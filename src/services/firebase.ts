@@ -15,14 +15,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 
 class Firebase {
+    public currentUser: firebase.User | null = null
+
     public async loginGoogle () {
+        firebase.auth().setPersistence('local')
+
         const provider = new firebase.auth.GoogleAuthProvider()
 
-        await firebase.auth().signInWithPopup(provider).catch(err => {
-            console.log(err)
-        })
+        this.currentUser = firebase.auth().currentUser
 
-        const token = await firebase.auth().currentUser?.getIdToken()
+        if (this.currentUser == null) {
+            await firebase.auth().signInWithPopup(provider).catch(err => {
+                console.log(err)
+            })
+            this.currentUser = firebase.auth().currentUser
+        }
+
+        if (this.currentUser == null) throw new Error('User not validated...')
+
+        const token = await this.currentUser.getIdToken()
 
         if (typeof token === 'string') return token
     }
