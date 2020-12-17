@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service build --no-clean --fix --watch",
-    "build": "vue-cli-service build --no-clean",
+    "serve": "vue-cli-service build --no-clean --fix --watch --dest \"../Digital Music Bank/wwwroot\"",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
