@@ -1,43 +1,18 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <!-- <hello-world msg="Welcome to Your Vue.js + TypeScript App"/> -->
-    </div>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  </div>
 </template>
 
 <script lang="ts">
-import { key } from '@/store'
-import { useStore } from 'vuex'
+import { Options, Vue } from 'vue-class-component';
+import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
-export default class Home {
-    public user: User | null = null;
-
-    async mounted() {
-        this.user = useStore(key).state.currentUser;
-        
-        console.log(this.user);
-    }
-}
-
-// export default {
-//     name: 'HelloWorld',
-//     components: {
-//     },
-//     data() {
-//         return {
-//             session: ''
-//         }
-//     },
-//     props: {
-//         msg: String,
-//     },
-//     setup() {
-//         return {
-//         }
-//     },
-//     mounted() {
-//         const store = useStore(key);
-//         this.session = store.state.currentUser;
-//     },
-// }
+@Options({
+  components: {
+    HelloWorld,
+  },
+})
+export default class Home extends Vue {}
 </script>

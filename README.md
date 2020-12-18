@@ -1,4 +1,4 @@
-# dmb
+# dmb-frontend2
 
 ## Project setup
 ```
