@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import fb from 'firebase/app'
 import 'firebase/auth'
 
 const firebaseConfig = {
@@ -12,30 +12,26 @@ const firebaseConfig = {
     measurementId: 'G-PP8F4ZZ3M0'
 }
 
-firebase.initializeApp(firebaseConfig)
+fb.initializeApp(firebaseConfig)
 
 class Firebase {
-    public currentUser: firebase.User | null = null
+    public currentUser: fb.User | null = null
 
-    public async loginGoogle () {
-        this.currentUser = firebase.auth().currentUser
-        if (this.currentUser) return await this.currentUser.getIdToken();
+    public async socialLogin (stayLoggedIn?: boolean) {
+        if (stayLoggedIn) await fb.auth().setPersistence('local');
 
-        await firebase.auth().setPersistence('local')
+        const provider = new fb.auth.GoogleAuthProvider();
 
-        if (this.currentUser == null) {
-            const provider = new firebase.auth.GoogleAuthProvider()
-            const credentials = await firebase.auth().signInWithPopup(provider);
-            localStorage.setItem('id_credential', JSON.stringify(credentials.credential));
-            this.currentUser = firebase.auth().currentUser
-        }
+        await fb.auth().signInWithPopup(provider);
 
-        if (this.currentUser == null) throw new Error('User not validated...')
+        const user = fb.auth().currentUser;
 
-        const token = await this.currentUser.getIdToken()
+        if (user == null) throw new Error('User not validated...')
 
-        if (typeof token === 'string') return token
+        return await user.getIdToken();
     }
 }
 
-export default Firebase
+const firebase = new Firebase();
+
+export default firebase;

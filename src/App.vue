@@ -8,18 +8,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { key, Session } from './store';
-import { Store, useStore } from 'vuex';
 
 @Options({
 })
 export default class Home extends Vue {
-    session?: Store<Session>;
-
-    async mounted() {
-        // this.session = useStore(key);
-        // await this.session.dispatch('startSession');
-    }
 }
 </script>
 

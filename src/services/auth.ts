@@ -1,12 +1,11 @@
-import Firebase from './firebase'
+import firebase from './firebase'
 
 class Auth {
-    public firebase: Firebase = new Firebase()
     public accessToken = ''
     public expiresAt = 0
 
     public async login () {
-        this.accessToken = await this.firebase.loginGoogle() || ''
+        this.accessToken = await firebase.socialLogin();
 
         if (this.accessToken !== '') {
             localStorage.setItem('id_token', this.accessToken)
@@ -23,9 +22,7 @@ class Auth {
 
         // Check whether the current time is past the
         // access token's expiry time
-        const expiresAt =
-            this.expiresAt ||
-            JSON.parse(window.localStorage.getItem('id_expires_at') || '')
+        const expiresAt = this.expiresAt || window.localStorage.getItem('id_expires_at') || ''
         const authenticated = new Date().getTime() < expiresAt
         return authenticated
     }
@@ -33,7 +30,7 @@ class Auth {
     public get token () {
         const expires =
             this.expiresAt ||
-            parseInt(window.localStorage.getItem('id_expires_at') || '0', 10)
+            parseInt(window.localStorage.getItem('id_expires_at') || '0')   
         if (expires > Date.now()) {
             const accessToken =
                 this.accessToken ||

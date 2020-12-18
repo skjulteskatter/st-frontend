@@ -113,9 +113,10 @@ class Http {
         )
     }
 
-    public apifetch (path: string, options: RequestInit) {
+    public async apifetch (path: string, options: RequestInit) {
         path = `${config.api.basePath}${path}`
-        return isomorphicfetch(path, {
+        if (auth.token == null) throw new Error("No Authorization token available")
+        const result = isomorphicfetch(path, {
             method: options.method,
             headers: {
                 Authorization: `Bearer ${auth.token}`
@@ -123,6 +124,7 @@ class Http {
         })
             .then(this.validateResponse)
             .then(this.parseJson)
+        return result;
     }
 }
 

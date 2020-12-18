@@ -18,13 +18,13 @@ import { key, Session } from '@/store';
         HelloWorld,
     },
 })
-export default class Home extends Vue {
+export default class Dashboard extends Vue {
     session: Store<Session> = useStore(key);
     user?: User;
 
     async login() {
-        await this.session.dispatch('login');
-        this.user = this.session.getters.currentUser;
+        // await this.session.dispatch('login');
+        // this.user = this.session.getters.currentUser;
     }
 }
 </script>
