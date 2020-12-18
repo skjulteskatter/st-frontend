@@ -18,16 +18,15 @@ class Firebase {
     public currentUser: firebase.User | null = null
 
     public async loginGoogle () {
-        firebase.auth().setPersistence('local')
-
-        const provider = new firebase.auth.GoogleAuthProvider()
-
         this.currentUser = firebase.auth().currentUser
+        if (this.currentUser) return await this.currentUser.getIdToken();
+
+        await firebase.auth().setPersistence('local')
 
         if (this.currentUser == null) {
-            await firebase.auth().signInWithPopup(provider).catch(err => {
-                console.log(err)
-            })
+            const provider = new firebase.auth.GoogleAuthProvider()
+            const credentials = await firebase.auth().signInWithPopup(provider);
+            localStorage.setItem('id_credential', JSON.stringify(credentials.credential));
             this.currentUser = firebase.auth().currentUser
         }
 

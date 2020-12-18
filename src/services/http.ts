@@ -3,7 +3,7 @@ import auth from './auth'
 import isomorphicfetch from 'isomorphic-fetch'
 
 class Http {
-    public validateResponse (response: any) {
+    public validateResponse (response: Response): Promise<Response> {
         return new Promise((resolve, reject) => {
             if (response.status >= 200 && response.status < 300) {
                 resolve(response)
@@ -24,7 +24,7 @@ class Http {
         })
     }
 
-    public parseJson (response: any) {
+    public parseJson (response: Response) {
         return response.json()
     }
 
@@ -53,7 +53,7 @@ class Http {
      */
     public post<T> (
         path: string,
-        content: any,
+        content: T,
         options?: object
     ): Promise<T> {
         return this.apifetch(
@@ -100,7 +100,7 @@ class Http {
      */
     public put<T> (
         path: string,
-        content: any
+        content: T
     ): Promise<T> {
         return this.apifetch(
             path,

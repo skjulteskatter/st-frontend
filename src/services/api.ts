@@ -8,7 +8,10 @@ export const session = {
     async getCurrentUser () {
         return await http.get<User>('api/Session')
     },
-    isAuthenticated: auth.isAuthenticated
+    isAuthenticated: auth.isAuthenticated,
+    async startSession() {
+        return await auth.login();
+    }
 }
 
 const api = {
