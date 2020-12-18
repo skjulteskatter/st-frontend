@@ -14,17 +14,24 @@ const firebaseConfig = {
 
 fb.initializeApp(firebaseConfig)
 
+
 class Firebase {
     public currentUser: fb.User | null = null
 
     public async socialLogin (stayLoggedIn?: boolean) {
-        if (stayLoggedIn) await fb.auth().setPersistence('local');
+        //await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
+
+        if (this.currentUser) return await this.currentUser.getIdToken();
+
+        let user = fb.auth().currentUser;
+
+        if (user) return await user.getIdToken();
 
         const provider = new fb.auth.GoogleAuthProvider();
 
         await fb.auth().signInWithPopup(provider);
 
-        const user = fb.auth().currentUser;
+        user = fb.auth().currentUser;
 
         if (user == null) throw new Error('User not validated...')
 
@@ -33,5 +40,9 @@ class Firebase {
 }
 
 const firebase = new Firebase();
+
+fb.auth().onAuthStateChanged(s => {
+    firebase.currentUser = s?.uid !== null ? s : null;
+})
 
 export default firebase;

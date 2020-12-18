@@ -21,7 +21,7 @@ export default class Login extends Vue {
     store = useStore(key)
 
     async login () {
-        await this.store.dispatch('socialLogin')
+        await this.store.dispatch('socialLogin', true)
     }
 }
 

@@ -16,8 +16,8 @@ export const store = createStore<Session>({
         isAuthenticated: false,
     },
     actions: {
-        async socialLogin() {
-            await auth.login();
+        async socialLogin(state, stayLoggedIn: boolean) {
+            await auth.login(stayLoggedIn);
             if (auth.isAuthenticated) {
                 console.log("what")
                 const user = await api.session.getCurrentUser();
