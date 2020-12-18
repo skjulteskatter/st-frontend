@@ -6,17 +6,16 @@
 </template>
 
 <script lang="ts">
-import { VueDecorator } from 'vue-class-component'
 import { key } from '@/store'
 import { useStore } from 'vuex'
 
 export default class Home {
-    public user: User;
+    public user: User | null = null;
 
     async mounted() {
         this.user = useStore(key).state.currentUser;
-
-
+        
+        console.log(this.user);
     }
 }
 
