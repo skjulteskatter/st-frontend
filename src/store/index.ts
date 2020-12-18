@@ -1,11 +1,14 @@
+import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
-export default createStore({
+
+export interface Session {
+    currentUser: User;
+}
+
+export const key: InjectionKey<Store<Session>> = Symbol()
+
+export const store = createStore<Session>({
     state: {
-    },
-    mutations: {
-    },
-    actions: {
-    },
-    modules: {
+        currentUser: {} as User
     }
 })
