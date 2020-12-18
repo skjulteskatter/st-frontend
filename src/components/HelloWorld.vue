@@ -1,6 +1,7 @@
 <template>
     <div class="hello">
         <h1>{{ msg }}</h1>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -15,8 +16,8 @@ import { Options, Vue } from 'vue-class-component'
 export default class HelloWorld extends Vue {
     msg!: string
 
-    mounted () {
-        console.log(this.$store.state)
+    async mounted () {
+        console.log(await this.$store.dispatch('startSession'))
     }
 }
 </script>
