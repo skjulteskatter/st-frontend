@@ -22,6 +22,10 @@ export default class Login extends Vue {
 
     async login () {
         await this.store.dispatch('socialLogin', true)
+
+        if (this.store.getters.isAdmin) {
+            this.$router.replace({name: 'about'});
+        }
     }
 }
 
