@@ -1,9 +1,10 @@
 <template>
-    <div class="about">
-        <h1>this is ur user</h1>
+    <div>
+        <h1>This is your User</h1>
         <h3>{{ user.displayName }}</h3>
+        <h4>{{ user.email }}</h4>
         <br/>
-        <h1>This is ur token</h1>
+        <h1>This is the token you can use to access the API</h1>
         <p style="font-align: left">{{ token }}</p>
     </div>
 </template>
@@ -19,11 +20,5 @@ export default class Login extends Vue {
     user: User = useStore(key).getters?.currentUser || {};
 
     token = localStorage.getItem("id_token");
-
-    mounted() {
-        if (!this.user?.displayName) {
-            this.$router.replace('/')
-        }
-    }
 }
 </script>

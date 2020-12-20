@@ -4,8 +4,8 @@ class Auth {
     public accessToken = ''
     public expiresAt = 0
 
-    public async login (stayLoggedIn?: boolean) {
-        this.accessToken = await firebase.socialLogin(stayLoggedIn);
+    public async login (providerName?: string, stayLoggedIn?: boolean) {
+        this.accessToken = await firebase.socialLogin(providerName, stayLoggedIn);
 
         if (this.accessToken !== '') {
             localStorage.setItem('id_token', this.accessToken)

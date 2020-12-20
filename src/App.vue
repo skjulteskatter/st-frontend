@@ -1,9 +1,11 @@
 <template>
     <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
+        <router-link to="/about">About</router-link> | 
+        <router-link to="/users">Users</router-link>
     </div>
-    <router-view/>
+    <div id="wrapper">
+        <router-view/>
+    </div>
 </template>
 
 <script lang="ts">
@@ -35,5 +37,11 @@ export default class Home extends Vue {
             color: #42b983;
         }
     }
+}
+
+#wrapper {
+    width: 900px;
+    margin: 0 auto;
+    word-wrap: break-word;
 }
 </style>

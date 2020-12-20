@@ -1,3 +1,4 @@
+import { store } from '@/store'
 import fb from 'firebase/app'
 import 'firebase/auth'
 
@@ -18,8 +19,18 @@ fb.initializeApp(firebaseConfig)
 class Firebase {
     public currentUser: fb.User | null = null
 
-    public async socialLogin (stayLoggedIn?: boolean) {
-        //await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
+    private getProvider(name = "google") {
+        switch(name) {
+            case "facebook":
+                return new fb.auth.FacebookAuthProvider();
+            case "google":
+            default:
+                return new fb.auth.GoogleAuthProvider();
+        }
+    }
+
+    public async socialLogin (providerName?: string, stayLoggedIn?: boolean) {
+        if (stayLoggedIn) await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
 
         if (this.currentUser) return await this.currentUser.getIdToken();
 
@@ -27,7 +38,7 @@ class Firebase {
 
         if (user) return await user.getIdToken();
 
-        const provider = new fb.auth.GoogleAuthProvider();
+        const provider = this.getProvider(providerName);
 
         await fb.auth().signInWithPopup(provider);
 
@@ -41,8 +52,12 @@ class Firebase {
 
 const firebase = new Firebase();
 
-fb.auth().onAuthStateChanged(s => {
+fb.auth().onAuthStateChanged(async s => {
     firebase.currentUser = s?.uid !== null ? s : null;
+
+    if (firebase.currentUser) {
+        await store.dispatch('socialLogin', true);
+    }
 })
 
 export default firebase;

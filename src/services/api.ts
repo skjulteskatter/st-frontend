@@ -11,11 +11,21 @@ export const session = {
     isAuthenticated: auth.isAuthenticated,
     async startSession() {
         return await auth.login();
+    },
+}
+
+export const admin = {
+    async getAllSubscriptions() {
+        return await http.get<Subscription[]>('api/Admin/Subscriptions')
+    },
+    getAllUsers() {
+        return http.get<User[]>('api/Admin/Users')
     }
 }
 
 const api = {
-    session
+    session,
+    admin
 }
 
 export default api

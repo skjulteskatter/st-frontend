@@ -1,12 +1,18 @@
-import api from '@/services/api'
+import api, { admin } from '@/services/api'
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import auth from '@/services/auth'
+import router from '@/router';
 
 export interface Session {
     currentUser: User;
     isAuthenticated: boolean;
 }
+
+type SocialLogin = {
+    provider: string;
+    stayLoggedIn: boolean;
+};
 
 export const key: InjectionKey<Store<Session>> = Symbol()
 
@@ -16,13 +22,18 @@ export const store = createStore<Session>({
         isAuthenticated: false,
     },
     actions: {
-        async socialLogin(state, stayLoggedIn: boolean) {
-            await auth.login(stayLoggedIn);
+        async socialLogin(state, obj: SocialLogin) {
+            await auth.login(obj.provider, obj.stayLoggedIn);
             if (auth.isAuthenticated) {
-                console.log("what")
                 const user = await api.session.getCurrentUser();
-                console.log(user);
                 this.commit('currentUser', user);
+                if (router.currentRoute.value.name == "login") {
+                    if (state.getters.isAdmin) {
+                        router.replace("/users");   
+                    } else {
+                        router.replace("/about")
+                    }
+                }
             }
         }
     },
@@ -36,7 +47,7 @@ export const store = createStore<Session>({
             return state.currentUser;
         },
         isAdmin(state) {
-            return state.currentUser?.roles?.find(r => r.name == "administrator") !== null;
+            return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
         }
     }
 })
