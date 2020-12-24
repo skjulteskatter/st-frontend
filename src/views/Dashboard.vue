@@ -11,7 +11,7 @@
 import { Options, Vue } from 'vue-class-component';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import { Store, useStore } from 'vuex';
-import { key, Session } from '@/store';
+import { sessionKey, Session } from '@/store';
 
 @Options({
     components: {
@@ -19,7 +19,7 @@ import { key, Session } from '@/store';
     },
 })
 export default class Dashboard extends Vue {
-    session: Store<Session> = useStore(key);
+    session: Store<Session> = useStore(sessionKey);
     user?: User;
 
     async login() {

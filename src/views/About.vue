@@ -10,14 +10,14 @@
 </template>
 
 <script lang="ts">
-import { key } from '@/store';
+import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 
 @Options({
 })
 export default class Login extends Vue {
-    user: User = useStore(key).getters?.currentUser || {};
+    user: User = useStore(sessionKey).getters?.currentUser || {};
 
     token = localStorage.getItem("id_token");
 }

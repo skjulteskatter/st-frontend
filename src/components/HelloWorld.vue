@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { key } from '@/store';
+import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 
@@ -49,7 +49,7 @@ export default class HelloWorld extends Vue {
     user!: User;
 
     async mounted() {
-        this.user = useStore(key).state.currentUser
+        this.user = useStore(sessionKey).state.currentUser
 
         console.log(this.user);
     }

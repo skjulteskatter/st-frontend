@@ -1,4 +1,4 @@
-import { store } from '@/store'
+import { sessionStore } from '@/store'
 import fb from 'firebase/app'
 import 'firebase/auth'
 
@@ -56,7 +56,7 @@ fb.auth().onAuthStateChanged(async s => {
     firebase.currentUser = s?.uid !== null ? s : null;
 
     if (firebase.currentUser) {
-        await store.dispatch('socialLogin', true);
+        await sessionStore.dispatch('socialLogin', true);
     }
 })
 

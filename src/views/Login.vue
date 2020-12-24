@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { key } from '@/store';
+import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 
@@ -18,7 +18,7 @@ export default class Login extends Vue {
         email: "",
         password: ""
     }
-    store = useStore(key)
+    store = useStore(sessionKey)
 
     async login () {
         await this.store.dispatch('socialLogin', true)

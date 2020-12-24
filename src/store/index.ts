@@ -1,4 +1,4 @@
-import api, { admin } from '@/services/api'
+import api from '@/services/api'
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import auth from '@/services/auth'
@@ -9,14 +9,39 @@ export interface Session {
     isAuthenticated: boolean;
 }
 
+export interface Users {
+    users: User[];
+}
+
 type SocialLogin = {
     provider: string;
     stayLoggedIn: boolean;
 };
 
-export const key: InjectionKey<Store<Session>> = Symbol()
+export const usersKey: InjectionKey<Store<Users>> = Symbol();
 
-export const store = createStore<Session>({
+export const usersStore = createStore<Users>({
+    state: {
+        users: [],
+    },
+    actions: {
+        async getUsers() {
+            const result = await api.admin.getAllUsers();
+            if (result?.length > 0) {
+                this.commit('users', result);
+            }
+        }
+    },
+    mutations: {
+        users(state, users: User[]) {
+            state.users = users;
+        }
+    }
+});
+
+export const sessionKey: InjectionKey<Store<Session>> = Symbol()
+
+export const sessionStore = createStore<Session>({
     state: {
         currentUser: {} as User,
         isAuthenticated: false,
