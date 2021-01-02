@@ -1,0 +1,72 @@
+.chordpro-container {
+    font-size: 1.3em;
+
+    .chordpro-title {
+        font-size: 2em;
+        font-weight: normal;
+        display: inline-block;
+        padding-right: 10px;
+    }
+
+    .chordpro-subtitle {
+        font-size: 1.5em;
+        font-weight: normal;
+    }
+
+    .chordpro-comment {
+        font-style: italic;
+        font-size: 0.9em;
+    }
+
+    .chordpro-key {
+        display: none; /*Because it's automatic based on metadata, not the transposed key*/
+        font-size: 1.5em;
+        padding: 5px 10px 0;
+        border: 2px solid #000;
+        border-radius: 4px;
+        width: auto;
+        line-height: 1.5em;
+        font-weight: bold;
+        margin: 1em 0;
+    }
+
+    /* Verses & Chorus */
+
+    &.with-chords .chordpro-verse {
+        height: 2.5em;
+    }
+
+    &.no-chords .chordpro-verse {
+        height: 1.4em;
+    }
+
+    .chordpro-chorus {
+        margin-top: 3px;
+        padding-left: 10px;
+        border-left: 4px solid #777;
+    }
+
+    .chordpro-elem {
+        position: relative;
+        display: inline-block;
+    }
+
+    .chordpro-chord {
+        position: relative;
+        display: block;
+        padding-right: 5px;
+        font-weight: bold;
+        font-size: 0.9em;
+        color: #ee3700;
+    }
+
+    .chordpro-text {
+        position: relative;
+        display: block;
+    }
+
+    .chordpro-start_of_verse, .chordpro-chorus-comment {
+        text-decoration: underline;
+        margin-bottom: 3px;
+    }
+}

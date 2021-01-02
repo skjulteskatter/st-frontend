@@ -31,14 +31,18 @@ import { useStore } from "vuex";
 
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
-    public users: User[] = useStore(usersKey).state.users;
-    public isAdmin = useStore(sessionKey).getters.isAdmin;
     public disableButton = false;
 
-    async beforeMount() {
-        if (this.isAdmin && this.users.length === 0) {
-            await this.usersStore.dispatch('getUsers');
+    get users(): User[] {
+        return useStore(usersKey).state.users;
+    }
+
+    get isAdmin(): boolean {
+        const admin = useStore(sessionKey).getters.isAdmin;
+        if (admin && this.users.length == 0) {
+            this.usersStore.dispatch('getUsers');
         }
+        return admin;
     }
 
     async refreshUsers() {

@@ -23,9 +23,16 @@ export const admin = {
     }
 }
 
+export const songs = {
+    async getSong(collection: string, number: number) {
+        return await http.get<Song>(`api/Songs/${collection}/${number}?lyrics=true&format=html`)
+    }
+}
+
 const api = {
     session,
-    admin
+    admin,
+    songs,
 }
 
 export default api

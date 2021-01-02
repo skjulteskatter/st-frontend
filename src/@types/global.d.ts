@@ -14,10 +14,19 @@ interface Subscription {
     validTo: Date;
 }
 
+interface Lyrics {
+    language: Language;
+    content: string;
+    format: string;
+    hasChords: boolean;
+    originalKey: string;
+    transposedToKey: string?;
+}
+
 interface Collection {
     id: string;
     name: {
-        [lang: string]: string
+        [lang: string]: string;
     };
     key: string;
     image: string;
@@ -26,4 +35,46 @@ interface Collection {
 interface Role {
     id: string;
     name: string;
+}
+
+interface Language {
+    key: string;
+    name: string;
+}
+
+interface Song {
+    number: nummber;
+    collection: Collection;
+    name: {
+        [languageKey: string]: string;
+    };
+    author: Contributor;
+    composer: Contributor;
+    leadSheetUrl: string;
+    yearWritten: number;
+    originCountry: Country;
+    soundFiles: MediaFile[];
+    videoFiles: MediaFile[];
+    biography: MediaFile;
+    lyrics: Lyrics;
+}
+
+interface MediaFile {
+    id: string;
+    type: string;
+    number: number;
+    language: Language;
+    name: string;
+    directUrl: string;
+}
+
+interface Contributor {
+    name: string;
+    birthYear: number;
+    country: string;
+}
+
+interface Country {
+    name: string;
+    countryCode: string;
 }

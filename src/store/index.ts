@@ -65,6 +65,10 @@ export const sessionStore = createStore<Session>({
     mutations: {
         currentUser(state, user: User) {
             state.currentUser = user;
+        },
+        logout(state) {
+            state.isAuthenticated = false;
+            state.currentUser = {} as User;
         }
     },
     getters: {
