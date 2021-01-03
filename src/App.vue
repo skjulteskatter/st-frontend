@@ -1,7 +1,8 @@
 <template>
     <div id="nav">
         <router-link to="/about">About</router-link> | 
-        <router-link to="/users">Users</router-link>
+        <router-link to="/users">Users</router-link> |
+        <router-link to="/song">Songs</router-link>
         <settings id="options"></settings>
     </div>
     <div id="wrapper">
@@ -12,6 +13,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Settings from '@/components/Options.vue';
+import songService from './services/songs';
 
 @Options({
     components: {
@@ -19,6 +21,9 @@ import Settings from '@/components/Options.vue';
     }
 })
 export default class Home extends Vue {
+    async mounted() {
+        await songService.init();
+    }
 }
 </script>
 

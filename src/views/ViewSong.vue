@@ -1,32 +1,33 @@
 <template>
     <div class="view-song">
-        {{ song.number }}
+        <input id="number-input" type="number" placeholder="Number">
+        <input id="language-input" type="text" maxlength="2" placeholder="Language">
+        <br>
+        <button @click="getNumber()">GET</button>
+        <br>
+        {{ lyrics.number }}
         <button @click="toggleChords()">CHORDS</button>
-        <button @click="newWindow()">WINDOW</button>
         
         <div id="view-song"></div>
     </div>
 </template>
 <script lang="ts">
-import api from "@/services/api";
+import songService from "@/services/songs";
 import { Vue } from "vue-class-component";
 
 export default class ViewSong extends Vue {
-    public song: Song = {} as Song;
+    private _lyrics: Lyrics = {} as Lyrics;
     public chords = document.getElementsByClassName('chordpro-chord');
     private hideChords = false;
 
-    async mounted() {
-        this.song = await api.songs.getSong("HV", 1);
+    async viewLyrics(number: number, language: string) {
+
+        this._lyrics = await songService.HV.getLyrics(number, language, "html");
 
         const element = document.getElementById("view-song");
-        if (element) element.innerHTML = this.song.lyrics.content;
+        if (element) element.innerHTML = this._lyrics.content;
+        this.hideChords = false;
         this.toggleChords();
-    }
-
-    newWindow() {
-        const page = window.open("/#/songview", this.song.lyrics.content);
-        console.log(page);
     }
 
     toggleChords() {
@@ -34,6 +35,19 @@ export default class ViewSong extends Vue {
         for (let i = 0; i < this.chords.length; i++) {
             (this.chords[i] as HTMLElement).style.display = this.hideChords ? "none" : ""
         }
+    }
+
+    getNumber() {
+        const numberElement = document.getElementById("number-input") as HTMLInputElement;
+        const number = parseInt(numberElement.value);
+        const languageElement = document.getElementById("language-input") as HTMLInputElement;
+        const language = languageElement.value;
+
+        this.viewLyrics(number, language || "no");
+    }
+
+    public get lyrics() {
+        return this._lyrics;
     }
 }
 </script>

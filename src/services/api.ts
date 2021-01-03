@@ -24,8 +24,17 @@ export const admin = {
 }
 
 export const songs = {
-    async getSong(collection: string, number: number) {
-        return await http.get<Song>(`api/Songs/${collection}/${number}?lyrics=true&format=html`)
+    getSong(collection: string, number: number) {
+        return http.get<Song>(`api/Songs/${collection}/${number}`);
+    },
+    getAllSongs(collection: string) {
+        return http.get<Song[]>(`api/Songs/${collection}`);
+    },
+    getLyrics(collection: string, number: number, language: string, format: string, transpose: number) {
+        return http.get<Lyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
+    },
+    getAllLyrics(collection: string, language: string, format: string, transpose: number) {
+        return http.get<Lyrics>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
     }
 }
 

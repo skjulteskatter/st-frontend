@@ -15,6 +15,8 @@ interface Subscription {
 }
 
 interface Lyrics {
+    song: Song;
+    collection: Collection;
     language: Language;
     content: string;
     format: string;
@@ -56,7 +58,6 @@ interface Song {
     soundFiles: MediaFile[];
     videoFiles: MediaFile[];
     biography: MediaFile;
-    lyrics: Lyrics;
 }
 
 interface MediaFile {
