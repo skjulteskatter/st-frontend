@@ -63,12 +63,6 @@ export default class ViewSong extends Vue {
     padding: .5em;
 }
 
-.songbooks {
-    &__book {
-
-    }
-}
-
 .lyrics {
     &__verse {
     margin-bottom: 2em;
