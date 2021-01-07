@@ -1,6 +1,6 @@
-import { sessionStore } from '@/store'
-import fb from 'firebase/app'
-import 'firebase/auth'
+import { sessionStore } from '@/store';
+import fb from 'firebase/app';
+import 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyC6b3XqiSM6uBuDq23THGzIWj6OgIogB_U',
@@ -57,6 +57,7 @@ fb.auth().onAuthStateChanged(async s => {
 
     if (firebase.currentUser) {
         await sessionStore.dispatch('socialLogin', true);
+        await sessionStore.dispatch('initSongService');
     }
 })
 

@@ -3,10 +3,12 @@ import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
+import { SongService } from '@/services/songService';
 
 export interface Session {
     currentUser: User;
     isAuthenticated: boolean;
+    songService: SongService;
 }
 
 export interface Users {
@@ -45,13 +47,14 @@ export const sessionStore = createStore<Session>({
     state: {
         currentUser: {} as User,
         isAuthenticated: false,
+        songService: {} as SongService,
     },
     actions: {
         async socialLogin(state, obj: SocialLogin) {
             await auth.login(obj.provider, obj.stayLoggedIn);
             if (auth.isAuthenticated) {
                 const user = await api.session.getCurrentUser();
-                this.commit('currentUser', user);
+                state.commit('currentUser', user);
                 if (router.currentRoute.value.name == "login") {
                     if (state.getters.isAdmin) {
                         router.replace("/users");   
@@ -60,6 +63,12 @@ export const sessionStore = createStore<Session>({
                     }
                 }
             }
+        },
+        async initSongService({commit}) {
+            const songService = new SongService();
+            await songService.init();
+
+            commit('songService', songService);
         }
     },
     mutations: {
@@ -69,6 +78,9 @@ export const sessionStore = createStore<Session>({
         logout(state) {
             state.isAuthenticated = false;
             state.currentUser = {} as User;
+        },
+        songService(state, songService: SongService) {
+            state.songService = songService;
         }
     },
     getters: {

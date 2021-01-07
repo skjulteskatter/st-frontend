@@ -5,6 +5,9 @@ interface User {
     language: string;
     subscriptions: Subscription[];
     roles: Role[];
+    settings: {
+        defaultLanguage: string;
+    };
 }
 
 interface Subscription {
