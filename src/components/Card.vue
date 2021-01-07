@@ -1,6 +1,9 @@
 <template>
   <div class="card" :class="{ 'card-border': border }">
-    <slot></slot>
+    <div v-if="image" class="card__image" :style="{ 'backgroundImage': `url(${image})` }"></div>
+    <div class="card__content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -13,6 +16,14 @@ import { Options, Vue } from 'vue-class-component'
       type: Boolean,
       default: false,
     },
+    padding: {
+      type: Boolean,
+      default: true
+    },
+    image: {
+      type: String,
+      default: null
+    }
   },
 })
 export default class Card extends Vue {}
@@ -20,11 +31,25 @@ export default class Card extends Vue {}
 
 <style lang="scss" scoped>
 .card {
-  padding: 1em;
   background: white;
+  border-radius: 5px;
+  overflow: hidden;
 
   &-border {
     border: 1px solid #dddddd;
+  }
+
+  &__image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    width: 100%;
+    min-height: 100px;
+  }
+
+  &__content {
+    padding: var(--spacing);
   }
 }
 </style>

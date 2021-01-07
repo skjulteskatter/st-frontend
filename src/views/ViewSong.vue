@@ -1,10 +1,11 @@
 <template>
     <div class="view-song">
+
         <h1>Songbooks</h1>
         <div class="songbooks">
-            <Card v-for="songbook in Songbooks" :key="songbook.id" class="songbooks__book" border>
-                <h2 class="songbooks__book__title">{{ songbook.collection }}</h2>
-            </Card>
+            <card v-for="songbook in Collections" :key="songbook.id" class="songbooks__book" :image="songbook.image" :padding="false" border>
+                <h2 class="songbooks__book__title">{{ songbook.name.no }}</h2>
+            </card>
         </div>
         
         <div class="lyrics">
@@ -21,14 +22,17 @@
 import songService from "@/services/songs";
 import { Vue, Options } from "vue-class-component";
 import Card from '@/components/Card.vue'
+import SongList from '@/components/SongList.vue'
 
 @Options({
     components: {
-        Card
+        Card,
+        SongList
     }
 })
 export default class ViewSong extends Vue {
     private lyrics: Lyrics = {} as Lyrics;
+    private collections = songService.collections;
 
     async viewLyrics(number: number, language: string) {
         this.lyrics = await songService.HV.getLyrics(number, language, "json");
@@ -43,8 +47,8 @@ export default class ViewSong extends Vue {
         this.viewLyrics(number, language || "no");
     }
 
-    public get Songbooks(){
-        return songService;
+    public get Collections(){
+        return this.collections;
     }
 
     public get Lyrics() {
@@ -60,6 +64,24 @@ export default class ViewSong extends Vue {
 
     &__book {
         grid-column: span 1;
+        transition: all .2s ease;
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px -5px rgba(black, .1);
+        }
+
+        &-cover {
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            min-height: 200px;
+        }
+
+        &__title {
+            margin: 0;
+        }
     }
 }
 
