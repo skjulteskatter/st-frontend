@@ -1,13 +1,13 @@
 <template>
   <div class="view-song">
+      
     <h1>Songbooks</h1>
     <div class="songbooks">
       <card
-        v-for="songbook in Collections"
+        v-for="songbook in collections"
         :key="songbook.id"
         class="songbooks__book"
         :image="songbook.image"
-        :padding="false"
         border
       >
         <h2 class="songbooks__book__title">{{ songbook.name.no }}</h2>
@@ -35,43 +35,30 @@
   </div>
 </template>
 <script lang="ts">
-import songService from "@/services/songs";
 import { Vue, Options } from "vue-class-component";
 import Card from '@/components/Card.vue'
 import SongList from '@/components/SongList.vue'
+import { useStore } from "vuex";
+import { sessionKey } from "@/store";
 
 @Options({
     components: {
         Card,
         SongList
     }
+    ,
+    computed: {
+        collections(){
+            return useStore(sessionKey).state.songService?.collections;
+        }
+    }
 })
 export default class ViewSong extends Vue {
     private lyrics: Lyrics = {} as Lyrics;
-    private collections = songService.collections;
 
-<<<<<<< HEAD
-    async viewLyrics(number: number, language: string) {
-        this.lyrics = await songService.HV.getLyrics(number, language, "json");
-=======
-    toggleChords() {
-        this.hideChords = !this.hideChords
-        for (let i = 0; i < this.chords.length; i++) {
-            (this.chords[i] as HTMLElement).style.display = this.hideChords ? "none" : ""
-        }
->>>>>>> 87ba3f730843b3062e4bde3beb5a3963f480fa0c
-    }
-
-    getSong() {
-        const numberElement = document.getElementById("number-input") as HTMLSelectElement;
-        const number = parseInt(numberElement.value);
-        const languageElement = document.getElementById("language-input") as HTMLInputElement;
-        const language = languageElement.value;
-    }
-
-    public get Collections(){
-        return this.collections;
-    }
+    // public get SongService() {
+    //     return this.songService;
+    // }
 
     public get Lyrics() {
         return this.lyrics;
