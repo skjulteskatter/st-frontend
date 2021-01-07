@@ -25,6 +25,9 @@ export const admin = {
 }
 
 export const songs = {
+    getCollections() {
+        return http.get<Collection[]>('api/Collections');
+    },
     getSong(collection: string, number: number) {
         return http.get<Song>(`api/Songs/${collection}/${number}`);
     },
