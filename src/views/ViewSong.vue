@@ -1,44 +1,43 @@
 <template>
     <div class="view-song">
-        <input id="number-input" type="number" placeholder="Number">
-        <input id="language-input" type="text" maxlength="2" placeholder="Language">
-        <br>
-        <button @click="getNumber()">GET</button>
-        <br>
-        {{ lyrics.number }}
-        <button @click="toggleChords()">CHORDS</button>
+        <div class="search-form">
+            <input class="input" id="number-input" type="number" placeholder="Song number" @keydown.enter="getSong()">
+            <select class="input" id="language-input" type="text" maxlength="2" placeholder="Language">
+                <!-- <option v-for="language in " :value="language" :key="language.id">NO</option> -->
+            </select>
+            <button type="submit" @click="getSong()">Get song</button>
+        </div>
+
+        <div class="songbooks">
+            <Card v-for="songbook in Songbooks" :key="songbook.id" class="songbooks__book">
+                <h2 class="songbooks__book__title">{{ songbook.collection }}</h2>
+            </Card>
+        </div>
         
-        <div id="view-song"></div>
+        <div class="lyrics">
+            <h1 class="lyrics__number">{{ lyrics.number }}</h1>
+            <h2 class="lyrics__title">{{ lyrics.title }}</h2>
+            <div class="lyrics__verse" v-for="verse in lyrics.content" :key="verse.id">
+                <span class="lyrics__verse__number">{{ verse.name }}</span>
+                <p class="lyrics__verse__line" v-for="line in verse.content" :key="line.id">{{ line }}</p>
+            </div>
+        </div>
     </div>
 </template>
 <script lang="ts">
 import songService from "@/services/songs";
 import { Vue } from "vue-class-component";
+import Card from '@/components/Card.vue'
 
 export default class ViewSong extends Vue {
-    private _lyrics: Lyrics = {} as Lyrics;
-    public chords = document.getElementsByClassName('chordpro-chord');
-    private hideChords = false;
+    private lyrics: Lyrics = {} as Lyrics;
 
     async viewLyrics(number: number, language: string) {
-
-        this._lyrics = await songService.HV.getLyrics(number, language, "html");
-
-        const element = document.getElementById("view-song");
-        if (element) element.innerHTML = this._lyrics.content;
-        this.hideChords = false;
-        this.toggleChords();
+        this.lyrics = await songService.HV.getLyrics(number, language, "json");
     }
 
-    toggleChords() {
-        this.hideChords = !this.hideChords
-        for (let i = 0; i < this.chords.length; i++) {
-            (this.chords[i] as HTMLElement).style.display = this.hideChords ? "none" : ""
-        }
-    }
-
-    getNumber() {
-        const numberElement = document.getElementById("number-input") as HTMLInputElement;
+    getSong() {
+        const numberElement = document.getElementById("number-input") as HTMLSelectElement;
         const number = parseInt(numberElement.value);
         const languageElement = document.getElementById("language-input") as HTMLInputElement;
         const language = languageElement.value;
@@ -46,13 +45,41 @@ export default class ViewSong extends Vue {
         this.viewLyrics(number, language || "no");
     }
 
-    public get lyrics() {
-        return this._lyrics;
+    public get Songbooks(){
+        return songService;
+    }
+
+    public get Lyrics() {
+        return this.lyrics;
     }
 }
 </script>
-<style scoped>
-.hidden {
-    display: none;
+<style lang="scss" scoped>
+.view-song {
+    padding-top: 2em;
+}
+
+.input {
+    padding: .5em;
+}
+
+.songbooks {
+    &__book {
+
+    }
+}
+
+.lyrics {
+    &__verse {
+    margin-bottom: 2em;
+
+    &__number {
+        font-weight: bold;
+    }
+
+    &__line {
+        margin: .5em;
+    }
+}
 }
 </style>

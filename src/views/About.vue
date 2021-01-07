@@ -1,10 +1,11 @@
 <template>
     <div>
-        <h1>This is your User</h1>
-        <h3>{{ user.displayName }}</h3>
-        <h4>{{ user.email }}</h4>
-        <br/>
-        <h1>This is the token you can use to access the API</h1>
+        <div class="user-info">
+            <h1>This is your user</h1>
+            <h3>{{ user.displayName }}</h3>
+            <h4>{{ user.email }}</h4>
+        </div>
+        <h2>This is the token you can use to access the API</h2>
         <p style="font-align: left">{{ token }}</p>
     </div>
 </template>

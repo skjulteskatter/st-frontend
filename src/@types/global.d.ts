@@ -18,7 +18,12 @@ interface Lyrics {
     song: Song;
     collection: Collection;
     language: Language;
-    content: string;
+    content: {
+        [key: string]: {
+            name: string,
+            content: string[],
+        };
+    };
     format: string;
     hasChords: boolean;
     originalKey: string;

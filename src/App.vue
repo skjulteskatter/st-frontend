@@ -1,6 +1,6 @@
 <template>
     <div id="nav">
-        <router-link to="/about">About</router-link> | 
+        <router-link to="/about">Dashboard</router-link> | 
         <router-link to="/users">Users</router-link> |
         <router-link to="/song">Songs</router-link>
         <settings id="options"></settings>
@@ -28,15 +28,33 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss">
+:root {
+    --primary-color: #0073ff;
+    --text-color: #2c3e50;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
+    color: var(--text-color);
 }
 
 #nav {
-    padding: 30px;
+    background-color: #eaeaea;
+    padding: 2em;
+
+    word-wrap: break-word;
 
     a {
         font-weight: bold;
@@ -46,9 +64,6 @@ export default class Home extends Vue {
             color: #42b983;
         }
     }
-    width: 900px;
-    margin: 0 auto;
-    word-wrap: break-word;
 }
 
 #options {
@@ -56,7 +71,7 @@ export default class Home extends Vue {
 }
 
 #wrapper {
-    width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     word-wrap: break-word;
 }
