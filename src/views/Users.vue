@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="users">
         <div v-if="isAdmin">
             <h1>Users</h1>
             <button :disabled="disableButton" @click="refreshUsers()">Refresh</button>
@@ -55,7 +55,13 @@ export default class Subscriptions extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+#users {
+    td {
+        padding: .5em;
+    }
+}
 
 div table {
     text-align: left;
