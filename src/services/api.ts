@@ -1,3 +1,4 @@
+import Song from '@/classes/song'
 import auth from './auth'
 import http from './http'
 

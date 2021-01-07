@@ -15,10 +15,14 @@ interface Subscription {
 }
 
 interface Lyrics {
-    song: Song;
     collection: Collection;
     language: Language;
-    content: string;
+    content: {
+        [key: string]: {
+            name: string;
+            content: string[];
+        };
+    };
     format: string;
     hasChords: boolean;
     originalKey: string;
@@ -44,14 +48,15 @@ interface Language {
     name: string;
 }
 
-interface Song {
-    number: nummber;
+interface SongInterface {
+    number: number;
     collection: Collection;
     name: {
         [languageKey: string]: string;
     };
-    author: Contributor;
-    composer: Contributor;
+    authors: Contributor[];
+    composers: Contributor[];
+    melodyOrigin: any;
     leadSheetUrl: string;
     yearWritten: number;
     originCountry: Country;

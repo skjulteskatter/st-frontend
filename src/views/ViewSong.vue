@@ -24,10 +24,7 @@ export default class ViewSong extends Vue {
 
         this._lyrics = await songService.HV.getLyrics(number, language, "html");
 
-        const element = document.getElementById("view-song");
-        if (element) element.innerHTML = this._lyrics.content;
-        this.hideChords = false;
-        this.toggleChords();
+        songService.HV.songs[1]
     }
 
     toggleChords() {
