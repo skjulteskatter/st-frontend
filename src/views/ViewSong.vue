@@ -1,15 +1,8 @@
 <template>
     <div class="view-song">
-        <div class="search-form">
-            <input class="input" id="number-input" type="number" placeholder="Song number" @keydown.enter="getSong()">
-            <select class="input" id="language-input" type="text" maxlength="2" placeholder="Language">
-                <!-- <option v-for="language in " :value="language" :key="language.id">NO</option> -->
-            </select>
-            <button type="submit" @click="getSong()">Get song</button>
-        </div>
-
+        <h1>Songbooks</h1>
         <div class="songbooks">
-            <Card v-for="songbook in Songbooks" :key="songbook.id" class="songbooks__book">
+            <Card v-for="songbook in Songbooks" :key="songbook.id" class="songbooks__book" border>
                 <h2 class="songbooks__book__title">{{ songbook.collection }}</h2>
             </Card>
         </div>
@@ -26,9 +19,14 @@
 </template>
 <script lang="ts">
 import songService from "@/services/songs";
-import { Vue } from "vue-class-component";
+import { Vue, Options } from "vue-class-component";
 import Card from '@/components/Card.vue'
 
+@Options({
+    components: {
+        Card
+    }
+})
 export default class ViewSong extends Vue {
     private lyrics: Lyrics = {} as Lyrics;
 
@@ -55,17 +53,20 @@ export default class ViewSong extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.view-song {
-    padding-top: 2em;
-}
+.songbooks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing);
 
-.input {
-    padding: .5em;
+    &__book {
+        grid-column: span 1;
+    }
 }
 
 .lyrics {
     &__verse {
-    margin-bottom: 2em;
+        margin-bottom: 2em;
+    }
 
     &__number {
         font-weight: bold;
@@ -74,6 +75,5 @@ export default class ViewSong extends Vue {
     &__line {
         margin: .5em;
     }
-}
 }
 </style>

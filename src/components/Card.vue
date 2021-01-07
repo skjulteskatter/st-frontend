@@ -1,17 +1,30 @@
 <template>
-    <div class="card">
-        <slot></slot>
-    </div>
+  <div class="card" :class="{ 'card-border': border }">
+    <slot></slot>
+  </div>
 </template>
 
-<script>
-    export default {
-    }
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component'
+
+@Options({
+  props: {
+    border: {
+      type: Boolean,
+      default: false,
+    },
+  },
+})
+export default class Card extends Vue {}
 </script>
 
 <style lang="scss" scoped>
 .card {
-    padding: 1em;
-    background: rgb(199, 42, 42);
+  padding: 1em;
+  background: white;
+
+  &-border {
+    border: 1px solid #dddddd;
+  }
 }
 </style>

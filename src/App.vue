@@ -31,6 +31,7 @@ export default class Home extends Vue {
 :root {
     --primary-color: #0073ff;
     --text-color: #2c3e50;
+    --spacing: 1rem;
 }
 
 *,
