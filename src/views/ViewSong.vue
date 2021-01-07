@@ -12,20 +12,12 @@
     </div>
 </template>
 <script lang="ts">
-import songService from "@/services/songs";
 import { Vue } from "vue-class-component";
 
 export default class ViewSong extends Vue {
     private _lyrics: Lyrics = {} as Lyrics;
     public chords = document.getElementsByClassName('chordpro-chord');
     private hideChords = false;
-
-    async viewLyrics(number: number, language: string) {
-
-        this._lyrics = await songService.HV.getLyrics(number, language, "html");
-
-        songService.HV.songs[1]
-    }
 
     toggleChords() {
         this.hideChords = !this.hideChords
@@ -39,8 +31,6 @@ export default class ViewSong extends Vue {
         const number = parseInt(numberElement.value);
         const languageElement = document.getElementById("language-input") as HTMLInputElement;
         const language = languageElement.value;
-
-        this.viewLyrics(number, language || "no");
     }
 
     public get lyrics() {

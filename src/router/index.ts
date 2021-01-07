@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Login from '../views/Login.vue'
-import Users from '../views/Users.vue'
-import Song from '../views/ViewSong.vue';
+const Users = () => import(/* webpackChunkName: 'users' */ '../views/Users.vue')
+const Song = () => import(/* webpackChunkName: 'song' */ '../views/ViewSong.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {

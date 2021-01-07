@@ -13,7 +13,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Settings from '@/components/Options.vue';
-import songService from './services/songs';
 
 @Options({
     components: {
@@ -21,9 +20,6 @@ import songService from './services/songs';
     }
 })
 export default class Home extends Vue {
-    async mounted() {
-        await songService.init();
-    }
 }
 </script>
 

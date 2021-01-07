@@ -10,6 +10,7 @@
     "dev": "vue-cli-service build --watch --dest ../BACKEND/wwwroot"
   },
   "dependencies": {
+    "@firebase/auth": "^0.16.1",
     "core-js": "^3.6.5",
     "firebase": "^8.2.1",
     "isomorphic-fetch": "^3.0.0",
