@@ -1,30 +1,65 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-        <button @click="login">LOGIN</button>
-        <div>{{ user }}</div>
+    <div id="dashboard">
+        <h1>Dashboard</h1>
+        <card class="user-info" border>
+            <div class="user-info__field">
+                <label>Name</label>
+                <h3>{{ user.displayName }}</h3>
+            </div>
+            <div class="user-info__field">
+                <label>E-mail</label>
+                <h3>{{ user.email }}</h3>
+            </div>
+        </card>
+        
+        <card class="api-token">
+            <h2 style="display: inline-block; margin-right: var(--spacing)">API token</h2>
+            <button @click="showApiToken = true" style="display: inline-block">Show API token</button>
+            <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
+        </card>
     </div>
 </template>
 
 <script lang="ts">
+import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
-import { Store, useStore } from 'vuex';
-import { sessionKey, Session } from '@/store';
+import { useStore } from 'vuex';
+import Card from '@/components/Card.vue'
 
 @Options({
     components: {
-        HelloWorld,
+        Card,
     },
-})
-export default class Dashboard extends Vue {
-    session: Store<Session> = useStore(sessionKey);
-    user?: User;
-
-    async login() {
-        // await this.session.dispatch('login');
-        // this.user = this.session.getters.currentUser;
+    data(){
+        return {
+            showApiToken: false
+        }
     }
+})
+export default class Login extends Vue {
+    user: User = useStore(sessionKey).getters?.currentUser || {};
+
+    token = localStorage.getItem("id_token");
 }
 </script>
+
+<style lang="scss" scoped>
+.user-info {
+    margin-bottom: var(--spacing);
+
+    h3 {
+        margin: 0;
+    }
+
+    &__field {
+        
+        &:not(:last-child) {
+            margin-bottom: var(--spacing);
+        }
+
+        & > label {
+            opacity: .7;
+        }
+    }
+}
+</style>
