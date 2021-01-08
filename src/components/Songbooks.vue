@@ -2,9 +2,10 @@
     <div class="songbooks">
       <card
         v-for="songbook in collections"
-        :key="songbook.id"
+        :key="songbook.key"
         class="songbooks__book hover"
         :image="songbook.image"
+        @click="callback(songbook.key)"
         border
       >
         <h2 class="songbooks__book__title">{{ songbook.name.no }}</h2>
@@ -14,6 +15,7 @@
 
 <script>
 import { Options, Vue } from "vue-class-component";
+// import { LoaderComponent } from 'vue-elder-loader'
 import Card from '@/components/Card.vue'
 
 @Options({
@@ -24,6 +26,10 @@ import Card from '@/components/Card.vue'
         collections: {
             type: Array,
             default: []
+        },
+        callback: {
+          type: Function,
+          default: console.log
         }
     }
 })

@@ -33,20 +33,16 @@ import LyricsViewer from '@/components/LyricsViewer.vue'
     computed: {
         collections(){
             return useStore(sessionKey).state.songService?.collections;
-        }
+        },
     },
     data(){
       return {
-        testSongs: new Array(100)
+        testSongs: [],
       }
-    }
+    },
 })
 export default class ViewSong extends Vue {
     private lyrics: Lyrics = {} as Lyrics;
-
-    // public get SongService() {
-    //     return this.songService;
-    // }
 
     public get Lyrics() {
         return this.lyrics;
