@@ -32,8 +32,4 @@ export class Song implements SongInterface {
 
         return false;
     }
-
-    public async lyrics(languageCode: string): Promise<Lyrics> {
-        return await this._api.songs.getLyrics(this.collection.key, this.number, languageCode, "json", 0);
-    }
 }

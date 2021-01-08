@@ -4,18 +4,14 @@
 
 <script>
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { songKey } from "@/store";
 
 @Options({
     props: {
-
-    },
-    computed: {
-        lyrics() {
-            return useStore(songKey).getters.lyrics;
+        lyrics: {
+            type: Object,
+            default: {}
         }
-    }
+    },
 })
 export default class LyricsSettings extends Vue {
     

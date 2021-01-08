@@ -14,7 +14,7 @@
 
         <div id="settings-step" v-if="songSelected && collectionSelected">
             <h1>Settings</h1>
-            {{lyrics}}
+            <lyrics-settings :lyrics="lyrics"></lyrics-settings>
         </div>
     </div>
 </template>
@@ -27,13 +27,15 @@ import Card from '@/components/Card.vue'
 import SongList from '@/components/SongList.vue'
 import Songbooks from '@/components/Songbooks.vue'
 import Stepper from '@/components/Stepper.vue'
+import LyricsSettings from '@/components/LyricsSettings.vue';
 
 @Options({
     components: {
         Card,
         SongList,
         Songbooks,
-        Stepper
+        Stepper,
+        LyricsSettings,
     },
     computed: {
         collections(){
@@ -75,7 +77,7 @@ export default class SongSelector extends Vue {
         this.songSelect = true;
         this.steps[1] = {name: song.number.toString(), id: song.number.toString(), type: "song"};
         this.loading = true;
-        await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey);
+        await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
         this.loading = false;
     }
 
