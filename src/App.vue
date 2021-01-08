@@ -1,6 +1,6 @@
 <template>
     <div id="nav">
-        <router-link to="/about">Dashboard</router-link> | 
+        <router-link to="/dashboard">Dashboard</router-link> | 
         <router-link to="/users">Users</router-link> |
         <router-link to="/song">Songs</router-link>
         <settings id="options"></settings>
