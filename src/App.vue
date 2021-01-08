@@ -72,4 +72,13 @@ body {
     margin: 0 auto;
     word-wrap: break-word;
 }
+
+.hover {
+    transition: transform .2s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px -5px rgba(black, 0.1);
+    }
+}
 </style>
