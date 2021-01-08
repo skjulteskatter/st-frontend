@@ -73,6 +73,7 @@ interface SongInterface {
     soundFiles: MediaFile[];
     videoFiles: MediaFile[];
     biography: MediaFile;
+    lyrics: (languageCode: string) => Promise<LyricsInterface>;
 }
 
 interface MediaFile {

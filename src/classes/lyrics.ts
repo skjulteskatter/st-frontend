@@ -1,6 +1,6 @@
-import Song from './song';
+import { Song } from '.';
 
-export default class Lyrics implements LyricsInterface {
+export class Lyrics implements LyricsInterface {
     collection = {} as Collection;
     content = {};
     format = "";

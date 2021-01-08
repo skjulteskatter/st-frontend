@@ -1,5 +1,4 @@
-import Song from '@/classes/song';
-import Lyrics from '@/classes/lyrics';
+import { Song, Lyrics } from '../classes';
 import auth from './auth';
 import http from './http';
 

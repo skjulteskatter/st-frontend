@@ -1,2 +1,4 @@
-export Song from './song';
-export Lyrics from './lyrics';
+export * from './song';
+export * from './lyrics';
+
+export default {};

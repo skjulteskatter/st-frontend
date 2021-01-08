@@ -4,8 +4,7 @@ import { createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
 import { SongService } from '@/services/songService';
-import Song from '@/classes/song';
-import Lyrics from '@/classes/lyrics';
+import { Song, Lyrics } from '@/classes';
 
 export interface Session {
     currentUser: User;
@@ -65,7 +64,7 @@ export const songStore = createStore<Songs>({
             commit('songService', songService);
         },
         async getLyrics({ state, commit }, languageCode: string) {
-            const lyrics = await state.song?.getLyrics(languageCode);
+            const lyrics = await state.song?.lyrics(languageCode);
             commit('setLyrics', lyrics);
         }
     },

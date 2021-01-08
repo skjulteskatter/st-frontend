@@ -1,7 +1,7 @@
 import api from "@/services/api";
-import Lyrics from "./lyrics";
+import { Lyrics } from ".";
 
-export default class Song implements SongInterface {
+export class Song implements SongInterface {
     public number = 0;
     public collection: Collection = {} as Collection;
     public name: {
@@ -33,7 +33,7 @@ export default class Song implements SongInterface {
         return false;
     }
 
-    public getLyrics(languageCode: string): Promise<Lyrics> {
-        return this._api.songs.getLyrics(this.collection.key, this.number, languageCode, "json", 0);
+    public async lyrics(languageCode: string): Promise<Lyrics> {
+        return await this._api.songs.getLyrics(this.collection.key, this.number, languageCode, "json", 0);
     }
 }

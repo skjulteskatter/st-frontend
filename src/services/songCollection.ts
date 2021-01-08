@@ -1,4 +1,4 @@
-import Song from "@/classes/song";
+import { Song } from "@/classes";
 import api from "./api";
 
 export class SongCollectionService {
@@ -16,9 +16,5 @@ export class SongCollectionService {
 
     public async initialize() {
         this._songs = await this._api.getAllSongs(this.collection.key);
-    }
-
-    public getLyrics(number: number, language?: string, format?: string, transpose?: number) {
-        return this._api.getLyrics(this.collection.key, number, language ?? "no", format ?? "text", transpose ?? 0);
     }
 }

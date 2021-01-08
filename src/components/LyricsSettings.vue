@@ -1,6 +1,5 @@
 <template>
     <div class="lyrics-settings"></div>
-    </div>
 </template>
 
 <script>

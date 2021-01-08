@@ -22,7 +22,7 @@
 import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
-import Song from '@/classes/song';
+import { Song } from '@/classes';
 import Card from '@/components/Card.vue'
 import SongList from '@/components/SongList.vue'
 import Songbooks from '@/components/Songbooks.vue'

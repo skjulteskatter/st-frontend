@@ -1,5 +1,5 @@
+import { Song } from "@/classes";
 import api from "./api";
-import Song from "@/classes/song";
 import { SongCollectionService } from "./songCollection";
 
 export class SongService {
