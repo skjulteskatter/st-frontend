@@ -1,20 +1,19 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
-import Login from '../views/Login.vue'
+const Login = () => import(/* webpackChuhnkName: 'login' */ '../views/Login.vue');
 const Users = () => import(/* webpackChunkName: 'users' */ '../views/Users.vue')
 const Song = () => import(/* webpackChunkName: 'song' */ '../views/ViewSong.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
-        path: '/login',
-        alias: '/',
-        name: 'login',
-        component: Login
-    },
-    {
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard
+    },
+    {
+        path: '/',
+        name: 'login',
+        component: Login,
     },
     {
         path: '/users',
@@ -37,8 +36,8 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes
-})
+});
 
 export default router
