@@ -8,7 +8,7 @@
         @click="callback(songbook.key)"
         border
       >
-        <h2 class="songbooks__book__title">{{ songbook.name.no }}</h2>
+        <h3 class="songbooks__book__title">{{ songbook.name.no }}</h3>
       </card>
     </div>
 </template>
@@ -40,12 +40,13 @@ export default class Songbooks extends Vue {
 
 <style lang="scss" scoped>
 .songbooks {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing);
-  grid-template-columns: repeat(4, 1fr);
 
   &__book {
-    grid-column: span 1;
+    max-width: 250px;
+    width: 100%;
     transition: all 0.2s ease;
     cursor: pointer;
 

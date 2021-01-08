@@ -71,6 +71,7 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     word-wrap: break-word;
+    padding: var(--spacing);
 }
 
 .hover {
