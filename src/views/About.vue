@@ -1,11 +1,22 @@
 <template>
-    <div>
-        <h1>This is your User</h1>
-        <h3>{{ user.displayName }}</h3>
-        <h4>{{ user.email }}</h4>
-        <br/>
-        <h1>This is the token you can use to access the API</h1>
-        <p style="font-align: left">{{ token }}</p>
+    <div id="dashboard">
+        <h1>Dashboard</h1>
+        <card class="user-info" border>
+            <div class="user-info__field">
+                <label>Name</label>
+                <h3>{{ user.displayName }}</h3>
+            </div>
+            <div class="user-info__field">
+                <label>E-mail</label>
+                <h3>{{ user.email }}</h3>
+            </div>
+        </card>
+        
+        <card class="api-token">
+            <h2 style="display: inline-block; margin-right: var(--spacing)">API token</h2>
+            <button @click="showApiToken = true" style="display: inline-block">Show API token</button>
+            <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
+        </card>
     </div>
 </template>
 
@@ -13,8 +24,17 @@
 import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
+import Card from '@/components/Card.vue'
 
 @Options({
+    components: {
+        Card,
+    },
+    data(){
+        return {
+            showApiToken: false
+        }
+    }
 })
 export default class Login extends Vue {
     user: User = useStore(sessionKey).getters?.currentUser || {};
@@ -22,3 +42,24 @@ export default class Login extends Vue {
     token = localStorage.getItem("id_token");
 }
 </script>
+
+<style lang="scss" scoped>
+.user-info {
+    margin-bottom: var(--spacing);
+
+    h3 {
+        margin: 0;
+    }
+
+    &__field {
+        
+        &:not(:last-child) {
+            margin-bottom: var(--spacing);
+        }
+
+        & > label {
+            opacity: .7;
+        }
+    }
+}
+</style>
