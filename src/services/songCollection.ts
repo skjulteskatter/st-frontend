@@ -4,16 +4,18 @@ import api from "./api";
 export class SongCollectionService {
     private _api = api.songs;
     private _songs: Song[] = [];
-    private collection: Collection = {} as Collection;
+    private collection: Collection;
 
+    constructor(collection: Collection) {
+        this.collection = collection;
+    }
 
     public get songs() {
         return this._songs.sort((a, b) => a.number - b.number);
     }
 
-    public async initialize(collection: Collection) {
-        this.collection = collection;
-        this._songs = await this._api.getAllSongs(collection.key);
+    public async initialize() {
+        this._songs = await this._api.getAllSongs(this.collection.key);
     }
 
     public getLyrics(number: number, language?: string, format?: string, transpose?: number) {

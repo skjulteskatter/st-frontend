@@ -36,7 +36,7 @@ export default class Card extends Vue {}
   overflow: hidden;
 
   &-border {
-    border: 1px solid #cecece;
+    border: 1px solid var(--border-color);
   }
 
   &__image {

@@ -2,13 +2,14 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 const Users = () => import(/* webpackChunkName: 'users' */ '../views/Users.vue');
-const Song = () => import(/* webpackChunkName: 'song' */ '../views/ViewSong.vue');
+const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
+const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
     },
     {
         path: '/',
@@ -23,7 +24,12 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/song',
         name: 'song',
-        component: Song,
+        component: SongSelector,
+    },
+    {
+        path: '/lyrics',
+        name: 'lyrics',
+        component: LyricsViewer,
     }
 ]
 
@@ -32,4 +38,4 @@ const router = createRouter({
     routes
 });
 
-export default router
+export default router;

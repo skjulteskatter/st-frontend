@@ -1,31 +1,31 @@
 <template>
-    <div id="nav">
-        <router-link to="/dashboard">Dashboard</router-link> | 
-        <router-link to="/users">Users</router-link> |
-        <router-link to="/song">Songs</router-link>
-        <settings id="options"></settings>
-    </div>
-    <div id="wrapper">
-        <router-view/>
+    <div>
+        <dashboard-layout v-if="!onLyrics"></dashboard-layout>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Settings from '@/components/Options.vue';
+import DashboardLayout from '@/layout/DashboardLayout.vue';
 
 @Options({
     components: {
-        Settings
+        DashboardLayout,
     }
 })
-export default class Home extends Vue {
+export default class App extends Vue {
+    public onLyrics = false;
+
+    public mounted() {
+        this.onLyrics = this.$route.name == "lyrics";
+    }
 }
 </script>
 
 <style lang="scss">
 :root {
     --primary-color: #0073ff;
+    --border-color: #d0d0d0;
     --text-color: #2c3e50;
     --spacing: 1rem;
 }
@@ -47,30 +47,18 @@ body {
     color: var(--text-color);
 }
 
-#nav {
-    background-color: #eaeaea;
-    padding: 2em;
-
-    word-wrap: break-word;
-
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
-}
-
-#options {
-    float: right;
+button {
+    padding: .5em;
+    background: var(--primary-color);
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 
 #wrapper {
     max-width: 1000px;
     margin: 0 auto;
-    word-wrap: break-word;
     padding: var(--spacing);
 }
 

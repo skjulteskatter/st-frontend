@@ -1,6 +1,6 @@
 <template>
     <div id="options">
-        <button @click="logout()">LOGOUT</button>
+        <button @click="logout()">Log out</button>
     </div>
 </template>
 <script lang="ts">
@@ -14,3 +14,6 @@ export default class Options extends Vue {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

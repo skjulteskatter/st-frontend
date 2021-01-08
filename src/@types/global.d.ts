@@ -6,8 +6,14 @@ interface User {
     subscriptions: Subscription[];
     roles: Role[];
     settings: {
-        defaultLanguage: string;
+        languageKey: string;
     };
+}
+
+interface Step {
+    name: string;
+    id: string;
+    type: string;
 }
 
 interface Subscription {
@@ -17,7 +23,7 @@ interface Subscription {
     validTo: Date;
 }
 
-interface Lyrics {
+interface LyricsInterface {
     collection: Collection;
     language: Language;
     content: {
@@ -29,7 +35,8 @@ interface Lyrics {
     format: string;
     hasChords: boolean;
     originalKey: string;
-    transposedToKey: string?;
+    transposedToKey: string;
+    song: SongInterface;
 }
 
 interface Collection {

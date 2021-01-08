@@ -1,12 +1,13 @@
-import Song from '@/classes/song'
-import auth from './auth'
-import http from './http'
+import Song from '@/classes/song';
+import Lyrics from '@/classes/lyrics';
+import auth from './auth';
+import http from './http';
 
 export const session = {
-    async login () {
+    async login() {
         return await auth.login()
     },
-    async getCurrentUser () {
+    async getCurrentUser() {
         return await http.get<User>('api/Session')
     },
     isAuthenticated: auth.isAuthenticated,
@@ -27,9 +28,6 @@ export const admin = {
 export const songs = {
     getCollections() {
         return http.get<Collection[]>('api/Collections');
-    },
-    getSong(collection: string, number: number) {
-        return http.get<Song>(`api/Songs/${collection}/${number}`);
     },
     getAllSongs(collection: string) {
         return http.get<Song[]>(`api/Songs/${collection}`);

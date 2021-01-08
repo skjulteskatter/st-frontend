@@ -4,15 +4,23 @@ import { createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
 import { SongService } from '@/services/songService';
+import Song from '@/classes/song';
+import Lyrics from '@/classes/lyrics';
 
 export interface Session {
     currentUser: User;
     isAuthenticated: boolean;
-    songService: SongService;
 }
 
 export interface Users {
     users: User[];
+}
+
+export interface Songs {
+    lyrics?: Lyrics;
+    collection?: Collection;
+    songService: SongService;
+    song?: Song;
 }
 
 type SocialLogin = {
@@ -41,13 +49,68 @@ export const usersStore = createStore<Users>({
     }
 });
 
+export const songKey: InjectionKey<Store<Songs>> = Symbol();
+
+export const songStore = createStore<Songs>({
+    state: {
+        lyrics: undefined,
+        collection: undefined,
+        songService: {} as SongService,
+        song: undefined,
+    },
+    actions: {
+        async initSongService({ commit }) {
+            const songService = new SongService();
+            await songService.init();
+            commit('songService', songService);
+        },
+        async getLyrics({ state, commit }, languageCode: string) {
+            const lyrics = await state.song?.getLyrics(languageCode);
+            commit('setLyrics', lyrics);
+        }
+    },
+    mutations: {
+        songService(state, songService: SongService) {
+            state.songService = songService;
+        },
+        selectCollection(state, collection: Collection) {
+            state.collection = collection;
+            state.song = undefined;
+        },
+        selectSong(state, song: Song) {
+            state.song = song;
+        },
+        setLyrics(state, lyrics: Lyrics) {
+            state.lyrics = lyrics;
+        }
+    },
+    getters: {
+        collections(state) {
+            return state.songService.collections;
+        },
+        collection(state) {
+            return state.collection;
+        },
+        songs(state) {
+            if (state.collection) {
+                return state.songService.songs.filter(s => s.collection.id == state.collection?.id);
+            }
+        },
+        song(state) {
+            return state.song;
+        },
+        lyrics(state) {
+            return state.lyrics;
+        }
+    },
+});
+
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
 
 export const sessionStore = createStore<Session>({
     state: {
         currentUser: {} as User,
         isAuthenticated: false,
-        songService: {} as SongService,
     },
     actions: {
         async socialLogin(state, obj: SocialLogin) {
@@ -57,18 +120,12 @@ export const sessionStore = createStore<Session>({
                 state.commit('currentUser', user);
                 if (router.currentRoute.value.name == "login") {
                     if (state.getters.isAdmin) {
-                        router.replace("/users");   
+                        router.replace("/users");
                     } else {
                         router.replace("/about")
                     }
                 }
             }
-        },
-        async initSongService({commit}) {
-            const songService = new SongService();
-            await songService.init();
-
-            commit('songService', songService);
         }
     },
     mutations: {
@@ -79,9 +136,6 @@ export const sessionStore = createStore<Session>({
             state.isAuthenticated = false;
             state.currentUser = {} as User;
         },
-        songService(state, songService: SongService) {
-            state.songService = songService;
-        }
     },
     getters: {
         currentUser(state) {

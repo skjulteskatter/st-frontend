@@ -3,20 +3,22 @@
         <div v-if="isAdmin">
             <h1>Users</h1>
             <button :disabled="disableButton" @click="refreshUsers()">Refresh</button>
-            <table>
-                <thead>
-                    <th>Id</th>
-                    <th>Collection</th>
-                    <th>Email</th>
-                </thead>
-                <tbody>
-                    <tr v-for="u in users" :key="u.id">
-                        <td>{{u.id}}</td>
-                        <td>{{u.displayName}}</td>
-                        <td>{{u.email}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <card class="users__table" border>
+                <table>
+                    <thead>
+                        <th>Id</th>
+                        <th>Collection</th>
+                        <th>Email</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="u in users" :key="u.id">
+                            <td>{{u.id}}</td>
+                            <td>{{u.displayName}}</td>
+                            <td>{{u.email}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </card>
         </div>
         <div v-else>
             <h1>You don't have access to view this page</h1>
@@ -26,9 +28,15 @@
 
 <script lang="ts">
 import { sessionKey, usersKey } from "@/store";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
+import Card from '@/components/Card.vue'
 
+@Options({
+    components: {
+        Card,
+    }
+})
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public disableButton = false;
@@ -61,6 +69,10 @@ export default class Subscriptions extends Vue {
     td {
         padding: .5em;
     }
+}
+
+.users__table {
+    margin-top: var(--spacing);
 }
 
 div table {
