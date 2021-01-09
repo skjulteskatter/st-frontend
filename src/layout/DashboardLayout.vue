@@ -4,7 +4,7 @@
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
             <router-link class="nav__item" to="/users">Users</router-link>
             <router-link class="nav__item" to="/song">Songs</router-link>
-            <settings class="nav__item nav__options"></settings>
+            <settings class="nav__item"></settings>
         </div>
     </nav>
     <div id="wrapper">
