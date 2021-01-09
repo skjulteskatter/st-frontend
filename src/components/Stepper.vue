@@ -31,7 +31,9 @@ export default class Stepper extends Vue {
 <style lang="scss" scoped>
 .stepper {
     &__breadcrumb {
+        height: var(--spacing);
         padding: 0;
+        opacity: .7;
 
         &__item {
             display: inline-block;
