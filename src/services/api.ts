@@ -1,4 +1,3 @@
-import { Song, Lyrics } from '../classes';
 import auth from './auth';
 import http from './http';
 
@@ -29,13 +28,13 @@ export const songs = {
         return http.get<Collection[]>('api/Collections');
     },
     getAllSongs(collection: string) {
-        return http.get<Song[]>(`api/Songs/${collection}`);
+        return http.get<SongInterface[]>(`api/Songs/${collection}`);
     },
     getLyrics(collection: string, number: number, language: string, format: string, transpose: number) {
-        return http.get<Lyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
+        return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
     },
     getAllLyrics(collection: string, language: string, format: string, transpose: number) {
-        return http.get<Lyrics>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
+        return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
     }
 }
 

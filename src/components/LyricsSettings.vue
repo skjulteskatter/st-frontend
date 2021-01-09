@@ -2,17 +2,17 @@
     <div class="lyrics-settings">
         <card class="lyrics-settings__verses" border>
             <h2 class="lyrics-settings__verses__title">Verses</h2>
-            <div class="lyrics-settings__verses__input" v-for="verse in lyrics.content" :key="verse.key">
-                <input :id="verse.name" type="checkbox">
-                <label :for="verse.name">Verse {{ verse.name }}</label>
+            <div class="lyrics-settings__verses__input" v-for="verse in lyrics.verses" :key="verse.type + verse.number">
+                <input :id="verse.type + verse.number" type="checkbox">
+                <label :for="verse.type + verse.number">{{ verse.type + " " + verse.number }}</label>
             </div>
         </card>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from '@/components/Card.vue'
+import Card from '@/components/Card.vue';
 
 @Options({
     props: {
@@ -26,7 +26,6 @@ import Card from '@/components/Card.vue'
     }
 })
 export default class LyricsSettings extends Vue {
-    
 }
 </script>
 

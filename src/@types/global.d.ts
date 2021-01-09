@@ -35,7 +35,7 @@ interface LyricsInterface {
     format: string;
     hasChords: boolean;
     originalKey: string;
-    transposedToKey: string;
+    transposedToKey?: string;
     song: SongInterface;
 }
 
