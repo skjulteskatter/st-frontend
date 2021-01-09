@@ -38,7 +38,7 @@ import LyricsSettings from '@/components/LyricsSettings.vue';
         LyricsSettings,
     },
     computed: {
-        collections(){
+        collections() {
             return useStore(songKey).getters.collections;
         },
         collectionSelected() {
