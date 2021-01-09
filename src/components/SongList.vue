@@ -45,7 +45,7 @@ export default class SongList extends Vue {
         width: 100%;
         background-color: white;
         border: 1px solid var(--border-color);
-        border-radius: 5px;
+        border-radius: var(--border-radius);
 
         cursor: pointer;
 

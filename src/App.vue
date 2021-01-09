@@ -24,9 +24,13 @@ export default class App extends Vue {
 
 <style lang="scss">
 :root {
+    // Colors
     --primary-color: #0073ff;
     --border-color: #d0d0d0;
     --text-color: #2c3e50;
+
+    // Misc
+    --border-radius: 5px;
     --spacing: 1rem;
 }
 
@@ -45,21 +49,6 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: var(--text-color);
-}
-
-button {
-    padding: .5em;
-    background: var(--primary-color);
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
-
-#wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: var(--spacing);
 }
 
 .hover {

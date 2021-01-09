@@ -25,6 +25,24 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
+
+#wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing);
+    word-wrap: break-word;
+}
+
+button {
+    padding: .5em;
+    background: var(--primary-color);
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
 .nav {
     background-color: white;
     border-bottom: 1px solid var(--border-color);

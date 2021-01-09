@@ -12,11 +12,11 @@
             </div>
         </card>
         
-        <card class="api-token">
+        <div class="api-token">
             <h2 style="display: inline-block; margin-right: var(--spacing)">API token</h2>
             <button @click="showApiToken = true" class="api-token__button">Show API token</button>
-            <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
-        </card>
+            <card v-if="showApiToken" style="font-size: .8em" border>{{ token }}</card>
+        </div>
     </div>
 </template>
 

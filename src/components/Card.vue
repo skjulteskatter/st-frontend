@@ -32,7 +32,7 @@ export default class Card extends Vue {}
 <style lang="scss" scoped>
 .card {
   background: white;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   overflow: hidden;
 
   &-border {
