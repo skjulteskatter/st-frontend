@@ -7,14 +7,16 @@
                 <table>
                     <thead>
                         <th>Id</th>
-                        <th>Collection</th>
+                        <th>Name</th>
                         <th>Email</th>
+                        <th>Role</th>
                     </thead>
                     <tbody>
                         <tr v-for="u in users" :key="u.id">
                             <td>{{u.id}}</td>
                             <td>{{u.displayName}}</td>
                             <td>{{u.email}}</td>
+                            <td>{{u.roles[0]}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,18 +67,17 @@ export default class Subscriptions extends Vue {
 
 <style lang="scss" scoped>
 
-#users {
+.users__table {
+    margin-top: var(--spacing);
+    text-align: left;
+    
     td {
         padding: .5em;
     }
-}
 
-.users__table {
-    margin-top: var(--spacing);
-}
-
-div table {
-    text-align: left;
+    tr:nth-child(odd) {
+        background: #eaeaea;
+    }
 }
 
 </style>
