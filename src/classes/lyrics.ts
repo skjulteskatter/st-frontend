@@ -32,7 +32,7 @@ export class Lyrics implements LyricsInterface {
             content: string[];
         }[] = [];
 
-        let chorus;
+        let chorus = undefined;
 
         for (const key of Object.keys(this.content)) {
             const verse = {
@@ -44,18 +44,17 @@ export class Lyrics implements LyricsInterface {
             
             if (verse.type == "chorus") {
                 verses.push(Object.assign({}, verse))
-            } else {
-                verses.push(verse);
-            }
-            if (verse.type !== "chorus" && chorus) {
-                chorus.number++;
-                verses.push(Object.assign({}, chorus));
-            } else {
                 if (chorus) {
                     verse.number = chorus.number + 1;
                     verse.name = chorus.name + "_2";
                 }
                 chorus = verse;
+            } else {
+                verses.push(verse);
+                if (chorus !== undefined) {
+                    chorus.number++;
+                    verses.push(Object.assign({}, chorus));
+                }
             }
         }
         return verses;
