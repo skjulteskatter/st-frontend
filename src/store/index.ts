@@ -9,6 +9,7 @@ import { Song, Lyrics } from '@/classes';
 export interface Session {
     currentUser: User;
     isAuthenticated: boolean;
+    languages: Language[];
 }
 
 export interface Users {
@@ -128,6 +129,7 @@ export const sessionStore = createStore<Session>({
     state: {
         currentUser: {} as User,
         isAuthenticated: false,
+        languages: []
     },
     actions: {
         async socialLogin(state, obj: SocialLogin) {
@@ -135,6 +137,12 @@ export const sessionStore = createStore<Session>({
             if (auth.isAuthenticated) {
                 const user = await api.session.getCurrentUser();
                 state.commit('currentUser', user);
+                try {
+                    const languages = await api.items.getLanguages();
+                    state.commit('languages', languages);
+                } catch (e) {
+                    console.log(e);
+                }
                 if (router.currentRoute.value.name == "login") {
                     if (state.getters.isAdmin) {
                         router.replace("/users");
@@ -176,6 +184,9 @@ export const sessionStore = createStore<Session>({
         },
         settings(state, settings: UserSettings) {
             state.currentUser.settings = settings;
+        },
+        languages(state, languages: Language[]) {
+            state.languages = languages;
         }
     },
     getters: {
@@ -184,6 +195,9 @@ export const sessionStore = createStore<Session>({
         },
         isAdmin(state) {
             return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
+        },
+        languages(state) {
+            return state.languages;
         }
     }
 })
