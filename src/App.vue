@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dashboard-layout v-if="!onLyrics"></dashboard-layout>
+        <router-view/>
     </div>
 </template>
 

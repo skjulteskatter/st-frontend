@@ -133,6 +133,7 @@ export const sessionStore = createStore<Session>({
     mutations: {
         currentUser(state, user: User) {
             state.currentUser = user;
+            console.log(user);
         },
         logout(state) {
             state.isAuthenticated = false;
