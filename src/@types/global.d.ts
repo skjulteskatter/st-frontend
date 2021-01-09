@@ -16,6 +16,14 @@ interface Step {
     type: string;
 }
 
+interface Verse {
+    id: number;
+    number: number;
+    type: string;
+    name: string;
+    content: string[];
+}
+
 interface Subscription {
     id: string;
     collection: Collection;

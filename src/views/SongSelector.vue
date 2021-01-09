@@ -14,7 +14,7 @@
 
         <div id="settings-step" v-if="songSelected && collectionSelected">
             <h1>Settings</h1>
-            <lyrics-settings :lyrics="lyrics"></lyrics-settings>
+            <lyrics-settings v-if="lyrics" :lyrics="lyrics"></lyrics-settings>
         </div>
     </div>
 </template>

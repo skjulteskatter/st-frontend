@@ -2,26 +2,35 @@
     <nav class="nav">
         <div class="nav__wrapper">
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
-            <router-link class="nav__item" to="/users">Users</router-link>
+            <router-link v-if="isAdmin" class="nav__item" to="/users">Users</router-link>
             <router-link class="nav__item" to="/song">Songs</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>
-    <div id="wrapper">
+    <div id="wrapper" v-if="user">
         <router-view/>
     </div>
 </template>
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
+import { useStore } from 'vuex';
+import { sessionKey } from '../store';
 import Settings from '@/components/Options.vue';
 
 @Options({
     components: {
         Settings,
+    },
+    computed: {
+        user() {
+            return useStore(sessionKey).state.currentUser;
+        },
+        isAdmin() {
+            return useStore(sessionKey).getters.isAdmin;
+        }
     }
 })
 export default class DashboardLayout extends Vue {
-
 }
 </script>
 <style lang="scss">

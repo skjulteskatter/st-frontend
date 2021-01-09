@@ -16,7 +16,7 @@
                             <td>{{u.id}}</td>
                             <td>{{u.displayName}}</td>
                             <td>{{u.email}}</td>
-                            <td>{{u.roles[0]}}</td>
+                            <td>{{u.roles[0] ? u.roles[0].name : 'unknown'}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -70,14 +70,22 @@ export default class Subscriptions extends Vue {
 .users__table {
     margin-top: var(--spacing);
     text-align: left;
+
+    table {
+        width: 100%;
+    }
     
     td {
         padding: .5em;
     }
 
-    tr:nth-child(odd) {
-        background: #eaeaea;
+    tr {
+        
+        &:nth-child(odd) {
+            background: #eaeaea;
+        }
     }
+
 }
 
 </style>

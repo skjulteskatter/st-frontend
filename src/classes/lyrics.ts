@@ -24,24 +24,22 @@ export class Lyrics implements LyricsInterface {
         this.song = lyrics.song;
     }
 
-    public get verses() {
-        const verses: {
-            number: number;
-            type: string;
-            name: string;
-            content: string[];
-        }[] = [];
+    public get verses(): Verse[] {
+        const verses: Verse[] = [];
 
         let chorus = undefined;
 
+        let number = 1;
+
         for (const key of Object.keys(this.content)) {
             const verse = {
+                id: number,
                 number: parseInt(key.split('_')[1]),
                 type: key.split('_')[0],
                 name: this.content[key].name,
-                content: this.content[key].content,
+                content: this.content[key].content
             }
-            
+            number++;
             if (verse.type == "chorus") {
                 verses.push(Object.assign({}, verse))
                 if (chorus) {
@@ -52,11 +50,13 @@ export class Lyrics implements LyricsInterface {
             } else {
                 verses.push(verse);
                 if (chorus !== undefined) {
+                    number++;
+                    chorus.id = number;
                     chorus.number++;
                     verses.push(Object.assign({}, chorus));
                 }
             }
         }
-        return verses;
+        return Object.assign([], verses);
     }
 }

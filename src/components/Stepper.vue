@@ -29,6 +29,17 @@ export default class Stepper extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .stepper {
     &__breadcrumb {
         height: var(--spacing);
@@ -40,10 +51,12 @@ export default class Stepper extends Vue {
             margin-right: .5em;
             padding: 0;
             cursor: pointer;
+            animation: slideIn .3s ease-in-out;
 
             &:not(:last-child):after {
                 content: '>';
                 padding-left: .5em;
+                animation: slideIn .3s ease-in-out;
             }
         }
     }
