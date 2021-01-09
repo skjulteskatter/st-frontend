@@ -1,7 +1,29 @@
 <template>
     <div class="container">
-        <div class="row">
-            <button class="social-button" @click="login()"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
+        <card id="login-card" border>
+            <div class="login">
+                <h1 class="login__title">Please log in</h1>
+                <form @submit.prevent="submitForm" class="login__form">
+                    <div class="login__form__email">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" v-model="form.email">
+                    </div>
+                    <div class="login__form__password">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" v-model="form.password">
+                    </div>
+                    <div class="login__form__stay">
+                        <label>
+                            <input type="checkbox" v-model="stayLoggedIn">
+                            <span>Remember me</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="login__form__submit">Log in</button>
+                </form>
+            </div>
+        </card>
+        <div class="social">
+            <button class="social-button" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
         </div>
     </div>
 </template>
@@ -10,18 +32,29 @@
 import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
+import Card from '@/components/Card.vue'
+import fb from 'firebase/app';
+import 'firebase/auth';
 
 @Options({
+    components: {
+        Card
+    }
 })
 export default class Login extends Vue {
-    form = {
+    public form = {
         email: "",
         password: ""
     }
-    store = useStore(sessionKey)
+    public stayLoggedIn = false;
+    private store = useStore(sessionKey);
 
-    async login () {
-        await this.store.dispatch('socialLogin', true);
+    submitForm() {
+        this.store.dispatch('loginWithEmailPassword', {email: this.form.email, password: this.form.password, stayLoggedIn: this.stayLoggedIn})
+    }
+
+    async login(provider: string) {
+        await this.store.dispatch('socialLogin', {provider, stayLoggedIn: this.stayLoggedIn});
     }
 }
 
@@ -51,22 +84,85 @@ export default class Login extends Vue {
 // };
 </script>
 
-<style scoped>
+<style lang="scss">
 
-.social-button {
-    width: 75px;
-    background: white;
-    padding: 10px;
-    border-radius: 100%;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-    outline: 0;
-    border: 0;
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-.social-button:active {
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
-}
-.social-button img {
+
+#login-card {
+    max-width: 500px;
     width: 100%;
+}
+
+.social {
+    padding: var(--spacing);
+
+    &-button {
+        width: 60px;
+        height: 60px;
+        background: white;
+        padding: .5em;
+        border-radius: 100%;
+        outline: 0;
+        border: 1px solid var(--border-color);
+
+        & img {
+            width: 100%;
+        }
+    }
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+
+    &__title {
+        margin: 0;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+
+        &__submit {
+            font-size: inherit;
+            padding: var(--spacing);
+        }
+
+        input {
+            padding: var(--spacing);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+        }
+
+        // &__stay {
+        //     input {
+
+        //     }
+        // }
+
+        &__email, &__password {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
+
+            label {
+                display: block;
+                margin-bottom: .2em;
+            }
+        }
+    }
 }
 
 </style>

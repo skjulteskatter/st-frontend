@@ -1,8 +1,10 @@
 <template>
     <div id="users">
         <div v-if="isAdmin">
-            <h1>Users</h1>
-            <button :disabled="disableButton" @click="refreshUsers()">Refresh</button>
+            <div class="header">
+                <h1>Users</h1>
+                <button :disabled="disableButton" @click="refreshUsers()">Refresh</button>
+            </div>
             <card class="users__table" border>
                 <table>
                     <thead>
@@ -16,7 +18,12 @@
                             <td>{{u.id}}</td>
                             <td>{{u.displayName}}</td>
                             <td>{{u.email}}</td>
-                            <td>{{u.roles[0] ? u.roles[0].name : 'unknown'}}</td>
+                            <td>
+                                <select name="role" id="role">
+                                    <option :value="u.roles[0] ? u.roles[0].name : 'NOT SET'">{{u.roles[0] ? u.roles[0].name : 'NOT SET'}}</option>
+                                    <option :value="role" v-for="role in roles" :key="role">{{role}}</option>
+                                </select>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -49,10 +56,15 @@ export default class Subscriptions extends Vue {
 
     get isAdmin(): boolean {
         const admin = useStore(sessionKey).getters.isAdmin;
-        if (admin && this.users.length == 0) {
+        if (admin && this.users.length == 0 && this.roles.length == 0) {
             this.usersStore.dispatch('getUsers');
+            this.usersStore.dispatch('getRoles');
         }
         return admin;
+    }
+
+    get roles() {
+        return useStore(usersKey).state.roles;
     }
 
     async refreshUsers() {
@@ -67,9 +79,23 @@ export default class Subscriptions extends Vue {
 
 <style lang="scss" scoped>
 
+.header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing);
+    margin: 0;
+}
+
 .users__table {
-    margin-top: var(--spacing);
     text-align: left;
+
+    #role {
+        font-size: inherit;
+        color: var(--text-color);
+        background: transparent;
+        border: none;
+        width: 100%;
+    }
 
     table {
         width: 100%;

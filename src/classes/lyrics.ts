@@ -24,39 +24,39 @@ export class Lyrics implements LyricsInterface {
         this.song = lyrics.song;
     }
 
-    public get verses(): Verse[] {
-        const verses: Verse[] = [];
-
-        let chorus = undefined;
+    public get verses() {
+        const verses: {
+            [key: string]: Verse;
+        } = {};
 
         let number = 1;
+        let chorus: Verse = {} as Verse;
 
         for (const key of Object.keys(this.content)) {
-            const verse = {
-                id: number,
-                number: parseInt(key.split('_')[1]),
-                type: key.split('_')[0],
+            const type = key.split("_")[0];
+
+            const verse: Verse = {
                 name: this.content[key].name,
-                content: this.content[key].content
+                content: this.content[key].content,
+                type,
             }
-            number++;
-            if (verse.type == "chorus") {
-                verses.push(Object.assign({}, verse))
-                if (chorus) {
-                    verse.number = chorus.number + 1;
-                    verse.name = chorus.name + "_2";
+
+            if (type == "chorus") {
+                if (chorus.name) {
+                    number--;
                 }
+                verses[number] = verse;
+                number++
                 chorus = verse;
             } else {
-                verses.push(verse);
-                if (chorus !== undefined) {
+                verses[number] = verse;
+                number++;
+                if (chorus.name) {
+                    verses[number] = Object.assign({}, chorus);
                     number++;
-                    chorus.id = number;
-                    chorus.number++;
-                    verses.push(Object.assign({}, chorus));
                 }
             }
         }
-        return Object.assign([], verses);
+        return verses;
     }
 }

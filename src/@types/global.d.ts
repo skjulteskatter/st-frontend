@@ -5,9 +5,11 @@ interface User {
     language: string;
     subscriptions: Subscription[];
     roles: Role[];
-    settings: {
-        languageKey: string;
-    };
+    settings: UserSettings;
+}
+
+interface UserSettings {
+    languageKey: string;
 }
 
 interface Step {
@@ -17,8 +19,6 @@ interface Step {
 }
 
 interface Verse {
-    id: number;
-    number: number;
     type: string;
     name: string;
     content: string[];

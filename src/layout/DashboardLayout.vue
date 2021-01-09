@@ -4,6 +4,7 @@
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
             <router-link v-if="isAdmin" class="nav__item" to="/users">Users</router-link>
             <router-link class="nav__item" to="/song">Songs</router-link>
+            <router-link class="nav__item" to="/">Log in</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>
@@ -50,12 +51,17 @@ button {
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
+
+    &[secondary] {
+        background: white;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+    }
 }
 
 .nav {
     background-color: white;
     border-bottom: 1px solid var(--border-color);
-    padding: var(--spacing);
 
     display: flex;
     justify-content: center;
@@ -63,6 +69,7 @@ button {
     &__wrapper {
         max-width: 1000px;
         width: 100%;
+        padding: var(--spacing);
 
         display: flex;
         justify-content: flex-end;

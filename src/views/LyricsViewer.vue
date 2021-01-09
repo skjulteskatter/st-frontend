@@ -1,11 +1,11 @@
 <template>
     <div class="lyrics">
-        <h1 class="lyrics__number">{{ song.number }}</h1>
-        <h2 class="lyrics__title">{{ song.name[user.settings.languageKey ?? "en"] }}</h2>
+        <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
+        <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
         <div
             class="lyrics__verse"
             v-for="verse in lyrics"
-            :key="verse.id"
+            :key="verse.name"
         >
             <span class="lyrics__verse__number">{{ verse.name }}</span>
             <p
@@ -28,29 +28,11 @@ import { useStore } from "vuex";
 })
 export default class LyricsViewer extends Vue {
     public $song?: SongInterface = undefined;
-    public $content: string[] = [];
-
-    public mounted() {
-        this.$song = JSON.parse(localStorage.getItem('song') ?? "") ?? {};
-        this.$content = JSON.parse(localStorage.getItem('lyrics') ?? "") ?? {};
-
-        window.addEventListener('storage', (event) => {
-            if (event.key) {
-                const item = localStorage.getItem(event.key);
-                if (item) {
-                    if (event.key == "lyrics") {
-                        this.$content = JSON.parse(item);
-                    }
-                    if (event.key == "song") {
-                        this.$song = JSON.parse(item);
-                    }
-                }
-            }
-        });
-    }
+    public $content: Verse[] = [];
 
     public get song() {
-        return this.$song;
+        const song = localStorage.getItem("song");
+        return song ? JSON.parse(song) : undefined;
     }
 
     public get lyrics() {

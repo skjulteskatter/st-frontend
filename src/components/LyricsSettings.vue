@@ -2,10 +2,15 @@
     <div class="lyrics-settings">
         <card class="lyrics-settings__verses" border>
             <h2 class="lyrics-settings__verses__title">Verses</h2>
-            <label class="lyrics-settings__verses__input" v-for="verse in verses" :key="verse.type + verse.number" @click="toggleSelection(verse)">
-                <input :id="verse.type + verse.number" type="checkbox" class="lyrics-settings__verses__input__check" checked>
-                <span :for="verse.type + verse.number" class="lyrics-settings__verses__input__label" :class="{'selected': verse.selected}">{{ verse.type + " " + verse.number }}</span>
+            <label class="lyrics-settings__verses__input" :class="{ 'ignored': ignoreVerses.includes(key) }" v-for="key in Object.keys(verses)" :key="key" @click="toggleVerse(key)">
+                <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked>
+                <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
+        </card>
+        <card class="lyrics-settings__controls">
+            <h2 class="lyrics-settings__controls__title">Controls</h2>
+            <button class="lyrics-settings__controls__update" @click="updateLyrics()">Update lyrics</button>
+            <a class="lyrics-settings__controls__link" href="/lyrics" target="_blank">Go to lyrics</a>
         </card>
     </div>
 </template>
@@ -13,6 +18,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics } from '@/classes';
+import { useStore } from 'vuex';
+import { songKey } from '@/store';
 import Card from  '@/components/Card.vue';
 
 @Options({
@@ -29,23 +36,37 @@ import Card from  '@/components/Card.vue';
 export default class LyricsSettings extends Vue {
     public lyrics: Lyrics = {} as Lyrics;
     //public verses: Verse[] = [];
-    private selectedVerses: Verse[] = [];
+    public ignoreVerses: string[] = [];
+    public currentVerses: string[] = ["1", "2"];
+    public song = useStore(songKey).getters.song;
 
-    public mounted() {
-        this.selectedVerses = Object.assign([], this.lyrics.verses)
+    public toggleVerse(key: string) {
+        console.log(this.verses);
+        console.log(key);
+        if (this.ignoreVerses.includes(key)) {
+            this.ignoreVerses = this.ignoreVerses.filter(k => k != key);
+        } else {
+            this.ignoreVerses.push(key);
+        }
     }
 
-    public toggleSelection(verse: Verse) {
-        if (this.selectedVerses.find(v => v.number == verse.number && v.type == verse.type)) {
-            this.selectedVerses = this.selectedVerses.filter(v => v.number != verse.number || v.type != verse.type);
-        } else {
-            this.selectedVerses.push(verse);
-        }
-        this.selectedVerses = this.selectedVerses.sort((a, b) => a.id - b.id);
+    public updateLyrics() {
+        localStorage.setItem('lyrics', JSON.stringify(this.current));
+        localStorage.setItem('song', JSON.stringify(this.song));
     }
 
     public get verses() {
         return this.lyrics.verses;
+    }
+
+    public get current() {
+        const verses: Verse[] = [];
+
+        for (const key of this.currentVerses) {
+            verses.push(this.verses[key]);
+        }
+
+        return verses;
     }
 }
 </script>
@@ -58,6 +79,27 @@ export default class LyricsSettings extends Vue {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing);
 
+    &__controls {
+        .card__content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        &__link {
+            color: var(--text-color);
+            padding: var(--spacing);
+        }
+
+        &__title {
+            margin-top: 0;
+            grid-column: span 2;
+        }
+
+        &__update {
+            font-size: 1em;
+        }
+    }
+
     &__verses {
         display: flex;
 
@@ -66,10 +108,10 @@ export default class LyricsSettings extends Vue {
         }
 
         &__input {
-            border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             overflow: hidden;
             font-size: 1.1em;
+            
             display: flex;
             align-items: center;
 
@@ -78,19 +120,21 @@ export default class LyricsSettings extends Vue {
 
                 &:checked + span {
                     color: white;
+                    background: var(--primary-color);
                 }
             }
 
             &__label {
                 width: 100%;
-                background: white;
-                color: var(--border-color);
                 padding: var(--half-spacing);
+
+                background: #eaeaea;
+                color: var(--text-color);
                 user-select: none;
 
-                &.selected {
-                    background: var(--primary-color);
-                }
+                // &.selected {
+                //     background: var(--primary-color);
+                // }
             }
 
             &:not(:last-child) {

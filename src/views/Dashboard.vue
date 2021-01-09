@@ -11,12 +11,32 @@
                 <h3>{{ user.email }}</h3>
             </div>
         </card>
+
+        <card style="margin-bottom: var(--spacing)">
+            <div class="user-settings">
+                <h2>User settings</h2>
+                <div class="user-settings__color">
+                    <label>
+                        <span>Theme color</span>
+                        <input type="color">
+                    </label>
+                </div>
+                <div class="user-settings__language">
+                    <label>
+                        <span>Language</span>
+                        <select name="language">
+                            <option value="no">NO</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </card>
         
-        <div class="api-token">
-            <h2 style="display: inline-block; margin-right: var(--spacing)">API token</h2>
+        <card class="api-token">
+            <h3>API token</h3>
             <button @click="showApiToken = true" class="api-token__button">Show API token</button>
-            <card v-if="showApiToken" style="font-size: .8em" border>{{ token }}</card>
-        </div>
+            <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
+        </card>
     </div>
 </template>
 
@@ -59,6 +79,30 @@ export default class Login extends Vue {
         & > label {
             opacity: .7;
         }
+    }
+}
+
+.user-settings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing);
+
+    div {
+        span {
+            display: block;
+            margin-bottom: .2em;
+        }
+    }
+
+    h2 {
+        margin: 0;
+    }
+}
+
+.api-token {
+    h3 {
+        margin: 0 var(--spacing) 0 0;
+        display: inline-block;
     }
 }
 </style>

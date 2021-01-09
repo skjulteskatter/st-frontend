@@ -1,6 +1,7 @@
 import api from '@/services/api'
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
+//import sharedMutations from 'vuex-shared-mutations';
 import auth from '@/services/auth'
 import router from '@/router';
 import { SongService } from '@/services/songService';
@@ -13,6 +14,7 @@ export interface Session {
 
 export interface Users {
     users: User[];
+    roles: string[];
 }
 
 export interface Songs {
@@ -32,18 +34,24 @@ export const usersKey: InjectionKey<Store<Users>> = Symbol();
 export const usersStore = createStore<Users>({
     state: {
         users: [],
+        roles: []
     },
     actions: {
         async getUsers() {
             const result = await api.admin.getAllUsers();
-            if (result?.length > 0) {
-                this.commit('users', result);
-            }
+            this.commit('users', result ?? []);
+        },
+        async getRoles() {
+            const result = await api.admin.getRoles();
+            this.commit('roles', result ?? []);
         }
     },
     mutations: {
         users(state, users: User[]) {
             state.users = users;
+        },
+        roles(state, roles: string[]) {
+            state.roles = roles;
         }
     }
 });
@@ -51,6 +59,10 @@ export const usersStore = createStore<Users>({
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
 export const songStore = createStore<Songs>({
+    // plugins: [
+    //     sharedMutations({ predicate: ['action1', 'action2'] })
+    // ]
+    // ,
     state: {
         lyrics: undefined,
         collection: undefined,
@@ -128,17 +140,40 @@ export const sessionStore = createStore<Session>({
                     }
                 }
             }
+        },
+        async loginWithEmailPassword({ getters, commit }, obj: {
+            email: string;
+            password: string;
+            stayLoggedIn: boolean;
+        }) {
+            await auth.loginEmail(obj.email, obj.password, obj.stayLoggedIn);
+            if (auth.isAuthenticated) {
+                const user = await api.session.getCurrentUser();
+                commit('currentUser', user);
+                if (router.currentRoute.value.name == "login") {
+                    if (getters.isAdmin) {
+                        router.replace("/users");
+                    } else {
+                        router.replace("/dashboard")
+                    }
+                }
+            }
+        },
+        async saveUser({ state }) {
+            await api.session.saveUser(state.currentUser.settings);
         }
     },
     mutations: {
         currentUser(state, user: User) {
             state.currentUser = user;
-            console.log(user);
         },
         logout(state) {
             state.isAuthenticated = false;
             state.currentUser = {} as User;
         },
+        settings(state, settings: UserSettings) {
+            state.currentUser.settings = settings;
+        }
     },
     getters: {
         currentUser(state) {

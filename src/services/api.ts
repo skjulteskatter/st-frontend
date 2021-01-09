@@ -12,6 +12,9 @@ export const session = {
     async startSession() {
         return await auth.login();
     },
+    saveUser(settings: UserSettings) {
+        return http.post('api/Session/Save', settings)
+    }
 }
 
 export const admin = {
@@ -20,6 +23,9 @@ export const admin = {
     },
     getAllUsers() {
         return http.get<User[]>('api/Admin/Users')
+    },
+    getRoles() {
+        return http.get<string[]>('api/Admin/Roles')
     }
 }
 

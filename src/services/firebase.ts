@@ -10,6 +10,7 @@ const providers: {
 } = {
     google: new fb.auth.GoogleAuthProvider(),
     facebook: new fb.auth.FacebookAuthProvider(),
+    twitter: new fb.auth.TwitterAuthProvider()
 };
 
 class Firebase {
@@ -35,6 +36,23 @@ class Firebase {
         user = fb.auth().currentUser;
 
         if (user == null) throw new Error('User not validated...')
+
+        return await user.getIdToken();
+    }
+
+    public async emailPassword(email: string, password: string, stayLoggedIn?: boolean) {
+        if (stayLoggedIn) await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
+
+        if (this.currentUser) return await this.currentUser.getIdToken();
+
+        let user = fb.auth().currentUser;
+        if (user) return await user.getIdToken();
+
+        const result = await fb.auth().signInWithEmailAndPassword(email, password);
+
+        user = result.user;
+
+        if (!user) throw new Error('User not validated...')
 
         return await user.getIdToken();
     }

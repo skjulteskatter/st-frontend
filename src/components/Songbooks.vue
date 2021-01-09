@@ -47,13 +47,19 @@ export default class Songbooks extends Vue {
 
 <style lang="scss" scoped>
 .songbooks {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing);
 
+    @media screen and (max-width: 720px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (max-width: 420px) {
+        grid-template-columns: 1fr;
+    }
+
     &__book {
-        max-width: 250px;
-        width: 100%;
         cursor: pointer;
 
         &__title {
