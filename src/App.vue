@@ -28,6 +28,7 @@ export default class App extends Vue {
     --primary-color: #0073ff;
     --border-color: #d0d0d0;
     --text-color: #2c3e50;
+    --background-color: #ffffff;
 
     // Misc
     --border-radius: 5px;

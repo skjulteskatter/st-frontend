@@ -32,6 +32,9 @@ import Settings from '@/components/Options.vue';
     }
 })
 export default class DashboardLayout extends Vue {
+    mounted(){
+        document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme_color') || '')
+    }
 }
 </script>
 <style lang="scss">
@@ -56,6 +59,7 @@ button {
         background: white;
         color: var(--text-color);
         border: 1px solid var(--border-color);
+        font-weight: 400;
     }
 }
 

@@ -4,17 +4,20 @@
             <div class="lyrics__credits">
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
                 <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
+                <p v-if="song.composers.length">Composer: {{song.composers[0]}}</p>
+                <p v-else>Composer: {{ song.melodyOrigin }}</p>
             </div>
             <div
                 class="lyrics__verse"
-                v-for="verse in lyrics"
-                :key="verse.name"
+                :class="{'lyrics__verse-chorus': verse.type == 'chorus'}"
+                v-for="(verse, i) in lyrics"
+                :key="i + '_' + verse"
             >
-                <span class="lyrics__verse__number">{{ verse.name }}</span>
+                <span class="lyrics__verse__number" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
                 <p
                     class="lyrics__verse__line"
-                    v-for="line in verse.content"
-                    :key="line.id"
+                    v-for="(line, i) in verse.content"
+                    :key="i + '_' + line"
                 >
                     {{ line }}
                 </p>
@@ -80,22 +83,32 @@ export default class LyricsViewer extends Vue {
 
     &__credits {
         border-bottom: 1px solid var(--border-color);
-        margin-bottom: var(--double-spacing);
-        padding-bottom: var(--spacing);
+        margin-bottom: 50px;
+        padding-bottom: .5em;
     }
 
     &__title {
         margin: 0;
+        display: inline-block;
+
     }
 
     &__number {
+        opacity: .5;
         margin-bottom: 0;
-
+        margin-right: var(--double-spacing);
+        display: inline-block;
     }
 
     &__verse {
         margin-bottom: var(--double-spacing);
         position: relative;
+
+        &-chorus {
+            font-style: italic;
+            border-left: 5px solid var(--border-color);
+            padding-left: var(--spacing);
+        }
 
         &__number {
             position: absolute;

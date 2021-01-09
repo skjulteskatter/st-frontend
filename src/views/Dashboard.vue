@@ -16,18 +16,15 @@
             <div class="user-settings">
                 <h2>User settings</h2>
                 <div class="user-settings__color">
-                    <label>
-                        <span>Theme color</span>
-                        <input type="color">
-                    </label>
+                    <label for="theme-color">Theme color</label>
+                    <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor">
+                    <button @click="setThemeColor('#0073ff')" secondary>Reset</button>
                 </div>
                 <div class="user-settings__language">
-                    <label>
-                        <span>Language</span>
-                        <select name="language">
-                            <option value="no">NO</option>
-                        </select>
-                    </label>
+                    <label for="language">Language</label>
+                    <select id="language" name="language">
+                        <option value="no">NO</option>
+                    </select>
                 </div>
             </div>
         </card>
@@ -51,10 +48,25 @@ import Card from '@/components/Card.vue'
         Card,
     }
 })
-export default class Login extends Vue {
+export default class Dashboard extends Vue {
     public showApiToken = false;
+    public themeColor = localStorage.getItem('theme_color') ?? "";
+    public settings?: UserSettings;
 
-    token = localStorage.getItem("id_token");
+    public token = localStorage.getItem("id_token");
+
+    public mounted() {
+        this.settings = Object.assign({}, this.user.settings);
+    }
+
+    public setThemeColor(color?: string) {
+        localStorage.setItem('theme_color', color ?? this.themeColor)
+        document.documentElement.style.setProperty('--primary-color', color ?? this.themeColor)
+    }
+
+    public save() {
+        useStore(sessionKey).dispatch('saveSettings', this.settings);
+    }
 
     public get languages(): Language[] {
         return useStore(sessionKey).getters.languages || [];
@@ -90,8 +102,18 @@ export default class Login extends Vue {
     flex-direction: column;
     gap: var(--spacing);
 
+    &__color {
+
+        input[type=color] {
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            background: var(--backround-color);
+            margin-right: var(--spacing);
+        }
+    }
+
     div {
-        span {
+        label {
             display: block;
             margin-bottom: .2em;
         }

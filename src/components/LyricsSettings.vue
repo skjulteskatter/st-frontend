@@ -9,8 +9,9 @@
         </card>
         <card class="lyrics-settings__controls">
             <h2 class="lyrics-settings__controls__title">Controls</h2>
-            <button class="lyrics-settings__controls__update" @click="updateLyrics()">Update lyrics</button>
-            <button class="lyrics-settings__controls__link" @click="openLyricsWindow" secondary>Go to lyrics</button>
+            <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
+            <button class="lyrics-settings__controls__link" @click="openLyricsWindow" secondary>Open viewer</button>
+            <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
         </card>
     </div>
 </template>
@@ -37,7 +38,7 @@ export default class LyricsSettings extends Vue {
     public lyrics: Lyrics = {} as Lyrics;
     //public verses: Verse[] = [];
     public ignoreVerses: string[] = [];
-    public currentVerses: string[] = ["1", "2"];
+    public currentVerses: number[] = [1, 2];
     public song = useStore(songKey).getters.song;
 
     public toggleVerse(key: string) {
@@ -51,23 +52,46 @@ export default class LyricsSettings extends Vue {
     }
 
     public openLyricsWindow(){
+        this.updateLyrics();
         window.open('/lyrics', 'Lyrics Viewer', 'resizeable,scrollbars')
     }
 
     public updateLyrics() {
+        if (this.size == 1) {
+            this.currentVerses = [1];
+        }
+        if (this.size == 2) {
+            this.currentVerses = [1, 2];
+        }
+
         localStorage.setItem('lyrics', JSON.stringify(this.current));
         localStorage.setItem('song', JSON.stringify(this.song));
+    }
+
+    public next() {
+        if (this.size == 1) {
+            this.currentVerses = [this.currentVerses[0] + 1];
+        }
+        if (this.size == 2) {
+            this.currentVerses = [this.currentVerses[0] + 1, this.currentVerses[0] + 2];
+        }
+        
+        localStorage.setItem('lyrics', JSON.stringify(this.current));
     }
 
     public get verses() {
         return this.lyrics.verses;
     }
 
+    public get size() {
+        return this.verses[0]?.content.length <= 6 ? 2 : 1;
+    }
+
     public get current() {
         const verses: Verse[] = [];
 
         for (const key of this.currentVerses) {
-            verses.push(this.verses[key]);
+            if (this.verses[key]) verses.push(this.verses[key]);
         }
 
         return verses;
