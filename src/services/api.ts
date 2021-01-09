@@ -17,6 +17,12 @@ export const session = {
     }
 }
 
+export const items = {
+    getLanguages() {
+        return http.get<Language[]>('api/Languaegs');
+    }
+}
+
 export const admin = {
     async getAllSubscriptions() {
         return await http.get<Subscription[]>('api/Admin/Subscriptions')
@@ -48,6 +54,7 @@ const api = {
     session,
     admin,
     songs,
+    items,
 }
 
 export default api

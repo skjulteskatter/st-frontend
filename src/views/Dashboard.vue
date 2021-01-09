@@ -49,17 +49,20 @@ import Card from '@/components/Card.vue'
 @Options({
     components: {
         Card,
-    },
-    data(){
-        return {
-            showApiToken: false
-        }
     }
 })
 export default class Login extends Vue {
-    user: User = useStore(sessionKey).getters?.currentUser || {};
+    public showApiToken = false;
 
     token = localStorage.getItem("id_token");
+
+    public get languages(): Language[] {
+        return useStore(sessionKey).getters.languages || [];
+    }
+
+    public get user(): User {
+        return useStore(sessionKey).getters?.currentUser || {};
+    }
 }
 </script>
 
