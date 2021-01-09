@@ -10,7 +10,7 @@
         <card class="lyrics-settings__controls">
             <h2 class="lyrics-settings__controls__title">Controls</h2>
             <button class="lyrics-settings__controls__update" @click="updateLyrics()">Update lyrics</button>
-            <a class="lyrics-settings__controls__link" href="/lyrics" target="_blank">Go to lyrics</a>
+            <button class="lyrics-settings__controls__link" @click="openLyricsWindow" secondary>Go to lyrics</button>
         </card>
     </div>
 </template>
@@ -50,6 +50,10 @@ export default class LyricsSettings extends Vue {
         }
     }
 
+    public openLyricsWindow(){
+        window.open('/lyrics', 'Lyrics Viewer', 'resizeable,scrollbars')
+    }
+
     public updateLyrics() {
         localStorage.setItem('lyrics', JSON.stringify(this.current));
         localStorage.setItem('song', JSON.stringify(this.song));
@@ -80,18 +84,21 @@ export default class LyricsSettings extends Vue {
     gap: var(--spacing);
 
     &__controls {
+
         .card__content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing);
         }
 
         &__link {
             color: var(--text-color);
             padding: var(--spacing);
+            text-align: center;
         }
 
         &__title {
-            margin-top: 0;
+            margin: 0;
             grid-column: span 2;
         }
 

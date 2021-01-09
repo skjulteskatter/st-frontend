@@ -23,7 +23,7 @@
             </div>
         </card>
         <div class="social">
-            <button class="social-button" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
+            <button class="social-button hover" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
         </div>
     </div>
 </template>

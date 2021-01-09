@@ -1,20 +1,24 @@
 <template>
-    <div class="lyrics">
-        <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
-        <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
-        <div
-            class="lyrics__verse"
-            v-for="verse in lyrics"
-            :key="verse.name"
-        >
-            <span class="lyrics__verse__number">{{ verse.name }}</span>
-            <p
-                class="lyrics__verse__line"
-                v-for="line in verse.content"
-                :key="line.id"
+    <div id="wrapper">
+        <div class="lyrics">
+            <div class="lyrics__credits">
+                <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
+                <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
+            </div>
+            <div
+                class="lyrics__verse"
+                v-for="verse in lyrics"
+                :key="verse.name"
             >
-                {{ line }}
-            </p>
+                <span class="lyrics__verse__number">{{ verse.name }}</span>
+                <p
+                    class="lyrics__verse__line"
+                    v-for="line in verse.content"
+                    :key="line.id"
+                >
+                    {{ line }}
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -62,16 +66,40 @@ export default class LyricsViewer extends Vue {
 
 <style lang="scss" scoped>
 .lyrics {
-    &__verse {
-        margin-bottom: 2em;
+    --double-spacing: calc(var(--spacing)*2);
+
+    font-size: 1.5em;
+
+    &__credits {
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: var(--double-spacing);
+        padding-bottom: var(--spacing);
+    }
+
+    &__title {
+        margin: 0;
     }
 
     &__number {
-        font-weight: bold;
+        margin-bottom: 0;
+
     }
 
-    &__line {
-        margin: 0.5em;
+    &__verse {
+        margin-bottom: var(--double-spacing);
+        position: relative;
+
+        &__number {
+            position: absolute;
+            top: 0;
+            left: calc(var(--double-spacing) * -1);
+            font-weight: bold;
+        }
+
+        &__line {
+            margin: .5em 0;
+        }
     }
+
 }
 </style>
