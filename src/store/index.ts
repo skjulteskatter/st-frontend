@@ -1,7 +1,6 @@
 import api from '@/services/api'
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
-//import sharedMutations from 'vuex-shared-mutations';
 import auth from '@/services/auth'
 import router from '@/router';
 import { SongService } from '@/services/songService';
@@ -22,6 +21,7 @@ export interface Songs {
     collection?: Collection;
     songService: SongService;
     song?: Song;
+    verses: Verse[];
 }
 
 type SocialLogin = {
@@ -59,15 +59,12 @@ export const usersStore = createStore<Users>({
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
 export const songStore = createStore<Songs>({
-    // plugins: [
-    //     sharedMutations({ predicate: ['action1', 'action2'] })
-    // ]
-    // ,
     state: {
         lyrics: undefined,
         collection: undefined,
         songService: {} as SongService,
         song: undefined,
+        verses: [],
     },
     actions: {
         async initSongService({ commit }) {
@@ -96,6 +93,9 @@ export const songStore = createStore<Songs>({
         },
         setLyrics(state, lyrics: Lyrics) {
             state.lyrics = lyrics;
+        },
+        verses(state, verses: Verse[]) {
+            state.verses = verses;
         }
     },
     getters: {
@@ -115,6 +115,9 @@ export const songStore = createStore<Songs>({
         },
         lyrics(state) {
             return state.lyrics;
+        },
+        verses(state) {
+            return state.verses;
         }
     },
 });

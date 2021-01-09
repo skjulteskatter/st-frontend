@@ -32,9 +32,7 @@
 import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
-import Card from '@/components/Card.vue'
-import fb from 'firebase/app';
-import 'firebase/auth';
+import Card from '@/components/Card.vue';
 
 @Options({
     components: {

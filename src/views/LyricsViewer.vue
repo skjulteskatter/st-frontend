@@ -20,23 +20,38 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
+import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
 @Options({
 })
 export default class LyricsViewer extends Vue {
-    public $song?: SongInterface = undefined;
-    public $content: Verse[] = [];
+    public store = useStore(songKey);
+
+    public mounted() {
+        window.addEventListener('storage', event => {
+            if (event.key == "song") {
+                const item = localStorage.getItem("song");
+                if (item) {
+                    this.store.commit('selectSong', JSON.parse(item));
+                }
+            }
+            if (event.key == "lyrics") {
+                const item = localStorage.getItem("lyrics");
+                if (item) {
+                    this.store.commit('verses', JSON.parse(item));
+                }
+            }
+        })
+    }
 
     public get song() {
-        const song = localStorage.getItem("song");
-        return song ? JSON.parse(song) : undefined;
+        return useStore(songKey).state.song;
     }
 
     public get lyrics() {
-        return this.$content;
+        return useStore(songKey).state.verses;
     }
 
     public get user() {
