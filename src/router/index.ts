@@ -26,11 +26,6 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/song',
                 name: 'song',
                 component: SongSelector,
-            },
-            {
-                path: '/lyrics',
-                name: 'lyrics',
-                component: LyricsViewer,
             }
         ],
     },
@@ -38,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/lyrics',
+        name: 'lyrics',
+        component: LyricsViewer,
     }
 ]
 

@@ -1,10 +1,10 @@
 <template>
     <div class="lyrics">
-        <h1 class="lyrics__number">{{ lyrics.number }}</h1>
-        <h2 class="lyrics__title">{{ lyrics.title }}</h2>
+        <h1 class="lyrics__number">{{ song.number }}</h1>
+        <h2 class="lyrics__title">{{ song.name[user.settings.languageKey ?? "en"] }}</h2>
         <div
             class="lyrics__verse"
-            v-for="verse in lyrics.content"
+            v-for="verse in lyrics"
             :key="verse.id"
         >
             <span class="lyrics__verse__number">{{ verse.name }}</span>
@@ -19,19 +19,47 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
+import { useStore } from "vuex";
 
 @Options({
-    props: {
-        lyrics: {
-            type: Object,
-            default: {}
-        }
-    }
 })
 export default class LyricsViewer extends Vue {
-    
+    public $song?: SongInterface = undefined;
+    public $content: string[] = [];
+
+    public mounted() {
+        this.$song = JSON.parse(localStorage.getItem('song') ?? "") ?? {};
+        this.$content = JSON.parse(localStorage.getItem('lyrics') ?? "") ?? {};
+
+        window.addEventListener('storage', (event) => {
+            if (event.key) {
+                const item = localStorage.getItem(event.key);
+                if (item) {
+                    if (event.key == "lyrics") {
+                        this.$content = JSON.parse(item);
+                    }
+                    if (event.key == "song") {
+                        this.$song = JSON.parse(item);
+                    }
+                }
+            }
+        });
+    }
+
+    public get song() {
+        return this.$song;
+    }
+
+    public get lyrics() {
+        return this.$content;
+    }
+
+    public get user() {
+        return useStore(sessionKey).state.currentUser;
+    }
 }
 </script>
 
