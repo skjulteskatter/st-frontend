@@ -1,6 +1,6 @@
 <template>
     <div class="modal">
-        <button @click="openModal">{{ label }}</button>
+        <button @click="openModal" class="modal__open-button">{{ label }}</button>
         <div class="modal__popup" v-if="modalIsOpen">
             <card class="modal__popup__card">
                 <slot></slot>
@@ -41,6 +41,10 @@ export default class Modal extends Vue {
 <style lang="scss" scoped>
 
 .modal {
+    &__open-button {
+        width: 100%;
+    }
+
     &__popup {
         width: 100vw;
         height: 100vh;

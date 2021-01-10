@@ -18,14 +18,14 @@
                         <tr v-for="u in users" :key="u.id">
                             <td>
                                 <modal label="Edit" class="edit-user">
-                                    <h3 style="margin-top: 0">{{u.displayName}}</h3>
+                                    <h2 style="margin-top: 0">{{u.displayName}}</h2>
                                     <div class="edit-user__form">
                                         <div class="edit-user__form__field">
-                                            <label for="role">Role</label>
-                                            <select name="role" id="role" class="edit-user__form__role">
-                                                <action>{{u.roles[0] ? u.roles[0].name : 'NOT SET'}}</action>
-                                                <action :value="role" v-for="role in roles" :key="role">{{role}}</action>
-                                            </select>
+                                            <label class="edit-user__form__field__label">Roles</label>
+                                            <label class="edit-user__form__role" v-for="role in roles" :key="role">
+                                                <input type="checkbox" :checked="u.roles.find(r => r.name == role)">
+                                                {{ role }}
+                                            </label>
                                         </div>
                                     </div>
                                 </modal>
@@ -65,21 +65,12 @@ import Modal from '@/components/Modal.vue'
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public disableButton = false;
-    public showUserPanel = false;
 
     get users(): User[] {
         return useStore(usersKey).state.users;
     }
 
-    public openUserPanel(){
-        this.showUserPanel = true;
-    }
-
-    public closeUserPanel(){
-        this.showUserPanel = false;
-    }
-
-    get isAdmin(): boolean {
+    public get isAdmin(): boolean {
         const admin = useStore(sessionKey).getters.isAdmin;
         if (admin && this.users.length == 0 && this.roles.length == 0) {
             this.usersStore.dispatch('getUsers');
@@ -88,11 +79,11 @@ export default class Subscriptions extends Vue {
         return admin;
     }
 
-    get roles() {
+    public get roles() {
         return useStore(usersKey).state.roles;
     }
 
-    async refreshUsers() {
+    public async refreshUsers() {
         this.disableButton = true;
         if (this.isAdmin) {
             await this.usersStore.dispatch('getUsers');
@@ -120,18 +111,13 @@ export default class Subscriptions extends Vue {
 
         &__field {
             width: 100%;
+            display: flex;
+            flex-direction: column;
 
-            label {
-                display: block;
+            &__label {
                 margin-bottom: .25em;
+                opacity: .6;
             }
-        }
-
-        &__role {
-            width: 100%;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            padding: .5em;
         }
     }
 }
