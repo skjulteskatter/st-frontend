@@ -2,8 +2,8 @@
     <div class="lyrics-settings">
         <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
-            <label class="lyrics-settings__verses__input" :class="{ 'ignored': ignoreVerses.includes(key) }" v-for="key in Object.keys(verses)" :key="key" @click="toggleVerse(key)">
-                <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked>
+            <label class="lyrics-settings__verses__input" :class="{'selected': selected.includes(key)}" v-for="key in Object.keys(verses)" :key="key">
+                <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked @click="toggleVerse(key)">
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
@@ -36,19 +36,15 @@ import Card from  '@/components/Card.vue';
 })
 export default class LyricsSettings extends Vue {
     public lyrics: Lyrics = {} as Lyrics;
-    //public verses: Verse[] = [];
-    public ignoreVerses: string[] = [];
-    public currentVerses: number[] = [1, 2];
+    public selectVerses: string[] = [];
     public song = useStore(songKey).getters.song;
+    public currentVerseNumber = 0;
 
-    public toggleVerse(key: string) {
-        console.log(this.verses);
-        console.log(key);
-        if (this.ignoreVerses.includes(key)) {
-            this.ignoreVerses = this.ignoreVerses.filter(k => k != key);
-        } else {
-            this.ignoreVerses.push(key);
-        }
+    // public toggleVerse(key: string) {
+    // }
+
+    public mounted() {
+        this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
     }
 
     public openLyricsWindow(){
@@ -56,27 +52,38 @@ export default class LyricsSettings extends Vue {
         window.open('/lyrics', 'Lyrics Viewer', 'resizeable,scrollbars')
     }
 
+    public toggleVerse(key: string) {
+        if(this.selectVerses.includes(key)) {
+            this.selectVerses = this.selectVerses.filter(k => k != key);
+        } else {
+            this.selectVerses.push(key);
+        }
+        console.log(this.selected);
+    }
+
     public updateLyrics() {
-        if (this.size == 1) {
-            this.currentVerses = [1];
-        }
-        if (this.size == 2) {
-            this.currentVerses = [1, 2];
-        }
+        // if (this.size == 1) {
+        //     this.currentVerses = [1];
+        // }
+        // if (this.size == 2) {
+        //     this.currentVerses = [1, 2];
+        // }
 
         localStorage.setItem('lyrics', JSON.stringify(this.current));
         localStorage.setItem('song', JSON.stringify(this.song));
     }
 
     public next() {
-        if (this.size == 1) {
-            this.currentVerses = [this.currentVerses[0] + 1];
-        }
-        if (this.size == 2) {
-            this.currentVerses = [this.currentVerses[0] + 2, this.currentVerses[1] + 2];
-        }
-        
         localStorage.setItem('lyrics', JSON.stringify(this.current));
+        if (this.size == 2) {
+            this.currentVerseNumber = this.currentVerseNumber + 2;
+        } else {
+            this.currentVerseNumber++;
+        }
+    }
+
+    public get selected() {
+        return this.selectVerses?.sort((a, b) => parseInt(a) - parseInt(b)) ?? [];
     }
 
     public get verses() {
@@ -87,11 +94,22 @@ export default class LyricsSettings extends Vue {
         return this.verses[1].content.length <= 6 ? 2 : 1;
     }
 
+    public get currentVerses(): string[] {
+        const keys = [];
+        if (this.size == 1) {
+            if (this.selected[this.currentVerseNumber]) keys.push(this.selected[this.currentVerseNumber]);
+        } else if (this.size == 2) {
+            if (this.selected[this.currentVerseNumber]) keys.push(this.selected[this.currentVerseNumber]);
+            if (this.selected[this.currentVerseNumber + 1]) keys.push(this.selected[this.currentVerseNumber + 1]);
+        }
+        return keys;
+    }
+
     public get current() {
         const verses: Verse[] = [];
 
         for (const key of this.currentVerses) {
-            if (this.verses[key]) verses.push(this.verses[key]);
+            if (this.verses[key]) verses.push(this.verses[key])
         }
 
         return verses;
