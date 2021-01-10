@@ -25,7 +25,7 @@ export default class App extends Vue {
 <style lang="scss">
 // Variables
 :root {
-    --primary-color: #0073ff;
+    --primary-color: #5372e2;
     --border-color: #d0d0d0;
     --text-color: #2c3e50;
     --background-color: #ffffff;

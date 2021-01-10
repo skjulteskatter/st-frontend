@@ -16,26 +16,27 @@ import { Vue, Options } from 'vue-class-component';
 import { useStore } from 'vuex';
 import { sessionKey } from '../store';
 import Settings from '@/components/Options.vue';
+import themes from '@/classes/themes';
 
 @Options({
     components: {
         Settings,
-    },
-    computed: {
-        user() {
-            return useStore(sessionKey).state.currentUser;
-        },
-        isAdmin() {
-            return useStore(sessionKey).getters.isAdmin;
-        },
-        initialized() {
-            return useStore(sessionKey).getters.initialized;
-        }
     }
 })
 export default class DashboardLayout extends Vue {
     mounted(){
-        document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme_color') || '')
+        document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme_color') || '');
+        themes.load();
+    }
+
+    public get user() {
+        return useStore(sessionKey).state.currentUser;
+    }
+    public get isAdmin() {
+        return useStore(sessionKey).getters.isAdmin;
+    }
+    public get initialized() {
+        return useStore(sessionKey).getters.initialized;
     }
 }
 </script>
@@ -46,6 +47,14 @@ export default class DashboardLayout extends Vue {
     margin: 0 auto;
     padding: var(--spacing);
     word-wrap: break-word;
+}
+
+select {
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: .5em;
 }
 
 button {

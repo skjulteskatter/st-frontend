@@ -18,15 +18,14 @@
                 <div class="user-settings__fields">
                     <div class="user-settings__theme field">
                         <label for="">Theme mode</label>
-                        <select name="theme-mode" id="theme-mode" v-model="themeMode" @input="setThemeMode">
-                            <option value="light">light</option>
-                            <option value="dark">dark</option>
+                        <select name="theme-mode" id="theme-mode" v-model="theme">
+                            <option :value="t" v-for="t in themes.keys" :key="t">{{t}}</option>
                         </select>
                     </div>
                     <div class="user-settings__color field">
                         <label for="theme-color">Theme color</label>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
-                        <button @click="setThemeColor('#0073ff')" secondary>Reset</button>
+                        <button @click="setThemeColor('#5372e2')" secondary>Reset</button>
                     </div>
                     <div class="user-settings__language field">
                         <label for="language">Language</label>
@@ -51,6 +50,7 @@
 import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
+import themes, { Themes } from '@/classes/themes';
 import Card from '@/components/Card.vue'
 
 @Options({
@@ -62,40 +62,23 @@ export default class Dashboard extends Vue {
     public showApiToken = false;
     public selectedLanguage: Language = {} as Language;
     public store = useStore(sessionKey);
+    public themes: Themes = themes;
 
     public themeColor = localStorage.getItem('theme_color') ?? "";
-    public themeMode = localStorage.getItem('theme_mode') ?? 'dark';
+    public theme = localStorage.getItem('theme') ?? '';
     public token = localStorage.getItem("id_token");
 
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
         console.log(this.selectedLanguage);
-        console.log(this.themeMode)
     }
 
     public setThemeColor(color?: string) {
-        localStorage.setItem('theme_color', color ?? this.themeColor)
-        this.setCSSProperty('--primary-color', color ?? this.themeColor)
-    }
-
-    public setThemeMode(theme: string){
-        localStorage.setItem('theme_mode', theme ?? this.themeMode)
-        // this.themeModes[theme]()
-    }
-
-    public setThemeProperties(params: {background: string; secondaryBackground: string; text: string; borderColor: string; borderRadius: string}){
-        this.setCSSProperty('--background-color', params.background)
-        this.setCSSProperty('--secondary-background-color', params.secondaryBackground)
-        this.setCSSProperty('--text-color', params.text)
-        this.setCSSProperty('--border-color', params.borderColor)
-        this.setCSSProperty('--border-radius', params.borderRadius)
-    }
-
-    public setCSSProperty(prop: string, value: string){
-        document.documentElement.style.setProperty(prop, value);
+        this.themes.setThemeColor(color ?? this.themeColor);
     }
 
     public save() {
+        this.themes.setTheme(this.theme);
         this.store.dispatch('saveSettings', this.user.settings);
     }
 
@@ -155,13 +138,7 @@ export default class Dashboard extends Vue {
             padding: .5em 0;
 
             &:not(:last-child) {
-                border-bottom: 1px solid var(--secondary-background-color);
-            }
-
-            select {
-                border: 1px solid var(--border-color);
-                border-radius: var(--border-radius);
-                padding: .5em;
+                border-bottom: 1px solid var(--border-color);
             }
         }
     }

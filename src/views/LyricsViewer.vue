@@ -33,6 +33,7 @@
 import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
+import themes from "@/classes/themes";
 
 @Options({
 })
@@ -40,6 +41,7 @@ export default class LyricsViewer extends Vue {
     public store = useStore(songKey);
 
     public mounted() {
+        themes.load();
         const lyricsItem = localStorage.getItem("lyrics");
         if (lyricsItem) {
             this.store.commit('verses', JSON.parse(lyricsItem));
