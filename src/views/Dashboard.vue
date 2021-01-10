@@ -129,7 +129,7 @@ export default class Dashboard extends Vue {
             padding: .5em 0;
 
             &:not(:last-child) {
-                border-bottom: 1px solid #eaeaea;
+                border-bottom: 1px solid var(--secondary-background-color);
             }
         }
     }
@@ -147,7 +147,7 @@ export default class Dashboard extends Vue {
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
             height: 30px;
-            background: var(--backround-color);
+            background: var(--secondary-backround-color);
 
             &::-webkit-color-swatch {
                 border-radius: var(--border-radius);

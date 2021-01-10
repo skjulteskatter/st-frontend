@@ -105,7 +105,7 @@ export default class Login extends Vue {
     &-button {
         width: 60px;
         height: 60px;
-        background: white;
+        background: var(--background-color);
         padding: .5em;
         border-radius: 100%;
         outline: 0;

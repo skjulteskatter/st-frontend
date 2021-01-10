@@ -58,7 +58,7 @@ button {
     cursor: pointer;
 
     &[secondary] {
-        background: white;
+        background: var(--background-color);
         color: var(--text-color);
         border: 1px solid var(--border-color);
         font-weight: 400;
@@ -66,7 +66,7 @@ button {
 }
 
 .nav {
-    background-color: white;
+    background-color: var(--background-color);
     border-bottom: 1px solid var(--border-color);
 
     display: flex;
