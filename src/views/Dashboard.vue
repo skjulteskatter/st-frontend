@@ -16,6 +16,13 @@
             <div class="user-settings">
                 <h2 class="user-settings__title">User settings</h2>
                 <div class="user-settings__fields">
+                    <div class="user-settings__theme field">
+                        <label for="">Theme mode</label>
+                        <select name="theme-mode" id="theme-mode" v-model="themeMode" @input="setThemeMode">
+                            <option value="light">light</option>
+                            <option value="dark">dark</option>
+                        </select>
+                    </div>
                     <div class="user-settings__color field">
                         <label for="theme-color">Theme color</label>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
@@ -53,20 +60,39 @@ import Card from '@/components/Card.vue'
 })
 export default class Dashboard extends Vue {
     public showApiToken = false;
-    public themeColor = localStorage.getItem('theme_color') ?? "";
     public selectedLanguage: Language = {} as Language;
     public store = useStore(sessionKey);
 
+    public themeColor = localStorage.getItem('theme_color') ?? "";
+    public themeMode = localStorage.getItem('theme_mode') ?? 'dark';
     public token = localStorage.getItem("id_token");
 
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
         console.log(this.selectedLanguage);
+        console.log(this.themeMode)
     }
 
     public setThemeColor(color?: string) {
         localStorage.setItem('theme_color', color ?? this.themeColor)
-        document.documentElement.style.setProperty('--primary-color', color ?? this.themeColor)
+        this.setCSSProperty('--primary-color', color ?? this.themeColor)
+    }
+
+    public setThemeMode(theme: string){
+        localStorage.setItem('theme_mode', theme ?? this.themeMode)
+        // this.themeModes[theme]()
+    }
+
+    public setThemeProperties(params: {background: string; secondaryBackground: string; text: string; borderColor: string; borderRadius: string}){
+        this.setCSSProperty('--background-color', params.background)
+        this.setCSSProperty('--secondary-background-color', params.secondaryBackground)
+        this.setCSSProperty('--text-color', params.text)
+        this.setCSSProperty('--border-color', params.borderColor)
+        this.setCSSProperty('--border-radius', params.borderRadius)
+    }
+
+    public setCSSProperty(prop: string, value: string){
+        document.documentElement.style.setProperty(prop, value);
     }
 
     public save() {
@@ -131,6 +157,12 @@ export default class Dashboard extends Vue {
             &:not(:last-child) {
                 border-bottom: 1px solid var(--secondary-background-color);
             }
+
+            select {
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius);
+                padding: .5em;
+            }
         }
     }
 
@@ -155,13 +187,6 @@ export default class Dashboard extends Vue {
             }
         }
     }
-
-    #language {
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        padding: .5em;
-    }
-
 
     &__title {
         margin: 0;
