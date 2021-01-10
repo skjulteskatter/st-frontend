@@ -9,8 +9,9 @@
         </card>
         <card class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
+            <button class="lyrics-settings__controls__open" @click="openLyricsWindow">Open viewer</button>
             <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
-            <button class="lyrics-settings__controls__link" @click="openLyricsWindow" secondary>Open viewer</button>
+            <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
             <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
         </card>
     </div>
@@ -133,18 +134,17 @@ export default class LyricsSettings extends Vue {
             gap: var(--spacing);
         }
 
-        &__link {
-            color: var(--text-color);
-            padding: var(--spacing);
-            text-align: center;
-        }
-
         &__title {
             margin: 0;
             grid-column: span 2;
         }
 
         &__update {
+            font-size: 1em;
+            padding: var(--spacing);
+        }
+
+        &__open {
             font-size: 1em;
         }
     }

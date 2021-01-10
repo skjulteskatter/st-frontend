@@ -39,15 +39,6 @@ export default class Modal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
 .modal {
     &__open-button {
         width: 100%;

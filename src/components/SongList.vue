@@ -38,6 +38,7 @@ export default class SongList extends Vue {
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--spacing) * 0.5);
+    animation: slideInFromBottom .3s ease;
 
     &__item {
         max-width: 50px;
