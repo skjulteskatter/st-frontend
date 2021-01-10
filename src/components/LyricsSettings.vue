@@ -83,6 +83,18 @@ export default class LyricsSettings extends Vue {
         localStorage.setItem('lyrics', JSON.stringify(this.current));
     }
 
+    public previous() {
+        if (this.currentVerseNumber == 0) {
+            return;
+        }
+        if (this.size == 2) {
+            this.currentVerseNumber = this.currentVerseNumber - 2;
+        } else {
+            this.currentVerseNumber--;
+        }
+        localStorage.setItem('lyrics', JSON.stringify(this.current));
+    }
+
     public get selected() {
         return this.selectVerses?.sort((a, b) => parseInt(a) - parseInt(b)) ?? [];
     }
