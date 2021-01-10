@@ -112,6 +112,7 @@ export default class LyricsViewer extends Vue {
     &__verse {
         margin-bottom: var(--double-spacing);
         position: relative;
+        font-size: 1.4em;
 
         &-chorus {
             font-style: italic;
@@ -122,7 +123,7 @@ export default class LyricsViewer extends Vue {
         &__number {
             position: absolute;
             top: 0;
-            left: calc(var(--double-spacing) * -1);
+            left: -1.5em;
             font-weight: bold;
         }
 
