@@ -1,6 +1,5 @@
 import config from '../config'
 import auth from './auth'
-import isomorphicfetch from 'isomorphic-fetch'
 
 class Http {
     public validateResponse(response: Response): Promise<Response> {
@@ -56,12 +55,25 @@ class Http {
         content: T,
         options?: object
     ): Promise<T> {
+
+        const body = JSON.stringify(content);
+
         return this.apifetch(
             path,
             Object.assign(
                 {
+                    headers: [
+                        [
+                            'Content-Type',
+                            'application/json'
+                        ],
+                        [
+                            'Content-Length',
+                            body.length as unknown as string,
+                        ]
+                    ],
                     method: 'POST',
-                    body: JSON.stringify(content)
+                    body: body
                 },
                 options || {}
             )
@@ -78,21 +90,18 @@ class Http {
      */
     public patch<T>(
         path: string,
-        content: T,
-        options?: object
+        content: T
     ): Promise<T> {
+        console.log(JSON.stringify(content));
         return this.apifetch(
             path,
-            Object.assign(
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: 'PATCH',
-                    body: JSON.stringify(content)
-                },
-                options || {}
-            )
+            {
+                method: 'PATCH',
+                body: JSON.stringify(content),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
         )
     }
 
@@ -145,14 +154,14 @@ class Http {
         path = `${config.api.basePath}${path}`
         if (auth.token == null) throw new Error("No Authorization token available")
 
-        const headers = Object.assign(options.headers ?? {}, {
-            Authorization: `Bearer ${auth.token}`
-        })
+        const headers = Object.assign({
+            'Authorization': `Bearer ${auth.token}`
+        }, options.headers);
 
-        const result = isomorphicfetch(path, {
-            method: options.method,
-            headers: headers,
-        })
+        const o = Object.assign(
+        options, {headers});
+
+        const result = fetch(path, o)
             .then(this.validateResponse)
             .then(this.parseJson)
         return result;

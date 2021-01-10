@@ -54,10 +54,15 @@ import Card from '@/components/Card.vue'
 export default class Dashboard extends Vue {
     public showApiToken = false;
     public themeColor = localStorage.getItem('theme_color') ?? "";
-    public selectedLanguage? = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no");
+    public selectedLanguage: Language = {} as Language;
     public store = useStore(sessionKey);
 
     public token = localStorage.getItem("id_token");
+
+    public mounted() {
+        this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
+        console.log(this.selectedLanguage);
+    }
 
     public setThemeColor(color?: string) {
         localStorage.setItem('theme_color', color ?? this.themeColor)
@@ -69,12 +74,15 @@ export default class Dashboard extends Vue {
     }
 
     public setLanguage() {
-        const settings = Object.assign({}, this.user.settings);
-        if (this.selectedLanguage) {
-            settings.languageKey = this.selectedLanguage.key;
-
-            this.store.commit('settings', settings);
-        }
+        setTimeout(() => {
+            const settings = Object.assign({}, this.user.settings);
+            const language = this.selectedLanguage; 
+            console.log(language);
+            if (language) {
+                settings.languageKey = language.key;
+                this.store.commit('settings', settings);
+            }
+        }, 100);
     }
 
     public get languages(): Language[] {
