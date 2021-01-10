@@ -7,7 +7,7 @@
             <settings class="nav__item"></settings>
         </div>
     </nav>
-    <div id="wrapper" v-if="user">
+    <div id="wrapper" v-if="user && initialized">
         <router-view/>
     </div>
 </template>
@@ -27,6 +27,9 @@ import Settings from '@/components/Options.vue';
         },
         isAdmin() {
             return useStore(sessionKey).getters.isAdmin;
+        },
+        initialized() {
+            return useStore(sessionKey).getters.initialized;
         }
     }
 })

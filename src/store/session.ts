@@ -8,6 +8,7 @@ export interface Session {
     currentUser: User;
     isAuthenticated: boolean;
     languages: Language[];
+    initialized: boolean;
 }
 
 type SocialLogin = {
@@ -21,7 +22,8 @@ export const sessionStore = createStore<Session>({
     state: {
         currentUser: {} as User,
         isAuthenticated: false,
-        languages: []
+        languages: [],
+        initialized: false,
     },
     actions: {
         async socialLogin(state, obj: SocialLogin) {
@@ -30,9 +32,8 @@ export const sessionStore = createStore<Session>({
                 const user = await api.session.getCurrentUser();
                 state.commit('currentUser', user);
                 try {
-                    api.items.getLanguages().then(languages => {
-                        state.commit('languages', languages);
-                    })
+                    const languages = await api.items.getLanguages();
+                    state.commit('languages', languages);
                 } catch (e) {
                     console.log(e);
                 }
@@ -43,6 +44,7 @@ export const sessionStore = createStore<Session>({
                         router.replace("/about")
                     }
                 }
+                state.commit('initialized', true);
             }
         },
         async loginWithEmailPassword({ getters, commit }, obj: {
@@ -63,7 +65,7 @@ export const sessionStore = createStore<Session>({
                 }
             }
         },
-        async saveUser({ state }) {
+        async saveSettings({ state }) {
             if (state.currentUser.settings) await api.session.saveUser(state.currentUser.settings);
         }
     },
@@ -80,6 +82,9 @@ export const sessionStore = createStore<Session>({
         },
         languages(state, languages: Language[]) {
             state.languages = languages;
+        },
+        initialized(state, initialized: boolean) {
+            state.initialized = initialized;
         }
     },
     getters: {
@@ -91,6 +96,9 @@ export const sessionStore = createStore<Session>({
         },
         languages(state) {
             return state.languages;
+        },
+        initialized(state) {
+            return state.initialized;
         }
     }
 })

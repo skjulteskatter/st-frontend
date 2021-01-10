@@ -22,11 +22,11 @@
                 </div>
                 <div class="user-settings__language">
                     <label for="language">Language</label>
-                    <select id="language" name="language" v-model="settings.languageKey">
-                        <option v-for="lang in languages" :value="lang.key" :key="lang.key">{{lang.name}}</option>
+                    <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
+                        <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>
                     </select>
                 </div>
-                <button class="user-settings__save-button" @click="save">Save settings</button>
+                <button class="user-settings__save-button" @click="save">Save</button>
             </div>
         </card>
         
@@ -52,13 +52,10 @@ import Card from '@/components/Card.vue'
 export default class Dashboard extends Vue {
     public showApiToken = false;
     public themeColor = localStorage.getItem('theme_color') ?? "";
-    public settings?: UserSettings;
+    public selectedLanguage? = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no");
+    public store = useStore(sessionKey);
 
     public token = localStorage.getItem("id_token");
-
-    public mounted() {
-        this.settings = this.user?.settings;
-    }
 
     public setThemeColor(color?: string) {
         localStorage.setItem('theme_color', color ?? this.themeColor)
@@ -66,7 +63,16 @@ export default class Dashboard extends Vue {
     }
 
     public save() {
-        useStore(sessionKey).dispatch('saveSettings', this.settings);
+        this.store.dispatch('saveSettings', this.user.settings);
+    }
+
+    public setLanguage() {
+        const settings = Object.assign({}, this.user.settings);
+        if (this.selectedLanguage) {
+            settings.languageKey = this.selectedLanguage.key;
+
+            this.store.commit('settings', settings);
+        }
     }
 
     public get languages(): Language[] {

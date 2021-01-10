@@ -3,7 +3,7 @@ import auth from './auth'
 import isomorphicfetch from 'isomorphic-fetch'
 
 class Http {
-    public validateResponse (response: Response): Promise<Response> {
+    public validateResponse(response: Response): Promise<Response> {
         return new Promise((resolve, reject) => {
             if (response.status >= 200 && response.status < 300) {
                 resolve(response)
@@ -24,7 +24,7 @@ class Http {
         })
     }
 
-    public parseJson (response: Response) {
+    public parseJson(response: Response) {
         return response.json()
     }
 
@@ -34,7 +34,7 @@ class Http {
      * @param  {String} path
      * @return {Promise}
      */
-    public get<T> (path: string): Promise<T> {
+    public get<T>(path: string): Promise<T> {
         return this.apifetch(
             path,
             {
@@ -51,7 +51,7 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public post<T> (
+    public post<T>(
         path: string,
         content: T,
         options?: object
@@ -69,6 +69,31 @@ class Http {
     }
 
     /**
+     * API PATCH request
+     *
+     * @param  {String} path
+     * @param  {Object} content
+     * @param  {Object} options (optional)
+     * @return {Promise}
+     */
+    public patch<T>(
+        path: string,
+        content: T,
+        options?: object
+    ): Promise<T> {
+        return this.apifetch(
+            path,
+            Object.assign(
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify(content)
+                },
+                options || {}
+            )
+        )
+    }
+
+    /**
      * API DELETE request
      *
      * @param  {String} path
@@ -76,7 +101,7 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public ['delete']<T> (
+    public ['delete']<T>(
         path: string,
         options?: object
     ): Promise<T> {
@@ -98,7 +123,7 @@ class Http {
      * @param  {Object} content
      * @return {Promise}
      */
-    public put<T> (
+    public put<T>(
         path: string,
         content: T
     ): Promise<T> {
@@ -113,7 +138,7 @@ class Http {
         )
     }
 
-    public async apifetch (path: string, options: RequestInit) {
+    public async apifetch(path: string, options: RequestInit) {
         path = `${config.api.basePath}${path}`
         if (auth.token == null) throw new Error("No Authorization token available")
         const result = isomorphicfetch(path, {
