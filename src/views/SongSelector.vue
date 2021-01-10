@@ -2,12 +2,13 @@
     <div class="view-song">
         <stepper :steps="steps" :callback="deselect"></stepper>
 
+        <div class="loader" v-if="loading || !collections"></div>
         <div id="book-step" v-if="!collectionSelected">
             <h1>Select book</h1>
             <songbooks :collections="collections" :callback="selectCollection"></songbooks>
         </div>
 
-        <div id="song-step" v-if="!songSelected && collectionSelected">
+        <div id="song-step" v-if="!songSelected && collectionSelected && !loading">
             <h1>Select number</h1>
             <song-list :items="songs" :callback="selectSong"></song-list>
         </div>
@@ -100,4 +101,43 @@ export default class SongSelector extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    &:after {
+        content: '';
+        width: 100px;
+        height: 100px;
+
+        border-radius: 100%;
+        border-bottom: 10px solid var(--primary-color);
+        border-top: 10px solid var(--primary-color);
+        border-left: 10px solid var(--primary-color);
+        border-right: 10px solid transparent;
+
+        animation: loading 1s infinite linear;
+    }
+
+}
+</style>

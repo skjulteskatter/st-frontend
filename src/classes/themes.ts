@@ -10,19 +10,19 @@ export class Themes {
     public themes: {
         [key: string]: Theme;
     } = {
-            dark: {
-                background: '#2C2F33',
-                secondaryBackground: '#232527',
-                text: '#F5F7FA',
-                borderColor: '#393d42'
-            },
-            light: {
-                background: '#FFFFFF',
-                secondaryBackground: '#FAFAFA',
-                text: '#333333',
-                borderColor: '#D0D0D0'
-            }
+        dark: {
+            background: '#2C2F33',
+            secondaryBackground: '#232527',
+            text: '#F5F7FA',
+            borderColor: '#393d42'
+        },
+        light: {
+            background: '#FFFFFF',
+            secondaryBackground: '#FAFAFA',
+            text: '#333333',
+            borderColor: '#D0D0D0'
         }
+    }
 
     public setTheme(key: string) {
         const theme = this.themes[key];
@@ -53,7 +53,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(localStorage.getItem('theme') ?? 'light');
+        this.setTheme(localStorage.getItem('theme') ?? 'dark');
     }
 
     public get keys() {

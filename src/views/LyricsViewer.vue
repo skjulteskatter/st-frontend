@@ -1,29 +1,32 @@
 <template>
-    <div id="wrapper">
+    <div id="lyrics-wrapper">
         <div class="lyrics">
             <div class="lyrics__credits">
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
                 <div>
                     <h3 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h3>
-                    <p class="lyrics__credits__author" v-if="song ? song.authors.length > 0 : false">Author: {{song.authors[0].name}}</p>
-                    <p class="lyrics__credits__composer" v-if="song ? song.composers.length > 0 : false">Composer: {{song.composers[0].name}}</p>
-                    <p class="lyrics__credits__composer" v-else>Composer: {{ song ? song.melodyOrigin.name[user.settings.languageKey] : 'UNKNOWN' }}</p>
+                    <p class="lyrics__credits__author" v-if="song ? song.authors.length > 0 : false">Forfatter: {{song.authors[0].name}}</p>
+                    <p class="lyrics__credits__composer" v-if="song ? song.composers.length > 0 : false">Komponist: {{song.composers[0].name}}</p>
+                    <p class="lyrics__credits__composer" v-else>Melodi: {{ song ? song.melodyOrigin.name[user.settings.languageKey] : 'UNKNOWN' }}</p>
                 </div>
             </div>
-            <div
-                class="lyrics__verse"
-                :class="{'lyrics__verse-chorus': verse.type == 'chorus'}"
-                v-for="(verse, i) in lyrics"
-                :key="i + '_' + verse"
-            >
-                <span class="lyrics__verse__number" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
-                <p
-                    class="lyrics__verse__line"
-                    v-for="(line, i) in verse.content"
-                    :key="i + '_' + line"
+            <div id="text-wrapper">
+                <div
+                    class="lyrics__verse"
+                    :class="{'lyrics__verse-chorus': verse.type == 'chorus'}"
+                    v-for="(verse, i) in lyrics"
+                    :key="i + '_' + verse"
                 >
-                    {{ line }}
-                </p>
+                    <span class="lyrics__verse__number" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
+                    <p
+                        class="lyrics__verse__line"
+                        :class="{'fade': line.trim()[0] == '('}"
+                        v-for="(line, i) in verse.content"
+                        :key="i + '_' + line"
+                    >
+                        {{ line }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -81,13 +84,20 @@ export default class LyricsViewer extends Vue {
 </script>
 
 <style lang="scss" scoped>
+
+#text-wrapper {
+    margin-left: 10em;
+}
+
 .lyrics {
     --double-spacing: calc(var(--spacing) * 2);
 
-    font-size: 1.5em;
+    font-size: 2.2em;
 
     &__credits {
+        width: 100%;
         border-bottom: 1px solid var(--border-color);
+        padding-left: 2em;
         margin-bottom: 50px;
         margin-top: 25px;
         padding-bottom: .5em;
@@ -112,9 +122,10 @@ export default class LyricsViewer extends Vue {
     }
 
     &__verse {
-        margin-bottom: var(--double-spacing);
+        margin-bottom: 1.5em;
         position: relative;
-        font-size: 1.4em;
+        line-height: 1em;
+        font-size: 1.5em;
 
         &-chorus {
             font-style: italic;
@@ -131,6 +142,11 @@ export default class LyricsViewer extends Vue {
 
         &__line {
             margin: .5em 0;
+
+            &.fade {
+                opacity: .5;
+                font-size: .8em;
+            }
         }
     }
 
