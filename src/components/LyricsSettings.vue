@@ -73,7 +73,7 @@ export default class LyricsSettings extends Vue {
             this.currentVerses = [this.currentVerses[0] + 1];
         }
         if (this.size == 2) {
-            this.currentVerses = [this.currentVerses[0] + 1, this.currentVerses[0] + 2];
+            this.currentVerses = [this.currentVerses[0] + 2, this.currentVerses[1] + 2];
         }
         
         localStorage.setItem('lyrics', JSON.stringify(this.current));
@@ -84,7 +84,7 @@ export default class LyricsSettings extends Vue {
     }
 
     public get size() {
-        return this.verses[0]?.content.length <= 6 ? 2 : 1;
+        return this.verses[1].content.length <= 6 ? 2 : 1;
     }
 
     public get current() {

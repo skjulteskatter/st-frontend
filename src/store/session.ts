@@ -30,8 +30,9 @@ export const sessionStore = createStore<Session>({
                 const user = await api.session.getCurrentUser();
                 state.commit('currentUser', user);
                 try {
-                    const languages = await api.items.getLanguages();
-                    state.commit('languages', languages);
+                    api.items.getLanguages().then(languages => {
+                        state.commit('languages', languages);
+                    })
                 } catch (e) {
                     console.log(e);
                 }

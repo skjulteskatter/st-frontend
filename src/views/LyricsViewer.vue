@@ -4,8 +4,8 @@
             <div class="lyrics__credits">
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
                 <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
-                <p v-if="song.composers.length">Composer: {{song.composers[0]}}</p>
-                <p v-else>Composer: {{ song.melodyOrigin }}</p>
+                <p v-if="song ? song.composers.length > 0 : false">Composer: {{song.composers[0]}}</p>
+                <p v-else>Composer: {{ song ? song.melodyOrigin : 'UNKNOWN' }}</p>
             </div>
             <div
                 class="lyrics__verse"
