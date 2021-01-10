@@ -85,6 +85,9 @@ class Http {
             path,
             Object.assign(
                 {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     method: 'PATCH',
                     body: JSON.stringify(content)
                 },
@@ -141,11 +144,14 @@ class Http {
     public async apifetch(path: string, options: RequestInit) {
         path = `${config.api.basePath}${path}`
         if (auth.token == null) throw new Error("No Authorization token available")
+
+        const headers = Object.assign(options.headers ?? {}, {
+            Authorization: `Bearer ${auth.token}`
+        })
+
         const result = isomorphicfetch(path, {
             method: options.method,
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            }
+            headers: headers,
         })
             .then(this.validateResponse)
             .then(this.parseJson)
