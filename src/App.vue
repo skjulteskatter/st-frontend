@@ -39,6 +39,7 @@ export default class App extends Vue {
 *:before,
 *:after {
     box-sizing: border-box;
+    outline-color: var(--primary-color);
 }
 
 body {

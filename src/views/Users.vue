@@ -8,14 +8,17 @@
             <card class="users__table" border>
                 <table>
                     <thead>
-                        <th>Id</th>
+                        <th></th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Id</th>
                     </thead>
                     <tbody>
                         <tr v-for="u in users" :key="u.id">
-                            <td>{{u.id}}</td>
+                            <td>
+                                <button @click="openUserPanel(u)" secondary>Edit</button>
+                            </td>
                             <td>{{u.displayName}}</td>
                             <td>{{u.email}}</td>
                             <td>
@@ -24,9 +27,15 @@
                                     <option :value="role" v-for="role in roles" :key="role">{{role}}</option>
                                 </select>
                             </td>
+                            <td>{{u.id}}</td>
                         </tr>
+
                     </tbody>
                 </table>
+            </card>
+            <card class="edit-user" v-if="showUserPanel" border>
+                <h2>Edit user</h2>
+                <button @click="closeUserPanel">Save</button>
             </card>
         </div>
         <div v-else>
@@ -49,9 +58,18 @@ import Card from '@/components/Card.vue'
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public disableButton = false;
+    public showUserPanel = false;
 
     get users(): User[] {
         return useStore(usersKey).state.users;
+    }
+
+    public openUserPanel(){
+        this.showUserPanel = true;
+    }
+
+    public closeUserPanel(){
+        this.showUserPanel = false;
     }
 
     get isAdmin(): boolean {
@@ -86,14 +104,24 @@ export default class Subscriptions extends Vue {
     margin: 0;
 }
 
+.edit-user {
+    margin-top: var(--spacing);
+
+    h2 {
+        margin-top: 0;
+    }
+}
+
 .users__table {
     text-align: left;
+    overflow-x: auto;
 
     #role {
         font-size: inherit;
         color: var(--text-color);
         background: transparent;
         border: none;
+        min-width: 100px;
         width: 100%;
     }
 
@@ -103,6 +131,10 @@ export default class Subscriptions extends Vue {
     
     td {
         padding: .5em;
+
+        & > {
+            margin: 0;
+        }
     }
 
     tr {
