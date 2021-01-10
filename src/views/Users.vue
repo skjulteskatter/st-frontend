@@ -128,22 +128,28 @@ export default class Subscriptions extends Vue {
 
     table {
         width: 100%;
+        border-collapse: collapse;
+
+        th {
+            padding: .5em;
+        }
+        
+        tr {
+            &:nth-child(odd) {
+                background: #eaeaea;
+            }
+        }
+
+        td {
+            padding: .5em;
+
+            & > {
+                margin: 0;
+            }
+        }
     }
     
-    td {
-        padding: .5em;
 
-        & > {
-            margin: 0;
-        }
-    }
-
-    tr {
-        
-        &:nth-child(odd) {
-            background: #eaeaea;
-        }
-    }
 
 }
 
