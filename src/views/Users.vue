@@ -17,19 +17,24 @@
                     <tbody>
                         <tr v-for="u in users" :key="u.id">
                             <td>
-                                <button @click="openUserPanel(u)" secondary>Edit</button>
+                                <modal label="Edit" class="edit-user">
+                                    <h3 style="margin-top: 0">{{u.displayName}}</h3>
+                                    <div class="edit-user__form">
+                                        <div class="edit-user__form__field">
+                                            <label for="role">Role</label>
+                                            <select name="role" id="role" class="edit-user__form__role">
+                                                <action>{{u.roles[0] ? u.roles[0].name : 'NOT SET'}}</action>
+                                                <action :value="role" v-for="role in roles" :key="role">{{role}}</action>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </modal>
                             </td>
                             <td>{{u.displayName}}</td>
                             <td>{{u.email}}</td>
-                            <td>
-                                <select name="role" id="role">
-                                    <option :value="u.roles[0] ? u.roles[0].name : 'NOT SET'">{{u.roles[0] ? u.roles[0].name : 'NOT SET'}}</option>
-                                    <option :value="role" v-for="role in roles" :key="role">{{role}}</option>
-                                </select>
-                            </td>
+                            <td>{{u.roles[0] ? u.roles[0].name : 'NOT SET'}}</td>
                             <td>{{u.id}}</td>
                         </tr>
-
                     </tbody>
                 </table>
             </card>
@@ -49,10 +54,12 @@ import { sessionKey, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import Card from '@/components/Card.vue'
+import Modal from '@/components/Modal.vue'
 
 @Options({
     components: {
         Card,
+        Modal
     }
 })
 export default class Subscriptions extends Vue {
@@ -105,25 +112,33 @@ export default class Subscriptions extends Vue {
 }
 
 .edit-user {
-    margin-top: var(--spacing);
+    &__form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing);
+        min-width: 300px;
 
-    h2 {
-        margin-top: 0;
+        &__field {
+            width: 100%;
+
+            label {
+                display: block;
+                margin-bottom: .25em;
+            }
+        }
+
+        &__role {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: .5em;
+        }
     }
 }
 
 .users__table {
     text-align: left;
     overflow-x: auto;
-
-    #role {
-        font-size: inherit;
-        color: var(--text-color);
-        background: transparent;
-        border: none;
-        min-width: 100px;
-        width: 100%;
-    }
 
     table {
         width: 100%;
