@@ -31,7 +31,7 @@ export default class Card extends Vue {}
 
 <style lang="scss" scoped>
 .card {
-  background: white;
+  background: var(--background-color);
   border-radius: var(--border-radius);
   overflow: hidden;
   animation: slideInFromBottom .3s ease;

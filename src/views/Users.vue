@@ -136,7 +136,7 @@ export default class Subscriptions extends Vue {
         
         tr {
             &:nth-child(odd) {
-                background: #eaeaea;
+                background: var(--secondary-background-color);
             }
         }
 
