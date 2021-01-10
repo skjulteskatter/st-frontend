@@ -46,6 +46,15 @@ export default class LyricsSettings extends Vue {
 
     public mounted() {
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key == "ArrowRight") {
+                this.next();
+            }
+            if (event.key == "ArrowLeft") {
+                this.previous();
+            }
+        })
     }
 
     public openLyricsWindow(){
