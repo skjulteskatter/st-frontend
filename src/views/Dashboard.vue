@@ -14,17 +14,19 @@
 
         <card style="margin-bottom: var(--spacing)">
             <div class="user-settings">
-                <h2>User settings</h2>
-                <div class="user-settings__color">
-                    <label for="theme-color">Theme color</label>
-                    <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
-                    <button @click="setThemeColor('#0073ff')" secondary>Reset</button>
-                </div>
-                <div class="user-settings__language">
-                    <label for="language">Language</label>
-                    <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
-                        <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>
-                    </select>
+                <h2 class="user-settings__title">User settings</h2>
+                <div class="user-settings__fields">
+                    <div class="user-settings__color field">
+                        <label for="theme-color">Theme color</label>
+                        <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
+                        <button @click="setThemeColor('#0073ff')" secondary>Reset</button>
+                    </div>
+                    <div class="user-settings__language field">
+                        <label for="language">Language</label>
+                        <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
+                            <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="user-settings__save-button" @click="save">Save</button>
             </div>
@@ -109,24 +111,51 @@ export default class Dashboard extends Vue {
     flex-direction: column;
     gap: var(--spacing);
 
+    &__fields {
+
+        .field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing);
+            padding: .5em 0;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid #eaeaea;
+            }
+        }
+    }
+
     &__color {
+        display: flex;
+        gap: var(--spacing);
+
+        label {
+            display: block;
+            width: 100%;
+        }
 
         input[type=color] {
             border-radius: var(--border-radius);
             border: 1px solid var(--border-color);
+            height: 30px;
             background: var(--backround-color);
-            margin-right: var(--spacing);
+
+            &::-webkit-color-swatch {
+                border-radius: var(--border-radius);
+                border: none;
+            }
         }
     }
 
-    div {
-        label {
-            display: block;
-            margin-bottom: .2em;
-        }
+    #language {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: .5em;
     }
 
-    h2 {
+
+    &__title {
         margin: 0;
     }
 }
