@@ -23,16 +23,36 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+// Variables
 :root {
-    // Colors
     --primary-color: #0073ff;
     --border-color: #d0d0d0;
     --text-color: #2c3e50;
     --background-color: #ffffff;
 
-    // Misc
     --border-radius: 5px;
     --spacing: 1rem;
+}
+
+// Animations
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(.5em);
+    opacity: 0;
+  }
+  to {
+    tranform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 *,
