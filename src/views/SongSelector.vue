@@ -36,26 +36,6 @@ import LyricsSettings from '@/components/LyricsSettings.vue';
         Songbooks,
         Stepper,
         LyricsSettings,
-    },
-    computed: {
-        collections() {
-            return useStore(songKey).getters.collections;
-        },
-        collectionSelected() {
-            return useStore(songKey).getters.collection != undefined && this.collectionSelect;
-        },
-        lyrics() {
-            return useStore(songKey).getters.lyrics;
-        },
-        songs() {
-            return useStore(songKey).getters.songs;
-        },
-        song() {
-            return useStore(songKey).getters.song;
-        },
-        songSelected() {
-            return useStore(songKey).getters.song != undefined && this.songSelect;
-        }
     }
 })
 export default class SongSelector extends Vue {
@@ -91,6 +71,31 @@ export default class SongSelector extends Vue {
             this.songSelect = false;
             this.steps = [this.steps[0]];
         }
+    }
+    
+    public get collections() {
+        return useStore(songKey).getters.collections;
+    }
+    public get collectionSelected() {
+        return useStore(songKey).getters.collection != undefined && this.collectionSelect;
+    }
+    public get lyrics() {
+        return useStore(songKey).getters.lyrics;
+    }
+    public get songs() {
+
+        const songs = useStore(songKey).getters.songs as Song[];
+
+        return songs?.filter(s => s.name[this.language] != null) || [];
+    }
+    public get song() {
+        return useStore(songKey).getters.song;
+    }
+    public get songSelected() {
+        return useStore(songKey).getters.song != undefined && this.songSelect;
+    }
+    public get language() {
+        return useStore(sessionKey).getters.currentUser?.settings?.languageKey;
     }
 }
 </script>
