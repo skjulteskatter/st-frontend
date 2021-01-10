@@ -30,10 +30,22 @@ export default class Card extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(.5em);
+    opacity: 0;
+  }
+  to {
+    tranform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .card {
   background: white;
   border-radius: var(--border-radius);
   overflow: hidden;
+  animation: slideInFromBottom .3s ease;
 
   &-border {
     border: 1px solid var(--border-color);
