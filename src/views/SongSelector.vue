@@ -54,11 +54,11 @@ export default class SongSelector extends Vue {
 
     public async selectSong(song: Song) {
         this.songStore.commit('selectSong', song);
-        this.songSelect = true;
         this.steps[1] = {name: song.number.toString(), id: song.number.toString(), type: "song"};
         this.loading = true;
         await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
         this.loading = false;
+        this.songSelect = true;
     }
 
     public deselect(type: string) {
