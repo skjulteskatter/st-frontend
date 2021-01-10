@@ -3,7 +3,7 @@
         <div v-if="isAdmin">
             <div class="header">
                 <h1>Users</h1>
-                <button :disabled="disableButton" @click="refreshUsers()">Refresh</button>
+                <button :disabled="disableButton" @click="refreshUsers()" secondary>Refresh</button>
             </div>
             <card class="users__table" border>
                 <table>

@@ -22,16 +22,17 @@
                 </div>
                 <div class="user-settings__language">
                     <label for="language">Language</label>
-                    <select id="language" name="language">
-                        <option value="no">NO</option>
+                    <select id="language" name="language" v-model="settings.languageKey">
+                        <option v-for="lang in languages" :value="lang.key" :key="lang.key">{{lang.name}}</option>
                     </select>
                 </div>
+                <button class="user-settings__save-button" @click="save">Save settings</button>
             </div>
         </card>
         
         <card class="api-token">
             <h3>API token</h3>
-            <button @click="showApiToken = true" class="api-token__button">Show API token</button>
+            <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
         </card>
     </div>
