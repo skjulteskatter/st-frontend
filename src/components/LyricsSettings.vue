@@ -1,13 +1,13 @@
 <template>
     <div class="lyrics-settings">
-        <card class="lyrics-settings__verses" border>
+        <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
             <label class="lyrics-settings__verses__input" :class="{ 'ignored': ignoreVerses.includes(key) }" v-for="key in Object.keys(verses)" :key="key" @click="toggleVerse(key)">
                 <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked>
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
-        <card class="lyrics-settings__controls">
+        <card class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
             <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
             <button class="lyrics-settings__controls__link" @click="openLyricsWindow" secondary>Open viewer</button>
