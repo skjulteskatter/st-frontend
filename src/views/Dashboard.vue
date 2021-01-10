@@ -17,7 +17,7 @@
                 <h2>User settings</h2>
                 <div class="user-settings__color">
                     <label for="theme-color">Theme color</label>
-                    <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor">
+                    <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
                     <button @click="setThemeColor('#0073ff')" secondary>Reset</button>
                 </div>
                 <div class="user-settings__language">

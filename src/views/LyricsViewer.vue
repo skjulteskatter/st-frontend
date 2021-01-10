@@ -3,9 +3,12 @@
         <div class="lyrics">
             <div class="lyrics__credits">
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
-                <h2 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h2>
-                <p v-if="song ? song.composers.length > 0 : false">Composer: {{song.composers[0]}}</p>
-                <p v-else>Composer: {{ song ? song.melodyOrigin : 'UNKNOWN' }}</p>
+                <div>
+                    <h3 class="lyrics__title">{{ song ? song.name[user.settings.languageKey ?? "en"].title : "TITLE"}}</h3>
+                    <p class="lyrics__credits__author" v-if="song ? song.authors.length > 0 : false">Author: {{song.authors[0].name}}</p>
+                    <p class="lyrics__credits__composer" v-if="song ? song.composers.length > 0 : false">Composer: {{song.composers[0].name}}</p>
+                    <p class="lyrics__credits__composer" v-else>Composer: {{ song ? song.melodyOrigin.name[user.settings.languageKey] : 'UNKNOWN' }}</p>
+                </div>
             </div>
             <div
                 class="lyrics__verse"
@@ -77,27 +80,33 @@ export default class LyricsViewer extends Vue {
 
 <style lang="scss" scoped>
 .lyrics {
-    --double-spacing: calc(var(--spacing)*2);
+    --double-spacing: calc(var(--spacing) * 2);
 
     font-size: 1.5em;
 
     &__credits {
         border-bottom: 1px solid var(--border-color);
         margin-bottom: 50px;
+        margin-top: 25px;
         padding-bottom: .5em;
+        display: flex;
+        align-items: center;
+        gap: var(--double-spacing);
+
+        &__composer, &__author {
+            margin: 0;
+            font-size: .7em;
+            opacity: .6;
+        }
     }
 
     &__title {
         margin: 0;
-        display: inline-block;
-
     }
 
     &__number {
-        opacity: .5;
-        margin-bottom: 0;
-        margin-right: var(--double-spacing);
-        display: inline-block;
+        opacity: .6;
+        margin: 0;
     }
 
     &__verse {

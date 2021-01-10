@@ -19,7 +19,7 @@ export const session = {
 
 export const items = {
     getLanguages() {
-        return http.get<Language[]>('api/Languaegs');
+        return http.get<Language[]>('api/Languages');
     }
 }
 
