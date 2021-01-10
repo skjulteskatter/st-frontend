@@ -56,7 +56,7 @@ export default class Dashboard extends Vue {
     public token = localStorage.getItem("id_token");
 
     public mounted() {
-        this.settings = Object.assign({}, this.user.settings);
+        this.settings = this.user?.settings;
     }
 
     public setThemeColor(color?: string) {

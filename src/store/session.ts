@@ -64,7 +64,7 @@ export const sessionStore = createStore<Session>({
             }
         },
         async saveUser({ state }) {
-            await api.session.saveUser(state.currentUser.settings);
+            if (state.currentUser.settings) await api.session.saveUser(state.currentUser.settings);
         }
     },
     mutations: {
