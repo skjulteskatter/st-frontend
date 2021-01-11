@@ -73,7 +73,6 @@ export default class Dashboard extends Vue {
 
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
-        console.log(this.selectedLanguage);
     }
 
     public setThemeColor(color?: string) {
@@ -88,8 +87,7 @@ export default class Dashboard extends Vue {
     public setLanguage() {
         setTimeout(() => {
             const settings = Object.assign({}, this.user.settings);
-            const language = this.selectedLanguage; 
-            console.log(language);
+            const language = this.selectedLanguage;
             if (language) {
                 settings.languageKey = language.key;
                 this.store.commit('settings', settings);

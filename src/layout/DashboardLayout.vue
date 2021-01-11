@@ -1,5 +1,5 @@
 <template>
-    <nav class="nav">
+    <nav class="nav" v-if="user && initialized">
         <div class="nav__wrapper">
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
             <router-link v-if="isAdmin" class="nav__item" to="/users">Users</router-link>

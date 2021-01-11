@@ -4,24 +4,25 @@ class Auth {
     public accessToken = ''
     public expiresAt = 0
 
-    public async login(providerName?: string, stayLoggedIn?: boolean) {
-        this.accessToken = await firebase.socialLogin(providerName, stayLoggedIn);
-
-        if (this.accessToken !== '') {
-            localStorage.setItem('id_token', this.accessToken)
-            this.expiresAt = 3600 * 1000 + new Date().getTime()
-            localStorage.setItem('id_expires_at', `${this.expiresAt}`)
+    public setToken(token: string) {
+        if (token !== '') {
+            this.accessToken = token;
+            localStorage.setItem('id_token', token);
+            this.expiresAt = 3600 * 1000 + new Date().getTime();
+            localStorage.setItem('id_expires_at', `${this.expiresAt}`);
         }
     }
 
-    public async loginEmail(email: string, password: string, stayLoggedIn: boolean) {
-        this.accessToken = await firebase.emailPassword(email, password, stayLoggedIn);
+    public async init() {
+        this.setToken(await firebase.init());
+    }
 
-        if (this.accessToken !== '') {
-            localStorage.setItem('id_token', this.accessToken)
-            this.expiresAt = 3600 * 1000 + new Date().getTime()
-            localStorage.setItem('id_expires_at', `${this.expiresAt}`)
-        }
+    public async login(providerName?: string, stayLoggedIn = false) {
+        this.setToken(await firebase.socialLogin(providerName, stayLoggedIn));
+    }
+
+    public async loginEmail(email: string, password: string, stayLoggedIn: boolean) {
+        this.setToken(await firebase.emailPassword(email, password, stayLoggedIn));
     }
 
     public get isAuthenticated() {

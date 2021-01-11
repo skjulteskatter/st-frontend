@@ -38,10 +38,6 @@
                     </tbody>
                 </table>
             </card>
-            <card class="edit-user" v-if="showUserPanel" border>
-                <h2>Edit user</h2>
-                <button @click="closeUserPanel">Save</button>
-            </card>
         </div>
         <div v-else>
             <h1>You don't have access to view this page</h1>

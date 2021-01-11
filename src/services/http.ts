@@ -92,7 +92,6 @@ class Http {
         path: string,
         content: T
     ): Promise<T> {
-        console.log(JSON.stringify(content));
         return this.apifetch(
             path,
             {
