@@ -18,17 +18,20 @@
                 <div class="user-settings__fields">
                     <div class="user-settings__theme field">
                         <label for="">Theme mode</label>
+                        <hr>
                         <select name="theme-mode" id="theme-mode" v-model="theme">
                             <option :value="t" v-for="t in themes.keys" :key="t">{{t}}</option>
                         </select>
                     </div>
                     <div class="user-settings__color field">
                         <label for="theme-color">Theme color</label>
+                        <hr>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
                         <button @click="setThemeColor('#5372e2')" secondary>Reset</button>
                     </div>
                     <div class="user-settings__language field">
                         <label for="language">Language</label>
+                        <hr>
                         <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
                             <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>
                         </select>
@@ -137,8 +140,18 @@ export default class Dashboard extends Vue {
             gap: var(--spacing);
             padding: .5em 0;
 
+            label {
+                white-space: nowrap;
+            }
+
+            hr {
+                border: none;
+                border-top: 1px solid var(--border-color);
+                width: 100%;
+            }
+
             &:not(:last-child) {
-                border-bottom: 1px solid var(--border-color);
+                // border-bottom: 1px solid var(--border-color);
             }
         }
     }
@@ -146,11 +159,6 @@ export default class Dashboard extends Vue {
     &__color {
         display: flex;
         gap: var(--spacing);
-
-        label {
-            display: block;
-            width: 100%;
-        }
 
         input[type=color] {
             border-radius: var(--border-radius);
