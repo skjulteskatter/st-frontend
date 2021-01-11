@@ -66,6 +66,12 @@ export default class LyricsViewer extends Vue {
                     this.store.commit('verses', JSON.parse(item));
                 }
             }
+            if(event.key == 'theme') {
+                const item = localStorage.getItem('theme')
+                if (item) {
+                    themes.load()
+                }
+            }
         })
     }
 

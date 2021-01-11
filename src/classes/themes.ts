@@ -4,6 +4,7 @@ type Theme = {
     text: string;
     borderColor: string;
     borderRadius?: string;
+    fontFamily?: string;
 }
 
 export class Themes {
@@ -41,6 +42,7 @@ export class Themes {
         this.setCSSProperty('--text-color', params.text)
         this.setCSSProperty('--border-color', params.borderColor)
         if (params.borderRadius) this.setCSSProperty('--border-radius', params.borderRadius)
+        if (params.fontFamily) this.setCSSProperty('--font-family', params.fontFamily)
     }
 
     public setCSSProperty(prop: string, value: string) {
