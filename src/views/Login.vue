@@ -3,6 +3,9 @@
         <card id="login-card" border>
             <div class="login">
                 <h1 class="login__title">Please log in</h1>
+                <div class="social">
+                    <button class="social-button hover" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
+                </div>
                 <form @submit.prevent="submitForm" class="login__form">
                     <div class="login__form__email">
                         <label for="email">Email</label>
@@ -22,9 +25,6 @@
                 </form>
             </div>
         </card>
-        <div class="social">
-            <button class="social-button hover" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
-        </div>
     </div>
 </template>
 
@@ -92,19 +92,21 @@ export default class Login extends Vue {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background: var(--background-color);
 }
 
 #login-card {
     max-width: 500px;
     width: 100%;
+
+    background: var(--secondary-background-color);
 }
 
 .social {
-    padding: var(--spacing);
-
     &-button {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
         background: var(--background-color);
         padding: .5em;
         border-radius: 100%;
@@ -119,6 +121,7 @@ export default class Login extends Vue {
 
 .login {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: var(--spacing);
 
@@ -127,6 +130,7 @@ export default class Login extends Vue {
     }
 
     &__form {
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: var(--spacing);
@@ -138,6 +142,7 @@ export default class Login extends Vue {
 
         input {
             padding: var(--spacing);
+            background: var(--background-color);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
         }
