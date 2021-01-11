@@ -20,8 +20,12 @@ class Firebase {
         return providers[name];
     }
 
-    public async socialLogin(providerName?: string, stayLoggedIn?: boolean) {
-        if (stayLoggedIn) await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
+    public async socialLogin(providerName?: string, stayLoggedIn = false) {
+        if (stayLoggedIn) {
+            await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
+        } else {
+            await fb.auth().setPersistence(fb.auth.Auth.Persistence.SESSION)
+        }
 
         if (this.currentUser) return await this.currentUser.getIdToken();
 
@@ -40,8 +44,12 @@ class Firebase {
         return await user.getIdToken();
     }
 
-    public async emailPassword(email: string, password: string, stayLoggedIn?: boolean) {
-        if (stayLoggedIn) await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL);
+    public async emailPassword(email: string, password: string, stayLoggedIn = false) {
+        if (stayLoggedIn) {
+            await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
+        } else {
+            await fb.auth().setPersistence(fb.auth.Auth.Persistence.SESSION)
+        }
 
         if (this.currentUser) return await this.currentUser.getIdToken();
 
@@ -56,6 +64,14 @@ class Firebase {
 
         return await user.getIdToken();
     }
+
+    public init(): Promise<string> {
+        const user = fb.auth().currentUser;
+
+        if (!user) throw new Error('User doesn\'t exist');
+
+        return user.getIdToken();
+    }
 }
 
 const firebase = new Firebase();
@@ -64,7 +80,7 @@ fb.auth().onAuthStateChanged(async s => {
     firebase.currentUser = s?.uid !== null ? s : null;
 
     if (firebase.currentUser) {
-        await sessionStore.dispatch('socialLogin', true);
+        await sessionStore.dispatch('initialize');
         await songStore.dispatch('initSongService');
     }
 })

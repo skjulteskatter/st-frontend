@@ -47,6 +47,27 @@ export const sessionStore = createStore<Session>({
                 state.commit('initialized', true);
             }
         },
+        async initialize(state) {
+            await auth.init();
+            if (auth.isAuthenticated) {
+                const user = await api.session.getCurrentUser();
+                state.commit('currentUser', user);
+                try {
+                    const languages = await api.items.getLanguages();
+                    state.commit('languages', languages);
+                } catch (e) {
+                    console.log(e);
+                }
+                if (router.currentRoute.value.name == "login") {
+                    if (state.getters.isAdmin) {
+                        router.replace("/users");
+                    } else {
+                        router.replace("/about")
+                    }
+                }
+                state.commit('initialized', true);
+            }
+        },
         async loginWithEmailPassword({ getters, commit }, obj: {
             email: string;
             password: string;

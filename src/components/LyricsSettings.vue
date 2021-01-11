@@ -68,7 +68,6 @@ export default class LyricsSettings extends Vue {
         } else {
             this.selectVerses.push(key);
         }
-        console.log(this.selected);
     }
 
     public updateLyrics() {
