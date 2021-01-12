@@ -80,7 +80,6 @@ export default class Dashboard extends Vue {
     public themeColor = localStorage.getItem('theme_color') ?? "";
     public theme = localStorage.getItem('theme') ?? '';
     public token = localStorage.getItem("id_token");
-    public roles = ['administrator','subscriber'];
 
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
