@@ -18,6 +18,7 @@
                         <tr v-for="u in users" :key="u.id">
                             <td>
                                 <modal label="Edit" class="edit-user">
+                                    <div class="loading" v-if="loading"></div>
                                     <h2 style="margin-top: 0">{{u.displayName}}</h2>
                                     <div class="edit-user__form">
                                         <div class="edit-user__form__field">
@@ -62,6 +63,7 @@ import Modal from '@/components/Modal.vue'
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public disableButton = false;
+    public loading = false;
 
     get users(): User[] {
         return useStore(usersKey).state.users;
@@ -85,7 +87,9 @@ export default class Subscriptions extends Vue {
     }
 
     public async saveRoles(user: User) {
+        this.loading = true;
         await this.usersStore.dispatch('setRoles', user);
+        this.loading = false;
     }
 
     public async refreshUsers() {
