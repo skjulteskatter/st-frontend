@@ -2,14 +2,24 @@
     <div id="dashboard">
         <h1>Dashboard</h1>
         <card class="user-info" border>
-            <div class="user-info__field">
+            <div class="fields">
+                <div class="user-info__field">
+                    <span class="tag empty" v-if="!user.roles.length">no roles</span>
+                    <span class="tag" v-for="role in user.roles" :key="'tag-'+role">{{role}}</span>
+                </div>
+                <div class="user-info__field">
+                    <h2 class="user-info__name">{{ user.displayName }}</h2>
+                    <p class="user-info__email">{{ user.email }}</p>
+                </div>
+            </div>
+            <!-- <div class="user-info__field">
                 <label>Name</label>
                 <h3>{{ user.displayName }}</h3>
-            </div>
-            <div class="user-info__field">
+            </div> -->
+            <!-- <div class="user-info__field">
                 <label>E-mail</label>
                 <h3>{{ user.email }}</h3>
-            </div>
+            </div> -->
         </card>
 
         <card style="margin-bottom: var(--spacing)">
@@ -70,6 +80,7 @@ export default class Dashboard extends Vue {
     public themeColor = localStorage.getItem('theme_color') ?? "";
     public theme = localStorage.getItem('theme') ?? '';
     public token = localStorage.getItem("id_token");
+    public roles = ['administrator','subscriber'];
 
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
@@ -109,8 +120,12 @@ export default class Dashboard extends Vue {
 .user-info {
     margin-bottom: var(--spacing);
 
-    h3 {
+    * {
         margin: 0;
+    }
+
+    &__name {
+        margin-bottom: .2em;
     }
 
     &__field {
@@ -120,7 +135,25 @@ export default class Dashboard extends Vue {
 
         & > label {
             opacity: .7;
+            font-size: .8em;
         }
+    }
+}
+
+.tag {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: .5em;
+    font-size: .7em;
+    text-transform: uppercase;
+    margin-right: calc(var(--spacing)/2);
+    margin-bottom: var(--spacing);
+
+    &.empty {
+        border: 1px solid var(--text-color);
+        color: var(--text-color); 
+        opacity: .6;
     }
 }
 
