@@ -5,6 +5,7 @@
                 <h1 class="login__title">Please log in</h1>
                 <div class="social">
                     <button class="social-button hover" @click="login('google')"><img alt="GOOGLE ICON" src="/img/google.png"/></button>
+                    <!-- <button class="social-button hover" @click="login('twitter')"><img alt="TWITTER ICON" src="/img/twitter.svg"/></button> -->
                 </div>
                 <form @submit.prevent="submitForm" class="login__form">
                     <div class="login__form__email">
@@ -52,7 +53,7 @@ export default class Login extends Vue {
     }
 
     async login(provider: string) {
-        await this.store.dispatch('socialLogin', {provider, stayLoggedIn: this.stayLoggedIn});
+        await this.store.dispatch('socialLogin', provider);
     }
 }
 

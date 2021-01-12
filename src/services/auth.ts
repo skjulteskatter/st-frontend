@@ -17,8 +17,8 @@ class Auth {
         this.setToken(await firebase.init());
     }
 
-    public async login(providerName?: string, stayLoggedIn = false) {
-        this.setToken(await firebase.socialLogin(providerName, stayLoggedIn));
+    public async login(providerName?: string) {
+        this.setToken(await firebase.socialLogin(providerName));
     }
 
     public async loginEmail(email: string, password: string, stayLoggedIn: boolean) {

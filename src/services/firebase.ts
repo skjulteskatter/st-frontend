@@ -20,12 +20,8 @@ class Firebase {
         return providers[name];
     }
 
-    public async socialLogin(providerName?: string, stayLoggedIn = false) {
-        if (stayLoggedIn) {
-            await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
-        } else {
-            await fb.auth().setPersistence(fb.auth.Auth.Persistence.SESSION)
-        }
+    public async socialLogin(providerName?: string) {
+        await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
 
         if (this.currentUser) return await this.currentUser.getIdToken();
 

@@ -148,9 +148,9 @@ export default class Dashboard extends Vue {
                 width: 100%;
             }
 
-            &:not(:last-child) {
-                // border-bottom: 1px solid var(--border-color);
-            }
+            // &:not(:last-child) {
+            //     // border-bottom: 1px solid var(--border-color);
+            // }
         }
     }
 

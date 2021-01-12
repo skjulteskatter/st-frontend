@@ -11,11 +11,6 @@ export interface Session {
     initialized: boolean;
 }
 
-type SocialLogin = {
-    provider: string;
-    stayLoggedIn: boolean;
-};
-
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
 
 export const sessionStore = createStore<Session>({
@@ -26,8 +21,8 @@ export const sessionStore = createStore<Session>({
         initialized: false,
     },
     actions: {
-        async socialLogin(state, obj: SocialLogin) {
-            await auth.login(obj.provider, obj.stayLoggedIn);
+        async socialLogin(state, provider: string) {
+            await auth.login(provider);
             if (auth.isAuthenticated) {
                 const user = await api.session.getCurrentUser();
                 state.commit('currentUser', user);
