@@ -90,7 +90,7 @@ class Http {
      */
     public patch<T>(
         path: string,
-        content: T
+        content: unknown
     ): Promise<T> {
         return this.apifetch(
             path,

@@ -28,13 +28,16 @@ export const items = {
 
 export const admin = {
     async getAllSubscriptions() {
-        return await http.get<Subscription[]>('api/Admin/Subscriptions')
+        return await http.get<Subscription[]>('api/Admin/Subscriptions');
     },
     getAllUsers() {
-        return http.get<User[]>('api/Admin/Users')
+        return http.get<User[]>('api/Admin/Users');
     },
     getRoles() {
-        return http.get<string[]>('api/Admin/Roles')
+        return http.get<string[]>('api/Admin/Roles');
+    },
+    setRoles(user: User, roles: string[]) {
+        return http.patch<User>(`api/Admin/User/${user.id}/Roles`, roles);
     }
 }
 

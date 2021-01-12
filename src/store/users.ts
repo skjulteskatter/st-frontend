@@ -23,6 +23,15 @@ export const usersStore = createStore<Users>({
         async getRoles() {
             const result = await api.admin.getRoles();
             this.commit('roles', result ?? []);
+        },
+        async setRoles({commit}, user: User) {
+            const roles = [];
+            for (const role of user.roles) {
+                roles.push(role.name);
+            }
+            const result = await api.admin.setRoles(user, roles);
+
+            commit('setRoles', {user, roles: result.roles});
         }
     },
     mutations: {
@@ -31,6 +40,16 @@ export const usersStore = createStore<Users>({
         },
         roles(state, roles: string[]) {
             state.roles = roles;
+        },
+        toggleRole(state, obj: {user: User; role: string}) {
+            if (obj.user.roles.find(r => r.name == obj.role)) {
+                obj.user.roles = obj.user.roles.filter(r => r.name != obj.role);
+            } else {
+                obj.user.roles.push({id: (Math.random() * 100).toString(), name: obj.role});
+            }
+        },
+        setRoles(state, obj: {user: User; roles: Role[]}) {
+            obj.user.roles = obj.roles;
         }
     }
 });

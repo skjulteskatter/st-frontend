@@ -23,11 +23,12 @@
                                         <div class="edit-user__form__field">
                                             <label class="edit-user__form__field__label">Roles</label>
                                             <label class="edit-user__form__role" v-for="role in roles" :key="role">
-                                                <input type="checkbox" :checked="u.roles.find(r => r.name == role)">
+                                                <input type="checkbox" :checked="u.roles.find(r => r.name == role)" @change="toggleRole(u, role)">
                                                 {{ role }}
                                             </label>
                                         </div>
                                     </div>
+                                    <button @click="saveRoles(u)">SAVE</button>
                                 </modal>
                             </td>
                             <td>{{u.displayName}}</td>
@@ -77,6 +78,14 @@ export default class Subscriptions extends Vue {
 
     public get roles() {
         return useStore(usersKey).state.roles;
+    }
+
+    public toggleRole(user: User, role: string) {
+        this.usersStore.commit('toggleRole', {user, role});
+    }
+
+    public async saveRoles(user: User) {
+        await this.usersStore.dispatch('setRoles', user);
     }
 
     public async refreshUsers() {
