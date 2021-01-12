@@ -10,11 +10,11 @@
     "dev": "vue-cli-service build --watch --dest ../BACKEND/wwwroot"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^1.11.0",
     "core-js": "^3.6.5",
-    "firebase": "^8.2.1",
+    "firebase": "^8.2.2",
     "isomorphic-fetch": "^3.0.0",
     "less-loader": "^7.2.1",
-    "stripe": "^8.130.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-0",

@@ -33,12 +33,13 @@ class Http {
      * @param  {String} path
      * @return {Promise}
      */
-    public get<T>(path: string): Promise<T> {
+    public get<T>(path: string, bypassAuth?: boolean): Promise<T> {
         return this.apifetch(
             path,
             {
                 method: 'GET'
-            }
+            }, 
+            bypassAuth
         )
     }
 
@@ -50,9 +51,9 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public post<T>(
+    public post<T, Y = T>(
         path: string,
-        content: T,
+        content: Y,
         options?: object
     ): Promise<T> {
 
@@ -149,9 +150,9 @@ class Http {
         )
     }
 
-    public async apifetch(path: string, options: RequestInit) {
+    public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`
-        if (auth.token == null) throw new Error("No Authorization token available")
+        if (auth.token == null && !bypassAuth) throw new Error("No Authorization token available")
 
         const headers = Object.assign({
             'Authorization': `Bearer ${auth.token}`

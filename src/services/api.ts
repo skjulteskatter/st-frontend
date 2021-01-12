@@ -1,9 +1,11 @@
+import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
+import { SessionRequest, SetupResponse } from 'checkout';
 import auth from './auth';
 import http from './http';
 
 export const session = {
     getVersion() {
-        return http.get<string>('version')
+        return http.get<string>('version', false)
     },
     async login() {
         return await auth.login()
@@ -53,6 +55,18 @@ export const songs = {
     },
     getAllLyrics(collection: string, language: string, format: string, transpose: number) {
         return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
+    }
+}
+
+export const stripe = {
+    setup() {
+        return http.get<SetupResponse>('api/Store/Setup')
+    },
+    startSession(priceId: string) {
+        return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { priceId })
+    },
+    getSession(sessionId: string) {
+        return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`)
     }
 }
 

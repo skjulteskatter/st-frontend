@@ -12,7 +12,7 @@ export class Song implements SongInterface {
     public soundFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
     public biography: MediaFile = {} as MediaFile;
-    public melodyOrigin = {};
+    public melodyOrigin = {} as Origin;
 
     constructor(song: SongInterface) {
         this.number = song.number;
