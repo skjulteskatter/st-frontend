@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { sessionStore, songStore } from '@/store';
 import fb from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from '@/config';
 
 fb.initializeApp(firebaseConfig);
+
+if (fb.auth == null) {
+    throw new Error("Firebase didn't initialize");
+}
 
 const providers: {
     [provider: string]: fb.auth.AuthProvider;
@@ -13,14 +18,17 @@ const providers: {
     twitter: new fb.auth.TwitterAuthProvider()
 };
 
-class Firebase {
-    public currentUser: fb.User | null = null
+class FirebaseService {
+    public currentUser: fb.User | null = null;
 
-    private getProvider(name = "google"): fb.auth.AuthProvider {
+    private getProvider(name = "google"): any {
         return providers[name];
     }
 
     public async socialLogin(providerName?: string) {
+        if (fb.auth == null) {
+            throw new Error("Firebase didn't initialize");
+        }
         await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
 
         if (this.currentUser) return await this.currentUser.getIdToken();
@@ -41,6 +49,9 @@ class Firebase {
     }
 
     public async emailPassword(email: string, password: string, stayLoggedIn = false) {
+        if (fb.auth == null) {
+            throw new Error("Firebase didn't initialize");
+        }
         if (stayLoggedIn) {
             await fb.auth().setPersistence(fb.auth.Auth.Persistence.LOCAL)
         } else {
@@ -62,15 +73,25 @@ class Firebase {
     }
 
     public init(): Promise<string> {
+        if (fb.auth == null) {
+            throw new Error("Firebase didn't initialize");
+        }
         const user = fb.auth().currentUser;
 
         if (!user) throw new Error('User doesn\'t exist');
 
         return user.getIdToken();
     }
+
+    public signOut() {
+        if (fb.auth == null) {
+            throw new Error("Firebase didn't initialize");
+        }
+        fb.auth().signOut();
+    }
 }
 
-const firebase = new Firebase();
+const firebase = new FirebaseService();
 
 fb.auth().onAuthStateChanged(async s => {
     firebase.currentUser = s?.uid !== null ? s : null;

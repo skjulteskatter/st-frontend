@@ -5,11 +5,11 @@
 </template>
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import firebase from "firebase";
+import firebase from "@/services/firebase";
 
 export default class Options extends Vue {
     logout() {
-        firebase.auth().signOut();
+        firebase.signOut();
         window.location.replace("/");
     }
 }
