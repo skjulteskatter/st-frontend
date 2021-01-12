@@ -1,10 +1,10 @@
 <template>
     <div class="modal">
         <button @click="openModal" class="modal__open-button">{{ label }}</button>
-        <div class="modal__popup" v-if="modalIsOpen">
-            <card class="modal__popup__card">
+        <div class="modal__popup" v-if="modalIsOpen" @click="closeIfOutside">
+            <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
                 <slot></slot>
-                <button @click="closeModal" class="modal__popup__card__close-button">Ok</button>
+                <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
             </card>
         </div>
     </div>
@@ -27,6 +27,11 @@ import Card from '@/components/Card.vue'
 })
 export default class Modal extends Vue {
     public modalIsOpen = false;
+    public mouseOverCard = false;
+
+    public closeIfOutside(){
+        if (!this.mouseOverCard) this.closeModal()
+    }
 
     public openModal(){
         this.modalIsOpen = true;
@@ -63,7 +68,6 @@ export default class Modal extends Vue {
         &__card {
             &__close-button {
                 margin-top: var(--spacing);
-                font-size: 1em;
             }
         }
     }

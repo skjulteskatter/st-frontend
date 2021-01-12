@@ -28,7 +28,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <button @click="saveRoles(u)">SAVE</button>
+                                    <button @click="saveRoles(u)" class="edit-user__save">Save</button>
                                 </modal>
                             </td>
                             <td>{{u.displayName}}</td>
@@ -108,6 +108,10 @@ export default class Subscriptions extends Vue {
 }
 
 .edit-user {
+    &__save {
+        margin-right: calc(var(--spacing)/2);
+    }
+
     &__form {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
