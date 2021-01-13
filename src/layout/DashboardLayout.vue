@@ -42,6 +42,23 @@ export default class DashboardLayout extends Vue {
 </script>
 <style lang="scss">
 
+.tag {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: .5em;
+    font-size: .7em;
+    text-transform: uppercase;
+    margin-right: calc(var(--spacing)/2);
+    margin-bottom: var(--spacing);
+
+    &.empty {
+        border: 1px solid var(--text-color);
+        color: var(--text-color); 
+        opacity: .6;
+    }
+}
+
 #wrapper {
     max-width: 1000px;
     margin: 0 auto;
