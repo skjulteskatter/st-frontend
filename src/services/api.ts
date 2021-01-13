@@ -4,9 +4,6 @@ import auth from './auth';
 import http from './http';
 
 export const session = {
-    getVersion() {
-        return http.get<string>('version', false)
-    },
     async login() {
         return await auth.login()
     },

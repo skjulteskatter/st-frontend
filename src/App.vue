@@ -7,7 +7,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import DashboardLayout from '@/layout/DashboardLayout.vue';
-import api from './services/api';
 
 @Options({
     components: {
@@ -19,15 +18,6 @@ export default class App extends Vue {
 
     public mounted() {
         this.onLyrics = this.$route.name == "lyrics";
-
-        api.session.getVersion().then(result => {
-            const version = localStorage.getItem('version');
-            if (version != result) {
-                localStorage.setItem('version', result);
-                window.location.reload();
-            }
-        })
-        
     }
 }
 </script>
