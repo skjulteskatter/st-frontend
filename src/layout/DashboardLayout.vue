@@ -74,6 +74,15 @@ select {
     padding: .5em;
 }
 
+input {
+    padding: var(--spacing);
+    background: transparent;
+    border: none;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+}
+
 button {
     padding: .5em;
     background: var(--primary-color);
