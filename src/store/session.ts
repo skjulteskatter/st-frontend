@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import api from '@/services/api'
 import { InjectionKey } from 'vue'
 import { createStore, Store } from 'vuex'
