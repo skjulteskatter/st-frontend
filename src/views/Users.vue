@@ -17,7 +17,7 @@
                     <tbody>
                         <tr v-for="u in users" :key="u.id">
                             <td>
-                                <modal label="Edit" class="edit-user">
+                                <modal label="Edit" class="edit-user" v-if="u.id != currentUser.id">
                                     <div class="loading" v-if="loading"></div>
                                     <h2 style="margin-top: 0">{{u.displayName}}</h2>
                                     <div class="edit-user__form">
@@ -67,6 +67,10 @@ export default class Subscriptions extends Vue {
 
     get users(): User[] {
         return useStore(usersKey).state.users;
+    }
+    
+    public get currentUser(){
+        return useStore(sessionKey).state.currentUser;
     }
 
     public get isAdmin(): boolean {
