@@ -58,7 +58,7 @@ export const sessionStore = createStore<Session>({
                     if (state.getters.isAdmin) {
                         router.replace("/users");
                     } else {
-                        router.replace("/about")
+                        router.replace("/dashboard")
                     }
                 }
                 state.commit('initialized', true);
