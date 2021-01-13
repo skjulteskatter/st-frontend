@@ -119,6 +119,13 @@ export const sessionStore = createStore<Session>({
         },
         initialized(state) {
             return state.initialized;
+        },
+        collections(state) {
+            const collections = [];
+            for (const sub of state.currentUser?.subscriptions) {
+                collections.push(sub.collections)
+            }
+            return collections;
         }
     }
 })

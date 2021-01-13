@@ -98,7 +98,7 @@ fb.auth().onAuthStateChanged(async s => {
 
     if (firebase.currentUser) {
         await sessionStore.dispatch('initialize');
-        await songStore.dispatch('initSongService');
+        await songStore.dispatch('initSongService', sessionStore.getters.collections ?? []);
     }
 })
 

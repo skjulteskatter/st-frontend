@@ -1,5 +1,4 @@
 import { Song } from "@/classes";
-import api from "./api";
 import { SongCollectionService } from "./songCollection";
 
 export class SongService {
@@ -7,8 +6,8 @@ export class SongService {
     public collections: Collection[] = [];
     public collectionServices: SongCollectionService[] = [];
 
-    public async init() {
-        this.collections = await api.songs.getCollections();
+    public async init(collections: Collection[]) {
+        this.collections = collections;
 
         for (const collection of this.collections) {
             const service = new SongCollectionService(collection);

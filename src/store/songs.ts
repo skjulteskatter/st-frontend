@@ -23,9 +23,9 @@ export const songStore = createStore<Songs>({
         verses: [],
     },
     actions: {
-        async initSongService({ commit }) {
+        async initSongService({ commit }, collections: Collection[]) {
             const songService = new SongService();
-            await songService.init();
+            await songService.init(collections);
             commit('songService', songService);
         },
         async getLyrics({ state, commit }, languageCode: string) {
