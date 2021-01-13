@@ -61,6 +61,10 @@ export class Themes {
     public get keys() {
         return Object.keys(this.themes);
     }
+
+    public get default() {
+        return '#5372e2';
+    }
 }
 
 const themes = new Themes();

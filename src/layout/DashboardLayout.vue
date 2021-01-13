@@ -25,7 +25,7 @@ import themes from '@/classes/themes';
 })
 export default class DashboardLayout extends Vue {
     mounted(){
-        document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme_color') || '');
+        document.documentElement.style.setProperty('--primary-color', localStorage.getItem('theme_color') || themes.default);
         themes.load();
     }
 
