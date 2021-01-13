@@ -5,7 +5,7 @@
             <div class="fields">
                 <div class="user-info__field">
                     <span class="tag empty" v-if="!user.roles.length">no roles</span>
-                    <span class="tag" v-for="role in user.roles" :key="'tag-'+role">{{role}}</span>
+                    <span class="tag" v-for="role in user.roles" :key="'tag-'+role.name">{{role.name}}</span>
                 </div>
                 <div class="user-info__field">
                     <h2 class="user-info__name">{{ user.displayName }}</h2>
@@ -77,7 +77,7 @@ export default class Dashboard extends Vue {
     public store = useStore(sessionKey);
     public themes: Themes = themes;
 
-    public themeColor = localStorage.getItem('theme_color') ?? "";
+    public themeColor = localStorage.getItem('theme_color') ?? '#5372e2';
     public theme = localStorage.getItem('theme') ?? '';
     public token = localStorage.getItem("id_token");
 
