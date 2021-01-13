@@ -1,5 +1,11 @@
 <template>
     <div class="lyrics-settings">
+        <card class="lyrics-settings__metadata" border secondary>
+            <h2 class="lyrics-settings__metadata__title">{{song.name['no'].title}}</h2>
+            <span class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
+            <p class="lyrics-settings__metadata__credits">Composer: {{song.composers[0].name}}</p>
+            <p class="lyrics-settings__metadata__credits">Author: {{song.authors[0].name}}</p>
+        </card>
         <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
             <label class="lyrics-settings__verses__input" :class="{'selected': selected.includes(key)}" v-for="key in Object.keys(verses)" :key="key">
@@ -27,6 +33,10 @@ import Card from  '@/components/Card.vue';
 @Options({
     props: {
         lyrics: {
+            type: Object,
+            default: {}
+        },
+        song: {
             type: Object,
             default: {}
         }
@@ -145,6 +155,27 @@ export default class LyricsSettings extends Vue {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing);
+
+    &__metadata {
+        grid-column: span 2;
+
+        &__credits {
+            display: inline-block;
+            margin: 0 0 0 var(--spacing);
+            color: var(--primary-color);
+        }
+
+        .card__content {
+            h2 {
+                margin: 0 0 var(--spacing);
+            }
+
+            .tag {
+                display: inline-block;
+                margin: 0;
+            }
+        }
+    }
 
     &__controls {
 
