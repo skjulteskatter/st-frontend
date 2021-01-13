@@ -123,7 +123,9 @@ export const sessionStore = createStore<Session>({
         collections(state) {
             const collections = [];
             for (const sub of state.currentUser?.subscriptions) {
-                collections.push(sub.collections)
+                for (const col of sub.collections) {
+                    collections.push(col);
+                }
             }
             return collections;
         }
