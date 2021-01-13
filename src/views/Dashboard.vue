@@ -51,7 +51,7 @@
             </div>
         </card>
         
-        <card class="api-token">
+        <card class="api-token" border secondary>
             <h3>API token</h3>
             <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>

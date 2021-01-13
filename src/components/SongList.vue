@@ -32,7 +32,7 @@ import { songKey } from '@/store';
             return useStore(songKey).getters.song ?? {};
         },
         filteredItems(){
-            return this.searchQuery ? this.items.filter((i: { number: any; }) => i.number == this.searchQuery): this.items
+            return this.searchQuery ? this.items.filter((i: { number: number }) => i.number == this.searchQuery): this.items
         }
     }
 })
