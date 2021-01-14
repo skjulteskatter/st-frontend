@@ -15,7 +15,7 @@ export const session = {
         return await auth.login();
     },
     saveUser(settings: UserSettings) {
-        return http.patch('api/Session/Save', settings)
+        return http.patch('api/Session', settings)
     }
 }
 
