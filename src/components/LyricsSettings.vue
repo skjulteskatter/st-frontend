@@ -3,8 +3,8 @@
         <card class="lyrics-settings__metadata" border secondary>
             <h2 class="lyrics-settings__metadata__title">{{song.name['no'].title}}</h2>
             <span class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
-            <p class="lyrics-settings__metadata__credits">Composer: {{song.composers[0] ? song.composers[0].name : 'UNKNOWN'}}</p>
-            <p class="lyrics-settings__metadata__credits">Author: {{song.authors[0] ? song.authors[0].name : 'UNKNOWN'}}</p>
+            <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
+            <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
         </card>
         <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Lyrics } from '@/classes';
+import { Lyrics, Song } from '@/classes';
 import { useStore } from 'vuex';
 import { songKey } from '@/store';
 import Card from  '@/components/Card.vue';
@@ -48,7 +48,7 @@ import Card from  '@/components/Card.vue';
 export default class LyricsSettings extends Vue {
     public lyrics: Lyrics = {} as Lyrics;
     public selectVerses: string[] = [];
-    public song = useStore(songKey).getters.song;
+    public song: Song = useStore(songKey).getters.song;
     public currentVerseNumber = 0;
 
     // public toggleVerse(key: string) {
@@ -123,6 +123,14 @@ export default class LyricsSettings extends Vue {
 
     public get size() {
         return this.verses[1].content.length <= 6 ? 2 : 1;
+    }
+
+    public get authors() {
+        return this.song.authors ?? [];
+    }
+
+    public get composers() {
+        return this.song.composers ?? [];
     }
 
     public get currentVerses(): string[] {
