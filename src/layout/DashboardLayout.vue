@@ -74,7 +74,7 @@ select {
     padding: .5em;
 }
 
-input {
+input[type=text] {
     padding: var(--spacing);
     background: transparent;
     border: none;
