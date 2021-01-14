@@ -2,7 +2,10 @@ export class Song implements SongInterface {
     public number = 0;
     public collection: Collection = {} as Collection;
     public name: {
-        [languageKey: string]: string;
+        [languageKey: string]: {
+            name: string;
+            title: string;
+        };
     } = {};
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
@@ -27,14 +30,6 @@ export class Song implements SongInterface {
         this.videoFiles = song.videoFiles;
         this.biography = song.biography;
         this.melodyOrigin = song.melodyOrigin;
-    }
-
-    public search(text: string): boolean {
-        for (const key in Object.keys(this.name)) {
-            if (this.name[key].includes(text)) return true;
-        }
-
-        return false;
     }
 
     public language(code: string): boolean {

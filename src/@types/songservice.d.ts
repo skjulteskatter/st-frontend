@@ -2,7 +2,10 @@ interface SongInterface {
     number: number;
     collection: Collection;
     name: {
-        [languageKey: string]: string;
+        [languageKey: string]: {
+            name: string;
+            title: string;
+        };
     };
     authors: Contributor[];
     composers: Contributor[];

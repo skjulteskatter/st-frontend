@@ -14,7 +14,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
-import { songKey } from '@/store';
+import { sessionKey, songKey } from '@/store';
+import { Song } from '@/classes';
 
 @Options({
     props: {
@@ -26,19 +27,23 @@ import { songKey } from '@/store';
             type: Function,
             default: (() => null),
         }
-    },
-    computed: {
-        filteredItems(){
-            return this.searchQuery ? this.items.filter((i: { number: number }) => i.number == this.searchQuery): this.items
-        }
     }
 })
 export default class SongList extends Vue {
     public searchQuery = '';
     public store = useStore(songKey);
+    public items: Song[] = [];
+
+    public get languageKey () {
+        return useStore(sessionKey).getters.languageKey;
+    }
 
     public get selected() {
         return this.store.getters.song ?? {};
+    }
+
+    public get filteredItems() {
+        return this.searchQuery ? this.items.filter(i => i.name[this.languageKey].title.toLowerCase().includes(this.searchQuery.toLowerCase())) : this.items;
     }
 }
 </script>
