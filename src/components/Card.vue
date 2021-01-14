@@ -36,6 +36,10 @@ export default class Card extends Vue {}
   overflow: hidden;
   animation: slideInFromBottom .3s ease;
 
+  &[secondary] {
+    background: transparent;
+  }
+
   &-border {
     border: 1px solid var(--border-color);
   }

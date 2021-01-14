@@ -51,7 +51,7 @@
             </div>
         </card>
         
-        <card class="api-token">
+        <card class="api-token" border secondary>
             <h3>API token</h3>
             <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
@@ -136,23 +136,6 @@ export default class Dashboard extends Vue {
             opacity: .7;
             font-size: .8em;
         }
-    }
-}
-
-.tag {
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    border-radius: var(--border-radius);
-    padding: .5em;
-    font-size: .7em;
-    text-transform: uppercase;
-    margin-right: calc(var(--spacing)/2);
-    margin-bottom: var(--spacing);
-
-    &.empty {
-        border: 1px solid var(--text-color);
-        color: var(--text-color); 
-        opacity: .6;
     }
 }
 

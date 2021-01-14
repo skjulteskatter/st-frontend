@@ -9,13 +9,12 @@
         </div>
 
         <div id="song-step" v-if="!songSelected && collectionSelected && !loading">
-            <h1>Select number</h1>
             <song-list :items="songs" :callback="selectSong"></song-list>
         </div>
 
         <div id="settings-step" v-if="songSelected && collectionSelected">
-            <h1>Settings</h1>
-            <lyrics-settings v-if="lyrics" :lyrics="lyrics"></lyrics-settings>
+            <h1>Song settings</h1>
+            <lyrics-settings v-if="lyrics" :lyrics="lyrics" :song="song"></lyrics-settings>
         </div>
     </div>
 </template>
