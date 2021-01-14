@@ -28,16 +28,18 @@ import { songKey } from '@/store';
         }
     },
     computed: {
-        selected() {
-            return useStore(songKey).getters.song ?? {};
-        },
         filteredItems(){
             return this.searchQuery ? this.items.filter((i: { number: number }) => i.number == this.searchQuery): this.items
         }
     }
 })
 export default class SongList extends Vue {
-    public searchQuery = ''
+    public searchQuery = '';
+    public store = useStore(songKey);
+
+    public get selected() {
+        return this.store.getters.song ?? {};
+    }
 }
 </script>
 

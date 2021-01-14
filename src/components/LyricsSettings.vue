@@ -3,8 +3,8 @@
         <card class="lyrics-settings__metadata" border secondary>
             <h2 class="lyrics-settings__metadata__title">{{song.name['no'].title}}</h2>
             <span class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
-            <p class="lyrics-settings__metadata__credits">Composer: {{song.composers[0].name ?? 'UNKNOWN'}}</p>
-            <p class="lyrics-settings__metadata__credits">Author: {{song.authors[0].name ?? 'UNKNOWN'}}</p>
+            <p class="lyrics-settings__metadata__credits">Composer: {{song.composers[0] ? song.composers[0].name : 'UNKNOWN'}}</p>
+            <p class="lyrics-settings__metadata__credits">Author: {{song.authors[0] ? song.authors[0].name : 'UNKNOWN'}}</p>
         </card>
         <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
