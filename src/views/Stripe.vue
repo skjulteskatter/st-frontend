@@ -1,6 +1,7 @@
 <template>
     <div>
         <div v-for="product in products" :key="product.id" @click="checkout(product.id)">{{product.name}}</div>
+        <button @click="portal()">Portal</button>
     </div>
 </template>
 
@@ -20,6 +21,12 @@ export default class Stripe extends Vue{
 
     public checkout(priceId: string) {
         this.store.dispatch('startSession', priceId);
+    }
+
+    public portal() {
+        this.store.dispatch('getPortal').then(result => {
+            window.location = result;
+        });
     }
 
     public get products() {

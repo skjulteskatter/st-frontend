@@ -24,6 +24,10 @@ class StripeService {
             if (err) throw err;
         });
     }
+
+    public async portal() {
+        return (await api.getPortalSession() as {url: string}).url;
+    }
 }
 
 const stripeService = new StripeService();

@@ -39,6 +39,9 @@ export const stripeStore = createStore<StripeStore>({
         },
         async startSession(state, priceId: string) {
             await stripeService.checkout(priceId);
+        },
+        async getPortal() {
+            return await stripeService.portal();
         }
     }
 })

@@ -68,6 +68,9 @@ export const stripe = {
     },
     getSession(sessionId: string) {
         return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`)
+    },
+    getPortalSession() {
+        return http.get(`api/Store/Portal?returnUrl=https://localhost:8080/store`);
     }
 }
 
