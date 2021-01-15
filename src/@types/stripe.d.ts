@@ -2,6 +2,8 @@
 declare module "checkout" {
     interface SessionRequest {
         priceId: string;
+        successUrl: string;
+        cancelUrl: string;
     }
 
     interface SessionResponse {

@@ -5,6 +5,7 @@ const Users = () => import(/* webpackChunkName: 'users' */ '../views/Users.vue')
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
+const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -26,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/song',
                 name: 'song',
                 component: SongSelector,
+            },
+            {
+                path: '/store',
+                name: 'store',
+                component: Store,
             }
         ],
     },

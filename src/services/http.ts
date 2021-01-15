@@ -57,24 +57,15 @@ class Http {
         options?: object
     ): Promise<T> {
 
-        const body = JSON.stringify(content);
-
         return this.apifetch(
             path,
             Object.assign(
                 {
-                    headers: [
-                        [
-                            'Content-Type',
-                            'application/json'
-                        ],
-                        [
-                            'Content-Length',
-                            body.length as unknown as string,
-                        ]
-                    ],
                     method: 'POST',
-                    body: body
+                    body: JSON.stringify(content),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 },
                 options || {}
             )

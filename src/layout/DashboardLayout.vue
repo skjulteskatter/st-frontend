@@ -4,6 +4,7 @@
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
             <router-link v-if="isAdmin" class="nav__item" to="/users">Users</router-link>
             <router-link class="nav__item" to="/song">Songs</router-link>
+            <router-link class="nav__item" to="/store">Store</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>
