@@ -146,7 +146,7 @@ class Http {
         if (auth.token == null && !bypassAuth) throw new Error("No Authorization token available")
 
         const headers = Object.assign({
-            'Authorization': `Bearer ${auth.token}`
+            'Authorization': `Bearer ${await auth.getToken()}`
         }, options.headers);
 
         const o = Object.assign(

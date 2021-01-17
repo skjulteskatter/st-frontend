@@ -25,6 +25,11 @@ class Auth {
         this.setToken(await firebase.emailPassword(email, password, stayLoggedIn));
     }
 
+    public async getToken() {
+        if (this.token) return this.token;
+        this.setToken(await firebase.getToken() ?? '');
+    }
+
     public get isAuthenticated() {
         this.accessToken = this.accessToken || localStorage.getItem('id_token') || ''
         if (!this.accessToken) {
