@@ -4,7 +4,7 @@
         <div class="song-list__header">
             <h1>Select number</h1>
             <div style="display: flex; gap: var(--spacing)">
-                <button @click="loadLyrics">Advanced search</button>
+                <button @click="loadLyrics">Content search</button>
                 <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
             </div>
         </div>
@@ -72,7 +72,7 @@ export default class SongList extends Vue {
     }
 
     public get filteredLyrics() {
-        return this.allLyrics.filter(l => l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()));
+        return this.allLyrics.filter(l => l.number.toString() == this.searchQuery || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()));
     }
 
     public get languageKey () {
@@ -84,7 +84,7 @@ export default class SongList extends Vue {
     }
 
     public get filteredItems() {
-        return this.searchQuery ? this.items.filter(i => i.name[this.languageKey].title.toLowerCase().includes(this.searchQuery.toLowerCase())) : this.items;
+        return this.searchQuery ? this.items.filter(i => i.number.toString() == this.searchQuery || i.name[this.languageKey].title.toLowerCase().includes(this.searchQuery.toLowerCase())) : this.items;
     }
 }
 </script>
