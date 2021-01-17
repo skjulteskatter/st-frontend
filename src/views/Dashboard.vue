@@ -15,8 +15,8 @@
             <div class="user-info__subscriptions" v-if="subscriptions.length">
                 <label>Subscriptions</label>
                 <div class="user-info__subscriptions__cards">
-                    <card v-for="sub in subscribedCollections" :key="sub" secondary border>
-                        {{sub.key}}
+                    <card v-for="sub in subscribedCollections" :key="sub" border>
+                        <b>{{sub.key}}</b>
                     </card>
                 </div>
             </div>
@@ -137,6 +137,9 @@ export default class Dashboard extends Vue {
     margin-bottom: var(--spacing);
 
     &__subscriptions {
+        // border-left: 1px solid var(--primary-color);
+        // padding-left: var(--spacing);
+
         &__cards {
             display: flex;
             gap: .5em;
