@@ -2,12 +2,13 @@
     <div class="store">
         <div class="store__title">
             <h1>Store</h1>    
-            <button @click="portal()" secondary>Manage subscriptions</button>
+            <button @click="portal()" v-if="user.subscriptions.length" secondary>Manage subscriptions</button>
         </div>
         <div class="store__items">
             <card v-for="product in products" :key="product.id" :image="product.image" class="store__items__item">
                 <h3>{{product.name.no}}</h3>
-                <button @click="checkout(product.priceId)">Buy</button>
+                <button @click="checkout(product.priceId)" v-if="!productIds.includes(product.id)">Buy</button>
+                <label style="opacity: .6" v-else>You already own this product.</label>
             </card>
         </div>
     </div>
@@ -18,6 +19,7 @@ import { stripeKey } from "@/store/stripe";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import Card from '@/components/Card.vue';
+import { sessionKey } from "@/store";
 
 @Options({
     components: {
@@ -45,6 +47,14 @@ export default class Stripe extends Vue{
 
     public get products() {
         return this.store.state.products;
+    }
+
+    public get user(){
+        return useStore(sessionKey).state.currentUser;
+    }
+
+    public get productIds(){
+        return this.user.subscriptions.map(s => s.product.id)
     }
 }
 </script>
