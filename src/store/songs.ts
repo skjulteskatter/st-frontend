@@ -10,6 +10,7 @@ export interface Songs {
     songService: SongService;
     song?: Song;
     verses: Verse[];
+    allLyrics: Lyrics[];
 }
 
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -21,6 +22,7 @@ export const songStore = createStore<Songs>({
         songService: {} as SongService,
         song: undefined,
         verses: [],
+        allLyrics: [],
     },
     actions: {
         async initSongService({ commit }, collections: Collection[]) {
@@ -34,6 +36,13 @@ export const songStore = createStore<Songs>({
             commit('setLyrics', undefined);
             const lyrics = new Lyrics(await api.songs.getLyrics(song.collection.key, song.number, languageCode, "json", 0));
             commit('setLyrics', lyrics);
+        },
+        async getAllLyrics({ state, commit }, languageCode: string) {
+            const result = await api.songs.getAllLyrics(state.collection?.key ?? "HV", languageCode, "json", 0);
+            console.log(result);
+            const lyrics = result.map(l => new Lyrics(l));
+            console.log(lyrics)
+            commit('setAllLyrics', lyrics);
         }
     },
     mutations: {
@@ -52,6 +61,9 @@ export const songStore = createStore<Songs>({
         },
         verses(state, verses: Verse[]) {
             state.verses = verses;
+        },
+        setAllLyrics(state, lyrics: Lyrics[]) {
+            state.allLyrics = lyrics ?? [];
         }
     },
     getters: {

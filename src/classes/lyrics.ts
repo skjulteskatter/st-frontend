@@ -1,4 +1,6 @@
 export class Lyrics implements LyricsInterface {
+    number: number;
+    title: string;
     collection: Collection;
     content: {
         [key: string]: {
@@ -11,9 +13,10 @@ export class Lyrics implements LyricsInterface {
     language: Language;
     originalKey: string;
     transposedToKey?: string;
-    song: SongInterface;
 
     constructor(lyrics: LyricsInterface) {
+        this.number = lyrics.number;
+        this.title = lyrics.title;
         this.collection = lyrics.collection;
         this.content = lyrics.content;
         this.format = lyrics.format;
@@ -21,7 +24,6 @@ export class Lyrics implements LyricsInterface {
         this.originalKey = lyrics.originalKey;
         this.language = lyrics.language;
         this.transposedToKey = lyrics.transposedToKey;
-        this.song = lyrics.song;
     }
 
     public get verses() {
@@ -58,5 +60,17 @@ export class Lyrics implements LyricsInterface {
             }
         }
         return verses;
+    }
+
+    public get rawContent() {
+        const lines = [];
+
+        for (const key of Object.keys(this.content)) {
+            for (const line of this.content[key].content) {
+                lines.push(line);
+            }
+        }
+
+        return lines.join('\n').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
     }
 }
