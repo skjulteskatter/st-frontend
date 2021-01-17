@@ -6,8 +6,8 @@
         </div>
         <div class="store__items">
             <card v-for="product in products" :key="product.id" :image="product.image" class="store__items__item">
-                <h3>{{product.name}}</h3>
-                <button @click="checkout(product.id)">Buy</button>
+                <h3>{{product.name.no}}</h3>
+                <button @click="checkout(product.priceId)">Buy</button>
             </card>
         </div>
     </div>

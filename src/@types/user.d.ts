@@ -15,7 +15,7 @@ interface UserSettings {
 
 interface Subscription {
     id: string;
-    collections: Collection[];
+    product: Product;
     creationDate: Date;
     validTo: Date;
 }

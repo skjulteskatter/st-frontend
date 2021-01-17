@@ -127,7 +127,7 @@ export const sessionStore = createStore<Session>({
             const collections = [];
 
             for (const sub of state.currentUser?.subscriptions) {
-                for (const col of sub.collections) {
+                for (const col of sub.product.collections) {
                     if (["HV", "MB"].includes(col.key)) {
                         collections.push(col);
                     }

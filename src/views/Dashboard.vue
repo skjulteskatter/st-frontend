@@ -113,7 +113,7 @@ export default class Dashboard extends Vue {
         const collections: Collection[] = [];
 
         for(const sub of this.subscriptions){
-            for(const col of sub.collections){
+            for(const col of sub.product.collections){
                 if(!collections.find(c => c.id == col.id)){
                     collections.push(col);
                 }
