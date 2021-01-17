@@ -22,8 +22,8 @@
         </card>
         <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
             <h2 class="lyrics-settings__files__title">Files</h2>
-            <div class="container">
-                <card class="lyrics-settings__files__audio" border>
+            <div class="files__container">
+                <card class="lyrics-settings__files__audio" v-if="song.soundFiles.length">
                     <h3>Audio</h3>
                     <figure v-for="file in song.soundFiles" :key="file">
                         <figcaption>{{file.name}}</figcaption>
@@ -32,9 +32,14 @@
                         </audio>
                     </figure>
                 </card>
-                <card class="lyrics-settings__files__video" border>
+                <card class="lyrics-settings__files__video" v-if="song.videoFiles.length">
                     <h3>Video</h3>
-                    <a class="lyrics-settings__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a>
+                    <modal v-for="video in song.videoFiles" :key="video" :label="video.name">
+                        <video :src="video.directUrl" width="500" type="video/mp4" controls>
+                            Sorry, your browser doesn't support embedded videos.
+                        </video>
+                    </modal>
+                    <!-- <a class="lyrics-settings__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
                 </card>
             </div>
         </card>
@@ -47,6 +52,7 @@ import { Lyrics, Song } from '@/classes';
 import { useStore } from 'vuex';
 import { songKey } from '@/store';
 import Card from  '@/components/Card.vue';
+import Modal from '@/components/Modal.vue';
 
 @Options({
     props: {
@@ -60,7 +66,8 @@ import Card from  '@/components/Card.vue';
         }
     },
     components: {
-        Card
+        Card,
+        Modal,
     }
 })
 export default class LyricsSettings extends Vue {
@@ -193,7 +200,7 @@ export default class LyricsSettings extends Vue {
         }
 
         .card__content {
-            .container {
+            .files__container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 gap: var(--spacing);
