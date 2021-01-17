@@ -44,6 +44,8 @@ interface Collection {
 
 // LYRICS
 interface LyricsInterface {
+    number: number;
+    title: string;
     collection: Collection;
     language: Language;
     content: {
@@ -56,7 +58,6 @@ interface LyricsInterface {
     hasChords: boolean;
     originalKey: string;
     transposedToKey?: string;
-    song: SongInterface;
 }
 
 interface Verse {
