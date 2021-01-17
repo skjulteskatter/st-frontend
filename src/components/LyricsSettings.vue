@@ -6,6 +6,13 @@
             <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
         </card>
+        <card class="lyrics-settings__controls" border>
+            <h2 class="lyrics-settings__controls__title">Controls</h2>
+            <button class="lyrics-settings__controls__open" @click="openLyricsWindow">Open viewer</button>
+            <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
+            <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
+            <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
+        </card>
         <card class="lyrics-settings__verses">
             <h2 class="lyrics-settings__verses__title">Verses</h2>
             <label class="lyrics-settings__verses__input" :class="{'selected': selected.includes(key)}" v-for="key in Object.keys(verses)" :key="key">
@@ -13,12 +20,23 @@
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
-        <card class="lyrics-settings__controls" border>
-            <h2 class="lyrics-settings__controls__title">Controls</h2>
-            <button class="lyrics-settings__controls__open" @click="openLyricsWindow">Open viewer</button>
-            <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
-            <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
-            <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
+        <card class="lyrics-settings__files">
+            <h2 class="lyrics-settings__files__title">Files</h2>
+            <div class="container">
+                <card class="lyrics-settings__files__audio" border>
+                    <h3>Audio</h3>
+                    <figure v-for="file in song.soundFiles" :key="file">
+                        <figcaption>{{file.name}}</figcaption>
+                        <audio :src="file.directUrl" controls>
+                            Your browser does not support the <code>audio</code> element.
+                        </audio>
+                    </figure>
+                </card>
+                <card class="lyrics-settings__files__video" border>
+                    <h3>Video</h3>
+                    <a class="lyrics-settings__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a>
+                </card>
+            </div>
         </card>
     </div>
 </template>
@@ -161,11 +179,34 @@ export default class LyricsSettings extends Vue {
     --half-spacing: calc(var(--spacing) * 0.5);
 
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: var(--spacing);
 
+    &__files {
+        grid-column: span 5;
+
+        &__video {
+            &__link {
+                text-decoration: none;
+                color: var(--primary-color);
+            }
+        }
+
+        .card__content {
+            .container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing);
+            }
+        }
+
+        figure {
+            margin: 0 0 .5em 0;
+        }
+    }
+
     &__metadata {
-        grid-column: span 2;
+        grid-column: span 4;
 
         &__credits {
             display: inline-block;
@@ -186,6 +227,7 @@ export default class LyricsSettings extends Vue {
     }
 
     &__controls {
+        grid-column: span 2;
 
         .card__content {
             display: grid;

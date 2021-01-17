@@ -55,6 +55,10 @@ export default class Card extends Vue {}
 
   &__content {
     padding: var(--spacing);
+
+    & >:first-child {
+      margin-top: 0;
+    }
   }
 }
 </style>

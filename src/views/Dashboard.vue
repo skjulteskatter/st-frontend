@@ -12,14 +12,14 @@
                     <p class="user-info__email">{{ user.email }}</p>
                 </div>
             </div>
-            <!-- <div class="user-info__field">
-                <label>Name</label>
-                <h3>{{ user.displayName }}</h3>
-            </div> -->
-            <!-- <div class="user-info__field">
-                <label>E-mail</label>
-                <h3>{{ user.email }}</h3>
-            </div> -->
+            <div class="user-info__subscriptions" v-if="subscriptions.length">
+                <label>Subscriptions</label>
+                <div class="user-info__subscriptions__cards">
+                    <card v-for="sub in subscribedCollections" :key="sub" secondary border>
+                        {{sub.key}}
+                    </card>
+                </div>
+            </div>
         </card>
 
         <card style="margin-bottom: var(--spacing)">
@@ -105,6 +105,23 @@ export default class Dashboard extends Vue {
         }, 100);
     }
 
+    public get subscriptions(): Subscription[] {
+        return useStore(sessionKey).state.currentUser.subscriptions ?? {};
+    }
+
+    public get subscribedCollections(){
+        const collections: Collection[] = [];
+
+        for(const sub of this.subscriptions){
+            for(const col of sub.collections){
+                if(!collections.find(c => c.id == col.id)){
+                    collections.push(col);
+                }
+            }
+        }
+        return collections;
+    }
+
     public get languages(): Language[] {
         return useStore(sessionKey).getters.languages || [];
     }
@@ -115,9 +132,29 @@ export default class Dashboard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .user-info {
     margin-bottom: var(--spacing);
+
+    &__subscriptions {
+        &__cards {
+            display: flex;
+            gap: .5em;
+            padding-top: .5em;
+            max-height: 100px;
+        }
+    }
+
+    .card__content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+    }
+
+    label {
+        opacity: .6;
+        font-size: .8em;
+    }
 
     * {
         margin: 0;
@@ -130,11 +167,6 @@ export default class Dashboard extends Vue {
     &__field {
         &:not(:last-child) {
             margin-bottom: var(--spacing);
-        }
-
-        & > label {
-            opacity: .7;
-            font-size: .8em;
         }
     }
 }
