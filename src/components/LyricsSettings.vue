@@ -20,7 +20,7 @@
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
-        <card class="lyrics-settings__files">
+        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
             <h2 class="lyrics-settings__files__title">Files</h2>
             <div class="container">
                 <card class="lyrics-settings__files__audio" border>
