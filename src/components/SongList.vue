@@ -15,7 +15,7 @@
         </div>
         <div v-else>
             <div class="search__container">
-                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 9)" :key="lyrics.number" @click="callback(items.find(s => s.number == lyrics.number))" border>
+                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="callback(items.find(s => s.number == lyrics.number))" border>
                     <p>{{lyrics.number}}</p>
                     <h3>{{lyrics.title}}</h3>
                 </card>
