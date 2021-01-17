@@ -64,3 +64,12 @@ interface Verse {
     name: string;
     content: string[];
 }
+
+interface Product {
+    name: {
+        [languageKey: string]: string;
+    };
+    collections: Collection[];
+    image: string;
+    priceId: string;
+}
