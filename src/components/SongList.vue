@@ -56,6 +56,10 @@ export default class SongList extends Vue {
     public collection?: Collection = useStore(songKey).state.collection;
     public loading = false;
 
+    public mounted() {
+        this.store.commit('setAllLyrics', null);
+    }
+
     public async loadLyrics(){
         this.advancedSearch = true;
         this.loading = true;
