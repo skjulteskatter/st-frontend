@@ -7,10 +7,12 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import DashboardLayout from '@/layout/DashboardLayout.vue';
+import Card from '@/components/Card.vue';
 
 @Options({
     components: {
         DashboardLayout,
+        Card,
     }
 })
 export default class App extends Vue {

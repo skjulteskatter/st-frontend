@@ -9,8 +9,6 @@
         </div>
 
         <div id="song-step" v-if="!songSelected && collectionSelected && !loading">
-            <lyrics-search v-if="advancedSearch"></lyrics-search>
-            <button @click="advancedSearch = true">ADVANCED SEARCH</button>
             <song-list :items="songs" :callback="selectSong"></song-list>
         </div>
 
@@ -30,7 +28,6 @@ import SongList from '@/components/SongList.vue'
 import Songbooks from '@/components/Songbooks.vue'
 import Stepper from '@/components/Stepper.vue'
 import LyricsSettings from '@/components/LyricsSettings.vue';
-import LyricsSearch from '@/components/LyricsSearch.vue';
 
 @Options({
     components: {
@@ -39,7 +36,6 @@ import LyricsSearch from '@/components/LyricsSearch.vue';
         Songbooks,
         Stepper,
         LyricsSettings,
-        LyricsSearch,
     }
 })
 export default class SongSelector extends Vue {

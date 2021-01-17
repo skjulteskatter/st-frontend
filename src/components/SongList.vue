@@ -1,13 +1,27 @@
 <template>
     <div class="song-list">
+        <div class="loader" v-if="loading"></div>
         <div class="song-list__header">
             <h1>Select number</h1>
-            <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+            <div style="display: flex; gap: var(--spacing)">
+                <button @click="loadLyrics">Advanced search</button>
+                <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+            </div>
         </div>
-        <span class="song-list__item hover" :class="selected.number == item.number ? 'selected' : ''" v-for="item in filteredItems" :key="item.id" @click="callback(item)">
-            {{ item.number }}
-        </span>
-        <h1 class="warning" v-if="!filteredItems.length">No results</h1>
+        <div v-if="!advancedSearch" class="song-list__wrapper">
+            <span class="song-list__item hover" :class="selected.number == item.number ? 'selected' : ''" v-for="item in filteredItems" :key="item.id" @click="callback(item)">
+                {{ item.number }}
+            </span>
+        </div>
+        <div v-else>
+            <div class="search__container">
+                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 9)" :key="lyrics.number" @click="callback(items.find(s => s.number == lyrics.number))" border>
+                    <p>{{lyrics.number}}</p>
+                    <h3>{{lyrics.title}}</h3>
+                </card>
+            </div>
+        </div>
+        <h1 class="warning" v-if="!filteredItems.length && !filteredLyrics.length">No results</h1>
     </div>
 </template>
 
@@ -16,8 +30,12 @@ import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import { sessionKey, songKey } from '@/store';
 import { Song } from '@/classes';
+import Card from '@/components/Card.vue'
 
 @Options({
+    components: {
+        Card
+    },
     props: {
         items: {
             type: Array,
@@ -30,9 +48,28 @@ import { Song } from '@/classes';
     }
 })
 export default class SongList extends Vue {
+    public userStore = useStore(sessionKey);
     public searchQuery = '';
     public store = useStore(songKey);
     public items: Song[] = [];
+    public advancedSearch = false;
+    public collection?: Collection = useStore(songKey).state.collection;
+    public loading = false;
+
+    public async loadLyrics(){
+        this.advancedSearch = true;
+        this.loading = true;
+        await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
+        this.loading = false;
+    }
+
+    public get allLyrics() {
+        return this.store.state.allLyrics;
+    }
+
+    public get filteredLyrics() {
+        return this.allLyrics.filter(l => l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()));
+    }
 
     public get languageKey () {
         return useStore(sessionKey).getters.languageKey;
@@ -53,11 +90,20 @@ export default class SongList extends Vue {
     opacity: .4;
 }
 
+.search__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing);
+}
+
 .song-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing) * 0.5);
     animation: slideInFromBottom .3s ease;
+
+    &__wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: calc(var(--spacing) * 0.5);
+    }
 
     .song-list__header {
         width: 100%;

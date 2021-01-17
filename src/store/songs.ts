@@ -39,9 +39,7 @@ export const songStore = createStore<Songs>({
         },
         async getAllLyrics({ state, commit }, languageCode: string) {
             const result = await api.songs.getAllLyrics(state.collection?.key ?? "HV", languageCode, "json", 0);
-            console.log(result);
             const lyrics = result.map(l => new Lyrics(l));
-            console.log(lyrics)
             commit('setAllLyrics', lyrics);
         }
     },
@@ -51,6 +49,7 @@ export const songStore = createStore<Songs>({
         },
         selectCollection(state, collection: Collection) {
             state.collection = collection;
+            state.allLyrics = [];
             state.song = undefined;
         },
         selectSong(state, song: Song) {
