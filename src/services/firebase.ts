@@ -90,6 +90,10 @@ class FirebaseService {
         }
         fb.auth().signOut();
     }
+
+    public getToken() {
+        return this.currentUser?.getIdToken();
+    }
 }
 
 const firebase = new FirebaseService();

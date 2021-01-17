@@ -69,10 +69,10 @@ export default class LyricsViewer extends Vue {
             if(event.key == 'theme') {
                 const item = localStorage.getItem('theme')
                 if (item) {
-                    themes.load()
+                    themes.load();
                 }
             }
-        })
+        });
     }
 
     public get song() {
