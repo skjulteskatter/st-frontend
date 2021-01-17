@@ -66,6 +66,7 @@ interface Verse {
 }
 
 interface Product {
+    id: string;
     name: {
         [languageKey: string]: string;
     };
