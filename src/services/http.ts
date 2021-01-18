@@ -142,11 +142,12 @@ class Http {
     }
 
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
-        path = `${config.api.basePath}${path}`
-        if (auth.token == null && !bypassAuth) throw new Error("No Authorization token available")
+        path = `${config.api.basePath}${path}`;
+        const token = await auth.getToken();
+        if (token == null && !bypassAuth) throw new Error("No Authorization token available")
 
         const headers = Object.assign({
-            'Authorization': `Bearer ${await auth.getToken()}`
+            'Authorization': `Bearer ${token}`
         }, options.headers);
 
         const o = Object.assign(
