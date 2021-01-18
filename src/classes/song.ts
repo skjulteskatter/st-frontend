@@ -1,6 +1,5 @@
 export class Song implements SongInterface {
     public number = 0;
-    public collection: Collection = {} as Collection;
     public name: {
         [languageKey: string]: {
             name: string;
@@ -16,10 +15,10 @@ export class Song implements SongInterface {
     public videoFiles: MediaFile[] = [];
     public biography: MediaFile = {} as MediaFile;
     public melodyOrigin = {} as Origin;
+    public collection: Collection = {} as Collection;
 
     constructor(song: SongInterface) {
         this.number = song.number;
-        this.collection = song.collection;
         this.name = song.name;
         this.authors = song.authors;
         this.composers = song.composers;

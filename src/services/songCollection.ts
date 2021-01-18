@@ -17,7 +17,10 @@ export class SongCollectionService {
     public async initialize() {
         const songs = await this._api.getAllSongs(this.collection.key);
         for (const song of songs) {
-            this._songs.push(new Song(song));
+            const s = new Song(song);
+            s.collection = this.collection;
+
+            this._songs.push(s);
         }
     }
 }

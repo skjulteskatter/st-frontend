@@ -6,7 +6,7 @@ import api from '@/services/api';
 
 export interface Songs {
     lyrics?: Lyrics;
-    collection?: Collection;
+    collection: Collection;
     songService: SongService;
     song?: Song;
     verses: Verse[];
@@ -18,7 +18,7 @@ export const songKey: InjectionKey<Store<Songs>> = Symbol();
 export const songStore = createStore<Songs>({
     state: {
         lyrics: undefined,
-        collection: undefined,
+        collection: {} as Collection,
         songService: {} as SongService,
         song: undefined,
         verses: [],
@@ -34,7 +34,7 @@ export const songStore = createStore<Songs>({
             const song = state.song;
             if (song == undefined) return;
             commit('setLyrics', undefined);
-            const lyrics = new Lyrics(await api.songs.getLyrics(song.collection.key, song.number, languageCode, "json", 0));
+            const lyrics = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, languageCode, "json", 0));
             commit('setLyrics', lyrics);
         },
         async getAllLyrics({ state, commit }, languageCode: string) {
