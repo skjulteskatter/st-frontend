@@ -14,7 +14,9 @@ interface SongInterface {
     originCountry: Country;
     soundFiles: MediaFile[];
     videoFiles: MediaFile[];
-    biography: MediaFile;
+    details: {
+        [languageKey: string]: string;
+    };
 }
 
 interface MediaFile {
@@ -27,9 +29,13 @@ interface MediaFile {
 }
 
 interface Contributor {
+    internalId: string;
     name: string;
     birthYear: number;
     country: string;
+    biography: {
+        [languageKey: string]: string;
+    };
 }
 
 interface Collection {
@@ -45,7 +51,7 @@ interface Collection {
 interface LyricsInterface {
     number: number;
     title: string;
-    collection: Collection;
+    collectionKey: string;
     language: Language;
     content: {
         [key: string]: {

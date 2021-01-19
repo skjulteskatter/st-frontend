@@ -13,7 +13,9 @@ export class Song implements SongInterface {
     public originCountry: Country = {} as Country;
     public soundFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
-    public biography: MediaFile = {} as MediaFile;
+    public details: {
+        [languageKey: string]: string;
+    } = {};
     public melodyOrigin = {} as Origin;
     public collection: Collection = {} as Collection;
 
@@ -27,7 +29,7 @@ export class Song implements SongInterface {
         this.originCountry = song.originCountry;
         this.soundFiles = song.soundFiles;
         this.videoFiles = song.videoFiles;
-        this.biography = song.biography;
+        this.details = song.details;
         this.melodyOrigin = song.melodyOrigin;
     }
 

@@ -1,7 +1,7 @@
 export class Lyrics implements LyricsInterface {
     number: number;
     title: string;
-    collection: Collection;
+    collectionKey: string;
     content: {
         [key: string]: {
             name: string;
@@ -17,7 +17,7 @@ export class Lyrics implements LyricsInterface {
     constructor(lyrics: LyricsInterface) {
         this.number = lyrics.number;
         this.title = lyrics.title;
-        this.collection = lyrics.collection;
+        this.collectionKey = lyrics.collectionKey;
         this.content = lyrics.content;
         this.format = lyrics.format;
         this.hasChords = lyrics.hasChords;

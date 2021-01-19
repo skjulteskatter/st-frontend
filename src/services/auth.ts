@@ -46,7 +46,7 @@ class Auth {
     public get token() {
         const expires =
             this.expiresAt ||
-            parseInt(window.localStorage.getItem('id_expires_at') || '0')
+            parseInt(window.localStorage.getItem('id_expires_at') || '0');
         if (expires > Date.now()) {
             const accessToken =
                 this.accessToken ||
