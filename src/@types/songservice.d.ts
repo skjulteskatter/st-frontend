@@ -1,5 +1,6 @@
 interface SongInterface {
     number: number;
+    type: string;
     name: {
         [languageKey: string]: {
             name: string;

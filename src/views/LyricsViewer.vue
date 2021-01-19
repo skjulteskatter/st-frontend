@@ -4,7 +4,7 @@
             <div class="lyrics__credits">
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
                 <div>
-                    <h3 class="lyrics__title">{{ song ? song.name[languageKey ?? "en"].title : "TITLE"}}</h3>
+                    <h3 class="lyrics__title">{{ song ? song.name[languageKey].title : "TITLE"}}</h3>
                     <p class="lyrics__credits__author" v-if="song ? song.authors.length > 0 : false">Forfatter: {{song.authors[0].name}}</p>
                     <p class="lyrics__credits__composer" v-if="song ? song.composers.length > 0 : false">Komponist: {{song.composers[0].name}}</p>
                     <p class="lyrics__credits__composer" v-else>Melodi: {{ melodyOrigin ? melodyOrigin.name[languageKey] : 'UNKNOWN' }}</p>
@@ -92,7 +92,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get languageKey() {
-        return useStore(sessionKey).state.currentUser.settings?.languageKey ?? "no";
+        return useStore(sessionKey).getters.languageKey;
     }
 }
 </script>

@@ -34,8 +34,10 @@ export const songStore = createStore<Songs>({
             const song = state.song;
             if (song == undefined) return;
             commit('setLyrics', undefined);
-            const lyrics = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, languageCode, "json", 0));
-            commit('setLyrics', lyrics);
+            if (song.type == "lyrics") {
+                const lyrics = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, languageCode, "json", 0));
+                commit('setLyrics', lyrics);
+            }
         },
         async getAllLyrics({ state, commit }, languageCode: string) {
             const result = await api.songs.getAllLyrics(state.collection?.key ?? "HV", languageCode, "json", 0);

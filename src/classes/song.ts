@@ -1,5 +1,6 @@
 export class Song implements SongInterface {
     public number = 0;
+    public type: string;
     public name: {
         [languageKey: string]: {
             name: string;
@@ -31,6 +32,7 @@ export class Song implements SongInterface {
         this.videoFiles = song.videoFiles;
         this.details = song.details;
         this.melodyOrigin = song.melodyOrigin;
+        this.type = song.type;
     }
 
     public language(code: string): boolean {

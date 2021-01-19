@@ -15,6 +15,7 @@
         <div id="settings-step" v-if="songSelected && collectionSelected">
             <h1>Song settings</h1>
             <lyrics-settings v-if="lyrics" :lyrics="lyrics" :song="song"></lyrics-settings>
+            <song-details v-else :song="song"></song-details>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ import SongList from '@/components/SongList.vue'
 import Songbooks from '@/components/Songbooks.vue'
 import Stepper from '@/components/Stepper.vue'
 import LyricsSettings from '@/components/LyricsSettings.vue';
+import SongDetails from '@/components/SongDetails.vue';
 
 @Options({
     components: {
@@ -36,6 +38,7 @@ import LyricsSettings from '@/components/LyricsSettings.vue';
         Songbooks,
         Stepper,
         LyricsSettings,
+        SongDetails,
     }
 })
 export default class SongSelector extends Vue {

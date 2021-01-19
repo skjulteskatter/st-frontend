@@ -1,24 +1,9 @@
 <template>
     <div class="lyrics-settings">
         <card class="lyrics-settings__metadata" border secondary>
-            <h2 class="lyrics-settings__metadata__title">{{song.name[languageKey].title}}</h2>
-            <span class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
-            <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
+            <h2 class="lyrics-settings__metadata__title">{{title}}</h2>
+            <p v-if="authors.length > 0" class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
-        </card>
-        <card class="lyrics-settings__controls" border>
-            <h2 class="lyrics-settings__controls__title">Controls</h2>
-            <button class="lyrics-settings__controls__open" @click="openLyricsWindow">Open viewer</button>
-            <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
-            <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
-            <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
-        </card>
-        <card class="lyrics-settings__verses">
-            <h2 class="lyrics-settings__verses__title">Verses</h2>
-            <label class="lyrics-settings__verses__input" :class="{'selected': selected.includes(key)}" v-for="key in Object.keys(verses)" :key="key">
-                <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked @click="toggleVerse(key)">
-                <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
-            </label>
         </card>
         <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
             <h2 class="lyrics-settings__files__title">Files</h2>
@@ -77,106 +62,18 @@ export default class LyricsSettings extends Vue {
     public currentVerseNumber = 0;
 
     // public toggleVerse(key: string) {
-    // }
-
-    public mounted() {
-        this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
-
-        window.addEventListener('keydown', (event) => {
-            if (event.key == "ArrowRight") {
-                this.next();
-            }
-            if (event.key == "ArrowLeft") {
-                this.previous();
-            }
-        })
-    }
-
-    public openLyricsWindow(){
-        this.updateLyrics();
-        window.open('/lyrics', 'Lyrics Viewer', 'resizeable,scrollbars')
-    }
-
-    public toggleVerse(key: string) {
-        if(this.selectVerses.includes(key)) {
-            this.selectVerses = this.selectVerses.filter(k => k != key);
-        } else {
-            this.selectVerses.push(key);
-        }
-    }
-
-    public updateLyrics() {
-        // if (this.size == 1) {
-        //     this.currentVerses = [1];
-        // }
-        // if (this.size == 2) {
-        //     this.currentVerses = [1, 2];
-        // }
-
-        localStorage.setItem('lyrics', JSON.stringify(this.current));
-        localStorage.setItem('song', JSON.stringify(this.song));
-    }
-
-    public next() {
-        if (this.size == 2) {
-            this.currentVerseNumber = this.currentVerseNumber + 2;
-        } else {
-            this.currentVerseNumber++;
-        }
-        localStorage.setItem('lyrics', JSON.stringify(this.current));
-    }
-
-    public previous() {
-        if (this.currentVerseNumber == 0) {
-            return;
-        }
-        if (this.size == 2) {
-            this.currentVerseNumber = this.currentVerseNumber - 2;
-        } else {
-            this.currentVerseNumber--;
-        }
-        localStorage.setItem('lyrics', JSON.stringify(this.current));
-    }
-
-    public get selected() {
-        return this.selectVerses?.sort((a, b) => parseInt(a) - parseInt(b)) ?? [];
-    }
-
-    public get verses() {
-        return this.lyrics.verses;
-    }
-
-    public get size() {
-        return this.verses[1].content.length <= 5 ? 2 : 1;
-    }
+    // 
 
     public get authors() {
         return this.song.authors ?? [];
     }
 
+    public get title() {
+        return this.song.name[this.languageKey]?.title ?? this.song.name.no.title ?? this.song.name.en.title;
+    }
+
     public get composers() {
         return this.song.composers ?? [];
-    }
-
-    public get currentVerses(): string[] {
-        const keys = [];
-        if (this.size == 1) {
-            if (this.selected[this.currentVerseNumber]) keys.push(this.selected[this.currentVerseNumber]);
-        } else if (this.size == 2) {
-            if (this.selected[this.currentVerseNumber]) keys.push(this.selected[this.currentVerseNumber]);
-            if (this.selected[this.currentVerseNumber + 1]) keys.push(this.selected[this.currentVerseNumber + 1]);
-        }
-        return keys;
-    }
-
-    public get current() {
-        const verses: Verse[] = [];
-
-        for (const key of this.currentVerses) {
-            if (this.verses[key]) verses.push(this.verses[key])
-        }
-
-        return verses;
     }
 
     public get languageKey() {

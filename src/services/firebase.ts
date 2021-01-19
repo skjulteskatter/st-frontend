@@ -106,7 +106,7 @@ fb.auth().onAuthStateChanged(async s => {
         let collections = [];
         
         if (sessionStore.getters.isAdmin) {
-            collections = (await api.songs.getCollections()).filter(c => ["HV", "MB"].includes(c.key));
+            collections = await api.songs.getCollections();
         } else {
             collections = sessionStore.getters.collections ?? [];
         }
