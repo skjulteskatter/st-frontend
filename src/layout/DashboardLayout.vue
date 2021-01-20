@@ -1,6 +1,9 @@
 <template>
     <nav class="nav" v-if="user && initialized">
         <div class="nav__wrapper">
+            <a href="/" id="logo">
+                <img :src="logo" />
+            </a>
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
             <router-link v-if="isAdmin" class="nav__item" to="/dashboard/users">Users</router-link>
             <router-link class="nav__item" to="/dashboard/songs">Songs</router-link>
@@ -30,6 +33,11 @@ export default class DashboardLayout extends Vue {
         themes.load();
     }
 
+    public get logo(){
+        // Return the direct url to the logo
+        return 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.jpg'
+    }
+
     public get user() {
         return useStore(sessionKey).state.currentUser;
     }
@@ -42,6 +50,13 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
+
+#logo {
+    margin: 0 auto 0 0;
+    img {
+        max-height: 35px;
+    }
+}
 
 .tag {
     border: 1px solid var(--primary-color);

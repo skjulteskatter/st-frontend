@@ -28,10 +28,10 @@ export default class App extends Vue {
 // Variables
 :root {
     --primary-color: #5372e2;
-    --border-color: #393d42;
-    --text-color: #F5F7FA;
-    --background-color: #2C2F33;
-    --secondary-background-color: #232527;
+    --border-color: #d0d0d0;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --secondary-background-color: #eaeaea;
 
     --border-radius: 5px;
     --spacing: 1rem;

@@ -1,7 +1,9 @@
 <template>
     <nav class="nav">
         <div class="container nav__wrapper">
-            <img :src="logo" id="logo" />
+            <a href="/" id="logo">
+                <img :src="logo" />
+            </a>
             <router-link v-if="!user.id" class="nav__item" to="/login">Login</router-link>
             <router-link v-else class="nav__item" to="/dashboard">Dashboard</router-link>
         </div>
@@ -10,36 +12,34 @@
         <div class="container">
             <div class="home__header__cta">
                 <h3>Discover our</h3>
-                <h1>SongTreasures</h1>
-                <button>Read more</button>
+                <h1>Song treasures</h1>
+                <a href="#about" class="cta">Read more</a>
             </div>
         </div>
     </header>
     <div class="container">
         <router-view/>
     </div>
-    <footer class="home__footer">
-        <div class="container">
-            <small>Copyright 2021 © Stiftelsen Skjulte Skatters Forlag</small>
-        </div>
-    </footer>
+    <footer-component></footer-component>
 </template>
 <script lang="ts">
 import { sessionKey } from '@/store';
 import { Vue, Options } from 'vue-class-component';
 import { useStore } from 'vuex';
 import Card from '@/components/Card.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
 
 @Options({
     components: {
-        Card
+        Card,
+        FooterComponent,
     }
 })
 export default class DashboardLayout extends Vue {
 
     public get logo(){
         // Return the direct url to the logo
-        return 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png'
+        return 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.jpg'
     }
 
 
@@ -49,33 +49,15 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
-:root {
-    --primary-color: #5372e2;
-    --border-color: #d0d0d0;
-    --text-color: #333333;
-    --background-color: #ffffff;
-    --secondary-background-color: #fafafa;
-
-    --border-radius: 5px;
-    --spacing: 1rem;
-}
 
 #logo {
-    max-height: 50px;
     margin: 0 auto 0 0;
+    img {
+        max-height: 35px;
+    }
 }
 
 .home {
-    &__footer {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-
-        background: var(--secondary-background-color);
-        border-top: 1px solid var(--border-color);
-        padding: var(--spacing);
-    }
 
     &__header {
         width: 100%;
@@ -89,10 +71,6 @@ export default class DashboardLayout extends Vue {
             font-size: 2.2em;
             color: white;
 
-            .card__content {
-                padding: 2rem;
-            }
-
             h3, h1 {
                 margin: 0;
             }
@@ -101,15 +79,29 @@ export default class DashboardLayout extends Vue {
                 opacity: .7;
             }
 
-            button {
-                border: 1px solid white;
-                transition: all .2s ease;
-                font-size: 1.1rem;
-                margin-top: var(--spacing);
+            .cta {
+                font-size: 1.2rem;
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                position: relative;
+
+
+                &:after {
+                    content: '';
+                    height: 3px;
+                    width: 0;
+                    background: white;
+                    position: absolute;
+                    bottom: -5px;
+                    left: 0;
+                    transition: all .2s ease;
+                }
 
                 &:hover {
-                    background: white;
-                    color: var(--text-color);
+                    &:after {
+                        width: 100%;
+                    }
                 }
             }
         }
