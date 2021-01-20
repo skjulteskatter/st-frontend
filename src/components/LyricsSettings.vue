@@ -209,6 +209,12 @@ export default class LyricsSettings extends Vue {
 </script>
 
 <style lang="scss">
+
+#biography img {
+    max-width: 100%;
+}
+
+
 .lyrics-settings {
     --half-spacing: calc(var(--spacing) * 0.5);
 

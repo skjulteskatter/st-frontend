@@ -1,9 +1,12 @@
 <template>
     <div class="lyrics-settings">
         <card class="lyrics-settings__metadata" border secondary>
-            <h2 class="lyrics-settings__metadata__title">{{title}}</h2>
-            <p v-if="authors.length > 0" class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
+            <h2 class="lyrics-settings__metadata__title">{{song.name[languageKey].title}}</h2>
+            <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
+            <div v-if="biography" id="biography"></div>
+            <div v-if="biography && description">------------------------</div>
+            <div v-if="description" id="song-details"></div>
         </card>
         <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
             <h2 class="lyrics-settings__files__title">Files</h2>
@@ -79,10 +82,22 @@ export default class LyricsSettings extends Vue {
     public get languageKey() {
         return useStore(sessionKey).getters.languageKey;
     }
+
+    public get description() {
+        return this.song.description[this.languageKey] ?? this.song.description.no ?? '';
+    }
+
+    public get biography() {
+        return this.authors[0]?.getBiography(this.languageKey) ?? '';
+    }
 }
 </script>
 
 <style lang="scss">
+#biography img {
+    max-width: 100%;
+}
+
 .lyrics-settings {
     --half-spacing: calc(var(--spacing) * 0.5);
 
