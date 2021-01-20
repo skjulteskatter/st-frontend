@@ -14,29 +14,29 @@ const routes: Array<RouteRecordRaw> = [
         component: DashboardLayout,
         children: [
             {
-                path: '/dashboard',
+                path: '',
                 name: 'dashboard',
                 component: Dashboard,
             },
             {
-                path: '/users',
+                path: 'users',
                 name: 'users',
                 component: Users,
             },
             {
-                path: '/songs',
+                path: 'songs',
                 name: 'songs',
                 component: SongSelector,
             },
             {
-                path: '/store',
+                path: 'store',
                 name: 'store',
                 component: Store,
             }
         ],
     },
     {
-        path: '/',
+        path: '/login',
         name: 'login',
         component: Login
     },

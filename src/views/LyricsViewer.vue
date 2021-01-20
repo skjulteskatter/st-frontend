@@ -5,9 +5,9 @@
                 <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
                 <div>
                     <h3 class="lyrics__title">{{ song ? song.name[languageKey].title : "TITLE"}}</h3>
-                    <p class="lyrics__credits__author" v-if="song ? song.authors.length > 0 : false">Forfatter: {{song.authors[0].name}}</p>
-                    <p class="lyrics__credits__composer" v-if="song ? song.composers.length > 0 : false">Komponist: {{song.composers[0].name}}</p>
-                    <p class="lyrics__credits__composer" v-else>Melodi: {{ melodyOrigin ? melodyOrigin.name[languageKey] : 'UNKNOWN' }}</p>
+                    <p class="lyrics__credits__author" v-if="authors.length > 0">Forfatter: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
+                    <p class="lyrics__credits__composer" v-if="composers.length > 0">Komponist: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
+                    <p class="lyrics__credits__composer" v-if="melodyOrigin">Melodi: {{ melodyOrigin }}</p>
                 </div>
             </div>
             <div id="text-wrapper">
@@ -84,15 +84,21 @@ export default class LyricsViewer extends Vue {
     }
 
     public get melodyOrigin() {
-        return this.store.state.song?.melodyOrigin;
+        const melodyOrigin = this.store.state.song?.melodyOrigin;
+
+        return melodyOrigin ? melodyOrigin.name[this.languageKey] ?? melodyOrigin.name.no : undefined;
     }
 
-    public get user() {
-        return useStore(sessionKey).state.currentUser;
-    }
-
-    public get languageKey() {
+    public get languageKey(): string {
         return useStore(sessionKey).getters.languageKey;
+    }
+
+    public get authors() {
+        return this.song?.authors ?? [];
+    }
+
+    public get composers() {
+        return this.song?.composers ?? [];
     }
 }
 </script>

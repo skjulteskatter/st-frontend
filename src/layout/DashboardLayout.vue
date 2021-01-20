@@ -2,9 +2,9 @@
     <nav class="nav" v-if="user && initialized">
         <div class="nav__wrapper">
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
-            <router-link v-if="isAdmin" class="nav__item" to="/users">Users</router-link>
-            <router-link class="nav__item" to="/songs">Songs</router-link>
-            <router-link class="nav__item" to="/store">Store</router-link>
+            <router-link v-if="isAdmin" class="nav__item" to="/dashboard/users">Users</router-link>
+            <router-link class="nav__item" to="/dashboard/songs">Songs</router-link>
+            <router-link class="nav__item" to="/dashboard/store">Store</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>

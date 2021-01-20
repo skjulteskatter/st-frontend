@@ -34,11 +34,7 @@ export const sessionStore = createStore<Session>({
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
-                    if (state.getters.isAdmin) {
-                        router.replace("/users");
-                    } else {
-                        router.replace("/about")
-                    }
+                    router.replace('/dashboard');
                 }
                 state.commit('initialized', true);
             }
@@ -55,11 +51,7 @@ export const sessionStore = createStore<Session>({
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
-                    if (state.getters.isAdmin) {
-                        router.replace("/users");
-                    } else {
-                        router.replace("/dashboard")
-                    }
+                    router.replace('/dashboard')
                 }
                 state.commit('initialized', true);
             }

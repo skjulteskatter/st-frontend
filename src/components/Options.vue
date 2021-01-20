@@ -10,7 +10,7 @@ import firebase from "@/services/firebase";
 export default class Options extends Vue {
     logout() {
         firebase.signOut();
-        window.location.replace("/");
+        window.location.replace("/login");
     }
 }
 </script>
