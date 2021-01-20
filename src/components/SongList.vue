@@ -4,8 +4,7 @@
         <div class="song-list__header">
             <h1>Select number</h1>
             <div style="display: flex; gap: var(--spacing)">
-                <button @click="loadLyrics">Content search</button>
-                <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+                <input type="text" class="song-list__search" @input="loadLyrics" placeholder="Search..." v-model="searchQuery">
             </div>
         </div>
         <div v-if="!advancedSearch" class="song-list__wrapper">
@@ -61,10 +60,12 @@ export default class SongList extends Vue {
     }
 
     public async loadLyrics(){
-        this.advancedSearch = true;
-        this.loading = true;
-        await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
-        this.loading = false;
+        if (!this.advancedSearch) {
+            this.advancedSearch = true;
+            this.loading = true;
+            await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
+            this.loading = false;
+        }
     }
 
     public get allLyrics() {
