@@ -2,9 +2,9 @@
     <div id="lyrics-wrapper">
         <div class="lyrics">
             <div class="lyrics__credits">
-                <h1 class="lyrics__number">{{ song ? song.number : "0"}}</h1>
+                <h1 class="lyrics__number" v-if="number">{{ number }}</h1>
                 <div>
-                    <h3 class="lyrics__title">{{ song ? song.name[languageKey].title : "TITLE"}}</h3>
+                    <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
                     <p class="lyrics__credits__author" v-if="authors.length > 0">Forfatter: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
                     <p class="lyrics__credits__composer" v-if="composers.length > 0">Komponist: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
                     <p class="lyrics__credits__composer" v-if="melodyOrigin">Melodi: {{ melodyOrigin }}</p>
@@ -77,6 +77,14 @@ export default class LyricsViewer extends Vue {
 
     public get song() {
         return useStore(songKey).state.song;
+    }
+
+    public get title() {
+        return this.song?.name[this.languageKey]?.title ?? this.song?.name.no?.title ?? "";
+    }
+
+    public get number() {
+        return this.song?.number ?? 0;
     }
 
     public get lyrics() {

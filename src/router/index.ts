@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: '/login',
+        path: '/',
         name: 'login',
         component: Login
     },
