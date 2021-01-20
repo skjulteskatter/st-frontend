@@ -19,7 +19,7 @@ export class Themes {
             },
             light: {
                 background: '#FFFFFF',
-                secondaryBackground: '#FAFAFA',
+                secondaryBackground: '#EAEAEA',
                 text: '#333333',
                 borderColor: '#D0D0D0'
             }
