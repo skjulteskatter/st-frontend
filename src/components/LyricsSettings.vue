@@ -1,5 +1,5 @@
 <template>
-    <div class="lyrics-settings">
+    <div class="lyrics-settings" v-if="song">
         <card class="lyrics-settings__metadata" border secondary>
             <h2 class="lyrics-settings__metadata__title">{{song.number}} | {{song.name[languageKey].title}}</h2>
             <span v-if="song.type == 'lyrics'" class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
@@ -69,7 +69,7 @@ export default class LyricsSettings extends Vue {
     // public toggleVerse(key: string) {
     // }
 
-    public mounted() {
+    public async mounted() {
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
 
         window.addEventListener('keydown', (event) => {

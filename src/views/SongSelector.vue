@@ -30,25 +30,18 @@ export default class SongSelector extends Vue {
     private songStore = useStore(songKey);
     private userStore = useStore(sessionKey);
     public steps: Step[] = [];
-    public songSelect = false;
-    public collectionSelect = false;
-    public loading = false;
-    public advancedSearch = false;
 
     public deselect(type: string) {
         if (type == "collection") {
-            this.collectionSelect = false;
-            this.songSelect = false;
             this.songStore.commit('selectSong', undefined);
             this.steps = [];
         } else if (type == "song") {
-            this.songSelect = false;
             this.steps = [this.steps[0]];
         }
     }
 
     public get selectedCollection() {
-        return useStore(songKey).getters.collection != undefined && this.collectionSelect;
+        return useStore(songKey).getters.collection;
     }
     public get selectedSong() {
         return useStore(songKey).getters.song

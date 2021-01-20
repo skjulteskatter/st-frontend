@@ -1,5 +1,6 @@
 <template>
     <div class="songbooks">
+        <div class="loader" v-if="loading"></div>
         <card
             v-for="songbook in collections"
             :key="songbook.key"
@@ -27,6 +28,10 @@ import Card from '@/components/Card.vue';
 })
 export default class Songbooks extends Vue {
     private songStore = useStore(songKey);
+
+    public get loading() {
+        return !this.collections?.length;
+    }
 
     public selectCollection(collection: Collection) {
         this.songStore.commit('selectCollection', collection);
