@@ -1,23 +1,46 @@
 <template>
     <nav class="nav">
-        <div class="nav__wrapper">
+        <div class="container nav__wrapper">
+            <img :src="logo" id="logo" />
             <router-link v-if="!user.id" class="nav__item" to="/login">Login</router-link>
             <router-link v-else class="nav__item" to="/dashboard">Dashboard</router-link>
         </div>
     </nav>
-    <div id="wrapper">
-        <h1>Welcome to SongTreasures!</h1>
+    <header class="home__header">
+        <div class="container">
+            <div class="home__header__cta">
+                <h3>Discover our</h3>
+                <h1>SongTreasures</h1>
+                <button>Read more</button>
+            </div>
+        </div>
+    </header>
+    <div class="container">
         <router-view/>
     </div>
+    <footer class="home__footer">
+        <div class="container">
+            <small>Copyright 2021 © Stiftelsen Skjulte Skatters Forlag</small>
+        </div>
+    </footer>
 </template>
 <script lang="ts">
 import { sessionKey } from '@/store';
 import { Vue, Options } from 'vue-class-component';
 import { useStore } from 'vuex';
+import Card from '@/components/Card.vue';
 
 @Options({
+    components: {
+        Card
+    }
 })
 export default class DashboardLayout extends Vue {
+
+    public get logo(){
+        // Return the direct url to the logo
+        return 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png'
+    }
 
 
     public get user() {
@@ -26,62 +49,70 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
+:root {
+    --primary-color: #5372e2;
+    --border-color: #d0d0d0;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --secondary-background-color: #fafafa;
 
-.tag {
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    border-radius: var(--border-radius);
-    padding: .5em;
-    font-size: .7em;
-    text-transform: uppercase;
-    margin-right: calc(var(--spacing)/2);
-    margin-bottom: var(--spacing);
+    --border-radius: 5px;
+    --spacing: 1rem;
+}
 
-    &.empty {
-        border: 1px solid var(--text-color);
-        color: var(--text-color); 
-        opacity: .6;
+#logo {
+    max-height: 50px;
+    margin: 0 auto 0 0;
+}
+
+.home {
+    &__footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        background: var(--secondary-background-color);
+        border-top: 1px solid var(--border-color);
+        padding: var(--spacing);
     }
-}
 
-#wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: var(--spacing);
-    word-wrap: break-word;
-}
+    &__header {
+        width: 100%;
+        min-height: 40vh;
+        background-color: var(--primary-color);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
 
-select {
-    background: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
-    padding: .5em;
-}
+        &__cta {
+            font-size: 2.2em;
+            color: white;
 
-input[type=text] {
-    padding: var(--spacing);
-    background: transparent;
-    border: none;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
-}
+            .card__content {
+                padding: 2rem;
+            }
 
-button {
-    padding: .5em;
-    background: var(--primary-color);
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
+            h3, h1 {
+                margin: 0;
+            }
 
-    &[secondary] {
-        background: var(--background-color);
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
-        font-weight: 400;
+            h3 {
+                opacity: .7;
+            }
+
+            button {
+                border: 1px solid white;
+                transition: all .2s ease;
+                font-size: 1.1rem;
+                margin-top: var(--spacing);
+
+                &:hover {
+                    background: white;
+                    color: var(--text-color);
+                }
+            }
+        }
     }
 }
 
@@ -93,9 +124,7 @@ button {
     justify-content: center;
 
     &__wrapper {
-        max-width: 1000px;
-        width: 100%;
-        padding: var(--spacing);
+        padding: var(--spacing) 0;
 
         display: flex;
         justify-content: flex-end;

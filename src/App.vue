@@ -85,4 +85,46 @@ body {
         box-shadow: 0 5px 10px -5px rgba(black, 0.1);
     }
 }
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+select {
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: .5em;
+}
+
+input[type=text] {
+    padding: var(--spacing);
+    background: transparent;
+    border: none;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+}
+
+button {
+    padding: .5em;
+    background: var(--primary-color);
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+
+    &[secondary] {
+        background: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        font-weight: 400;
+    }
+}
 </style>

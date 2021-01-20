@@ -8,7 +8,7 @@
             <settings class="nav__item"></settings>
         </div>
     </nav>
-    <div id="wrapper" v-if="user && initialized">
+    <div class="container" v-if="user && initialized">
         <router-view/>
     </div>
 </template>
@@ -55,13 +55,13 @@ export default class DashboardLayout extends Vue {
 
     &.empty {
         border: 1px solid var(--text-color);
-        color: var(--text-color); 
+        color: var(--text-color);
         opacity: .6;
     }
 }
 
 #wrapper {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: var(--spacing);
     word-wrap: break-word;
@@ -109,7 +109,7 @@ button {
     justify-content: center;
 
     &__wrapper {
-        max-width: 1000px;
+        max-width: 1200px;
         width: 100%;
         padding: var(--spacing);
 
