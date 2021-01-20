@@ -6,6 +6,7 @@ const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongS
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
+const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -36,7 +37,7 @@ const routes: Array<RouteRecordRaw> = [
         ],
     },
     {
-        path: '/',
+        path: '/login',
         name: 'login',
         component: Login
     },
@@ -44,6 +45,13 @@ const routes: Array<RouteRecordRaw> = [
         path: '/lyrics',
         name: 'lyrics',
         component: LyricsViewer,
+    },
+    {
+        path: '/',
+        name: 'home',
+        component: HomeLayout,
+        children: [
+        ]
     }
 ]
 
