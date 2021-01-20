@@ -5,6 +5,9 @@
             <span class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
             <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
+            <div v-if="biography" id="biography"></div>
+            <div v-if="biography && description">------------------------</div>
+            <div v-if="song.description[languageKey]" id="song-details"></div>
         </card>
         <card class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
@@ -82,6 +85,18 @@ export default class LyricsSettings extends Vue {
     public mounted() {
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
 
+        const songDetailsElement = window.document.getElementById("song-details");
+
+        if (songDetailsElement) {
+            songDetailsElement.innerHTML = this.description;
+        }
+
+        const biographyElement = document.getElementById('biography');
+
+        if (biographyElement) {
+            biographyElement.innerHTML = this.biography ?? '';
+        }
+
         window.addEventListener('keydown', (event) => {
             if (event.key == "ArrowRight") {
                 this.next();
@@ -148,6 +163,18 @@ export default class LyricsSettings extends Vue {
 
     public get size() {
         return this.verses[1].content.length <= 5 ? 2 : 1;
+    }
+
+    public get description() {
+        return this.song.description[this.languageKey] ?? this.song.description.no ?? undefined;
+    }
+
+    public get biography() {
+        if (this.authors.length > 0) {
+            const bio = this.authors[0].getBiography(this.languageKey);
+            if (bio) return bio;
+        }
+        return undefined;
     }
 
     public get authors() {

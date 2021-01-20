@@ -52,6 +52,9 @@ export const songs = {
     },
     getAllLyrics(collection: string, language: string, format: string, transpose: number) {
         return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
+    },
+    getAllContributors(collection: string) {
+        return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}`);
     }
 }
 

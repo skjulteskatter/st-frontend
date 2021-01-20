@@ -64,7 +64,7 @@ export const sessionStore = createStore<Session>({
                 state.commit('initialized', true);
             }
         },
-        async loginWithEmailPassword({ getters, commit }, obj: {
+        async loginWithEmailPassword({ commit }, obj: {
             email: string;
             password: string;
             stayLoggedIn: boolean;
@@ -74,11 +74,7 @@ export const sessionStore = createStore<Session>({
                 const user = await api.session.getCurrentUser();
                 commit('currentUser', user);
                 if (router.currentRoute.value.name == "login") {
-                    if (getters.isAdmin) {
-                        router.replace("/users");
-                    } else {
-                        router.replace("/dashboard")
-                    }
+                    router.replace("/dashboard");
                 }
             }
         },

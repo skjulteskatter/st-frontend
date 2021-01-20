@@ -20,6 +20,11 @@ interface SongInterface {
     };
 }
 
+interface ContributorCollectionItem {
+    contributor: Contributor;
+    songs: SongInterface[];
+}
+
 interface MediaFile {
     id: string;
     type: string;
