@@ -8,6 +8,10 @@ const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
 
+const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
+const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
+const SongSettings = () => import(/* webpackChunkName: 'songSettings' */ '../components/LyricsSettings.vue');
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/dashboard',
@@ -28,6 +32,23 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'songs',
                 name: 'songs',
                 component: SongSelector,
+                children: [
+                    {
+                        path: '',
+                        name: 'collections',
+                        component: Collections,
+                    },
+                    {
+                        path: ':collection',
+                        name: 'songs',
+                        component: SongList,
+                    },
+                    {
+                        path: ':collection/:number',
+                        name: 'song',
+                        component: SongSettings,
+                    }
+                ]
             },
             {
                 path: 'store',

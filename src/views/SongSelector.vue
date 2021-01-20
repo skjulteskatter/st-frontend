@@ -2,28 +2,13 @@
     <div class="view-song">
         <stepper :steps="steps" :callback="deselect"></stepper>
 
-        <div class="loader" v-if="loading || !collections"></div>
-        <div id="book-step" v-if="!collectionSelected">
-            <h1>Select book</h1>
-            <songbooks :collections="collections" :callback="selectCollection"></songbooks>
-        </div>
-
-        <div id="song-step" v-if="!songSelected && collectionSelected && !loading">
-            <song-list :items="songs" :callback="selectSong"></song-list>
-        </div>
-
-        <div id="settings-step" v-if="songSelected && collectionSelected">
-            <h1>Song settings</h1>
-            <lyrics-settings v-if="lyrics" :lyrics="lyrics" :song="song"></lyrics-settings>
-            <song-details v-else :song="song"></song-details>
-        </div>
+        <router-view />
     </div>
 </template>
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
-import { Song } from '@/classes';
 import Card from '@/components/Card.vue'
 import SongList from '@/components/SongList.vue'
 import Songbooks from '@/components/Songbooks.vue'
@@ -50,22 +35,6 @@ export default class SongSelector extends Vue {
     public loading = false;
     public advancedSearch = false;
 
-    public selectCollection(collection: Collection) {
-        this.songStore.commit('selectCollection', collection)
-        this.collectionSelect = true;
-        this.advancedSearch = false;
-        this.steps = [{name: collection.name.no, id: collection.id, type: "collection"}];
-    }
-
-    public async selectSong(song: Song) {
-        this.songStore.commit('selectSong', song);
-        this.steps[1] = {name: song.number.toString(), id: song.number.toString(), type: "song"};
-        this.loading = true;
-        await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
-        this.loading = false;
-        this.songSelect = true;
-    }
-
     public deselect(type: string) {
         if (type == "collection") {
             this.collectionSelect = false;
@@ -77,27 +46,12 @@ export default class SongSelector extends Vue {
             this.steps = [this.steps[0]];
         }
     }
-    
-    public get collections() {
-        return useStore(songKey).getters.collections;
-    }
-    public get collectionSelected() {
+
+    public get selectedCollection() {
         return useStore(songKey).getters.collection != undefined && this.collectionSelect;
     }
-    public get lyrics() {
-        return useStore(songKey).getters.lyrics;
-    }
-    public get songs() {
-
-        const songs = useStore(songKey).getters.songs as Song[];
-
-        return songs?.filter(s => s.name[this.language] != null) || [];
-    }
-    public get song() {
-        return useStore(songKey).getters.song;
-    }
-    public get songSelected() {
-        return useStore(songKey).getters.song != undefined && this.songSelect;
+    public get selectedSong() {
+        return useStore(songKey).getters.song
     }
     public get language() {
         return useStore(sessionKey).getters.currentUser?.settings?.languageKey;

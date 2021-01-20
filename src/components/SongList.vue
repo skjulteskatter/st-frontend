@@ -1,26 +1,26 @@
 <template>
     <div class="song-list">
         <div class="loader" v-if="loading"></div>
-        <div class="song-list__header">
+        <div class="song-list__header" v-if="!loading">
             <h1>Select number</h1>
             <div style="display: flex; gap: var(--spacing)">
-                <input type="text" class="song-list__search" @input="loadLyrics" placeholder="Search..." v-model="searchQuery">
+                <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
             </div>
         </div>
-        <div v-if="!advancedSearch" class="song-list__wrapper">
-            <span class="song-list__item hover" :class="selected.number == item.number ? 'selected' : ''" v-for="item in filteredItems" :key="item.id" @click="callback(item)">
+        <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
+            <span class="song-list__item hover" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
                 {{ item.number }}
             </span>
         </div>
         <div v-else>
             <div class="search__container">
-                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="callback(items.find(s => s.number == lyrics.number))" border>
+                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="selectSong(songs.find(s => s.number == lyrics.number))" border>
                     <p>{{lyrics.number}}</p>
                     <h3>{{lyrics.title}}</h3>
                 </card>
             </div>
         </div>
-        <h1 class="warning" v-if="!filteredItems.length && !filteredLyrics.length">No results</h1>
+        <h1 class="warning" v-if="!filteredLyrics.length">No results</h1>
     </div>
 </template>
 
@@ -35,35 +35,25 @@ import Card from '@/components/Card.vue'
     components: {
         Card
     },
-    props: {
-        items: {
-            type: Array,
-            default: [],
-        },
-        callback: {
-            type: Function,
-            default: (() => null),
-        }
-    }
 })
 export default class SongList extends Vue {
-    public userStore = useStore(sessionKey);
+    private userStore = useStore(sessionKey);
+    private songStore = useStore(songKey);
     public searchQuery = '';
     public store = useStore(songKey);
-    public items: Song[] = [];
-    public advancedSearch = false;
     public collection?: Collection = useStore(songKey).state.collection;
     public loading = false;
 
-    public async loadLyrics(){
-        if (!this.advancedSearch) {
-            this.advancedSearch = true;
-            if (this.allLyrics.length == 0) {
-                this.loading = true;
-                await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
-                this.loading = false;
-            }
+    public async mounted() {
+        if (this.allLyrics.length == 0) {
+            this.loading = true;
+            await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
+            this.loading = false;
         }
+    }
+
+    public get advancedSearch() {
+        return this.searchQuery !== '';
     }
 
     public get allLyrics() {
@@ -82,8 +72,22 @@ export default class SongList extends Vue {
         return this.store.getters.song ?? {};
     }
 
-    public get filteredItems() {
-        return this.searchQuery ? this.items.filter(i => i.number.toString() == this.searchQuery || i.name[this.languageKey].title.toLowerCase().includes(this.searchQuery.toLowerCase())) : this.items;
+    public async selectSong(song: Song) {
+        if (this.disabled.find(s => s.number == song.number)) return;
+        this.songStore.commit('selectSong', song);
+        this.loading = true;
+        await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
+        this.$router.push(`${song.collection.key}/${song.number}`);
+        this.loading = false;
+    }
+    
+    public get songs() {
+        const songs = useStore(songKey).getters.songs as Song[];
+        return songs ?? [];
+    }
+
+    public get disabled() {
+        return this.songs.filter(s => !s.name[this.languageKey]);
     }
 }
 </script>
@@ -135,6 +139,10 @@ export default class SongList extends Vue {
         
         &.selected {
             border: 2px solid var(--primary-color);
+        }
+
+        &.disabled {
+            color: red;
         }
     }
 }

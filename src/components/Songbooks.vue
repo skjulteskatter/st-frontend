@@ -6,7 +6,7 @@
             class="songbooks__book hover"
             :class="selected.id == songbook.id ? 'selected' : ''"
             :image="songbook.image"
-            @click="callback(songbook)"
+            @click="selectCollection(songbook)"
             border
         >
             <h3 class="songbooks__book__title">{{ songbook.name.no }}</h3>
@@ -14,7 +14,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from 'vuex';
 import { songKey } from '@/store';
@@ -23,25 +23,23 @@ import Card from '@/components/Card.vue';
 @Options({
     components: {
         Card,
-    },
-    props: {
-        collections: {
-            type: Array,
-            default: []
-        },
-        callback: {
-            type: Function,
-            default: (() => null),
-        }
-    },
-    computed: {
-        selected() {
-            return useStore(songKey).getters.collection ?? {};
-        }
     }
 })
 export default class Songbooks extends Vue {
+    private songStore = useStore(songKey);
+
+    public selectCollection(collection: Collection) {
+        this.songStore.commit('selectCollection', collection);
+        this.$router.push(`songs/${collection.key}`)
+    }
     
+    public get collections() {
+        return useStore(songKey).getters.collections;
+    }
+
+    public get selected() {
+        return useStore(songKey).getters.collection ?? {};
+    }
 }
 </script>
 

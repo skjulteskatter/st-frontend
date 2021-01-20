@@ -35,7 +35,7 @@ export const songStore = createStore<Songs>({
             if (song == undefined) return;
             commit('setLyrics', undefined);
             if (song.type == "lyrics") {
-                const lyrics = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, languageCode, "json", 0));
+                const lyrics = state.allLyrics.find(l => l.number == song.number) ?? new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, languageCode, "json", 0));
                 commit('setLyrics', lyrics);
             }
         },
@@ -52,9 +52,11 @@ export const songStore = createStore<Songs>({
             state.songService = songService;
         },
         selectCollection(state, collection: Collection) {
-            state.collection = collection;
-            state.allLyrics = [];
-            state.song = undefined;
+            if (state.collection.key !== collection.key) {
+                state.collection = collection;
+                state.allLyrics = [];
+                state.song = undefined;
+            }
         },
         selectSong(state, song: Song) {
             state.song = song;
