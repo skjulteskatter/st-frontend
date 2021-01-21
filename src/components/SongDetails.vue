@@ -5,10 +5,10 @@
             <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
             <div v-if="biography" id="biography"></div>
-            <div v-if="biography && description">------------------------</div>
+            <hr v-if="biography && description">
             <div v-if="description" id="song-details"></div>
         </card>
-        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
+        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length" border>
             <h2 class="lyrics-settings__files__title">Files</h2>
             <div class="files__container">
                 <card class="lyrics-settings__files__audio" v-if="song.soundFiles.length">
@@ -27,7 +27,6 @@
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
-                    <!-- <a class="lyrics-settings__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
                 </card>
             </div>
         </card>

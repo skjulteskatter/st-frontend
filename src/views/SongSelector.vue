@@ -1,6 +1,6 @@
 <template>
     <div class="view-song">
-        <stepper :steps="steps" :callback="deselect"></stepper>
+        <!-- <stepper :steps="steps" :callback="deselect"></stepper> -->
 
         <router-view />
     </div>
@@ -53,4 +53,7 @@ export default class SongSelector extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.view-song {
+    padding-top: var(--spacing);
+}
 </style>
