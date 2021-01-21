@@ -66,7 +66,6 @@ section {
         width: 100%;
         min-height: 30vh;
         background-color: var(--primary-color);
-        margin-top: 70px;
 
         display: flex;
         justify-content: flex-start;

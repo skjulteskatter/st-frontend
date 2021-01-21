@@ -58,10 +58,6 @@ body {
     background-color: var(--background-color);
     border-bottom: 1px solid var(--border-color);
 
-    position: fixed;
-    top: 0;
-    left: 0;
-
     width: 100%;
     display: flex;
     justify-content: center;
