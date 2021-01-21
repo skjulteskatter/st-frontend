@@ -8,18 +8,7 @@
             <router-link v-else class="nav__item" to="/dashboard">Dashboard</router-link>
         </div>
     </nav>
-    <header class="home__header">
-        <div class="container">
-            <div class="home__header__cta">
-                <h3>Discover our</h3>
-                <h1>Song treasures</h1>
-                <a href="#about" class="cta">Read more</a>
-            </div>
-        </div>
-    </header>
-    <div class="container">
-        <router-view/>
-    </div>
+    <router-view/>
     <footer-component></footer-component>
 </template>
 <script lang="ts">
@@ -29,11 +18,13 @@ import { useStore } from 'vuex';
 
 import Card from '@/components/Card.vue';
 import FooterComponent from '@/components/home/FooterComponent.vue';
+import LandingPage from '@/views/home/LandingPage.vue';
 
 @Options({
     components: {
         Card,
         FooterComponent,
+        LandingPage,
     }
 })
 export default class DashboardLayout extends Vue {
@@ -63,67 +54,20 @@ body {
     }
 }
 
-.home {
-    &__header {
-        width: 100%;
-        min-height: 40vh;
-        background-color: var(--primary-color);
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-
-        &__cta {
-            font-size: 2.2em;
-            color: white;
-
-            h3, h1 {
-                margin: 0;
-            }
-
-            h3 {
-                opacity: .7;
-            }
-
-            .cta {
-                font-size: 1.2rem;
-                text-decoration: none;
-                color: white;
-                font-weight: bold;
-                position: relative;
-
-
-                &:after {
-                    content: '';
-                    height: 3px;
-                    width: 0;
-                    background: white;
-                    position: absolute;
-                    bottom: -5px;
-                    left: 0;
-                    transition: all .2s ease;
-                }
-
-                &:hover {
-
-                    &:after {
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
-}
-
 .nav {
     background-color: var(--background-color);
     border-bottom: 1px solid var(--border-color);
 
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
     display: flex;
     justify-content: center;
+    z-index: 1;
 
     &__wrapper {
-        padding: var(--spacing) 0;
-
         display: flex;
         justify-content: flex-end;
         align-items: center;

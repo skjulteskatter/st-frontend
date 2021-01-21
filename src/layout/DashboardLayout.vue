@@ -1,6 +1,6 @@
 <template>
     <nav class="nav" v-if="user && initialized">
-        <div class="nav__wrapper">
+        <div class="container nav__wrapper">
             <a href="/" id="logo">
                 <img :src="logo" />
             </a>

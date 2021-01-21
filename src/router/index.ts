@@ -7,6 +7,9 @@ const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/Lyr
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
+const LandingPage = () => import('../views/home/LandingPage.vue');
+const Blog = () => import('../views/home/Blog.vue');
+const BlogPost = () => import('../views/home/BlogPost.vue');
 
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
@@ -72,6 +75,21 @@ const routes: Array<RouteRecordRaw> = [
         name: 'home',
         component: HomeLayout,
         children: [
+            {
+                path: '',
+                name: 'landingpage',
+                component: LandingPage,
+            },
+            {
+                path: '/blog',
+                name: 'blog',
+                component: Blog,
+            },
+            {
+                path: '/blog/:post',
+                name: 'post',
+                component: BlogPost
+            }
         ]
     }
 ]

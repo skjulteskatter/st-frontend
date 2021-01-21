@@ -50,7 +50,7 @@ export default class Card extends Vue {}
     background-repeat: no-repeat;
 
     width: 100%;
-    min-height: 100px;
+    min-height: 150px;
   }
 
   &__content {
