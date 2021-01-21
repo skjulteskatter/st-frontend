@@ -32,7 +32,7 @@ interface MediaFile {
 }
 
 interface Contributor {
-    internalId: string;
+    id: string;
     name: string;
     birthYear: number;
     country: string;

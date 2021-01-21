@@ -24,8 +24,8 @@ export class Song implements SongInterface {
     constructor(song: SongInterface, contributors: ContributorCollectionItem[]) {
         this.number = song.number;
         this.name = song.name;
-        this.authors = song.authors.map(a => new ContributorItem(contributors.find(c => c.contributor.internalId == a.internalId)?.contributor ?? {} as Contributor)).filter(c => c.internalId);
-        this.composers = song.composers.map(a => new ContributorItem(contributors.find(c => c.contributor.internalId == a.internalId)?.contributor ?? {} as Contributor)).filter(c => c.internalId);
+        this.authors = song.authors.map(a => new ContributorItem(contributors.find(c => c.contributor.id == a.id)?.contributor ?? {} as Contributor)).filter(c => c.id);
+        this.composers = song.composers.map(a => new ContributorItem(contributors.find(c => c.contributor.id == a.id)?.contributor ?? {} as Contributor)).filter(c => c.id);
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
         this.originCountry = song.originCountry;

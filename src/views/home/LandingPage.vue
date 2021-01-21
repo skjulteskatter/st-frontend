@@ -38,7 +38,7 @@ export default class LandingPage extends Vue {
         {title: 'Post 3', slug: 'post-3' }
     ];
 
-    public openBlogPost(slug){
+    public openBlogPost(slug: string){
         this.$router.push(`/blog/${slug}`);
     }
 }
