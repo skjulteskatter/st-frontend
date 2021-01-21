@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="wrapper">
         <card id="login-card" border>
             <div class="login">
                 <h1 class="login__title">Please log in</h1>
@@ -85,7 +85,7 @@ export default class Login extends Vue {
 
 <style lang="scss">
 
-.container {
+.wrapper {
     width: 100vw;
     height: 100vh;
 
