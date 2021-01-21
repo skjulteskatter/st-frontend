@@ -108,6 +108,7 @@ export default class SongList extends Vue {
 
     &__wrapper {
         display: flex;
+        justify-content: space-around;
         flex-wrap: wrap;
         gap: calc(var(--spacing) * 0.5);
     }
@@ -124,7 +125,7 @@ export default class SongList extends Vue {
     }
 
     &__item {
-        max-width: 53px;
+        max-width: 52px;
         min-height: 40px;
         width: 100%;
         background-color: var(--background-color);
