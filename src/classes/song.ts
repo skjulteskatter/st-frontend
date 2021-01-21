@@ -6,10 +6,7 @@ export class Song implements SongInterface {
     public number = 0;
     public type: string;
     public name: {
-        [languageKey: string]: {
-            name: string;
-            title: string;
-        };
+        [languageKey: string]: string;
     } = {};
     public authors: ContributorItem[] = []
     public composers: ContributorItem[] = [];
