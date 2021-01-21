@@ -2,10 +2,12 @@
     <div class="modal">
         <button @click="openModal" class="modal__open-button">{{ label }}</button>
         <div class="modal__popup" v-if="modalIsOpen" @click="closeIfOutside">
-            <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
-                <slot></slot>
-                <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
-            </card>
+            <div class="container">
+                <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
+                    <slot></slot>
+                    <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
+                </card>
+            </div>
         </div>
     </div>
 </template>

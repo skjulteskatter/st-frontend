@@ -26,8 +26,9 @@
 import { sessionKey } from '@/store';
 import { Vue, Options } from 'vue-class-component';
 import { useStore } from 'vuex';
+
 import Card from '@/components/Card.vue';
-import FooterComponent from '@/components/FooterComponent.vue';
+import FooterComponent from '@/components/home/FooterComponent.vue';
 
 @Options({
     components: {
@@ -50,15 +51,19 @@ export default class DashboardLayout extends Vue {
 </script>
 <style lang="scss">
 
+body {
+    background: var(--background-color);
+}
+
 #logo {
     margin: 0 auto 0 0;
+
     img {
         max-height: 35px;
     }
 }
 
 .home {
-
     &__header {
         width: 100%;
         min-height: 40vh;
@@ -99,6 +104,7 @@ export default class DashboardLayout extends Vue {
                 }
 
                 &:hover {
+
                     &:after {
                         width: 100%;
                     }

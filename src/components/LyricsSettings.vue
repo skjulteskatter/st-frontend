@@ -1,13 +1,26 @@
 <template>
     <div class="lyrics-settings" v-if="song">
         <card class="lyrics-settings__metadata" border secondary>
-            <h2 class="lyrics-settings__metadata__title">{{song.number}} | {{title}}</h2>
+            <h2 class="lyrics-settings__metadata__title"><span style="opacity: .5; padding-right: .5em">{{song.number}}</span> {{title}}</h2>
             <span v-if="song.type == 'lyrics'" class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
-            <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
-            <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
-            <div v-if="biography" id="biography"></div>
-            <div v-if="biography && description">------------------------</div>
-            <div v-if="description" id="song-details"></div>
+            <p class="lyrics-settings__metadata__credits">
+                Author: 
+                <span v-for="author in authors" :key="author.id">
+                    <span v-if="!biography">{{ author.name }}</span>
+                    <modal :label="author.name" v-else>
+                        <div v-html="biography" class="biography-wrapper"></div>
+                    </modal>
+                </span>
+            </p>
+            <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">
+                Composer: 
+                <span v-for="composer in composers" :key="composer.id" :label="composer.name">
+                    <span v-if="!description">{{ composer.name }}</span>
+                    <modal :label="composer.name" v-else>
+                        <div v-html="description" class="biography-wrapper"></div>
+                    </modal>
+                </span>
+            </p>
         </card>
         <card v-if="song.type == 'lyrics'" class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
@@ -16,14 +29,14 @@
             <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
             <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
         </card>
-        <card v-if="song.type == 'lyrics'" class="lyrics-settings__verses">
+        <card v-if="song.type == 'lyrics'" class="lyrics-settings__verses" border>
             <h2 class="lyrics-settings__verses__title">Verses</h2>
             <label class="lyrics-settings__verses__input" :class="{'selected': selected.includes(key)}" v-for="key in Object.keys(verses)" :key="key">
                 <input :id="key" type="checkbox" class="lyrics-settings__verses__input__check" checked @click="toggleVerse(key)">
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
-        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length">
+        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length" border>
             <h2 class="lyrics-settings__files__title">Files</h2>
             <div class="files__container">
                 <card class="lyrics-settings__files__audio" v-if="song.soundFiles.length">
@@ -212,6 +225,13 @@ export default class LyricsSettings extends Vue {
     max-width: 100%;
 }
 
+.biography-wrapper {
+    color: var(--text-color);
+
+    img {
+        max-width: 50%;
+    }
+}
 
 .lyrics-settings {
     --half-spacing: calc(var(--spacing) * 0.5);
