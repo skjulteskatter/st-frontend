@@ -68,7 +68,7 @@ section {
         background-color: var(--primary-color);
 
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
 
         &__cta {

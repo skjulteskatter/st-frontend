@@ -75,13 +75,6 @@ export default class DashboardLayout extends Vue {
     }
 }
 
-#wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: var(--spacing);
-    word-wrap: break-word;
-}
-
 select {
     background: var(--background-color);
     border: 1px solid var(--border-color);

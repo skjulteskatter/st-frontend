@@ -1,7 +1,6 @@
 <template>
     <div class="view-song">
         <!-- <stepper :steps="steps" :callback="deselect"></stepper> -->
-
         <router-view />
     </div>
 </template>

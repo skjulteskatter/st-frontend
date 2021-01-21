@@ -2,7 +2,7 @@
     <div class="modal">
         <button @click="openModal" class="modal__open-button">{{ label }}</button>
         <div class="modal__popup" v-if="modalIsOpen" @click="closeIfOutside">
-            <div class="container">
+            <div class="wrapper">
                 <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
                     <slot></slot>
                     <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
@@ -46,6 +46,11 @@ export default class Modal extends Vue {
 </script>
 
 <style lang="scss" scoped>
+
+.wrapper {
+    max-width: 1200px;
+}
+
 .modal {
     &__open-button {
         width: 100%;

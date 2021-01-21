@@ -88,6 +88,7 @@ body {
 
 .container {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     padding: var(--spacing);
     word-wrap: break-word;
