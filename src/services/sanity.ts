@@ -13,7 +13,8 @@ type Author = {
     slug: Slug;
 }
 
-type Post = {
+export interface Post {
+    _id: string;
     name: string;
     slug: string;
     author: Author;
