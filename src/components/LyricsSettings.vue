@@ -1,7 +1,7 @@
 <template>
     <div class="lyrics-settings" v-if="song">
         <card class="lyrics-settings__metadata" border secondary>
-            <h2 class="lyrics-settings__metadata__title">{{song.number}} | {{song.name[languageKey].title}}</h2>
+            <h2 class="lyrics-settings__metadata__title">{{song.number}} | {{title}}</h2>
             <span v-if="song.type == 'lyrics'" class="lyrics-settings__metadata__verse-count tag">{{Object.keys(verses).length}} verses</span>
             <p class="lyrics-settings__metadata__credits">Author: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">Composer: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
@@ -152,8 +152,12 @@ export default class LyricsSettings extends Vue {
         return this.verses[1].content.length <= 5 ? 2 : 1;
     }
 
+    public get title() {
+        return this.song.name[this.languageKey] ?? this.song.name.en ?? this.song.name.no ?? "";
+    }
+
     public get description() {
-        return this.song.description[this.languageKey] ?? this.song.description.no ?? '';
+        return this.song.description[this.languageKey] ?? this.song.description.en ?? this.song.description.no ?? '';
     }
 
     public get biography() {

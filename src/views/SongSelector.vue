@@ -9,22 +9,8 @@
 import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
-import Card from '@/components/Card.vue'
-import SongList from '@/components/SongList.vue'
-import Songbooks from '@/components/Songbooks.vue'
-import Stepper from '@/components/Stepper.vue'
-import LyricsSettings from '@/components/LyricsSettings.vue';
-import SongDetails from '@/components/SongDetails.vue';
 
 @Options({
-    components: {
-        Card,
-        SongList,
-        Songbooks,
-        Stepper,
-        LyricsSettings,
-        SongDetails,
-    }
 })
 export default class SongSelector extends Vue {
     private songStore = useStore(songKey);

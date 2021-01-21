@@ -80,7 +80,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get title() {
-        return this.song?.name[this.languageKey]?.title ?? this.song?.name.no?.title ?? "";
+        return this.song?.name[this.languageKey] ?? this.song?.name.no ?? "";
     }
 
     public get number() {
