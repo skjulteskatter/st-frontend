@@ -15,9 +15,16 @@ type Author = {
 
 type Post = {
     name: string;
-    slug: Slug;
+    slug: string;
     author: Author;
-
 }
 
-export default client;
+class Sanity {
+    async getPost(slug: string) {
+        return await client.fetch(`*[_type == 'post' && (slug == '${slug}' || _id == '${slug}')][0]{title, slug}`) as Post;
+    }
+}
+
+const sanity = new Sanity();
+
+export default sanity;
