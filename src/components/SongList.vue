@@ -15,7 +15,7 @@
         <div v-else>
             <div class="search__container">
                 <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="selectSong(songs.find(s => s.number == lyrics.number))" border>
-                    <p>{{lyrics.number}}</p>
+                    <h2>{{lyrics.number}}</h2>
                     <h3>{{lyrics.title}}</h3>
                 </card>
             </div>
