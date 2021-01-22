@@ -54,7 +54,7 @@ export const songs = {
         return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
     },
     getAllContributors(collection: string) {
-        return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}`);
+        return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}?expand=contributor/biography`);
     }
 }
 
