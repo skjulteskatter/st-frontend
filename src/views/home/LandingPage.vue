@@ -12,10 +12,9 @@
         <div class="container">
             <h1>Newest</h1>
             <div class="posts__wrapper">
-                <card v-for="post in posts" :key="post.title" image="https://source.unsplash.com/random" border>
+                <card v-for="post in posts" :key="post.title" :image="post.image" border>
                     <h2>{{ post.title }}</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus repudiandae veniam doloribus modi nisi. </p>
-                    <b style="color: var(--primary-color); cursor: pointer" @click="openBlogPost(post.slug)">Read more</b>
+                    <b style="color: var(--primary-color); cursor: pointer" @click="openBlogPost(post.slug.current)">Read more</b>
                 </card>
             </div>
         </div>
@@ -25,6 +24,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Card from '@/components/Card.vue';
+import sanity, { Post, PostPreview } from "@/services/sanity";
 
 @Options({
     components: {
@@ -32,11 +32,11 @@ import Card from '@/components/Card.vue';
     }
 })
 export default class LandingPage extends Vue {
-    public posts = [
-        {title: 'Post 1', slug: 'post-1' },
-        {title: 'Post 2', slug: 'post-2' },
-        {title: 'Post 3', slug: 'post-3' }
-    ];
+    public posts: PostPreview[] = [];
+
+    public async mounted(){
+        this.posts = await sanity.getAllPosts('no');
+    }
 
     public openBlogPost(slug: string){
         this.$router.push(`/blog/${slug}`);
