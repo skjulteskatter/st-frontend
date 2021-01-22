@@ -10,7 +10,7 @@ interface SongInterface {
     leadSheetUrl: string;
     yearWritten: number;
     originCountry: Country;
-    soundFiles: MediaFile[];
+    audioFiles: MediaFile[];
     videoFiles: MediaFile[];
     details: {
         [languageKey: string]: string;

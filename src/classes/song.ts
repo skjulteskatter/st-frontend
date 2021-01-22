@@ -13,7 +13,7 @@ export class Song implements SongInterface {
     public leadSheetUrl = "";
     public yearWritten = 0;
     public originCountry: Country = {} as Country;
-    public soundFiles: MediaFile[] = [];
+    public audioFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
     public details: {
         [languageKey: string]: string;
@@ -29,7 +29,7 @@ export class Song implements SongInterface {
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
         this.originCountry = song.originCountry;
-        this.soundFiles = song.soundFiles;
+        this.audioFiles = song.audioFiles;
         this.videoFiles = song.videoFiles;
         this.details = song.details;
         this.melodyOrigin = song.melodyOrigin;

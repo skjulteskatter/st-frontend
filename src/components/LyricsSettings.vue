@@ -36,12 +36,12 @@
                 <span :for="key" class="lyrics-settings__verses__input__label">{{ verses[key].name }}</span>
             </label>
         </card>
-        <card class="lyrics-settings__files" v-if="song.soundFiles.length || song.videoFiles.length" border>
+        <card class="lyrics-settings__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
             <h2 class="lyrics-settings__files__title">Files</h2>
             <div class="files__container">
-                <card class="lyrics-settings__files__audio" v-if="song.soundFiles.length">
+                <card class="lyrics-settings__files__audio" v-if="song.audioFiles.length">
                     <h3>Audio</h3>
-                    <figure v-for="file in song.soundFiles" :key="file">
+                    <figure v-for="file in song.audioFiles" :key="file">
                         <figcaption>{{file.name}}</figcaption>
                         <audio :src="file.directUrl" controls>
                             Your browser does not support the <code>audio</code> element.
@@ -221,10 +221,10 @@ export default class LyricsSettings extends Vue {
     }
     
     public get lyrics() {
-        return useStore(songKey).getters.lyrics;
+        return this.store.getters.lyrics;
     }
     public get song() {
-        return useStore(songKey).getters.song;
+        return this.store.getters.song;
     }
 }
 </script>

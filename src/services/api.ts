@@ -45,7 +45,7 @@ export const songs = {
         return http.get<Collection[]>('api/Collections');
     },
     getAllSongs(collection: string) {
-        return http.get<SongInterface[]>(`api/Songs/${collection}`);
+        return http.get<SongInterface[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles,audioFiles`);
     },
     getLyrics(collection: string, number: number, language: string, format: string, transpose: number) {
         return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
