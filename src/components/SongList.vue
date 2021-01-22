@@ -8,7 +8,7 @@
             </div>
         </div>
         <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
-            <span class="song-list__item hover" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
+            <span class="song-list__item" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number), hover: !disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
                 {{ item.number }}
             </span>
         </div>
@@ -153,7 +153,7 @@ export default class SongList extends Vue {
         }
 
         &.disabled {
-            color: red;
+            color: var(--border-color);
         }
     }
 }

@@ -29,16 +29,6 @@ export default class Stepper extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
 
 .stepper {
     &__breadcrumb {

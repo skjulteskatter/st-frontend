@@ -1,9 +1,7 @@
 <template>
     <nav class="nav">
         <div class="container nav__wrapper">
-            <a href="/" id="logo">
-                <img :src="logo" />
-            </a>
+            <img id="logo" :src="logo" @click="$router.push('/')" />
             <router-link v-if="!user.id" class="nav__item" to="/login">Login</router-link>
             <router-link v-else class="nav__item" to="/dashboard">Dashboard</router-link>
         </div>
@@ -41,6 +39,7 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
+@import '@/style/main';
 
 body {
     background: var(--background-color);
@@ -48,74 +47,7 @@ body {
 
 #logo {
     margin: 0 auto 0 0;
-
-    img {
-        max-height: 35px;
-    }
-}
-
-.nav {
-    background-color: var(--background-color);
-    border-bottom: 1px solid var(--border-color);
-
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
-
-    &__wrapper {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    &__item {
-        color: var(--text-color);
-        margin-left: var(--spacing);
-        text-decoration: none;
-        font-weight: bold;
-
-        &.router-link-exact-active {
-            color: var(--primary-color);
-        }
-    }
-}
-
-.loader {
-    width: 100vw;
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9;
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    &:after {
-        content: '';
-        width: 100px;
-        height: 100px;
-
-        border-radius: 100%;
-        border-bottom: 10px solid var(--primary-color);
-        border-top: 10px solid var(--primary-color);
-        border-left: 10px solid var(--primary-color);
-        border-right: 10px solid transparent;
-
-        animation: loading 1s infinite linear;
-    }
-
-}
-
-@keyframes loading {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+    max-height: 35px;
+    cursor: pointer;
 }
 </style>
