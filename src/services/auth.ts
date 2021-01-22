@@ -2,7 +2,8 @@ import firebase from './firebase'
 
 class Auth {
     public accessToken = ''
-    public expiresAt = 0
+    public expiresAt = 0;
+    public initing = false;
 
     public setToken(token: string) {
         if (token !== '') {

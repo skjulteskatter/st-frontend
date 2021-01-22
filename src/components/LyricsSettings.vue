@@ -78,12 +78,22 @@ import Modal from '@/components/Modal.vue';
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
+    private store = useStore(songKey);
 
     // public toggleVerse(key: string) {
     // }
 
     public async mounted() {
+        if (!this.lyrics) {
+            await this.store.dispatch('load', {
+                collectionKey: this.$route.params.collection, 
+                number: this.$route.params.number,
+                languageKey: this.languageKey,
+            });
+        }
+
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
+        
 
         window.addEventListener('keydown', (event) => {
             if (event.key == "ArrowRight") {

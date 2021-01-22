@@ -1,5 +1,5 @@
 <template>
-    <div class="song-list">
+    <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
         <div class="song-list__header" v-if="!loading">
             <h1>Select number</h1>
@@ -41,10 +41,17 @@ export default class SongList extends Vue {
     private songStore = useStore(songKey);
     public searchQuery = '';
     public store = useStore(songKey);
-    public collection?: Collection = useStore(songKey).state.collection;
     public loading = false;
 
     public async mounted() {
+
+        if (!this.collection.id) {
+            await this.store.dispatch('load', {
+                collectionKey: this.$route.params.collection,
+                languageKey: this.languageKey,
+            });
+        }
+
         if (this.allLyrics.length == 0) {
             this.loading = true;
             await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
@@ -61,7 +68,11 @@ export default class SongList extends Vue {
     }
 
     public get filteredLyrics() {
-        return this.allLyrics.filter(l => l.number.toString() == this.searchQuery || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()));
+        return this.allLyrics?.filter(l => l.number.toString() == this.searchQuery || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())) ?? [];
+    }
+    
+    public get collection(): Collection {
+        return useStore(songKey).state.collection;
     }
 
     public get languageKey () {
@@ -81,9 +92,8 @@ export default class SongList extends Vue {
         this.loading = false;
     }
     
-    public get songs() {
-        const songs = useStore(songKey).getters.songs as Song[];
-        return songs ?? [];
+    public get songs(): Song[] {
+        return useStore(songKey).getters.songs ?? [];
     }
 
     public get disabled() {

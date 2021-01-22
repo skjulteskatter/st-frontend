@@ -8,6 +8,7 @@ export interface Songs {
     lyrics?: Lyrics;
     collection: Collection;
     songService: SongService;
+    initialized: boolean;
     song?: Song;
     verses: Verse[];
     allLyrics: Lyrics[];
@@ -23,12 +24,36 @@ export const songStore = createStore<Songs>({
         song: undefined,
         verses: [],
         allLyrics: [],
+        initialized: false,
     },
     actions: {
         async initSongService({ commit }, collections: Collection[]) {
             const songService = new SongService();
             await songService.init(collections);
             commit('songService', songService);
+        },
+        async load({ state, commit }, object: {
+            collectionKey: string; 
+            number: number;
+            languageKey: string;
+        }) {
+            while(!state.initialized) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            const collection = state.songService.collections.find(c => c.key == object.collectionKey);
+            if (collection) {
+                commit('selectCollection', collection);
+                await this.dispatch('getAllLyrics', object.languageKey);
+                if (!object.number) return;
+                const song = state.songService.songs.find(s => s.collection.key == collection.key && s.number == object.number);
+                if (song) {
+                    commit('selectSong', song);
+                    const lyrics = state.allLyrics.find(l => l.number == object.number);
+                    if (lyrics) {
+                        commit('setLyrics', lyrics);
+                    }
+                }
+            }
         },
         async getLyrics({ state, commit }, languageCode: string) {
             const song = state.song;
@@ -50,6 +75,7 @@ export const songStore = createStore<Songs>({
     mutations: {
         songService(state, songService: SongService) {
             state.songService = songService;
+            state.initialized = true;
         },
         selectCollection(state, collection: Collection) {
             if (state.collection.key !== collection.key) {
@@ -80,7 +106,7 @@ export const songStore = createStore<Songs>({
         },
         songs(state) {
             if (state.collection) {
-                return state.songService.songs.filter(s => s.collection.id == state.collection?.id);
+                return state.songService.songs?.filter(s => s.collection.id == state.collection?.id) ?? [];
             }
         },
         song(state) {

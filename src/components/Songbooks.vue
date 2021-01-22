@@ -30,7 +30,7 @@ export default class Songbooks extends Vue {
     private songStore = useStore(songKey);
 
     public get loading() {
-        return !this.collections?.length;
+        return !this.songStore.state.initialized;
     }
 
     public selectCollection(collection: Collection) {
