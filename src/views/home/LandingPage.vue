@@ -56,11 +56,6 @@ export default class LandingPage extends Vue {
     }
 }
 
-section {
-    padding: calc(var(--spacing) * 2) 0;
-    min-height: 75vh;
-}
-
 .home {
     &__header {
         width: 100%;
