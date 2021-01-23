@@ -4,6 +4,7 @@
             <h2 class="post-preview__title secondary" v-if="secondary">{{ title }}</h2>
         </div>
         <h2 class="post-preview__title" v-if="!secondary">{{ title }}</h2>
+        <p class="post-preview__excerpt" v-if="excerpt">{{ excerpt }}</p>
     </div>
 </template>
 
@@ -15,6 +16,7 @@ import { Options, Vue } from "vue-class-component";
         image: String,
         title: String,
         slug: String,
+        excerpt: String,
         secondary: Boolean
     }
 })
