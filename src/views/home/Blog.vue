@@ -3,7 +3,14 @@
         <div class="container blog">
             <h1 class="blog__title">All posts</h1>
             <div class="blog__posts">
-                <post-card v-for="post in posts" :key="post.title" secondary :title="post.title" :image="post.image" :slug="post.slug.current"></post-card>
+                <post-card 
+                    v-for="post in posts" 
+                    :key="post.title" 
+                    :title="post.title" 
+                    :image="post.image" 
+                    :slug="post.slug.current" 
+                    secondary
+                ></post-card>
             </div>
         </div>
     </section>

@@ -4,7 +4,14 @@
         <router-link class="see-more" to="/blog">See all</router-link>
     </div>
     <div class="post-slider__posts">
-        <post-card v-for="post in posts.slice(0, 3)" :key="post.title" style="default" :image="post.image" :title="post.title" :slug="post.slug.current"></post-card>
+        <post-card 
+            v-for="post in posts.slice(0, 3)" 
+            :key="post.title" style="default" 
+            :image="post.image" 
+            :title="post.title" 
+            :slug="post.slug.current"
+            :excerpt="post.excerpt"
+        ></post-card>
     </div>
 </template>
 
