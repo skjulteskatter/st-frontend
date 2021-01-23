@@ -103,7 +103,7 @@ export const sessionStore = createStore<Session>({
             return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
         },
         languageKey(state) {
-            return state.currentUser.settings?.languageKey ?? "no"
+            return state.currentUser.settings?.languageKey ?? "en"
         },
         languages(state) {
             return state.languages;
