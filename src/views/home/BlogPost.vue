@@ -41,7 +41,6 @@ export default class BlogPost extends Vue {
     width: 100vw;
     height: 30vh;
 
-    background-image: url('https://source.unsplash.com/random');
     background-size: cover;
     background-position: center;
 

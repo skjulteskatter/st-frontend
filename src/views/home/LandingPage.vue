@@ -10,51 +10,31 @@
     </header>
     <section id="blogposts">
         <div class="container">
-            <h1>Newest</h1>
-            <div class="posts__wrapper">
-                <card v-for="post in posts" :key="post.title" :image="post.image" border>
-                    <h2>{{ post.title }}</h2>
-                    <b style="color: var(--primary-color); cursor: pointer" @click="openBlogPost(post.slug.current)">Read more</b>
-                </card>
-            </div>
+            <post-slider></post-slider>
         </div>
     </section>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import sanity, { PostPreview } from "@/services/sanity";
 import Card from '@/components/Card.vue';
-import sanity, { Post, PostPreview } from "@/services/sanity";
+import PostCard from '@/components/home/PostCard.vue';
+import PostSlider from '@/components/home/PostSlider.vue';
 
 @Options({
     components: {
         Card,
+        PostCard,
+        PostSlider,
     }
 })
 export default class LandingPage extends Vue {
-    public posts: PostPreview[] = [];
-
-    public async mounted(){
-        this.posts = await sanity.getAllPosts('no');
-    }
-
-    public openBlogPost(slug: string){
-        this.$router.push(`/blog/${slug}`);
-    }
+    
 }
 </script>
 
 <style lang="scss">
-
-.posts__wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing);
-
-    @media screen and (max-width: 600px) {
-        grid-template-columns: 1fr;
-    }
-}
 
 .home {
     &__header {
