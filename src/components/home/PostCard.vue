@@ -1,8 +1,9 @@
 <template>
-    <div class="post-preview">
-        <div :style="{'backgroundImage': `url(${image})`}" class="post-preview__image"></div>
-        <h2 class="post-preview__title">{{ title }}</h2>
-        <b @click="openBlogPost(slug)" class="post-preview__button">Read more</b>
+    <div class="post-preview" @click="openBlogPost(slug)">
+        <div :style="{'backgroundImage': `url(${image})`}" class="post-preview__image">
+            <h2 class="post-preview__title secondary" v-if="secondary">{{ title }}</h2>
+        </div>
+        <h2 class="post-preview__title" v-if="!secondary">{{ title }}</h2>
     </div>
 </template>
 
@@ -13,7 +14,8 @@ import { Options, Vue } from "vue-class-component";
     props: {
         image: String,
         title: String,
-        slug: String
+        slug: String,
+        secondary: Boolean
     }
 })
 export default class PostCard extends Vue {
@@ -27,21 +29,34 @@ export default class PostCard extends Vue {
 <style lang="scss">
 .post-preview {
     background: var(--background-color);
+    cursor: pointer;
+
+    &:hover {
+        .post-preview__title {
+            text-decoration: underline;
+        }
+    }
 
     &__image {
         width: 100%;
         height: 200px;
         background-size: cover;
         background-position: center;
+
+        padding: var(--spacing);
+        display: flex;
+        align-items: flex-end;
     }
 
     &__title {
         margin-bottom: .5em;
+        
+        &.secondary {
+            color: white;
+            text-shadow: 0 0 5px rgba(black, .2);
+            margin: 0;
+        }
     }
 
-    &__button {
-        color: var(--primary-color); 
-        cursor: pointer
-    }
 }
 </style>

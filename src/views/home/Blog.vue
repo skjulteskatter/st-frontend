@@ -1,9 +1,9 @@
 <template>
     <section>
-        <div class="container">
-            <h1>All posts</h1>
-            <div id="post-wrapper">
-                <post-card v-for="post in posts" :key="post.title" :title="post.title" :image="post.image" :slug="post.slug.current"></post-card>
+        <div class="container blog">
+            <h1 class="blog__title">All posts</h1>
+            <div class="blog__posts">
+                <post-card v-for="post in posts" :key="post.title" secondary :title="post.title" :image="post.image" :slug="post.slug.current"></post-card>
             </div>
         </div>
     </section>
@@ -28,14 +28,19 @@ export default class Blog extends Vue {
 }
 </script>
 
-<style lang="scss">
-#post-wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing);
+<style lang="scss" scoped>
+@import '@/style/main.scss';
 
-    @media screen and (max-width: 600px) {
-        grid-template-columns: 1fr;
+.blog {
+
+    &__posts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing);
+
+        @media screen and (max-width: 600px) {
+            grid-template-columns: 1fr;
+        }
     }
 }
 </style>
