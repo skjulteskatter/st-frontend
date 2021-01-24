@@ -10,6 +10,7 @@ const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/
 const LandingPage = () => import('../views/home/LandingPage.vue');
 const Blog = () => import('../views/home/Blog.vue');
 const BlogPost = () => import('../views/home/BlogPost.vue');
+const Contact = () => import('../views/home/Contact.vue');
 
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
@@ -89,6 +90,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/blog/:post',
                 name: 'post',
                 component: BlogPost
+            },
+            {
+                path: '/contact',
+                name: 'contact',
+                component: Contact
             }
         ]
     }

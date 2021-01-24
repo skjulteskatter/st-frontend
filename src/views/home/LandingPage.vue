@@ -13,20 +13,29 @@
             <post-slider></post-slider>
         </div>
     </section>
+    <section id="contact">
+        <div class="container">
+            <div></div>
+            <card>
+                <contact-form></contact-form>
+            </card>
+        </div>
+    </section>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import sanity, { PostPreview } from "@/services/sanity";
 import Card from '@/components/Card.vue';
 import PostCard from '@/components/home/PostCard.vue';
 import PostSlider from '@/components/home/PostSlider.vue';
+import ContactForm from '@/components/home/ContactForm.vue';
 
 @Options({
     components: {
         Card,
         PostCard,
         PostSlider,
+        ContactForm,
     }
 })
 export default class LandingPage extends Vue {
@@ -35,6 +44,15 @@ export default class LandingPage extends Vue {
 </script>
 
 <style lang="scss">
+
+#contact {
+    background: var(--secondary-background-color);
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 .home {
     &__header {
