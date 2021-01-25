@@ -1,6 +1,6 @@
 <template>
     <header class="home__header">
-        <div class="container slideIna">
+        <div class="container slideIn">
             <div class="home__header__cta">
                 <h3>Discover our</h3>
                 <h1>Song treasures</h1>
