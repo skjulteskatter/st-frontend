@@ -11,6 +11,7 @@ const h = blocksToHtml.h;
 
 const serializers = {
     types: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         code: (props: any) => (
             h('pre', { className: props.node.language },
                 h('code', props.node.code)
