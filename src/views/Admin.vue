@@ -1,6 +1,8 @@
 <template>
     <div id="admin-panel">
         <div v-if="isAdmin">
+            <h1>Admin</h1>
+
             <users-list :users="users" :currentUser="currentUser"></users-list>
         </div>
         <div v-else>
@@ -35,10 +37,6 @@ export default class Subscriptions extends Vue {
 
     public get isAdmin(): boolean {
         return useStore(sessionKey).getters.isAdmin;
-    }
-
-    public get roles() {
-        return useStore(usersKey).state.roles;
     }
 
     public toggleRole(user: User, role: string) {

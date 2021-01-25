@@ -2,7 +2,7 @@
     <div id="users">
         <div class="header">
             <h1>Users</h1>
-            <button :disabled="disableButton" @click="refreshUsers()" secondary>Refresh</button>
+            <button :class="{disabled: disableButton}" @click="refreshUsers()" secondary>Refresh</button>
         </div>
         <card class="users__table" border>
             <table>
@@ -69,8 +69,8 @@ export default class UsersList extends Vue {
     public users: User[] = [];
     private usersStore = useStore(usersKey);
     public disableButton = false;
+    public loading = false;
     
-
     public async mounted() {
         await this.usersStore.dispatch('getUsers');
         await this.usersStore.dispatch('getRoles');
@@ -80,6 +80,20 @@ export default class UsersList extends Vue {
         this.disableButton = true;
         await this.usersStore.dispatch('getUsers');
         this.disableButton = false;
+    }
+
+    public get roles() {
+        return this.usersStore.state.roles;
+    }
+
+    public toggleRole(user: User, role: string) {
+        this.usersStore.commit('toggleRole', {user, role});
+    }
+
+    public async saveRoles(user: User) {
+        this.loading = true;
+        await this.usersStore.dispatch('setRoles', user);
+        this.loading = false;
     }
 }
 </script>
