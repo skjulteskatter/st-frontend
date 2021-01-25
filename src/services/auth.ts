@@ -22,6 +22,10 @@ class Auth {
         this.setToken(await firebase.socialLogin(providerName));
     }
 
+    public async createUser(email: string, password: string) {
+        return firebase.createUserWithEmailPassword(email, password);
+    }
+
     public async loginEmail(email: string, password: string, stayLoggedIn: boolean) {
         this.setToken(await firebase.emailPassword(email, password, stayLoggedIn));
     }

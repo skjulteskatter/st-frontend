@@ -20,7 +20,7 @@ const providers: {
 };
 
 class FirebaseService {
-    public currentUser: fb.User | null = null;
+    public currentUser?: fb.User = undefined;
 
     private getProvider(name = "google"): any {
         return providers[name];
@@ -38,9 +38,7 @@ class FirebaseService {
 
         if (user) return await user.getIdToken();
 
-        const provider = this.getProvider(providerName);
-
-        await fb.auth().signInWithPopup(provider);
+        await fb.auth().signInWithPopup(this.getProvider(providerName));
 
         user = fb.auth().currentUser;
 
@@ -62,6 +60,7 @@ class FirebaseService {
         if (this.currentUser) return await this.currentUser.getIdToken();
 
         let user = fb.auth().currentUser;
+
         if (user) return await user.getIdToken();
 
         const result = await fb.auth().signInWithEmailAndPassword(email, password);
@@ -71,6 +70,16 @@ class FirebaseService {
         if (!user) throw new Error('User not validated...')
 
         return await user.getIdToken();
+    }
+
+    public async createUserWithEmailPassword(email: string, password: string): Promise<string> {
+        const user = await fb.auth().createUserWithEmailAndPassword(email, password);
+
+        if (!user.user) {
+            throw new Error("User is not defined");
+        }
+
+        return user.user.getIdToken();
     }
 
     public init(): Promise<string> {
@@ -99,7 +108,7 @@ class FirebaseService {
 const firebase = new FirebaseService();
 
 fb.auth().onAuthStateChanged(async s => {
-    firebase.currentUser = s?.uid !== null ? s : null;
+    firebase.currentUser = s?.uid ? s : undefined;
 
     if (firebase.currentUser) {
         await sessionStore.dispatch('initialize');

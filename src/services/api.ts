@@ -16,6 +16,9 @@ export const session = {
     },
     saveUser(settings: UserSettings) {
         return http.patch('api/Session', settings)
+    },
+    createUser(displayName: string) {
+        return http.put('api/Session', {displayName});
     }
 }
 

@@ -22,22 +22,31 @@ export const sessionStore = createStore<Session>({
         initialized: false,
     },
     actions: {
-        async socialLogin(state, provider: string) {
+        async socialLogin({commit}, provider: string) {
             await auth.login(provider);
             if (auth.isAuthenticated) {
                 const user = await api.session.getCurrentUser();
-                state.commit('currentUser', user);
+                commit('currentUser', user);
                 try {
                     const languages = await api.items.getLanguages();
-                    state.commit('languages', languages);
+                    commit('languages', languages);
                 } catch (e) {
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
                     router.replace('/dashboard');
                 }
-                state.commit('initialized', true);
+                commit('initialized', true);
             }
+        },
+        async createUser(state, object: { 
+            email: string; 
+            password: string; 
+            displayName: string;
+        }) {
+            const token = await auth.createUser(object.email, object.password);
+
+            const user = await api.session.createUser(object.displayName);
         },
         async initialize(state) {
             await auth.init();
