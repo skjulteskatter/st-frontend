@@ -1,6 +1,6 @@
 import stripeService from "@/services/stripe";
 import { InjectionKey } from "vue";
-import { createStore } from "vuex";
+import { createStore, Store } from "vuex";
 
 export interface StripeStore {
     products: Product[];
@@ -8,7 +8,7 @@ export interface StripeStore {
     initialized: boolean;
 }
 
-export const stripeKey: InjectionKey<StripeStore> = Symbol();
+export const stripeKey: InjectionKey<Store<StripeStore>> = Symbol();
 
 export const stripeStore = createStore<StripeStore>({
     state: {

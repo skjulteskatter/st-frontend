@@ -50,7 +50,7 @@ export default class Stripe extends Vue{
     }
 
     public get products() {
-        return this.store.state.products;
+        return this.store.state.products.sort((a, b) => b.collections.length - a.collections.length);
     }
 
     public get user(){
