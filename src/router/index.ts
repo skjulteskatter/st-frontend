@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
-const Users = () => import(/* webpackChunkName: 'users' */ '../views/Users.vue');
+const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue');
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
@@ -28,9 +28,9 @@ const routes: Array<RouteRecordRaw> = [
                 component: Dashboard,
             },
             {
-                path: 'users',
-                name: 'users',
-                component: Users,
+                path: 'admin',
+                name: 'admin',
+                component: Admin,
             },
             {
                 path: 'songs',

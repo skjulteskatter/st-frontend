@@ -3,9 +3,9 @@
         <div class="container nav__wrapper">
             <img id="logo" :src="logo" @click="$router.push('/')"/>
             <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
-            <router-link v-if="isAdmin" class="nav__item" to="/dashboard/users">Users</router-link>
             <router-link class="nav__item" to="/dashboard/songs">Songs</router-link>
             <router-link class="nav__item" to="/dashboard/store">Store</router-link>
+            <router-link v-if="isAdmin" class="nav__item" to="/dashboard/admin">Admin</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>

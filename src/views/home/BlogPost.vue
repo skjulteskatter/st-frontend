@@ -11,7 +11,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Card from '@/components/Card.vue';
-import sanity, { Post } from "@/services/sanity";
+import { Post } from "@/services/sanity";
+import { useStore } from "vuex";
+import { sanityKey } from "@/store/sanity";
 
 @Options({
     components: {
@@ -19,17 +21,18 @@ import sanity, { Post } from "@/services/sanity";
     }
 })
 export default class BlogPost extends Vue {
-    public currentPost: Post = {} as Post;
-    public body = undefined;
+    public store = useStore(sanityKey);
 
-    public async mounted(){
-        const res = await sanity.getPost(this.$route.params.post as string, 'no');
-        this.currentPost = res.post;
-        this.body = res.body;
+    public async mounted() {
+        await this.store.dispatch('setCurrent', this.$route.params.post as string);
     }
 
-    public get post(){
-        return this.currentPost;
+    public get post(): Post {
+        return this.store.state.current ?? {} as Post;
+    }
+
+    public get body(): HTMLElement | undefined {
+        return this.store.state.body;
     }
 }
 </script>
