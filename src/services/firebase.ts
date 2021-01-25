@@ -112,12 +112,10 @@ fb.auth().onAuthStateChanged(async s => {
 
     if (firebase.currentUser) {
         await sessionStore.dispatch('initialize');
-        let collections = [];
+        let collections = await api.songs.getCollections();
         
-        if (sessionStore.getters.isAdmin) {
-            collections = await api.songs.getCollections();
-        } else {
-            collections = sessionStore.getters.collections ?? [];
+        if (!sessionStore.getters.isAdmin) {
+            collections = collections.filter(c => sessionStore.getters.collectionIds.includes(c.id));
         }
 
         await songStore.dispatch('initSongService', collections);
