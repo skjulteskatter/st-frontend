@@ -74,12 +74,18 @@ interface Verse {
     content: string[];
 }
 
+interface Price {
+    id: string;
+    value: string;
+    name: string;
+    type: string;
+}
+
 interface Product {
     id: string;
     name: {
         [languageKey: string]: string;
     };
     collections: Collection[];
-    image: string;
-    priceId: string;
+    prices: Price[];
 }
