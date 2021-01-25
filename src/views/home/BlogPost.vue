@@ -1,11 +1,9 @@
 <template>
-    <div id="header-image" :style="{'backgroundImage': `url(${post.image})`}"></div>
-    <div class="wrapper">
-        <div class="container">
-            <card class="post">
-                <h1>{{ post.title }}</h1>
-                <div id="post-body" v-if="body" v-html="body"></div>
-            </card>
+    <div class="container post slideIn">
+        <div class="post__header-image" :style="{'backgroundImage': `url(${post.image})`}"></div>
+        <div class="post__content">
+            <h1 class="post__content__title">{{ post.title }}</h1>
+            <div class="post__content__body" v-if="body" v-html="body"></div>
         </div>
     </div>
 </template>
@@ -37,31 +35,29 @@ export default class BlogPost extends Vue {
 </script>
 
 <style lang="scss" scoped>
-#header-image {
-    width: 100vw;
-    height: 30vh;
-
-    background-size: cover;
-    background-position: center;
-
-    z-index: 0;
-}
-
-.wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
 .post {
-    margin-top: -100px;
-    height: 100vh;
-    box-shadow: 0 10px 10px rgba(black, .1);
+    padding-top: 0;
+
+    &__content {
+
+        &__title {
+            font-size: 2.5em;
+        }
+
+        &__body {
+            img {
+                max-width: 500px;
+            } 
+        }
+    }
+
+    &__header-image {
+        height: 50vh;
+
+        background-size: cover;
+        background-position: center;
+    }
+
 }
 
-#post-body {
-    img {
-        max-width: 500px;
-    } 
-}
 </style>

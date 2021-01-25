@@ -1,5 +1,5 @@
 <template>
-    <div class="post-preview" @click="openBlogPost(slug)">
+    <div class="post-preview slideIn" @click="openBlogPost(slug)">
         <div :style="{'backgroundImage': `url(${image})`}" class="post-preview__image">
             <h2 class="post-preview__title secondary" v-if="secondary">{{ title }}</h2>
             <p class="post-preview__excerpt secondary" v-if="excerpt && secondary">{{ excerpt }}</p>

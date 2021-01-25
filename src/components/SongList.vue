@@ -154,6 +154,7 @@ export default class SongList extends Vue {
 
         &.disabled {
             color: var(--border-color);
+            cursor: not-allowed;
         }
     }
 }
