@@ -4,10 +4,18 @@
             <div class="home__header__cta">
                 <h3>Discover our</h3>
                 <h1>Song treasures</h1>
-                <a href="#about" class="cta">Read more</a>
+                <router-link to="/register" class="cta">Start now</router-link>
             </div>
         </div>
     </header>
+    <section id="about">
+        <div class="container">
+            <h1>What is SongTreasures?</h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda esse illum incidunt hic eaque odit, ex voluptates mollitia qui provident nam impedit alias doloribus. Eligendi blanditiis adipisci modi iure id.
+            Ullam, voluptate! Dolorum eius, quas quia harum quis soluta voluptatibus aliquam molestiae temporibus nostrum doloribus iste tempora odit quo adipisci veritatis, sed ipsum optio quidem dolor laborum praesentium voluptate. Nemo.
+            Explicabo, nulla blanditiis! Impedit, fugit sit atque aspernatur eos tempora minus eveniet praesentium expedita exercitationem dolore culpa molestias provident inventore quaerat a magni est nobis! Sed enim inventore eligendi laboriosam.</p>
+        </div>
+    </section>
     <section id="blogposts">
         <div class="container">
             <post-slider></post-slider>
