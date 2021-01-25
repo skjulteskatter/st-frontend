@@ -2,9 +2,10 @@
     <div class="post-preview" @click="openBlogPost(slug)">
         <div :style="{'backgroundImage': `url(${image})`}" class="post-preview__image">
             <h2 class="post-preview__title secondary" v-if="secondary">{{ title }}</h2>
+            <p class="post-preview__excerpt secondary" v-if="excerpt && secondary">{{ excerpt }}</p>
         </div>
         <h2 class="post-preview__title" v-if="!secondary">{{ title }}</h2>
-        <p class="post-preview__excerpt" v-if="excerpt">{{ excerpt }}</p>
+        <p class="post-preview__excerpt" v-if="excerpt && !secondary">{{ excerpt }}</p>
     </div>
 </template>
 
@@ -47,7 +48,8 @@ export default class PostCard extends Vue {
 
         padding: var(--spacing);
         display: flex;
-        align-items: flex-end;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     &__title {
@@ -55,8 +57,16 @@ export default class PostCard extends Vue {
         
         &.secondary {
             color: white;
-            text-shadow: 0 0 5px rgba(black, .2);
-            margin: 0;
+            text-shadow: 0 0 5px rgba(black, .5);
+        }
+    }
+
+    &__excerpt {
+        margin: 0;
+
+        &.secondary {
+            color: white;
+            text-shadow: 0 0 5px rgba(black, .5);
         }
     }
 

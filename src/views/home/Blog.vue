@@ -8,7 +8,8 @@
                     :key="post.title" 
                     :title="post.title" 
                     :image="post.image" 
-                    :slug="post.slug.current" 
+                    :slug="post.slug.current"
+                    :excerpt="post.excerpt"
                     secondary
                 ></post-card>
             </div>
