@@ -38,16 +38,6 @@ export default class Subscriptions extends Vue {
     public get isAdmin(): boolean {
         return useStore(sessionKey).getters.isAdmin;
     }
-
-    public toggleRole(user: User, role: string) {
-        this.usersStore.commit('toggleRole', {user, role});
-    }
-
-    public async saveRoles(user: User) {
-        this.loading = true;
-        await this.usersStore.dispatch('setRoles', user);
-        this.loading = false;
-    }
 }
 </script>
 
