@@ -23,7 +23,7 @@ class Auth {
     }
 
     public async createUser(email: string, password: string) {
-        return firebase.createUserWithEmailPassword(email, password);
+        this.setToken(await firebase.createUserWithEmailPassword(email, password));
     }
 
     public async loginEmail(email: string, password: string, stayLoggedIn: boolean) {

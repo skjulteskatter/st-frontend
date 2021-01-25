@@ -39,14 +39,28 @@ export const sessionStore = createStore<Session>({
                 commit('initialized', true);
             }
         },
-        async createUser(state, object: { 
+        async createUser({commit}, object: { 
             email: string; 
             password: string; 
             displayName: string;
         }) {
-            const token = await auth.createUser(object.email, object.password);
+            await auth.createUser(object.email, object.password);
 
-            const user = await api.session.createUser(object.displayName);
+            if (auth.isAuthenticated) {
+                const user = await api.session.createUser(object.displayName);
+
+                commit('currentUser', user);
+                try {
+                    const languages = await api.items.getLanguages();
+                    commit('languages', languages);
+                } catch (e) {
+                    console.log(e);
+                }
+                if (router.currentRoute.value.name == "login") {
+                    router.replace('/dashboard');
+                }
+                commit('initialized', true);
+            }
         },
         async initialize(state) {
             await auth.init();
