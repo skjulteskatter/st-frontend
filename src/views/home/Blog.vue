@@ -10,7 +10,6 @@
                     :image="post.image" 
                     :slug="post.slug.current"
                     :excerpt="post.excerpt"
-                    secondary
                 ></post-card>
             </div>
         </div>
@@ -44,7 +43,7 @@ export default class Blog extends Vue {
     &__posts {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing);
+        gap: calc(var(--spacing)*2);
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;

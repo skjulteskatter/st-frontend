@@ -84,6 +84,10 @@
     }
 }
 
+.slideIn {
+    animation: slideInFromBottom .5s ease;
+}
+
 // Container
 .container {
     max-width: 1200px;
