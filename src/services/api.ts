@@ -68,8 +68,8 @@ export const stripe = {
     startSession(priceId: string) {
         return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { 
             priceId, 
-            cancelUrl: "http://localhost:8080/cancel", 
-            successUrl: "http://localhost:8080/success" 
+            cancelUrl: window.location.origin + "/dashboard", 
+            successUrl: window.location.origin + "/success",
         });
     },
     getSession(sessionId: string) {
