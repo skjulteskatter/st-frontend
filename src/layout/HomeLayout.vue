@@ -17,6 +17,7 @@ import { useStore } from 'vuex';
 import Card from '@/components/Card.vue';
 import FooterComponent from '@/components/home/FooterComponent.vue';
 import LandingPage from '@/views/home/LandingPage.vue';
+import { sanityKey } from '@/store/sanity';
 
 @Options({
     components: {
@@ -27,11 +28,14 @@ import LandingPage from '@/views/home/LandingPage.vue';
 })
 export default class DashboardLayout extends Vue {
 
+    public mounted() {
+        useStore(sanityKey).dispatch('init');
+    }
+
     public get logo(){
         // Return the direct url to the logo
         return 'https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.jpg'
     }
-
 
     public get user() {
         return useStore(sessionKey).state.currentUser;

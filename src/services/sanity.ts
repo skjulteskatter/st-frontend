@@ -44,7 +44,7 @@ export interface PostPreview {
 
 class Sanity {
     async getPost(slug: string, languageKey: string) {
-        const post = await client.fetch(`*[_type == 'post' && (slug.current == '${slug}' || _id == '${slug}')][0]{'title': title.${languageKey}, slug, 'image': mainImage.asset->url, 'body': body.no}`);
+        const post = await client.fetch(`*[_type == 'post' && (slug.current == '${slug}' || _id == '${slug}')][0]{'title': title.${languageKey}, slug, 'image': mainImage.asset->url, 'body': body.${languageKey}}`);
 
         const el = blocksToHtml({
             blocks: post.body,
