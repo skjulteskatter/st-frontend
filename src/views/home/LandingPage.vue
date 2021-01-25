@@ -15,7 +15,10 @@
     </section>
     <section id="contact">
         <div class="container">
-            <div></div>
+            <div class="contact__cta">
+                <h1>Get in touch with us.</h1>
+                <p>We will gladly answer any of your questions</p>
+            </div>
             <card>
                 <contact-form></contact-form>
             </card>
@@ -46,11 +49,38 @@ export default class LandingPage extends Vue {
 <style lang="scss">
 
 #contact {
-    background: var(--secondary-background-color);
+    background: var(--primary-color);
 
     .container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing);
+
+        @media screen and (max-width: 600px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .contact__cta {
+        color: white;
+        font-size: 2em;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        @media screen and (max-width: 600px) {
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        p {
+            opacity: .8;
+        }
+
+        h1, p {
+            margin: 0 0 .3em 0;
+        }
     }
 }
 

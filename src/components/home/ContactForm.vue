@@ -10,7 +10,7 @@
         </div>
         <div class="contact-form__field">
             <label for="message" class="contact-form__field__label">Message</label>
-            <textarea rows="10" id="message" class="contact-form__input" v-model="form.message"></textarea>
+            <textarea rows="5" id="message" class="contact-form__input" v-model="form.message"></textarea>
         </div>
         <div class="contact-form__field">
             <button class="contact-form__button" @click="sendForm">Send</button>
