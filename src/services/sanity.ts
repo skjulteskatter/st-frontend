@@ -56,7 +56,7 @@ class Sanity {
         return { post, body: el }
     }
     async getAllPosts(languageKey: string) {
-        return await client.fetch(`*[_type == 'post']{'title': title.${languageKey}, slug, 'image': mainImage.asset->url, 'excerpt': excerpt.${languageKey}}`) as PostPreview[];
+        return await client.fetch(`*[_type == 'post']{'title': title.${languageKey}, slug, 'image': mainImage.asset->url + '?w=400', 'excerpt': excerpt.${languageKey}}`) as PostPreview[];
     }
 }
 
