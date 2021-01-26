@@ -5,9 +5,9 @@
             <button @click="portal()" v-if="user.subscriptions.length" secondary>Manage subscriptions</button>
         </div>
         <div class="store__items">
-            <card v-for="product in products" :key="product.id" :image="product.image" class="store__items__item">
+            <card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item">
                 <h3>{{product.name.no}}</h3>
-                <button @click="checkout(product.priceId)" v-if="!productIds.includes(product.id)">Buy</button>
+                <button @click="checkout(product)" v-if="!productIds.includes(product.id)">Buy</button>
                 <label style="opacity: .6" v-else>You already own this product.</label>
             </card>
         </div>
@@ -35,8 +35,12 @@ export default class Stripe extends Vue{
         }
     }
 
-    public checkout(priceId: string) {
-        this.store.dispatch('startSession', priceId);
+    public checkout(product: Product) {
+        const price = product.prices.find(p => p.type == 'month');
+
+        if (price) {
+            this.store.dispatch('startSession', price.id);
+        }
     }
 
     public portal() {
@@ -46,7 +50,7 @@ export default class Stripe extends Vue{
     }
 
     public get products() {
-        return this.store.state.products;
+        return this.store.state.products.sort((a, b) => b.collections.length - a.collections.length);
     }
 
     public get user(){
@@ -54,7 +58,7 @@ export default class Stripe extends Vue{
     }
 
     public get productIds(){
-        return this.user.subscriptions.map(s => s.product.id)
+        return this.user.subscriptions.map(s => s.productId)
     }
 }
 </script>

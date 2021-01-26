@@ -19,7 +19,6 @@ export default class ContributorItem implements Contributor{
     }
 
     public getBiography(language: string) {
-        
         const content = this.biography[language] ?? this.biography.no ?? undefined;
 
         if (content) {

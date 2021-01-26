@@ -110,16 +110,7 @@ export default class Dashboard extends Vue {
     }
 
     public get subscribedCollections(){
-        const collections: Collection[] = [];
-
-        for(const sub of this.subscriptions){
-            for(const col of sub.product.collections){
-                if(!collections.find(c => c.id == col.id)){
-                    collections.push(col);
-                }
-            }
-        }
-        return collections;
+        return this.store.getters.collections;
     }
 
     public get languages(): Language[] {

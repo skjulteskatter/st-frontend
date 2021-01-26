@@ -1,20 +1,25 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
-const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue');
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
-const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
-const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
-const LandingPage = () => import('../views/home/LandingPage.vue');
-const Blog = () => import('../views/home/Blog.vue');
-const BlogPost = () => import('../views/home/BlogPost.vue');
-const Contact = () => import('../views/home/Contact.vue');
-
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
 const SongSettings = () => import(/* webpackChunkName: 'songSettings' */ '../components/LyricsSettings.vue');
+
+const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
+
+const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
+const LandingPage = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/LandingPage.vue');
+const Blog = () => import(/* webpackChunkName: 'blog' */ '../views/home/Blog.vue');
+const BlogPost = () => import(/* webpackChunkName: 'blogPost' */ '../views/home/BlogPost.vue');
+const Contact = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/Contact.vue');
+
+const Success = () => import(/* webpackChunkName: 'success' */ '../views/Success.vue');
+
+const NotFound = () => import(/* webpackChunkName: 'notFound' */ '../views/NotFound.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -97,6 +102,16 @@ const routes: Array<RouteRecordRaw> = [
                 component: Contact
             }
         ]
+    },
+    {
+        path: '/success',
+        name: 'success',
+        component: Success,
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFound,
     }
 ]
 

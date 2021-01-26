@@ -10,6 +10,7 @@ export interface Session {
     isAuthenticated: boolean;
     languages: Language[];
     initialized: boolean;
+    collections: Collection[];
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
@@ -20,6 +21,7 @@ export const sessionStore = createStore<Session>({
         isAuthenticated: false,
         languages: [],
         initialized: false,
+        collections: []
     },
     actions: {
         async socialLogin({commit}, provider: string) {
@@ -30,6 +32,8 @@ export const sessionStore = createStore<Session>({
                 try {
                     const languages = await api.items.getLanguages();
                     commit('languages', languages);
+                    const collections = await api.songs.getCollections();
+                    commit('collections', collections);
                 } catch (e) {
                     console.log(e);
                 }
@@ -53,6 +57,8 @@ export const sessionStore = createStore<Session>({
                 try {
                     const languages = await api.items.getLanguages();
                     commit('languages', languages);
+                    const collections = await api.songs.getCollections();
+                    commit('collections', collections);
                 } catch (e) {
                     console.log(e);
                 }
@@ -62,21 +68,23 @@ export const sessionStore = createStore<Session>({
                 commit('initialized', true);
             }
         },
-        async initialize(state) {
+        async initialize({commit}) {
             await auth.init();
             if (auth.isAuthenticated) {
                 const user = await api.session.getCurrentUser();
-                state.commit('currentUser', user);
+                commit('currentUser', user);
                 try {
                     const languages = await api.items.getLanguages();
-                    state.commit('languages', languages);
+                    commit('languages', languages);
+                    const collections = await api.songs.getCollections();
+                    commit('collections', collections);
                 } catch (e) {
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
                     router.replace('/dashboard')
                 }
-                state.commit('initialized', true);
+                commit('initialized', true);
             }
         },
         async loginWithEmailPassword({ commit }, obj: {
@@ -116,6 +124,9 @@ export const sessionStore = createStore<Session>({
         },
         initialized(state, initialized: boolean) {
             state.initialized = initialized;
+        },
+        collections(state, collections: Collection[]) {
+            state.collections = collections;
         }
     },
     getters: {
@@ -135,12 +146,12 @@ export const sessionStore = createStore<Session>({
             return state.initialized;
         },
         collections(state) {
-            const collections = [];
-
-            for (const sub of state.currentUser?.subscriptions) {
-                for (const col of sub.product.collections) {
-                    if (["HV", "MB"].includes(col.key)) {
-                        collections.push(col);
+            const collections: Collection[] = [];
+            for (const sub of state.currentUser.subscriptions) {
+                for (const id of sub.collectionIds) {
+                    if (!collections.find(c => c.id == id)) {
+                        const collection = state.collections.find(c => c.id == id);
+                        if (collection) collections.push(collection);
                     }
                 }
             }

@@ -67,16 +67,16 @@ export const stripe = {
     },
     startSession(priceId: string) {
         return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { 
-            priceId, 
-            cancelUrl: "http://localhost:8080/cancel", 
-            successUrl: "http://localhost:8080/success" 
+            priceId,
+            cancelUrl: window.location.origin + "/dashboard",
+            successUrl: window.location.origin + "/success",
         });
     },
     getSession(sessionId: string) {
         return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`)
     },
     getPortalSession() {
-        return http.get(`api/Store/Portal?returnUrl=https://localhost:8080/store`);
+        return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
     }
 }
 

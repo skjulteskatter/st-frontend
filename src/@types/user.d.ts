@@ -3,7 +3,6 @@ interface User {
     id: string;
     displayName: string;
     email: string;
-    language: string;
     subscriptions: Subscription[];
     roles: Role[];
     settings?: UserSettings;
@@ -15,9 +14,10 @@ interface UserSettings {
 
 interface Subscription {
     id: string;
-    product: Product;
-    creationDate: Date;
+    productId: string;
+    collectionIds: string[];
     validTo: Date;
+    valid: boolean;
 }
 
 interface Role {
