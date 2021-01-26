@@ -48,11 +48,11 @@ export default class Login extends Vue {
     public stayLoggedIn = false;
     private store = useStore(sessionKey);
 
-    submitForm() {
+    public submitForm() {
         this.store.dispatch('loginWithEmailPassword', {email: this.form.email, password: this.form.password, stayLoggedIn: this.stayLoggedIn})
     }
 
-    async login(provider: string) {
+    public async login(provider: string) {
         await this.store.dispatch('socialLogin', provider);
     }
 
@@ -64,31 +64,6 @@ export default class Login extends Vue {
         return this.store.state.loggedIn;
     }
 }
-
-// export default {
-//   data() {
-//     return {
-//       form: {
-//         email: "",
-//         password: ""
-//       },
-//       error: null
-//     };
-//   },
-//   methods: {
-//     submit() {
-//       firebase
-//         .auth()
-//         .signInWithEmailAndPassword(this.form.email, this.form.password)
-//         .then(data => {
-//           this.$router.replace({ name: "Dashboard" });
-//         })
-//         .catch(err => {
-//           this.error = err.message;
-//         });
-//     }
-//   }
-// };
 </script>
 
 <style lang="scss">

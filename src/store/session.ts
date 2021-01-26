@@ -13,6 +13,7 @@ export interface Session {
     collections: Collection[];
     authInitialized: boolean;
     loggedIn: boolean;
+    extend: boolean;
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
@@ -26,6 +27,7 @@ export const sessionStore = createStore<Session>({
         collections: [],
         authInitialized: false,
         loggedIn: false,
+        extend: false,
     },
     actions: {
         async socialLogin({commit}, provider: string) {
@@ -135,6 +137,9 @@ export const sessionStore = createStore<Session>({
         },
         collections(state, collections: Collection[]) {
             state.collections = collections;
+        },
+        extend(state) {
+            state.extend = !state.extend;
         }
     },
     getters: {
