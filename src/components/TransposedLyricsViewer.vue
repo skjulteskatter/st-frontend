@@ -45,12 +45,6 @@
                 </card>
             </div>
         </card>
-        <div>
-            <div v-for="verse in text" :key="verse.name + verse.content">
-                <h3>{{verse.name}}</h3>
-                <p v-for="line in verse.content" :key="line">{{line}}</p>
-            </div>
-        </div>
     </div>
 </template>
 
