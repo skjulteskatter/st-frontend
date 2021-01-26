@@ -7,7 +7,7 @@ const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/Lyr
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
-const SongSettings = () => import(/* webpackChunkName: 'songSettings' */ '../components/LyricsSettings.vue');
+const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 
@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
                     {
                         path: ':collection/:number',
                         name: 'song',
-                        component: SongSettings,
+                        component: SongViewer,
                     }
                 ]
             },
