@@ -44,7 +44,7 @@ export const sessionStore = createStore<Session>({
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
-                    router.replace('/dashboard');
+                    router.replace({name: 'main'});
                 }
                 commit('initialized', true);
             }
@@ -69,7 +69,7 @@ export const sessionStore = createStore<Session>({
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
-                    router.replace('/dashboard');
+                    router.replace({name: 'main'});
                 }
                 commit('initialized', true);
             }
@@ -88,7 +88,7 @@ export const sessionStore = createStore<Session>({
                     console.log(e);
                 }
                 if (router.currentRoute.value.name == "login") {
-                    router.replace('/dashboard')
+                    router.replace({name: 'main'})
                 }
                 commit('initialized', true);
             }
