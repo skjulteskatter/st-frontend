@@ -79,8 +79,6 @@ export const songStore = createStore<Songs>({
         }) {
             const song = state.song;
 
-            console.log(object);
-
             if (song && (state.lyrics?.format != 'html' || state.transposition != object.transposition)) {
                 const result = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, object.languageCode, 'html', object.transposition));
                 commit('setLyrics', result);

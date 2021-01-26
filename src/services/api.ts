@@ -51,9 +51,7 @@ export const songs = {
         return http.get<SongInterface[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles,audioFiles`);
     },
     getLyrics(collection: string, number: number, language: string, format: string, transpose: number) {
-        const url = `api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`;
-        console.log(url)
-        return http.get<LyricsInterface>(url);
+        return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
     },
     getAllLyrics(collection: string, language: string, format: string, transpose: number) {
         return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);

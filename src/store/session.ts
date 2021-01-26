@@ -1,9 +1,26 @@
 /* eslint-disable no-console */
 import api from '@/services/api'
 import { InjectionKey } from 'vue'
-import { createStore, Store } from 'vuex'
+import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
+
+async function init(commit: Commit) {
+    const user = await api.session.getCurrentUser();
+    commit('currentUser', user);
+    try {
+        const languages = await api.items.getLanguages();
+        commit('languages', languages);
+        const collections = await api.songs.getCollections();
+        commit('collections', collections);
+    } catch (e) {
+        console.log(e);
+    }
+    if (router.currentRoute.value.name == "login") {
+        router.replace({name: 'main'});
+    }
+    commit('initialized', true);
+}
 
 export interface Session {
     currentUser: User;
@@ -33,20 +50,7 @@ export const sessionStore = createStore<Session>({
         async socialLogin({commit}, provider: string) {
             await auth.login(provider);
             if (auth.isAuthenticated) {
-                const user = await api.session.getCurrentUser();
-                commit('currentUser', user);
-                try {
-                    const languages = await api.items.getLanguages();
-                    commit('languages', languages);
-                    const collections = await api.songs.getCollections();
-                    commit('collections', collections);
-                } catch (e) {
-                    console.log(e);
-                }
-                if (router.currentRoute.value.name == "login") {
-                    router.replace({name: 'main'});
-                }
-                commit('initialized', true);
+                await init(commit);
             }
         },
         async createUser({commit}, object: { 
@@ -57,40 +61,13 @@ export const sessionStore = createStore<Session>({
             await auth.createUser(object.email, object.password);
 
             if (auth.isAuthenticated) {
-                const user = await api.session.createUser(object.displayName);
-
-                commit('currentUser', user);
-                try {
-                    const languages = await api.items.getLanguages();
-                    commit('languages', languages);
-                    const collections = await api.songs.getCollections();
-                    commit('collections', collections);
-                } catch (e) {
-                    console.log(e);
-                }
-                if (router.currentRoute.value.name == "login") {
-                    router.replace({name: 'main'});
-                }
-                commit('initialized', true);
+                await init(commit);
             }
         },
         async initialize({commit}) {
             await auth.init();
             if (auth.isAuthenticated) {
-                const user = await api.session.getCurrentUser();
-                commit('currentUser', user);
-                try {
-                    const languages = await api.items.getLanguages();
-                    commit('languages', languages);
-                    const collections = await api.songs.getCollections();
-                    commit('collections', collections);
-                } catch (e) {
-                    console.log(e);
-                }
-                if (router.currentRoute.value.name == "login") {
-                    router.replace({name: 'main'})
-                }
-                commit('initialized', true);
+                await init(commit);
             }
         },
         async loginWithEmailPassword({ commit }, obj: {
@@ -100,11 +77,7 @@ export const sessionStore = createStore<Session>({
         }) {
             await auth.loginEmail(obj.email, obj.password, obj.stayLoggedIn);
             if (auth.isAuthenticated) {
-                const user = await api.session.getCurrentUser();
-                commit('currentUser', user);
-                if (router.currentRoute.value.name == "login") {
-                    router.push({name: 'main'});
-                }
+                await init(commit);
             }
         },
         async saveSettings({ state, commit }) {

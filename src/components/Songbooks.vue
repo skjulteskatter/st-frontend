@@ -5,7 +5,7 @@
             v-for="songbook in collections"
             :key="songbook.key"
             class="songbooks__book hover"
-            :class="selected.id == songbook.id ? 'selected' : ''"
+            :class="{selected: selected.id == songbook.id, disabled: !available.find(c => c.id == songbook.id)}"
             :image="songbook.image"
             @click="selectCollection(songbook)"
             border
@@ -18,7 +18,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from 'vuex';
-import { songKey } from '@/store';
+import { sessionKey, songKey } from '@/store';
 import Card from '@/components/Card.vue';
 
 @Options({
@@ -34,6 +34,7 @@ export default class Songbooks extends Vue {
     }
 
     public selectCollection(collection: Collection) {
+        if (!this.available.find(c => c.id == collection.id)) return;
         this.songStore.commit('selectCollection', collection);
         this.$router.push({
             name: 'song-list',
@@ -44,11 +45,15 @@ export default class Songbooks extends Vue {
     }
     
     public get collections() {
-        return useStore(songKey).getters.collections;
+        return useStore(songKey).getters.collections ?? [];
     }
 
     public get selected() {
         return useStore(songKey).getters.collection ?? {};
+    }
+
+    public get available(): Collection[] {
+        return useStore(sessionKey).getters.collections ?? [];
     }
 }
 </script>
@@ -76,6 +81,11 @@ export default class Songbooks extends Vue {
 
         &.selected {
             border: 2px solid var(--primary-color);
+        }
+
+        &.disabled {
+            color: var(--border-color);
+            cursor: not-allowed;
         }
     }
 }
