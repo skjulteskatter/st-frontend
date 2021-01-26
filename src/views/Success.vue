@@ -9,7 +9,7 @@ import { Vue } from "vue-class-component";
 
 export default class Success extends Vue {
     public mounted() {
-        setTimeout(() => this.$router.push('/dashboard'), 5000);
+        setTimeout(() => this.$router.push({name: 'main'}), 5000);
     }
 }
 </script>
