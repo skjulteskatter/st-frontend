@@ -103,7 +103,7 @@ export const sessionStore = createStore<Session>({
                 const user = await api.session.getCurrentUser();
                 commit('currentUser', user);
                 if (router.currentRoute.value.name == "login") {
-                    router.replace("/dashboard");
+                    router.push({name: 'main'});
                 }
             }
         },
@@ -120,7 +120,11 @@ export const sessionStore = createStore<Session>({
         },
         authInitialized(state, value: boolean) {
             state.authInitialized = true;
+
             state.loggedIn = value;
+            if (value == false) {
+                router.push({name: 'login'});
+            }
         },
         logout(state) {
             state.isAuthenticated = false;
