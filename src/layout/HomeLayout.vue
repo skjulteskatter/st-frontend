@@ -1,4 +1,4 @@
-<template>
+<template class="home-layout">
     <nav class="nav">
         <div class="container nav__wrapper">
             <img id="logo" :src="logo" @click="$router.push('/')" />
@@ -45,7 +45,7 @@ export default class DashboardLayout extends Vue {
 <style lang="scss">
 @import '@/style/main';
 
-body {
+section {
     background: var(--background-color);
 }
 
