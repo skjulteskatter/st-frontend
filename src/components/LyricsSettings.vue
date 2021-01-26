@@ -65,37 +65,59 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from 'vuex';
-import { sessionKey, songKey } from '@/store';
 import Card from  '@/components/Card.vue';
 import Modal from '@/components/Modal.vue';
+import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
         Card,
         Modal,
+    },
+    props: {
+        title: {
+            type: String,
+            default: () => '',
+        },
+        description: {
+            type: String,
+            default: () => '',
+        },
+        lyrics: {
+            type: Object,
+            default: () => undefined,
+        },
+        languageKey: {
+            type: String,
+            default: () => '',
+        },
+        song: {
+            type: Object,
+            default: () => undefined,
+        },
+        authors: {
+            type: Array,
+            default: () => [],
+        },
+        composers: {
+            type: Array,
+            default: () => [],
+        }
     }
 })
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
-    private store = useStore(songKey);
+    public description = '';
+    public lyrics?: Lyrics;
+    public languageKey = '';
+    public song?: Song;
 
     // public toggleVerse(key: string) {
     // }
 
     public async mounted() {
-        if (!this.lyrics) {
-            await this.store.dispatch('load', {
-                collectionKey: this.$route.params.collection, 
-                number: this.$route.params.number,
-                languageKey: this.languageKey,
-            });
-        }
-
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
-        
-
         window.addEventListener('keydown', (event) => {
             if (event.key == "ArrowRight") {
                 this.next();
@@ -163,27 +185,15 @@ export default class LyricsSettings extends Vue {
     }
 
     public get verses() {
-        return this.lyrics?.verses ?? [];
+        return this.lyrics?.verses ?? {};
     }
 
     public get size() {
         return this.verses[1].content.length <= 5 ? 2 : 1;
     }
 
-    public get title() {
-        return this.song.name[this.languageKey] ?? this.song.name.en ?? this.song.name.no ?? "";
-    }
-
-    public get description() {
-        return this.song.description[this.languageKey] ?? this.song.description.en ?? this.song.description.no ?? '';
-    }
-
-    public get authors() {
-        return this.song.authors ?? [];
-    }
-
     public get composers() {
-        return this.song.composers ?? [];
+        return this.song?.composers ?? [];
     }
 
     public get currentVerses(): string[] {
@@ -205,17 +215,6 @@ export default class LyricsSettings extends Vue {
         }
 
         return verses;
-    }
-
-    public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
-    }
-    
-    public get lyrics() {
-        return this.store.getters.lyrics;
-    }
-    public get song() {
-        return this.store.getters.song;
     }
 }
 </script>

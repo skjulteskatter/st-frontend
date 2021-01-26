@@ -50,18 +50,20 @@ interface Collection {
     image: string;
 }
 
+interface JsonContent {
+    [key: string]: {
+        name: string;
+        content: string[];
+    };
+}
+
 // LYRICS
 interface LyricsInterface {
     number: number;
     title: string;
     collectionKey: string;
     language: Language;
-    content: {
-        [key: string]: {
-            name: string;
-            content: string[];
-        };
-    };
+    content: JsonContent | string;
     format: string;
     hasChords: boolean;
     originalKey: string;

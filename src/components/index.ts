@@ -4,6 +4,7 @@ import LyricsSettings from './LyricsSettings.vue';
 import Modal from './Modal.vue';
 import Options from './Options.vue';
 import Songbooks from './Songbooks.vue';
+import TransposedLyricsViewer from './TransposedLyricsViewer.vue';
 
 export {
     LyricsSettings,
@@ -12,4 +13,5 @@ export {
     Modal,
     Options,
     Songbooks,
+    TransposedLyricsViewer,
 }

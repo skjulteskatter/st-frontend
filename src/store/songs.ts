@@ -6,6 +6,7 @@ import api from '@/services/api';
 
 export interface Songs {
     lyrics?: Lyrics;
+    transposition?: number;
     collection: Collection;
     songService: SongService;
     initialized: boolean;
@@ -25,6 +26,7 @@ export const songStore = createStore<Songs>({
         verses: [],
         allLyrics: [],
         initialized: false,
+        transposition: undefined,
     },
     actions: {
         async initSongService({ commit }, collections: Collection[]) {
@@ -70,6 +72,20 @@ export const songStore = createStore<Songs>({
                 const lyrics = result.map(l => new Lyrics(l));
                 commit('setAllLyrics', lyrics);
             }
+        },
+        async getTransposedLyrics({ state, commit }, object: {
+            languageCode: string; 
+            transposition: number;
+        }) {
+            const song = state.song;
+
+            console.log(object);
+
+            if (song && (state.lyrics?.format != 'html' || state.transposition != object.transposition)) {
+                const result = new Lyrics(await api.songs.getLyrics(state.collection.key, song.number, object.languageCode, 'html', object.transposition));
+                commit('setLyrics', result);
+                commit('transposition', object.transposition);
+            }
         }
     },
     mutations: {
@@ -86,6 +102,8 @@ export const songStore = createStore<Songs>({
         },
         selectSong(state, song: Song) {
             state.song = song;
+            state.lyrics = undefined;
+            state.transposition = undefined;
         },
         setLyrics(state, lyrics: Lyrics) {
             state.lyrics = lyrics;
@@ -95,6 +113,9 @@ export const songStore = createStore<Songs>({
         },
         setAllLyrics(state, lyrics: Lyrics[]) {
             state.allLyrics = lyrics ?? [];
+        },
+        transposition(state, transposition: number) {
+            state.transposition = transposition;
         }
     },
     getters: {
@@ -108,9 +129,6 @@ export const songStore = createStore<Songs>({
             if (state.collection) {
                 return state.songService.songs?.filter(s => s.collection.id == state.collection?.id) ?? [];
             }
-        },
-        song(state) {
-            return state.song;
         },
         lyrics(state) {
             return state.lyrics;

@@ -138,8 +138,8 @@ export const sessionStore = createStore<Session>({
         collections(state, collections: Collection[]) {
             state.collections = collections;
         },
-        extend(state) {
-            state.extend = !state.extend;
+        extend(state, value?: boolean) {
+            state.extend = value != undefined ? value : !state.extend;
         }
     },
     getters: {

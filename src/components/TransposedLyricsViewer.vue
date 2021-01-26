@@ -20,8 +20,8 @@
                     </modal>
                 </span>
             </p>
-            <div v-if="description" v-html="description"></div>
         </card>
+        <div id="transposed-lyrics"></div>
         <card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
@@ -58,7 +58,7 @@
 import { Options, Vue } from "vue-class-component";
 import Card from  '@/components/Card.vue';
 import Modal from '@/components/Modal.vue';
-import { Lyrics } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -73,10 +73,6 @@ import { Lyrics } from "@/classes";
         description: {
             type: String,
             default: () => '',
-        },
-        lyrics: {
-            type: Object,
-            default: () => undefined,
         },
         languageKey: {
             type: String,
@@ -93,52 +89,31 @@ import { Lyrics } from "@/classes";
         authors: {
             type: Array,
             default: () => [],
+        },
+        lyrics: {
+            type: Object,
+            default: () => undefined,
         }
     }
 })
-export default class SongDetails extends Vue {
+export default class TransposedLyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public description = '';
     public lyrics?: Lyrics;
     public languageKey = '';
+    public song?: Song;
 
     // public toggleVerse(key: string) {
     // }
 
     public async mounted() {
-        const songDetailsElement = document.getElementById("song-details");
+        const html = this.lyrics?.transposed ?? '';
+        const lyricsElement = document.getElementById('transposed-lyrics');
 
-        if (songDetailsElement) {
-            songDetailsElement.innerHTML = this.description;
+        if (lyricsElement) {
+            lyricsElement.innerHTML = html;
         }
-    }
-
-    public get text() {
-        const verses: { name: string; content: string[] }[] = [];
-
-        const types: {
-            [key: string]: string;
-        } = {
-            '[Chorus]': 'chorus',
-            '[Bridge]': 'bridge',
-        }
-        
-        if (this.lyrics) {
-            for (const key of Object.keys(this.lyrics.content)) {
-
-
-                const verse: Verse = {
-                    name: (this.lyrics.content as JsonContent)[key].name,
-                    content: (this.lyrics.content as JsonContent)[key].content,
-                    type: types[(this.lyrics.content as JsonContent)[key].name] ?? 'verse',
-                }
-
-                verses.push(verse);
-            }
-        }
-
-        return verses;
     }
 }
 </script>

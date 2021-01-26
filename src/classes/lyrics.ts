@@ -7,7 +7,7 @@ export class Lyrics implements LyricsInterface {
             name: string;
             content: string[];
         };
-    };
+    } | string;
     format: string;
     hasChords: boolean;
     language: Language;
@@ -38,8 +38,8 @@ export class Lyrics implements LyricsInterface {
             const type = key.split("_")[0];
 
             const verse: Verse = {
-                name: this.content[key].name,
-                content: this.content[key].content,
+                name: (this.content as JsonContent)[key].name,
+                content: (this.content as JsonContent)[key].content,
                 type,
             }
 
@@ -66,11 +66,15 @@ export class Lyrics implements LyricsInterface {
         const lines = [];
 
         for (const key of Object.keys(this.content)) {
-            for (const line of this.content[key].content) {
+            for (const line of (this.content as JsonContent)[key].content) {
                 lines.push(line);
             }
         }
 
         return lines.join('\n').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+    }
+
+    public get transposed() {
+        return this.content as string;
     }
 }
