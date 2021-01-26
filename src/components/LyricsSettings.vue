@@ -15,7 +15,7 @@
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">
                 Composer: 
                 <span v-for="composer in composers" :key="composer.id" :label="composer.name">
-                    <span v-if="!author.getBiography(languageKey)">{{ composer.name }}</span>
+                    <span v-if="!composer.getBiography(languageKey)">{{ composer.name }}</span>
                     <modal :label="composer.name" v-else>
                         <div v-html="composer.getBiography(languageKey)" class="biography-wrapper"></div>
                     </modal>
@@ -110,12 +110,6 @@ export default class LyricsSettings extends Vue {
         if (songDetailsElement) {
             songDetailsElement.innerHTML = this.description;
         }
-
-        const biographyElement = document.getElementById('biography');
-
-        if (biographyElement) {
-            biographyElement.innerHTML = this.biography;
-        }
     }
 
     public openLyricsWindow(){
@@ -182,10 +176,6 @@ export default class LyricsSettings extends Vue {
 
     public get description() {
         return this.song.description[this.languageKey] ?? this.song.description.en ?? this.song.description.no ?? '';
-    }
-
-    public get biography() {
-        return this.authors[0]?.getBiography(this.languageKey) ?? '';
     }
 
     public get authors() {
