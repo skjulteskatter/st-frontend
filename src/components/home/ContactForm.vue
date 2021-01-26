@@ -27,10 +27,6 @@ export default class ContactForm extends Vue {
         email: '',
         message: ''
     };
-
-    public sendForm(){
-        console.log(this.form);
-    }
 }
 </script>
 
