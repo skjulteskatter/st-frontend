@@ -1,26 +1,28 @@
 <template>
     <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
-        <div class="song-list__header" v-if="!loading">
-            <h1>Select number</h1>
-            <div style="display: flex; gap: var(--spacing)">
-                <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+        <div v-if="!loading">
+            <div class="song-list__header" v-if="!loading">
+                <h1>Select number</h1>
+                <div style="display: flex; gap: var(--spacing)">
+                    <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+                </div>
             </div>
-        </div>
-        <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
-            <span class="song-list__item" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number), hover: !disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
-                {{ item.number }}
-            </span>
-        </div>
-        <div v-else>
-            <div class="search__container">
-                <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="selectSong(songs.find(s => s.number == lyrics.number))" border>
-                    <h2>{{lyrics.number}}</h2>
-                    <h3>{{lyrics.title}}</h3>
-                </card>
+            <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
+                <span class="song-list__item" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number), hover: !disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
+                    {{ item.number }}
+                </span>
             </div>
+            <div v-else>
+                <div class="search__container">
+                    <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="selectSong(songs.find(s => s.number == lyrics.number))" border>
+                        <h2>{{lyrics.number}}</h2>
+                        <h3>{{lyrics.title}}</h3>
+                    </card>
+                </div>
+            </div>
+            <h1 class="warning" v-if="!filteredLyrics.length">No results</h1>
         </div>
-        <h1 class="warning" v-if="!filteredLyrics.length">No results</h1>
     </div>
 </template>
 

@@ -45,7 +45,10 @@
             </div>
         </card>
         <div>
-            <div v-for="verse in text" :key="verse.name + verse.content">{{verse.name}}</div>
+            <div v-for="verse in text" :key="verse.name + verse.content">
+                <h3>{{verse.name}}</h3>
+                <p v-for="line in verse.content" :key="line">{{line}}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -111,10 +114,25 @@ export default class SongDetails extends Vue {
     }
 
     public get text() {
-        const verses: Verse[] = [];
+        const verses: { name: string; content: string[] }[] = [];
+
+        const types: {
+            [key: string]: string;
+        } = {
+            '[Chorus]': 'chorus',
+            '[Bridge]': 'bridge',
+        }
         
-        for (const key of Object.keys(this.lyrics.verses)) {
-            verses.push(this.lyrics.verses[key]);
+        for (const key of Object.keys(this.lyrics.content)) {
+
+
+            const verse: Verse = {
+                name: this.lyrics.content[key].name,
+                content: this.lyrics.content[key].content,
+                type: types[this.lyrics.content[key].name] ?? 'verse',
+            }
+
+            verses.push(verse);
         }
 
         return verses;
