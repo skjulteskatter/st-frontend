@@ -19,6 +19,8 @@ const Contact = () => import(/* webpackChunkName: 'landingPage' */ '../views/hom
 
 const Success = () => import(/* webpackChunkName: 'success' */ '../views/Success.vue');
 
+const NotFound = () => import(/* webpackChunkName: 'notFound' */ '../views/NotFound.vue');
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/dashboard',
@@ -105,6 +107,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/success',
         name: 'success',
         component: Success,
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: NotFound,
     }
 ]
 

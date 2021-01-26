@@ -67,8 +67,8 @@ export const stripe = {
     },
     startSession(priceId: string) {
         return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { 
-            priceId, 
-            cancelUrl: window.location.origin + "/dashboard", 
+            priceId,
+            cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
         });
     },
@@ -76,7 +76,7 @@ export const stripe = {
         return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`)
     },
     getPortalSession() {
-        return http.get(`api/Store/Portal?returnUrl=https://localhost:8080/store`);
+        return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
     }
 }
 
