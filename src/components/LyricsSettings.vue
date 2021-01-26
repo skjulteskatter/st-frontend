@@ -6,21 +6,22 @@
             <p class="lyrics-settings__metadata__credits">
                 Author: 
                 <span v-for="author in authors" :key="author.id">
-                    <span v-if="!biography">{{ author.name }}</span>
+                    <span v-if="!author.getBiography(languageKey)">{{ author.name }}</span>
                     <modal :label="author.name" v-else>
-                        <div v-html="biography" class="biography-wrapper"></div>
+                        <div v-html="author.getBiography(languageKey)" class="biography-wrapper"></div>
                     </modal>
                 </span>
             </p>
             <p v-if="composers.length > 0" class="lyrics-settings__metadata__credits">
                 Composer: 
                 <span v-for="composer in composers" :key="composer.id" :label="composer.name">
-                    <span v-if="!description">{{ composer.name }}</span>
+                    <span v-if="!author.getBiography(languageKey)">{{ composer.name }}</span>
                     <modal :label="composer.name" v-else>
-                        <div v-html="description" class="biography-wrapper"></div>
+                        <div v-html="composer.getBiography(languageKey)" class="biography-wrapper"></div>
                     </modal>
                 </span>
             </p>
+            <div v-if="description" v-html="description"></div>
         </card>
         <card v-if="song.type == 'lyrics'" class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
