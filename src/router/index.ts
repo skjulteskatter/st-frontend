@@ -30,6 +30,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '',
                 name: 'main',
+                alias: '/dashboard',
                 component: Dashboard,
             },
             {
