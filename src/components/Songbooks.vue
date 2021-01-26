@@ -35,7 +35,12 @@ export default class Songbooks extends Vue {
 
     public selectCollection(collection: Collection) {
         this.songStore.commit('selectCollection', collection);
-        this.$router.push(`songs/${collection.key}`)
+        this.$router.push({
+            name: 'song-list',
+            params: {
+                'collection': collection.key,
+            }
+        });
     }
     
     public get collections() {

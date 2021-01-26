@@ -90,7 +90,13 @@ export default class SongList extends Vue {
         this.songStore.commit('selectSong', song);
         this.loading = true;
         await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
-        this.$router.push(`${song.collection.key}/${song.number}`);
+        this.$router.push({
+            name: 'song',
+            params: {
+                'collection': song.collection.key,
+                'number': song.number,
+            }
+        });
         this.loading = false;
     }
     

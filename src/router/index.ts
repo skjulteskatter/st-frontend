@@ -11,11 +11,11 @@ const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 
-const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
-const LandingPage = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/LandingPage.vue');
-const Blog = () => import(/* webpackChunkName: 'blog' */ '../views/home/Blog.vue');
-const BlogPost = () => import(/* webpackChunkName: 'blogPost' */ '../views/home/BlogPost.vue');
-const Contact = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/Contact.vue');
+// const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
+// const LandingPage = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/LandingPage.vue');
+// const Blog = () => import(/* webpackChunkName: 'blog' */ '../views/home/Blog.vue');
+// const BlogPost = () => import(/* webpackChunkName: 'blogPost' */ '../views/home/BlogPost.vue');
+// const Contact = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/Contact.vue');
 
 const Success = () => import(/* webpackChunkName: 'success' */ '../views/Success.vue');
 
@@ -23,13 +23,13 @@ const NotFound = () => import(/* webpackChunkName: 'notFound' */ '../views/NotFo
 
 const routes: Array<RouteRecordRaw> = [
     {
-        path: '/dashboard',
+        path: '/',
         name: 'dashboard',
         component: DashboardLayout,
         children: [
             {
                 path: '',
-                name: 'dashboard',
+                name: 'main',
                 component: Dashboard,
             },
             {
@@ -49,7 +49,7 @@ const routes: Array<RouteRecordRaw> = [
                     },
                     {
                         path: ':collection',
-                        name: 'songs',
+                        name: 'song-list',
                         component: SongList,
                     },
                     {
@@ -76,33 +76,33 @@ const routes: Array<RouteRecordRaw> = [
         name: 'lyrics',
         component: LyricsViewer,
     },
-    {
-        path: '/',
-        name: 'home',
-        component: HomeLayout,
-        children: [
-            {
-                path: '',
-                name: 'landingpage',
-                component: LandingPage,
-            },
-            {
-                path: '/blog',
-                name: 'blog',
-                component: Blog,
-            },
-            {
-                path: '/blog/:post',
-                name: 'post',
-                component: BlogPost
-            },
-            {
-                path: '/contact',
-                name: 'contact',
-                component: Contact
-            }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     name: 'home',
+    //     component: HomeLayout,
+    //     children: [
+    //         {
+    //             path: '',
+    //             name: 'landingpage',
+    //             component: LandingPage,
+    //         },
+    //         {
+    //             path: '/blog',
+    //             name: 'blog',
+    //             component: Blog,
+    //         },
+    //         {
+    //             path: '/blog/:post',
+    //             name: 'post',
+    //             component: BlogPost
+    //         },
+    //         {
+    //             path: '/contact',
+    //             name: 'contact',
+    //             component: Contact
+    //         }
+    //     ]
+    // },
     {
         path: '/success',
         name: 'success',

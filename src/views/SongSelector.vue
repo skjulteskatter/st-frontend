@@ -13,7 +13,6 @@ import { songKey, sessionKey } from "@/store";
 })
 export default class SongSelector extends Vue {
     private songStore = useStore(songKey);
-    private userStore = useStore(sessionKey);
     public steps: Step[] = [];
 
     public deselect(type: string) {

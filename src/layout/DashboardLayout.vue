@@ -2,10 +2,10 @@
     <nav class="nav" v-if="user && initialized">
         <div class="container nav__wrapper">
             <img id="logo" :src="logo" @click="$router.push('/')"/>
-            <router-link class="nav__item" to="/dashboard">Dashboard</router-link>
-            <router-link class="nav__item" to="/dashboard/songs">Songs</router-link>
-            <router-link class="nav__item" to="/dashboard/store">Store</router-link>
-            <router-link v-if="isAdmin" class="nav__item" to="/dashboard/admin">Admin</router-link>
+            <router-link class="nav__item" :to="{name: 'main'}">Dashboard</router-link>
+            <router-link class="nav__item" :to="{name: 'collections'}">Songs</router-link>
+            <router-link class="nav__item" :to="{name: 'store'}">Store</router-link>
+            <router-link v-if="isAdmin" class="nav__item" :to="{name: 'admin'}">Admin</router-link>
             <settings class="nav__item"></settings>
         </div>
     </nav>
