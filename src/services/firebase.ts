@@ -110,7 +110,9 @@ const firebase = new FirebaseService();
 fb.auth().onAuthStateChanged(async s => {
     firebase.currentUser = s?.uid ? s : undefined;
 
+    
     if (firebase.currentUser) {
+        sessionStore.commit('authInitialized', true)
         await sessionStore.dispatch('initialize');
         let collections = await api.songs.getCollections();
         
@@ -119,6 +121,8 @@ fb.auth().onAuthStateChanged(async s => {
         }
 
         await songStore.dispatch('initSongService', collections);
+    } else {
+        sessionStore.commit('authInitialized', false)
     }
 })
 

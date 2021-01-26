@@ -11,6 +11,8 @@ export interface Session {
     languages: Language[];
     initialized: boolean;
     collections: Collection[];
+    authInitialized: boolean;
+    loggedIn: boolean;
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
@@ -21,7 +23,9 @@ export const sessionStore = createStore<Session>({
         isAuthenticated: false,
         languages: [],
         initialized: false,
-        collections: []
+        collections: [],
+        authInitialized: false,
+        loggedIn: false,
     },
     actions: {
         async socialLogin({commit}, provider: string) {
@@ -112,6 +116,10 @@ export const sessionStore = createStore<Session>({
         currentUser(state, user: User) {
             state.currentUser = user;
         },
+        authInitialized(state, value: boolean) {
+            state.authInitialized = true;
+            state.loggedIn = value;
+        },
         logout(state) {
             state.isAuthenticated = false;
             state.currentUser = {} as User;
@@ -156,6 +164,9 @@ export const sessionStore = createStore<Session>({
                 }
             }
             return collections;
+        },
+        extended(state) {
+            return state.currentUser.roles.find(r => ["extended", "administrator"].includes(r.name)) !== undefined;
         }
     }
 })

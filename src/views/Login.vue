@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <card id="login-card" border>
+        <card id="login-card" v-if="authInitialized && !loggedIn" border>
             <div class="login">
                 <h1 class="login__title">Please log in</h1>
                 <div class="social">
@@ -54,6 +54,14 @@ export default class Login extends Vue {
 
     async login(provider: string) {
         await this.store.dispatch('socialLogin', provider);
+    }
+
+    public get authInitialized() {
+        return this.store.state.authInitialized;
+    }
+
+    public get loggedIn() {
+        return this.store.state.loggedIn;
     }
 }
 
