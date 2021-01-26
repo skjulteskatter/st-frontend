@@ -3,7 +3,6 @@ import { sessionStore, songStore } from '@/store';
 import fb from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from '@/config';
-import api from './api';
 
 fb.initializeApp(firebaseConfig);
 
@@ -114,13 +113,8 @@ fb.auth().onAuthStateChanged(async s => {
     if (firebase.currentUser) {
         sessionStore.commit('authInitialized', true)
         await sessionStore.dispatch('initialize');
-        let collections = await api.songs.getCollections();
-        
-        if (!sessionStore.getters.isAdmin) {
-            collections = collections.filter(c => sessionStore.getters.collectionIds.includes(c.id));
-        }
 
-        await songStore.dispatch('initSongService', collections);
+        await songStore.dispatch('initSongService');
     } else {
         sessionStore.commit('authInitialized', false)
     }

@@ -3,6 +3,7 @@ import { Song, Lyrics } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import api from '@/services/api';
+import { sessionStore } from './session';
 
 export interface Songs {
     lyrics?: Lyrics;
@@ -13,6 +14,7 @@ export interface Songs {
     song?: Song;
     verses: Verse[];
     allLyrics: Lyrics[];
+    collections: Collection[];
 }
 
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -27,11 +29,13 @@ export const songStore = createStore<Songs>({
         allLyrics: [],
         initialized: false,
         transposition: undefined,
+        collections: [],
     },
     actions: {
-        async initSongService({ commit }, collections: Collection[]) {
+        async initSongService({ commit }) {
             const songService = new SongService();
-            await songService.init(collections);
+            await songService.init(sessionStore.getters.collections);
+            commit('collections', await api.songs.getCollections());
             commit('songService', songService);
         },
         async load({ state, commit }, object: {
@@ -114,11 +118,14 @@ export const songStore = createStore<Songs>({
         },
         transposition(state, transposition: number) {
             state.transposition = transposition;
+        },
+        collections(state, collections: Collection[]){
+            state.collections = collections;
         }
     },
     getters: {
         collections(state) {
-            return state.songService.collections;
+            return state.collections;
         },
         collection(state) {
             return state.collection;
