@@ -118,14 +118,11 @@ export default class LyricsSettings extends Vue {
     public languageKey = '';
     public song?: Song;
 
-<<<<<<< HEAD
-=======
     public lineSize = 2;
 
     // public toggleVerse(key: string) {
     // }
 
->>>>>>> adfd01943628acb95307e93f15b6cc94b3059424
     public async mounted() {
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
         window.addEventListener('keydown', (event) => {
