@@ -97,6 +97,11 @@
     word-wrap: break-word;
 }
 
+.disabled {
+    color: var(--border-color);
+    cursor: not-allowed;
+}
+
 // Standard elements
 select {
     background: var(--background-color);

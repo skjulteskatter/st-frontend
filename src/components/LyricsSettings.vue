@@ -57,7 +57,6 @@
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
-                    <!-- <a class="lyrics-settings__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
                 </card>
             </div>
         </card>
@@ -114,9 +113,6 @@ export default class LyricsSettings extends Vue {
     public languageKey = '';
     public song?: Song;
 
-    // public toggleVerse(key: string) {
-    // }
-
     public async mounted() {
         this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
         window.addEventListener('keydown', (event) => {
@@ -127,12 +123,6 @@ export default class LyricsSettings extends Vue {
                 this.previous();
             }
         });
-        
-        const songDetailsElement = document.getElementById("song-details");
-
-        if (songDetailsElement) {
-            songDetailsElement.innerHTML = this.description;
-        }
     }
 
     public openLyricsWindow(){

@@ -58,7 +58,7 @@ export default class Songbooks extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .songbooks {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
