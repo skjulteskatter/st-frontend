@@ -4,6 +4,7 @@ import { InjectionKey } from 'vue'
 import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
+import { ensureLanguageIsFetched } from '@/i18n';
 
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
@@ -84,12 +85,14 @@ export const sessionStore = createStore<Session>({
             if (state.currentUser.settings) {
                 const user = await api.session.saveUser(state.currentUser.settings)
                 commit('currentUser', user);
+                await ensureLanguageIsFetched();
             }
         }
     },
     mutations: {
         currentUser(state, user: User) {
             state.currentUser = user;
+            if (user.settings) localStorage.setItem('languageKey', user.settings.languageKey);
         },
         authInitialized(state, value: boolean) {
             state.authInitialized = true;
@@ -127,7 +130,7 @@ export const sessionStore = createStore<Session>({
             return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
         },
         languageKey(state) {
-            return state.currentUser.settings?.languageKey ?? "en"
+            return state.currentUser.settings?.languageKey ?? localStorage.getItem('languageKey') ?? 'en';
         },
         languages(state) {
             return state.languages;
