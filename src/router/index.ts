@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+import sanity from '@/services/sanity';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
@@ -120,5 +122,17 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+let translations: {
+    [key: string]: string;
+};
+
+router.beforeEach(async (to, from, next) => {
+    if (!translations) {
+        translations = (await sanity.getAllTranslations('no')).reduce((a, b) => ({...a, [b.key]: b.value}), {});
+        i18n.global.setLocaleMessage('no', translations);
+    }
+    next();
+})
 
 export default router;

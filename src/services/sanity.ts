@@ -27,6 +27,11 @@ type Author = {
     slug: Slug;
 }
 
+type Translation = {
+    key: string;
+    value: string;
+}
+
 export interface Post {
     _id: string;
     name: string;
@@ -58,6 +63,10 @@ class Sanity {
     }
     async getAllPosts(languageKey: string) {
         return await client.fetch(`*[_type == 'post']{'title': title.${languageKey}, slug, 'image': mainImage.asset->url + '?w=400', 'excerpt': excerpt.${languageKey}}`) as PostPreview[];
+    }
+
+    async getAllTranslations(languageKey: string) {
+        return await client.fetch(`*[_type == 'localization']{'key': code.current, 'value': ${languageKey}}`) as Translation[];
     }
 }
 

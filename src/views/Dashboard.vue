@@ -47,7 +47,7 @@
                         </select>
                     </div>
                 </div>
-                <button class="user-settings__save-button" @click="save">Save</button>
+                <button class="user-settings__save-button" @click="save">{{$t('common.save')}}</button>
             </div>
         </card>
         
@@ -106,7 +106,7 @@ export default class Dashboard extends Vue {
     }
 
     public get subscriptions(): Subscription[] {
-        return useStore(sessionKey).state.currentUser.subscriptions ?? {};
+        return useStore(sessionKey).state.currentUser.subscriptions ?? [];
     }
 
     public get subscribedCollections(){
