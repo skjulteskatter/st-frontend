@@ -23,7 +23,6 @@ export async function ensureLanguageIsFetched() {
     if (!translations || currentTranslation !== lan) {
         await setLocale(sessionStore.getters.languageKey);
     }
-    console.log(lan)
 }
 
 export default i18n;
