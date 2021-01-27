@@ -6,11 +6,15 @@ const i18n = createI18n({
     locale: 'current'
 })
 
+const validLanguages = ['en', 'no']
+
 let translations: {
     [key: string]: string;
 };
 
-let currentTranslation = localStorage.getItem('languageKey') ?? 'en';
+const lanKey = localStorage.getItem('languageKey') ?? 'en'
+
+let currentTranslation = validLanguages.includes(lanKey) ? lanKey : 'en';
 
 export async function setLocale(locale: string) {
     translations = (await sanity.getAllTranslations(locale)).reduce((a, b) => ({...a, [b.key]: b.value}), {});
@@ -19,9 +23,10 @@ export async function setLocale(locale: string) {
 }
 
 export async function ensureLanguageIsFetched() {
-    const lan = sessionStore.getters.languageKey;
+    const key = sessionStore.getters.languageKey;
+    const lan = validLanguages.includes(key) ? key : 'en';
     if (!translations || currentTranslation !== lan) {
-        await setLocale(sessionStore.getters.languageKey);
+        await setLocale(lan);
     }
 }
 
