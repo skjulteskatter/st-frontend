@@ -3,7 +3,10 @@ import { sessionStore } from "@/store";
 import { createI18n } from "vue-i18n";
 
 const i18n = createI18n({
-    locale: 'current'
+    locale: 'current',
+    fallbackLocale: 'en',
+    silentFallbackWarn: true,
+    silentTranslationWarn: true,
 })
 
 const validLanguages = ['en', 'no']
@@ -22,9 +25,14 @@ export async function setLocale(locale: string) {
     currentTranslation = locale;
 }
 
+let englishIsFetched = false;
+
 export async function ensureLanguageIsFetched() {
-    const key = sessionStore.getters.languageKey;
-    const lan = validLanguages.includes(key) ? key : 'en';
+    const lan = sessionStore.getters.languageKey;
+    if (!englishIsFetched) {
+        englishIsFetched = true;
+        i18n.global.setLocaleMessage('en', (await sanity.getAllTranslations('en')).reduce((a, b) => ({...a, [b.key]: b.value}), {}))
+    }
     if (!translations || currentTranslation !== lan) {
         await setLocale(lan);
     }
