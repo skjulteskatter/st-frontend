@@ -54,4 +54,18 @@ export class Song implements SongInterface {
 
         return contents;
     }
+
+    public get rawContributorNames() {
+        const names: string[] = [];
+
+        this.authors.forEach(a => {
+            names.push(a.name.toLowerCase());
+        });
+
+        this.composers.forEach(c => {
+            names.push(c.name.toLowerCase());
+        });
+
+        return names.join('').replace(/[^0-9a-zA-Z]/g, '');
+    }
 }

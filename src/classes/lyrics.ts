@@ -1,13 +1,15 @@
+type Content = {
+    [key: string]: {
+        name: string;
+        content: string[];
+    };
+}
+
 export class Lyrics implements LyricsInterface {
     number: number;
     title: string;
     collectionKey: string;
-    content: {
-        [key: string]: {
-            name: string;
-            content: string[];
-        };
-    } | string;
+    content: Content | string;
     format: string;
     hasChords: boolean;
     language: Language;
@@ -76,5 +78,14 @@ export class Lyrics implements LyricsInterface {
 
     public get transposed() {
         return this.content as string;
+    }
+
+    public get lines() {
+        const ls: string[] = [];
+        const content = this.content as Content;
+        for (const key of Object.keys(content)) {
+            content[key].content.forEach(s => ls.push(s));
+        }
+        return ls;
     }
 }

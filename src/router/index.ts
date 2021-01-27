@@ -1,9 +1,11 @@
+import { ensureLanguageIsFetched } from '@/i18n';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
 const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue');
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
+const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ '../views/KaraokeViewer.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
@@ -77,6 +79,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'lyrics',
         component: LyricsViewer,
     },
+    {
+        path: '/karaoke',
+        name: 'karaoke',
+        component: KaraokeViewer,
+    },
     // {
     //     path: '/',
     //     name: 'home',
@@ -120,5 +127,10 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+router.beforeEach(async (to, from, next) => {
+    await ensureLanguageIsFetched();
+    next();
+})
 
 export default router;

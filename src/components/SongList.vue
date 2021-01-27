@@ -15,13 +15,15 @@
             </div>
             <div v-else>
                 <div class="search__container">
-                    <card style="cursor: pointer" class="hover" v-for="lyrics in filteredLyrics.slice(0, 12)" :key="lyrics.number" @click="selectSong(songs.find(s => s.number == lyrics.number))" border>
-                        <h2>{{lyrics.number}}</h2>
-                        <h3>{{lyrics.title}}</h3>
+                    <card style="cursor: pointer" class="hover" v-for="song in filteredSongs.slice(0, 90)" :key="song.id" @click="selectSong(song)" border>
+                        <h2>{{song.number}}</h2>
+                        <h4 v-for="author in song.authors" :key="author.id">{{author.name}}</h4>
+                        <h4 v-for="composer in song.composers" :key="composer.id">{{composer.name}}</h4>
+                        <h3>{{song.name[languageKey]}}</h3>
                     </card>
                 </div>
             </div>
-            <h1 class="warning" v-if="!filteredLyrics.length">No results</h1>
+            <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
         </div>
     </div>
 </template>
@@ -69,8 +71,14 @@ export default class SongList extends Vue {
         return this.store.state.allLyrics;
     }
 
-    public get filteredLyrics() {
-        return this.allLyrics?.filter(l => l.number.toString() == this.searchQuery || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())) ?? [];
+    public get filteredNumbers() {
+        const numbers = this.songs.filter(s => s.number.toString() == this.searchQuery || s.rawContributorNames.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())).map(s => s.number);
+
+        return this.allLyrics?.filter(l => numbers.includes(l.number) || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())).map(l => l.number) ?? [];
+    }
+
+    public get filteredSongs() {
+        return this.songs.filter(s => this.filteredNumbers.includes(s.number));
     }
     
     public get collection(): Collection {

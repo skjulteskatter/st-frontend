@@ -15,6 +15,7 @@ export interface Songs {
     verses: Verse[];
     allLyrics: Lyrics[];
     collections: Collection[];
+    lines: string[];
 }
 
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -30,6 +31,7 @@ export const songStore = createStore<Songs>({
         initialized: false,
         transposition: undefined,
         collections: [],
+        lines: [],
     },
     actions: {
         async initSongService({ commit }) {
@@ -121,6 +123,9 @@ export const songStore = createStore<Songs>({
         },
         collections(state, collections: Collection[]){
             state.collections = collections;
+        },
+        lines(state, lines: string[]) {
+            state.lines = lines;
         }
     },
     getters: {
