@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import themes from "@/classes/themes";
