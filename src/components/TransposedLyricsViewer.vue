@@ -20,6 +20,7 @@
                     </modal>
                 </span>
             </p>
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
         </card>
         <div id="transposed-lyrics"></div>
         <card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
@@ -108,6 +109,10 @@ export default class TransposedLyricsViewer extends Vue {
         if (lyricsElement) {
             lyricsElement.innerHTML = html;
         }
+    }
+
+    public get melodyOrigin() {
+        return this.song?.melodyOrigin?.name[this.languageKey] ?? this.song?.melodyOrigin?.name.no ?? undefined;
     }
 }
 </script>

@@ -20,6 +20,7 @@
                     </modal>
                 </span>
             </p>
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
             <div v-if="description" v-html="description"></div>
         </card>
         <card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
@@ -58,7 +59,7 @@
 import { Options, Vue } from "vue-class-component";
 import Card from  '@/components/Card.vue';
 import Modal from '@/components/Modal.vue';
-import { Lyrics } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -102,6 +103,7 @@ export default class SongDetails extends Vue {
     public description = '';
     public lyrics?: Lyrics;
     public languageKey = '';
+    public song?: Song;
 
     // public toggleVerse(key: string) {
     // }
@@ -139,6 +141,10 @@ export default class SongDetails extends Vue {
         }
 
         return verses;
+    }
+
+    public get melodyOrigin() {
+        return this.song?.melodyOrigin?.name[this.languageKey] ?? this.song?.melodyOrigin?.name.no ?? undefined;
     }
 }
 </script>

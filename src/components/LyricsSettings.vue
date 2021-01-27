@@ -21,6 +21,7 @@
                     </modal>
                 </span>
             </p>
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
             <div v-if="description" v-html="description"></div>
         </card>
         <card v-if="song.type == 'lyrics'" class="lyrics-settings__controls" border>
@@ -192,8 +193,8 @@ export default class LyricsSettings extends Vue {
         return this.verses[1].content.length <= 5 ? 2 : 1;
     }
 
-    public get composers() {
-        return this.song?.composers ?? [];
+    public get melodyOrigin() {
+        return this.song?.melodyOrigin?.name[this.languageKey] ?? this.song?.melodyOrigin?.name.no ?? undefined;
     }
 
     public get currentVerses(): string[] {
