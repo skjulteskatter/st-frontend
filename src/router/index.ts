@@ -5,6 +5,7 @@ const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Das
 const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue');
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
+const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ '../views/KaraokeViewer.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
@@ -77,6 +78,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/lyrics',
         name: 'lyrics',
         component: LyricsViewer,
+    },
+    {
+        path: '/karaoke',
+        name: 'karaoke',
+        component: KaraokeViewer,
     },
     // {
     //     path: '/',

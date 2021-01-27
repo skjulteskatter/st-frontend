@@ -26,10 +26,14 @@
         </card>
         <card v-if="song.type == 'lyrics'" class="lyrics-settings__controls" border>
             <h2 class="lyrics-settings__controls__title">Controls</h2>
-            <button class="lyrics-settings__controls__open" @click="openLyricsWindow">Open viewer</button>
+            <button class="lyrics-settings__controls__open" @click="openLyricsWindow('lyrics')">Open viewer</button>
             <button class="lyrics-settings__controls__update" @click="updateLyrics">Update viewer</button>
             <button class="lyrcis-settings__controls__previous" @click="previous" secondary>Previous</button>
             <button class="lyrcis-settings__controls__next" @click="next" secondary>Next</button>
+            <br/>
+            <button class="lyrics-settings__controls__open" @click="openLyricsWindow('karaoke')">Open KaraokeViewer</button>
+            <button @click="setLineSize(1)">1</button>
+            <button @click="setLineSize(2)">2</button>
         </card>
         <card v-if="song.type == 'lyrics'" class="lyrics-settings__verses" border>
             <h2 class="lyrics-settings__verses__title">Verses</h2>
@@ -109,10 +113,13 @@ import { Lyrics, Song } from "@/classes";
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
+    public currentLinesNumber = 0;
     public description = '';
     public lyrics?: Lyrics;
     public languageKey = '';
     public song?: Song;
+
+    public lineSize = 2;
 
     // public toggleVerse(key: string) {
     // }
@@ -135,9 +142,14 @@ export default class LyricsSettings extends Vue {
         }
     }
 
-    public openLyricsWindow(){
+    public setLineSize(number: number) {
+        this.lineSize = number;
+        localStorage.setItem('lyrics_lines', JSON.stringify(this.currentLines));
+    }
+
+    public openLyricsWindow(type: string){
         this.updateLyrics();
-        window.open('/lyrics', 'Lyrics Viewer', 'resizeable,scrollbars')
+        window.open('/' + type, 'Lyrics Viewer', 'resizeable,scrollbars')
     }
 
     public toggleVerse(key: string) {
@@ -158,6 +170,7 @@ export default class LyricsSettings extends Vue {
 
         localStorage.setItem('lyrics', JSON.stringify(this.current));
         localStorage.setItem('song', JSON.stringify(this.song));
+        localStorage.setItem('lyrics_lines', JSON.stringify(this.currentLines))
     }
 
     public next() {
@@ -166,19 +179,24 @@ export default class LyricsSettings extends Vue {
         } else {
             this.currentVerseNumber++;
         }
+        this.currentLinesNumber = this.currentLinesNumber + this.lineSize;
         localStorage.setItem('lyrics', JSON.stringify(this.current));
+        localStorage.setItem('lyrics_lines', JSON.stringify(this.currentLines));
     }
 
     public previous() {
-        if (this.currentVerseNumber == 0) {
-            return;
+        if (this.currentVerseNumber !== 0) {
+            if (this.size == 2) {
+                this.currentVerseNumber = this.currentVerseNumber - 2;
+            } else {
+                this.currentVerseNumber--;
+            }
         }
-        if (this.size == 2) {
-            this.currentVerseNumber = this.currentVerseNumber - 2;
-        } else {
-            this.currentVerseNumber--;
+        if (this.currentLinesNumber !== 0) {
+            this.currentLinesNumber = this.currentLinesNumber - this.lineSize;
         }
         localStorage.setItem('lyrics', JSON.stringify(this.current));
+        localStorage.setItem('lyrics_lines', JSON.stringify(this.currentLines));
     }
 
     public get selected() {
@@ -206,6 +224,12 @@ export default class LyricsSettings extends Vue {
             if (this.selected[this.currentVerseNumber + 1]) keys.push(this.selected[this.currentVerseNumber + 1]);
         }
         return keys;
+    }
+
+    public get currentLines(): string[] {
+        const lines = this.lyrics?.lines ?? [];
+
+        return lines.slice(this.currentLinesNumber, this.currentLinesNumber + this.lineSize) ?? []
     }
 
     public get current() {
