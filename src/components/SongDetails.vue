@@ -60,6 +60,7 @@ import { Options, Vue } from "vue-class-component";
 import Card from  '@/components/Card.vue';
 import Modal from '@/components/Modal.vue';
 import { Lyrics, Song } from "@/classes";
+import ContributorItem from "@/classes/contributor";
 
 @Options({
     components: {
@@ -89,11 +90,11 @@ import { Lyrics, Song } from "@/classes";
         },
         composers: {
             type: Array,
-            default: () => [],
+            default: () => undefined,
         },
         authors: {
             type: Array,
-            default: () => [],
+            default: () => undefined,
         }
     }
 })
@@ -104,6 +105,9 @@ export default class SongDetails extends Vue {
     public lyrics?: Lyrics;
     public languageKey = '';
     public song?: Song;
+    public composers: ContributorItem[] = []
+    public authors: ContributorItem[] = []
+    public title?: string;
 
     // public toggleVerse(key: string) {
     // }

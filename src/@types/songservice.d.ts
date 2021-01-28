@@ -1,4 +1,5 @@
 interface SongInterface {
+    id: string;
     number: number;
     type: string;
     name: {

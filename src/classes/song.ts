@@ -3,6 +3,7 @@ import ContributorItem from './contributor';
 const converter = new showdown.Converter();
 
 export class Song implements SongInterface {
+    public id: string;
     public number = 0;
     public type: string;
     public name: {
@@ -22,6 +23,7 @@ export class Song implements SongInterface {
     public collection: Collection = {} as Collection;
 
     constructor(song: SongInterface, contributors: ContributorCollectionItem[]) {
+        this.id = song.id;
         this.number = song.number;
         this.name = song.name;
         this.authors = song.authors.map(a => new ContributorItem(contributors.find(c => c.contributor.id == a.id)?.contributor ?? {} as Contributor)).filter(c => c.id);
