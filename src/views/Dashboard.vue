@@ -1,6 +1,6 @@
 <template>
     <div id="dashboard">
-        <h1>Dashboard</h1>
+        <h1>{{ $t('common.dashboard') }}</h1>
         <base-card class="user-info" border>
             <div class="fields">
                 <div class="user-info__field">
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="user-info__subscriptions" v-if="subscriptions.length">
-                <label>Subscriptions</label>
+                <label>{{ $t('common.subscriptions') }}</label>
                 <div class="user-info__subscriptions__cards">
                     <base-card v-for="sub in subscribedCollections" :key="sub" border>
                         <b>{{sub.key}}</b>
@@ -24,23 +24,23 @@
 
         <base-card style="margin-bottom: var(--st-spacing)">
             <div class="user-settings">
-                <h2 class="user-settings__title">User settings</h2>
+                <h2 class="user-settings__title">{{ $t('common.settings') }}</h2>
                 <div class="user-settings__fields">
                     <div class="user-settings__theme field">
-                        <label for="">Theme mode</label>
+                        <label for="">{{ $t('common.theme') }}</label>
                         <hr>
                         <select name="theme-mode" id="theme-mode" v-model="theme">
                             <option :value="t" v-for="t in themes.keys" :key="t">{{t}}</option>
                         </select>
                     </div>
                     <div class="user-settings__color field">
-                        <label for="theme-color">Theme color</label>
+                        <label for="theme-color">{{ `${$t('common.theme')} ${$t('common.color').toLowerCase()}` }}</label>
                         <hr>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
                         <button @click="setThemeColor('#5372e2')" secondary>Reset</button>
                     </div>
                     <div class="user-settings__language field">
-                        <label for="language">Language</label>
+                        <label for="language">{{ $t('common.language') }}</label>
                         <hr>
                         <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
                             <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>

@@ -1,8 +1,8 @@
 <template>
     <div class="store">
         <div class="store__title">
-            <h1>Store</h1>    
-            <button @click="portal()" v-if="user.subscriptions.length" secondary>Manage subscriptions</button>
+            <h1>{{ $t('common.store') }}</h1>    
+            <button @click="portal()" v-if="user.subscriptions.length" secondary>{{ `${$t('common.manage')} ${$t('common.subscriptions').toLowerCase()}` }}</button>
         </div>
         <div class="store__items">
             <base-card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>

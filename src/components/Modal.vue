@@ -6,7 +6,7 @@
             <div class="wrapper">
                 <base-card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
                     <slot></slot>
-                    <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
+                    <button @click="closeModal" class="modal__popup__card__close-button" secondary>{{ $t('common.close') }}</button>
                 </base-card>
             </div>
         </div>

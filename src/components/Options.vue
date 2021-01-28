@@ -1,6 +1,6 @@
 <template>
     <div id="options">
-        <button @click="logout()" secondary>Log out</button>
+        <button @click="logout()" secondary>{{ $t('common.logout') }}</button>
     </div>
 </template>
 <script lang="ts">
