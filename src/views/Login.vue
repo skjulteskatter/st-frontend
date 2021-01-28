@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <card id="login-card" v-if="authInitialized && !loggedIn" border>
+        <base-card id="login-card" v-if="authInitialized && !loggedIn" border>
             <div class="login">
                 <h1 class="login__title">Please log in</h1>
                 <div class="social">
@@ -25,7 +25,7 @@
                     <button type="submit" class="login__form__submit">Log in</button>
                 </form>
             </div>
-        </card>
+        </base-card>
     </div>
 </template>
 
@@ -33,11 +33,11 @@
 import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
-import Card from '@/components/Card.vue';
+import BaseCard from '@/components/BaseCard.vue';
 
 @Options({
     components: {
-        Card
+        BaseCard
     }
 })
 export default class Login extends Vue {
@@ -77,25 +77,25 @@ export default class Login extends Vue {
     justify-content: center;
     align-items: center;
 
-    background: var(--background-color);
+    background: var(--st-background-color);
 }
 
 #login-card {
     max-width: 500px;
     width: 100%;
 
-    background: var(--secondary-background-color);
+    background: var(--st-secondary-background-color);
 }
 
 .social {
     &-button {
         width: 50px;
         height: 50px;
-        background: var(--background-color);
+        background: var(--st-background-color);
         padding: .5em;
         border-radius: 100%;
         outline: 0;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--st-border-color);
 
         & img {
             width: 100%;
@@ -107,7 +107,7 @@ export default class Login extends Vue {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__title {
         margin: 0;
@@ -117,18 +117,18 @@ export default class Login extends Vue {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         &__submit {
             font-size: inherit;
-            padding: var(--spacing);
+            padding: var(--st-spacing);
         }
 
         input {
-            padding: var(--spacing);
-            background: var(--background-color);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
+            padding: var(--st-spacing);
+            background: var(--st-background-color);
+            border: 1px solid var(--st-border-color);
+            border-radius: var(--st-border-radius);
         }
 
         // &__stay {

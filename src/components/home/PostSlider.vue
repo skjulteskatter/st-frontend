@@ -44,7 +44,7 @@ export default class PostSlider extends Vue {
         align-items: center;
 
         .see-more {
-            color: var(--text-color);
+            color: var(--st-text-color);
             font-weight: bold;
         }
     }
@@ -52,7 +52,7 @@ export default class PostSlider extends Vue {
     &__posts {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;

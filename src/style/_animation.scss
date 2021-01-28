@@ -37,3 +37,21 @@
         opacity: 1;
     }
 }
+
+@keyframes growFromLeft {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes buttonLoading {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: .7;
+    }
+}

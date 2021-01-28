@@ -1,7 +1,7 @@
 <template>
     <div id="dashboard">
-        <h1>Dashboard</h1>
-        <card class="user-info" border>
+        <h1>{{ $t('common.dashboard') }}</h1>
+        <base-card class="user-info" border>
             <div class="fields">
                 <div class="user-info__field">
                     <span class="tag empty" v-if="!user.roles.length">no roles</span>
@@ -13,49 +13,56 @@
                 </div>
             </div>
             <div class="user-info__subscriptions" v-if="subscriptions.length">
-                <label>Subscriptions</label>
+                <label>{{ $t('common.subscriptions') }}</label>
                 <div class="user-info__subscriptions__cards">
-                    <card v-for="sub in subscribedCollections" :key="sub" border>
+                    <base-card v-for="sub in subscribedCollections" :key="sub" border>
                         <b>{{sub.key}}</b>
-                    </card>
+                    </base-card>
                 </div>
             </div>
-        </card>
+        </base-card>
 
-        <card style="margin-bottom: var(--spacing)">
+        <base-card style="margin-bottom: var(--st-spacing)">
             <div class="user-settings">
-                <h2 class="user-settings__title">User settings</h2>
+                <h2 class="user-settings__title">{{ $t('common.settings') }}</h2>
                 <div class="user-settings__fields">
                     <div class="user-settings__theme field">
-                        <label for="">Theme mode</label>
+                        <label for="theme-mode">{{ $t('common.theme') }}</label>
                         <hr>
                         <select name="theme-mode" id="theme-mode" v-model="theme">
                             <option :value="t" v-for="t in themes.keys" :key="t">{{t}}</option>
                         </select>
                     </div>
                     <div class="user-settings__color field">
-                        <label for="theme-color">Theme color</label>
+                        <label for="theme-color">{{ `${$t('common.theme')} ${$t('common.color').toLowerCase()}` }}</label>
                         <hr>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
-                        <button @click="setThemeColor('#5372e2')" secondary>Reset</button>
+                        <base-button :action="() => { setThemeColor('#5372e2') }" theme="secondary" label="Reset"></base-button>
                     </div>
                     <div class="user-settings__language field">
-                        <label for="language">Language</label>
+                        <label for="language">{{ $t('common.language') }}</label>
                         <hr>
                         <select id="language" name="language" v-model="selectedLanguage" @input="setLanguage">
                             <option v-for="lang in languages" :value="lang" :key="lang.key">{{lang.name}}</option>
                         </select>
                     </div>
                 </div>
-                <button class="user-settings__save-button" @click="save">{{$t('common.save')}}</button>
+                <base-button :loading="loadingSave" :label="$t('common.save')" :action="save" class="user-settings__save-button"></base-button>
             </div>
-        </card>
+        </base-card>
         
-        <card class="api-token" border secondary>
-            <h3>API token</h3>
-            <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
+        <base-card class="api-token" border secondary>
+            <div class="api-token__header">
+                <h3 class="api-token__title">API token</h3>
+                <base-button 
+                    class="api-token__button" 
+                    label="Toggle API token" 
+                    theme="secondary" 
+                    :action="() => {showApiToken = !showApiToken}"
+                ></base-button>
+            </div>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
-        </card>
+        </base-card>
     </div>
 </template>
 
@@ -64,11 +71,13 @@ import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import themes, { Themes } from '@/classes/themes';
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
+import BaseButton from '@/components/BaseButton.vue'
 
 @Options({
     components: {
-        Card,
+        BaseCard,
+        BaseButton,
     }
 })
 export default class Dashboard extends Vue {
@@ -81,6 +90,8 @@ export default class Dashboard extends Vue {
     public theme = localStorage.getItem('theme') ?? 'dark';
     public token = localStorage.getItem('id_token');
 
+    public loadingSave = false;
+
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
     }
@@ -90,8 +101,13 @@ export default class Dashboard extends Vue {
     }
 
     public save() {
-        this.themes.setTheme(this.theme);
-        this.store.dispatch('saveSettings', this.user.settings);
+        this.loadingSave = true;
+        setTimeout(() => {
+            this.themes.setTheme(this.theme);
+            this.store.dispatch('saveSettings', this.user.settings);
+
+            this.loadingSave = false;
+        }, 500)
     }
 
     public setLanguage() {
@@ -125,11 +141,9 @@ export default class Dashboard extends Vue {
 
 <style lang="scss">
 .user-info {
-    margin-bottom: var(--spacing);
+    margin-bottom: var(--st-spacing);
 
     &__subscriptions {
-        // border-left: 1px solid var(--primary-color);
-        // padding-left: var(--spacing);
 
         &__cards {
             display: flex;
@@ -142,7 +156,7 @@ export default class Dashboard extends Vue {
     .card__content {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
     }
 
     label {
@@ -160,7 +174,7 @@ export default class Dashboard extends Vue {
 
     &__field {
         &:not(:last-child) {
-            margin-bottom: var(--spacing);
+            margin-bottom: var(--st-spacing);
         }
     }
 }
@@ -168,7 +182,7 @@ export default class Dashboard extends Vue {
 .user-settings {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__fields {
 
@@ -176,7 +190,7 @@ export default class Dashboard extends Vue {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--spacing);
+            gap: var(--st-spacing);
             padding: .5em 0;
 
             label {
@@ -185,28 +199,24 @@ export default class Dashboard extends Vue {
 
             hr {
                 border: none;
-                border-top: 1px solid var(--border-color);
+                border-top: 1px solid var(--st-border-color);
                 width: 100%;
             }
-
-            // &:not(:last-child) {
-            //     // border-bottom: 1px solid var(--border-color);
-            // }
         }
     }
 
     &__color {
         display: flex;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         input[type=color] {
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
+            border-radius: var(--st-border-radius);
+            border: 1px solid var(--st-border-color);
             height: 30px;
             background: var(--secondary-backround-color);
 
             &::-webkit-color-swatch {
-                border-radius: var(--border-radius);
+                border-radius: var(--st-border-radius);
                 border: none;
             }
         }
@@ -215,12 +225,25 @@ export default class Dashboard extends Vue {
     &__title {
         margin: 0;
     }
+
+    &__save-button {
+        align-self: flex-end;
+
+        @media screen and (max-width: 600px) {
+            align-self: initial;
+        }
+    }
 }
 
 .api-token {
-    h3 {
-        margin: 0 var(--spacing) 0 0;
-        display: inline-block;
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: var(--st-spacing);
+    }
+
+    &__title {
+        margin: 0;
     }
 }
 </style>

@@ -4,7 +4,7 @@
             <h1>Users</h1>
             <button :class="{disabled: disableButton}" @click="refreshUsers()" secondary>Refresh</button>
         </div>
-        <card class="users__table" border>
+        <base-card class="users__table" border>
             <table>
                 <thead>
                     <th></th>
@@ -38,20 +38,20 @@
                     </tr>
                 </tbody>
             </table>
-        </card>
+        </base-card>
     </div>
 </template>
 <script lang="ts">
 import { usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
 import Modal from '@/components/Modal.vue'
 
 
 @Options({
     components: {
-        Card,
+        BaseCard,
         Modal,
     },
     props: {
@@ -101,19 +101,19 @@ export default class UsersList extends Vue {
 .header {
     display: flex;
     align-items: center;
-    gap: var(--spacing);
+    gap: var(--st-spacing);
     margin: 0;
 }
 
 .edit-user {
     &__save {
-        margin-right: calc(var(--spacing)/2);
+        margin-right: calc(var(--st-spacing)/2);
     }
 
     &__form {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing);
+        gap: var(--st-spacing);
         min-width: 300px;
 
         &__field {
@@ -143,7 +143,7 @@ export default class UsersList extends Vue {
         
         tr {
             &:nth-child(odd) {
-                background: var(--secondary-background-color);
+                background: var(--st-secondary-background-color);
             }
         }
 

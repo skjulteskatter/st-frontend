@@ -43,7 +43,7 @@ export default class Blog extends Vue {
     &__posts {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: calc(var(--spacing)*2);
+        gap: calc(var(--st-spacing)*2);
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;

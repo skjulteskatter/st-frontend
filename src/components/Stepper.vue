@@ -32,7 +32,7 @@ export default class Stepper extends Vue {
 
 .stepper {
     &__breadcrumb {
-        height: var(--spacing);
+        height: var(--st-spacing);
         padding: 0;
         opacity: .7;
 

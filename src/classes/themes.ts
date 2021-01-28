@@ -37,11 +37,11 @@ export class Themes {
     }
 
     public setThemeProperties(params: Theme) {
-        this.setCSSProperty('--background-color', params.background)
-        this.setCSSProperty('--secondary-background-color', params.secondaryBackground)
-        this.setCSSProperty('--text-color', params.text)
-        this.setCSSProperty('--border-color', params.borderColor)
-        if (params.borderRadius) this.setCSSProperty('--border-radius', params.borderRadius)
+        this.setCSSProperty('--st-background-color', params.background)
+        this.setCSSProperty('--st-secondary-background-color', params.secondaryBackground)
+        this.setCSSProperty('--st-text-color', params.text)
+        this.setCSSProperty('--st-border-color', params.borderColor)
+        if (params.borderRadius) this.setCSSProperty('--st-border-radius', params.borderRadius)
         if (params.fontFamily) this.setCSSProperty('--font-family', params.fontFamily)
     }
 
@@ -51,7 +51,7 @@ export class Themes {
 
     public setThemeColor(color: string) {
         localStorage.setItem('theme_color', color)
-        this.setCSSProperty('--primary-color', color)
+        this.setCSSProperty('--st-primary-color', color)
     }
 
     public load() {

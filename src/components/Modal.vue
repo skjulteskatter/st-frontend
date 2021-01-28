@@ -1,12 +1,13 @@
 <template>
     <div class="modal">
-        <button @click="openModal" class="modal__open-button">{{ label }}</button>
+        <button @click="openModal" class="modal__open-button" v-if="type == 'button'">{{ label }}</button>
+        <b @click="openModal" class="modal__open-button" v-if="type == 'span'">{{ label }}</b>
         <div class="modal__popup" v-if="modalIsOpen" @click="closeIfOutside">
             <div class="wrapper">
-                <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
+                <base-card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
                     <slot></slot>
-                    <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
-                </card>
+                    <button @click="closeModal" class="modal__popup__card__close-button" secondary>{{ $t('common.close') }}</button>
+                </base-card>
             </div>
         </div>
     </div>
@@ -14,17 +15,23 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
 
 @Options({
     props: {
         label: {
             type: String,
-            default: ''
+            default: '',
+            required: true
+        },
+        type: {
+            type: String,
+            default: 'button',
+            validator: (value: string) => ['button','span'].indexOf(value) != -1
         }
     },
     components: {
-        Card
+        BaseCard
     }
 })
 export default class Modal extends Vue {
@@ -48,12 +55,13 @@ export default class Modal extends Vue {
 <style lang="scss" scoped>
 
 .wrapper {
-    max-width: 1200px;
+    max-width: 900px;
 }
 
 .modal {
     &__open-button {
         width: 100%;
+        cursor: pointer;
     }
 
     &__popup {
@@ -74,7 +82,7 @@ export default class Modal extends Vue {
 
         &__card {
             &__close-button {
-                margin-top: var(--spacing);
+                margin-top: var(--st-spacing);
             }
         }
     }

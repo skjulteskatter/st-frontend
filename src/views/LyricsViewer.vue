@@ -118,13 +118,13 @@ export default class LyricsViewer extends Vue {
 }
 
 .lyrics {
-    --double-spacing: calc(var(--spacing) * 2);
+    --double-spacing: calc(var(--st-spacing) * 2);
 
     font-size: 2.2em;
 
     &__credits {
         width: 100%;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--st-border-color);
         padding-left: 2em;
         margin-bottom: 50px;
         margin-top: 25px;
@@ -157,8 +157,8 @@ export default class LyricsViewer extends Vue {
 
         &-chorus {
             font-style: italic;
-            border-left: 5px solid var(--border-color);
-            padding-left: var(--spacing);
+            border-left: 5px solid var(--st-border-color);
+            padding-left: var(--st-spacing);
         }
 
         &__number {
