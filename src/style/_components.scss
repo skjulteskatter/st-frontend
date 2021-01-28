@@ -38,34 +38,6 @@
     }
 }
 
-// Navigation bar
-.nav {
-    background-color: var(--st-background-color);
-    border-bottom: 1px solid var(--st-border-color);
-
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 1;
-
-    &__wrapper {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    &__item {
-        color: var(--st-text-color);
-        margin-left: var(--st-spacing);
-        text-decoration: none;
-        font-weight: bold;
-
-        &.router-link-exact-active {
-            color: var(--st-primary-color);
-        }
-    }
-}
-
 // Tag
 .tag {
     border: 1px solid var(--st-primary-color);
