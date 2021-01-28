@@ -1,6 +1,6 @@
 <template>
     <div class="song-details" v-if="song">
-        <card class="song-details__metadata" border secondary>
+        <base-card class="song-details__metadata" border secondary>
             <h2 class="song-details__metadata__title"><span style="opacity: .5; padding-right: .5em">{{song.number}}</span> {{title}}</h2>
             <p class="song-details__metadata__credits">
                 <span>Author: </span>
@@ -22,11 +22,11 @@
             </p>
             <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
             <div v-if="description" v-html="description"></div>
-        </card>
-        <card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
+        </base-card>
+        <base-card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
-                <card class="song-details__files__audio" v-if="song.audioFiles.length">
+                <base-card class="song-details__files__audio" v-if="song.audioFiles.length">
                     <h3>Audio</h3>
                     <figure v-for="file in song.audioFiles" :key="file">
                         <figcaption>{{file.name}}</figcaption>
@@ -34,23 +34,23 @@
                             Your browser does not support the <code>audio</code> element.
                         </audio>
                     </figure>
-                </card>
-                <card class="song-details__files__video" v-if="song.videoFiles.length">
+                </base-card>
+                <base-card class="song-details__files__video" v-if="song.videoFiles.length">
                     <h3>Video</h3>
                     <modal v-for="video in song.videoFiles" :key="video" :label="video.name">
                         <video :src="video.directUrl" width="500" type="video/mp4" controls>
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
-                </card>
+                </base-card>
             </div>
-        </card>
-        <card class="song-details__lyrics">
+        </base-card>
+        <base-card class="song-details__lyrics">
             <div v-for="verse in text" :key="verse.name + verse.content">
                 <b>{{verse.name}}</b>
                 <p v-for="line in verse.content" :key="line">{{line}}</p>
             </div>
-        </card>
+        </base-card>
     </div>
 </template>
 
