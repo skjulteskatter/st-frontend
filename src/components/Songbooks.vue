@@ -1,7 +1,7 @@
 <template>
     <div class="songbooks">
         <div class="loader" v-if="loading"></div>
-        <card
+        <base-card
             v-for="songbook in collections"
             :key="songbook.key"
             class="songbooks__book hover"
@@ -11,7 +11,7 @@
             border
         >
             <h3 class="songbooks__book__title">{{ songbook.name.no }}</h3>
-        </card>
+        </base-card>
     </div>
 </template>
 
@@ -19,11 +19,11 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from 'vuex';
 import { sessionKey, songKey } from '@/store';
-import Card from '@/components/Card.vue';
+import BaseCard from '@/components/BaseCard.vue';
 
 @Options({
     components: {
-        Card,
+        BaseCard,
     }
 })
 export default class Songbooks extends Vue {
@@ -62,7 +62,7 @@ export default class Songbooks extends Vue {
 .songbooks {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     @media screen and (max-width: 720px) {
         grid-template-columns: repeat(2, 1fr);
@@ -80,11 +80,11 @@ export default class Songbooks extends Vue {
         }
 
         &.selected {
-            border: 2px solid var(--primary-color);
+            border: 2px solid var(--st-primary-color);
         }
 
         &.disabled {
-            color: var(--border-color);
+            color: var(--st-border-color);
             cursor: not-allowed;
         }
     }

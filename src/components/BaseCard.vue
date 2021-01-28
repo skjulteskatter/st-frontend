@@ -31,8 +31,8 @@ export default class Card extends Vue {}
 
 <style lang="scss" scoped>
 .card {
-  background: var(--background-color);
-  border-radius: var(--border-radius);
+  background: var(--st-background-color);
+  border-radius: var(--st-border-radius);
   overflow: hidden;
   animation: slideInFromBottom .3s ease;
 
@@ -41,7 +41,7 @@ export default class Card extends Vue {}
   }
 
   &-border {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--st-border-color);
   }
 
   &__image {
@@ -54,7 +54,7 @@ export default class Card extends Vue {}
   }
 
   &__content {
-    padding: var(--spacing);
+    padding: var(--st-spacing);
 
     & >:first-child {
       margin-top: 0;

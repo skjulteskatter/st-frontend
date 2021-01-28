@@ -14,14 +14,12 @@ import { sessionKey } from '@/store';
 import { Vue, Options } from 'vue-class-component';
 import { useStore } from 'vuex';
 
-import Card from '@/components/Card.vue';
 import FooterComponent from '@/components/home/FooterComponent.vue';
 import LandingPage from '@/views/home/LandingPage.vue';
 import { sanityKey } from '@/store/sanity';
 
 @Options({
     components: {
-        Card,
         FooterComponent,
         LandingPage,
     }
@@ -46,7 +44,7 @@ export default class DashboardLayout extends Vue {
 @import '@/style/main';
 
 section {
-    background: var(--background-color);
+    background: var(--st-background-color);
 }
 
 #logo {

@@ -7,12 +7,10 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import DashboardLayout from '@/layout/DashboardLayout.vue';
-import Card from '@/components/Card.vue';
 
 @Options({
     components: {
         DashboardLayout,
-        Card,
     }
 })
 export default class App extends Vue {
@@ -31,18 +29,18 @@ export default class App extends Vue {
 *:before,
 *:after {
     box-sizing: border-box;
-    outline-color: var(--primary-color);
+    outline-color: var(--st-primary-color);
 }
 
 body {
     margin: 0;
-    background-color: var(--secondary-background-color);
+    background-color: var(--st-secondary-background-color);
 }
 
 #app {
     font-family: Lato, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: var(--text-color);
+    color: var(--st-text-color);
 }
 </style>

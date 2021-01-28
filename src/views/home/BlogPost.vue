@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from '@/components/Card.vue';
+import BaseCard from '@/components/BaseCard.vue';
 import { Post } from "@/services/sanity";
 import { useStore } from "vuex";
 import { sanityKey } from "@/store/sanity";

@@ -31,7 +31,7 @@ export default class PostCard extends Vue {
 
 <style lang="scss">
 .post-preview {
-    background: var(--background-color);
+    background: var(--st-background-color);
     cursor: pointer;
 
     &:hover {
@@ -46,7 +46,7 @@ export default class PostCard extends Vue {
         background-size: cover;
         background-position: center;
 
-        padding: var(--spacing);
+        padding: var(--st-spacing);
         display: flex;
         flex-direction: column;
         justify-content: flex-end;

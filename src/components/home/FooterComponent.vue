@@ -36,8 +36,8 @@ export default class FooterComponent extends Vue {
 .footer {
     width: 100%;
 
-    background: var(--secondary-background-color);
-    border-top: 1px solid var(--border-color);
+    background: var(--st-secondary-background-color);
+    border-top: 1px solid var(--st-border-color);
 
     &__copyright {
         background: rgba(black, .1);
@@ -46,7 +46,7 @@ export default class FooterComponent extends Vue {
     &__content {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         &-group {
             display: flex;
@@ -54,11 +54,11 @@ export default class FooterComponent extends Vue {
             gap: .5em;
 
             &__title {
-                margin-bottom: var(--spacing);
+                margin-bottom: var(--st-spacing);
             }
 
             &__link {
-                color: var(--text-color);
+                color: var(--st-text-color);
                 text-decoration: none;
             }
 

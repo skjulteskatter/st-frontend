@@ -34,11 +34,11 @@ export default class ContactForm extends Vue {
 .contact-form {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__button {
         font-size: 1em;
-        padding: var(--spacing);
+        padding: var(--st-spacing);
     }
 
     &__field {

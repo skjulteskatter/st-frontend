@@ -5,11 +5,11 @@
             <button @click="portal()" v-if="user.subscriptions.length" secondary>Manage subscriptions</button>
         </div>
         <div class="store__items">
-            <card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>
+            <base-card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>
                 <h3>{{product.name.no}}</h3>
                 <button @click="checkout(product)" v-if="!productIds.includes(product.id)">Buy</button>
                 <label style="opacity: .6" v-else>You already own this product.</label>
-            </card>
+            </base-card>
         </div>
     </div>
 </template>
@@ -18,12 +18,12 @@
 import { stripeKey } from "@/store/stripe";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import Card from '@/components/Card.vue';
+import BaseCard from '@/components/BaseCard.vue';
 import { sessionKey } from "@/store";
 
 @Options({
     components: {
-        Card
+        BaseCard
     }
 })
 export default class Stripe extends Vue{
@@ -68,12 +68,12 @@ export default class Stripe extends Vue{
     &__title {
         display: flex;
         align-items: center;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
     }
     &__items {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         &__item {
             display: flex;

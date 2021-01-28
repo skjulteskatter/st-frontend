@@ -26,6 +26,6 @@ export default class Contact extends Vue {
 <style lang="scss">
 .form-card {
     max-width: 500px;
-    padding: var(--spacing);
+    padding: var(--st-spacing);
 }
 </style>

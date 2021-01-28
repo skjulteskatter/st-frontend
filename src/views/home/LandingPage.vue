@@ -27,23 +27,23 @@
                 <h1>Get in touch with us.</h1>
                 <p>We will gladly answer any of your questions</p>
             </div>
-            <card>
+            <base-card>
                 <contact-form></contact-form>
-            </card>
+            </base-card>
         </div>
     </section>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from '@/components/Card.vue';
+import BaseCard from '@/components/BaseCard.vue';
 import PostCard from '@/components/home/PostCard.vue';
 import PostSlider from '@/components/home/PostSlider.vue';
 import ContactForm from '@/components/home/ContactForm.vue';
 
 @Options({
     components: {
-        Card,
+        BaseCard,
         PostCard,
         PostSlider,
         ContactForm,
@@ -57,12 +57,12 @@ export default class LandingPage extends Vue {
 <style lang="scss">
 
 #contact {
-    background: var(--primary-color);
+    background: var(--st-primary-color);
 
     .container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;
@@ -96,7 +96,7 @@ export default class LandingPage extends Vue {
     &__header {
         width: 100%;
         min-height: 30vh;
-        background-color: var(--primary-color);
+        background-color: var(--st-primary-color);
 
         display: flex;
         justify-content: center;

@@ -1,6 +1,6 @@
 <template>
     <div class="song-details" v-if="song">
-        <card class="song-details__metadata" border secondary>
+        <base-card class="song-details__metadata" border secondary>
             <h2 class="song-details__metadata__title"><span style="opacity: .5; padding-right: .5em">{{song.number}}</span> {{title}}</h2>
             <p class="song-details__metadata__credits">
                 Author: 
@@ -21,12 +21,12 @@
                 </span>
             </p>
             <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
-        </card>
+        </base-card>
         <div id="transposed-lyrics"></div>
-        <card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
+        <base-card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
-                <card class="song-details__files__audio" v-if="song.audioFiles.length">
+                <base-card class="song-details__files__audio" v-if="song.audioFiles.length">
                     <h3>Audio</h3>
                     <figure v-for="file in song.audioFiles" :key="file">
                         <figcaption>{{file.name}}</figcaption>
@@ -34,8 +34,8 @@
                             Your browser does not support the <code>audio</code> element.
                         </audio>
                     </figure>
-                </card>
-                <card class="song-details__files__video" v-if="song.videoFiles.length">
+                </base-card>
+                <base-card class="song-details__files__video" v-if="song.videoFiles.length">
                     <h3>Video</h3>
                     <modal v-for="video in song.videoFiles" :key="video" :label="video.name">
                         <video :src="video.directUrl" width="500" type="video/mp4" controls>
@@ -43,21 +43,21 @@
                         </video>
                     </modal>
                     <!-- <a class="song-details__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
-                </card>
+                </base-card>
             </div>
-        </card>
+        </base-card>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from  '@/components/Card.vue';
+import BaseCard from  '@/components/BaseCard.vue';
 import Modal from '@/components/Modal.vue';
 import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
-        Card,
+        BaseCard,
         Modal,
     },
     props: {
@@ -124,7 +124,7 @@ export default class TransposedLyricsViewer extends Vue {
 }
 
 .biography-wrapper {
-    color: var(--text-color);
+    color: var(--st-text-color);
 
     img {
         max-width: 50%;
@@ -132,11 +132,11 @@ export default class TransposedLyricsViewer extends Vue {
 }
 
 .song-details {
-    --half-spacing: calc(var(--spacing) * 0.5);
+    --half-spacing: calc(var(--st-spacing) * 0.5);
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__files {
         grid-column: span 5;
@@ -144,7 +144,7 @@ export default class TransposedLyricsViewer extends Vue {
         &__video {
             &__link {
                 text-decoration: none;
-                color: var(--primary-color);
+                color: var(--st-primary-color);
             }
         }
 
@@ -152,7 +152,7 @@ export default class TransposedLyricsViewer extends Vue {
             .files__container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: var(--spacing);
+                gap: var(--st-spacing);
             }
         }
 
@@ -166,13 +166,13 @@ export default class TransposedLyricsViewer extends Vue {
 
         &__credits {
             display: inline-block;
-            margin: 0 0 0 var(--spacing);
-            color: var(--primary-color);
+            margin: 0 0 0 var(--st-spacing);
+            color: var(--st-primary-color);
         }
 
         .card__content {
             h2 {
-                margin: 0 0 var(--spacing);
+                margin: 0 0 var(--st-spacing);
             }
 
             .tag {
@@ -188,7 +188,7 @@ export default class TransposedLyricsViewer extends Vue {
         .card__content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing);
+            gap: var(--st-spacing);
         }
 
         &__title {
@@ -198,7 +198,7 @@ export default class TransposedLyricsViewer extends Vue {
 
         &__update {
             font-size: 1em;
-            padding: var(--spacing);
+            padding: var(--st-spacing);
         }
 
         &__open {
@@ -214,7 +214,7 @@ export default class TransposedLyricsViewer extends Vue {
         }
 
         &__input {
-            border-radius: var(--border-radius);
+            border-radius: var(--st-border-radius);
             overflow: hidden;
             font-size: 1.1em;
             
@@ -226,15 +226,15 @@ export default class TransposedLyricsViewer extends Vue {
 
                 &:checked + span {
                     color: white;
-                    background: var(--primary-color);
+                    background: var(--st-primary-color);
                 }
             }
 
             &__label {
                 width: 100%;
                 padding: var(--half-spacing);
-                background: var(--secondary-background-color);
-                color: var(--text-color);
+                background: var(--st-secondary-background-color);
+                color: var(--st-text-color);
                 user-select: none;
             }
 

@@ -1,7 +1,7 @@
 <template>
     <div id="dashboard">
         <h1>Dashboard</h1>
-        <card class="user-info" border>
+        <base-card class="user-info" border>
             <div class="fields">
                 <div class="user-info__field">
                     <span class="tag empty" v-if="!user.roles.length">no roles</span>
@@ -15,14 +15,14 @@
             <div class="user-info__subscriptions" v-if="subscriptions.length">
                 <label>Subscriptions</label>
                 <div class="user-info__subscriptions__cards">
-                    <card v-for="sub in subscribedCollections" :key="sub" border>
+                    <base-card v-for="sub in subscribedCollections" :key="sub" border>
                         <b>{{sub.key}}</b>
-                    </card>
+                    </base-card>
                 </div>
             </div>
-        </card>
+        </base-card>
 
-        <card style="margin-bottom: var(--spacing)">
+        <base-card style="margin-bottom: var(--st-spacing)">
             <div class="user-settings">
                 <h2 class="user-settings__title">User settings</h2>
                 <div class="user-settings__fields">
@@ -49,13 +49,13 @@
                 </div>
                 <button class="user-settings__save-button" @click="save">{{$t('common.save')}}</button>
             </div>
-        </card>
+        </base-card>
         
-        <card class="api-token" border secondary>
+        <base-card class="api-token" border secondary>
             <h3>API token</h3>
             <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
-        </card>
+        </base-card>
     </div>
 </template>
 
@@ -64,11 +64,11 @@ import { sessionKey } from '@/store';
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import themes, { Themes } from '@/classes/themes';
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
 
 @Options({
     components: {
-        Card,
+        BaseCard,
     }
 })
 export default class Dashboard extends Vue {
@@ -125,11 +125,11 @@ export default class Dashboard extends Vue {
 
 <style lang="scss">
 .user-info {
-    margin-bottom: var(--spacing);
+    margin-bottom: var(--st-spacing);
 
     &__subscriptions {
-        // border-left: 1px solid var(--primary-color);
-        // padding-left: var(--spacing);
+        // border-left: 1px solid var(--st-primary-color);
+        // padding-left: var(--st-spacing);
 
         &__cards {
             display: flex;
@@ -142,7 +142,7 @@ export default class Dashboard extends Vue {
     .card__content {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
     }
 
     label {
@@ -160,7 +160,7 @@ export default class Dashboard extends Vue {
 
     &__field {
         &:not(:last-child) {
-            margin-bottom: var(--spacing);
+            margin-bottom: var(--st-spacing);
         }
     }
 }
@@ -168,7 +168,7 @@ export default class Dashboard extends Vue {
 .user-settings {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__fields {
 
@@ -176,7 +176,7 @@ export default class Dashboard extends Vue {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--spacing);
+            gap: var(--st-spacing);
             padding: .5em 0;
 
             label {
@@ -185,28 +185,28 @@ export default class Dashboard extends Vue {
 
             hr {
                 border: none;
-                border-top: 1px solid var(--border-color);
+                border-top: 1px solid var(--st-border-color);
                 width: 100%;
             }
 
             // &:not(:last-child) {
-            //     // border-bottom: 1px solid var(--border-color);
+            //     // border-bottom: 1px solid var(--st-border-color);
             // }
         }
     }
 
     &__color {
         display: flex;
-        gap: var(--spacing);
+        gap: var(--st-spacing);
 
         input[type=color] {
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
+            border-radius: var(--st-border-radius);
+            border: 1px solid var(--st-border-color);
             height: 30px;
             background: var(--secondary-backround-color);
 
             &::-webkit-color-swatch {
-                border-radius: var(--border-radius);
+                border-radius: var(--st-border-radius);
                 border: none;
             }
         }
@@ -219,7 +219,7 @@ export default class Dashboard extends Vue {
 
 .api-token {
     h3 {
-        margin: 0 var(--spacing) 0 0;
+        margin: 0 var(--st-spacing) 0 0;
         display: inline-block;
     }
 }

@@ -4,7 +4,7 @@
         <div v-if="!loading">
             <div class="song-list__header" v-if="!loading">
                 <h1>Select number</h1>
-                <div style="display: flex; gap: var(--spacing)">
+                <div style="display: flex; gap: var(--st-spacing)">
                     <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
                 </div>
             </div>
@@ -15,12 +15,12 @@
             </div>
             <div v-else>
                 <div class="search__container">
-                    <card style="cursor: pointer" class="hover" v-for="song in filteredSongs.slice(0, 90)" :key="song.id" @click="selectSong(song)" border>
+                    <base-card style="cursor: pointer" class="hover" v-for="song in filteredSongs.slice(0, 90)" :key="song.id" @click="selectSong(song)" border>
                         <h2>{{song.number}}</h2>
                         <h4 v-for="author in song.authors" :key="author.id">{{author.name}}</h4>
                         <h4 v-for="composer in song.composers" :key="composer.id">{{composer.name}}</h4>
                         <h3>{{song.name[languageKey]}}</h3>
-                    </card>
+                    </base-card>
                 </div>
             </div>
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
@@ -33,11 +33,11 @@ import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import { sessionKey, songKey } from '@/store';
 import { Song } from '@/classes';
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
 
 @Options({
     components: {
-        Card
+        BaseCard
     },
 })
 export default class SongList extends Vue {
@@ -126,7 +126,7 @@ export default class SongList extends Vue {
 .search__container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 }
 
 .song-list {
@@ -136,7 +136,7 @@ export default class SongList extends Vue {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
-        gap: calc(var(--spacing) * 0.5);
+        gap: calc(var(--st-spacing) * 0.5);
     }
 
     .song-list__header {
@@ -154,9 +154,9 @@ export default class SongList extends Vue {
         max-width: 52px;
         min-height: 40px;
         width: 100%;
-        background-color: var(--background-color);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
+        background-color: var(--st-background-color);
+        border: 1px solid var(--st-border-color);
+        border-radius: var(--st-border-radius);
 
         cursor: pointer;
 
@@ -165,11 +165,11 @@ export default class SongList extends Vue {
         align-items: center;
         
         &.selected {
-            border: 2px solid var(--primary-color);
+            border: 2px solid var(--st-primary-color);
         }
 
         &.disabled {
-            color: var(--border-color);
+            color: var(--st-border-color);
             cursor: not-allowed;
         }
     }

@@ -38,6 +38,6 @@ export default class SongSelector extends Vue {
 
 <style lang="scss" scoped>
 .view-song {
-    padding-top: var(--spacing);
+    padding-top: var(--st-spacing);
 }
 </style>

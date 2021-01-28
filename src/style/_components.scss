@@ -18,9 +18,9 @@
         height: 100px;
 
         border-radius: 100%;
-        border-bottom: 10px solid var(--primary-color);
-        border-top: 10px solid var(--primary-color);
-        border-left: 10px solid var(--primary-color);
+        border-bottom: 10px solid var(--st-primary-color);
+        border-top: 10px solid var(--st-primary-color);
+        border-left: 10px solid var(--st-primary-color);
         border-right: 10px solid transparent;
 
         animation: loading 1s infinite linear;
@@ -40,8 +40,8 @@
 
 // Navigation bar
 .nav {
-    background-color: var(--background-color);
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--st-background-color);
+    border-bottom: 1px solid var(--st-border-color);
 
     width: 100%;
     display: flex;
@@ -55,31 +55,31 @@
     }
 
     &__item {
-        color: var(--text-color);
-        margin-left: var(--spacing);
+        color: var(--st-text-color);
+        margin-left: var(--st-spacing);
         text-decoration: none;
         font-weight: bold;
 
         &.router-link-exact-active {
-            color: var(--primary-color);
+            color: var(--st-primary-color);
         }
     }
 }
 
 // Tag
 .tag {
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--st-primary-color);
+    color: var(--st-primary-color);
+    border-radius: var(--st-border-radius);
     padding: .5em;
     font-size: .7em;
     text-transform: uppercase;
-    margin-right: calc(var(--spacing)/2);
-    margin-bottom: var(--spacing);
+    margin-right: calc(var(--st-spacing)/2);
+    margin-bottom: var(--st-spacing);
 
     &.empty {
-        border: 1px solid var(--text-color);
-        color: var(--text-color);
+        border: 1px solid var(--st-text-color);
+        color: var(--st-text-color);
         opacity: .6;
     }
 }
@@ -93,61 +93,61 @@
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    padding: var(--spacing);
+    padding: var(--st-spacing);
     word-wrap: break-word;
 }
 
 .disabled {
-    color: var(--border-color);
+    color: var(--st-border-color);
     cursor: not-allowed;
 }
 
 // Standard elements
 select {
-    background: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
+    background: var(--st-background-color);
+    border: 1px solid var(--st-border-color);
+    border-radius: var(--st-border-radius);
+    color: var(--st-text-color);
     padding: .5em;
 }
 
 input[type=text], input[type=email] {
-    padding: var(--spacing);
+    padding: var(--st-spacing);
     background: transparent;
     border: none;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
+    border: 1px solid var(--st-border-color);
+    border-radius: var(--st-border-radius);
+    color: var(--st-text-color);
 }
 
 textarea {
-    padding: var(--spacing);
+    padding: var(--st-spacing);
     background: transparent;
     border: none;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    color: var(--text-color);
+    border: 1px solid var(--st-border-color);
+    border-radius: var(--st-border-radius);
+    color: var(--st-text-color);
     font-family: inherit;
     resize: none;
 }
 
 button {
     padding: .5em;
-    background: var(--primary-color);
+    background: var(--st-primary-color);
     font-weight: bold;
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--st-border-radius);
     cursor: pointer;
 
     &[secondary] {
-        background: var(--background-color);
-        color: var(--text-color);
-        border: 1px solid var(--border-color);
+        background: var(--st-background-color);
+        color: var(--st-text-color);
+        border: 1px solid var(--st-border-color);
         font-weight: 400;
     }
 }
 
 section {
-    padding: calc(var(--spacing) * 2) 0;
+    padding: calc(var(--st-spacing) * 2) 0;
 }

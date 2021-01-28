@@ -4,10 +4,10 @@
         <b @click="openModal" class="modal__open-button" v-if="type == 'span'">{{ label }}</b>
         <div class="modal__popup" v-if="modalIsOpen" @click="closeIfOutside">
             <div class="wrapper">
-                <card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
+                <base-card class="modal__popup__card" @mouseover="mouseOverCard = true" @mouseleave="mouseOverCard = false">
                     <slot></slot>
                     <button @click="closeModal" class="modal__popup__card__close-button" secondary>Close</button>
-                </card>
+                </base-card>
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from '@/components/Card.vue'
+import BaseCard from '@/components/BaseCard.vue'
 
 @Options({
     props: {
@@ -31,7 +31,7 @@ import Card from '@/components/Card.vue'
         }
     },
     components: {
-        Card
+        BaseCard
     }
 })
 export default class Modal extends Vue {
@@ -82,7 +82,7 @@ export default class Modal extends Vue {
 
         &__card {
             &__close-button {
-                margin-top: var(--spacing);
+                margin-top: var(--st-spacing);
             }
         }
     }

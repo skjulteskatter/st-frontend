@@ -56,13 +56,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from  '@/components/Card.vue';
+import BaseCard from  '@/components/BaseCard.vue';
 import Modal from '@/components/Modal.vue';
 import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
-        Card,
+        BaseCard,
         Modal,
     },
     props: {
@@ -152,7 +152,7 @@ export default class SongDetails extends Vue {
 }
 
 .biography-wrapper {
-    color: var(--text-color);
+    color: var(--st-text-color);
 
     img {
         width: 100%;
@@ -160,11 +160,11 @@ export default class SongDetails extends Vue {
 }
 
 .song-details {
-    --half-spacing: calc(var(--spacing) * 0.5);
+    --half-spacing: calc(var(--st-spacing) * 0.5);
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: var(--spacing);
+    gap: var(--st-spacing);
 
     &__lyrics {
         grid-column: span 4;
@@ -176,7 +176,7 @@ export default class SongDetails extends Vue {
         &__video {
             &__link {
                 text-decoration: none;
-                color: var(--primary-color);
+                color: var(--st-primary-color);
             }
         }
 
@@ -184,7 +184,7 @@ export default class SongDetails extends Vue {
             .files__container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: var(--spacing);
+                gap: var(--st-spacing);
             }
         }
 
@@ -198,7 +198,7 @@ export default class SongDetails extends Vue {
 
         &__credits {
             display: inline-block;
-            color: var(--primary-color);
+            color: var(--st-primary-color);
 
             span {
                 display: inline-block;
@@ -208,7 +208,7 @@ export default class SongDetails extends Vue {
 
         .card__content {
             h2 {
-                margin: 0 0 var(--spacing);
+                margin: 0 0 var(--st-spacing);
             }
 
             .tag {
