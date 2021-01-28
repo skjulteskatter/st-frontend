@@ -1,5 +1,10 @@
 <template>
-	<button class="button" :class="[`button-${theme}`, { 'button-loading': loading }]" @click="action" :disabled="loading">
+	<button
+		class="button"
+		:class="[`button-${theme}`, { 'button-loading': loading }]"
+		@click="action"
+		:disabled="loading"
+	>
 		<span class="button__label-loading" v-if="loading">{{ loadingLabel }}</span>
 		<span class="spinner" v-if="loading"></span>
 		<span class="button__label" v-else>{{ label }}</span>
@@ -13,59 +18,80 @@ import { Options, Vue } from "vue-class-component";
 	props: {
 		label: {
 			type: String,
-			default: 'Button'
+			default: "Button",
 		},
 		theme: {
 			type: String,
-			default: 'primary',
+			default: "primary",
 			validator: (value: string) => {
-				return ['primary','secondary','success','error','warning'].indexOf(value) > -1
-			}
+				return (
+					["primary", "secondary", "success", "error", "warning"].indexOf(
+						value
+					) > -1
+				);
+			},
 		},
 		action: {
 			type: Function,
-			default: undefined
+			default: undefined,
 		},
 		loading: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 		loadingLabel: {
 			type: String,
-			default: 'Loading'
+			default: "Loading",
 		},
 	},
 })
 export default class BaseButton extends Vue {
-	public loading = false
+	public loading = false;
 
-	public get isLoading(){
-		return this.loading
+	public get isLoading() {
+		return this.loading;
+	}
+
+	public get theme(): string {
+		return this.theme;
+	}
+
+	public get label(): string {
+		return this.label;
+	}
+
+	public get loadingLabel(): string {
+		return this.loadingLabel;
+	}
+
+	public get action(): Function {
+		return this.action;
 	}
 }
 </script>
 
 <style lang="scss" scoped>
 .button {
-	padding: calc(var(--st-spacing) * .5) var(--st-spacing);
+	padding: calc(var(--st-spacing) * 0.5) var(--st-spacing);
 	border-radius: var(--st-border-radius);
 	color: white;
 	cursor: pointer;
 	display: flex;
 	justify-content: center;
+	display: inline-block;
 
 	&-loading {
-		animation: buttonLoading .5s ease infinite alternate;
+		animation: buttonLoading 0.5s ease infinite alternate;
 		display: flex;
 		align-items: center;
-		
+
 		.spinner {
 			--st-loader-width: 2px;
 			display: inline-block;
 			width: 10px;
 			height: 10px;
 			border-radius: 100%;
-			margin-left: calc(var(--st-spacing) * .5);
+			margin-left: calc(var(--st-spacing) * 0.5);
 
 			border-top: var(--st-loader-width) solid currentColor;
 			border-right: var(--st-loader-width) solid currentColor;
