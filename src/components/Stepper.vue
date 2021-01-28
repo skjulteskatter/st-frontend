@@ -15,16 +15,17 @@ import { Options, Vue } from "vue-class-component";
     props: {
         steps: {
             type: Array,
-            default: []
+            default: () => undefined,
         },
         callback: {
             type: Function,
-            default: (() => null)
+            default: () => undefined,
         }
     }
 })
 export default class Stepper extends Vue {
-    public steps?: Step[];
+    public steps: Step[] = [];
+    public callback: Function = () => undefined;
 }
 </script>
 
