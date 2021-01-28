@@ -3,7 +3,7 @@
         <div class="loader" v-if="loading"></div>
         <div v-if="!loading">
             <div class="song-list__header" v-if="!loading">
-                <h1>Select number</h1>
+                <h1>Select song</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
                     <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
                 </div>
