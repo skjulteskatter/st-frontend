@@ -30,6 +30,7 @@ interface MediaFile {
     language: Language;
     name: string;
     directUrl: string;
+    contributors: Contributor[];
 }
 
 interface Contributor {
