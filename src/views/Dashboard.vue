@@ -218,6 +218,14 @@ export default class Dashboard extends Vue {
     &__title {
         margin: 0;
     }
+
+    &__save-button {
+        align-self: flex-end;
+
+        @media screen and (max-width: 600px) {
+            align-self: initial;
+        }
+    }
 }
 
 .api-token {
