@@ -46,3 +46,12 @@
         width: 100%;
     }
 }
+
+@keyframes buttonLoading {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: .7;
+    }
+}

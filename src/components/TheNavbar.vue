@@ -2,13 +2,13 @@
 	<nav class="nav" @click="toggleBurgerMenu">
         <div class="container nav__wrapper">
             <img class="nav__logo" :src="logo" @click="$router.push('/')"/>
-			<button secondary v-if="isMobileDevice">Menu</button>
+			<base-button theme='secondary' v-if="isMobileDevice" label="Menu"></base-button>
             <div class="nav__links" :class="{'nav__links-active': openBurgerMenu}">
 				<router-link class="nav__item" :to="{name: 'main'}">{{ $t('common.dashboard') }}</router-link>
 				<router-link class="nav__item" :to="{name: 'collections'}">{{ $t('common.songs') }}</router-link>
 				<router-link class="nav__item" :to="{name: 'store'}">{{ $t('common.store') }}</router-link>
 				<router-link v-if="isAdmin" class="nav__item" :to="{name: 'admin'}">Admin</router-link>
-				<settings class="nav__item settings"></settings>
+				<options-component class="nav__item settings"></options-component>
 			</div>
         </div>
     </nav>
@@ -16,11 +16,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component"
-import Settings from '@/components/Options.vue';
+import OptionsComponent from '@/components/OptionsComponent.vue';
+import BaseButton from '@/components/BaseButton.vue'
 
 @Options({
 	components: {
-		Settings,
+		OptionsComponent,
+		BaseButton
 	},
 	computed: {
 		isMobileDevice(){

@@ -27,7 +27,7 @@
                 <h2 class="user-settings__title">{{ $t('common.settings') }}</h2>
                 <div class="user-settings__fields">
                     <div class="user-settings__theme field">
-                        <label for="">{{ $t('common.theme') }}</label>
+                        <label for="theme-mode">{{ $t('common.theme') }}</label>
                         <hr>
                         <select name="theme-mode" id="theme-mode" v-model="theme">
                             <option :value="t" v-for="t in themes.keys" :key="t">{{t}}</option>
@@ -47,13 +47,13 @@
                         </select>
                     </div>
                 </div>
-                <button class="user-settings__save-button" @click="save">{{$t('common.save')}}</button>
+                <base-button :loading="loadingSave" :label="$t('common.save')" :action="save" class="user-settings__save-button"></base-button>
             </div>
         </base-card>
         
         <base-card class="api-token" border secondary>
             <h3>API token</h3>
-            <button @click="showApiToken = true" class="api-token__button" secondary>Show API token</button>
+            <base-button class="api-token__button" label="Toggle API token" theme="secondary" :action="() => {showApiToken = !showApiToken}"></base-button>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
         </base-card>
     </div>
@@ -65,10 +65,12 @@ import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import themes, { Themes } from '@/classes/themes';
 import BaseCard from '@/components/BaseCard.vue'
+import BaseButton from '@/components/BaseButton.vue'
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
     }
 })
 export default class Dashboard extends Vue {
@@ -81,6 +83,8 @@ export default class Dashboard extends Vue {
     public theme = localStorage.getItem('theme') ?? 'dark';
     public token = localStorage.getItem('id_token');
 
+    public loadingSave = false;
+
     public mounted() {
         this.selectedLanguage = this.languages.find(l => l.key == this.user.settings?.languageKey) ?? this.languages.find(l => l.key == "no") ?? {} as Language;
     }
@@ -90,8 +94,13 @@ export default class Dashboard extends Vue {
     }
 
     public save() {
-        this.themes.setTheme(this.theme);
-        this.store.dispatch('saveSettings', this.user.settings);
+        this.loadingSave = true;
+        setTimeout(() => {
+            this.themes.setTheme(this.theme);
+            this.store.dispatch('saveSettings', this.user.settings);
+
+            this.loadingSave = false;
+        }, 500)
     }
 
     public setLanguage() {
@@ -128,8 +137,6 @@ export default class Dashboard extends Vue {
     margin-bottom: var(--st-spacing);
 
     &__subscriptions {
-        // border-left: 1px solid var(--st-primary-color);
-        // padding-left: var(--st-spacing);
 
         &__cards {
             display: flex;
@@ -188,10 +195,6 @@ export default class Dashboard extends Vue {
                 border-top: 1px solid var(--st-border-color);
                 width: 100%;
             }
-
-            // &:not(:last-child) {
-            //     // border-bottom: 1px solid var(--st-border-color);
-            // }
         }
     }
 
@@ -220,6 +223,10 @@ export default class Dashboard extends Vue {
 .api-token {
     h3 {
         margin: 0 var(--st-spacing) 0 0;
+        display: inline-block;
+    }
+
+    &__button {
         display: inline-block;
     }
 }

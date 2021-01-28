@@ -2,12 +2,24 @@
     <div class="store">
         <div class="store__title">
             <h1>{{ $t('common.store') }}</h1>    
-            <button @click="portal()" v-if="user.subscriptions.length" secondary>{{ `${$t('common.manage')} ${$t('common.subscriptions').toLowerCase()}` }}</button>
+            <base-button 
+                v-if="user.subscriptions.length" 
+                :action="portal" 
+                theme='secondary' 
+                :label="`${$t('common.manage')} ${$t('common.subscriptions').toLowerCase()}`"
+                :loading="loading"
+            ></base-button>
         </div>
         <div class="store__items">
             <base-card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>
                 <h3>{{product.name.no}}</h3>
-                <button @click="checkout(product)" v-if="!productIds.includes(product.id)">{{ $t('common.buy') }}</button>
+                <base-button 
+                    class="store__items__item__button"
+                    v-if="!productIds.includes(product.id)"
+                    :action="() => checkout(product)" 
+                    :label="$t('common.buy')"
+                    :loading="loading"
+                ></base-button>
                 <label style="opacity: .6" v-else>{{ $t('store.alreadyown') }}</label>
             </base-card>
         </div>
@@ -15,19 +27,22 @@
 </template>
 
 <script lang="ts">
-import { stripeKey } from "@/store/stripe";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import BaseCard from '@/components/BaseCard.vue';
+import { stripeKey } from "@/store/stripe";
 import { sessionKey } from "@/store";
+import BaseCard from '@/components/BaseCard.vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 @Options({
     components: {
-        BaseCard
+        BaseCard,
+        BaseButton
     }
 })
 export default class Stripe extends Vue{
     private store = useStore(stripeKey);
+    public loading = false;
 
     public mounted() {
         if (!this.store.state.initialized) {
@@ -36,17 +51,21 @@ export default class Stripe extends Vue{
     }
 
     public checkout(product: Product) {
+        this.loading = true;
         const price = product.prices.find(p => p.type == 'month');
 
         if (price) {
             this.store.dispatch('startSession', price.id);
+            this.loading = false;
         }
     }
 
     public portal() {
+        this.loading = true;
         this.store.dispatch('getPortal').then(result => {
             window.location = result;
         });
+        this.loading = false;
     }
 
     public get products() {
@@ -81,12 +100,16 @@ export default class Stripe extends Vue{
 
         &__item {
             display: flex;
-            justify-content: space-between;
+
+            &__button {
+                align-self: flex-end;
+            }
 
             .card__content {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+                align-items: flex-start;
                 width: 100%;
 
                 h3 {
