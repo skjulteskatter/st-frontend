@@ -25,18 +25,6 @@ export default class App extends Vue {
 <style lang="scss">
 @import '@/style/main';
 
-*,
-*:before,
-*:after {
-    box-sizing: border-box;
-    outline-color: var(--st-primary-color);
-}
-
-body {
-    margin: 0;
-    background-color: var(--st-secondary-background-color);
-}
-
 #app {
     font-family: Lato, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

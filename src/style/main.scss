@@ -7,4 +7,11 @@
 *:before,
 *:after {
 	box-sizing: border-box;
+	outline-color: var(--st-primary-color);
+}
+
+body {
+	margin: 0;
+    background-color: var(--st-secondary-background-color);
+	overflow-y: overlay;
 }

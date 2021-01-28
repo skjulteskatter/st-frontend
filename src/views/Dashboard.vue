@@ -37,7 +37,7 @@
                         <label for="theme-color">{{ `${$t('common.theme')} ${$t('common.color').toLowerCase()}` }}</label>
                         <hr>
                         <input id="theme-color" type="color" v-model="themeColor" @input="setThemeColor()">
-                        <button @click="setThemeColor('#5372e2')" secondary>Reset</button>
+                        <base-button :action="() => { setThemeColor('#5372e2') }" theme="secondary" label="Reset"></base-button>
                     </div>
                     <div class="user-settings__language field">
                         <label for="language">{{ $t('common.language') }}</label>
@@ -52,8 +52,15 @@
         </base-card>
         
         <base-card class="api-token" border secondary>
-            <h3>API token</h3>
-            <base-button class="api-token__button" label="Toggle API token" theme="secondary" :action="() => {showApiToken = !showApiToken}"></base-button>
+            <div class="api-token__header">
+                <h3 class="api-token__title">API token</h3>
+                <base-button 
+                    class="api-token__button" 
+                    label="Toggle API token" 
+                    theme="secondary" 
+                    :action="() => {showApiToken = !showApiToken}"
+                ></base-button>
+            </div>
             <p v-if="showApiToken" style="font-size: .8em">{{ token }}</p>
         </base-card>
     </div>
@@ -229,13 +236,14 @@ export default class Dashboard extends Vue {
 }
 
 .api-token {
-    h3 {
-        margin: 0 var(--st-spacing) 0 0;
-        display: inline-block;
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: var(--st-spacing);
     }
 
-    &__button {
-        display: inline-block;
+    &__title {
+        margin: 0;
     }
 }
 </style>
