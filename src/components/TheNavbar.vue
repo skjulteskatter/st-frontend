@@ -18,16 +18,13 @@
 import { Options, Vue } from "vue-class-component"
 import OptionsComponent from '@/components/OptionsComponent.vue';
 import BaseButton from '@/components/BaseButton.vue'
+import { useStore } from "vuex";
+import { sessionKey } from "@/store";
 
 @Options({
 	components: {
 		OptionsComponent,
 		BaseButton
-	},
-	computed: {
-		isMobileDevice(){
-			return window.orientation != undefined
-		}
 	}
 })
 export default class TheNavbar extends Vue {
@@ -40,6 +37,14 @@ export default class TheNavbar extends Vue {
 
 	public toggleBurgerMenu(){
 		this.openBurgerMenu = !this.openBurgerMenu
+	}
+
+	public get isAdmin() {
+		return useStore(sessionKey).getters.isAdmin;
+	}
+
+	public get isMobileDevice(){
+		return window.orientation != undefined
 	}
 }
 </script>
