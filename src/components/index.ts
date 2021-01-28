@@ -2,7 +2,7 @@ import BaseCard from './BaseCard.vue';
 import SongDetails from './SongDetails.vue';
 import LyricsSettings from './LyricsSettings.vue';
 import Modal from './Modal.vue';
-import Options from './Options.vue';
+import OptionsComponent from './OptionsComponent.vue';
 import Songbooks from './Songbooks.vue';
 import TransposedLyricsViewer from './TransposedLyricsViewer.vue';
 
@@ -11,7 +11,7 @@ export {
     SongDetails,
     BaseCard,
     Modal,
-    Options,
+    OptionsComponent,
     Songbooks,
     TransposedLyricsViewer,
 }
