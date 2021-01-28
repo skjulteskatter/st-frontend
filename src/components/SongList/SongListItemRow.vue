@@ -1,5 +1,7 @@
 <template>
-	<base-card class="song-list__item-row" @click="$emit('onClick')"></base-card>
+	<base-card class="song-list__item-row" @click="$emit('onClick')" border>
+		<b>Example song</b>
+	</base-card>
 </template>
 
 <script lang="ts">
@@ -19,5 +21,7 @@ export default class SongListItemRow extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.song-list__item-row {
+	width: 100%;
+}
 </style>
