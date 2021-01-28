@@ -19,9 +19,9 @@ export class Themes {
             },
             light: {
                 background: '#FFFFFF',
-                secondaryBackground: '#EAEAEA',
+                secondaryBackground: '#F5F6FA',
                 text: '#333333',
-                borderColor: '#D0D0D0'
+                borderColor: '#E6E9F2'
             }
         }
 
@@ -63,7 +63,7 @@ export class Themes {
     }
 
     public get default() {
-        return '#5372e2';
+        return '#6291EB';
     }
 }
 
