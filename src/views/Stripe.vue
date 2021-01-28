@@ -7,8 +7,8 @@
         <div class="store__items">
             <base-card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>
                 <h3>{{product.name.no}}</h3>
-                <button @click="checkout(product)" v-if="!productIds.includes(product.id)">Buy</button>
-                <label style="opacity: .6" v-else>You already own this product.</label>
+                <button @click="checkout(product)" v-if="!productIds.includes(product.id)">{{ $t('common.buy') }}</button>
+                <label style="opacity: .6" v-else>{{ $t('store.alreadyown') }}</label>
             </base-card>
         </div>
     </div>
@@ -74,6 +74,10 @@ export default class Stripe extends Vue{
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: var(--st-spacing);
+
+        @media screen and (max-width: 600px) {
+            grid-template-columns: 1fr;
+        }
 
         &__item {
             display: flex;
