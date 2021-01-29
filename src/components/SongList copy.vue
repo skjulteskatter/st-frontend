@@ -3,7 +3,7 @@
         <div class="loader" v-if="loading"></div>
         <div v-if="!loading && filteredSongs.length">
             <div class="song-list__header">
-                <h1>Select song</h1>
+                <h1>{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
                     <input
                         type="text"
