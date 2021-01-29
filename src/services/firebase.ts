@@ -15,7 +15,14 @@ const providers: {
 } = {
     google: new fb.auth.GoogleAuthProvider(),
     facebook: new fb.auth.FacebookAuthProvider(),
-    twitter: new fb.auth.TwitterAuthProvider()
+    twitter: new fb.auth.TwitterAuthProvider(),
+    microsoft: (() => {
+        const p = new fb.auth.OAuthProvider('microsoft.com');
+        p.setCustomParameters({
+            prompt: 'consent'
+        });
+        return p;
+    })(),
 };
 
 class FirebaseService {
@@ -42,6 +49,12 @@ class FirebaseService {
         user = fb.auth().currentUser;
 
         if (user == null) throw new Error('User not validated...')
+
+        if (user.email) {
+            // fb.auth().sendSignInLinkToEmail(user.email, {
+            //     url
+            // });
+        }
 
         return await user.getIdToken();
     }
@@ -81,7 +94,7 @@ class FirebaseService {
         return user.user.getIdToken();
     }
 
-    public init(): Promise<string> {
+    public async init(): Promise<string> {
         if (fb.auth == null) {
             throw new Error("Firebase didn't initialize");
         }
