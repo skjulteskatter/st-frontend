@@ -1,17 +1,17 @@
 <template>
     <div>
-        <router-view/>
+        <router-view />
     </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import DashboardLayout from '@/layout/DashboardLayout.vue';
+import { Options, Vue } from "vue-class-component";
+import DashboardLayout from "@/layout/DashboardLayout.vue";
 
 @Options({
     components: {
         DashboardLayout,
-    }
+    },
 })
 export default class App extends Vue {
     public onLyrics = false;
@@ -23,10 +23,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/style/main';
+@import "@/style/main";
 
 #app {
-    font-family: Lato, Helvetica, Arial, sans-serif;
+    font-family: inherit;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: var(--st-text-color);
