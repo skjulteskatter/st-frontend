@@ -1,8 +1,8 @@
 <template>
     <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
-        <div v-if="!loading">
-            <div class="song-list__header" v-if="!loading">
+        <div v-if="!loading && filteredSongs.length">
+            <div class="song-list__header">
                 <h1>Select song</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
                     <input
@@ -13,47 +13,18 @@
                     />
                 </div>
             </div>
-            <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
-                <span
-                    class="song-list__item"
-                    :class="{
-                        selected: selected.number == item.number,
-                        disabled: disabled.find((s) => s.number == item.number),
-                        clickable: !disabled.find(
-                            (s) => s.number == item.number
-                        ),
-                    }"
-                    v-for="item in songs"
-                    :key="item.id"
-                    @click="selectSong(item)"
-                >
-                    {{ item.number }}
-                </span>
+
+            <div class="song-list__list song-list__list-rows">
+                <song-list-item-row
+                    v-for="song in filteredSongs.slice(0, 50)"
+                    :key="song.id"
+                    :song="song"
+                    @click="selectSong(song)"
+                ></song-list-item-row>
             </div>
-            <div v-else>
-                <div class="search__container">
-                    <base-card
-                        style="cursor: pointer"
-                        class="clickable"
-                        v-for="song in filteredSongs.slice(0, 90)"
-                        :key="song.id"
-                        @click="selectSong(song)"
-                        border
-                    >
-                        <h2>{{ song.number }}</h2>
-                        <h4 v-for="author in song.authors" :key="author.id">
-                            {{ author.name }}
-                        </h4>
-                        <h4
-                            v-for="composer in song.composers"
-                            :key="composer.id"
-                        >
-                            {{ composer.name }}
-                        </h4>
-                        <h3>{{ song.name[languageKey] }}</h3>
-                    </base-card>
-                </div>
-            </div>
+            <div class="song-list__list song-list__list-cards"></div>
+            <div class="song-list__list song-list__list-numbers"></div>
+
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
         </div>
     </div>
@@ -65,10 +36,12 @@ import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
+import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
 
 @Options({
     components: {
         BaseCard,
+        SongListItemRow,
     },
 })
 export default class SongList extends Vue {
@@ -77,6 +50,7 @@ export default class SongList extends Vue {
     public searchQuery = "";
     public store = useStore(songKey);
     public loading = false;
+    public songListType = "";
 
     public async mounted() {
         if (!this.collection.id) {
@@ -139,11 +113,11 @@ export default class SongList extends Vue {
     }
 
     public get collection(): Collection {
-        return useStore(songKey).state.collection;
+        return this.songStore.state.collection;
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
+        return this.userStore.getters.languageKey;
     }
 
     public get selected() {
@@ -169,7 +143,7 @@ export default class SongList extends Vue {
     }
 
     public get songs(): Song[] {
-        return useStore(songKey).getters.songs ?? [];
+        return this.songStore.getters.songs ?? [];
     }
 
     public get disabled() {
@@ -190,16 +164,23 @@ export default class SongList extends Vue {
 }
 
 .song-list {
+    --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
 
     &__wrapper {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
-        gap: calc(var(--st-spacing) * 0.5);
+        gap: var(--st-half-spacing);
     }
 
-    .song-list__header {
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-half-spacing);
+    }
+
+    &__header {
         width: 100%;
         display: flex;
         justify-content: space-between;

@@ -28,9 +28,9 @@
 
 }
 
-// Hover animation
-.hover {
+.clickable {
     transition: transform .2s ease;
+    cursor: pointer;
 
     &:hover {
         transform: translateY(-5px);

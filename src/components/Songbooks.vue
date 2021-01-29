@@ -4,8 +4,11 @@
         <base-card
             v-for="songbook in collections"
             :key="songbook.key"
-            class="songbooks__book hover"
-            :class="{selected: selected.id == songbook.id, disabled: !available.find(c => c.id == songbook.id)}"
+            class="songbooks__book clickable"
+            :class="{
+                selected: selected.id == songbook.id,
+                disabled: !available.find((c) => c.id == songbook.id),
+            }"
             :image="songbook.image"
             @click="selectCollection(songbook)"
             border
@@ -17,14 +20,14 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from 'vuex';
-import { sessionKey, songKey } from '@/store';
-import BaseCard from '@/components/BaseCard.vue';
+import { useStore } from "vuex";
+import { sessionKey, songKey } from "@/store";
+import BaseCard from "@/components/BaseCard.vue";
 
 @Options({
     components: {
         BaseCard,
-    }
+    },
 })
 export default class Songbooks extends Vue {
     private songStore = useStore(songKey);
@@ -34,16 +37,16 @@ export default class Songbooks extends Vue {
     }
 
     public selectCollection(collection: Collection) {
-        if (!this.available.find(c => c.id == collection.id)) return;
-        this.songStore.commit('selectCollection', collection);
+        if (!this.available.find((c) => c.id == collection.id)) return;
+        this.songStore.commit("selectCollection", collection);
         this.$router.push({
-            name: 'song-list',
+            name: "song-list",
             params: {
-                'collection': collection.key,
-            }
+                collection: collection.key,
+            },
         });
     }
-    
+
     public get collections() {
         return useStore(songKey).getters.collections ?? [];
     }
