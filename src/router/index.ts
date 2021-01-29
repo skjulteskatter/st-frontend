@@ -12,6 +12,7 @@ const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
+const CreateUser = () => import(/* webpackChunkName: 'createUser' */ '../views/CreateUser.vue');
 
 // const HomeLayout = () => import(/* webpackChunkName: 'homeLayout' */ '../layout/HomeLayout.vue');
 // const LandingPage = () => import(/* webpackChunkName: 'landingPage' */ '../views/home/LandingPage.vue');
@@ -73,6 +74,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/login',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/create',
+        name: 'create-user',
+        component: CreateUser,
     },
     {
         path: '/lyrics',
