@@ -8,8 +8,7 @@ import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
 
-@Options({
-})
+@Options({})
 export default class SongSelector extends Vue {
     // private songStore = useStore(songKey);
     // public steps: Step[] = [];
@@ -27,7 +26,7 @@ export default class SongSelector extends Vue {
         return useStore(songKey).getters.collection;
     }
     public get selectedSong() {
-        return useStore(songKey).getters.song
+        return useStore(songKey).getters.song;
     }
     public get language() {
         return useStore(sessionKey).getters.currentUser?.settings?.languageKey;
@@ -36,7 +35,4 @@ export default class SongSelector extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.view-song {
-    padding-top: var(--st-spacing);
-}
 </style>

@@ -1,56 +1,60 @@
 <template>
     <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
-        <div v-if="!loading">
-            <div class="song-list__header" v-if="!loading">
-                <h1>Select song</h1>
+        <div v-if="!loading && filteredSongs.length">
+            <div class="song-list__header">
+                <h1>{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
-                    <input type="text" class="song-list__search" placeholder="Search..." v-model="searchQuery">
+                    <input
+                        type="text"
+                        class="song-list__search"
+                        placeholder="Search..."
+                        v-model="searchQuery"
+                    />
                 </div>
             </div>
-            <div v-if="!advancedSearch && !loading" class="song-list__wrapper">
-                <span class="song-list__item" :class="{selected: selected.number == item.number, disabled: disabled.find(s => s.number == item.number), hover: !disabled.find(s => s.number == item.number)}" v-for="item in songs" :key="item.id" @click="selectSong(item)">
-                    {{ item.number }}
-                </span>
+
+            <div class="song-list__list song-list__list-rows">
+                <song-list-item-row
+                    v-for="song in filteredSongs.slice(0, 50)"
+                    :key="song.id"
+                    :song="song"
+                    @click="selectSong(song)"
+                ></song-list-item-row>
             </div>
-            <div v-else>
-                <div class="search__container">
-                    <base-card style="cursor: pointer" class="hover" v-for="song in filteredSongs.slice(0, 90)" :key="song.id" @click="selectSong(song)" border>
-                        <h2>{{song.number}}</h2>
-                        <h4 v-for="author in song.authors" :key="author.id">{{author.name}}</h4>
-                        <h4 v-for="composer in song.composers" :key="composer.id">{{composer.name}}</h4>
-                        <h3>{{song.name[languageKey]}}</h3>
-                    </base-card>
-                </div>
-            </div>
+            <div class="song-list__list song-list__list-cards"></div>
+            <div class="song-list__list song-list__list-numbers"></div>
+
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { useStore } from 'vuex';
-import { sessionKey, songKey } from '@/store';
-import { Song } from '@/classes';
-import BaseCard from '@/components/BaseCard.vue'
+import { Options, Vue } from "vue-class-component";
+import { useStore } from "vuex";
+import { sessionKey, songKey } from "@/store";
+import { Song } from "@/classes";
+import BaseCard from "@/components/BaseCard.vue";
+import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
 
 @Options({
     components: {
-        BaseCard
+        BaseCard,
+        SongListItemRow,
     },
 })
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
-    public searchQuery = '';
+    public searchQuery = "";
     public store = useStore(songKey);
     public loading = false;
+    public songListType = "";
 
     public async mounted() {
-
         if (!this.collection.id) {
-            await this.store.dispatch('load', {
+            await this.store.dispatch("load", {
                 collectionKey: this.$route.params.collection,
                 languageKey: this.languageKey,
             });
@@ -58,13 +62,16 @@ export default class SongList extends Vue {
 
         if (this.allLyrics.length == 0) {
             this.loading = true;
-            await this.store.dispatch('getAllLyrics', this.userStore.state.currentUser.settings?.languageKey ?? "no");
+            await this.store.dispatch(
+                "getAllLyrics",
+                this.userStore.state.currentUser.settings?.languageKey ?? "no"
+            );
             this.loading = false;
         }
     }
 
     public get advancedSearch() {
-        return this.searchQuery !== '';
+        return this.searchQuery !== "";
     }
 
     public get allLyrics() {
@@ -72,21 +79,45 @@ export default class SongList extends Vue {
     }
 
     public get filteredNumbers() {
-        const numbers = this.songs.filter(s => s.number.toString() == this.searchQuery || s.rawContributorNames.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())).map(s => s.number);
+        const numbers = this.songs
+            .filter(
+                (s) =>
+                    s.number.toString() == this.searchQuery ||
+                    s.rawContributorNames.includes(
+                        this.searchQuery
+                            .replace(/[^0-9a-zA-Z]/g, "")
+                            .toLowerCase()
+                    )
+            )
+            .map((s) => s.number);
 
-        return this.allLyrics?.filter(l => numbers.includes(l.number) || l.rawContent.includes(this.searchQuery.replace(/[^0-9a-zA-Z]/g, '').toLowerCase())).map(l => l.number) ?? [];
+        return (
+            this.allLyrics
+                ?.filter(
+                    (l) =>
+                        numbers.includes(l.number) ||
+                        l.rawContent.includes(
+                            this.searchQuery
+                                .replace(/[^0-9a-zA-Z]/g, "")
+                                .toLowerCase()
+                        )
+                )
+                .map((l) => l.number) ?? []
+        );
     }
 
     public get filteredSongs() {
-        return this.songs.filter(s => this.filteredNumbers.includes(s.number));
-    }
-    
-    public get collection(): Collection {
-        return useStore(songKey).state.collection;
+        return this.songs.filter((s) =>
+            this.filteredNumbers.includes(s.number)
+        );
     }
 
-    public get languageKey () {
-        return useStore(sessionKey).getters.languageKey;
+    public get collection(): Collection {
+        return this.songStore.state.collection;
+    }
+
+    public get languageKey() {
+        return this.userStore.getters.languageKey;
     }
 
     public get selected() {
@@ -94,33 +125,36 @@ export default class SongList extends Vue {
     }
 
     public async selectSong(song: Song) {
-        if (this.disabled.find(s => s.number == song.number)) return;
-        this.songStore.commit('selectSong', song);
+        if (this.disabled.find((s) => s.number == song.number)) return;
+        this.songStore.commit("selectSong", song);
         this.loading = true;
-        await this.songStore.dispatch('getLyrics', this.userStore.getters.currentUser?.settings?.languageKey ?? "en");
+        await this.songStore.dispatch(
+            "getLyrics",
+            this.userStore.getters.currentUser?.settings?.languageKey ?? "en"
+        );
         this.$router.push({
-            name: 'song',
+            name: "song",
             params: {
-                'collection': song.collection.key,
-                'number': song.number,
-            }
+                collection: song.collection.key,
+                number: song.number,
+            },
         });
         this.loading = false;
     }
-    
+
     public get songs(): Song[] {
-        return useStore(songKey).getters.songs ?? [];
+        return this.songStore.getters.songs ?? [];
     }
 
     public get disabled() {
-        return this.songs.filter(s => !s.name[this.languageKey]);
+        return this.songs.filter((s) => !s.name[this.languageKey]);
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .warning {
-    opacity: .4;
+    opacity: 0.4;
 }
 
 .search__container {
@@ -130,16 +164,23 @@ export default class SongList extends Vue {
 }
 
 .song-list {
-    animation: slideInFromBottom .3s ease;
+    --st-half-spacing: calc(var(--st-spacing) * 0.5);
+    animation: slideInFromBottom 0.3s ease;
 
     &__wrapper {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
-        gap: calc(var(--st-spacing) * 0.5);
+        gap: var(--st-half-spacing);
     }
 
-    .song-list__header {
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-half-spacing);
+    }
+
+    &__header {
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -163,7 +204,7 @@ export default class SongList extends Vue {
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
         &.selected {
             border: 2px solid var(--st-primary-color);
         }
