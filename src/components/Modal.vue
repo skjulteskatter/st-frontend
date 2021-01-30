@@ -38,12 +38,10 @@ import BaseButton from "@/components/BaseButton.vue";
 	props: {
 		label: {
 			type: String,
-			default: "",
 			required: true,
 		},
 		type: {
 			type: String,
-			default: "button",
 			validator: (value: string) => ["button", "span"].indexOf(value) != -1,
 		},
 	},
@@ -55,14 +53,8 @@ import BaseButton from "@/components/BaseButton.vue";
 export default class Modal extends Vue {
 	public modalIsOpen = false;
 	public mouseOverCard = false;
-
-	public get label(): string {
-		return this.label;
-	}
-
-	public get type(): string {
-		return this.type;
-	}
+	public type = 'button';
+	public label = '';
 
 	public closeIfOutside() {
 		if (!this.mouseOverCard) this.closeModal();
