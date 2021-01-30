@@ -1,7 +1,7 @@
 <template>
     <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
-        <div v-if="!loading && filteredSongs.length">
+        <div v-if="!loading">
             <div class="song-list__header">
                 <h1>{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            <div class="song-list__list song-list__list-rows">
+            <div class="song-list__list song-list__list-rows" v-if="filteredSongs.length">
                 <song-list-item-row
                     v-for="song in filteredSongs.slice(0, 50)"
                     :key="song.id"
