@@ -133,6 +133,15 @@ export default class LyricsSettings extends Vue {
                 this.previous();
             }
         });
+
+        window.addEventListener('storage', (event) => {
+            if (event.key == 'lyrics_next') {
+                this.next();
+            }
+            if (event.key == 'lyrics_previous') {
+                this.previous();
+            }
+        });
     }
 
     public setLineSize(number: number) {

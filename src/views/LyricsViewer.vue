@@ -73,6 +73,23 @@ export default class LyricsViewer extends Vue {
                 }
             }
         });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key == "ArrowRight") {
+                this.next();
+            }
+            if (event.key == "ArrowLeft") {
+                this.previous();
+            }
+        });
+    }
+
+    private next() {
+        localStorage.setItem('lyrics_next', Math.random().toString());
+    }
+
+    private previous() {
+        localStorage.setItem('lyrics_previous', Math.random().toString());
     }
 
     public get song() {
