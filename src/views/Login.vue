@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <base-card id="login-card" v-if="authInitialized && !loggedIn" border>
-            <div class="login">
+            <div class="login gap-y">
                 <h1 class="login__title">Please log in</h1>
                 <div class="social">
                     <button
@@ -10,15 +10,15 @@
                     >
                         <img alt="GOOGLE ICON" src="/img/google.png" />
                     </button>
-                    <button 
-                        class="social-button hover clickable" 
+                    <button
+                        class="social-button hover clickable"
                         @click="login('microsoft')"
                     >
-                        <img alt="MICROSOFT" src="/img/microsoft.png"/>
+                        <img alt="MICROSOFT" src="/img/microsoft.png" />
                     </button>
                     <!-- <button class="social-button hover" @click="login('twitter')"><img alt="TWITTER ICON" src="/img/twitter.svg"/></button> -->
                 </div>
-                <form @submit.prevent="submitForm" class="login__form">
+                <form @submit.prevent="submitForm" class="login__form gap-y">
                     <div class="login__form__email">
                         <label for="email">Email</label>
                         <input type="email" id="email" v-model="form.email" />
@@ -74,7 +74,7 @@ export default class Login extends Vue {
     }
 
     public createUser() {
-        this.$router.push({name: 'create-user'});
+        this.$router.push({ name: "create-user" });
     }
 
     public async login(provider: string) {
@@ -131,7 +131,7 @@ export default class Login extends Vue {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: var(--st-spacing);
+    // gap: var(--st-spacing);
 
     &__title {
         margin: 0;
@@ -141,7 +141,7 @@ export default class Login extends Vue {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: var(--st-spacing);
+        // gap: var(--st-spacing);
 
         &__submit {
             font-size: inherit;

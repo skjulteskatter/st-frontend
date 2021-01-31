@@ -14,7 +14,10 @@
                 </div>
             </div>
 
-            <div class="song-list__list song-list__list-rows" v-if="filteredSongs.length">
+            <div
+                class="song-list__list song-list__list-rows gap-y"
+                v-if="filteredSongs.length"
+            >
                 <song-list-item-row
                     v-for="song in filteredSongs.slice(0, 50)"
                     :key="song.id"
@@ -125,6 +128,7 @@ export default class SongList extends Vue {
     }
 
     public async selectSong(song: Song) {
+        console.log("test");
         if (this.disabled.find((s) => s.number == song.number)) return;
         this.songStore.commit("selectSong", song);
         this.loading = true;
@@ -160,24 +164,17 @@ export default class SongList extends Vue {
 .search__container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--st-spacing);
+    grid-gap: var(--st-spacing);
 }
 
 .song-list {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
 
-    &__wrapper {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: var(--st-half-spacing);
-    }
-
     &__list {
         display: flex;
         flex-direction: column;
-        gap: var(--st-half-spacing);
+        // gap: var(--st-half-spacing);
     }
 
     &__header {

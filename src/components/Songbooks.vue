@@ -65,7 +65,7 @@ export default class Songbooks extends Vue {
 .songbooks {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--st-spacing);
+    grid-gap: var(--st-spacing);
 
     @media screen and (max-width: 800px) {
         grid-template-columns: repeat(2, 1fr);

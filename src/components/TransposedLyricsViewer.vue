@@ -1,44 +1,88 @@
 <template>
     <div class="song-details" v-if="song">
         <base-card class="song-details__metadata" border secondary>
-            <h2 class="song-details__metadata__title"><span style="opacity: .5; padding-right: .5em">{{song.number}}</span> {{title}}</h2>
+            <h2 class="song-details__metadata__title">
+                <span style="opacity: 0.5; padding-right: 0.5em">{{
+                    song.number
+                }}</span>
+                {{ title }}
+            </h2>
             <p class="song-details__metadata__credits">
-                Author: 
+                Author:
                 <span v-for="author in authors" :key="author.id">
-                    <span v-if="!author.getBiography(languageKey)">{{ author.name }}</span>
+                    <span v-if="!author.getBiography(languageKey)">{{
+                        author.name
+                    }}</span>
                     <modal :label="author.name" v-else>
-                        <div v-html="author.getBiography(languageKey)" class="biography-wrapper"></div>
+                        <div
+                            v-html="author.getBiography(languageKey)"
+                            class="biography-wrapper"
+                        ></div>
                     </modal>
                 </span>
             </p>
-            <p v-if="composers.length > 0" class="song-details__metadata__credits">
-                Composer: 
-                <span v-for="composer in composers" :key="composer.id" :label="composer.name">
-                    <span v-if="!composer.getBiography(languageKey)">{{ composer.name }}</span>
+            <p
+                v-if="composers.length > 0"
+                class="song-details__metadata__credits"
+            >
+                Composer:
+                <span
+                    v-for="composer in composers"
+                    :key="composer.id"
+                    :label="composer.name"
+                >
+                    <span v-if="!composer.getBiography(languageKey)">{{
+                        composer.name
+                    }}</span>
                     <modal :label="composer.name" v-else>
-                        <div v-html="composer.getBiography(languageKey)" class="biography-wrapper"></div>
+                        <div
+                            v-html="composer.getBiography(languageKey)"
+                            class="biography-wrapper"
+                        ></div>
                     </modal>
                 </span>
             </p>
-            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
+                {{ melodyOrigin }}
+            </p>
         </base-card>
         <div id="transposed-lyrics"></div>
-        <base-card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
+        <base-card
+            class="song-details__files"
+            v-if="song.audioFiles.length || song.videoFiles.length"
+            border
+        >
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
-                <base-card class="song-details__files__audio" v-if="song.audioFiles.length">
+                <base-card
+                    class="song-details__files__audio"
+                    v-if="song.audioFiles.length"
+                >
                     <h3>Audio</h3>
                     <figure v-for="file in song.audioFiles" :key="file">
-                        <figcaption>{{file.name}}</figcaption>
+                        <figcaption>{{ file.name }}</figcaption>
                         <audio :src="file.directUrl" controls>
-                            Your browser does not support the <code>audio</code> element.
+                            Your browser does not support the
+                            <code>audio</code> element.
                         </audio>
                     </figure>
                 </base-card>
-                <base-card class="song-details__files__video" v-if="song.videoFiles.length">
+                <base-card
+                    class="song-details__files__video"
+                    v-if="song.videoFiles.length"
+                >
                     <h3>Video</h3>
-                    <modal v-for="video in song.videoFiles" :key="video" :label="video.name">
-                        <video :src="video.directUrl" width="500" type="video/mp4" controls>
+                    <modal
+                        v-for="video in song.videoFiles"
+                        :key="video"
+                        :label="video.name"
+                    >
+                        <video
+                            :src="video.directUrl"
+                            width="500"
+                            type="video/mp4"
+                            controls
+                        >
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
@@ -51,8 +95,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from  '@/components/BaseCard.vue';
-import Modal from '@/components/Modal.vue';
+import BaseCard from "@/components/BaseCard.vue";
+import Modal from "@/components/Modal.vue";
 import { Lyrics, Song } from "@/classes";
 
 @Options({
@@ -63,15 +107,15 @@ import { Lyrics, Song } from "@/classes";
     props: {
         title: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         description: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         languageKey: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         song: {
             type: Object,
@@ -88,23 +132,23 @@ import { Lyrics, Song } from "@/classes";
         lyrics: {
             type: Object,
             default: () => undefined,
-        }
-    }
+        },
+    },
 })
 export default class TransposedLyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
-    public description = '';
+    public description = "";
     public lyrics?: Lyrics;
-    public languageKey = '';
+    public languageKey = "";
     public song?: Song;
 
     // public toggleVerse(key: string) {
     // }
 
     public async mounted() {
-        const html = this.lyrics?.transposed ?? '';
-        const lyricsElement = document.getElementById('transposed-lyrics');
+        const html = this.lyrics?.transposed ?? "";
+        const lyricsElement = document.getElementById("transposed-lyrics");
 
         if (lyricsElement) {
             lyricsElement.innerHTML = html;
@@ -112,13 +156,16 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public get melodyOrigin() {
-        return this.song?.melodyOrigin?.name[this.languageKey] ?? this.song?.melodyOrigin?.name.no ?? undefined;
+        return (
+            this.song?.melodyOrigin?.name[this.languageKey] ??
+            this.song?.melodyOrigin?.name.no ??
+            undefined
+        );
     }
 }
 </script>
 
 <style lang="scss">
-
 #biography img {
     max-width: 100%;
 }
@@ -136,7 +183,7 @@ export default class TransposedLyricsViewer extends Vue {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: var(--st-spacing);
+    grid-gap: var(--st-spacing);
 
     &__files {
         grid-column: span 5;
@@ -152,12 +199,12 @@ export default class TransposedLyricsViewer extends Vue {
             .files__container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: var(--st-spacing);
+                grid-gap: var(--st-spacing);
             }
         }
 
         figure {
-            margin: 0 0 .5em 0;
+            margin: 0 0 0.5em 0;
         }
     }
 
@@ -188,7 +235,7 @@ export default class TransposedLyricsViewer extends Vue {
         .card__content {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--st-spacing);
+            grid-gap: var(--st-spacing);
         }
 
         &__title {
@@ -217,7 +264,7 @@ export default class TransposedLyricsViewer extends Vue {
             border-radius: var(--st-border-radius);
             overflow: hidden;
             font-size: 1.1em;
-            
+
             display: flex;
             align-items: center;
 
@@ -239,7 +286,7 @@ export default class TransposedLyricsViewer extends Vue {
             }
 
             &:not(:last-child) {
-                margin-bottom: .5em;
+                margin-bottom: 0.5em;
             }
         }
     }

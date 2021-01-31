@@ -1,26 +1,36 @@
 <template>
     <div class="store">
-        <div class="store__title">
-            <h1>{{ $t('common.store') }}</h1>    
-            <base-button 
-                v-if="user.subscriptions.length" 
-                :action="portal" 
-                theme='secondary' 
-                :label="`${$t('common.manage')} ${$t('common.subscriptions').toLowerCase()}`"
+        <div class="store__title gap-x">
+            <h1>{{ $t("common.store") }}</h1>
+            <base-button
+                v-if="user.subscriptions.length"
+                :action="portal"
+                theme="secondary"
+                :label="`${$t('common.manage')} ${$t(
+                    'common.subscriptions'
+                ).toLowerCase()}`"
                 :loading="loading"
             ></base-button>
         </div>
         <div class="store__items">
-            <base-card v-for="product in products" :key="product.id" :image="product.collections[0].image" class="store__items__item" border>
-                <h3>{{product.name.no}}</h3>
-                <base-button 
+            <base-card
+                v-for="product in products"
+                :key="product.id"
+                :image="product.collections[0].image"
+                class="store__items__item"
+                border
+            >
+                <h3>{{ product.name.no }}</h3>
+                <base-button
                     class="store__items__item__button"
                     v-if="!productIds.includes(product.id)"
-                    :action="() => checkout(product)" 
+                    :action="() => checkout(product)"
                     :label="$t('common.buy')"
                     :loading="loading"
                 ></base-button>
-                <label style="opacity: .6" v-else>{{ $t('store.alreadyown') }}</label>
+                <label style="opacity: 0.6" v-else>{{
+                    $t("store.alreadyown")
+                }}</label>
             </base-card>
         </div>
     </div>
@@ -31,53 +41,55 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
 import { sessionKey } from "@/store";
-import BaseCard from '@/components/BaseCard.vue';
-import BaseButton from '@/components/BaseButton.vue';
+import BaseCard from "@/components/BaseCard.vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 @Options({
     components: {
         BaseCard,
-        BaseButton
-    }
+        BaseButton,
+    },
 })
-export default class Stripe extends Vue{
+export default class Stripe extends Vue {
     private store = useStore(stripeKey);
     public loading = false;
 
     public mounted() {
         if (!this.store.state.initialized) {
-            this.store.dispatch('setup');
+            this.store.dispatch("setup");
         }
     }
 
     public checkout(product: Product) {
         this.loading = true;
-        const price = product.prices.find(p => p.type == 'month');
+        const price = product.prices.find((p) => p.type == "month");
 
         if (price) {
-            this.store.dispatch('startSession', price.id);
+            this.store.dispatch("startSession", price.id);
             this.loading = false;
         }
     }
 
     public portal() {
         this.loading = true;
-        this.store.dispatch('getPortal').then(result => {
+        this.store.dispatch("getPortal").then((result) => {
             window.location = result;
         });
         this.loading = false;
     }
 
     public get products() {
-        return this.store.state.products.sort((a, b) => b.collections.length - a.collections.length);
+        return this.store.state.products.sort(
+            (a, b) => b.collections.length - a.collections.length
+        );
     }
 
-    public get user(){
+    public get user() {
         return useStore(sessionKey).state.currentUser;
     }
 
-    public get productIds(){
-        return this.user.subscriptions.map(s => s.productId)
+    public get productIds() {
+        return this.user.subscriptions.map((s) => s.productId);
     }
 }
 </script>
@@ -87,12 +99,12 @@ export default class Stripe extends Vue{
     &__title {
         display: flex;
         align-items: center;
-        gap: var(--st-spacing);
+        // gap: var(--st-spacing);
     }
     &__items {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--st-spacing);
+        grid-gap: var(--st-spacing);
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;

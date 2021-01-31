@@ -1,0 +1,11 @@
+.gap-y {
+	& > *:not(:last-child) {
+		margin-bottom: var(--st-spacing);
+	}
+}
+
+.gap-x {
+	& > *:not(:last-child) {
+		margin-right: var(--st-spacing);
+	}
+}

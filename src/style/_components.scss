@@ -122,3 +122,7 @@ button {
 section {
     padding: calc(var(--st-spacing) * 2) 0;
 }
+
+h1, h2, h3 {
+    font-family: var(--st-secondary-font-family);
+}

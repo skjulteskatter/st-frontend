@@ -1,6 +1,6 @@
 <template>
     <div id="users">
-        <div class="header">
+        <div class="header gap-x">
             <h1>Users</h1>
             <base-button
                 :class="{ disabled: disableButton }"
@@ -138,7 +138,7 @@ export default class UsersList extends Vue {
 .header {
     display: flex;
     align-items: center;
-    gap: var(--st-spacing);
+    // gap: var(--st-spacing);
     margin: 0;
 }
 
@@ -150,7 +150,7 @@ export default class UsersList extends Vue {
     &__form {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--st-spacing);
+        grid-gap: var(--st-spacing);
         min-width: 300px;
 
         &__field {

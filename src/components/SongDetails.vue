@@ -1,44 +1,88 @@
 <template>
     <div class="song-details" v-if="song">
         <base-card class="song-details__metadata" border secondary>
-            <h2 class="song-details__metadata__title"><span style="opacity: .5; padding-right: .5em">{{song.number}}</span> {{title}}</h2>
+            <h2 class="song-details__metadata__title">
+                <span style="opacity: 0.5; padding-right: 0.5em">{{
+                    song.number
+                }}</span>
+                {{ title }}
+            </h2>
             <p class="song-details__metadata__credits">
-                <span>Author: </span>
+                <span>{{ $t("song.author") }}: </span>
                 <span v-for="author in authors" :key="author.id">
-                    <span v-if="!author.getBiography(languageKey)">{{ author.name }}</span>
+                    <span v-if="!author.getBiography(languageKey)">{{
+                        author.name
+                    }}</span>
                     <modal :label="author.name" type="span" v-else>
-                        <div v-html="author.getBiography(languageKey)" class="biography-wrapper"></div>
+                        <div
+                            v-html="author.getBiography(languageKey)"
+                            class="biography-wrapper"
+                        ></div>
                     </modal>
                 </span>
             </p>
-            <p v-if="composers.length > 0" class="song-details__metadata__credits">
-                <span>{{$t('song.composer')}}: </span>
-                <span v-for="composer in composers" :key="composer.id" :label="composer.name">
-                    <span v-if="!composer.getBiography(languageKey)">{{ composer.name }}</span>
+            <p
+                v-if="composers.length > 0"
+                class="song-details__metadata__credits"
+            >
+                <span>{{ $t("song.composer") }}: </span>
+                <span
+                    v-for="composer in composers"
+                    :key="composer.id"
+                    :label="composer.name"
+                >
+                    <span v-if="!composer.getBiography(languageKey)">{{
+                        composer.name
+                    }}</span>
                     <modal :label="composer.name" type="span" v-else>
-                        <div v-html="composer.getBiography(languageKey)" class="biography-wrapper"></div>
+                        <div
+                            v-html="composer.getBiography(languageKey)"
+                            class="biography-wrapper"
+                        ></div>
                     </modal>
                 </span>
             </p>
-            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">{{melodyOrigin}}</p> 
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
+                {{ melodyOrigin }}
+            </p>
             <div v-if="description" v-html="description"></div>
         </base-card>
-        <base-card class="song-details__files" v-if="song.audioFiles.length || song.videoFiles.length" border>
+        <base-card
+            class="song-details__files"
+            v-if="song.audioFiles.length || song.videoFiles.length"
+            border
+        >
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
-                <base-card class="song-details__files__audio" v-if="song.audioFiles.length">
+                <base-card
+                    class="song-details__files__audio"
+                    v-if="song.audioFiles.length"
+                >
                     <h3>Audio</h3>
                     <figure v-for="file in song.audioFiles" :key="file">
-                        <figcaption>{{file.name}}</figcaption>
+                        <figcaption>{{ file.name }}</figcaption>
                         <audio :src="file.directUrl" controls>
-                            Your browser does not support the <code>audio</code> element.
+                            Your browser does not support the
+                            <code>audio</code> element.
                         </audio>
                     </figure>
                 </base-card>
-                <base-card class="song-details__files__video" v-if="song.videoFiles.length">
+                <base-card
+                    class="song-details__files__video"
+                    v-if="song.videoFiles.length"
+                >
                     <h3>Video</h3>
-                    <modal v-for="video in song.videoFiles" :key="video" :label="video.name">
-                        <video :src="video.directUrl" width="500" type="video/mp4" controls>
+                    <modal
+                        v-for="video in song.videoFiles"
+                        :key="video"
+                        :label="video.name"
+                    >
+                        <video
+                            :src="video.directUrl"
+                            width="500"
+                            type="video/mp4"
+                            controls
+                        >
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
@@ -47,8 +91,8 @@
         </base-card>
         <base-card class="song-details__lyrics">
             <div v-for="verse in text" :key="verse.name + verse.content">
-                <b>{{verse.name}}</b>
-                <p v-for="line in verse.content" :key="line">{{line}}</p>
+                <b>{{ verse.name }}</b>
+                <p v-for="line in verse.content" :key="line">{{ line }}</p>
             </div>
         </base-card>
     </div>
@@ -56,8 +100,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from  '@/components/BaseCard.vue';
-import Modal from '@/components/Modal.vue';
+import BaseCard from "@/components/BaseCard.vue";
+import Modal from "@/components/Modal.vue";
 import { Lyrics, Song } from "@/classes";
 import ContributorItem from "@/classes/contributor";
 
@@ -69,11 +113,11 @@ import ContributorItem from "@/classes/contributor";
     props: {
         title: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         description: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         lyrics: {
             type: Object,
@@ -81,7 +125,7 @@ import ContributorItem from "@/classes/contributor";
         },
         languageKey: {
             type: String,
-            default: () => '',
+            default: () => "",
         },
         song: {
             type: Object,
@@ -94,18 +138,18 @@ import ContributorItem from "@/classes/contributor";
         authors: {
             type: Array,
             default: () => undefined,
-        }
-    }
+        },
+    },
 })
 export default class SongDetails extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
-    public description = '';
+    public description = "";
     public lyrics?: Lyrics;
-    public languageKey = '';
+    public languageKey = "";
     public song?: Song;
-    public composers: ContributorItem[] = []
-    public authors: ContributorItem[] = []
+    public composers: ContributorItem[] = [];
+    public authors: ContributorItem[] = [];
     public title?: string;
 
     // public async mounted() {
@@ -122,24 +166,24 @@ export default class SongDetails extends Vue {
         const types: {
             [key: string]: string;
         } = {
-            '[Chorus]': 'chorus',
-            '[Bridge]': 'bridge',
-        }
-        
+            "[Chorus]": "chorus",
+            "[Bridge]": "bridge",
+        };
+
         if (this.lyrics) {
             for (const key of Object.keys(this.lyrics.content)) {
-
-
                 const verse: Verse = {
                     name: (this.lyrics.content as JsonContent)[key].name,
                     content: (this.lyrics.content as JsonContent)[key].content,
-                    type: types[(this.lyrics.content as JsonContent)[key].name] ?? 'verse',
-                }
+                    type:
+                        types[(this.lyrics.content as JsonContent)[key].name] ??
+                        "verse",
+                };
 
                 if (verse.type == "chorus") {
-                    verse.name = this.$t('song.chorus');
-                } else if (verse.type == 'bridge') {
-                    verse.name = this.$t('song.bridge');
+                    verse.name = this.$t("song.chorus");
+                } else if (verse.type == "bridge") {
+                    verse.name = this.$t("song.bridge");
                 }
 
                 verses.push(verse);
@@ -150,13 +194,16 @@ export default class SongDetails extends Vue {
     }
 
     public get melodyOrigin() {
-        return this.song?.melodyOrigin?.name[this.languageKey] ?? this.song?.melodyOrigin?.name.no ?? undefined;
+        return (
+            this.song?.melodyOrigin?.name[this.languageKey] ??
+            this.song?.melodyOrigin?.name.no ??
+            undefined
+        );
     }
 }
 </script>
 
 <style lang="scss">
-
 #biography img {
     max-width: 100%;
 }
@@ -174,7 +221,7 @@ export default class SongDetails extends Vue {
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: var(--st-spacing);
+    grid-gap: var(--st-spacing);
 
     &__lyrics {
         grid-column: span 4;
@@ -194,12 +241,12 @@ export default class SongDetails extends Vue {
             .files__container {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: var(--st-spacing);
+                grid-gap: var(--st-spacing);
             }
         }
 
         figure {
-            margin: 0 0 .5em 0;
+            margin: 0 0 0.5em 0;
         }
     }
 

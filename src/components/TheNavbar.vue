@@ -8,7 +8,7 @@
                 label="Menu"
             ></base-button>
             <div
-                class="nav__links"
+                class="nav__links gap-x"
                 :class="{ 'nav__links-active': openBurgerMenu }"
             >
                 <router-link class="nav__item" :to="{ name: 'main' }">{{
@@ -87,7 +87,7 @@ export default class TheNavbar extends Vue {
     &__links {
         display: flex;
         align-items: center;
-        gap: var(--st-spacing);
+        // gap: var(--st-spacing);
     }
 
     &__logo {

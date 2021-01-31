@@ -1,26 +1,48 @@
 <template>
     <div id="lyrics-wrapper">
         <div class="lyrics">
-            <div class="lyrics__credits">
+            <div class="lyrics__credits gap-x">
                 <h1 class="lyrics__number" v-if="number">{{ number }}</h1>
                 <div>
                     <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
-                    <p class="lyrics__credits__author" v-if="authors.length > 0">{{$t('song.author')}}: <span v-for="author in authors" :key="author.id"> {{ author.name }} </span></p>
-                    <p class="lyrics__credits__composer" v-if="composers.length > 0">{{$t('song.composer')}}: <span v-for="composer in composers" :key="composer.id"> {{ composer.name }} </span></p>
-                    <p class="lyrics__credits__composer" v-if="melodyOrigin">{{$t('song.melody')}}: {{ melodyOrigin }}</p>
+                    <p
+                        class="lyrics__credits__author"
+                        v-if="authors.length > 0"
+                    >
+                        {{ $t("song.author") }}:
+                        <span v-for="author in authors" :key="author.id">
+                            {{ author.name }}
+                        </span>
+                    </p>
+                    <p
+                        class="lyrics__credits__composer"
+                        v-if="composers.length > 0"
+                    >
+                        {{ $t("song.composer") }}:
+                        <span v-for="composer in composers" :key="composer.id">
+                            {{ composer.name }}
+                        </span>
+                    </p>
+                    <p class="lyrics__credits__composer" v-if="melodyOrigin">
+                        {{ $t("song.melody") }}: {{ melodyOrigin }}
+                    </p>
                 </div>
             </div>
             <div id="text-wrapper">
                 <div
                     class="lyrics__verse"
-                    :class="{'lyrics__verse-chorus': verse.type == 'chorus'}"
+                    :class="{ 'lyrics__verse-chorus': verse.type == 'chorus' }"
                     v-for="(verse, i) in lyrics"
                     :key="i + '_' + verse"
                 >
-                    <span class="lyrics__verse__number" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
+                    <span
+                        class="lyrics__verse__number"
+                        v-if="verse.type != 'chorus'"
+                        >{{ verse.name }}</span
+                    >
                     <p
                         class="lyrics__verse__line"
-                        :class="{'fade': line.trim()[0] == '('}"
+                        :class="{ fade: line.trim()[0] == '(' }"
                         v-for="(line, i) in verse.content"
                         :key="i + '_' + line"
                     >
@@ -38,8 +60,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import themes from "@/classes/themes";
 
-@Options({
-})
+@Options({})
 export default class LyricsViewer extends Vue {
     public store = useStore(songKey);
 
@@ -47,34 +68,34 @@ export default class LyricsViewer extends Vue {
         themes.load();
         const lyricsItem = localStorage.getItem("lyrics");
         if (lyricsItem) {
-            this.store.commit('verses', JSON.parse(lyricsItem));
+            this.store.commit("verses", JSON.parse(lyricsItem));
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit('selectSong', JSON.parse(songItem));
+            this.store.commit("selectSong", JSON.parse(songItem));
         }
-        window.addEventListener('storage', event => {
+        window.addEventListener("storage", (event) => {
             if (event.key == "song") {
                 const item = localStorage.getItem("song");
                 if (item) {
-                    this.store.commit('selectSong', JSON.parse(item));
+                    this.store.commit("selectSong", JSON.parse(item));
                 }
             }
             if (event.key == "lyrics") {
                 const item = localStorage.getItem("lyrics");
                 if (item) {
-                    this.store.commit('verses', JSON.parse(item));
+                    this.store.commit("verses", JSON.parse(item));
                 }
             }
-            if(event.key == 'theme') {
-                const item = localStorage.getItem('theme')
+            if (event.key == "theme") {
+                const item = localStorage.getItem("theme");
                 if (item) {
                     themes.load();
                 }
             }
         });
 
-        window.addEventListener('keydown', (event) => {
+        window.addEventListener("keydown", (event) => {
             if (event.key == "ArrowRight") {
                 this.next();
             }
@@ -85,11 +106,11 @@ export default class LyricsViewer extends Vue {
     }
 
     private next() {
-        localStorage.setItem('lyrics_next', Math.random().toString());
+        localStorage.setItem("lyrics_next", Math.random().toString());
     }
 
     private previous() {
-        localStorage.setItem('lyrics_previous', Math.random().toString());
+        localStorage.setItem("lyrics_previous", Math.random().toString());
     }
 
     public get song() {
@@ -111,7 +132,9 @@ export default class LyricsViewer extends Vue {
     public get melodyOrigin() {
         const melodyOrigin = this.store.state.song?.melodyOrigin;
 
-        return melodyOrigin ? melodyOrigin.name[this.languageKey] ?? melodyOrigin.name.no : undefined;
+        return melodyOrigin
+            ? melodyOrigin.name[this.languageKey] ?? melodyOrigin.name.no
+            : undefined;
     }
 
     public get languageKey(): string {
@@ -129,7 +152,6 @@ export default class LyricsViewer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
 #text-wrapper {
     margin-left: 10em;
 }
@@ -145,15 +167,16 @@ export default class LyricsViewer extends Vue {
         padding-left: 2em;
         margin-bottom: 50px;
         margin-top: 25px;
-        padding-bottom: .5em;
+        padding-bottom: 0.5em;
         display: flex;
         align-items: center;
-        gap: var(--double-spacing);
+        // gap: var(--double-spacing);
 
-        &__composer, &__author {
+        &__composer,
+        &__author {
             margin: 0;
-            font-size: .7em;
-            opacity: .6;
+            font-size: 0.7em;
+            opacity: 0.6;
         }
     }
 
@@ -162,7 +185,7 @@ export default class LyricsViewer extends Vue {
     }
 
     &__number {
-        opacity: .6;
+        opacity: 0.6;
         margin: 0;
     }
 
@@ -186,14 +209,13 @@ export default class LyricsViewer extends Vue {
         }
 
         &__line {
-            margin: .5em 0;
+            margin: 0.5em 0;
 
             &.fade {
-                opacity: .5;
-                font-size: .8em;
+                opacity: 0.5;
+                font-size: 0.8em;
             }
         }
     }
-
 }
 </style>

@@ -1,28 +1,30 @@
 <template>
     <base-card class="song-list__item-row clickable" border>
-        <b class="song-list__item-row__number">{{ song.number }}</b>
-        <div>
-            <span class="song-list__item-row__title">{{
-                song.name[languageKey]
-            }}</span>
-            <div class="song-list__item-row__contributors">
-                <div class="song-list__item-row__contributors__authors">
-                    <small>{{ $t("song.author") }}: </small>
-                    <small v-for="author in song.authors" :key="author.id">
-                        {{ author.name }}
-                    </small>
-                </div>
-                <div
-                    class="song-list__item-row__contributors__composers"
-                    v-if="song.composers.length"
-                >
-                    <small>{{ $t("song.composer") }}: </small>
-                    <small
-                        v-for="composer in song.composers"
-                        :key="composer.id"
+        <div class="song-list__item-row__wrapper gap-x">
+            <b class="song-list__item-row__number">{{ song.number }}</b>
+            <div>
+                <span class="song-list__item-row__title">{{
+                    song.name[languageKey]
+                }}</span>
+                <div class="song-list__item-row__contributors">
+                    <div class="song-list__item-row__contributors__authors">
+                        <small>{{ $t("song.author") }}: </small>
+                        <small v-for="author in song.authors" :key="author.id">
+                            {{ author.name }}
+                        </small>
+                    </div>
+                    <div
+                        class="song-list__item-row__contributors__composers"
+                        v-if="song.composers.length"
                     >
-                        {{ composer.name }}
-                    </small>
+                        <small>{{ $t("song.composer") }}: </small>
+                        <small
+                            v-for="composer in song.composers"
+                            :key="composer.id"
+                        >
+                            {{ composer.name }}
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,10 +63,10 @@ export default class SongListItemRow extends Vue {
 .song-list__item-row {
     width: 100%;
 
-    .card__content {
+    &__wrapper {
         display: flex;
         align-items: center;
-        gap: var(--st-spacing);
+        // gap: var(--st-spacing);
     }
 
     &__contributors {
