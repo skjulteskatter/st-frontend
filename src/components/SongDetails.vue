@@ -12,7 +12,7 @@
                 </span>
             </p>
             <p v-if="composers.length > 0" class="song-details__metadata__credits">
-                <span>Composer: </span>
+                <span>{{$t('song.composer')}}: </span>
                 <span v-for="composer in composers" :key="composer.id" :label="composer.name">
                     <span v-if="!composer.getBiography(languageKey)">{{ composer.name }}</span>
                     <modal :label="composer.name" type="span" v-else>
@@ -134,6 +134,12 @@ export default class SongDetails extends Vue {
                     name: (this.lyrics.content as JsonContent)[key].name,
                     content: (this.lyrics.content as JsonContent)[key].content,
                     type: types[(this.lyrics.content as JsonContent)[key].name] ?? 'verse',
+                }
+
+                if (verse.type == "chorus") {
+                    verse.name = this.$t('song.chorus');
+                } else if (verse.type == 'bridge') {
+                    verse.name = this.$t('song.bridge');
                 }
 
                 verses.push(verse);
