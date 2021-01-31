@@ -9,7 +9,10 @@
             ></base-button>
             <div
                 class="nav__links gap-x"
-                :class="{ 'nav__links-active': openBurgerMenu }"
+                :class="{
+                    'nav__links-active': openBurgerMenu,
+                    'gap-y': isMobileDevice,
+                }"
             >
                 <router-link class="nav__item" :to="{ name: 'main' }">{{
                     $t("common.dashboard")
