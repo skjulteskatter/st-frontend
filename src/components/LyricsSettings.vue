@@ -72,6 +72,7 @@ import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
 import BaseCard from  '@/components/BaseCard.vue';
 import Modal from '@/components/Modal.vue';
+import ContributorItem from "@/classes/contributor";
 
 @Options({
     components: {
@@ -81,7 +82,6 @@ import Modal from '@/components/Modal.vue';
     props: {
         title: {
             type: String,
-            default: () => '',
         },
         description: {
             type: String,
@@ -97,15 +97,12 @@ import Modal from '@/components/Modal.vue';
         },
         song: {
             type: Object,
-            default: () => undefined,
         },
         authors: {
             type: Array,
-            default: () => [],
         },
         composers: {
             type: Array,
-            default: () => [],
         }
     }
 })
@@ -117,6 +114,9 @@ export default class LyricsSettings extends Vue {
     public lyrics?: Lyrics;
     public languageKey = '';
     public song?: Song;
+    public composers: ContributorItem[] = [];
+    public authors: ContributorItem[] = [];
+    public title = '';
 
     public lineSize = 2;
 
