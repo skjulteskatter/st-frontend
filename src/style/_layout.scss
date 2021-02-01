@@ -1,11 +1,11 @@
 .gap-y {
 	& > *:not(:last-child) {
-		margin-bottom: var(--st-spacing);
+		margin-bottom: calc(var(--st-spacing) * .5);
 	}
 }
 
 .gap-x {
 	& > *:not(:last-child) {
-		margin-right: var(--st-spacing);
+		margin-right: calc(var(--st-spacing) * .5);
 	}
 }
