@@ -52,9 +52,7 @@ export default class SongListItemRow extends Vue {
     public song: Song = {} as Song;
 
     public get languageKey() {
-        return (
-            useStore(sessionKey).state.currentUser.settings?.languageKey ?? "en"
-        );
+        return useStore(sessionKey).getters.languageKey ?? "en";
     }
 }
 </script>

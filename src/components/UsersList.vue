@@ -26,7 +26,7 @@
                             <modal
                                 :label="$t('common.edit')"
                                 class="edit-user"
-                                v-if="u.id != currentUser.id"
+                                v-if="u.id != getCurrentUser.id"
                             >
                                 <div class="loading" v-if="loading"></div>
                                 <h2 style="margin-top: 0">
@@ -99,6 +99,7 @@ import Modal from "@/components/Modal.vue";
 })
 export default class UsersList extends Vue {
     public users: User[] = [];
+    public currentUser: User = {} as User;
     private usersStore = useStore(usersKey);
     public disableButton = false;
     public loading = false;
@@ -116,7 +117,7 @@ export default class UsersList extends Vue {
         this.disableButton = false;
     }
 
-    public get currentUser(): User {
+    public get getCurrentUser(): User {
         return this.currentUser;
     }
 
