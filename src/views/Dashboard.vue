@@ -42,14 +42,15 @@
                 <h3 class="api-token__title">API token</h3>
                 <base-button
                     class="api-token__button"
-                    label="Toggle API token"
                     theme="secondary"
                     :action="
                         () => {
                             showApiToken = !showApiToken;
                         }
                     "
-                ></base-button>
+                >
+                    Toggle API token
+                </base-button>
             </div>
             <p v-if="showApiToken" style="font-size: 0.8em">{{ token }}</p>
         </base-card>

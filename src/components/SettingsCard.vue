@@ -32,8 +32,8 @@
                             }
                         "
                         theme="secondary"
-                        label="Reset"
-                    ></base-button>
+                        >Reset</base-button
+                    >
                 </div>
                 <div class="user-settings__language field gap-x">
                     <label for="language">{{ $t("common.language") }}</label>
@@ -56,10 +56,10 @@
             </div>
             <base-button
                 :loading="loadingSave"
-                :label="$t('common.save')"
                 :action="save"
                 class="user-settings__save-button"
-            ></base-button>
+                >{{ $t("common.save") }}</base-button
+            >
         </div>
     </base-card>
 </template>

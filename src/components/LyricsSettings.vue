@@ -18,7 +18,7 @@
                     <span v-if="!author.getBiography(languageKey)">{{
                         author.name
                     }}</span>
-                    <modal :label="author.name" v-else>
+                    <modal :label="author.name" type="span" v-else>
                         <div
                             v-html="author.getBiography(languageKey)"
                             class="biography-wrapper"
@@ -58,41 +58,41 @@
             border
         >
             <h2 class="lyrics-settings__controls__title">Controls</h2>
-            <button
+            <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('lyrics')"
             >
                 Open viewer
-            </button>
-            <button
+            </base-button>
+            <base-button
                 class="lyrics-settings__controls__update"
                 @click="updateLyrics"
             >
                 Update viewer
-            </button>
-            <button
+            </base-button>
+            <base-button
                 class="lyrcis-settings__controls__previous"
                 @click="previous"
-                secondary
+                theme="secondary"
             >
                 Previous
-            </button>
-            <button
+            </base-button>
+            <base-button
                 class="lyrcis-settings__controls__next"
                 @click="next"
-                secondary
+                theme="secondary"
             >
                 Next
-            </button>
+            </base-button>
             <br />
-            <button
+            <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('karaoke')"
             >
                 Open KaraokeViewer
-            </button>
-            <button @click="setLineSize(1)">1</button>
-            <button @click="setLineSize(2)">2</button>
+            </base-button>
+            <base-button @click="setLineSize(1)">1</base-button>
+            <base-button @click="setLineSize(2)">2</base-button>
         </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
@@ -169,12 +169,14 @@
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import Modal from "@/components/Modal.vue";
 import ContributorItem from "@/classes/contributor";
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
         Modal,
     },
     props: {

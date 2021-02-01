@@ -5,6 +5,21 @@
             <div class="song-list__header">
                 <h1>{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
+                    <base-button
+                        theme="secondary"
+                        @click="songListType = 'numbers'"
+                        >Number</base-button
+                    >
+                    <base-button
+                        theme="secondary"
+                        @click="songListType = 'rows'"
+                        >List</base-button
+                    >
+                    <base-button
+                        theme="secondary"
+                        @click="songListType = 'cards'"
+                        >Cards</base-button
+                    >
                     <input
                         type="text"
                         class="song-list__search"
@@ -16,7 +31,7 @@
 
             <div
                 class="song-list__list song-list__list-rows gap-y"
-                v-if="filteredSongs.length"
+                v-if="filteredSongs.length && listType == 'rows'"
             >
                 <song-list-item-row
                     v-for="song in filteredSongs.slice(0, 50)"
@@ -25,8 +40,28 @@
                     @click="selectSong(song)"
                 ></song-list-item-row>
             </div>
-            <div class="song-list__list song-list__list-cards"></div>
-            <div class="song-list__list song-list__list-numbers"></div>
+            <div
+                class="song-list__list song-list__list-numbers"
+                v-if="filteredSongs.length && listType == 'numbers'"
+            >
+                <song-list-item-number
+                    v-for="song in filteredSongs"
+                    :key="song.id"
+                    :song="song"
+                    @click="selectSong(song)"
+                ></song-list-item-number>
+            </div>
+            <div
+                class="song-list__list song-list__list-cards"
+                v-if="filteredSongs.length && listType == 'cards'"
+            >
+                <song-list-item-card
+                    v-for="song in filteredSongs.slice(0, 50)"
+                    :key="song.id"
+                    :song="song"
+                    @click="selectSong(song)"
+                ></song-list-item-card>
+            </div>
 
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
         </div>
@@ -39,12 +74,18 @@ import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
+import SongListItemNumber from "@/components/SongList/SongListItemNumber.vue";
+import SongListItemCard from "@/components/SongList/SongListItemCard.vue";
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
         SongListItemRow,
+        SongListItemNumber,
+        SongListItemCard,
     },
 })
 export default class SongList extends Vue {
@@ -53,7 +94,7 @@ export default class SongList extends Vue {
     public searchQuery = "";
     public store = useStore(songKey);
     public loading = false;
-    public songListType = "";
+    public songListType = "numbers";
 
     public async mounted() {
         if (!this.collection.id) {
@@ -71,6 +112,10 @@ export default class SongList extends Vue {
             );
             this.loading = false;
         }
+    }
+
+    public get listType() {
+        return this.songListType;
     }
 
     public get advancedSearch() {
@@ -156,7 +201,7 @@ export default class SongList extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .warning {
     opacity: 0.4;
 }
@@ -175,6 +220,18 @@ export default class SongList extends Vue {
         display: flex;
         flex-direction: column;
         // gap: var(--st-half-spacing);
+
+        &-numbers {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            grid-gap: var(--st-half-spacing);
+        }
+
+        &-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: var(--st-half-spacing);
+        }
     }
 
     &__header {

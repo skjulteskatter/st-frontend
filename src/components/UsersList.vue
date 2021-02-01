@@ -8,8 +8,8 @@
                 :loading="loading"
                 loadingLabel="Fetching users"
                 theme="secondary"
-                label="Refresh"
-            ></base-button>
+                >Refresh</base-button
+            >
         </div>
         <base-card class="users__table" border>
             <table>
@@ -24,7 +24,7 @@
                     <tr v-for="u in users" :key="u.id">
                         <td>
                             <modal
-                                label="Edit"
+                                :label="$t('common.edit')"
                                 class="edit-user"
                                 v-if="u.id != currentUser.id"
                             >
@@ -58,9 +58,10 @@
                                 </div>
                                 <base-button
                                     :action="() => saveRoles(u)"
-                                    :label="$t('common.save')"
                                     class="edit-user__save"
-                                ></base-button>
+                                    :loading="loading"
+                                    >{{ $t("common.save") }}</base-button
+                                >
                             </modal>
                         </td>
                         <td>{{ u.displayName }}</td>

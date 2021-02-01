@@ -9,7 +9,9 @@
             loadingLabel
         }}</span>
         <span class="spinner" v-if="loading"></span>
-        <span class="button__label" v-else>{{ label }}</span>
+        <span class="button__content" v-else>
+            <slot></slot>
+        </span>
     </button>
 </template>
 
@@ -18,9 +20,6 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
     props: {
-        label: {
-            type: String,
-        },
         theme: {
             type: String,
             validator: (value: string) => {
@@ -51,7 +50,6 @@ export default class BaseButton extends Vue {
     public action: Function = () => undefined;
     public loadingLabel = "Loading...";
     public theme = "primary";
-    public label = "Button";
 
     public get isLoading() {
         return this.loading;

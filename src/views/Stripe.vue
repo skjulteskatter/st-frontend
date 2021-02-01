@@ -6,11 +6,14 @@
                 v-if="user.subscriptions.length"
                 :action="portal"
                 theme="secondary"
-                :label="`${$t('common.manage')} ${$t(
-                    'common.subscriptions'
-                ).toLowerCase()}`"
                 :loading="loading"
-            ></base-button>
+            >
+                {{
+                    `${$t("common.manage")} ${$t(
+                        "common.subscriptions"
+                    ).toLowerCase()}`
+                }}
+            </base-button>
         </div>
         <div class="store__items">
             <base-card
@@ -25,9 +28,9 @@
                     class="store__items__item__button"
                     v-if="!productIds.includes(product.id)"
                     :action="() => checkout(product)"
-                    :label="$t('common.buy')"
                     :loading="loading"
-                ></base-button>
+                    >{{ $t("common.buy") }}</base-button
+                >
                 <label style="opacity: 0.6" v-else>{{
                     $t("store.alreadyown")
                 }}</label>
