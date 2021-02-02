@@ -55,4 +55,12 @@ export class Collection {
     public async transposeLyrics(number: number, transpose: number) {
         return new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
     }
+
+    public get authors() {
+        return this.contributors.filter(c => this.songs.map(s => s.authors.map(a => a.id)).some(s => s.includes(c.id)));
+    }
+
+    public get composers() {
+        return this.contributors.filter(c => this.songs.map(s => s.composers.map(a => a.id)).some(s => s.includes(c.id)));
+    }
 }
