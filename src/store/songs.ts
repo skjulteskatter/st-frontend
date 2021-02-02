@@ -36,7 +36,7 @@ export const songStore = createStore<Songs>({
             const collection = getters.collection as Collection;
 
             if (collection) {
-                await collection.load(sessionStore.getters.languageKey);
+                collection.load(sessionStore.getters.languageKey);
             }
         },
         async selectSong({getters, commit}, number: number) {

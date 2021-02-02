@@ -11,6 +11,7 @@ export class Collection {
     public image: string;
 
     private _initialized = false;
+    private _loading = false;
 
     public contributors: Contributor[] = [];
     public songs: Song[] = [];
@@ -36,12 +37,15 @@ export class Collection {
     }
 
     public async load(language: string) {
+        if (this._loading) return;
+        this._loading = true;
         await this.initialize();
 
         if (this._currentLanguage != language) {
             this.lyrics = (await api.songs.getAllLyrics(this.key, language, 'json', 0)).map(l => new Lyrics(l));
             this._currentLanguage = language;
         }
+        this._loading = false;
     }
 
     public getSong(number: number) {
