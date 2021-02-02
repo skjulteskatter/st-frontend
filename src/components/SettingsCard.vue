@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, usersKey } from "@/store";
+import { sessionKey } from "@/store";
 import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
@@ -92,7 +92,7 @@ export default class SettingsCard extends Vue {
     public mounted() {
         this.selectedLanguage =
             this.languages.find(
-                (l) => l.key == this.user.settings?.languageKey
+                (l) => l.key == this.user?.settings?.languageKey
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
@@ -102,32 +102,30 @@ export default class SettingsCard extends Vue {
         this.themes.setThemeColor(color ?? this.themeColor);
     }
 
-    public save() {
+    public async save() {
         this.loadingSave = true;
-        setTimeout(() => {
-            this.themes.setTheme(this.theme);
-            this.store.dispatch("saveSettings", this.user.settings);
-            this.loadingSave = false;
-        }, 500);
+        await this.store.dispatch('saveSettings', this.user?.settings);
+        this.themes.setTheme(this.theme);
+        this.loadingSave = false;
     }
 
     public setLanguage() {
         setTimeout(() => {
-            const settings = Object.assign({}, this.user.settings);
+            const settings = Object.assign({}, this.user?.settings);
             const language = this.selectedLanguage;
             if (language) {
                 settings.languageKey = language.key;
-                this.store.commit("settings", settings);
+                this.store.commit('settings', settings);
             }
         }, 100);
     }
 
     public get languages(): Language[] {
-        return useStore(sessionKey).getters.languages || [];
+        return this.store.state.languages || [];
     }
 
-    public get user(): User {
-        return useStore(usersKey).getters.currentUser || {};
+    public get user(): User | undefined {
+        return this.store.state.currentUser;
     }
 }
 </script>

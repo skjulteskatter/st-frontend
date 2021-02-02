@@ -81,7 +81,7 @@ export const sessionStore = createStore<Session>({
         async saveSettings({ state, commit }) {
             if (state.currentUser?.settings) {
                 const user = await api.session.saveUser(state.currentUser.settings)
-                commit('currentUser', user);
+                commit('user', user);
                 await ensureLanguageIsFetched();
             }
         },
