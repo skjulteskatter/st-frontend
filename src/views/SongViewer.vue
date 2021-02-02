@@ -71,10 +71,7 @@ export default class SongViewer extends Vue {
     public async transpose() {
         this.show = false;
         this.store.commit("extend", false);
-        await this.songStore.dispatch("getTransposedLyrics", {
-            languageCode: this.languageKey,
-            transposition: 0,
-        });
+        await this.songStore.dispatch("transpose", 0);
         this.transposed = true;
         this.show = true;
     }

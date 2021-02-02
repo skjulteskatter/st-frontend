@@ -52,6 +52,17 @@ export const songStore = createStore<Songs>({
             if (lyrics) {
                 commit('lyrics', lyrics);
             }
+        },
+        async transpose({state, commit, getters}, transpose: number) {
+            const collection = getters.collection as Collection | undefined;
+            if (!collection || !state.song) {
+                return;
+            }
+
+            const lyrics = await collection.transposeLyrics(state.song.number, transpose);
+
+            commit('lyrics', lyrics);
+            commit('transposition', transpose);
         }
     },
     mutations: {
@@ -85,7 +96,7 @@ export const songStore = createStore<Songs>({
             return getters.collection?.songs ?? [];
         },
         collection(state) {
-            return state.collections.find(c => c.id == state.collectionId);
+            return state.collections.find(c => c.id == state.collectionId || c.key == state.collectionId);
         }
     },
 });
