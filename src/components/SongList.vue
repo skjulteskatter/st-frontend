@@ -39,37 +39,15 @@
             </div>
 
             <!-- <div
-                class="song-list__list song-list__list-rows gap-y"
-                v-if="filteredSongs.length && listType == 'rows'"
-            >
-                <song-list-item-row
-                    v-for="song in filteredSongs.slice(0, 50)"
-                    :key="song.id"
-                    :song="song"
-                    @click="selectSong(song.number)"
-                ></song-list-item-row>
-            </div>
-            <div
                 class="song-list__list song-list__list-numbers"
                 v-if="filteredSongs.length && listType == 'numbers'"
             >
                 <song-list-item-number
-                    v-for="song in filteredSongs"
+                    v-for="song in songs"
                     :key="song.id"
                     :song="song"
                     @click="selectSong(song.number)"
                 ></song-list-item-number>
-            </div>
-            <div
-                class="song-list__list song-list__list-cards"
-                v-if="filteredSongs.length && listType == 'cards'"
-            >
-                <song-list-item-card
-                    v-for="song in filteredSongs.slice(0, 50)"
-                    :key="song.id"
-                    :song="song"
-                    @click="selectSong(song.number)"
-                ></song-list-item-card>
             </div> -->
 
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
