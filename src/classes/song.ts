@@ -1,4 +1,5 @@
 import showdown from 'showdown';
+import Contributor from './contributor';
 import ContributorItem from './contributor';
 const converter = new showdown.Converter();
 
@@ -20,14 +21,13 @@ export class Song implements SongInterface {
         [languageKey: string]: string;
     } = {};
     public melodyOrigin = {} as Origin;
-    public collection: Collection = {} as Collection;
 
-    constructor(song: SongInterface, contributors: ContributorCollectionItem[]) {
+    constructor(song: SongInterface, contributors: Contributor[]) {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
-        this.authors = song.authors.map(a => new ContributorItem(contributors.find(c => c.contributor.id == a.id)?.contributor ?? {} as Contributor)).filter(c => c.id);
-        this.composers = song.composers.map(a => new ContributorItem(contributors.find(c => c.contributor.id == a.id)?.contributor ?? {} as Contributor)).filter(c => c.id);
+        this.authors = contributors.filter(c => song.authors.map(a => a.id).includes(c.id));
+        this.composers = contributors.filter(c => song.composers.map(a => a.id).includes(c.id));
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
         this.originCountry = song.originCountry;

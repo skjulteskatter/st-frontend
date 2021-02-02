@@ -1,20 +1,20 @@
 <template>
     <div id="dashboard">
         <h1>{{ $t("common.dashboard") }}</h1>
-        <base-card class="user-info" border>
+        <base-card class="user-info" border v-if="user">
             <div class="user-info__wrapper gap-y">
                 <div class="fields">
-                    <div class="user-info__field" v-if="roles.length">
+                    <div class="user-info__field" v-if="user.roles.length">
                         <span
                             class="tag"
-                            v-for="role in roles"
+                            v-for="role in user.roles"
                             :key="'tag-' + role.name"
                             >{{ role.name }}</span
                         >
                     </div>
                     <div class="user-info__field">
-                        <h2 class="user-info__name">{{ user ? user.displayName : '' }}</h2>
-                        <p class="user-info__email">{{ user ? user.email : '' }}</p>
+                        <h2 class="user-info__name">{{ user.displayName }}</h2>
+                        <p class="user-info__email">{{ user.email }}</p>
                     </div>
                 </div>
                 <div
@@ -87,10 +87,6 @@ export default class Dashboard extends Vue {
 
     public get user(): User | undefined {
         return useStore(sessionKey).state.currentUser;
-    }
-
-    public get roles(): Role[] {
-        return this.user?.roles ?? [];
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="songbooks">
-        <div class="loader" v-if="loading"></div>
+        <!-- <div class="loader" v-if="loading"></div> -->
         <base-card
             v-for="songbook in collections"
             :key="songbook.key"
@@ -23,6 +23,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import BaseCard from "@/components/BaseCard.vue";
+import { Collection } from "@/classes";
 
 @Options({
     components: {
@@ -32,13 +33,9 @@ import BaseCard from "@/components/BaseCard.vue";
 export default class Songbooks extends Vue {
     private songStore = useStore(songKey);
 
-    public get loading() {
-        return !this.songStore.state.initialized;
-    }
-
     public selectCollection(collection: Collection) {
         if (!this.available.find((c) => c.id == collection.id)) return;
-        this.songStore.commit("selectCollection", collection);
+        this.songStore.dispatch("selectCollection", collection.id);
         this.$router.push({
             name: "song-list",
             params: {
@@ -48,7 +45,7 @@ export default class Songbooks extends Vue {
     }
 
     public get collections() {
-        return useStore(songKey).getters.collections ?? [];
+        return useStore(sessionKey).state.collections ?? [];
     }
 
     public get selected() {

@@ -37,7 +37,7 @@
                     v-for="song in filteredSongs.slice(0, 50)"
                     :key="song.id"
                     :song="song"
-                    @click="selectSong(song)"
+                    @click="selectSong(song.number)"
                 ></song-list-item-row>
             </div>
             <div
@@ -48,7 +48,7 @@
                     v-for="song in filteredSongs"
                     :key="song.id"
                     :song="song"
-                    @click="selectSong(song)"
+                    @click="selectSong(song.number)"
                 ></song-list-item-number>
             </div>
             <div
@@ -59,7 +59,7 @@
                     v-for="song in filteredSongs.slice(0, 50)"
                     :key="song.id"
                     :song="song"
-                    @click="selectSong(song)"
+                    @click="selectSong(song.number)"
                 ></song-list-item-card>
             </div>
 
@@ -72,7 +72,7 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { Song } from "@/classes";
+import { Collection, Lyrics, Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
@@ -96,24 +96,6 @@ export default class SongList extends Vue {
     public loading = false;
     public songListType = "numbers";
 
-    public async mounted() {
-        if (!this.collection.id) {
-            await this.store.dispatch("load", {
-                collectionKey: this.$route.params.collection,
-                languageKey: this.languageKey,
-            });
-        }
-
-        if (this.allLyrics.length == 0) {
-            this.loading = true;
-            await this.store.dispatch(
-                "getAllLyrics",
-                this.userStore.state.currentUser?.settings?.languageKey ?? "no"
-            );
-            this.loading = false;
-        }
-    }
-
     public get listType() {
         return this.songListType;
     }
@@ -122,8 +104,8 @@ export default class SongList extends Vue {
         return this.searchQuery !== "";
     }
 
-    public get allLyrics() {
-        return this.store.state.allLyrics;
+    public get allLyrics(): Lyrics[] {
+        return this.store.getters.collection?.lyrics ?? [];
     }
 
     public get filteredNumbers() {
@@ -161,7 +143,7 @@ export default class SongList extends Vue {
     }
 
     public get collection(): Collection {
-        return this.songStore.state.collection;
+        return this.songStore.getters.collection;
     }
 
     public get languageKey() {
@@ -172,22 +154,19 @@ export default class SongList extends Vue {
         return this.store.getters.song ?? {};
     }
 
-    public async selectSong(song: Song) {
-        console.log("test");
-        if (this.disabled.find((s) => s.number == song.number)) return;
-        this.songStore.commit("selectSong", song);
+    public async selectSong(number: number) {
+        if (this.disabled.find((s) => s.number == number)) return;
         this.loading = true;
-        await this.songStore.dispatch(
-            "getLyrics",
-            this.userStore.getters.currentUser?.settings?.languageKey ?? "en"
-        );
-        this.$router.push({
-            name: "song",
-            params: {
-                collection: song.collection.key,
-                number: song.number,
-            },
-        });
+        await this.songStore.dispatch('selectSong', number);
+        if (this.collection) {
+            this.$router.push({
+                name: "song",
+                params: {
+                    collection: this.collection?.key,
+                    number: number,
+                },
+            });
+        }
         this.loading = false;
     }
 

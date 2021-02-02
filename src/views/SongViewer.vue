@@ -64,16 +64,6 @@ export default class SongViewer extends Vue {
     public transposed = false;
     public show = true;
 
-    public async mounted() {
-        if (!this.lyrics) {
-            await this.songStore.dispatch("load", {
-                collectionKey: this.$route.params.collection,
-                number: this.$route.params.number,
-                languageKey: this.languageKey,
-            });
-        }
-    }
-
     public get extended() {
         return this.store.getters.extended;
     }
@@ -125,8 +115,8 @@ export default class SongViewer extends Vue {
         );
     }
 
-    public get lyrics(): Lyrics {
-        return this.songStore.getters.lyrics;
+    public get lyrics(): Lyrics | undefined {
+        return this.songStore.state.lyrics;
     }
 
     public get song(): Song | undefined {

@@ -5,6 +5,7 @@ import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
+import { Collection } from '@/classes';
 
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
@@ -12,7 +13,7 @@ async function init(commit: Commit) {
     try {
         const languages = await api.items.getLanguages();
         commit('languages', languages);
-        const collections = await api.songs.getCollections();
+        const collections = (await api.songs.getCollections()).map(c => new Collection(c));
         commit('collections', collections);
     } catch (e) {
         console.log(e);
@@ -111,6 +112,15 @@ export const sessionStore = createStore<Session>({
         collections(state, collections: Collection[]) {
             state.collections = collections;
         },
+        collection(state, collection: Collection) {
+            const c = state.collections.find(c => c.id == collection.id);
+
+            if (c) {
+                state.collections[state.collections.indexOf(c)] = collection;
+            } else {
+                state.collections.push(collection);
+            }
+        },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;
         },
@@ -130,7 +140,8 @@ export const sessionStore = createStore<Session>({
                 const subscriptions = state.currentUser.subscriptions;
                 return state.collections.filter(c => subscriptions
                     .map(s => s.collectionIds)
-                    .some(i => i.includes(c.id)));
+                    .some(i => i.includes(c.id)))
+                    .map(c => new Collection(c));
             } else {
                 return [];
             }

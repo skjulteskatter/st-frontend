@@ -72,7 +72,7 @@ export default class LyricsViewer extends Vue {
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit("selectSong", JSON.parse(songItem));
+            this.store.commit("song", JSON.parse(songItem));
         }
         window.addEventListener("storage", (event) => {
             if (event.key == "song") {

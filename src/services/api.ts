@@ -39,7 +39,7 @@ export const admin = {
 
 export const songs = {
     getCollections() {
-        return http.get<Collection[]>('api/Collections');
+        return http.get<CollectionInterface[]>('api/Collections');
     },
     getAllSongs(collection: string) {
         return http.get<SongInterface[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles/contributors,audioFiles/contributors`);

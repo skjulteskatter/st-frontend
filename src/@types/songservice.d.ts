@@ -5,8 +5,8 @@ interface SongInterface {
     name: {
         [languageKey: string]: string;
     };
-    authors: Contributor[];
-    composers: Contributor[];
+    authors: ContributorInterface[];
+    composers: ContributorInterface[];
     melodyOrigin: Origin;
     leadSheetUrl: string;
     yearWritten: number;
@@ -19,7 +19,7 @@ interface SongInterface {
 }
 
 interface ContributorCollectionItem {
-    contributor: Contributor;
+    contributor: ContributorInterface;
     songs: SongInterface[];
 }
 
@@ -30,10 +30,10 @@ interface MediaFile {
     language: Language;
     name: string;
     directUrl: string;
-    contributors: Contributor[];
+    contributors: ContributorInterface[];
 }
 
-interface Contributor {
+interface ContributorInterface {
     id: string;
     name: string;
     birthYear: number;
@@ -43,7 +43,7 @@ interface Contributor {
     };
 }
 
-interface Collection {
+interface CollectionInterface {
     id: string;
     name: {
         [lang: string]: string;

@@ -1,7 +1,7 @@
 import { Converter } from 'showdown';
 const converter = new Converter();
 
-export default class ContributorItem implements Contributor{
+export default class Contributor implements ContributorInterface {
     public biography: {
         [key: string]: string;
     } = {};
@@ -10,7 +10,7 @@ export default class ContributorItem implements Contributor{
     public id = '';
     public name = '';
 
-    constructor(contributor: Contributor) {
+    constructor(contributor: ContributorInterface) {
         this.biography = contributor.biography;
         this.birthYear = contributor.birthYear;
         this.country = contributor.country;
