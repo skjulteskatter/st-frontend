@@ -7,8 +7,9 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import firebase from "@/services/firebase";
 import BaseButton from "@/components/BaseButton.vue";
+import { useStore } from "vuex";
+import { sessionKey } from "@/store";
 
 @Options({
     components: {
@@ -16,9 +17,12 @@ import BaseButton from "@/components/BaseButton.vue";
     },
 })
 export default class OptionsComponent extends Vue {
+    private store = useStore(sessionKey);
+
     logout() {
-        firebase.signOut();
-        window.location.replace("/login");
+        this.store.dispatch('logout').then(() => {
+            window.location.replace("/login");
+        });
     }
 }
 </script>

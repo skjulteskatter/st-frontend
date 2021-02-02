@@ -9,7 +9,7 @@ class Http {
             } else if (response.status === 401) {
                 setTimeout(() => {
                     if (!auth.isAuthenticated) {
-                        auth.login()
+                        return "";
                     }
                 }, 10000)
                 // auth.startLogin();

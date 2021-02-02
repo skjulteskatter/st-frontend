@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <base-card id="login-card" v-if="authInitialized && !loggedIn" border>
+        <base-card id="login-card" v-if="initialized && !user" border>
             <div class="login gap-y">
                 <h1 class="login__title">Please log in</h1>
                 <div class="social">
@@ -77,16 +77,16 @@ export default class Login extends Vue {
         this.$router.push({ name: "create-user" });
     }
 
+    public get user() {
+        return this.store.state.currentUser;
+    }
+
     public async login(provider: string) {
         await this.store.dispatch("socialLogin", provider);
     }
 
-    public get authInitialized() {
-        return this.store.state.authInitialized;
-    }
-
-    public get loggedIn() {
-        return this.store.state.loggedIn;
+    public get initialized() {
+        return this.store.state.initialized;
     }
 }
 </script>

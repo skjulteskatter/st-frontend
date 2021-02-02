@@ -108,7 +108,7 @@ export default class SongList extends Vue {
             this.loading = true;
             await this.store.dispatch(
                 "getAllLyrics",
-                this.userStore.state.currentUser.settings?.languageKey ?? "no"
+                this.userStore.state.currentUser?.settings?.languageKey ?? "no"
             );
             this.loading = false;
         }

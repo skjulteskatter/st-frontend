@@ -4,17 +4,17 @@
         <base-card class="user-info" border>
             <div class="user-info__wrapper gap-y">
                 <div class="fields">
-                    <div class="user-info__field" v-if="user.roles.length">
+                    <div class="user-info__field" v-if="roles.length">
                         <span
                             class="tag"
-                            v-for="role in user.roles"
+                            v-for="role in roles"
                             :key="'tag-' + role.name"
                             >{{ role.name }}</span
                         >
                     </div>
                     <div class="user-info__field">
-                        <h2 class="user-info__name">{{ user.displayName }}</h2>
-                        <p class="user-info__email">{{ user.email }}</p>
+                        <h2 class="user-info__name">{{ user ? user.displayName : '' }}</h2>
+                        <p class="user-info__email">{{ user ? user.email : '' }}</p>
                     </div>
                 </div>
                 <div
@@ -78,14 +78,19 @@ export default class Dashboard extends Vue {
     public token = localStorage.getItem("id_token");
 
     public get subscriptions(): Subscription[] {
-        return useStore(sessionKey).state.currentUser.subscriptions ?? [];
+        return useStore(sessionKey).state.currentUser?.subscriptions ?? [];
     }
 
     public get subscribedCollections() {
         return this.store.getters.collections;
     }
-    public get user(): User {
-        return useStore(sessionKey).getters?.currentUser || {};
+
+    public get user(): User | undefined {
+        return useStore(sessionKey).state.currentUser;
+    }
+
+    public get roles(): Role[] {
+        return this.user?.roles ?? [];
     }
 }
 </script>

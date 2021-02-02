@@ -86,12 +86,8 @@ export default class Login extends Vue {
         await this.store.dispatch("socialLogin", provider);
     }
 
-    public get authInitialized() {
-        return this.store.state.authInitialized;
-    }
-
-    public get loggedIn() {
-        return this.store.state.loggedIn;
+    public get initialized() {
+        return this.store.state.initialized;
     }
 }
 </script>

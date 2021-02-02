@@ -8,7 +8,7 @@ import { ensureLanguageIsFetched } from '@/i18n';
 
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
-    commit('currentUser', user);
+    commit('user', user);
     try {
         const languages = await api.items.getLanguages();
         commit('languages', languages);
@@ -24,32 +24,33 @@ async function init(commit: Commit) {
 }
 
 export interface Session {
-    currentUser: User;
-    isAuthenticated: boolean;
+    currentUser?: User;
     languages: Language[];
     initialized: boolean;
     collections: Collection[];
-    authInitialized: boolean;
-    loggedIn: boolean;
     extend: boolean;
+    error: string;
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
 
 export const sessionStore = createStore<Session>({
     state: {
-        currentUser: {} as User,
-        isAuthenticated: false,
         languages: [],
         initialized: false,
         collections: [],
-        authInitialized: false,
-        loggedIn: false,
         extend: false,
+        error: '',
     },
     actions: {
+        async startSession({commit}) {
+            if (auth.isAuthenticated) {
+                await init(commit);
+            }
+        },
         async socialLogin({commit}, provider: string) {
             await auth.login(provider);
+
             if (auth.isAuthenticated) {
                 await init(commit);
             }
@@ -59,14 +60,8 @@ export const sessionStore = createStore<Session>({
             password: string; 
             displayName: string;
         }) {
-            await auth.createUser(object.email, object.password);
+            await auth.createEmailAndPasswordUser(object.email, object.password);
 
-            if (auth.isAuthenticated) {
-                await init(commit);
-            }
-        },
-        async initialize({commit}) {
-            await auth.init();
             if (auth.isAuthenticated) {
                 await init(commit);
             }
@@ -76,38 +71,36 @@ export const sessionStore = createStore<Session>({
             password: string;
             stayLoggedIn: boolean;
         }) {
-            await auth.loginEmail(obj.email, obj.password, obj.stayLoggedIn);
+            await auth.loginWithEmailAndPassword(obj.email, obj.password, obj.stayLoggedIn);
+
             if (auth.isAuthenticated) {
                 await init(commit);
             }
         },
         async saveSettings({ state, commit }) {
-            if (state.currentUser.settings) {
+            if (state.currentUser?.settings) {
                 const user = await api.session.saveUser(state.currentUser.settings)
                 commit('currentUser', user);
                 await ensureLanguageIsFetched();
             }
+        },
+        async logout({ commit }) {
+            await auth.logout();
+            commit('logout');
         }
     },
     mutations: {
-        currentUser(state, user: User) {
+        user(state, user: User) {
             state.currentUser = user;
             if (user.settings) localStorage.setItem('languageKey', user.settings.languageKey);
         },
-        authInitialized(state, value: boolean) {
-            state.authInitialized = true;
-
-            state.loggedIn = value;
-            if (value == false) {
-                router.push({name: 'login'});
-            }
-        },
         logout(state) {
-            state.isAuthenticated = false;
-            state.currentUser = {} as User;
+            state.currentUser = undefined;
         },
         settings(state, settings: UserSettings) {
-            state.currentUser.settings = settings;
+            if (state.currentUser) {
+                state.currentUser.settings = settings;
+            }
         },
         languages(state, languages: Language[]) {
             state.languages = languages;
@@ -120,38 +113,33 @@ export const sessionStore = createStore<Session>({
         },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;
+        },
+        error(state, value: string) {
+            state.error = value;
         }
     },
     getters: {
-        currentUser(state) {
-            return state.currentUser;
-        },
-        isAdmin(state) {
+        isAdmin(state): boolean {
             return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
         },
-        languageKey(state) {
-            return state.currentUser.settings?.languageKey ?? localStorage.getItem('languageKey') ?? 'en';
+        languageKey(state): string {
+            return state.currentUser?.settings?.languageKey ?? localStorage.getItem('languageKey') ?? 'en';
         },
-        languages(state) {
-            return state.languages;
-        },
-        initialized(state) {
-            return state.initialized;
-        },
-        collections(state) {
-            const collections: Collection[] = [];
-            for (const sub of state.currentUser.subscriptions) {
-                for (const id of sub.collectionIds) {
-                    if (!collections.find(c => c.id == id)) {
-                        const collection = state.collections.find(c => c.id == id);
-                        if (collection) collections.push(collection);
-                    }
-                }
+        collections(state): Collection[] {
+            if (state.currentUser) {
+                const subscriptions = state.currentUser.subscriptions;
+                return state.collections.filter(c => subscriptions
+                    .map(s => s.collectionIds)
+                    .some(i => i.includes(c.id)));
+            } else {
+                return [];
             }
-            return collections;
         },
-        extended(state) {
-            return state.currentUser.roles.find(r => ["extended", "administrator"].includes(r.name)) !== undefined;
+        extended(state): boolean {
+            return state.currentUser?.roles.find(r => ["extended", "administrator"].includes(r.name)) !== undefined;
+        },
+        isAuthenticated(): boolean {
+            return auth.isAuthenticated;
         }
     }
 })

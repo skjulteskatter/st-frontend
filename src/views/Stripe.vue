@@ -3,7 +3,7 @@
         <div class="store__title gap-x">
             <h1>{{ $t("common.store") }}</h1>
             <base-button
-                v-if="user.subscriptions.length"
+                v-if="productIds.length"
                 :action="portal"
                 theme="secondary"
                 :loading="loading"
@@ -92,7 +92,7 @@ export default class Stripe extends Vue {
     }
 
     public get productIds() {
-        return this.user.subscriptions.map((s) => s.productId);
+        return this.user?.subscriptions.map((s) => s.productId) ?? [];
     }
 }
 </script>

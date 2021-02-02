@@ -29,7 +29,7 @@ export default class DashboardLayout extends Vue {
         return useStore(sessionKey).getters.isAdmin;
     }
     public get initialized() {
-        return useStore(sessionKey).getters.initialized;
+        return useStore(sessionKey).state.initialized;
     }
 }
 </script>
