@@ -31,7 +31,7 @@
 
             <div class="song-list__contributors">
                 <contributor-card
-                    v-for="contributor in allContributors"
+                    v-for="contributor in collection.authors"
                     :key="contributor.id"
                     :contributor="contributor"
                     type="author"
@@ -212,7 +212,7 @@ export default class SongList extends Vue {
     animation: slideInFromBottom 0.3s ease;
 
     &__contributors {
-        columns: 250px;
+        columns: 300px;
         column-gap: var(--st-spacing);
     }
 

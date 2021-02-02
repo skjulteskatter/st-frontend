@@ -1,12 +1,15 @@
 <template>
     <base-card class="contributor-card" border>
-        <b>{{ contributor.name }}</b>
+        <b class="contributor-card__title">{{ contributor.name }}</b>
         <ul class="contributor-card__list">
-            <li v-for="song in songs" :key="song.id">
-                <router-link
-                    :to="{ name: 'song', params: { number: song.number } }"
-                    >{{ song.name[languageKey] }}</router-link
-                >
+            <li
+                v-for="song in songs"
+                :key="song.id"
+                @click="selectSong(song)"
+                class="contributor-card__list__item gap-x"
+            >
+                <b>{{ song.number }}</b>
+                <span>{{ song.name[languageKey] }}</span>
             </li>
         </ul>
     </base-card>
@@ -39,6 +42,8 @@ import { Song } from "@/classes";
 export default class CobtributorCard extends Vue {
     public contributor: Contributor = {} as Contributor;
     public type = "";
+    private songStore = useStore(songKey);
+    private userStore = useStore(sessionKey);
     public filters: {
         [key: string]: (song: Song, contributor: Contributor) => boolean;
     } = {
@@ -51,13 +56,18 @@ export default class CobtributorCard extends Vue {
     };
 
     public get songs() {
-        return useStore(songKey).getters.collection.songs.filter((song: Song) =>
+        return this.songStore.getters.collection.songs.filter((song: Song) =>
             this.filters[this.type]?.(song, this.contributor)
         );
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey ?? "en";
+        return this.userStore.getters.languageKey ?? "en";
+    }
+
+    public selectSong(song: Song) {
+        this.songStore.dispatch("selectSong", song.number);
+        this.$router.push({ name: "song", params: { number: song.number } });
     }
 }
 </script>
@@ -65,17 +75,20 @@ export default class CobtributorCard extends Vue {
 <style lang="scss">
 .contributor-card {
     margin-bottom: var(--st-spacing);
+    break-inside: avoid;
+
     &__list {
         margin: var(--st-spacing) 0 0 0;
         padding: 0;
         font-size: 0.8rem;
+        color: var(--st-text-color);
+        opacity: 0.8;
 
-        li,
-        li > * {
+        &__item {
             display: block;
-            color: var(--st-text-color);
             margin-bottom: 0.2rem;
             text-decoration: none;
+            cursor: pointer;
 
             &:hover {
                 text-decoration: underline;
