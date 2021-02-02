@@ -29,7 +29,16 @@
                 </div>
             </div>
 
-            <div
+            <div class="song-list__contributors">
+                <contributor-card
+                    v-for="contributor in allContributors"
+                    :key="contributor.id"
+                    :contributor="contributor"
+                    type="author"
+                ></contributor-card>
+            </div>
+
+            <!-- <div
                 class="song-list__list song-list__list-rows gap-y"
                 v-if="filteredSongs.length && listType == 'rows'"
             >
@@ -61,7 +70,7 @@
                     :song="song"
                     @click="selectSong(song.number)"
                 ></song-list-item-card>
-            </div>
+            </div> -->
 
             <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
         </div>
@@ -73,11 +82,13 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
+
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
 import SongListItemNumber from "@/components/SongList/SongListItemNumber.vue";
 import SongListItemCard from "@/components/SongList/SongListItemCard.vue";
+import ContributorCard from "@/components/SongList/ContributorCard.vue";
 
 @Options({
     components: {
@@ -86,6 +97,7 @@ import SongListItemCard from "@/components/SongList/SongListItemCard.vue";
         SongListItemRow,
         SongListItemNumber,
         SongListItemCard,
+        ContributorCard,
     },
 })
 export default class SongList extends Vue {
@@ -142,6 +154,10 @@ export default class SongList extends Vue {
         );
     }
 
+    public get allContributors() {
+        return this.songStore.getters.collection.contributors ?? [];
+    }
+
     public get collection(): Collection {
         return this.songStore.getters.collection;
     }
@@ -157,7 +173,7 @@ export default class SongList extends Vue {
     public async selectSong(number: number) {
         if (this.disabled.find((s) => s.number == number)) return;
         this.loading = true;
-        await this.songStore.dispatch('selectSong', number);
+        await this.songStore.dispatch("selectSong", number);
         if (this.collection) {
             this.$router.push({
                 name: "song",
@@ -194,6 +210,11 @@ export default class SongList extends Vue {
 .song-list {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
+
+    &__contributors {
+        columns: 250px;
+        column-gap: var(--st-spacing);
+    }
 
     &__list {
         display: flex;
