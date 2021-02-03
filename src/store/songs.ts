@@ -1,10 +1,11 @@
-import { Lyrics, Collection } from '@/classes';
+import { Lyrics, Collection, Song } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 
 export interface Songs {
     collectionId?: string;
+    song?: Song;
     songNumber?: number;
     lyrics?: Lyrics;
     transposition?: number;
@@ -79,6 +80,9 @@ export const songStore = createStore<Songs>({
         },
         lines(state, lines: string[]) {
             state.lines = lines;
+        },
+        setSong(state, song: Song) {
+            state.song = song;
         }
     },
     getters: {
