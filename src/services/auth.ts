@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from '@/config';
 import { sessionStore } from '@/store';
+import router from '@/router';
 
 function notInitialized() {
     throw Error('FIREBASE DID NOT INITIALIZE');
@@ -56,6 +57,9 @@ class Auth {
     public accessToken = '';
     public expiresAt = 0;
     public initing = false;
+    public emailVerified = () => {
+        return a().currentUser?.emailVerified
+    }
 
     public setToken(token: string) {
         if (token !== '') {
@@ -112,7 +116,7 @@ class Auth {
         }
     }
 
-    public async createEmailAndPasswordUser(email: string, password: string) {
+    public async createEmailAndPasswordUser(email: string, password: string, displayName: string) {
         if (!a) {
             notInitialized();
         }
@@ -121,6 +125,10 @@ class Auth {
             .createUserWithEmailAndPassword(email, password);
         
         const user = result.user;
+
+        await user?.updateProfile({
+            displayName
+        });
 
         if (user) {
             await this.sendLinkToEmail();
@@ -140,6 +148,7 @@ class Auth {
         } else {
             notLoggedIn();
         }
+        router.push({name: 'verify-email'});
     }
 
     public async logout() {
@@ -163,7 +172,7 @@ class Auth {
 
     public get isAuthenticated() {
         this.accessToken = this.accessToken || localStorage.getItem('id_token') || '';
-        if (!this.accessToken) {
+        if (!this.accessToken || !this.emailVerified()) {
             return false;
         }
         const expiresAt = this.expiresAt || localStorage.getItem('id_expires_at') || '';

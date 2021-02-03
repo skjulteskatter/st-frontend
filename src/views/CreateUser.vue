@@ -2,17 +2,17 @@
     <div class="wrapper">
         <base-card id="login-card" border>
             <div class="login gap-y">
-                <h1 class="login__title">Please log in</h1>
-                <div class="social">
-                    <button
-                        class="social-button hover"
-                        @click="login('google')"
-                    >
-                        <img alt="GOOGLE ICON" src="/img/google.png" />
-                    </button>
-                    <!-- <button class="social-button hover" @click="login('twitter')"><img alt="TWITTER ICON" src="/img/twitter.svg"/></button> -->
-                </div>
+                <h1 class="login__title">Create account</h1>
                 <form @submit.prevent="submitForm" class="login__form gap-y">
+                    <div class="login__form__email">
+                        <label for="email">Display Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            autocomplete="name"
+                            v-model="form.displayName"
+                        />
+                    </div>
                     <div class="login__form__email">
                         <label for="email">Email</label>
                         <input
@@ -40,7 +40,7 @@
                                     : ''
                             "
                             type="password"
-                            id="password"
+                            id="repeat-password"
                             autocomplete="new-password"
                             v-model="form.repeatPassword"
                         />
@@ -67,6 +67,7 @@ import BaseCard from "@/components/BaseCard.vue";
 })
 export default class Login extends Vue {
     public form = {
+        displayName: '',
         email: "",
         password: "",
         repeatPassword: "",
@@ -75,15 +76,12 @@ export default class Login extends Vue {
     private store = useStore(sessionKey);
 
     public submitForm() {
-        this.store.dispatch("loginWithEmailPassword", {
-            email: this.form.email,
-            password: this.form.password,
-            stayLoggedIn: this.stayLoggedIn,
-        });
-    }
-
-    public async login(provider: string) {
-        await this.store.dispatch("socialLogin", provider);
+        if (this.form.password == this.form.repeatPassword && this.form.password != '' && this.form.displayName != '') {
+            this.store.dispatch("createUser", {
+                email: this.form.email,
+                password: this.form.password,
+            });
+        }
     }
 
     public get initialized() {
