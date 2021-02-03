@@ -97,7 +97,10 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Lyrics, Song } from "@/classes";
+import { Song } from "@/classes";
+import { useStore } from "vuex";
+import { songKey } from "@/store";
+import Contributor from "@/classes/contributor";
 
 @Options({
     components: {
@@ -107,31 +110,21 @@ import { Lyrics, Song } from "@/classes";
     props: {
         title: {
             type: String,
-            default: () => "",
         },
         description: {
             type: String,
-            default: () => "",
         },
         languageKey: {
             type: String,
-            default: () => "",
         },
         song: {
             type: Object,
-            default: () => undefined,
         },
         composers: {
             type: Array,
-            default: () => [],
         },
         authors: {
             type: Array,
-            default: () => [],
-        },
-        lyrics: {
-            type: Object,
-            default: () => undefined,
         },
     },
 })
@@ -139,9 +132,13 @@ export default class TransposedLyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public description = "";
-    public lyrics?: Lyrics;
     public languageKey = "";
+    public title = "";
     public song?: Song;
+    public authors: Contributor[] = [];
+    public composers: Contributor[] = [];
+
+    private songStore = useStore(songKey);
 
     // public toggleVerse(key: string) {
     // }
@@ -161,6 +158,10 @@ export default class TransposedLyricsViewer extends Vue {
             this.song?.melodyOrigin?.name.no ??
             undefined
         );
+    }
+
+    public get lyrics() {
+        return this.songStore.state.lyrics;
     }
 }
 </script>
