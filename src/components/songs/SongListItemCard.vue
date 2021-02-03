@@ -48,8 +48,5 @@ export default class SongListItemCard extends Vue {
         display: flex;
         font-size: 1.1rem;
     }
-
-    &__body {
-    }
 }
 </style>
