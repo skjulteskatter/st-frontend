@@ -90,7 +90,7 @@
             </div>
         </base-card>
         <base-card class="song-details__lyrics">
-            <div v-for="(verse, i) in text" :key="i">
+            <div v-for="(verse, i) in text" :key="verse.name + verse.content[0] + i">
                 <b>{{ verse.name }}</b>
                 <p v-for="line in verse.content" :key="line">{{ line }}</p>
             </div>
