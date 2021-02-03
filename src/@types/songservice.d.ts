@@ -10,6 +10,7 @@ interface SongInterface {
     melodyOrigin: Origin;
     leadSheetUrl: string;
     yearWritten: number;
+    themes: Theme[];
     originCountry: Country;
     audioFiles: MediaFile[];
     videoFiles: MediaFile[];
@@ -22,6 +23,11 @@ interface ContributorCollectionItem {
     contributor: ContributorInterface;
     songs: SongInterface[];
     songIds: string[];
+}
+
+interface Theme {
+    id: string;
+    name: LocaleString;
 }
 
 interface MediaFile {
@@ -93,4 +99,9 @@ interface Product {
     };
     collections: Collection[];
     prices: Price[];
+}
+
+interface ThemeCollectionItem {
+    theme: Theme;
+    songs: SongInterface[];
 }

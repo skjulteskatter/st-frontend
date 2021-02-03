@@ -58,6 +58,9 @@ export const songs = {
     },
     getAllComposers(collection: string) {
         return http.get<ContributorCollectionItem[]>(`api/Composers/${collection}`);
+    },
+    getAllThemes(collection: string) {
+        return http.get<ThemeCollectionItem[]>(`api/Themes/${collection}`);
     }
 }
 
