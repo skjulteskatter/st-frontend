@@ -63,18 +63,14 @@ import { Collection, Lyrics, Song } from "@/classes";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import SongListItemRow from "@/components/SongList/SongListItemRow.vue";
-import SongListItemNumber from "@/components/SongList/SongListItemNumber.vue";
-import SongListItemCard from "@/components/SongList/SongListItemCard.vue";
+import SongListItemNumber from "@/components/SongList";
 import ContributorCard from "@/components/SongList/ContributorCard.vue";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
-        SongListItemRow,
         SongListItemNumber,
-        SongListItemCard,
         ContributorCard,
     },
 })
@@ -87,7 +83,10 @@ export default class SongList extends Vue {
     public songListType = "numbers";
 
     public mounted() {
-        this.songStore.dispatch("selectCollection", this.$route.params.collection);
+        this.songStore.dispatch(
+            "selectCollection",
+            this.$route.params.collection
+        );
     }
 
     public get listType() {

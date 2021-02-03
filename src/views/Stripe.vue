@@ -16,25 +16,13 @@
             </base-button>
         </div>
         <div class="store__items">
-            <base-card
+            <store-card
                 v-for="product in products"
                 :key="product.id"
-                :image="product.collections[0].image"
-                class="store__items__item"
-                border
-            >
-                <h3>{{ product.name.no }}</h3>
-                <base-button
-                    class="store__items__item__button"
-                    v-if="!productIds.includes(product.id)"
-                    :action="() => checkout(product)"
-                    :loading="loading"
-                    >{{ $t("common.buy") }}</base-button
-                >
-                <label style="opacity: 0.6" v-else>{{
-                    $t("store.alreadyown")
-                }}</label>
-            </base-card>
+                :product="product"
+                :action="() => checkout(product)"
+                :isPurchaseable="!productIds.includes(product.id)"
+            ></store-card>
         </div>
     </div>
 </template>
@@ -44,13 +32,16 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
 import { sessionKey } from "@/store";
+
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import { StoreCard } from "@/components/Store";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
+        StoreCard,
     },
 })
 export default class Stripe extends Vue {
@@ -111,26 +102,6 @@ export default class Stripe extends Vue {
 
         @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;
-        }
-
-        &__item {
-            display: flex;
-
-            &__button {
-                align-self: flex-end;
-            }
-
-            .card__content {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                align-items: flex-start;
-                width: 100%;
-
-                h3 {
-                    margin-top: 0;
-                }
-            }
         }
     }
 }
