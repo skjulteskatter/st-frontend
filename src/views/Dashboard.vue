@@ -14,6 +14,8 @@
                     </div>
                     <div class="user-info__field">
                         <h2 class="user-info__name">{{ user.displayName }}</h2>
+                        <input type="text" v-model="newDisplayName" :placeholder="user.displayName"/>
+                        <button @click="setDisplayName">SET</button>
                         <p class="user-info__email">{{ user.email }}</p>
                     </div>
                 </div>
@@ -76,9 +78,11 @@ export default class Dashboard extends Vue {
     public showApiToken = false;
     public store = useStore(sessionKey);
     public token = localStorage.getItem("id_token");
+    public newDisplayName = '';
+    public changeName = false;
 
     public get subscriptions(): Subscription[] {
-        return useStore(sessionKey).state.currentUser?.subscriptions ?? [];
+        return this.store.state.currentUser?.subscriptions ?? [];
     }
 
     public get subscribedCollections() {
@@ -86,7 +90,11 @@ export default class Dashboard extends Vue {
     }
 
     public get user(): User | undefined {
-        return useStore(sessionKey).state.currentUser;
+        return this.store.state.currentUser;
+    }
+
+    public async setDisplayName() {
+        await this.store.dispatch('setDisplayName', this.newDisplayName);
     }
 }
 </script>

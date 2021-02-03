@@ -88,6 +88,13 @@ export const sessionStore = createStore<Session>({
         async logout({ commit }) {
             await auth.logout();
             commit('logout');
+        },
+        async setDisplayName({ state, commit }, name: string) {
+            await auth.setDisplayName(name);
+            
+            commit('user', Object.assign({
+                displayName: name,
+            }, state.currentUser))
         }
     },
     mutations: {

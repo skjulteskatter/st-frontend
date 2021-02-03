@@ -64,6 +64,15 @@ class Auth {
     }
     public verificationEmailSent = false;
 
+    public async setDisplayName(name: string) {
+        if (!a) {
+            notInitialized();
+        }
+        await a().currentUser?.updateProfile({
+            displayName: name,
+        });
+    }
+
     public setToken(token: string) {
         if (token !== '') {
             this.accessToken = token;
