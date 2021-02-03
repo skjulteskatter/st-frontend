@@ -90,7 +90,7 @@
             </div>
         </base-card>
         <base-card class="song-details__lyrics">
-            <div v-for="verse in text" :key="verse.name + verse.content">
+            <div v-for="verse in text" :key="verse.name + Math.random()">
                 <b>{{ verse.name }}</b>
                 <p v-for="line in verse.content" :key="line">{{ line }}</p>
             </div>
