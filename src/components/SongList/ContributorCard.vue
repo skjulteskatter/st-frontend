@@ -17,7 +17,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Contributor from "@/classes/contributor";
 import BaseCard from "@/components/BaseCard.vue";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";

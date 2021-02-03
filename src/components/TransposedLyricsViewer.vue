@@ -97,10 +97,9 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Song } from "@/classes";
+import { Song, Contributor } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
-import Contributor from "@/classes/contributor";
 
 @Options({
     components: {

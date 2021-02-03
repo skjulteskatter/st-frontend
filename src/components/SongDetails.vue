@@ -102,8 +102,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Lyrics, Song } from "@/classes";
-import ContributorItem from "@/classes/contributor";
+import { Contributor, Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -140,8 +139,8 @@ export default class SongDetails extends Vue {
     public description = "";
     public lyrics?: Lyrics;
     public languageKey = "";
-    public composers: ContributorItem[] = [];
-    public authors: ContributorItem[] = [];
+    public composers: Contributor[] = [];
+    public authors: Contributor[] = [];
     public title?: string;
     public song?: Song;
 

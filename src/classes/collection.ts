@@ -1,7 +1,5 @@
 import api from "@/services/api";
-import Contributor from "./contributor";
-import { Lyrics } from "./lyrics";
-import { Song } from "./song";
+import { Contributor, Lyrics, Song } from ".";
 
 
 export class Collection {
