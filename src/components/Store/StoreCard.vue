@@ -1,5 +1,6 @@
 <template>
     <base-card
+        v-if="product"
         class="store-card"
         :image="product.collections[0].image"
         footer
@@ -44,7 +45,7 @@ import BaseButton from "@/components/BaseButton.vue";
     },
 })
 export default class StoreCard extends Vue {
-    public product = {};
+    public product?: Product;
     public isPurchaseable = false;
     public action = () => undefined;
     public userStore = useStore(sessionKey);

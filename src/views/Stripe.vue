@@ -36,7 +36,7 @@ import { sessionKey } from "@/store";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { StoreCard } from "@/components/Store";
+import { StoreCard } from "@/components/store";
 
 @Options({
     components: {

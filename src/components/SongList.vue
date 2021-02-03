@@ -67,7 +67,7 @@ import BaseButton from "@/components/BaseButton.vue";
 import {
     SongListItemNumber,
     ContributorCard,
-} from "@/components/SongList/index";
+} from "@/components/songs";
 
 @Options({
     components: {
