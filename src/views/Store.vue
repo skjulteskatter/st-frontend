@@ -45,7 +45,7 @@ import { StoreCard } from "@/components/store";
         StoreCard,
     },
 })
-export default class Stripe extends Vue {
+export default class Store extends Vue {
     private store = useStore(stripeKey);
     public loading = false;
 
