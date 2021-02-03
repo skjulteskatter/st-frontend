@@ -1,7 +1,7 @@
 <template>
     <div id="users">
         <div class="header gap-x">
-            <h1>Users</h1>
+            <h2>Users</h2>
             <base-button
                 :class="{ disabled: disableButton }"
                 :action="refreshUsers"
@@ -140,8 +140,7 @@ export default class UsersList extends Vue {
 .header {
     display: flex;
     align-items: center;
-    // gap: var(--st-spacing);
-    margin: 0;
+    justify-content: space-between;
 }
 
 .edit-user {

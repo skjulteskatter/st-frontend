@@ -1,7 +1,7 @@
 <template>
     <div class="store">
-        <div class="store__title gap-x">
-            <h1>{{ $t("common.store") }}</h1>
+        <div class="store__header">
+            <h1 class="store__title">{{ $t("common.store") }}</h1>
             <base-button
                 v-if="productIds.length"
                 :action="portal"
@@ -15,6 +15,7 @@
                 }}
             </base-button>
         </div>
+        <hr />
         <div class="store__items">
             <store-card
                 v-for="product in products"
@@ -91,10 +92,20 @@ export default class Stripe extends Vue {
 <style lang="scss">
 .store {
     &__title {
+        margin: 0;
+    }
+
+    &__header {
         display: flex;
         align-items: center;
-        // gap: var(--st-spacing);
+        justify-content: space-between;
     }
+
+    hr {
+        border: 1px solid var(--st-border-color);
+        margin: var(--st-spacing) 0;
+    }
+
     &__items {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

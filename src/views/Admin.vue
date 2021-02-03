@@ -1,8 +1,8 @@
 <template>
     <div id="admin-panel">
         <div v-if="isAdmin">
-            <h1>Admin</h1>
-
+            <h1 class="admin-panel__title">Admin</h1>
+            <hr />
             <users-list :users="users" :currentUser="currentUser"></users-list>
         </div>
         <div v-else>
@@ -15,12 +15,12 @@
 import { sessionKey, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import UsersList from '@/components/UsersList.vue';
+import UsersList from "@/components/UsersList.vue";
 
 @Options({
     components: {
-        UsersList
-    }
+        UsersList,
+    },
 })
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
@@ -30,8 +30,8 @@ export default class Subscriptions extends Vue {
     get users(): User[] {
         return useStore(usersKey).state.users ?? [];
     }
-    
-    public get currentUser(){
+
+    public get currentUser() {
         return useStore(sessionKey).state.currentUser;
     }
 
@@ -41,6 +41,10 @@ export default class Subscriptions extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.admin-panel {
+    &__title {
+        margin: 0;
+    }
+}
 </style>

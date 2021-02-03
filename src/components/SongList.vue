@@ -3,7 +3,7 @@
         <div class="loader" v-if="loading"></div>
         <div v-if="!loading">
             <div class="song-list__header">
-                <h1>{{ $t("common.songs") }}</h1>
+                <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
                     <base-button
                         theme="secondary"
@@ -28,6 +28,7 @@
                     />
                 </div>
             </div>
+            <hr />
 
             <div class="song-list__contributors">
                 <contributor-card
@@ -185,6 +186,10 @@ export default class SongList extends Vue {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
 
+    &__title {
+        margin: 0;
+    }
+
     &__contributors {
         columns: 300px;
         column-gap: var(--st-spacing);
@@ -193,7 +198,6 @@ export default class SongList extends Vue {
     &__list {
         display: flex;
         flex-direction: column;
-        // gap: var(--st-half-spacing);
 
         &-numbers {
             display: grid;
@@ -209,12 +213,9 @@ export default class SongList extends Vue {
     }
 
     &__header {
-        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid var(--st-border-color);
-        margin-bottom: var(--st-spacing);
     }
 
     &__search {

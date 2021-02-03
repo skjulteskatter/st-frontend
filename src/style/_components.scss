@@ -126,3 +126,8 @@ section {
 h1, h2, h3 {
     font-family: var(--st-secondary-font-family);
 }
+
+hr {
+    border: 1px solid var(--st-border-color);
+    margin: var(--st-spacing) 0;
+}
