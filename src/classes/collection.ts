@@ -35,9 +35,9 @@ export class Collection {
 
     private async initialize() {
         if (!this._initialized) {
+            this._initialized = true;
             this.contributors = (await api.songs.getAllContributors(this.key)).map(c => new Contributor(c.contributor));
             this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s, this.contributors));
-            this._initialized = true;
         }
     }
 
