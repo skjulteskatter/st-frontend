@@ -11,20 +11,16 @@ import { songKey, sessionKey } from "@/store";
 @Options({})
 export default class SongSelector extends Vue {
     private songStore = useStore(songKey);
-    // public steps: Step[] = [];
-
-    // public deselect(type: string) {
-    //     if (type == "collection") {
-    //         this.songStore.commit('selectSong', undefined);
-    //         this.steps = [];
-    //     } else if (type == "song") {
-    //         this.steps = [this.steps[0]];
-    //     }
-    // }
 
     public async mounted() {
-        if (this.$route.name != 'collections' && this.$route.params.collection) {
-            await this.songStore.dispatch('selectCollection', this.$route.params.collection);
+        if (
+            this.$route.name != "collections" &&
+            this.$route.params.collection
+        ) {
+            await this.songStore.dispatch(
+                "selectCollection",
+                this.$route.params.collection
+            );
         }
     }
 
