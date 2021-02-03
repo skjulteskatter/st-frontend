@@ -46,7 +46,7 @@ const providers: {
     google: new a.GoogleAuthProvider(),
     twitter: new a.TwitterAuthProvider(),
     microsoft: (() => {
-        const p = new a.OAuthProvider('microsoft');
+        const p = new a.OAuthProvider('microsoft.com');
         p.setCustomParameters({
             prompt: 'consent'
         });
