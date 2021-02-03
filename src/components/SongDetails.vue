@@ -113,32 +113,25 @@ import ContributorItem from "@/classes/contributor";
     props: {
         title: {
             type: String,
-            default: () => "",
         },
         description: {
             type: String,
-            default: () => "",
         },
         lyrics: {
             type: Object,
-            default: () => undefined,
         },
         languageKey: {
             type: String,
-            default: () => "",
-        },
-        song: {
-            type: Object,
-            default: () => undefined,
         },
         composers: {
             type: Array,
-            default: () => undefined,
         },
         authors: {
             type: Array,
-            default: () => undefined,
         },
+        song: {
+            type: Object,
+        }
     },
 })
 export default class SongDetails extends Vue {
@@ -147,18 +140,10 @@ export default class SongDetails extends Vue {
     public description = "";
     public lyrics?: Lyrics;
     public languageKey = "";
-    public song?: Song;
     public composers: ContributorItem[] = [];
     public authors: ContributorItem[] = [];
     public title?: string;
-
-    // public async mounted() {
-    //     const songDetailsElement = document.getElementById("song-details");
-
-    //     if (songDetailsElement) {
-    //         songDetailsElement.innerHTML = this.description;
-    //     }
-    // }
+    public song?: Song;
 
     public get text() {
         const verses: { name: string; content: string[] }[] = [];

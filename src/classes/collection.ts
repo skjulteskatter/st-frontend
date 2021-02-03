@@ -52,10 +52,6 @@ export class Collection {
         return this.songs.find(s => s.number == number);
     }
 
-    public getLyrics(number: number) {
-        return this.lyrics.find(l => l.number == number);
-    }
-
     public async transposeLyrics(number: number, transpose: number) {
         return new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
     }

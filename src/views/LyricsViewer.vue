@@ -114,7 +114,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get song() {
-        return useStore(songKey).state.song;
+        return this.store.getters.song;
     }
 
     public get title() {
@@ -130,7 +130,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get melodyOrigin() {
-        const melodyOrigin = this.store.state.song?.melodyOrigin;
+        const melodyOrigin = this.store.getters.song?.melodyOrigin;
 
         return melodyOrigin
             ? melodyOrigin.name[this.languageKey] ?? melodyOrigin.name.no

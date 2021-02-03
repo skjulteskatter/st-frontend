@@ -35,7 +35,6 @@ export default class Songbooks extends Vue {
 
     public selectCollection(collection: Collection) {
         if (!this.available.find((c) => c.id == collection.id)) return;
-        this.songStore.dispatch("selectCollection", collection.id);
         this.$router.push({
             name: "song-list",
             params: {

@@ -1,5 +1,5 @@
 <template>
-    <base-card class="contributor-card" border>
+    <base-card class="contributor-card" border v-if="contributor">
         <b class="contributor-card__title">{{ contributor.name }}</b>
         <ul class="contributor-card__list">
             <li
@@ -29,7 +29,7 @@ import { Song } from "@/classes";
     },
     props: {
         contributor: {
-            type: Contributor,
+            type: Object,
         },
         type: {
             type: String,
@@ -39,8 +39,8 @@ import { Song } from "@/classes";
         },
     },
 })
-export default class CobtributorCard extends Vue {
-    public contributor: Contributor = {} as Contributor;
+export default class ContributorCard extends Vue {
+    public contributor?: Contributor;
     public type = "";
     private songStore = useStore(songKey);
     private userStore = useStore(sessionKey);
@@ -57,7 +57,7 @@ export default class CobtributorCard extends Vue {
 
     public get songs() {
         return this.songStore.getters.collection.songs.filter((song: Song) =>
-            this.filters[this.type]?.(song, this.contributor)
+            this.filters[this.type]?.(song, this.contributor as Contributor)
         );
     }
 
@@ -66,7 +66,6 @@ export default class CobtributorCard extends Vue {
     }
 
     public selectSong(song: Song) {
-        this.songStore.dispatch("selectSong", song.number);
         this.$router.push({ name: "song", params: { number: song.number } });
     }
 }

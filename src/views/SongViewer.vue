@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="initialized">
         <base-button v-if="extended && !transposed" @click="extend"
             >Advanced</base-button
         >
@@ -64,6 +64,13 @@ export default class SongViewer extends Vue {
     public transposed = false;
     public show = true;
 
+    public async mounted() {
+        if (!this.songStore.getters.collection) {
+            await this.songStore.dispatch('selectCollection', this.$route.params.collection);
+        }
+        await this.songStore.dispatch('selectSong', this.$route.params.number);
+    }
+
     public get extended() {
         return this.store.getters.extended;
     }
@@ -113,15 +120,19 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.state.lyrics;
+        return this.songStore.getters.lyrics;
     }
 
     public get song(): Song | undefined {
-        return this.songStore.state.song;
+        return this.songStore.getters.song;
     }
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get initialized() {
+        return this.store.state.initialized;
     }
 }
 </script>

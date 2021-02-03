@@ -86,12 +86,12 @@ export default class SongList extends Vue {
     public loading = false;
     public songListType = "numbers";
 
-    public get listType() {
-        return this.songListType;
+    public mounted() {
+        this.songStore.dispatch("selectCollection", this.$route.params.collection);
     }
 
-    public get advancedSearch() {
-        return this.searchQuery !== "";
+    public get listType() {
+        return this.songListType;
     }
 
     public get allLyrics(): Lyrics[] {
@@ -132,10 +132,6 @@ export default class SongList extends Vue {
         );
     }
 
-    public get allContributors() {
-        return this.songStore.getters.collection.contributors ?? [];
-    }
-
     public get collection(): Collection {
         return this.songStore.getters.collection;
     }
@@ -151,7 +147,6 @@ export default class SongList extends Vue {
     public async selectSong(number: number) {
         if (this.disabled.find((s) => s.number == number)) return;
         this.loading = true;
-        await this.songStore.dispatch("selectSong", number);
         if (this.collection) {
             this.$router.push({
                 name: "song",

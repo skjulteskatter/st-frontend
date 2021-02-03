@@ -23,12 +23,8 @@ export default class SongSelector extends Vue {
     // }
 
     public async mounted() {
-        if (this.$route.name != 'collections') {
+        if (this.$route.name != 'collections' && this.$route.params.collection) {
             await this.songStore.dispatch('selectCollection', this.$route.params.collection);
-
-            if (this.$route.name == 'song') {
-                await this.songStore.dispatch('selectSong', this.$route.params.number);
-            }
         }
     }
 

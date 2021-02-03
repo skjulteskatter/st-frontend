@@ -1,11 +1,11 @@
-import { Song, Lyrics, Collection } from '@/classes';
+import { Lyrics, Collection } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 
 export interface Songs {
     collectionId?: string;
-    song?: Song;
+    songNumber?: number;
     lyrics?: Lyrics;
     transposition?: number;
     verses: Verse[];
@@ -19,10 +19,7 @@ export const songKey: InjectionKey<Store<Songs>> = Symbol();
 export const songStore = createStore<Songs>({
     state: {
         collections: [],
-        lyrics: undefined,
-        song: undefined,
         verses: [],
-        transposition: undefined,
         lines: [],
         initialized: false,
     },
@@ -44,22 +41,15 @@ export const songStore = createStore<Songs>({
             if (!collection) {
                 return;
             }
-            const song = collection.getSong(number);
-            if (song) {
-                commit('song', song);
-            }
-            const lyrics = collection.getLyrics(number);
-            if (lyrics) {
-                commit('lyrics', lyrics);
-            }
+            commit('song', number);
         },
-        async transpose({state, commit, getters}, transpose: number) {
+        async transpose({commit, getters}, transpose: number) {
             const collection = getters.collection as Collection | undefined;
-            if (!collection || !state.song) {
+            if (!collection || !getters.song) {
                 return;
             }
 
-            const lyrics = await collection.transposeLyrics(state.song.number, transpose);
+            const lyrics = await collection.transposeLyrics(getters.song.number, transpose);
 
             commit('lyrics', lyrics);
             commit('transposition', transpose);
@@ -73,8 +63,8 @@ export const songStore = createStore<Songs>({
         collection(state, collectionId: string) {
             state.collectionId = collectionId;
         },
-        song(state, song: Song) {
-            state.song = song;
+        song(state, songNumber: number) {
+            state.songNumber = songNumber;
             state.lyrics = undefined;
             state.transposition = undefined;
         },
@@ -97,6 +87,12 @@ export const songStore = createStore<Songs>({
         },
         collection(state) {
             return state.collections.find(c => c.id == state.collectionId || c.key == state.collectionId);
+        },
+        song(state, getters) {
+            return (getters.collection as Collection)?.songs.find(s => s.number == state.songNumber);
+        },
+        lyrics(state, getters) {
+            return (getters.collection as Collection)?.lyrics.find(l => l.number == state.songNumber);
         }
     },
 });
