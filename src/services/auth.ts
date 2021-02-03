@@ -13,6 +13,7 @@ function invalidProvider() {
 }
 
 function notLoggedIn() {
+    router.push({name: 'login'});
     throw Error('NOT LOGGED IN');
 }
 
@@ -33,6 +34,7 @@ async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
         return true;
     } else {
         sessionStore.commit('error', 'EMAIL_NOT_VERIFIED');
+        router.push({name: 'verify-email'});
         return false;
     }
 }
@@ -57,9 +59,10 @@ class Auth {
     public accessToken = '';
     public expiresAt = 0;
     public initing = false;
-    public emailVerified = () => {
+    public get emailVerified () {
         return a().currentUser?.emailVerified
     }
+    public verificationEmailSent = false;
 
     public setToken(token: string) {
         if (token !== '') {
@@ -88,9 +91,7 @@ class Auth {
         const user = result.user;
 
         if (user) {
-            if (!await loginUser(this, user)) {
-                await this.sendLinkToEmail();
-            }
+            await loginUser(this, user)
         }
     }
 
@@ -110,9 +111,7 @@ class Auth {
         const user = result.user;
 
         if (user) {
-            if (!await loginUser(this, user)) {
-                await this.sendLinkToEmail();
-            }
+            await loginUser(this, user);
         }
     }
 
@@ -145,6 +144,7 @@ class Auth {
                 handleCodeInApp: true,
                 url: window.origin,
             });
+            this.verificationEmailSent = true;
         } else {
             notLoggedIn();
         }
@@ -172,7 +172,7 @@ class Auth {
 
     public get isAuthenticated() {
         this.accessToken = this.accessToken || localStorage.getItem('id_token') || '';
-        if (!this.accessToken || !this.emailVerified()) {
+        if (!this.accessToken || !this.emailVerified) {
             return false;
         }
         const expiresAt = this.expiresAt || localStorage.getItem('id_expires_at') || '';

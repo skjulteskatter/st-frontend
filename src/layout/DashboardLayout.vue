@@ -1,6 +1,6 @@
 <template>
-    <the-navbar v-if="user && initialized"></the-navbar>
-    <div class="container" v-if="user && initialized">
+    <the-navbar v-if="user"></the-navbar>
+    <div class="container" v-if="user">
         <router-view/>
     </div>
 </template>
