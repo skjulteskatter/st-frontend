@@ -1,13 +1,11 @@
 <template>
-    <div v-if="initialized">
+    <div v-if="initialized && song">
         <base-button v-if="extended && !transposed" @click="extend"
             >Advanced</base-button
         >
         <base-button @click="transpose">Transpose</base-button>
         <lyrics-settings
             v-if="show && isExtended && !transposed"
-            :authors="authors"
-            :composers="composers"
             :description="description"
             :languageKey="languageKey"
             :lyrics="lyrics"
@@ -17,8 +15,6 @@
 
         <transposed-lyrics-viewer
             v-if="show && transposed"
-            :authors="authors"
-            :composers="composers"
             :description="description"
             :languageKey="languageKey"
             :lyrics="lyrics"
@@ -28,8 +24,6 @@
 
         <song-details
             v-if="show && !isExtended && !transposed"
-            :authors="authors"
-            :composers="composers"
             :description="description"
             :languageKey="languageKey"
             :lyrics="lyrics"
@@ -91,14 +85,6 @@ export default class SongViewer extends Vue {
         this.show = false;
         this.store.commit("extend");
         this.show = true;
-    }
-
-    public get composers() {
-        return this.song?.composers ?? [];
-    }
-
-    public get authors() {
-        return this.song?.authors ?? [];
     }
 
     public get title() {

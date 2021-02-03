@@ -9,7 +9,7 @@
             </h2>
             <p class="song-details__metadata__credits">
                 <span>{{ $t("song.author") }}: </span>
-                <span v-for="author in authors" :key="author.id">
+                <span v-for="author in song.authors" :key="author.id">
                     <span v-if="!author.getBiography(languageKey)">{{
                         author.name
                     }}</span>
@@ -22,12 +22,12 @@
                 </span>
             </p>
             <p
-                v-if="composers.length > 0"
+                v-if="song.composers.length > 0"
                 class="song-details__metadata__credits"
             >
                 <span>{{ $t("song.composer") }}: </span>
                 <span
-                    v-for="composer in composers"
+                    v-for="composer in song.composers"
                     :key="composer.id"
                     :label="composer.name"
                 >
@@ -45,6 +45,7 @@
             <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
                 {{ melodyOrigin }}
             </p>
+            <b>{{song.yearWritten}}</b>
             <div v-if="description" v-html="description"></div>
         </base-card>
         <base-card
@@ -102,7 +103,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Contributor, Lyrics, Song } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -122,12 +123,6 @@ import { Contributor, Lyrics, Song } from "@/classes";
         languageKey: {
             type: String,
         },
-        composers: {
-            type: Array,
-        },
-        authors: {
-            type: Array,
-        },
         song: {
             type: Object,
         }
@@ -139,8 +134,6 @@ export default class SongDetails extends Vue {
     public description = "";
     public lyrics?: Lyrics;
     public languageKey = "";
-    public composers: Contributor[] = [];
-    public authors: Contributor[] = [];
     public title?: string;
     public song?: Song;
 

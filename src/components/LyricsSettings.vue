@@ -14,7 +14,7 @@
             >
             <p class="lyrics-settings__metadata__credits">
                 Author:
-                <span v-for="author in authors" :key="author.id">
+                <span v-for="author in song.authors" :key="author.id">
                     <span v-if="!author.getBiography(languageKey)">{{
                         author.name
                     }}</span>
@@ -27,12 +27,12 @@
                 </span>
             </p>
             <p
-                v-if="composers.length > 0"
+                v-if="song.composers.length > 0"
                 class="lyrics-settings__metadata__credits"
             >
                 Composer:
                 <span
-                    v-for="composer in composers"
+                    v-for="composer in song.composers"
                     :key="composer.id"
                     :label="composer.name"
                 >
@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Lyrics, Song, Contributor } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import Modal from "@/components/Modal.vue";
@@ -197,12 +197,6 @@ import Modal from "@/components/Modal.vue";
         song: {
             type: Object,
         },
-        authors: {
-            type: Array,
-        },
-        composers: {
-            type: Array,
-        },
     },
 })
 export default class LyricsSettings extends Vue {
@@ -213,8 +207,6 @@ export default class LyricsSettings extends Vue {
     public lyrics?: Lyrics;
     public languageKey = "";
     public song?: Song;
-    public composers: Contributor[] = [];
-    public authors: Contributor[] = [];
     public title = "";
 
     public lineSize = 2;
