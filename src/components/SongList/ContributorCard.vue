@@ -28,7 +28,7 @@ import { Song } from "@/classes";
         BaseCard,
     },
     props: {
-        contributor: {
+        contributorItem: {
             type: Object,
         },
         type: {
@@ -40,25 +40,13 @@ import { Song } from "@/classes";
     },
 })
 export default class ContributorCard extends Vue {
-    public contributor?: Contributor;
+    public contributorItem?: ContributorCollectionItem;
     public type = "";
     private songStore = useStore(songKey);
     private userStore = useStore(sessionKey);
-    public filters: {
-        [key: string]: (song: Song, contributor: Contributor) => boolean;
-    } = {
-        author(song: Song, contributor: Contributor) {
-            return song.authors.includes(contributor);
-        },
-        composer(song: Song, contributor: Contributor) {
-            return song.composers.includes(contributor);
-        },
-    };
 
     public get songs() {
-        return this.songStore.getters.collection.songs.filter((song: Song) =>
-            this.filters[this.type]?.(song, this.contributor as Contributor)
-        );
+        return this.songStore.getters.collection.songs.filter((s: Song) => this.contributorItem?.songIds.includes(s.id));
     }
 
     public get languageKey() {
@@ -67,6 +55,10 @@ export default class ContributorCard extends Vue {
 
     public selectSong(song: Song) {
         this.$router.push({ name: "song", params: { number: song.number } });
+    }
+
+    public get contributor() {
+        return this.contributorItem?.contributor;
     }
 }
 </script>

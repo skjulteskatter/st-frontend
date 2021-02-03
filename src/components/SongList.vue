@@ -32,8 +32,8 @@
             <div class="song-list__contributors">
                 <contributor-card
                     v-for="contributor in collection.authors"
-                    :key="contributor.id"
-                    :contributor="contributor"
+                    :key="contributor.contributor.id"
+                    :contributor-item="contributor"
                     type="author"
                 ></contributor-card>
             </div>

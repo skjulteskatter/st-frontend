@@ -17,6 +17,9 @@ export class Collection {
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
 
+    private _authors: ContributorCollectionItem[] = [];
+    private _composers: ContributorCollectionItem[] = [];
+
     private _currentLanguage = '';
 
     constructor(collection: CollectionInterface) {
@@ -31,6 +34,13 @@ export class Collection {
             this.contributors = (await api.songs.getAllContributors(this.key)).map(c => new Contributor(c.contributor));
 
             this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s, this.contributors));
+
+            api.songs.getAllAuthors(this.key).then(result => {
+                this._authors = result;
+            });
+            api.songs.getAllComposers(this.key).then(result => {
+                this._composers = result;
+            });
 
             this._initialized = true;
         }
@@ -56,11 +66,11 @@ export class Collection {
         return new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
     }
 
-    public get authors() {
-        return this.contributors.filter(c => this.songs.map(s => s.authors.map(a => a.id)).some(s => s.includes(c.id)));
+    public get authors(): ContributorCollectionItem[] {
+        return this._authors;
     }
 
     public get composers() {
-        return this.contributors.filter(c => this.songs.map(s => s.composers.map(a => a.id)).some(s => s.includes(c.id)));
+        return this._composers;
     }
 }
