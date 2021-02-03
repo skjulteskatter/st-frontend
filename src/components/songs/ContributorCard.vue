@@ -1,6 +1,7 @@
 <template>
     <base-card class="contributor-card" border v-if="contributor">
         <b class="contributor-card__title">{{ contributor.name }}</b>
+        <b style="float:right;">{{ songs.length }}</b>
         <ul class="contributor-card__list">
             <li
                 v-for="song in songs"
