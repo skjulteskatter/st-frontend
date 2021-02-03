@@ -63,8 +63,10 @@ import { Collection, Lyrics, Song } from "@/classes";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import SongListItemNumber from "@/components/SongList";
-import ContributorCard from "@/components/SongList/ContributorCard.vue";
+import {
+    SongListItemNumber,
+    ContributorCard,
+} from "@/components/SongList/index";
 
 @Options({
     components: {
@@ -211,6 +213,8 @@ export default class SongList extends Vue {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 1px solid var(--st-border-color);
+        margin-bottom: var(--st-spacing);
     }
 
     &__search {
