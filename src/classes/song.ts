@@ -1,6 +1,5 @@
 import showdown from 'showdown';
-import Contributor from './contributor';
-import ContributorItem from './contributor';
+import { Contributor } from '.';
 const converter = new showdown.Converter();
 
 export class Song implements SongInterface {
@@ -10,8 +9,8 @@ export class Song implements SongInterface {
     public name: {
         [languageKey: string]: string;
     } = {};
-    public authors: ContributorItem[] = []
-    public composers: ContributorItem[] = [];
+    public authors: Contributor[] = []
+    public composers: Contributor[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
     public originCountry: Country = {} as Country;

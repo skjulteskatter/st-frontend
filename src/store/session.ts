@@ -61,7 +61,7 @@ export const sessionStore = createStore<Session>({
             password: string; 
             displayName: string;
         }) {
-            await auth.createEmailAndPasswordUser(object.email, object.password);
+            await auth.createEmailAndPasswordUser(object.email, object.password, object.displayName);
 
             if (auth.isAuthenticated) {
                 await init(commit);
@@ -88,6 +88,13 @@ export const sessionStore = createStore<Session>({
         async logout({ commit }) {
             await auth.logout();
             commit('logout');
+        },
+        async setDisplayName({ state, commit }, name: string) {
+            await auth.setDisplayName(name);
+            
+            commit('user', Object.assign({
+                displayName: name,
+            }, state.currentUser))
         }
     },
     mutations: {

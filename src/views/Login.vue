@@ -10,12 +10,12 @@
                     >
                         <img alt="GOOGLE ICON" src="/img/google.png" />
                     </button>
-                    <button
+                    <!-- <button
                         class="social-button hover clickable"
                         @click="login('microsoft')"
                     >
                         <img alt="MICROSOFT" src="/img/microsoft.png" />
-                    </button>
+                    </button> -->
                     <!-- <button class="social-button hover" @click="login('twitter')"><img alt="TWITTER ICON" src="/img/twitter.svg"/></button> -->
                 </div>
                 <form @submit.prevent="submitForm" class="login__form gap-y">

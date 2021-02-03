@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { firebaseConfig } from '@/config';
 import { sessionStore } from '@/store';
+import router from '@/router';
 
 function notInitialized() {
     throw Error('FIREBASE DID NOT INITIALIZE');
@@ -12,6 +13,7 @@ function invalidProvider() {
 }
 
 function notLoggedIn() {
+    router.push({name: 'login'});
     throw Error('NOT LOGGED IN');
 }
 
@@ -32,6 +34,7 @@ async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
         return true;
     } else {
         sessionStore.commit('error', 'EMAIL_NOT_VERIFIED');
+        router.push({name: 'verify-email'});
         return false;
     }
 }
@@ -43,7 +46,7 @@ const providers: {
     google: new a.GoogleAuthProvider(),
     twitter: new a.TwitterAuthProvider(),
     microsoft: (() => {
-        const p = new a.OAuthProvider('microsoft');
+        const p = new a.OAuthProvider('microsoft.com');
         p.setCustomParameters({
             prompt: 'consent'
         });
@@ -56,6 +59,19 @@ class Auth {
     public accessToken = '';
     public expiresAt = 0;
     public initing = false;
+    public get emailVerified () {
+        return a().currentUser?.emailVerified
+    }
+    public verificationEmailSent = false;
+
+    public async setDisplayName(name: string) {
+        if (!a) {
+            notInitialized();
+        }
+        await a().currentUser?.updateProfile({
+            displayName: name,
+        });
+    }
 
     public setToken(token: string) {
         if (token !== '') {
@@ -84,9 +100,7 @@ class Auth {
         const user = result.user;
 
         if (user) {
-            if (!await loginUser(this, user)) {
-                await this.sendLinkToEmail();
-            }
+            await loginUser(this, user)
         }
     }
 
@@ -106,13 +120,11 @@ class Auth {
         const user = result.user;
 
         if (user) {
-            if (!await loginUser(this, user)) {
-                await this.sendLinkToEmail();
-            }
+            await loginUser(this, user);
         }
     }
 
-    public async createEmailAndPasswordUser(email: string, password: string) {
+    public async createEmailAndPasswordUser(email: string, password: string, displayName: string) {
         if (!a) {
             notInitialized();
         }
@@ -121,6 +133,10 @@ class Auth {
             .createUserWithEmailAndPassword(email, password);
         
         const user = result.user;
+
+        await user?.updateProfile({
+            displayName
+        });
 
         if (user) {
             await this.sendLinkToEmail();
@@ -137,9 +153,11 @@ class Auth {
                 handleCodeInApp: true,
                 url: window.origin,
             });
+            this.verificationEmailSent = true;
         } else {
             notLoggedIn();
         }
+        router.push({name: 'verify-email'});
     }
 
     public async logout() {
@@ -163,7 +181,7 @@ class Auth {
 
     public get isAuthenticated() {
         this.accessToken = this.accessToken || localStorage.getItem('id_token') || '';
-        if (!this.accessToken) {
+        if (!this.accessToken || !this.emailVerified) {
             return false;
         }
         const expiresAt = this.expiresAt || localStorage.getItem('id_expires_at') || '';

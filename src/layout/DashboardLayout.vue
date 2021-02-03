@@ -1,6 +1,6 @@
 <template>
-    <the-navbar v-if="user && initialized"></the-navbar>
-    <div class="container" v-if="user && initialized">
+    <the-navbar v-if="user"></the-navbar>
+    <div class="container" v-if="user">
         <router-view/>
     </div>
 </template>
@@ -20,6 +20,9 @@ export default class DashboardLayout extends Vue {
     mounted(){
         document.documentElement.style.setProperty('--st-primary-color', localStorage.getItem('theme_color') || themes.default);
         themes.load();
+        if (this.initialized && !this.user) {
+            this.$router.push({name: 'login'});
+        }
     }
 
     public get user() {

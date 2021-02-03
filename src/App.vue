@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="initialized">
         <router-view />
     </div>
 </template>
@@ -7,6 +7,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import DashboardLayout from "@/layout/DashboardLayout.vue";
+import { useStore } from "vuex";
+import { sessionKey } from "./store";
 
 @Options({
     components: {
@@ -18,6 +20,10 @@ export default class App extends Vue {
 
     public mounted() {
         this.onLyrics = this.$route.name == "lyrics";
+    }
+
+    public get initialized() {
+        return useStore(sessionKey).state.initialized;
     }
 }
 </script>

@@ -167,11 +167,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Lyrics, Song } from "@/classes";
+import { Lyrics, Song, Contributor } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import Modal from "@/components/Modal.vue";
-import ContributorItem from "@/classes/contributor";
 
 @Options({
     components: {
@@ -214,8 +213,8 @@ export default class LyricsSettings extends Vue {
     public lyrics?: Lyrics;
     public languageKey = "";
     public song?: Song;
-    public composers: ContributorItem[] = [];
-    public authors: ContributorItem[] = [];
+    public composers: Contributor[] = [];
+    public authors: Contributor[] = [];
     public title = "";
 
     public lineSize = 2;

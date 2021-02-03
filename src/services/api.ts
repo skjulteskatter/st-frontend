@@ -52,6 +52,12 @@ export const songs = {
     },
     getAllContributors(collection: string) {
         return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}?expand=contributor/biography`);
+    },
+    getAllAuthors(collection: string) {
+        return http.get<ContributorCollectionItem[]>(`api/Authors/${collection}`);
+    },
+    getAllComposers(collection: string) {
+        return http.get<ContributorCollectionItem[]>(`api/Composers/${collection}`);
     }
 }
 

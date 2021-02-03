@@ -17,6 +17,7 @@ const CreateUser = () => import(/* webpackChunkName: 'createUser' */ '../views/C
 const Success = () => import(/* webpackChunkName: 'success' */ '../views/Success.vue');
 
 const NotFound = () => import(/* webpackChunkName: 'notFound' */ '../views/NotFound.vue');
+const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ '../views/VerifyEmail.vue');
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -88,6 +89,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/success',
         name: 'success',
         component: Success,
+    },
+    {
+        path: '/verify-email',
+        name: 'verify-email',
+        component: VerifyEmail,
     },
     {
         path: '/:pathMatch(.*)*',

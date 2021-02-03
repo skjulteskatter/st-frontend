@@ -21,6 +21,7 @@ interface SongInterface {
 interface ContributorCollectionItem {
     contributor: ContributorInterface;
     songs: SongInterface[];
+    songIds: string[];
 }
 
 interface MediaFile {
