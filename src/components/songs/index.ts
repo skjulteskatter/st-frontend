@@ -3,6 +3,7 @@ import SongListItemNumber from './SongListItemNumber.vue';
 import ContributorCard from './ContributorCard.vue';
 import ThemeCard from './ThemeCard.vue';
 import SongInfoCard from './SongInfoCard.vue';
+import SongListItemCard from './SongListItemCard.vue';
 
 export {
 	SongListItemRow,
@@ -10,4 +11,5 @@ export {
 	ContributorCard,
 	ThemeCard,
 	SongInfoCard,
+	SongListItemCard
 }

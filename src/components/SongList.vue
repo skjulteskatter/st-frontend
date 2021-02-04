@@ -35,47 +35,59 @@
                 </div>
             </div>
             <hr />
+            <div v-if="searchQuery == ''">
+                <div class="song-list__contributors" v-if="listType == 'authors'">
+                    <contributor-card
+                        v-for="contributor in collection.authors"
+                        
+                        :key="contributor.contributor.id"
+                        :contributor-item="contributor"
+                        type="author"
+                        :all-songs="filteredSongs"
+                    ></contributor-card>
+                </div>
 
-            <div class="song-list__contributors" v-if="listType == 'authors'">
-                <contributor-card
-                    v-for="contributor in collection.authors"
-                    
-                    :key="contributor.contributor.id"
-                    :contributor-item="contributor"
-                    type="author"
-                    :all-songs="filteredSongs"
-                ></contributor-card>
+                <div class="song-list__contributors" v-if="listType == 'composers'">
+                    <contributor-card
+                        v-for="contributor in collection.composers"
+                        
+                        :key="contributor.contributor.id"
+                        :contributor-item="contributor"
+                        type="author"
+                        :all-songs="filteredSongs"
+                    ></contributor-card>
+                </div>
+
+                <div class="song-list__contributors" v-if="listType == 'themes'">
+                    <theme-card
+                        v-for="theme in collection.themes"
+                        
+                        :key="theme.theme.id"
+                        :theme-item="theme"
+                        type="author"
+                        :all-songs="filteredSongs"
+                    ></theme-card>
+                </div>
+
+                <div class="song-list__list song-list__list-numbers" v-if="listType == 'default'">
+                    <song-list-item-number
+                        v-for="song in filteredSongs"
+                        :key="song.id"
+                        :song="song"
+                        @click="selectSong(song.number)"
+                    ></song-list-item-number>
+                </div>
             </div>
 
-            <div class="song-list__contributors" v-if="listType == 'composers'">
-                <contributor-card
-                    v-for="contributor in collection.composers"
-                    
-                    :key="contributor.contributor.id"
-                    :contributor-item="contributor"
-                    type="author"
-                    :all-songs="filteredSongs"
-                ></contributor-card>
-            </div>
-
-            <div class="song-list__contributors" v-if="listType == 'themes'">
-                <theme-card
-                    v-for="theme in collection.themes"
-                    
-                    :key="theme.theme.id"
-                    :theme-item="theme"
-                    type="author"
-                    :all-songs="filteredSongs"
-                ></theme-card>
-            </div>
-
-            <div class="song-list__list song-list__list-numbers" v-if="listType == 'default'">
-                <song-list-item-number
-                    v-for="song in filteredSongs"
+            <div class="song-list__list" v-if="searchQuery != ''">
+                <song-list-item-row
+                    v-for="song in filteredSongs.slice(0, 24)"
                     :key="song.id"
                     :song="song"
                     @click="selectSong(song.number)"
-                ></song-list-item-number>
+                >
+
+                </song-list-item-row>
             </div>
 
             <h1 class="warning" v-if="!filteredSongs.length">No results</h1>
@@ -93,6 +105,7 @@ import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import {
     SongListItemNumber,
+    SongListItemRow,
     ContributorCard,
     ThemeCard,
 } from "@/components/songs";
@@ -103,7 +116,8 @@ import {
         BaseButton,
         SongListItemNumber,
         ContributorCard,
-        ThemeCard
+        ThemeCard,
+        SongListItemRow
     },
 })
 export default class SongList extends Vue {
@@ -140,36 +154,8 @@ export default class SongList extends Vue {
         return this.store.getters.collection?.lyrics ?? [];
     }
 
-    // public get filteredNumbers() {
-    //     const numbers = this.songs
-    //         .filter(
-    //             (s) =>
-    //                 s.number.toString() == this.searchQuery ||
-    //                 s.rawContributorNames.includes(
-    //                     this.searchQuery
-    //                         .replace(/[^0-9a-zA-Z]/g, "")
-    //                         .toLowerCase()
-    //                 )
-    //         )
-    //         .map((s) => s.number);
-
-    //     return (
-    //         this.allLyrics
-    //             ?.filter(
-    //                 (l) =>
-    //                     numbers.includes(l.number) ||
-    //                     l.rawContent.includes(
-    //                         this.searchQuery
-    //                             .replace(/[^0-9a-zA-Z]/g, "")
-    //                             .toLowerCase()
-    //                     )
-    //             )
-    //             .map((l) => l.number) ?? []
-    //     );
-    // }
-
     public get filteredSongs() {
-        return this.searchFilter ? this.collection.filteredSongs(this.searchFilter) : this.collection.songs;
+        return this.searchQuery ? this.collection.filteredSongs(this.searchQuery) : this.collection.songs;
     }
 
     public get collection(): Collection {
