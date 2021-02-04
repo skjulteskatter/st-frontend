@@ -1,12 +1,12 @@
 <template>
     <base-card class="theme-card" border v-if="theme && songs.length > 0">
         <b class="theme-card__title">{{ name }}</b>
-        <b style="float:right;">{{ songs.length }}</b>
+        <b style="float:right">{{ songs.length }}</b>
         <ul class="theme-card__list">
             <li
                 v-for="song in songs"
                 :key="song.id"
-                @click="selectSong(song)"
+                @click="selectSong(song.number)"
                 class="theme-card__list__item gap-x"
             >
                 <b>{{ song.number }}</b>
@@ -49,8 +49,8 @@ export default class ThemeCard extends Vue {
         return this.allSongs.filter((s: Song) => this.themeItem?.songIds.includes(s.id));
     }
 
-    public selectSong(song: Song) {
-        this.$router.push({ name: "song", params: { number: song.number } });
+    public selectSong(number: number) {
+        this.$router.push({ name: "song", params: { number } });
     }
 
     public get theme() {

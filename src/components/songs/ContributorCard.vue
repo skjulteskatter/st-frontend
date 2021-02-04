@@ -1,12 +1,12 @@
 <template>
     <base-card class="contributor-card" border v-if="contributor && songs.length > 0">
         <b class="contributor-card__title">{{ contributor.name }}</b>
-        <b style="float:right;">{{ songs.length }}</b>
+        <b style="float:right">{{ songs.length }}</b>
         <ul class="contributor-card__list">
             <li
                 v-for="song in songs"
                 :key="song.id"
-                @click="selectSong(song)"
+                @click="selectSong(song.number)"
                 class="contributor-card__list__item gap-x"
             >
                 <b>{{ song.number }}</b>
@@ -49,8 +49,8 @@ export default class ContributorCard extends Vue {
         return this.allSongs.filter((s: Song) => this.contributorItem?.songIds.includes(s.id));
     }
 
-    public selectSong(song: Song) {
-        this.$router.push({ name: "song", params: { number: song.number } });
+    public selectSong(number: number) {
+        this.$router.push({ name: "song", params: { number } });
     }
 
     public get contributor() {
