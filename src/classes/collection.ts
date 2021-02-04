@@ -15,13 +15,13 @@ export class Collection {
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
 
-    private _authors: ContributorCollectionItem[] = [];
+    private _authors?: ContributorCollectionItem[];
     private _loadingAuthors = false;
 
-    private _composers: ContributorCollectionItem[] = [];
+    private _composers?: ContributorCollectionItem[];
     private _loadingComposers = false;
 
-    private _themes: ThemeCollectionItem[] = [];
+    private _themes?: ThemeCollectionItem[];
     private _loadingThemes = false;
 
     private _currentLanguage = '';
@@ -51,6 +51,10 @@ export class Collection {
             this._currentLanguage = language;
         }
         this._loading = false;
+    }
+
+    public get loading() {
+        return this._loading ||  this._loadingAuthors || this._loadingComposers || this._loadingThemes;
     }
 
     public getSong(number: number) {
@@ -87,32 +91,35 @@ export class Collection {
     }
 
     public get authors(): ContributorCollectionItem[] {
-        if (!this._loadingAuthors) {
+        if (!this._loadingAuthors && !this._authors) {
             this._loadingAuthors = true;
             api.songs.getAllAuthors(this.key).then(result => {
                 this._authors = result;
+                this._loadingAuthors = false;
             });
         }
-        return this._authors;
+        return this._authors ?? [];
     }
 
-    public get composers() {
-        if (!this._loadingComposers) {
+    public get composers(): ContributorCollectionItem[] {
+        if (!this._loadingComposers && !this._composers) {
             this._loadingComposers = true;
             api.songs.getAllComposers(this.key).then(result => {
                 this._composers = result;
+                this._loadingComposers = false;
             });
         }
-        return this._composers;
+        return this._composers ?? [];
     }
 
     public get themes(): ThemeCollectionItem[] {
-        if (!this._loadingThemes) {
+        if (!this._loadingThemes && !this._themes) {
             this._loadingThemes = true;
             api.songs.getAllThemes(this.key).then(result => {
                 this._themes = result;
+                this._loadingThemes = false;
             });
         }
-        return this._themes;
+        return this._themes ?? [];
     }
 }

@@ -112,13 +112,16 @@ export default class SongList extends Vue {
     private searchFilter = '';
     public searchQuery = "";
     public store = useStore(songKey);
-    public loading = false;
 
     public mounted() {
         this.songStore.dispatch(
             "selectCollection",
             this.$route.params.collection
         );
+    }
+
+    public get loading() {
+        return this.collection.loading;
     }
 
     public search() {
@@ -183,7 +186,6 @@ export default class SongList extends Vue {
 
     public async selectSong(number: number) {
         if (this.disabled.find((s) => s.number == number)) return;
-        this.loading = true;
         if (this.collection) {
             this.$router.push({
                 name: "song",
@@ -193,7 +195,6 @@ export default class SongList extends Vue {
                 },
             });
         }
-        this.loading = false;
     }
 
     public get songs(): Song[] {
