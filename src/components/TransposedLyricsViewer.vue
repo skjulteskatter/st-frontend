@@ -46,7 +46,7 @@
                 {{ melodyOrigin }}
             </p>
         </base-card>
-        <div id="transposed-lyrics"></div>
+        <div v-if="lyrics" v-html="lyrics.transposed"></div>
         <base-card
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
@@ -130,18 +130,6 @@ export default class TransposedLyricsViewer extends Vue {
     public song?: Song;
 
     private songStore = useStore(songKey);
-
-    // public toggleVerse(key: string) {
-    // }
-
-    public async mounted() {
-        const html = this.lyrics?.transposed ?? "";
-        const lyricsElement = document.getElementById("transposed-lyrics");
-
-        if (lyricsElement) {
-            lyricsElement.innerHTML = html;
-        }
-    }
 
     public get melodyOrigin() {
         return (

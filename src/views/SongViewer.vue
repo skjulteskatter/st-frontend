@@ -1,35 +1,38 @@
 <template>
     <div v-if="initialized && song">
-        <base-button v-if="extended && !transposed" @click="extend"
-            >Advanced</base-button
-        >
-        <base-button @click="transpose">Transpose</base-button>
-        <lyrics-settings
-            v-if="show && isExtended && !transposed"
-            :description="description"
-            :languageKey="languageKey"
-            :lyrics="lyrics"
-            :song="song"
-            :title="title"
-        ></lyrics-settings>
+        <div class="loader" v-if="loading"></div>
+        <div v-if="!loading">
+            <base-button v-if="extended && !transposed" @click="extend"
+                >Advanced</base-button
+            >
+            <base-button @click="transpose">Transpose</base-button>
+            
+            <song-info-card
+                :song="song"
+                :languageKey="languageKey"
+                :verses="lyrics ? Object.keys(lyrics.content).length : 0"
+            ></song-info-card>
 
-        <transposed-lyrics-viewer
-            v-if="show && transposed"
-            :description="description"
-            :languageKey="languageKey"
-            :lyrics="lyrics"
-            :song="song"
-            :title="title"
-        ></transposed-lyrics-viewer>
+            <lyrics-settings
+                v-if="isExtended && !transposed"
+                :languageKey="languageKey"
+                :lyrics="lyrics"
+                :song="song"
+            ></lyrics-settings>
 
-        <song-details
-            v-if="show && !isExtended && !transposed"
-            :description="description"
-            :languageKey="languageKey"
-            :lyrics="lyrics"
-            :song="song"
-            :title="title"
-        ></song-details>
+            <transposed-lyrics-viewer
+                v-if="transposed"
+                :languageKey="languageKey"
+                :song="song"
+            ></transposed-lyrics-viewer>
+
+            <song-details
+                v-if="!isExtended && !transposed"
+                :languageKey="languageKey"
+                :lyrics="lyrics"
+                :song="song"
+            ></song-details>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -43,6 +46,7 @@ import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Lyrics, Song } from "@/classes";
 import BaseButton from "@/components/BaseButton.vue";
+import { SongInfoCard } from '@/components/songs';
 
 @Options({
     components: {
@@ -50,13 +54,13 @@ import BaseButton from "@/components/BaseButton.vue";
         SongDetails,
         TransposedLyricsViewer,
         BaseButton,
+        SongInfoCard,
     },
 })
 export default class SongViewer extends Vue {
     public store = useStore(sessionKey);
     public songStore = useStore(songKey);
     public transposed = false;
-    public show = true;
 
     public async mounted() {
         if (!this.songStore.getters.collection) {
@@ -70,11 +74,13 @@ export default class SongViewer extends Vue {
     }
 
     public async transpose() {
-        this.show = false;
         this.store.commit("extend", false);
-        await this.songStore.dispatch("transpose", 0);
+        this.songStore.dispatch("transpose", 0);
         this.transposed = true;
-        this.show = true;
+    }
+
+    public get loading() {
+        return this.songStore.getters.collection?.loading;
     }
 
     public get isExtended() {
@@ -82,27 +88,7 @@ export default class SongViewer extends Vue {
     }
 
     public extend() {
-        this.show = false;
         this.store.commit("extend");
-        this.show = true;
-    }
-
-    public get title() {
-        return (
-            this.song?.name[this.languageKey] ??
-            this.song?.name.en ??
-            this.song?.name.no ??
-            ""
-        );
-    }
-
-    public get description() {
-        return (
-            this.song?.description[this.languageKey] ??
-            this.song?.description.en ??
-            this.song?.description.no ??
-            ""
-        );
     }
 
     public get lyrics(): Lyrics | undefined {
