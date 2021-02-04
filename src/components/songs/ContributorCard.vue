@@ -1,5 +1,5 @@
 <template>
-    <base-card class="contributor-card" border v-if="contributor">
+    <base-card class="contributor-card" border v-if="contributor && songs.length > 0">
         <b class="contributor-card__title">{{ contributor.name }}</b>
         <b style="float:right;">{{ songs.length }}</b>
         <ul class="contributor-card__list">
@@ -20,7 +20,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import { useStore } from "vuex";
-import { sessionKey, songKey } from "@/store";
+import { sessionKey } from "@/store";
 import { Song } from "@/classes";
 
 @Options({
@@ -37,20 +37,23 @@ import { Song } from "@/classes";
                 return ["author", "composer"].includes(value);
             },
         },
+        allSongs: {
+            type: Array
+        }
     },
 })
 export default class ContributorCard extends Vue {
     public contributorItem?: ContributorCollectionItem;
     public type = "";
-    private songStore = useStore(songKey);
+    public allSongs: Song[] = [];
     private userStore = useStore(sessionKey);
-
-    public get songs() {
-        return this.songStore.getters.collection.songs.filter((s: Song) => this.contributorItem?.songIds.includes(s.id));
-    }
 
     public get languageKey() {
         return this.userStore.getters.languageKey ?? "en";
+    }
+
+    public get songs() {
+        return this.allSongs.filter((s: Song) => this.contributorItem?.songIds.includes(s.id));
     }
 
     public selectSong(song: Song) {

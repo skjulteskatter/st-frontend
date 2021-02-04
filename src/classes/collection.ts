@@ -61,6 +61,27 @@ export class Collection {
         return this.contributors.find(c => c.id == id);
     }
 
+    public filteredSongs(filter: string) {
+        filter = filter.toLowerCase().replace(/[^0-9a-zA-Z]/g, "");
+
+        const numbers: number[] = []
+
+        for (const lyrics of this.lyrics) {
+
+            if (lyrics.title.includes(filter)) {
+                numbers.push(lyrics.number);
+                continue;
+            }
+
+            if (lyrics.rawContent.includes(filter)) {
+                numbers.push(lyrics.number);
+                continue;
+            }
+        }
+
+        return this.songs.filter(s => numbers.includes(s.number) || s.rawContributorNames.includes(filter));
+    }
+
     public async transposeLyrics(number: number, transpose: number) {
         return new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
     }

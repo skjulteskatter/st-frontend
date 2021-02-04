@@ -25,6 +25,7 @@
                         class="song-list__search"
                         placeholder="Search..."
                         v-model="searchQuery"
+                        @keydown.enter="search"
                     />
                 </div>
             </div>
@@ -33,9 +34,11 @@
             <div class="song-list__contributors">
                 <contributor-card
                     v-for="contributor in collection.authors"
+                    
                     :key="contributor.contributor.id"
                     :contributor-item="contributor"
                     type="author"
+                    :all-songs="filteredSongs"
                 ></contributor-card>
             </div>
 
@@ -51,7 +54,7 @@
                 ></song-list-item-number>
             </div> -->
 
-            <h1 class="warning" v-if="!filteredNumbers.length">No results</h1>
+            <h1 class="warning" v-if="!filteredSongs.length">No results</h1>
         </div>
     </div>
 </template>
@@ -80,6 +83,7 @@ import {
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
+    private searchFilter = '';
     public searchQuery = "";
     public store = useStore(songKey);
     public loading = false;
@@ -92,6 +96,10 @@ export default class SongList extends Vue {
         );
     }
 
+    public search() {
+        this.searchFilter = this.searchQuery;
+    }
+
     public get listType() {
         return this.songListType;
     }
@@ -100,38 +108,36 @@ export default class SongList extends Vue {
         return this.store.getters.collection?.lyrics ?? [];
     }
 
-    public get filteredNumbers() {
-        const numbers = this.songs
-            .filter(
-                (s) =>
-                    s.number.toString() == this.searchQuery ||
-                    s.rawContributorNames.includes(
-                        this.searchQuery
-                            .replace(/[^0-9a-zA-Z]/g, "")
-                            .toLowerCase()
-                    )
-            )
-            .map((s) => s.number);
+    // public get filteredNumbers() {
+    //     const numbers = this.songs
+    //         .filter(
+    //             (s) =>
+    //                 s.number.toString() == this.searchQuery ||
+    //                 s.rawContributorNames.includes(
+    //                     this.searchQuery
+    //                         .replace(/[^0-9a-zA-Z]/g, "")
+    //                         .toLowerCase()
+    //                 )
+    //         )
+    //         .map((s) => s.number);
 
-        return (
-            this.allLyrics
-                ?.filter(
-                    (l) =>
-                        numbers.includes(l.number) ||
-                        l.rawContent.includes(
-                            this.searchQuery
-                                .replace(/[^0-9a-zA-Z]/g, "")
-                                .toLowerCase()
-                        )
-                )
-                .map((l) => l.number) ?? []
-        );
-    }
+    //     return (
+    //         this.allLyrics
+    //             ?.filter(
+    //                 (l) =>
+    //                     numbers.includes(l.number) ||
+    //                     l.rawContent.includes(
+    //                         this.searchQuery
+    //                             .replace(/[^0-9a-zA-Z]/g, "")
+    //                             .toLowerCase()
+    //                     )
+    //             )
+    //             .map((l) => l.number) ?? []
+    //     );
+    // }
 
     public get filteredSongs() {
-        return this.songs.filter((s) =>
-            this.filteredNumbers.includes(s.number)
-        );
+        return this.searchFilter ? this.collection.filteredSongs(this.searchFilter) : this.collection.songs;
     }
 
     public get collection(): Collection {
