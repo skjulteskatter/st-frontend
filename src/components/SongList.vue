@@ -8,22 +8,22 @@
                     <base-button
                         theme="secondary"
                         @click="listType = 'default'"
-                        >Number</base-button
+                        >{{ $t("common.number") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'authors'"
-                        >Authors</base-button
+                        >{{ $t("song.authors") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'composers'"
-                        >Composers</base-button
+                        >{{ $t("song.composers") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'themes'"
-                        >Themes</base-button
+                        >{{ $t("song.themes") }}</base-button
                     >
                     <input
                         type="text"
@@ -39,7 +39,6 @@
             <div class="song-list__contributors" v-if="listType == 'authors'">
                 <contributor-card
                     v-for="contributor in collection.authors"
-                    
                     :key="contributor.contributor.id"
                     :contributor-item="contributor"
                     type="author"
@@ -50,7 +49,6 @@
             <div class="song-list__contributors" v-if="listType == 'composers'">
                 <contributor-card
                     v-for="contributor in collection.composers"
-                    
                     :key="contributor.contributor.id"
                     :contributor-item="contributor"
                     type="author"
@@ -61,7 +59,6 @@
             <div class="song-list__contributors" v-if="listType == 'themes'">
                 <theme-card
                     v-for="theme in collection.themes"
-                    
                     :key="theme.theme.id"
                     :theme-item="theme"
                     type="author"
@@ -69,7 +66,10 @@
                 ></theme-card>
             </div>
 
-            <div class="song-list__list song-list__list-numbers" v-if="listType == 'default'">
+            <div
+                class="song-list__list song-list__list-numbers"
+                v-if="listType == 'default'"
+            >
                 <song-list-item-number
                     v-for="song in filteredSongs"
                     :key="song.id"
@@ -103,13 +103,13 @@ import {
         BaseButton,
         SongListItemNumber,
         ContributorCard,
-        ThemeCard
+        ThemeCard,
     },
 })
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
-    private searchFilter = '';
+    private searchFilter = "";
     public searchQuery = "";
     public store = useStore(songKey);
 
@@ -129,7 +129,7 @@ export default class SongList extends Vue {
     }
 
     public set listType(value: string) {
-        this.store.commit('list', value);
+        this.store.commit("list", value);
     }
 
     public get listType() {
@@ -169,7 +169,9 @@ export default class SongList extends Vue {
     // }
 
     public get filteredSongs() {
-        return this.searchFilter ? this.collection.filteredSongs(this.searchFilter) : this.collection.songs;
+        return this.searchFilter
+            ? this.collection.filteredSongs(this.searchFilter)
+            : this.collection.songs;
     }
 
     public get collection(): Collection {

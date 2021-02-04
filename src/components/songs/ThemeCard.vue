@@ -1,7 +1,9 @@
 <template>
     <base-card class="theme-card" border v-if="theme && songs.length > 0">
         <b class="theme-card__title">{{ name }}</b>
-        <b style="float:right">{{ songs.length }}</b>
+        <b style="float: right; color: var(--st-primary-color)">{{
+            songs.length
+        }}</b>
         <ul class="theme-card__list">
             <li
                 v-for="song in songs"
@@ -32,8 +34,8 @@ import { Song } from "@/classes";
             type: Object,
         },
         allSongs: {
-            type: Array
-        }
+            type: Array,
+        },
     },
 })
 export default class ThemeCard extends Vue {
@@ -46,7 +48,9 @@ export default class ThemeCard extends Vue {
     }
 
     public get songs() {
-        return this.allSongs.filter((s: Song) => this.themeItem?.songIds.includes(s.id));
+        return this.allSongs.filter((s: Song) =>
+            this.themeItem?.songIds.includes(s.id)
+        );
     }
 
     public selectSong(number: number) {
