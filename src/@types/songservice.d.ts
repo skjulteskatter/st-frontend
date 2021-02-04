@@ -33,6 +33,7 @@ interface Theme {
 interface MediaFile {
     id: string;
     type: string;
+    category: string;
     number: number;
     language: Language;
     name: string;
