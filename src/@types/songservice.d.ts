@@ -103,5 +103,6 @@ interface Product {
 
 interface ThemeCollectionItem {
     theme: Theme;
+    songIds: string[];
     songs: SongInterface[];
 }

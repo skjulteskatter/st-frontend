@@ -7,18 +7,23 @@
                 <div style="display: flex; gap: var(--st-spacing)">
                     <base-button
                         theme="secondary"
-                        @click="songListType = 'numbers'"
+                        @click="listType = 'default'"
                         >Number</base-button
                     >
                     <base-button
                         theme="secondary"
-                        @click="songListType = 'rows'"
-                        >List</base-button
+                        @click="listType = 'authors'"
+                        >Authors</base-button
                     >
                     <base-button
                         theme="secondary"
-                        @click="songListType = 'cards'"
-                        >Cards</base-button
+                        @click="listType = 'composers'"
+                        >Composers</base-button
+                    >
+                    <base-button
+                        theme="secondary"
+                        @click="listType = 'themes'"
+                        >Themes</base-button
                     >
                     <input
                         type="text"
@@ -31,7 +36,7 @@
             </div>
             <hr />
 
-            <div class="song-list__contributors">
+            <div class="song-list__contributors" v-if="listType == 'authors'">
                 <contributor-card
                     v-for="contributor in collection.authors"
                     
@@ -42,17 +47,36 @@
                 ></contributor-card>
             </div>
 
-            <!-- <div
-                class="song-list__list song-list__list-numbers"
-                v-if="filteredSongs.length && listType == 'numbers'"
-            >
+            <div class="song-list__contributors" v-if="listType == 'composers'">
+                <contributor-card
+                    v-for="contributor in collection.composers"
+                    
+                    :key="contributor.contributor.id"
+                    :contributor-item="contributor"
+                    type="author"
+                    :all-songs="filteredSongs"
+                ></contributor-card>
+            </div>
+
+            <div class="song-list__contributors" v-if="listType == 'themes'">
+                <theme-card
+                    v-for="theme in collection.themes"
+                    
+                    :key="theme.theme.id"
+                    :theme-item="theme"
+                    type="author"
+                    :all-songs="filteredSongs"
+                ></theme-card>
+            </div>
+
+            <div class="song-list__list song-list__list-numbers" v-if="listType == 'default'">
                 <song-list-item-number
-                    v-for="song in songs"
+                    v-for="song in filteredSongs"
                     :key="song.id"
                     :song="song"
                     @click="selectSong(song.number)"
                 ></song-list-item-number>
-            </div> -->
+            </div>
 
             <h1 class="warning" v-if="!filteredSongs.length">No results</h1>
         </div>
@@ -70,6 +94,7 @@ import BaseButton from "@/components/BaseButton.vue";
 import {
     SongListItemNumber,
     ContributorCard,
+    ThemeCard,
 } from "@/components/songs";
 
 @Options({
@@ -78,6 +103,7 @@ import {
         BaseButton,
         SongListItemNumber,
         ContributorCard,
+        ThemeCard
     },
 })
 export default class SongList extends Vue {
@@ -87,7 +113,6 @@ export default class SongList extends Vue {
     public searchQuery = "";
     public store = useStore(songKey);
     public loading = false;
-    public songListType = "numbers";
 
     public mounted() {
         this.songStore.dispatch(
@@ -100,8 +125,12 @@ export default class SongList extends Vue {
         this.searchFilter = this.searchQuery;
     }
 
+    public set listType(value: string) {
+        this.store.commit('list', value);
+    }
+
     public get listType() {
-        return this.songListType;
+        return this.store.state.list;
     }
 
     public get allLyrics(): Lyrics[] {
