@@ -107,12 +107,6 @@ import { songKey } from "@/store";
         Modal,
     },
     props: {
-        title: {
-            type: String,
-        },
-        description: {
-            type: String,
-        },
         languageKey: {
             type: String,
         },
