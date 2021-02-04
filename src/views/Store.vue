@@ -36,7 +36,7 @@ import { sessionKey } from "@/store";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { StoreCard } from "@/components/Store";
+import { StoreCard } from "@/components/store";
 
 @Options({
     components: {
@@ -45,7 +45,7 @@ import { StoreCard } from "@/components/Store";
         StoreCard,
     },
 })
-export default class Stripe extends Vue {
+export default class Store extends Vue {
     private store = useStore(stripeKey);
     public loading = false;
 

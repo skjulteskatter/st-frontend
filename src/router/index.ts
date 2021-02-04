@@ -6,7 +6,7 @@ const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue')
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ '../views/KaraokeViewer.vue');
-const Store = () => import(/* webpackChunkName: 'store' */ '../views/Stripe.vue');
+const Store = () => import(/* webpackChunkName: 'store' */ '../views/Store.vue');
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');

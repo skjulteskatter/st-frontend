@@ -1,52 +1,5 @@
 <template>
     <div class="song-details" v-if="song">
-        <base-card class="song-details__metadata" border secondary>
-            <h2 class="song-details__metadata__title">
-                <span style="opacity: 0.5; padding-right: 0.5em">{{
-                    song.number
-                }}</span>
-                {{ title }}
-            </h2>
-            <p class="song-details__metadata__credits">
-                <span>{{ $t("song.author") }}: </span>
-                <span v-for="author in authors" :key="author.id">
-                    <span v-if="!author.getBiography(languageKey)">{{
-                        author.name
-                    }}</span>
-                    <modal :label="author.name" type="span" v-else>
-                        <div
-                            v-html="author.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p
-                v-if="composers.length > 0"
-                class="song-details__metadata__credits"
-            >
-                <span>{{ $t("song.composer") }}: </span>
-                <span
-                    v-for="composer in composers"
-                    :key="composer.id"
-                    :label="composer.name"
-                >
-                    <span v-if="!composer.getBiography(languageKey)">{{
-                        composer.name
-                    }}</span>
-                    <modal :label="composer.name" type="span" v-else>
-                        <div
-                            v-html="composer.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
-                {{ melodyOrigin }}
-            </p>
-            <div v-if="description" v-html="description"></div>
-        </base-card>
         <base-card
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
@@ -102,7 +55,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Contributor, Lyrics, Song } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -110,23 +63,11 @@ import { Contributor, Lyrics, Song } from "@/classes";
         Modal,
     },
     props: {
-        title: {
-            type: String,
-        },
-        description: {
-            type: String,
-        },
         lyrics: {
             type: Object,
         },
         languageKey: {
             type: String,
-        },
-        composers: {
-            type: Array,
-        },
-        authors: {
-            type: Array,
         },
         song: {
             type: Object,
@@ -136,12 +77,8 @@ import { Contributor, Lyrics, Song } from "@/classes";
 export default class SongDetails extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
-    public description = "";
     public lyrics?: Lyrics;
     public languageKey = "";
-    public composers: Contributor[] = [];
-    public authors: Contributor[] = [];
-    public title?: string;
     public song?: Song;
 
     public get text() {
@@ -175,14 +112,6 @@ export default class SongDetails extends Vue {
         }
 
         return verses;
-    }
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.name[this.languageKey] ??
-            this.song?.melodyOrigin?.name.no ??
-            undefined
-        );
     }
 }
 </script>

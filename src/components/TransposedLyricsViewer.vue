@@ -9,7 +9,7 @@
             </h2>
             <p class="song-details__metadata__credits">
                 Author:
-                <span v-for="author in authors" :key="author.id">
+                <span v-for="author in song.authors" :key="author.id">
                     <span v-if="!author.getBiography(languageKey)">{{
                         author.name
                     }}</span>
@@ -22,12 +22,12 @@
                 </span>
             </p>
             <p
-                v-if="composers.length > 0"
+                v-if="song.composers.length > 0"
                 class="song-details__metadata__credits"
             >
                 Composer:
                 <span
-                    v-for="composer in composers"
+                    v-for="composer in song.composers"
                     :key="composer.id"
                     :label="composer.name"
                 >
@@ -46,7 +46,7 @@
                 {{ melodyOrigin }}
             </p>
         </base-card>
-        <div id="transposed-lyrics"></div>
+        <div v-if="lyrics" v-html="lyrics.transposed"></div>
         <base-card
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
@@ -97,7 +97,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Song, Contributor } from "@/classes";
+import { Song } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 
@@ -119,12 +119,6 @@ import { songKey } from "@/store";
         song: {
             type: Object,
         },
-        composers: {
-            type: Array,
-        },
-        authors: {
-            type: Array,
-        },
     },
 })
 export default class TransposedLyricsViewer extends Vue {
@@ -134,22 +128,8 @@ export default class TransposedLyricsViewer extends Vue {
     public languageKey = "";
     public title = "";
     public song?: Song;
-    public authors: Contributor[] = [];
-    public composers: Contributor[] = [];
 
     private songStore = useStore(songKey);
-
-    // public toggleVerse(key: string) {
-    // }
-
-    public async mounted() {
-        const html = this.lyrics?.transposed ?? "";
-        const lyricsElement = document.getElementById("transposed-lyrics");
-
-        if (lyricsElement) {
-            lyricsElement.innerHTML = html;
-        }
-    }
 
     public get melodyOrigin() {
         return (

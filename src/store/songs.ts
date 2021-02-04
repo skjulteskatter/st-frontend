@@ -1,10 +1,11 @@
-import { Lyrics, Collection } from '@/classes';
+import { Lyrics, Collection, Song } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 
 export interface Songs {
     collectionId?: string;
+    song?: Song;
     songNumber?: number;
     lyrics?: Lyrics;
     transposition?: number;
@@ -12,6 +13,7 @@ export interface Songs {
     lines: string[];
     collections: Collection[];
     initialized: boolean;
+    list: string;
 }
 
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -22,6 +24,7 @@ export const songStore = createStore<Songs>({
         verses: [],
         lines: [],
         initialized: false,
+        list: 'default',
     },
     actions: {
         async selectCollection({state, commit, getters}, id: string) {
@@ -63,6 +66,9 @@ export const songStore = createStore<Songs>({
         collection(state, collectionId: string) {
             state.collectionId = collectionId;
         },
+        list(state, list: string) {
+            state.list = list;
+        },
         song(state, songNumber: number) {
             state.songNumber = songNumber;
             state.lyrics = undefined;
@@ -79,6 +85,9 @@ export const songStore = createStore<Songs>({
         },
         lines(state, lines: string[]) {
             state.lines = lines;
+        },
+        setSong(state, song: Song) {
+            state.song = song;
         }
     },
     getters: {

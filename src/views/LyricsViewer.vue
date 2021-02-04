@@ -1,31 +1,32 @@
 <template>
     <div id="lyrics-wrapper">
         <div class="lyrics">
-            <div class="lyrics__credits gap-x">
-                <h1 class="lyrics__number" v-if="number">{{ number }}</h1>
+            <div class="lyrics__credits gap-x" v-if="song">
+                <h1 class="lyrics__number" v-if="song.number">{{ song.number }}</h1>
                 <div>
                     <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
                     <p
                         class="lyrics__credits__author"
-                        v-if="authors.length > 0"
+                        v-if="song.authors.length > 0"
                     >
                         {{ $t("song.author") }}:
-                        <span v-for="author in authors" :key="author.id">
+                        <span v-for="author in song.authors" :key="author.id">
                             {{ author.name }}
                         </span>
                     </p>
                     <p
                         class="lyrics__credits__composer"
-                        v-if="composers.length > 0"
+                        v-if="song.composers.length > 0"
                     >
                         {{ $t("song.composer") }}:
-                        <span v-for="composer in composers" :key="composer.id">
+                        <span v-for="composer in song.composers" :key="composer.id">
                             {{ composer.name }}
                         </span>
                     </p>
                     <p class="lyrics__credits__composer" v-if="melodyOrigin">
                         {{ $t("song.melody") }}: {{ melodyOrigin }}
                     </p>
+                    <p class="lyrics__credits__composer">{{song.yearWritten}}</p>
                 </div>
             </div>
             <div id="text-wrapper">
@@ -72,13 +73,13 @@ export default class LyricsViewer extends Vue {
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit("song", JSON.parse(songItem));
+            this.store.commit("setSong", JSON.parse(songItem));
         }
         window.addEventListener("storage", (event) => {
             if (event.key == "song") {
                 const item = localStorage.getItem("song");
                 if (item) {
-                    this.store.commit("selectSong", JSON.parse(item));
+                    this.store.commit("setSong", JSON.parse(item));
                 }
             }
             if (event.key == "lyrics") {
@@ -114,15 +115,11 @@ export default class LyricsViewer extends Vue {
     }
 
     public get song() {
-        return this.store.getters.song;
+        return this.store.state.song;
     }
 
     public get title() {
         return this.song?.name[this.languageKey] ?? this.song?.name.no ?? "";
-    }
-
-    public get number() {
-        return this.song?.number ?? 0;
     }
 
     public get lyrics() {
@@ -139,14 +136,6 @@ export default class LyricsViewer extends Vue {
 
     public get languageKey(): string {
         return useStore(sessionKey).getters.languageKey;
-    }
-
-    public get authors() {
-        return this.song?.authors ?? [];
-    }
-
-    public get composers() {
-        return this.song?.composers ?? [];
     }
 }
 </script>

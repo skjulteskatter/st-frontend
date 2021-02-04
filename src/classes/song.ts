@@ -13,6 +13,7 @@ export class Song implements SongInterface {
     public composers: Contributor[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
+    public themes: Theme[] = [];
     public originCountry: Country = {} as Country;
     public audioFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
@@ -35,6 +36,7 @@ export class Song implements SongInterface {
         this.details = song.details;
         this.melodyOrigin = song.melodyOrigin;
         this.type = song.type;
+        this.themes = song.themes;
     }
 
     public language(code: string): boolean {

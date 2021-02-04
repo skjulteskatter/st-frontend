@@ -1,57 +1,5 @@
 <template>
     <div class="lyrics-settings" v-if="song">
-        <base-card class="lyrics-settings__metadata" border secondary>
-            <h2 class="lyrics-settings__metadata__title">
-                <span style="opacity: 0.5; padding-right: 0.5em">{{
-                    song.number
-                }}</span>
-                {{ title }}
-            </h2>
-            <span
-                v-if="song.type == 'lyrics'"
-                class="lyrics-settings__metadata__verse-count tag"
-                >{{ Object.keys(verses).length }} verses</span
-            >
-            <p class="lyrics-settings__metadata__credits">
-                Author:
-                <span v-for="author in authors" :key="author.id">
-                    <span v-if="!author.getBiography(languageKey)">{{
-                        author.name
-                    }}</span>
-                    <modal :label="author.name" type="span" v-else>
-                        <div
-                            v-html="author.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p
-                v-if="composers.length > 0"
-                class="lyrics-settings__metadata__credits"
-            >
-                Composer:
-                <span
-                    v-for="composer in composers"
-                    :key="composer.id"
-                    :label="composer.name"
-                >
-                    <span v-if="!composer.getBiography(languageKey)">{{
-                        composer.name
-                    }}</span>
-                    <modal :label="composer.name" v-else>
-                        <div
-                            v-html="composer.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
-                {{ melodyOrigin }}
-            </p>
-            <div v-if="description" v-html="description"></div>
-        </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__controls"
@@ -167,7 +115,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Lyrics, Song, Contributor } from "@/classes";
+import { Lyrics, Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import Modal from "@/components/Modal.vue";
@@ -179,13 +127,6 @@ import Modal from "@/components/Modal.vue";
         Modal,
     },
     props: {
-        title: {
-            type: String,
-        },
-        description: {
-            type: String,
-            default: () => "",
-        },
         lyrics: {
             type: Object,
             default: () => undefined,
@@ -197,25 +138,15 @@ import Modal from "@/components/Modal.vue";
         song: {
             type: Object,
         },
-        authors: {
-            type: Array,
-        },
-        composers: {
-            type: Array,
-        },
     },
 })
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public currentLinesNumber = 0;
-    public description = "";
     public lyrics?: Lyrics;
     public languageKey = "";
     public song?: Song;
-    public composers: Contributor[] = [];
-    public authors: Contributor[] = [];
-    public title = "";
 
     public lineSize = 2;
 
