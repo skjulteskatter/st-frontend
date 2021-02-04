@@ -5,7 +5,7 @@
             <div class="song-list__header">
                 <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
                 <div style="display: flex; gap: var(--st-spacing)">
-                    <base-button
+                    <!-- <base-button
                         theme="secondary"
                         @click="songListType = 'numbers'"
                         >Number</base-button
@@ -19,7 +19,7 @@
                         theme="secondary"
                         @click="songListType = 'cards'"
                         >Cards</base-button
-                    >
+                    > -->
                     <input
                         type="text"
                         class="song-list__search"
