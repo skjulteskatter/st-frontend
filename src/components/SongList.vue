@@ -30,7 +30,6 @@
                         class="song-list__search"
                         placeholder="Search..."
                         v-model="searchQuery"
-                        @keydown.enter="search"
                     />
                 </div>
             </div>
@@ -131,7 +130,11 @@ import {
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
-    private searchFilter = "";
+    
+    public themeFilter: string[] = [];
+    public audioFilter: string[] = [];
+    public videoFilter: string[] = [];
+
     public searchQuery = "";
     public store = useStore(songKey);
 
@@ -144,10 +147,6 @@ export default class SongList extends Vue {
 
     public get loading() {
         return this.collection.loading;
-    }
-
-    public search() {
-        this.searchFilter = this.searchQuery;
     }
 
     public set listType(value: string) {
@@ -163,9 +162,7 @@ export default class SongList extends Vue {
     }
 
     public get filteredSongs() {
-        return this.searchQuery
-            ? this.collection.filteredSongs(this.searchQuery)
-            : this.collection.songs;
+        return this.collection.filteredSongs(this.searchQuery, this.themeFilter, this.audioFilter, this.videoFilter);
     }
 
     public get collection(): Collection {

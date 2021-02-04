@@ -67,10 +67,10 @@ export class Collection {
         return this.contributors.find(c => c.id == id);
     }
 
-    public filteredSongs(filter: string) {
+    public filteredSongs(filter: string, themes: string[] = [], audio: string[] = [], video: string[] = []) {
         filter = filter.toLowerCase().replace(/[^0-9a-zA-Z]/g, "");
 
-        const numbers: number[] = []
+        const numbers: number[] = [];
 
         for (const lyrics of this.lyrics) {
 
@@ -85,7 +85,11 @@ export class Collection {
             }
         }
 
-        return this.songs.filter(s => numbers.includes(s.number) || s.rawContributorNames.includes(filter));
+        return this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
+            && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
+            && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
+            && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
+        );
     }
 
     public async transposeLyrics(number: number, transpose: number) {
