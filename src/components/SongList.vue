@@ -4,25 +4,29 @@
         <div v-if="!loading">
             <div class="song-list__header">
                 <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
-                <div style="display: flex; gap: var(--st-spacing)">
+                <div class="song-list__filters gap-x">
                     <base-button
                         theme="secondary"
                         @click="listType = 'default'"
+                        :class="{ selected: listType == 'default' }"
                         >{{ $t("common.number") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'authors'"
+                        :class="{ selected: listType == 'authors' }"
                         >{{ $t("song.authors") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'composers'"
+                        :class="{ selected: listType == 'composers' }"
                         >{{ $t("song.composers") }}</base-button
                     >
                     <base-button
                         theme="secondary"
                         @click="listType = 'themes'"
+                        :class="{ selected: listType == 'themes' }"
                         >{{ $t("song.themes") }}</base-button
                     >
                     <input
@@ -40,39 +44,36 @@
                     class="song-list__contributors"
                     v-if="listType == 'authors'"
                 >
-                    <contributor-card
-                        v-for="contributor in collection.authors"
-                        :key="contributor.contributor.id"
-                        :contributor-item="contributor"
-                        type="author"
-                        :all-songs="filteredSongs"
-                    ></contributor-card>
+                    <song-list-card
+                        v-for="author in collection.authors"
+                        :key="author.contributor.id"
+                        :songs="contributorSongs(author)"
+                        :title="author.contributor.name"
+                    ></song-list-card>
                 </div>
 
                 <div
                     class="song-list__contributors"
                     v-if="listType == 'composers'"
                 >
-                    <contributor-card
-                        v-for="contributor in collection.composers"
-                        :key="contributor.contributor.id"
-                        :contributor-item="contributor"
-                        type="author"
-                        :all-songs="filteredSongs"
-                    ></contributor-card>
+                    <song-list-card
+                        v-for="composer in collection.composers"
+                        :key="composer.contributor.id"
+                        :songs="contributorSongs(composer)"
+                        :title="composer.contributor.name"
+                    ></song-list-card>
                 </div>
 
                 <div
                     class="song-list__contributors"
                     v-if="listType == 'themes'"
                 >
-                    <theme-card
+                    <song-list-card
                         v-for="theme in collection.themes"
                         :key="theme.theme.id"
-                        :theme-item="theme"
-                        type="author"
-                        :all-songs="filteredSongs"
-                    ></theme-card>
+                        :songs="themeSongs(theme)"
+                        :title="theme.theme.name[languageKey]"
+                    ></song-list-card>
                 </div>
 
                 <div
@@ -89,13 +90,13 @@
             </div>
 
             <div class="song-list__list" v-if="searchQuery != ''">
-                <song-list-item-row
+                <song-list-item-card
                     v-for="song in filteredSongs.slice(0, 24)"
                     :key="song.id"
                     :song="song"
                     @click="selectSong(song.number)"
                 >
-                </song-list-item-row>
+                </song-list-item-card>
             </div>
 
             <h1 class="warning" v-if="!filteredSongs.length">No results</h1>
@@ -113,9 +114,8 @@ import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import {
     SongListItemNumber,
-    SongListItemRow,
-    ContributorCard,
-    ThemeCard,
+    SongListItemCard,
+    SongListCard,
 } from "@/components/songs";
 
 @Options({
@@ -123,9 +123,8 @@ import {
         BaseCard,
         BaseButton,
         SongListItemNumber,
-        ContributorCard,
-        ThemeCard,
-        SongListItemRow,
+        SongListItemCard,
+        SongListCard,
     },
 })
 export default class SongList extends Vue {
@@ -197,6 +196,18 @@ export default class SongList extends Vue {
         return this.songStore.getters.songs ?? [];
     }
 
+    public themeSongs(theme: ThemeCollectionItem) {
+        return this.filteredSongs.filter((s: Song) =>
+            theme?.songIds.includes(s.id)
+        );
+    }
+
+    public contributorSongs(contributor: ContributorCollectionItem) {
+        return this.filteredSongs.filter((s: Song) =>
+            contributor?.songIds.includes(s.id)
+        );
+    }
+
     public get disabled() {
         return this.songs.filter((s) => !s.name[this.languageKey]);
     }
@@ -217,6 +228,14 @@ export default class SongList extends Vue {
 .song-list {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
+
+    &__filters {
+        display: flex;
+
+        .selected {
+            background: transparent;
+        }
+    }
 
     &__title {
         margin: 0;

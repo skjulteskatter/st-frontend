@@ -1,7 +1,7 @@
 <template>
-    <base-card class="theme-card" border v-if="theme && songs.length > 0">
-        <b class="theme-card__title">{{ name }}</b>
-        <b class="theme-card__count">{{ songs.length }}</b>
+    <base-card class="theme-card" border v-if="title && songs.length > 0">
+        <b class="theme-card__title">{{ title }}</b>
+        <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
         <ul class="theme-card__list">
             <li
                 v-for="song in songs"
@@ -32,39 +32,30 @@ import { Song } from "@/classes";
         BaseCard,
     },
     props: {
-        themeItem: {
-            type: Object,
+        title: {
+            type: String,
         },
-        allSongs: {
-            type: Array,
+        songs: {
+            type: undefined,
+        },
+        count: {
+            type: Boolean,
+            default: true,
         },
     },
 })
-export default class ThemeCard extends Vue {
-    public themeItem?: ThemeCollectionItem;
-    public allSongs: Song[] = [];
+export default class SongListCard extends Vue {
     private userStore = useStore(sessionKey);
+    public songs: Song[] = [];
+    public title = "";
+    public count?: boolean;
 
     public get languageKey() {
         return this.userStore.getters.languageKey ?? "en";
     }
 
-    public get songs() {
-        return this.allSongs.filter((s: Song) =>
-            this.themeItem?.songIds.includes(s.id)
-        );
-    }
-
     public selectSong(number: number) {
         this.$router.push({ name: "song", params: { number } });
-    }
-
-    public get theme() {
-        return this.themeItem?.theme;
-    }
-
-    public get name() {
-        return this.theme?.name[this.languageKey];
     }
 }
 </script>

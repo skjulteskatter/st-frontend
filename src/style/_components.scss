@@ -60,6 +60,14 @@
     animation: slideInFromBottom .5s ease;
 }
 
+.selectable {
+    transition: transform .2s;
+
+    &:hover {
+        transform: translateX(3px);
+    }
+}
+
 // Container
 .container {
     max-width: var(--st-max-width);
