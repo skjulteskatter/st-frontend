@@ -31,12 +31,6 @@ import { Song } from "@/classes";
         themeItem: {
             type: Object,
         },
-        type: {
-            type: String,
-            validator(value: string) {
-                return ["author", "composer"].includes(value);
-            },
-        },
         allSongs: {
             type: Array
         }
@@ -44,7 +38,6 @@ import { Song } from "@/classes";
 })
 export default class ThemeCard extends Vue {
     public themeItem?: ThemeCollectionItem;
-    public type = "";
     public allSongs: Song[] = [];
     private userStore = useStore(sessionKey);
 

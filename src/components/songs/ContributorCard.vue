@@ -31,12 +31,6 @@ import { Song } from "@/classes";
         contributorItem: {
             type: Object,
         },
-        type: {
-            type: String,
-            validator(value: string) {
-                return ["author", "composer"].includes(value);
-            },
-        },
         allSongs: {
             type: Array
         }
@@ -44,7 +38,6 @@ import { Song } from "@/classes";
 })
 export default class ContributorCard extends Vue {
     public contributorItem?: ContributorCollectionItem;
-    public type = "";
     public allSongs: Song[] = [];
     private userStore = useStore(sessionKey);
 
