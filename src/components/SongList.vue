@@ -137,8 +137,8 @@ export default class SongList extends Vue {
     public searchQuery = "";
     public store = useStore(songKey);
 
-    public mounted() {
-        this.songStore.dispatch(
+    public async mounted() {
+        await this.songStore.dispatch(
             "selectCollection",
             this.$route.params.collection
         );

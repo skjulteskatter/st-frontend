@@ -33,10 +33,11 @@ export const songStore = createStore<Songs>({
             }
 
             commit('collection', id );
+            commit('list', 'default');
             const collection = getters.collection as Collection;
 
             if (collection) {
-                collection.load(sessionStore.getters.languageKey);
+                await collection.load(sessionStore.getters.languageKey);
             }
         },
         async selectSong({getters, commit}, number: number) {
@@ -65,6 +66,10 @@ export const songStore = createStore<Songs>({
         },
         collection(state, collectionId: string) {
             state.collectionId = collectionId;
+            state.lyrics = undefined;
+            state.songNumber = undefined;
+            state.transposition = undefined;
+            state.song = undefined;
         },
         list(state, list: string) {
             state.list = list;
