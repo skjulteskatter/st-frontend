@@ -257,12 +257,11 @@ export default class SongList extends Vue {
 
     &__filters {
         display: flex;
+        align-items: flex-end;
 
         &__fields {
             display: flex;
-            // border: 1px dashed var(--st-border-color);
-            // border-radius: var(--st-border-radius);
-            // padding: var(--st-half-spacing);
+            align-items: flex-end;
         }
 
         &__field {

@@ -68,7 +68,7 @@
     }
 }
 
-// Container
+// Container with max-width
 .container {
     max-width: var(--st-max-width);
     width: 100%;
@@ -88,16 +88,16 @@ select {
     border: 1px solid var(--st-border-color);
     border-radius: var(--st-border-radius);
     color: var(--st-text-color);
-    padding: .5em;
+    padding: calc(var(--st-spacing)*.5);
 }
 
 input[type=text], input[type=email] {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing)*.5);
     background: transparent;
-    border: none;
     border: 1px solid var(--st-border-color);
     border-radius: var(--st-border-radius);
     color: var(--st-text-color);
+    height: 100%;
 }
 
 textarea {
