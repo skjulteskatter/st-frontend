@@ -1,6 +1,6 @@
 <template>
     <base-card class="theme-card" border v-if="title && songs.length > 0">
-        <b class="theme-card__title" @click="action">{{ title }}</b>
+        <b class="theme-card__title" :class="{selectable: action != undefined}" @click="action" :style="action ? 'cursor:pointer': ''">{{ title }}</b>
         <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
         <ul class="theme-card__list">
             <li
@@ -56,7 +56,7 @@ export default class SongListCard extends Vue {
     public songs: Song[] = [];
     public title = "";
     public count?: boolean;
-    public action: Function = () => undefined;
+    public action?: Function;
 
     public get languageKey() {
         return this.userStore.getters.languageKey ?? "en";
@@ -86,6 +86,25 @@ export default class SongListCard extends Vue {
     &__count {
         float: right;
         opacity: 0.5;
+    }
+
+    &__title {
+        display: flex;
+        margin-bottom: 0.2rem;
+        text-decoration: none;
+        
+        &.selectable {
+
+            cursor: pointer;
+
+            &:hover {
+                color: var(--st-primary-color);
+
+                .theme-card__list__item__title {
+                    text-decoration: underline;
+                }
+            }
+        }
     }
 
     &__list {

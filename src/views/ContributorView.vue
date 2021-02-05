@@ -14,6 +14,7 @@ import { useStore } from "vuex";
 
 export default class ContributorView extends Vue {
     private store = useStore(songKey);
+    public languageKey = useStore(sessionKey).getters.languageKey;
 
     public async mounted() {
         if (!this.store.getters.collection) {
@@ -24,10 +25,6 @@ export default class ContributorView extends Vue {
 
     public get contributor(): Contributor | undefined {
         return this.store.getters.contributor;
-    }
-
-    public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
     }
 }
 </script>
