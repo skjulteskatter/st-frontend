@@ -5,34 +5,43 @@
             <div class="song-list__header">
                 <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
                 <div class="song-list__filters gap-x">
-                    <base-button
-                        theme="secondary"
-                        @click="listType = 'default'"
-                        :class="{ selected: listType == 'default' }"
-                        >{{ $t("common.number") }}</base-button
-                    >
-                    <base-button
-                        theme="secondary"
-                        @click="listType = 'authors'"
-                        :class="{ selected: listType == 'authors' }"
-                        >{{ $t("song.authors") }}</base-button
-                    >
-                    <base-button
-                        theme="secondary"
-                        @click="listType = 'composers'"
-                        :class="{ selected: listType == 'composers' }"
-                        >{{ $t("song.composers") }}</base-button
-                    >
-                    <base-button
-                        theme="secondary"
-                        @click="listType = 'themes'"
-                        :class="{ selected: listType == 'themes' }"
-                        >{{ $t("song.themes") }}</base-button
-                    >
+                    <div class="song-list__filters__fields gap-x">
+                        <div class="song-list__filters__field">
+                            <label for="song-category">{{
+                                $t("song.category")
+                            }}</label>
+                            <select
+                                name="song-category"
+                                id="song-category"
+                                v-model="listType"
+                            >
+                                <option value="default">
+                                    {{ $t("common.number") }}
+                                </option>
+                                <option value="authors">
+                                    {{ $t("song.authors") }}
+                                </option>
+                                <option value="composers">
+                                    {{ $t("song.composers") }}
+                                </option>
+                                <option value="themes">
+                                    {{ $t("song.themes") }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="song-list__filters__field">
+                            <label for="song-filters">{{
+                                $t("song.filters")
+                            }}</label>
+                            <select name="song-filters" id="song-filters">
+                                <option value="test">Test</option>
+                            </select>
+                        </div>
+                    </div>
                     <input
                         type="text"
                         class="song-list__search"
-                        placeholder="Search..."
+                        :placeholder="$t('common.search')"
                         v-model="searchQuery"
                     />
                 </div>
@@ -129,7 +138,7 @@ import {
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
-    
+
     public themeFilter: string[] = [];
     public audioFilter: string[] = [];
     public videoFilter: string[] = [];
@@ -161,7 +170,12 @@ export default class SongList extends Vue {
     }
 
     public get filteredSongs() {
-        return this.collection.filteredSongs(this.searchQuery, this.themeFilter, this.audioFilter, this.videoFilter);
+        return this.collection.filteredSongs(
+            this.searchQuery,
+            this.themeFilter,
+            this.audioFilter,
+            this.videoFilter
+        );
     }
 
     public get collection(): Collection {
@@ -229,6 +243,24 @@ export default class SongList extends Vue {
     &__filters {
         display: flex;
 
+        &__fields {
+            display: flex;
+            // border: 1px dashed var(--st-border-color);
+            // border-radius: var(--st-border-radius);
+            // padding: var(--st-half-spacing);
+        }
+
+        &__field {
+            display: flex;
+            flex-direction: column;
+
+            label {
+                opacity: 0.5;
+                font-size: 0.8em;
+                margin-bottom: 0.2em;
+            }
+        }
+
         .selected {
             background: transparent;
         }
@@ -264,10 +296,16 @@ export default class SongList extends Vue {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        @media screen and (max-width: 600px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--st-spacing);
+        }
     }
 
     &__search {
-        display: block;
+        width: 100%;
     }
 
     &__item {
