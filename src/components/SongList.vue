@@ -10,25 +10,33 @@
                             <label for="song-category">{{
                                 $t("song.category")
                             }}</label>
-                            <select
-                                name="song-category"
-                                id="song-category"
-                                v-model="listType"
-                            >
-                                <option value="default">
-                                    {{ $t("common.number") }}
-                                </option>
-                                <option value="authors">
-                                    {{ $t("song.authors") }}
-                                </option>
-                                <option value="composers">
-                                    {{ $t("song.composers") }}
-                                </option>
-                                <option value="themes">
-                                    {{ $t("song.themes") }}
-                                </option>
-                            </select>
+                            <button-group
+                                :buttons="[
+                                    {
+                                        label: $t('common.number'),
+                                        value: 'default',
+                                        selected: listType == 'default',
+                                    },
+                                    {
+                                        label: $t('song.authors'),
+                                        value: 'authors',
+                                        selected: listType == 'authors',
+                                    },
+                                    {
+                                        label: $t('song.composers'),
+                                        value: 'composers',
+                                        selected: listType == 'composers',
+                                    },
+                                    {
+                                        label: $t('song.themes'),
+                                        value: 'themes',
+                                        selected: listType == 'themes',
+                                    },
+                                ]"
+                                :action="setListType"
+                            ></button-group>
                         </div>
+
                         <div class="song-list__filters__field">
                             <label for="song-filters">{{
                                 $t("song.filters")
@@ -125,6 +133,7 @@ import {
     SongListItemCard,
     SongListCard,
 } from "@/components/songs";
+import { ButtonGroup } from "@/components/inputs";
 
 @Options({
     components: {
@@ -133,6 +142,7 @@ import {
         SongListItemNumber,
         SongListItemCard,
         SongListCard,
+        ButtonGroup,
     },
 })
 export default class SongList extends Vue {
@@ -212,6 +222,10 @@ export default class SongList extends Vue {
         return this.filteredSongs.filter((s: Song) =>
             theme?.songIds.includes(s.id)
         );
+    }
+
+    public setListType(value: string) {
+        this.listType = value;
     }
 
     public contributorSongs(contributor: ContributorCollectionItem) {
