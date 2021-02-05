@@ -104,7 +104,7 @@ export default class SettingsCard extends Vue {
 
     public async save() {
         this.loadingSave = true;
-        await this.store.dispatch('saveSettings', this.user?.settings);
+        await this.store.dispatch("saveSettings", this.user?.settings);
         this.themes.setTheme(this.theme);
         this.loadingSave = false;
     }
@@ -115,7 +115,7 @@ export default class SettingsCard extends Vue {
             const language = this.selectedLanguage;
             if (language) {
                 settings.languageKey = language.key;
-                this.store.commit('settings', settings);
+                this.store.commit("settings", settings);
             }
         }, 100);
     }
@@ -134,15 +134,12 @@ export default class SettingsCard extends Vue {
 .user-settings {
     display: flex;
     flex-direction: column;
-    // gap: calc(var(--st-spacing) * 0.5);
 
     &__fields {
         .field {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            // gap: calc(var(--st-spacing) * 0.5);
-            padding: 0.5em 0;
 
             label {
                 white-space: nowrap;
@@ -158,7 +155,6 @@ export default class SettingsCard extends Vue {
 
     &__color {
         display: flex;
-        // gap: var(--st-spacing);
 
         input[type="color"] {
             border-radius: var(--st-border-radius);
@@ -179,6 +175,7 @@ export default class SettingsCard extends Vue {
 
     &__save-button {
         align-self: flex-end;
+        margin-top: var(--st-spacing);
 
         @media screen and (max-width: 600px) {
             align-self: initial;
