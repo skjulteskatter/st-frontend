@@ -98,7 +98,7 @@
                         v-for="theme in collection.themes"
                         :key="theme.theme.id"
                         :songs="themeSongs(theme)"
-                        :title="theme.theme.name[languageKey]"
+                        :title="theme ? theme.theme.name[languageKey] : ''"
                     ></song-list-card>
                 </div>
 
@@ -108,9 +108,9 @@
                 >
                     <song-list-card
                         v-for="country in collection.countries"
-                        :key="country.country.countryCode"
-                        :songs="countrySongs(country)"
-                        :title="country.country.name"
+                        :key="country ? country.country.countryCode : Math.random()"
+                        :songs="country ? countrySongs(country) : []"
+                        :title="country ? country.country.name : ''"
                     ></song-list-card>
                 </div>
 
@@ -136,7 +136,6 @@
                         :key="s ? s.title : Math.random()"
                         :songs="s ? s.songs : []"
                         :title="s ? s.title : ''"
-                        :count="false"
                     ></song-list-card>
                 </div>
             </div>
