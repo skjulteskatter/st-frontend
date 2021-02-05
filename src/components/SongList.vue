@@ -18,6 +18,11 @@
                                         selected: listType == 'default',
                                     },
                                     {
+                                        label: $t('common.title'),
+                                        value: 'title',
+                                        selected: listType == 'title',
+                                    },
+                                    {
                                         label: $t('song.authors'),
                                         value: 'authors',
                                         selected: listType == 'authors',
@@ -33,7 +38,7 @@
                                         selected: listType == 'themes',
                                     },
                                     {
-                                        label: $t('song.countries'),
+                                        label: $t('common.countries'),
                                         value: 'countries',
                                         selected: listType == 'countries',
                                     },
@@ -60,7 +65,7 @@
                 </div>
             </div>
             <hr />
-            <div v-if="searchQuery == ''">
+            <div v-if="searchQuery == '' && !loading">
                 <div
                     class="song-list__contributors"
                     v-if="listType == 'authors'"
@@ -110,15 +115,29 @@
                 </div>
 
                 <div
-                    class="song-list__list song-list__list-numbers"
-                    v-if="listType == 'default'"
+                    class="song-list__contributors"
+                    v-if="listType == 'default' && songsByNumber.length"
                 >
-                    <song-list-item-number
-                        v-for="song in filteredSongs"
-                        :key="song.id"
-                        :song="song"
-                        @click="selectSong(song.number)"
-                    ></song-list-item-number>
+                    <song-list-card
+                        v-for="s in songsByNumber"
+                        :key="s ? s.title : Math.random()"
+                        :songs="s ? s.songs : []"
+                        :title="s ? s.title : ''"
+                        :count="false"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'title' && songsByTitle.length"
+                >
+                    <song-list-card
+                        v-for="s in songsByTitle"
+                        :key="s ? s.title : Math.random()"
+                        :songs="s ? s.songs : []"
+                        :title="s ? s.title : ''"
+                        :count="false"
+                    ></song-list-card>
                 </div>
             </div>
 
@@ -236,6 +255,53 @@ export default class SongList extends Vue {
 
     public get songs(): Song[] {
         return this.songStore.getters.songs ?? [];
+    }
+
+    public get songsByNumber(): {
+            title: string;
+            songs: Song[];
+        }[] {
+        const songs: {
+            title: string;
+            songs: Song[];
+        }[] = [];
+
+        for (const song of this.filteredSongs) {
+            const number = Math.floor((song.number-1)/50);
+
+            songs[number] = songs[number] ?? {
+                title: `${(number*50)+1}-${(number*50)+50}`,
+                songs: [],
+            };
+
+            songs[number].songs.push(song);
+        }
+        return songs;
+    }
+
+    public get songsByTitle(): {
+        title: string;
+        songs: Song[];
+    }[] {
+        const songs: {
+            [key: string]: {
+                title: string;
+                songs: Song[];
+            };
+        } = {};
+
+        for (const song of this.filteredSongs) {
+            const letter = song.getName(this.languageKey)?.[0].toUpperCase();
+            if (!letter) continue;
+
+            songs[letter] = songs[letter] ?? {
+                title: letter,
+                songs: []
+            };
+
+            songs[letter].songs.push(song);
+        }
+        return Object.keys(songs).map(k => songs[k]).sort((a, b) => a.title > b.title ? 1 : -1);
     }
 
     public themeSongs(theme: ThemeCollectionItem) {

@@ -6,14 +6,18 @@
             <li
                 v-for="song in songs"
                 :key="song.id"
-                @click="selectSong(song.number)"
-                class="theme-card__list__item selectable gap-x"
+                @click="selectSong(song)"
+                class="theme-card__list__item gap-x"
+                :class="{
+                    selectable: !disabled.includes(song),
+                    disabled: disabled.includes(song),
+                }"
             >
                 <div class="theme-card__list__item__number">
                     <b>{{ song.number }}</b>
                 </div>
                 <div class="theme-card__list__item__title">
-                    <span>{{ song.name[languageKey] }}</span>
+                    <span>{{ name(song.name) }}</span>
                 </div>
             </li>
         </ul>
@@ -54,8 +58,18 @@ export default class SongListCard extends Vue {
         return this.userStore.getters.languageKey ?? "en";
     }
 
-    public selectSong(number: number) {
-        this.$router.push({ name: "song", params: { number } });
+    public selectSong(song: Song) {
+        if (!this.disabled.includes(song)) {
+            this.$router.push({ name: "song", params: { number: song.number } });
+        }
+    }
+
+    public get disabled() {
+        return this.songs.filter(s => !s.name[this.languageKey]);
+    }
+
+    public name(name: {[key: string]: string}) {
+        return name[this.languageKey] ?? name.en ?? name[Object.keys(name)[0]];
     }
 }
 </script>
@@ -83,14 +97,16 @@ export default class SongListCard extends Vue {
             text-decoration: none;
             cursor: pointer;
 
-            &:hover {
-                color: var(--st-primary-color);
+            &.selectable {
+                &:hover {
+                    color: var(--st-primary-color);
 
-                .theme-card__list__item__title {
-                    text-decoration: underline;
+                    .theme-card__list__item__title {
+                        text-decoration: underline;
+                    }
                 }
             }
-
+            
             &__number {
                 width: 3ch;
                 text-align: right;
