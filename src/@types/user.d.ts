@@ -4,7 +4,7 @@ interface User {
     displayName: string;
     email: string;
     subscriptions: Subscription[];
-    roles: Role[];
+    roles: string[];
     settings?: UserSettings;
 }
 

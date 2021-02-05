@@ -139,9 +139,9 @@ export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
 
-    public themeFilter: string[] = [];
-    public audioFilter: string[] = [];
-    public videoFilter: string[] = [];
+    public themeFilter: string[] = []; // The ThemeID for the themes you want to filter on.
+    public audioFilter: string[] = []; // The Category for the audioFiles you want to filter on.
+    public videoFilter: string[] = []; // The Category for the videoFiles you want to filter on.
 
     public searchQuery = "";
     public store = useStore(songKey);
@@ -169,6 +169,7 @@ export default class SongList extends Vue {
         return this.store.getters.collection?.lyrics ?? [];
     }
 
+    // Filtered songs. Returns all songs if no filters are applied.
     public get filteredSongs() {
         return this.collection.filteredSongs(
             this.searchQuery,

@@ -27,7 +27,7 @@ export const usersStore = createStore<Users>({
         async setRoles({commit}, user: User) {
             const roles = [];
             for (const role of user.roles) {
-                roles.push(role.name);
+                roles.push(role);
             }
             const result = await api.admin.setRoles(user, roles);
 
@@ -42,13 +42,13 @@ export const usersStore = createStore<Users>({
             state.roles = roles;
         },
         toggleRole(state, obj: {user: User; role: string}) {
-            if (obj.user.roles.find(r => r.name == obj.role)) {
-                obj.user.roles = obj.user.roles.filter(r => r.name != obj.role);
+            if (obj.user.roles.find(r => r == obj.role)) {
+                obj.user.roles = obj.user.roles.filter(r => r != obj.role);
             } else {
-                obj.user.roles.push({id: (Math.random() * 100).toString(), name: obj.role});
+                obj.user.roles.push(obj.role);
             }
         },
-        setRoles(state, obj: {user: User; roles: Role[]}) {
+        setRoles(state, obj: {user: User; roles: string[]}) {
             obj.user.roles = obj.roles;
         }
     }

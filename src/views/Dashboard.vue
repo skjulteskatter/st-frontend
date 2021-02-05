@@ -8,8 +8,8 @@
                         <span
                             class="tag"
                             v-for="role in user.roles"
-                            :key="'tag-' + role.name"
-                            >{{ role.name }}</span
+                            :key="'tag-' + role"
+                            >{{ role }}</span
                         >
                     </div>
                     <div class="user-info__field">

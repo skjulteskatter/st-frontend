@@ -137,7 +137,7 @@ export const sessionStore = createStore<Session>({
     },
     getters: {
         isAdmin(state): boolean {
-            return state.currentUser?.roles?.find(r => r.name == "administrator")?.id !== undefined;
+            return state.currentUser?.roles?.includes("administrator") == true;
         },
         languageKey(state): string {
             return state.currentUser?.settings?.languageKey ?? localStorage.getItem('languageKey') ?? 'en';
@@ -154,7 +154,7 @@ export const sessionStore = createStore<Session>({
             }
         },
         extended(state): boolean {
-            return state.currentUser?.roles.find(r => ["extended", "administrator"].includes(r.name)) !== undefined;
+            return state.currentUser?.roles.some(r => ["extended", "administrator"].includes(r)) == true;
         },
         isAuthenticated(): boolean {
             return auth.isAuthenticated;
