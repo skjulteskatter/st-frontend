@@ -1,6 +1,6 @@
 <template>
     <base-card class="theme-card" border v-if="title && songs.length > 0">
-        <b class="theme-card__title">{{ title }}</b>
+        <b class="theme-card__title" @click="action">{{ title }}</b>
         <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
         <ul class="theme-card__list">
             <li
@@ -46,6 +46,9 @@ import { Song } from "@/classes";
             type: Boolean,
             default: true,
         },
+        action: {
+            type: Function,
+        }
     },
 })
 export default class SongListCard extends Vue {
@@ -53,6 +56,7 @@ export default class SongListCard extends Vue {
     public songs: Song[] = [];
     public title = "";
     public count?: boolean;
+    public action: Function = () => undefined;
 
     public get languageKey() {
         return this.userStore.getters.languageKey ?? "en";

@@ -14,6 +14,7 @@ export interface Songs {
     collections: Collection[];
     initialized: boolean;
     list: string;
+    contributorId?: string;
 }
 
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -50,6 +51,13 @@ export const songStore = createStore<Songs>({
             }
             commit('song', number);
         },
+        async selectContributor({getters, commit}, contributorId: number) {
+            const collection = getters.collection as Collection | undefined;
+            if (!collection) {
+                return;
+            }
+            commit('contributor', contributorId);
+        },
         async transpose({commit, getters}, transpose: number) {
             const collection = getters.collection as Collection | undefined;
             if (!collection || !getters.song) {
@@ -73,6 +81,9 @@ export const songStore = createStore<Songs>({
             state.songNumber = undefined;
             state.transposition = undefined;
             state.song = undefined;
+        },
+        contributor(state, contributorId: string) {
+            state.contributorId = contributorId;
         },
         list(state, list: string) {
             state.list = list;
@@ -110,6 +121,9 @@ export const songStore = createStore<Songs>({
         },
         lyrics(state, getters) {
             return (getters.collection as Collection)?.lyrics.find(l => l.number == state.songNumber);
+        },
+        contributor(state, getters) {
+            return (getters.collection as Collection | undefined)?.contributors.find(c => c.id == state.contributorId);
         }
     },
 });

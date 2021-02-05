@@ -75,6 +75,7 @@
                         :key="author.contributor.id"
                         :songs="contributorSongs(author)"
                         :title="author.contributor.name"
+                        :action="() => gotoContributor(author.contributor)"
                     ></song-list-card>
                 </div>
 
@@ -87,6 +88,7 @@
                         :key="composer.contributor.id"
                         :songs="contributorSongs(composer)"
                         :title="composer.contributor.name"
+                        :action="() => gotoContributor(composer.contributor)"
                     ></song-list-card>
                 </div>
 
@@ -162,7 +164,7 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { Collection, Lyrics, Song } from "@/classes";
+import { Collection, Contributor, Lyrics, Song } from "@/classes";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -315,6 +317,16 @@ export default class SongList extends Vue {
         return this.filteredSongs.filter((s: Song) =>
             country?.songIds.includes(s.id)
         );
+    }
+
+    public gotoContributor(contributor: Contributor) {
+        this.$router.push({
+            name: 'contributor', 
+            params: {
+                collection: this.collection.key, 
+                contributor: contributor.id
+            }
+        });
     }
 
     public setListType(value: string) {

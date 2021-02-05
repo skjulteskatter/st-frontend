@@ -10,6 +10,7 @@ const Store = () => import(/* webpackChunkName: 'store' */ '../views/Store.vue')
 const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
+const ContributorView = () => import(/* wepbackChunkName: 'contributor' */ '../views/ContributorView.vue');
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 const CreateUser = () => import(/* webpackChunkName: 'createUser' */ '../views/CreateUser.vue');
@@ -57,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
                         component: SongViewer,
                     }
                 ]
+            },
+            {
+                path: 'contributors/:collection/:contributor',
+                name: 'contributor',
+                component: ContributorView,
             },
             {
                 path: 'store',
