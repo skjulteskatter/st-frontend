@@ -7,7 +7,7 @@
                 v-for="song in songs"
                 :key="song.id"
                 @click="selectSong(song.number)"
-                class="theme-card__list__item gap-x selectable"
+                class="theme-card__list__item selectable gap-x"
             >
                 <div class="theme-card__list__item__number">
                     <b>{{ song.number }}</b>
@@ -85,8 +85,6 @@ export default class SongListCard extends Vue {
 
             &:hover {
                 color: var(--st-primary-color);
-                transition: transform 0.2s;
-                transform: translateX(3px);
 
                 .theme-card__list__item__title {
                     text-decoration: underline;
