@@ -144,11 +144,13 @@ export const sessionStore = createStore<Session>({
         },
         collections(state): Collection[] {
             if (state.currentUser) {
+                if (state.currentUser.roles.includes("administrator")) {
+                    return state.collections;
+                }
                 const subscriptions = state.currentUser.subscriptions;
                 return state.collections.filter(c => subscriptions
                     .map(s => s.collectionIds)
-                    .some(i => i.includes(c.id)))
-                    .map(c => new Collection(c));
+                    .some(i => i.includes(c.id)));
             } else {
                 return [];
             }
