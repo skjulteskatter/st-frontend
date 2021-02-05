@@ -105,7 +105,10 @@
                 </div>
             </div>
 
-            <div class="song-list__list" v-if="searchQuery != ''">
+            <div
+                class="song-list__list song-list__list-cards"
+                v-if="searchQuery != ''"
+            >
                 <song-list-item-card
                     v-for="song in filteredSongs.slice(0, 24)"
                     :key="song.id"
