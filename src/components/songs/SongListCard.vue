@@ -95,9 +95,12 @@ export default class SongListCard extends Vue {
             display: flex;
             margin-bottom: 0.2rem;
             text-decoration: none;
-            cursor: pointer;
+            cursor: unset;
 
             &.selectable {
+
+                cursor: pointer;
+
                 &:hover {
                     color: var(--st-primary-color);
 
