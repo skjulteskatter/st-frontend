@@ -107,3 +107,9 @@ interface ThemeCollectionItem {
     songIds: string[];
     songs: SongInterface[];
 }
+
+interface CountryCollectionItem {
+    country: Country;
+    songIds: string[];
+    songs: SongInterface[];
+}

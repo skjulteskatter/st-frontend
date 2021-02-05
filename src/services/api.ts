@@ -61,6 +61,9 @@ export const songs = {
     },
     getAllThemes(collection: string) {
         return http.get<ThemeCollectionItem[]>(`api/Themes/${collection}`);
+    },
+    getAllCountries(collection: string) {
+        return http.get<CountryCollectionItem[]>(`api/Countries/${collection}`);
     }
 }
 

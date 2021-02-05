@@ -26,6 +26,9 @@ export class Collection {
     private _themes?: ThemeCollectionItem[];
     private _loadingThemes = false;
 
+    private _countries?: CountryCollectionItem[];
+    private _loadingCountries = false;
+
     private _currentLanguage = '';
 
     constructor(collection: CollectionInterface) {
@@ -132,5 +135,16 @@ export class Collection {
             });
         }
         return this._themes ?? [];
+    }
+
+    public get countries(): CountryCollectionItem[] {
+        if (!this._loadingCountries && !this._countries) {
+            this._loadingCountries = true;
+            api.songs.getAllCountries(this.key).then(result => {
+                this._countries = result;
+                this._loadingCountries = false;
+            });
+        }
+        return this._countries ?? [];
     }
 }

@@ -32,6 +32,11 @@
                                         value: 'themes',
                                         selected: listType == 'themes',
                                     },
+                                    {
+                                        label: $t('song.countries'),
+                                        value: 'countries',
+                                        selected: listType == 'countries',
+                                    },
                                 ]"
                                 :action="setListType"
                             ></button-group>
@@ -89,6 +94,18 @@
                         :key="theme.theme.id"
                         :songs="themeSongs(theme)"
                         :title="theme.theme.name[languageKey]"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'countries'"
+                >
+                    <song-list-card
+                        v-for="country in collection.countries"
+                        :key="country.country.countryCode"
+                        :songs="countrySongs(country)"
+                        :title="country.country.name"
                     ></song-list-card>
                 </div>
 
@@ -224,6 +241,12 @@ export default class SongList extends Vue {
     public themeSongs(theme: ThemeCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
             theme?.songIds.includes(s.id)
+        );
+    }
+
+    public countrySongs(country: CountryCollectionItem) {
+        return this.filteredSongs.filter((s: Song) =>
+            country?.songIds.includes(s.id)
         );
     }
 
