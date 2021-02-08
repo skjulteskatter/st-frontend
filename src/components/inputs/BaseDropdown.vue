@@ -4,6 +4,7 @@
             class="dropdown__button"
             theme="secondary"
             :action="openDropdown"
+            v-if="label"
         >
             <span>{{ label }}</span>
             <i
@@ -11,6 +12,11 @@
                 :class="{ 'fa-angle-down': !isOpen, 'fa-angle-up': isOpen }"
             ></i>
         </base-button>
+        <i
+            v-if="icon"
+            :class="['dropdown__icon', 'fa', icon]"
+            @click="openDropdown"
+        ></i>
         <base-card v-if="isOpen" class="dropdown__content">
             <slot></slot>
         </base-card>
@@ -31,10 +37,14 @@ import BaseCard from "@/components/BaseCard.vue";
         label: {
             type: String,
         },
+        icon: {
+            type: String,
+        },
     },
 })
 export default class BaseDropdown extends Vue {
     public label = "";
+    public icon = "";
     public isOpen = false;
 
     public openDropdown() {
@@ -48,6 +58,10 @@ export default class BaseDropdown extends Vue {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     position: relative;
     z-index: 999;
+
+    &__icon {
+        cursor: pointer;
+    }
 
     &__button {
         outline: none;
