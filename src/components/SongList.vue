@@ -51,9 +51,7 @@
                             <label for="song-filters">{{
                                 $t("song.filters")
                             }}</label>
-                            <select name="song-filters" id="song-filters">
-                                <option value="test">Test</option>
-                            </select>
+                            <song-filter-dropdown></song-filter-dropdown>
                         </div>
                     </div>
                     <input
@@ -110,7 +108,11 @@
                 >
                     <song-list-card
                         v-for="country in collection.countries"
-                        :key="country ? country.country.countryCode : Math.random()"
+                        :key="
+                            country
+                                ? country.country.countryCode
+                                : Math.random()
+                        "
                         :songs="country ? countrySongs(country) : []"
                         :title="country ? country.country.name : ''"
                     ></song-list-card>
@@ -173,7 +175,7 @@ import {
     SongListItemCard,
     SongListCard,
 } from "@/components/songs";
-import { ButtonGroup } from "@/components/inputs";
+import { ButtonGroup, SongFilterDropdown } from "@/components/inputs";
 
 @Options({
     components: {
@@ -183,6 +185,7 @@ import { ButtonGroup } from "@/components/inputs";
         SongListItemCard,
         SongListCard,
         ButtonGroup,
+        SongFilterDropdown,
     },
 })
 export default class SongList extends Vue {
@@ -261,19 +264,19 @@ export default class SongList extends Vue {
     }
 
     public get songsByNumber(): {
-            title: string;
-            songs: Song[];
-        }[] {
+        title: string;
+        songs: Song[];
+    }[] {
         const songs: {
             title: string;
             songs: Song[];
         }[] = [];
 
         for (const song of this.filteredSongs) {
-            const number = Math.floor((song.number-1)/50);
+            const number = Math.floor((song.number - 1) / 50);
 
             songs[number] = songs[number] ?? {
-                title: `${(number*50)+1}-${(number*50)+50}`,
+                title: `${number * 50 + 1}-${number * 50 + 50}`,
                 songs: [],
             };
 
@@ -299,12 +302,14 @@ export default class SongList extends Vue {
 
             songs[letter] = songs[letter] ?? {
                 title: letter,
-                songs: []
+                songs: [],
             };
 
             songs[letter].songs.push(song);
         }
-        return Object.keys(songs).map(k => songs[k]).sort((a, b) => a.title > b.title ? 1 : -1);
+        return Object.keys(songs)
+            .map((k) => songs[k])
+            .sort((a, b) => (a.title > b.title ? 1 : -1));
     }
 
     public themeSongs(theme: ThemeCollectionItem) {
@@ -321,11 +326,11 @@ export default class SongList extends Vue {
 
     public gotoContributor(contributor: Contributor) {
         this.$router.push({
-            name: 'contributor', 
+            name: "contributor",
             params: {
-                collection: this.collection.key, 
-                contributor: contributor.id
-            }
+                collection: this.collection.key,
+                contributor: contributor.id,
+            },
         });
     }
 

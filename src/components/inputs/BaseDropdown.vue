@@ -1,0 +1,68 @@
+<template>
+    <div class="dropdown">
+        <base-button
+            class="dropdown__button"
+            theme="secondary"
+            :action="openDropdown"
+        >
+            <span>{{ label }}</span>
+            <i
+                class="fa dropdown__button__icon"
+                :class="{ 'fa-angle-down': !isOpen, 'fa-angle-up': isOpen }"
+            ></i>
+        </base-button>
+        <base-card v-if="isOpen" class="dropdown__content">
+            <slot></slot>
+        </base-card>
+    </div>
+</template>
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseCard from "@/components/BaseCard.vue";
+
+@Options({
+    components: {
+        BaseButton,
+        BaseCard,
+    },
+    props: {
+        label: {
+            type: String,
+        },
+    },
+})
+export default class BaseDropdown extends Vue {
+    public label = "";
+    public isOpen = false;
+
+    public openDropdown() {
+        this.isOpen = !this.isOpen;
+    }
+}
+</script>
+
+<style lang="scss">
+.dropdown {
+    --st-half-spacing: calc(var(--st-spacing) * 0.5);
+    position: relative;
+    z-index: 999;
+
+    &__button {
+        outline: none;
+
+        &__icon {
+            display: inline;
+            margin-left: var(--st-half-spacing);
+        }
+    }
+
+    &__content {
+        position: absolute;
+        top: calc(100% + var(--st-half-spacing));
+        right: 0;
+        box-shadow: 0px 10px 15px rgba(black, 0.1);
+    }
+}
+</style>
