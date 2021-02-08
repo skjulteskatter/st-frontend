@@ -2,6 +2,7 @@
 interface User {
     id: string;
     displayName: string;
+    image: string;
     email: string;
     subscriptions: Subscription[];
     roles: string[];

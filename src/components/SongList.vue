@@ -166,7 +166,7 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { Collection, Contributor, Lyrics, Song } from "@/classes";
+import { Collection, Lyrics, Song } from "@/classes";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -324,7 +324,7 @@ export default class SongList extends Vue {
         );
     }
 
-    public gotoContributor(contributor: Contributor) {
+    public gotoContributor(contributor: ContributorInterface) {
         this.$router.push({
             name: "contributor",
             params: {
