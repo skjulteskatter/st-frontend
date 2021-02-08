@@ -1,7 +1,7 @@
 <template>
     <base-card style="margin-bottom: var(--st-spacing)">
         <div class="user-settings">
-            <h2 class="user-settings__title">{{ $t("common.settings") }}</h2>
+            <h3 class="user-settings__title">{{ $t("common.settings") }}</h3>
             <div class="user-settings__fields gap-y">
                 <div class="user-settings__theme field gap-x">
                     <label for="theme-mode">{{ $t("common.theme") }}</label>
@@ -170,7 +170,7 @@ export default class SettingsCard extends Vue {
     }
 
     &__title {
-        margin: 0;
+        margin: 0 0 var(--st-spacing) 0;
     }
 
     &__save-button {
