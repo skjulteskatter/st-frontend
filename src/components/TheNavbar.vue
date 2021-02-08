@@ -2,11 +2,9 @@
     <nav class="nav" @click="toggleBurgerMenu">
         <div class="container nav__wrapper">
             <img class="nav__logo" :src="logo" @click="$router.push('/')" />
-            <base-button
-                theme="secondary"
-                v-if="isMobileDevice"
-                label="Menu"
-            ></base-button>
+            <base-button theme="secondary" v-if="isMobileDevice">
+                <i class="fa fa-bars"></i>
+            </base-button>
             <div
                 class="nav__links gap-x"
                 :class="{
