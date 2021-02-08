@@ -1,7 +1,7 @@
-let basePath = '/'
+let basePath = 'https://app.songtreasures.org/'
 
 if (process.env.NODE_ENV == "development") {
-    basePath = 'https://app.songtreasures.org/'
+    basePath = 'https://app.songtreasures.org/';
 }
 
 export const firebaseConfig = {
