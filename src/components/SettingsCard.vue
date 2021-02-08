@@ -3,6 +3,15 @@
         <div class="user-settings">
             <h3 class="user-settings__title">{{ $t("common.settings") }}</h3>
             <div class="user-settings__fields gap-y">
+                <div class="user-settings__name field gap-x">
+                    <label for="theme-mode">{{ $t("common.name") }}</label>
+                    <hr />
+                    <input
+                        type="text"
+                        v-model="newDisplayName"
+                        :placeholder="user.displayName"
+                    />
+                </div>
                 <div class="user-settings__theme field gap-x">
                     <label for="theme-mode">{{ $t("common.theme") }}</label>
                     <hr />
@@ -82,6 +91,7 @@ export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
     public store = useStore(sessionKey);
     public themes: Themes = themes;
+    public newDisplayName = "";
 
     public themeColor = localStorage.getItem("theme_color") ?? themes.default;
     public theme = localStorage.getItem("theme") ?? "dark";
@@ -104,6 +114,7 @@ export default class SettingsCard extends Vue {
 
     public async save() {
         this.loadingSave = true;
+        this.setDisplayName;
         await this.store.dispatch("saveSettings", this.user?.settings);
         this.themes.setTheme(this.theme);
         this.loadingSave = false;
@@ -126,6 +137,10 @@ export default class SettingsCard extends Vue {
 
     public get user(): User | undefined {
         return this.store.state.currentUser;
+    }
+
+    public async setDisplayName() {
+        await this.store.dispatch("setDisplayName", this.newDisplayName);
     }
 }
 </script>
