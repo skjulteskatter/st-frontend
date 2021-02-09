@@ -4,7 +4,7 @@
             class="button-group__button"
             v-for="button in buttons"
             :key="button.label"
-            @click="action(button.value)"
+            @click="action ? action(button.value) : undefined"
             :class="{
                 'button-group__button--selected': button.selected,
             }"
@@ -28,8 +28,13 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class ButtonGroup extends Vue {
-    public buttons = [];
-    public action = (value: string) => console.log(value);
+    public buttons: 
+            {
+                label: string;
+                value: string;
+                selected: boolean;
+            }[] = [];
+    public action?: Function;
 }
 </script>
 
