@@ -5,31 +5,31 @@
             <div class="grouping">
                 <small>Video</small>
                 <div class="filter gap-x">
-                    <input v-model="videoValues.karaoke" type="checkbox" name="karaoke" id="karaoke" />
-                    <label for="karaoke">Karaoke</label>
+                    <input v-model="videoValues.karaoke" type="checkbox" name="karaoke" id="v-karaoke" />
+                    <label for="v-karaoke">Karaoke</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="gathering" />
-                    <label for="gathering">Samling</label>
+                    <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="v-gathering" />
+                    <label for="v-gathering">Samling</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="videoValues.complete_arrangement" type="checkbox" name="complete" id="complete" />
-                    <label for="complete">Komplett</label>
+                    <input v-model="videoValues.complete_arrangement" type="checkbox" name="complete" id="v-complete" />
+                    <label for="v-complete">Komplett</label>
                 </div>
             </div>
             <div class="grouping">
                 <small>Audio</small>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.karaoke" type="checkbox" name="karaoke" id="karaoke" />
-                    <label for="karaoke">Karaoke</label>
+                    <input v-model="audioValues.karaoke" type="checkbox" name="karaoke" id="a-karaoke" />
+                    <label for="a-karaoke">Karaoke</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.gathering" type="checkbox" name="gathering" id="gathering" />
-                    <label for="gathering">Samling</label>
+                    <input v-model="audioValues.gathering" type="checkbox" name="gathering" id="a-gathering" />
+                    <label for="a-gathering">Samling</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.complete_arrangement" type="checkbox" name="complete" id="complete" />
-                    <label for="complete">Komplett</label>
+                    <input v-model="audioValues.complete_arrangement" type="checkbox" name="complete" id="a-complete" />
+                    <label for="a-complete">Komplett</label>
                 </div>
             </div>
             <button @click="apply">APPLY</button>
