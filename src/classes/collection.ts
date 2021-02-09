@@ -106,6 +106,7 @@ export class Collection {
                 this._loadingAuthors = true;
                 this._authors = await api.songs.getAllAuthors(this.key);
                 this._loadingAuthors = false;
+                return this._authors.length;
             }
         }
         if (value == 'composers') {
@@ -113,6 +114,7 @@ export class Collection {
                 this._loadingComposers = true;
                 this._composers = await api.songs.getAllComposers(this.key);
                 this._loadingComposers = false;
+                return this._composers.length;
             }
         }
         if (value == 'countries') {
@@ -120,8 +122,11 @@ export class Collection {
                 this._loadingCountries = true;
                 this._countries = await api.songs.getAllCountries(this.key);
                 this._loadingCountries = false;
+                return this._countries.length;
             }
         }
+
+        return 1;
     }
 
     public async transposeLyrics(number: number, transpose: number) {

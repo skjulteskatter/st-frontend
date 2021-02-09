@@ -13,7 +13,7 @@
             @click="selectCollection(songbook)"
             border
         >
-            <h3 class="songbooks__book__title">{{ songbook.name.no }}</h3>
+            <h3 class="songbooks__book__title">{{ songbook.name[languageKey] }}</h3>
         </base-card>
     </div>
 </template>
@@ -53,6 +53,10 @@ export default class Collections extends Vue {
 
     public get available(): Collection[] {
         return useStore(sessionKey).getters.collections ?? [];
+    }
+
+    public get languageKey() {
+        return useStore(sessionKey).getters.languageKey;
     }
 }
 </script>

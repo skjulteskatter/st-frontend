@@ -39,7 +39,7 @@ export const songStore = createStore<Songs>({
         }
     },
     actions: {
-        async selectCollection({state, commit, getters}, id: string) {
+        async selectCollection({dispatch, state, commit, getters}, id: string) {
             if (!state.initialized) {
                 commit('collections', sessionStore.getters.collections);
             }
@@ -51,7 +51,7 @@ export const songStore = createStore<Songs>({
 
             if (collection) {
                 collection.load(sessionStore.getters.languageKey).then(() => {
-                    commit('list', list);
+                    dispatch('setList', list);
                 });
             }
         },
@@ -81,8 +81,12 @@ export const songStore = createStore<Songs>({
             commit('transposition', transpose);
         },
         async setList({commit, getters}, value: string) {
-            await (getters.collection as Collection).getList(value);
-            commit('list', value);
+            const r = await (getters.collection as Collection).getList(value);
+            if (r == 0) {
+                commit('list', 'default');
+            } else {
+                commit('list', value);
+            }
         }
     },
     mutations: {
