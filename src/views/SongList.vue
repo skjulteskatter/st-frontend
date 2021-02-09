@@ -1,133 +1,131 @@
 <template>
     <div class="song-list" v-if="collection">
         <div class="loader" v-if="loading"></div>
-        <div v-if="!loading">
-            <div class="song-list__header">
-                <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
-                <div class="song-list__filters gap-x">
-                    <div class="song-list__filters__fields gap-x">
-                        <div class="song-list__filters__field">
-                            <label for="song-category">{{
-                                $t("song.category")
-                            }}</label>
-                            <button-group
-                                :buttons="buttons"
-                                :action="setListType"
-                            ></button-group>
-                        </div>
-
-                        <div class="song-list__filters__field">
-                            <label for="song-filters">{{
-                                $t("song.filters")
-                            }}</label>
-                            <song-filter-dropdown></song-filter-dropdown>
-                        </div>
+        <div class="song-list__header">
+            <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
+            <div class="song-list__filters gap-x" v-if="!loading">
+                <div class="song-list__filters__fields gap-x">
+                    <div class="song-list__filters__field">
+                        <label for="song-category">{{
+                            $t("song.category")
+                        }}</label>
+                        <button-group
+                            :buttons="buttons"
+                            :action="setListType"
+                        ></button-group>
                     </div>
-                    <input
-                        type="text"
-                        class="song-list__search"
-                        :placeholder="$t('common.search')"
-                        v-model="searchQuery"
-                    />
+
+                    <div class="song-list__filters__field">
+                        <label for="song-filters">{{
+                            $t("song.filters")
+                        }}</label>
+                        <song-filter-dropdown></song-filter-dropdown>
+                    </div>
                 </div>
+                <input
+                    type="text"
+                    class="song-list__search"
+                    :placeholder="$t('common.search')"
+                    v-model="searchQuery"
+                />
             </div>
-            <hr />
-            <div v-if="searchQuery == '' && !loading">
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'authors'"
-                >
-                    <song-list-card
-                        v-for="author in collection.authors"
-                        :key="author.contributor.id"
-                        :songs="contributorSongs(author)"
-                        :title="author.contributor.name"
-                        :action="() => gotoContributor(author.contributor)"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'composers'"
-                >
-                    <song-list-card
-                        v-for="composer in collection.composers"
-                        :key="composer.contributor.id"
-                        :songs="contributorSongs(composer)"
-                        :title="composer.contributor.name"
-                        :action="() => gotoContributor(composer.contributor)"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'themes'"
-                >
-                    <song-list-card
-                        v-for="theme in collection.themes"
-                        :key="theme.theme.id"
-                        :songs="themeSongs(theme)"
-                        :title="theme ? theme.theme.name[languageKey] : ''"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'countries'"
-                >
-                    <song-list-card
-                        v-for="country in collection.countries"
-                        :key="
-                            country
-                                ? country.country.countryCode
-                                : Math.random()
-                        "
-                        :songs="country ? countrySongs(country) : []"
-                        :title="country ? country.country.name : ''"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'default' && songsByNumber.length"
-                >
-                    <song-list-card
-                        v-for="s in songsByNumber"
-                        :key="s ? s.title : Math.random()"
-                        :songs="s ? s.songs : []"
-                        :title="s ? s.title : ''"
-                        :count="false"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'title' && songsByTitle.length"
-                >
-                    <song-list-card
-                        v-for="s in songsByTitle"
-                        :key="s ? s.title : Math.random()"
-                        :songs="s ? s.songs : []"
-                        :title="s ? s.title : ''"
-                    ></song-list-card>
-                </div>
+        </div>
+        <hr />
+        <div v-if="searchQuery == '' && !loading">
+            <div
+                class="song-list__contributors"
+                v-if="listType == 'authors'"
+            >
+                <song-list-card
+                    v-for="author in collection.authors"
+                    :key="author.contributor.id"
+                    :songs="contributorSongs(author)"
+                    :title="author.contributor.name"
+                    :action="() => gotoContributor(author.contributor)"
+                ></song-list-card>
             </div>
 
             <div
-                class="song-list__list song-list__list-cards"
-                v-if="searchQuery != ''"
+                class="song-list__contributors"
+                v-if="listType == 'composers'"
             >
-                <song-list-item-card
-                    v-for="song in filteredSongs.slice(0, 24)"
-                    :key="song.id"
-                    :song="song"
-                    @click="selectSong(song.number)"
-                >
-                </song-list-item-card>
+                <song-list-card
+                    v-for="composer in collection.composers"
+                    :key="composer.contributor.id"
+                    :songs="contributorSongs(composer)"
+                    :title="composer.contributor.name"
+                    :action="() => gotoContributor(composer.contributor)"
+                ></song-list-card>
             </div>
 
-            <h1 class="warning" v-if="!filteredSongs.length">No results</h1>
+            <div
+                class="song-list__contributors"
+                v-if="listType == 'themes'"
+            >
+                <song-list-card
+                    v-for="theme in collection.themes"
+                    :key="theme.theme.id"
+                    :songs="themeSongs(theme)"
+                    :title="theme ? theme.theme.name[languageKey] : ''"
+                ></song-list-card>
+            </div>
+
+            <div
+                class="song-list__contributors"
+                v-if="listType == 'countries'"
+            >
+                <song-list-card
+                    v-for="country in collection.countries"
+                    :key="
+                        country
+                            ? country.country.countryCode
+                            : Math.random()
+                    "
+                    :songs="country ? countrySongs(country) : []"
+                    :title="country ? country.country.name : ''"
+                ></song-list-card>
+            </div>
+
+            <div
+                class="song-list__contributors"
+                v-if="listType == 'default' && songsByNumber.length"
+            >
+                <song-list-card
+                    v-for="s in songsByNumber"
+                    :key="s ? s.title : Math.random()"
+                    :songs="s ? s.songs : []"
+                    :title="s ? s.title : ''"
+                    :count="false"
+                ></song-list-card>
+            </div>
+
+            <div
+                class="song-list__contributors"
+                v-if="listType == 'title' && songsByTitle.length"
+            >
+                <song-list-card
+                    v-for="s in songsByTitle"
+                    :key="s ? s.title : Math.random()"
+                    :songs="s ? s.songs : []"
+                    :title="s ? s.title : ''"
+                ></song-list-card>
+            </div>
         </div>
+
+        <div
+            class="song-list__list song-list__list-cards"
+            v-if="searchQuery != ''"
+        >
+            <song-list-item-card
+                v-for="song in filteredSongs.slice(0, 24)"
+                :key="song.id"
+                :song="song"
+                @click="selectSong(song.number)"
+            >
+            </song-list-item-card>
+        </div>
+
+        <h1 class="warning" v-if="!filteredSongs.length && !loading">No results</h1>
     </div>
 </template>
 
