@@ -30,7 +30,7 @@ import { Collection } from "@/classes";
         BaseCard,
     },
 })
-export default class Songbooks extends Vue {
+export default class Collections extends Vue {
     private songStore = useStore(songKey);
 
     public selectCollection(collection: Collection) {

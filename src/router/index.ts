@@ -7,8 +7,8 @@ const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongS
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ '../views/KaraokeViewer.vue');
 const Store = () => import(/* webpackChunkName: 'store' */ '../views/Store.vue');
-const Collections = () => import(/* webpackChunkName: 'collections' */ '../components/Songbooks.vue');
-const SongList = () => import(/* webpackChunkName: 'songList' */ '../components/SongList.vue');
+const Collections = () => import(/* webpackChunkName: 'collections' */ '../views/Collections.vue');
+const SongList = () => import(/* webpackChunkName: 'songList' */ '../views/SongList.vue');
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 const ContributorView = () => import(/* wepbackChunkName: 'contributor' */ '../views/ContributorView.vue');
 
