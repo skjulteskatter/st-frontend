@@ -1,6 +1,6 @@
 <template>
     <base-card style="margin-bottom: var(--st-spacing)">
-        <div class="user-settings">
+        <div class="user-settings" v-if="user">
             <h3 class="user-settings__title">{{ $t("common.settings") }}</h3>
             <div class="user-settings__fields gap-y">
                 <div class="user-settings__name field gap-x">

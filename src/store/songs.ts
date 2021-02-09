@@ -5,6 +5,7 @@ import { sessionStore } from './session';
 
 export type SongFilter = {
     themes: string[];
+    origins: string[];
     videoFiles: string[];
     audioFiles: string[];
 }
@@ -36,6 +37,7 @@ export const songStore = createStore<Songs>({
             themes: [],
             videoFiles: [],
             audioFiles: [],
+            origins: [],
         }
     },
     actions: {

@@ -94,10 +94,22 @@ export class Collection {
 
         return this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
             && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
-            && (origins.length == 0 || origins.includes(s.melodyOrigin.id))
+            && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
             && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
             && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
         );
+    }
+
+    public get origins() {
+        const origins: Origin[] = [];
+
+        for (const song of this.songs) {
+            if (song.melodyOrigin != undefined && !origins.find(o => o.id == song.melodyOrigin.id)) {
+                origins.push(song.melodyOrigin);
+            }
+        }
+
+        return origins;
     }
 
     public async getList(value: string) {

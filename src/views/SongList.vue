@@ -21,6 +21,7 @@
                         }}</label>
                         <song-filter-dropdown
                             :themes="collection.themeTypes"
+                            :origins="collection.origins"
                         ></song-filter-dropdown>
                     </div>
                 </div>
@@ -162,11 +163,6 @@ export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
     private songStore = useStore(songKey);
 
-    public themeFilter: string[] = []; // The ThemeID for the themes you want to filter on.
-    public originFilter: string[] = []; // The OriginID for the origins you want to filter on.
-    public audioFilter: string[] = []; // The Category for the audioFiles you want to filter on.
-    public videoFilter: string[] = []; // The Category for the videoFiles you want to filter on.
-
     public searchQuery = "";
     public store = useStore(songKey);
 
@@ -201,9 +197,9 @@ export default class SongList extends Vue {
         return this.collection?.filteredSongs(
             this.searchQuery,
             this.store.state.filter.themes,
-            this.originFilter,
-            this.audioFilter,
-            this.videoFilter
+            this.store.state.filter.origins,
+            this.store.state.filter.audioFiles,
+            this.store.state.filter.videoFiles,
         ) ?? [];
     }
 

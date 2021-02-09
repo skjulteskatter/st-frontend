@@ -5,18 +5,31 @@
             <div class="grouping">
                 <small>Video</small>
                 <div class="filter gap-x">
-                    <input type="checkbox" name="video" id="video" />
-                    <label for="video">Karaoke</label>
+                    <input v-model="videoValues.karaoke" type="checkbox" name="karaoke" id="karaoke" />
+                    <label for="karaoke">Karaoke</label>
+                </div>
+                <div class="filter gap-x">
+                    <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="gathering" />
+                    <label for="gathering">Samling</label>
+                </div>
+                <div class="filter gap-x">
+                    <input v-model="videoValues.complete_arrangement" type="checkbox" name="complete" id="complete" />
+                    <label for="complete">Komplett</label>
                 </div>
             </div>
             <div class="grouping">
-                <small>Lyd</small>
-            </div>
-            <div class="grouping" v-if="themes">
-                <small>{{ $t("song.themes") }}</small>
-                <div class="filter gap-x" v-for="theme in collection.themes" :key="theme.theme.id">
-                    <input v-model="themeValues[theme.theme.id]" type="checkbox" :name="theme.theme.name[languageKey]" :id="theme.theme.id"/>
-                    <label :for="theme.theme.id">{{theme.theme.name[languageKey]}}</label>
+                <small>Audio</small>
+                <div class="filter gap-x">
+                    <input v-model="audioValues.karaoke" type="checkbox" name="karaoke" id="karaoke" />
+                    <label for="karaoke">Karaoke</label>
+                </div>
+                <div class="filter gap-x">
+                    <input v-model="audioValues.gathering" type="checkbox" name="gathering" id="gathering" />
+                    <label for="gathering">Samling</label>
+                </div>
+                <div class="filter gap-x">
+                    <input v-model="audioValues.complete_arrangement" type="checkbox" name="complete" id="complete" />
+                    <label for="complete">Komplett</label>
                 </div>
             </div>
             <button @click="apply">APPLY</button>
@@ -38,26 +51,48 @@ import BaseDropdown from "./BaseDropdown.vue";
     props: {
         themes: {
             type: Array,
+        },
+        origins: {
+            type: Array,
         }
     }
 })
 export default class SongFilterDropdown extends Vue {
     private sessionStore = useStore(sessionKey);
     private store = useStore(songKey);
-    public videoTypes = ["karaoke", "complete_arrangement"];
+    public videoTypes = ["karaoke", "gathering", "complete_arrangement"];
     public audioTypes = ["karaoke", "gathering", "complete_arrangement"];
     public themes?: Theme[];
+    public origins?: Origin[];
 
     public themeValues: {
+        [id: string]: boolean;
+    } = {};
+    public originValues: {
+        [id: string]: boolean;
+    } = {};
+
+    public audioValues: {
+        [id: string]: boolean;
+    } = {};
+    public videoValues: {
         [id: string]: boolean;
     } = {};
 
     public apply() {
         const themes = this.collection?.themes?.filter(t => this.themeValues[t.theme.id] == true)?.map(t => t.theme.id) ?? [];
+        //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
+
+        const videos = this.videoTypes.filter(t => this.videoValues[t] == true);
+        console.log(videos);
+        const audio = this.audioTypes.filter(t => this.audioValues[t] == true);
 
         const filter = Object.assign({}, this.store.state.filter);
 
         filter.themes = themes;
+        filter.videoFiles = videos;
+        filter.audioFiles = audio;
+        //filter.origins = origins;
 
         this.store.commit('filter', filter)
     }
