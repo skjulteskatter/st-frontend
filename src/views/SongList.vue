@@ -19,7 +19,9 @@
                         <label for="song-filters">{{
                             $t("song.filters")
                         }}</label>
-                        <song-filter-dropdown></song-filter-dropdown>
+                        <song-filter-dropdown
+                            :themes="collection.themeTypes"
+                        ></song-filter-dropdown>
                     </div>
                 </div>
                 <input
@@ -198,7 +200,7 @@ export default class SongList extends Vue {
     public get filteredSongs() {
         return this.collection?.filteredSongs(
             this.searchQuery,
-            this.themeFilter,
+            this.store.state.filter.themes,
             this.originFilter,
             this.audioFilter,
             this.videoFilter

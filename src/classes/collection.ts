@@ -14,6 +14,9 @@ export class Collection {
     public contributors: Contributor[] = [];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
+    public themes: ThemeCollectionItem[] = [];
+
+    public themeTypes: Theme[] = [];
 
     private _loadingLyrics = false;
 
@@ -43,6 +46,7 @@ export class Collection {
             this._initialized = true;
             this.contributors = (await api.songs.getAllContributors(this.key)).map(c => new Contributor(c.contributor));
             this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s, this.contributors));
+            this.themes = await api.songs.getAllThemes(this.key);
         }
     }
 
@@ -143,16 +147,17 @@ export class Collection {
         return this._composers ?? [];
     }
 
-    public get themes(): ThemeCollectionItem[] {
-        if (!this._loadingThemes && !this._themes) {
-            this._loadingThemes = true;
-            api.songs.getAllThemes(this.key).then(result => {
-                this._themes = result;
-                this._loadingThemes = false;
-            });
-        }
-        return this._themes ?? [];
-    }
+    // public get themes(): ThemeCollectionItem[] {
+    //     if (!this._loadingThemes && !this._themes) {
+    //         this._loadingThemes = true;
+    //         api.songs.getAllThemes(this.key).then(result => {
+    //             this._themes = result;
+    //             this._loadingThemes = false;
+    //             this.themeTypes = result.map(t => t.theme);
+    //         });
+    //     }
+    //     return this._themes ?? [];
+    // }
 
     public get countries(): CountryCollectionItem[] {
         if (!this._loadingCountries && !this._countries) {

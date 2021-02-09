@@ -3,6 +3,12 @@ import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 
+export type SongFilter = {
+    themes: string[];
+    videoFiles: string[];
+    audioFiles: string[];
+}
+
 export interface Songs {
     collectionId?: string;
     song?: Song;
@@ -15,8 +21,8 @@ export interface Songs {
     initialized: boolean;
     list: string;
     contributorId?: string;
+    filter: SongFilter;
 }
-
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
 export const songStore = createStore<Songs>({
@@ -26,6 +32,11 @@ export const songStore = createStore<Songs>({
         lines: [],
         initialized: false,
         list: 'default',
+        filter: {
+            themes: [],
+            videoFiles: [],
+            audioFiles: [],
+        }
     },
     actions: {
         async selectCollection({state, commit, getters}, id: string) {
@@ -107,6 +118,9 @@ export const songStore = createStore<Songs>({
         },
         setSong(state, song: Song) {
             state.song = song;
+        },
+        filter(state, filter: SongFilter) {
+            state.filter = filter;
         }
     },
     getters: {
