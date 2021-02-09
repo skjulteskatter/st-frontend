@@ -100,6 +100,30 @@ export class Collection {
         );
     }
 
+    public async getList(value: string) {
+        if (value == 'authors') {
+            if (!this._authors) {
+                this._loadingAuthors = true;
+                this._authors = await api.songs.getAllAuthors(this.key);
+                this._loadingAuthors = false;
+            }
+        }
+        if (value == 'composers') {
+            if (!this._composers) {
+                this._loadingComposers = true;
+                this._composers = await api.songs.getAllComposers(this.key);
+                this._loadingComposers = false;
+            }
+        }
+        if (value == 'countries') {
+            if (!this._countries) {
+                this._loadingCountries = true;
+                this._countries = await api.songs.getAllCountries(this.key);
+                this._loadingCountries = false;
+            }
+        }
+    }
+
     public async transposeLyrics(number: number, transpose: number) {
         this._loadingLyrics = true;
 
@@ -126,47 +150,14 @@ export class Collection {
     }
 
     public get authors(): ContributorCollectionItem[] {
-        if (!this._loadingAuthors && !this._authors) {
-            this._loadingAuthors = true;
-            api.songs.getAllAuthors(this.key).then(result => {
-                this._authors = result;
-                this._loadingAuthors = false;
-            });
-        }
-        return this._authors ?? [];
+        return this._authors ? this._authors : [];
     }
 
     public get composers(): ContributorCollectionItem[] {
-        if (!this._loadingComposers && !this._composers) {
-            this._loadingComposers = true;
-            api.songs.getAllComposers(this.key).then(result => {
-                this._composers = result;
-                this._loadingComposers = false;
-            });
-        }
-        return this._composers ?? [];
+        return this._composers ? this._composers : [];
     }
 
-    // public get themes(): ThemeCollectionItem[] {
-    //     if (!this._loadingThemes && !this._themes) {
-    //         this._loadingThemes = true;
-    //         api.songs.getAllThemes(this.key).then(result => {
-    //             this._themes = result;
-    //             this._loadingThemes = false;
-    //             this.themeTypes = result.map(t => t.theme);
-    //         });
-    //     }
-    //     return this._themes ?? [];
-    // }
-
     public get countries(): CountryCollectionItem[] {
-        if (!this._loadingCountries && !this._countries) {
-            this._loadingCountries = true;
-            api.songs.getAllCountries(this.key).then(result => {
-                this._countries = result;
-                this._loadingCountries = false;
-            });
-        }
-        return this._countries ?? [];
+        return this._countries ? this._countries : [];
     }
 }

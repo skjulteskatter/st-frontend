@@ -185,7 +185,7 @@ export default class SongList extends Vue {
     }
 
     public set listType(value: string) {
-        this.store.commit("list", value);
+        this.store.dispatch('setList', value);
     }
 
     public get listType() {

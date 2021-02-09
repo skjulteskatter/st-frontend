@@ -79,6 +79,10 @@ export const songStore = createStore<Songs>({
 
             commit('lyrics', lyrics);
             commit('transposition', transpose);
+        },
+        async setList({commit, getters}, value: string) {
+            await (getters.collection as Collection).getList(value);
+            commit('list', value);
         }
     },
     mutations: {
