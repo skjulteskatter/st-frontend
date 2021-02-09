@@ -11,38 +11,7 @@
                                 $t("song.category")
                             }}</label>
                             <button-group
-                                :buttons="[
-                                    {
-                                        label: $t('common.number'),
-                                        value: 'default',
-                                        selected: listType == 'default',
-                                    },
-                                    {
-                                        label: $t('common.title'),
-                                        value: 'title',
-                                        selected: listType == 'title',
-                                    },
-                                    {
-                                        label: $t('song.authors'),
-                                        value: 'authors',
-                                        selected: listType == 'authors',
-                                    },
-                                    {
-                                        label: $t('song.composers'),
-                                        value: 'composers',
-                                        selected: listType == 'composers',
-                                    },
-                                    {
-                                        label: $t('song.themes'),
-                                        value: 'themes',
-                                        selected: listType == 'themes',
-                                    },
-                                    {
-                                        label: $t('common.countries'),
-                                        value: 'countries',
-                                        selected: listType == 'countries',
-                                    },
-                                ]"
+                                :buttons="buttons"
                                 :action="setListType"
                             ></button-group>
                         </div>
@@ -205,10 +174,13 @@ export default class SongList extends Vue {
             "selectCollection",
             this.$route.params.collection
         );
+        if (!this.buttons.find(b => b.value == this.listType)) {
+            this.listType = 'default';
+        }
     }
 
     public get loading() {
-        return this.collection.loading;
+        return this.collection?.loading;
     }
 
     public set listType(value: string) {
@@ -225,16 +197,16 @@ export default class SongList extends Vue {
 
     // Filtered songs. Returns all songs if no filters are applied.
     public get filteredSongs() {
-        return this.collection.filteredSongs(
+        return this.collection?.filteredSongs(
             this.searchQuery,
             this.themeFilter,
             this.originFilter,
             this.audioFilter,
             this.videoFilter
-        );
+        ) ?? [];
     }
 
-    public get collection(): Collection {
+    public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
     }
 
@@ -325,13 +297,15 @@ export default class SongList extends Vue {
     }
 
     public gotoContributor(contributor: ContributorInterface) {
-        this.$router.push({
-            name: "contributor",
-            params: {
-                collection: this.collection.key,
-                contributor: contributor.id,
-            },
-        });
+        if (this.collection) {
+            this.$router.push({
+                name: "contributor",
+                params: {
+                    collection: this.collection.key,
+                    contributor: contributor.id,
+                },
+            });
+        }
     }
 
     public setListType(value: string) {
@@ -346,6 +320,41 @@ export default class SongList extends Vue {
 
     public get disabled() {
         return this.songs.filter((s) => !s.name[this.languageKey]);
+    }
+
+    public get buttons() {
+        return [
+            {
+                label: this.$t('common.number'),
+                value: 'default',
+                selected: this.listType == 'default',
+            },
+            {
+                label: this.$t('common.title'),
+                value: 'title',
+                selected: this.listType == 'title',
+            },
+            {
+                label: this.$t('song.authors'),
+                value: 'authors',
+                selected: this.listType == 'authors',
+            },
+            {
+                label: this.$t('song.composers'),
+                value: 'composers',
+                selected: this.listType == 'composers',
+            },
+            {
+                label: this.$t('song.themes'),
+                value: 'themes',
+                selected: this.listType == 'themes',
+            },
+            {
+                label: this.$t('common.countries'),
+                value: 'countries',
+                selected: this.listType == 'countries',
+            },
+        ].filter(b => ![!this.collection?.hasAuthors ? 'authors' : '', !this.collection?.hasComposers ? 'composers' : '', !this.collection?.hasCountries ? 'countries' : '', !this.collection?.hasThemes ? 'themes' : ''].includes(b.value))
     }
 }
 </script>

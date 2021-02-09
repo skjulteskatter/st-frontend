@@ -105,6 +105,22 @@ export class Collection {
         return lyrics;
     }
 
+    public get hasAuthors(): boolean {
+        return this.songs.find(s => s.authors?.length > 0) != undefined;
+    }
+
+    public get hasComposers(): boolean {
+        return this.songs.find(s => s.composers?.length > 0) != undefined;
+    }
+
+    public get hasCountries(): boolean {
+        return this.songs.find(s => s.originCountry) != undefined;
+    }
+
+    public get hasThemes(): boolean {
+        return this.songs.find(s => s.themes?.length > 0) != undefined;
+    }
+
     public get authors(): ContributorCollectionItem[] {
         if (!this._loadingAuthors && !this._authors) {
             this._loadingAuthors = true;
