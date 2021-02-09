@@ -132,13 +132,14 @@
 </template>
 
 <script lang="ts">
+import BaseCard from "@/components/BaseCard.vue";
+import BaseButton from "@/components/BaseButton.vue";
+
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
 
-import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import {
     SongListItemNumber,
     SongListItemCard,

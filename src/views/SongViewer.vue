@@ -36,6 +36,9 @@
     </div>
 </template>
 <script lang="ts">
+import BaseButton from "@/components/BaseButton.vue";
+import { SongInfoCard } from '@/components/songs';
+
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
@@ -45,8 +48,6 @@ import {
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Lyrics, Song } from "@/classes";
-import BaseButton from "@/components/BaseButton.vue";
-import { SongInfoCard } from '@/components/songs';
 
 @Options({
     components: {
