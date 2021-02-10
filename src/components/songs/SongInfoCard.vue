@@ -12,15 +12,9 @@
         <p class="song-details__metadata__credits gap-x">
             <span>{{ $t("song.author") }}: </span>
             <span v-for="author in song.authors" :key="author.id">
-                <span v-if="!author.getBiography(languageKey)">{{
+                <router-link :to="{name: 'contributor', params: {collection: $route.params.collection, contributor: author.id}}">{{
                     author.name
-                }}</span>
-                <modal :label="author.name" type="span" v-else>
-                    <div
-                        v-html="author.getBiography(languageKey)"
-                        class="biography-wrapper"
-                    ></div>
-                </modal>
+                }}</router-link>
             </span>
         </p>
         <p
@@ -33,15 +27,9 @@
                 :key="composer.id"
                 :label="composer.name"
             >
-                <span v-if="!composer.getBiography(languageKey)">{{
+                <router-link :to="{name: 'contributor', params: {collection: $route.params.collection, contributor: composer.id}}">{{
                     composer.name
-                }}</span>
-                <modal :label="composer.name" type="span" v-else>
-                    <div
-                        v-html="composer.getBiography(languageKey)"
-                        class="biography-wrapper"
-                    ></div>
-                </modal>
+                }}</router-link>
             </span>
         </p>
         <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
