@@ -1,95 +1,12 @@
 <template>
-    <div class="song-details" v-if="song">
-        <!-- <base-card class="song-details__metadata" border secondary>
-            <h2 class="song-details__metadata__title">
-                <span style="opacity: 0.5; padding-right: 0.5em">{{
-                    song.number
-                }}</span>
-                {{ title }}
-            </h2>
-            <p class="song-details__metadata__credits">
-                Author:
-                <span v-for="author in song.authors" :key="author.id">
-                    <span v-if="!author.getBiography(languageKey)">{{
-                        author.name
-                    }}</span>
-                    <modal :label="author.name" v-else>
-                        <div
-                            v-html="author.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p
-                v-if="song.composers.length > 0"
-                class="song-details__metadata__credits"
-            >
-                Composer:
-                <span
-                    v-for="composer in song.composers"
-                    :key="composer.id"
-                    :label="composer.name"
-                >
-                    <span v-if="!composer.getBiography(languageKey)">{{
-                        composer.name
-                    }}</span>
-                    <modal :label="composer.name" v-else>
-                        <div
-                            v-html="composer.getBiography(languageKey)"
-                            class="biography-wrapper"
-                        ></div>
-                    </modal>
-                </span>
-            </p>
-            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
-                {{ melodyOrigin }}
-            </p>
-        </base-card> -->
+    <div v-if="song">
+        <div>{{currentTransposition}}</div>
+        <button @click="currentTransposition < 12 ? currentTransposition += 1 : undefined">UP</button>
+        <button @click="currentTransposition > -12 ? currentTransposition -= 1 : undefined">DOWN</button>
+        <button @click="apply">APPLY</button>
         <base-card v-if="lyrics && lyrics.format == 'html'" border>
-            <div v-html="lyrics.transposed"></div>
-        </base-card>
-        <base-card
-            class="song-details__files"
-            v-if="song.audioFiles.length || song.videoFiles.length"
-            border
-        >
-            <h2 class="song-details__files__title">Files</h2>
-            <div class="files__container">
-                <base-card
-                    class="song-details__files__audio"
-                    v-if="song.audioFiles.length"
-                >
-                    <h3>Audio</h3>
-                    <figure v-for="file in song.audioFiles" :key="file">
-                        <figcaption>{{ file.name }}</figcaption>
-                        <audio :src="file.directUrl" controls>
-                            Your browser does not support the
-                            <code>audio</code> element.
-                        </audio>
-                    </figure>
-                </base-card>
-                <base-card
-                    class="song-details__files__video"
-                    v-if="song.videoFiles.length"
-                >
-                    <h3>Video</h3>
-                    <modal
-                        v-for="video in song.videoFiles"
-                        :key="video"
-                        :label="video.name"
-                    >
-                        <video
-                            :src="video.directUrl"
-                            width="500"
-                            type="video/mp4"
-                            controls
-                        >
-                            Sorry, your browser doesn't support embedded videos.
-                        </video>
-                    </modal>
-                </base-card>
-            </div>
+            <div v-html="lyrics.transposedContent"></div>
+            <div v-if="collection ? collection.loadingLyrics : false" class="loader"></div>
         </base-card>
     </div>
 </template>
@@ -98,7 +15,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
-import { Song } from "@/classes";
+import { Collection, Song } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 
@@ -117,14 +34,14 @@ import { songKey } from "@/store";
     },
 })
 export default class TransposedLyricsViewer extends Vue {
+    private songStore = useStore(songKey);
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public description = "";
     public languageKey = "";
     public title = "";
     public song?: Song;
-
-    private songStore = useStore(songKey);
+    public currentTransposition = 0;
 
     public get melodyOrigin() {
         return (
@@ -135,7 +52,18 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public get lyrics() {
-        return this.songStore.state.lyrics;
+        return this.songStore.state.transposedLyrics;
+    }
+    
+    public get collection(): Collection | undefined {
+        return this.songStore.getters.collection;
+    }
+
+    public async apply() {
+        if (this.song) {
+            const lyrics = await this.collection?.transposeLyrics(this.song.number, this.currentTransposition);
+            this.songStore.commit('transposedLyrics', lyrics);
+        }
     }
 }
 </script>
@@ -159,29 +87,6 @@ export default class TransposedLyricsViewer extends Vue {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: var(--st-spacing);
-
-    &__files {
-        grid-column: span 5;
-
-        &__video {
-            &__link {
-                text-decoration: none;
-                color: var(--st-primary-color);
-            }
-        }
-
-        .card__content {
-            .files__container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: var(--st-spacing);
-            }
-        }
-
-        figure {
-            margin: 0 0 0.5em 0;
-        }
-    }
 
     &__metadata {
         grid-column: span 4;
