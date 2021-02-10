@@ -1,6 +1,9 @@
 <template>
     <base-dropdown :label="$t('common.open')">
-        <b>{{ $t("song.filters") }}</b>
+        <div class="filter__header gap-x">
+            <b>{{ $t("song.filters") }}</b>
+            <base-button theme="primary" :action="apply">Apply</base-button>
+        </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
                 <small>Video</small>
@@ -36,7 +39,6 @@
                     <label for="a-instrumental">{{$t('types.instrumental')}}</label>
                 </div>
             </div>
-            <button @click="apply">APPLY</button>
         </div>
     </base-dropdown>
 </template>
@@ -47,10 +49,12 @@ import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import BaseDropdown from "./BaseDropdown.vue";
+import BaseButton from "@/components/BaseButton.vue";
 
 @Options({
     components: {
         BaseDropdown,
+        BaseButton,
     },
     props: {
         themes: {
@@ -119,6 +123,12 @@ export default class SongFilterDropdown extends Vue {
     border: 1px dashed var(--st-border-color);
     border-radius: var(--st-border-radius);
     padding: calc(var(--st-spacing) * 0.5);
+}
+
+.filter__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .filter__wrapper {

@@ -6,12 +6,10 @@
             }}</span>
             {{ title }}
         </h2>
-        <span
-            v-if="verses"
-            class="lyrics-settings__metadata__verse-count tag"
+        <span v-if="verses" class="lyrics-settings__metadata__verse-count tag"
             >{{ verses }} verses</span
         >
-        <p class="song-details__metadata__credits">
+        <p class="song-details__metadata__credits gap-x">
             <span>{{ $t("song.author") }}: </span>
             <span v-for="author in song.authors" :key="author.id">
                 <span v-if="!author.getBiography(languageKey)">{{
@@ -27,7 +25,7 @@
         </p>
         <p
             v-if="song.composers.length > 0"
-            class="song-details__metadata__credits"
+            class="song-details__metadata__credits gap-x"
         >
             <span>{{ $t("song.composer") }}: </span>
             <span
@@ -49,19 +47,21 @@
         <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
             {{ melodyOrigin }}
         </p>
-        <b>{{song.yearWritten}}</b>
+        <p class="lyrics-settings__metadata__credits" v-if="song.yearWritten">
+            {{ song.yearWritten }}
+        </p>
         <div v-if="description" v-html="description"></div>
     </base-card>
 </template>
 <script lang="ts">
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, Modal } from '@/components';
+import { BaseCard, Modal } from "@/components";
 
 @Options({
     components: {
         BaseCard,
-        Modal
+        Modal,
     },
     props: {
         languageKey: {
@@ -72,8 +72,8 @@ import { BaseCard, Modal } from '@/components';
         },
         verses: {
             type: Number,
-        }
-    }
+        },
+    },
 })
 export default class SongInfoCard extends Vue {
     public languageKey = "";

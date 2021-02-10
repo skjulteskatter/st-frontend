@@ -1,7 +1,15 @@
 <template>
     <base-card class="theme-card" border v-if="title && songs.length > 0">
-        <b class="theme-card__title" :class="{selectable: action != undefined}" @click="action" :style="action ? 'cursor:pointer': ''">{{ title }}</b>
-        <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
+        <div class="theme-card__header">
+            <b
+                class="theme-card__title"
+                :class="{ selectable: action != undefined }"
+                @click="action"
+                :style="action ? 'cursor:pointer' : ''"
+                >{{ title }}</b
+            >
+            <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
+        </div>
         <ul class="theme-card__list">
             <li
                 v-for="song in songs"
@@ -48,7 +56,7 @@ import { Song } from "@/classes";
         },
         action: {
             type: Function,
-        }
+        },
     },
 })
 export default class SongListCard extends Vue {
@@ -64,15 +72,18 @@ export default class SongListCard extends Vue {
 
     public selectSong(song: Song) {
         if (!this.disabled.includes(song)) {
-            this.$router.push({ name: "song", params: { number: song.number } });
+            this.$router.push({
+                name: "song",
+                params: { number: song.number },
+            });
         }
     }
 
     public get disabled() {
-        return this.songs.filter(s => !s.name[this.languageKey]);
+        return this.songs.filter((s) => !s.name[this.languageKey]);
     }
 
-    public name(name: {[key: string]: string}) {
+    public name(name: { [key: string]: string }) {
         return name[this.languageKey] ?? name.en ?? name[Object.keys(name)[0]];
     }
 }
@@ -83,8 +94,12 @@ export default class SongListCard extends Vue {
     margin-bottom: var(--st-spacing);
     break-inside: avoid;
 
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
     &__count {
-        float: right;
         opacity: 0.5;
     }
 
@@ -92,9 +107,8 @@ export default class SongListCard extends Vue {
         display: flex;
         margin-bottom: 0.2rem;
         text-decoration: none;
-        
-        &.selectable {
 
+        &.selectable {
             cursor: pointer;
 
             &:hover {
@@ -121,7 +135,6 @@ export default class SongListCard extends Vue {
             cursor: unset;
 
             &.selectable {
-
                 cursor: pointer;
 
                 &:hover {
@@ -132,7 +145,7 @@ export default class SongListCard extends Vue {
                     }
                 }
             }
-            
+
             &__number {
                 width: 3ch;
                 text-align: right;
