@@ -1,6 +1,6 @@
 <template>
-    <div class="song-list" v-if="collection">
-        <div class="loader" v-if="loading"></div>
+    <div class="loader" v-if="loading"></div>
+    <div class="song-list" v-if="collection && !loading">
         <div class="song-list__header">
             <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
             <div class="song-list__filters gap-x" v-if="!loading">
