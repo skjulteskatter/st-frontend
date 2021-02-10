@@ -24,7 +24,7 @@ export default class ContributorView extends Vue {
     }
 
     public get contributor(): Contributor | undefined {
-        return this.store.getters.contributor;
+        return this.store.state.contributor
     }
 }
 </script>

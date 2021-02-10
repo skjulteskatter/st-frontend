@@ -1,7 +1,8 @@
-import { Lyrics, Collection, Song } from '@/classes';
+import { Lyrics, Collection, Song, Contributor } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
+import api from '@/services/api';
 
 export type SongFilter = {
     themes: string[];
@@ -22,7 +23,7 @@ export interface Songs {
     collections: Collection[];
     initialized: boolean;
     list: string;
-    contributorId?: string;
+    contributor?: Contributor;
     filter: SongFilter;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -77,12 +78,15 @@ export const songStore = createStore<Songs>({
 
             commit('lyrics', lyrics);
         },
-        async selectContributor({getters, commit}, contributorId: number) {
+        async selectContributor({getters, commit}, contributorId: string) {
             const collection = getters.collection as Collection | undefined;
             if (!collection) {
                 return;
             }
-            commit('contributor', contributorId);
+            const contributor = await api.songs.getContributor(collection.key, contributorId);
+            if (contributor) {
+                commit('contributor', new Contributor(contributor.contributor));
+            }
         },
         async transpose({commit, getters}, transpose: number) {
             const collection = getters.collection as Collection | undefined;
@@ -113,11 +117,13 @@ export const songStore = createStore<Songs>({
             state.collectionId = collectionId;
             state.lyrics = undefined;
             state.songNumber = undefined;
+            state.transposedLyrics = undefined;
             state.transposition = undefined;
             state.song = undefined;
+            state.contributor = undefined;
         },
-        contributor(state, contributorId: string) {
-            state.contributorId = contributorId;
+        contributor(state, contributor: Contributor) {
+            state.contributor = contributor;
         },
         list(state, list: string) {
             state.list = list;
@@ -157,13 +163,10 @@ export const songStore = createStore<Songs>({
             return state.collections.find(c => c.id == state.collectionId || c.key == state.collectionId);
         },
         song(state, getters) {
-            return (getters.collection as Collection)?.songs.find(s => s.number == state.songNumber);
+            return (getters.collection as Collection | undefined)?.songs.find(s => s.number == state.songNumber);
         },
         lyrics(state, getters) {
-            return (getters.collection as Collection)?.lyrics.find(l => l.number == state.songNumber) ?? state.lyrics;
+            return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber) ?? state.lyrics;
         },
-        contributor(state, getters) {
-            return (getters.collection as Collection | undefined)?.contributors.find(c => c.id == state.contributorId);
-        }
     },
 });
