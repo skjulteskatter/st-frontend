@@ -1,53 +1,7 @@
 <template>
     <div class="song-details" v-if="song">
-        <base-card
-            class="song-details__files"
-            v-if="song.audioFiles.length || song.videoFiles.length"
-            border
-            secondary
-        >
-            <h2 class="song-details__files__title">Files</h2>
-            <div class="files__container">
-                <base-card
-                    class="song-details__files__audio"
-                    v-if="song.audioFiles.length"
-                >
-                    <h3>Audio</h3>
-                    <figure v-for="file in song.audioFiles" :key="file">
-                        <figcaption>{{ file.name }}</figcaption>
-                        <audio :src="file.directUrl" controls>
-                            Your browser does not support the
-                            <code>audio</code> element.
-                        </audio>
-                    </figure>
-                </base-card>
-                <base-card
-                    class="song-details__files__video"
-                    v-if="song.videoFiles.length"
-                >
-                    <h3>Video</h3>
-                    <modal
-                        v-for="video in song.videoFiles"
-                        :key="video"
-                        :label="video.name"
-                    >
-                        <video
-                            :src="video.directUrl"
-                            width="500"
-                            type="video/mp4"
-                            controls
-                        >
-                            Sorry, your browser doesn't support embedded videos.
-                        </video>
-                    </modal>
-                </base-card>
-            </div>
-        </base-card>
-        <base-card class="song-details__lyrics" v-if="text.length">
-            <div
-                v-for="(verse, i) in text"
-                :key="verse.name + verse.content[0] + i"
-            >
+        <base-card class="song-details__lyrics">
+            <div v-for="(verse, i) in text" :key="verse.name + verse.content[0] + i">
                 <b>{{ verse.name }}</b>
                 <p v-for="line in verse.content" :key="line">{{ line }}</p>
             </div>

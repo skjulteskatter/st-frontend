@@ -42,12 +42,16 @@
                 :lyrics="lyrics"
                 :song="song"
             ></song-details>
+
+            <song-files-card
+                :song="song"
+            ></song-files-card>
         </div>
     </div>
 </template>
 <script lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
-import { SongInfoCard } from "@/components/songs";
+import { SongInfoCard, SongFilesCard } from '@/components/songs';
 
 import { Options, Vue } from "vue-class-component";
 import {
@@ -66,6 +70,7 @@ import { Collection, Lyrics, Song } from "@/classes";
         TransposedLyricsViewer,
         BaseButton,
         SongInfoCard,
+        SongFilesCard
     },
 })
 export default class SongViewer extends Vue {
