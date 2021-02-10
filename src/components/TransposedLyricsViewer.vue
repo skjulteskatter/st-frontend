@@ -1,6 +1,6 @@
 <template>
     <div class="song-details" v-if="song">
-        <base-card class="song-details__metadata" border secondary>
+        <!-- <base-card class="song-details__metadata" border secondary>
             <h2 class="song-details__metadata__title">
                 <span style="opacity: 0.5; padding-right: 0.5em">{{
                     song.number
@@ -45,7 +45,7 @@
             <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
                 {{ melodyOrigin }}
             </p>
-        </base-card>
+        </base-card> -->
         <div v-if="lyrics" v-html="lyrics.transposed"></div>
         <base-card
             class="song-details__files"
