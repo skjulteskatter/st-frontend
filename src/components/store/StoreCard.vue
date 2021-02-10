@@ -3,19 +3,26 @@
         v-if="product"
         class="store-card"
         :image="product.collections[0].image"
-        footer
         border
     >
-        <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
-        <base-button
-            class="store-card__button"
-            v-if="isPurchaseable"
-            :action="action"
-            >{{ $t("store.buy") }}</base-button
-        >
-        <span class="store-card__subtitle" v-else>{{
-            $t("store.alreadyown")
-        }}</span>
+        <h2 class="store-card__itle">
+            {{ product.name[languageKey] }}
+        </h2>
+        <div class="store-card__footer">
+            <p class="store-card__price">
+                {{ product.prices[0].value }}
+            </p>
+            <base-button
+                class="store-card__button"
+                v-if="isPurchaseable"
+                :action="action"
+            >
+                {{ $t("store.buy") }}
+            </base-button>
+            <span class="store-card__subtitle" v-else>
+                {{ $t("store.alreadyown") }}
+            </span>
+        </div>
     </base-card>
 </template>
 
@@ -59,10 +66,21 @@ export default class StoreCard extends Vue {
 
 <style lang="scss">
 .store-card {
-    display: flex;
+    .card__content {
+        display: flex;
+        flex-direction: column;
+    }
 
-    &__button {
-        align-self: flex-end;
+    &__footer {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__price {
+        opacity: 0.5;
+        margin: 0;
     }
 
     &__title {
@@ -71,14 +89,6 @@ export default class StoreCard extends Vue {
 
     &__subtitle {
         opacity: 0.7;
-    }
-
-    .card__content {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
     }
 }
 </style>
