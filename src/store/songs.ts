@@ -63,6 +63,18 @@ export const songStore = createStore<Songs>({
                 return;
             }
             commit('song', number);
+            let lyrics = collection?.lyrics.find(l => l.number == number);
+
+            if (!lyrics) {
+                const song = collection?.songs.find(s => s.number == number);
+                if (song) {
+                    const language = Object.keys(song.name)[0];
+
+                    lyrics = await collection.getLyrics(number, language);
+                }
+            }
+
+            commit('lyrics', lyrics);
         },
         async selectContributor({getters, commit}, contributorId: number) {
             const collection = getters.collection as Collection | undefined;
@@ -144,7 +156,7 @@ export const songStore = createStore<Songs>({
             return (getters.collection as Collection)?.songs.find(s => s.number == state.songNumber);
         },
         lyrics(state, getters) {
-            return (getters.collection as Collection)?.lyrics.find(l => l.number == state.songNumber);
+            return (getters.collection as Collection)?.lyrics.find(l => l.number == state.songNumber) ?? state.lyrics;
         },
         contributor(state, getters) {
             return (getters.collection as Collection | undefined)?.contributors.find(c => c.id == state.contributorId);

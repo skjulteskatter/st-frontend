@@ -53,6 +53,7 @@ interface ContributorInterface {
 
 interface CollectionInterface {
     id: string;
+    defaultType: string;
     name: {
         [lang: string]: string;
     };

@@ -15,10 +15,9 @@
                 v-for="song in songs"
                 :key="song.id"
                 @click="selectSong(song)"
-                class="theme-card__list__item gap-x"
+                class="theme-card__list__item gap-x selectable"
                 :class="{
-                    selectable: !disabled.includes(song),
-                    disabled: disabled.includes(song),
+                    'wrong-language': anotherLanguage.includes(song),
                 }"
             >
                 <div class="theme-card__list__item__number">
@@ -71,16 +70,14 @@ export default class SongListCard extends Vue {
     }
 
     public selectSong(song: Song) {
-        if (!this.disabled.includes(song)) {
-            this.$router.push({
-                name: "song",
-                params: { number: song.number },
-            });
-        }
+        this.$router.push({
+            name: "song",
+            params: { number: song.number },
+        });
     }
 
-    public get disabled() {
-        return this.songs.filter((s) => !s.name[this.languageKey]);
+    public get anotherLanguage() {
+        return this.songs.filter((s) => s.type == 'lyrics' && !s.name[this.languageKey]);
     }
 
     public name(name: { [key: string]: string }) {
@@ -144,6 +141,11 @@ export default class SongListCard extends Vue {
                         text-decoration: underline;
                     }
                 }
+            }
+
+            &.wrong-language {
+                color: red;
+                opacity: 0.8;
             }
 
             &__number {
