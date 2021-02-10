@@ -68,49 +68,6 @@
                 >
             </label>
         </base-card>
-        <base-card
-            class="lyrics-settings__files"
-            v-if="song.audioFiles.length || song.videoFiles.length"
-            border
-            secondary
-        >
-            <h2 class="lyrics-settings__files__title">Files</h2>
-            <div class="files__container">
-                <base-card
-                    class="lyrics-settings__files__audio"
-                    v-if="song.audioFiles.length"
-                >
-                    <h3>Audio</h3>
-                    <figure v-for="file in song.audioFiles" :key="file">
-                        <figcaption>{{ file.name }}</figcaption>
-                        <audio :src="file.directUrl" controls>
-                            Your browser does not support the
-                            <code>audio</code> element.
-                        </audio>
-                    </figure>
-                </base-card>
-                <base-card
-                    class="lyrics-settings__files__video"
-                    v-if="song.videoFiles.length"
-                >
-                    <h3>Video</h3>
-                    <modal
-                        v-for="video in song.videoFiles"
-                        :key="video"
-                        :label="video.name"
-                    >
-                        <video
-                            :src="video.directUrl"
-                            width="500"
-                            type="video/mp4"
-                            controls
-                        >
-                            Sorry, your browser doesn't support embedded videos.
-                        </video>
-                    </modal>
-                </base-card>
-            </div>
-        </base-card>
     </div>
 </template>
 
