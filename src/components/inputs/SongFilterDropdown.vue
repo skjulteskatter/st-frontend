@@ -88,7 +88,6 @@ export default class SongFilterDropdown extends Vue {
         //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
 
         const videos = this.videoTypes.filter(t => this.videoValues[t] == true);
-        console.log(videos);
         const audio = this.audioTypes.filter(t => this.audioValues[t] == true);
 
         const filter = Object.assign({}, this.store.state.filter);
