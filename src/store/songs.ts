@@ -23,7 +23,10 @@ export interface Songs {
     collections: Collection[];
     initialized: boolean;
     list: string;
-    contributor?: Contributor;
+    contributorItem?: {
+        contributor: Contributor;
+        songIds: string[];
+    };
     filter: SongFilter;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
@@ -85,7 +88,10 @@ export const songStore = createStore<Songs>({
             }
             const contributor = await api.songs.getContributor(collection.key, contributorId);
             if (contributor) {
-                commit('contributor', new Contributor(contributor.contributor));
+                commit('contributor', {
+                    songIds: contributor.songIds,
+                    contributor: new Contributor(contributor.contributor)
+                });
             }
         },
         async transpose({commit, getters}, transpose: number) {
@@ -120,10 +126,10 @@ export const songStore = createStore<Songs>({
             state.transposedLyrics = undefined;
             state.transposition = undefined;
             state.song = undefined;
-            state.contributor = undefined;
+            state.contributorItem = undefined;
         },
-        contributor(state, contributor: Contributor) {
-            state.contributor = contributor;
+        contributor(state, contributor: {songIds: string[]; contributor: Contributor}) {
+            state.contributorItem = contributor;
         },
         list(state, list: string) {
             state.list = list;
