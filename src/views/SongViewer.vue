@@ -13,6 +13,10 @@
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
 
+            <div class="song-details__buttons">
+                <button @click="translateTo(key)" v-for="key in Object.keys(song.name)" :key="key">{{key.toUpperCase()}}</button>
+            </div>
+
             <lyrics-settings
                 v-if="isExtended && !transposed"
                 :languageKey="languageKey"
@@ -47,7 +51,7 @@ import {
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { Lyrics, Song } from "@/classes";
+import { Collection, Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
@@ -93,7 +97,7 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.getters.lyrics;
+        return this.songStore.state.lyrics;
     }
 
     public get song(): Song | undefined {
@@ -106,6 +110,18 @@ export default class SongViewer extends Vue {
 
     public get initialized() {
         return this.store.state.initialized;
+    }
+
+    public get collection(): Collection | undefined {
+        return this.songStore.getters.collection;
+    }
+
+    public async translateTo(language: string) {
+        if (this.song) {
+            const lyrics = await this.collection?.getLyrics(this.song.number, language);
+
+            this.songStore.commit('lyrics', lyrics);
+        }
     }
 }
 </script>
