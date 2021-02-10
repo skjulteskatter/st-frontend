@@ -79,10 +79,6 @@ export default class SongListCard extends Vue {
     public get anotherLanguage() {
         return this.songs.filter((s) => s.type == 'lyrics' && !s.name[this.languageKey]);
     }
-
-    public name(name: { [key: string]: string }) {
-        return name[this.languageKey] ?? name.en ?? name[Object.keys(name)[0]];
-    }
 }
 </script>
 
