@@ -1,23 +1,23 @@
 <template>
     <div id="users">
         <div class="header gap-x">
-            <h2>Users</h2>
+            <h2>{{ $t("admin.users") }}</h2>
             <base-button
                 :class="{ disabled: disableButton }"
                 :action="refreshUsers"
                 :loading="loading"
                 loadingLabel="Fetching users"
                 theme="secondary"
-                >Refresh</base-button
+                >{{ $t("common.update") }}</base-button
             >
         </div>
         <base-card class="users__table" border>
             <table>
                 <thead>
                     <th></th>
-                    <th>Name</th>
+                    <th>{{ $t("common.name") }}</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>{{ $t("common.role") }}</th>
                     <th>Id</th>
                 </thead>
                 <tbody>

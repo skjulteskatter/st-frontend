@@ -46,7 +46,9 @@
                 {{ melodyOrigin }}
             </p>
         </base-card> -->
-        <div v-if="lyrics" v-html="lyrics.transposed"></div>
+        <base-card v-if="lyrics" border>
+            <div v-html="lyrics.transposed"></div>
+        </base-card>
         <base-card
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
@@ -86,7 +88,6 @@
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
-                    <!-- <a class="song-details__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
                 </base-card>
             </div>
         </base-card>
