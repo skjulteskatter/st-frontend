@@ -31,8 +31,6 @@ export class Collection {
 
     private _composers?: ContributorCollectionItem[];
     private _loadingComposers = false;
-
-    private _themes?: ThemeCollectionItem[];
     private _loadingThemes = false;
 
     private _countries?: CountryCollectionItem[];
@@ -51,8 +49,7 @@ export class Collection {
     private async initialize() {
         if (!this._initialized) {
             this._initialized = true;
-            this.contributors = (await api.songs.getAllContributors(this.key)).map(c => new Contributor(c.contributor));
-            this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s, this.contributors));
+            this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s));
             this.themes = await api.songs.getAllThemes(this.key);
         }
     }
@@ -70,15 +67,11 @@ export class Collection {
     }
 
     public get loading() {
-        return this._loading || this._loadingAuthors || this._loadingComposers || this._loadingThemes;
+        return this._loading || this._loadingAuthors || this._loadingComposers || this._loadingThemes || this._loadingCountries;
     }
 
     public getSong(number: number) {
         return this.songs.find(s => s.number == number);
-    }
-
-    public getContributor(id: string) {
-        return this.contributors.find(c => c.id == id);
     }
 
     public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = []) {

@@ -1,5 +1,4 @@
 import { Converter } from 'showdown';
-import { Contributor } from '.';
 const converter = new Converter();
 
 export class Song implements SongInterface {
@@ -12,8 +11,8 @@ export class Song implements SongInterface {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
     }
 
-    public authors: Contributor[] = []
-    public composers: Contributor[] = [];
+    public authors: ContributorInterface[] = []
+    public composers: ContributorInterface[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
     public themes: Theme[] = [];
@@ -25,12 +24,12 @@ export class Song implements SongInterface {
     } = {};
     public melodyOrigin = {} as Origin;
 
-    constructor(song: SongInterface, contributors: Contributor[]) {
+    constructor(song: SongInterface) {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
-        this.authors = contributors.filter(c => song.authors.map(a => a.id).includes(c.id));
-        this.composers = contributors.filter(c => song.composers.map(a => a.id).includes(c.id));
+        this.authors = song.authors;
+        this.composers = song.composers;
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
         this.originCountry = song.originCountry;
