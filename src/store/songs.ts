@@ -15,6 +15,7 @@ export interface Songs {
     song?: Song;
     songNumber?: number;
     lyrics?: Lyrics;
+    transposedLyrics?: Lyrics;
     transposition?: number;
     verses: Verse[];
     lines: string[];
@@ -91,7 +92,7 @@ export const songStore = createStore<Songs>({
 
             const lyrics = await collection.transposeLyrics(getters.song.number, transpose);
 
-            commit('lyrics', lyrics);
+            commit('transposedLyrics', lyrics);
             commit('transposition', transpose);
         },
         async setList({commit, getters}, value: string) {
@@ -128,6 +129,9 @@ export const songStore = createStore<Songs>({
         },
         lyrics(state, lyrics: Lyrics) {
             state.lyrics = lyrics;
+        },
+        transposedLyrics(state, lyrics: Lyrics) {
+            state.transposedLyrics = lyrics;
         },
         verses(state, verses: Verse[]) {
             state.verses = verses;
