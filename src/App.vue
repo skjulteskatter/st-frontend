@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="loader" v-if="!initialized"></div>
-        <router-view  v-else />
+        <router-view v-else />
     </div>
 </template>
 

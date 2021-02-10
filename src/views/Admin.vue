@@ -1,5 +1,5 @@
 <template>
-    <div id="admin-panel">
+    <div class="admin-panel">
         <div v-if="isAdmin">
             <h1 class="admin-panel__title">Admin</h1>
             <hr />
@@ -77,6 +77,8 @@ export default class Subscriptions extends Vue {
 
 <style lang="scss">
 .admin-panel {
+    padding: var(--st-spacing);
+
     &__collections {
         .card__content {
             display: flex;

@@ -1,27 +1,32 @@
 <template>
-    <the-navbar v-if="user"></the-navbar>
-    <div class="container" v-if="user">
-        <router-view/>
+    <div class="dashboard-layout">
+        <the-navbar v-if="user"></the-navbar>
+        <main v-if="user" class="dashboard-layout__body">
+            <router-view />
+        </main>
     </div>
 </template>
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import { useStore } from 'vuex';
-import { sessionKey } from '../store';
-import themes from '@/classes/themes';
-import TheNavbar from '@/components/TheNavbar.vue';
+import { Vue, Options } from "vue-class-component";
+import { useStore } from "vuex";
+import { sessionKey } from "../store";
+import themes from "@/classes/themes";
+import TheNavbar from "@/components/TheNavbar.vue";
 
 @Options({
     components: {
-        TheNavbar
-    }
+        TheNavbar,
+    },
 })
 export default class DashboardLayout extends Vue {
-    mounted(){
-        document.documentElement.style.setProperty('--st-primary-color', localStorage.getItem('theme_color') || themes.default);
+    mounted() {
+        document.documentElement.style.setProperty(
+            "--st-primary-color",
+            localStorage.getItem("theme_color") || themes.default
+        );
         themes.load();
         if (this.initialized && !this.user) {
-            this.$router.push({name: 'login'});
+            this.$router.push({ name: "login" });
         }
     }
 
@@ -36,4 +41,14 @@ export default class DashboardLayout extends Vue {
     }
 }
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+
+    &__body {
+        overflow-y: auto;
+        width: 100%;
+    }
+}
+</style>

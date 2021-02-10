@@ -91,6 +91,8 @@ export default class Store extends Vue {
 
 <style lang="scss">
 .store {
+    padding: var(--st-spacing);
+
     &__title {
         margin: 0;
     }

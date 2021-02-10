@@ -1,6 +1,6 @@
 <template>
-    <div id="dashboard">
-        <h1>{{ $t("common.dashboard") }}</h1>
+    <div class="dashboard">
+        <h1 class="dashboard__title">{{ $t("common.dashboard") }}</h1>
         <base-card class="user-info" border v-if="user">
             <div class="user-info__wrapper gap-y">
                 <div class="fields">
@@ -92,6 +92,14 @@ export default class Dashboard extends Vue {
 </script>
 
 <style lang="scss">
+.dashboard {
+    padding: var(--st-spacing);
+
+    &__title {
+        margin-top: 0;
+    }
+}
+
 .user-info {
     margin-bottom: var(--st-spacing);
 

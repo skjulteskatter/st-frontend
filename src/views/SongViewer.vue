@@ -2,54 +2,61 @@
     <div v-if="initialized && song">
         <div class="loader" v-if="loading"></div>
         <div v-if="!loading" class="song-viewer">
-            <base-button v-if="extended && !transposed" @click="extend"
-                >Advanced</base-button
-            >
-            <base-button @click="transpose">Transpose</base-button>
-
-            <song-info-card
-                :song="song"
-                :languageKey="languageKey"
-                :verses="lyrics ? Object.keys(lyrics.content).length : 0"
-            ></song-info-card>
-
-            <song-files-card :song="song"></song-files-card>
-
-            <div class="song-details__buttons">
-                <base-button
-                    :action="() => translateTo(l.key)"
-                    v-for="l in languages"
-                    :key="l.key"
+            <div class="song-viewer__content">
+                <base-button v-if="extended && !transposed" @click="extend"
+                    >Advanced</base-button
                 >
-                    {{ l.name }}
-                </base-button>
+                <base-button @click="transpose">Transpose</base-button>
+
+                <song-info-card
+                    :song="song"
+                    :languageKey="languageKey"
+                    :verses="lyrics ? Object.keys(lyrics.content).length : 0"
+                ></song-info-card>
+
+                <song-files-card :song="song"></song-files-card>
+
+                <lyrics-settings
+                    v-if="isExtended && !transposed"
+                    :languageKey="languageKey"
+                    :lyrics="lyrics"
+                    :song="song"
+                ></lyrics-settings>
+
+                <transposed-lyrics-viewer
+                    v-if="transposed"
+                    :languageKey="languageKey"
+                    :song="song"
+                ></transposed-lyrics-viewer>
+
+                <song-details
+                    v-if="!isExtended && !transposed"
+                    :languageKey="languageKey"
+                    :lyrics="lyrics"
+                    :song="song"
+                ></song-details>
             </div>
 
-            <lyrics-settings
-                v-if="isExtended && !transposed"
-                :languageKey="languageKey"
-                :lyrics="lyrics"
-                :song="song"
-            ></lyrics-settings>
-
-            <transposed-lyrics-viewer
-                v-if="transposed"
-                :languageKey="languageKey"
-                :song="song"
-            ></transposed-lyrics-viewer>
-
-            <song-details
-                v-if="!isExtended && !transposed"
-                :languageKey="languageKey"
-                :lyrics="lyrics"
-                :song="song"
-            ></song-details>
+            <aside class="song-viewer__sidebar">
+                <div class="song-details__buttons">
+                    <base-dropdown label="Språk">
+                        <base-button
+                            :action="() => translateTo(l.key)"
+                            v-for="l in languages"
+                            :key="l.key"
+                        >
+                            {{ l.name }}
+                        </base-button>
+                    </base-dropdown>
+                </div>
+            </aside>
         </div>
     </div>
 </template>
 <script lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
 import { SongInfoCard, SongFilesCard } from "@/components/songs";
+import { BaseDropdown } from "@/components/inputs";
 
 import { Options, Vue } from "vue-class-component";
 import {
@@ -69,6 +76,7 @@ import { Collection, Lyrics, Song } from "@/classes";
         BaseButton,
         SongInfoCard,
         SongFilesCard,
+        BaseDropdown,
     },
 })
 export default class SongViewer extends Vue {
@@ -149,7 +157,23 @@ export default class SongViewer extends Vue {
 
 <style lang="scss">
 .song-viewer {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    display: flex;
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--st-spacing);
+        padding: var(--st-spacing);
+        overflow-y: auto;
+    }
+
+    &__sidebar {
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        padding: var(--st-spacing);
+        background-color: var(--st-background-color);
+        border-left: 1px solid var(--st-border-color);
+    }
 }
 </style>

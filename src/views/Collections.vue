@@ -13,7 +13,9 @@
             @click="selectCollection(songbook)"
             border
         >
-            <h3 class="songbooks__book__title">{{ songbook.getName(languageKey) }}</h3>
+            <h3 class="songbooks__book__title">
+                {{ songbook.getName(languageKey) }}
+            </h3>
         </base-card>
     </div>
 </template>
@@ -67,6 +69,7 @@ export default class Collections extends Vue {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: var(--st-spacing);
+    padding: var(--st-spacing);
 
     @media screen and (max-width: 800px) {
         grid-template-columns: repeat(2, 1fr);

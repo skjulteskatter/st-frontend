@@ -35,10 +35,7 @@
         </div>
         <hr />
         <div v-if="searchQuery == '' && !loading">
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'authors'"
-            >
+            <div class="song-list__contributors" v-if="listType == 'authors'">
                 <song-list-card
                     v-for="author in collection.authors"
                     :key="author.contributor.id"
@@ -48,10 +45,7 @@
                 ></song-list-card>
             </div>
 
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'composers'"
-            >
+            <div class="song-list__contributors" v-if="listType == 'composers'">
                 <song-list-card
                     v-for="composer in collection.composers"
                     :key="composer.contributor.id"
@@ -61,10 +55,7 @@
                 ></song-list-card>
             </div>
 
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'themes'"
-            >
+            <div class="song-list__contributors" v-if="listType == 'themes'">
                 <song-list-card
                     v-for="theme in collection.themes"
                     :key="theme.theme.id"
@@ -73,17 +64,10 @@
                 ></song-list-card>
             </div>
 
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'countries'"
-            >
+            <div class="song-list__contributors" v-if="listType == 'countries'">
                 <song-list-card
                     v-for="country in collection.countries"
-                    :key="
-                        country
-                            ? country.country.countryCode
-                            : Math.random()
-                    "
+                    :key="country ? country.country.countryCode : Math.random()"
                     :songs="country ? countrySongs(country) : []"
                     :title="country ? country.country.name : ''"
                 ></song-list-card>
@@ -128,7 +112,9 @@
             </song-list-item-card>
         </div>
 
-        <h1 class="warning" v-if="!filteredSongs.length && !loading">No results</h1>
+        <h1 class="warning" v-if="!filteredSongs.length && !loading">
+            No results
+        </h1>
     </div>
 </template>
 
@@ -171,8 +157,8 @@ export default class SongList extends Vue {
             "selectCollection",
             this.$route.params.collection
         );
-        if (!this.buttons.find(b => b.value == this.listType)) {
-            this.listType = 'default';
+        if (!this.buttons.find((b) => b.value == this.listType)) {
+            this.listType = "default";
         }
     }
 
@@ -181,7 +167,7 @@ export default class SongList extends Vue {
     }
 
     public set listType(value: string) {
-        this.store.dispatch('setList', value);
+        this.store.dispatch("setList", value);
     }
 
     public get listType() {
@@ -194,13 +180,15 @@ export default class SongList extends Vue {
 
     // Filtered songs. Returns all songs if no filters are applied.
     public get filteredSongs() {
-        return this.collection?.filteredSongs(
-            this.searchQuery,
-            this.store.state.filter.themes,
-            this.store.state.filter.origins,
-            this.store.state.filter.audioFiles,
-            this.store.state.filter.videoFiles,
-        ) ?? [];
+        return (
+            this.collection?.filteredSongs(
+                this.searchQuery,
+                this.store.state.filter.themes,
+                this.store.state.filter.origins,
+                this.store.state.filter.audioFiles,
+                this.store.state.filter.videoFiles
+            ) ?? []
+        );
     }
 
     public get collection(): Collection | undefined {
@@ -264,8 +252,13 @@ export default class SongList extends Vue {
             };
         } = {};
 
-        for (const song of this.filteredSongs.sort((a, b) => a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1)) {
-            const letter = song.getName(this.languageKey)?.replace(/[\W]/g, '')[0].toUpperCase();
+        for (const song of this.filteredSongs.sort((a, b) =>
+            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1
+        )) {
+            const letter = song
+                .getName(this.languageKey)
+                ?.replace(/[\W]/g, "")[0]
+                .toUpperCase();
             if (!letter) continue;
 
             songs[letter] = songs[letter] ?? {
@@ -318,36 +311,44 @@ export default class SongList extends Vue {
     public get buttons() {
         return [
             {
-                label: this.$t('common.number'),
-                value: 'default',
-                selected: this.listType == 'default',
+                label: this.$t("common.number"),
+                value: "default",
+                selected: this.listType == "default",
             },
             {
-                label: this.$t('common.title'),
-                value: 'title',
-                selected: this.listType == 'title',
+                label: this.$t("common.title"),
+                value: "title",
+                selected: this.listType == "title",
             },
             {
-                label: this.$t('song.authors'),
-                value: 'authors',
-                selected: this.listType == 'authors',
+                label: this.$t("song.authors"),
+                value: "authors",
+                selected: this.listType == "authors",
             },
             {
-                label: this.$t('song.composers'),
-                value: 'composers',
-                selected: this.listType == 'composers',
+                label: this.$t("song.composers"),
+                value: "composers",
+                selected: this.listType == "composers",
             },
             {
-                label: this.$t('song.themes'),
-                value: 'themes',
-                selected: this.listType == 'themes',
+                label: this.$t("song.themes"),
+                value: "themes",
+                selected: this.listType == "themes",
             },
             {
-                label: this.$t('common.countries'),
-                value: 'countries',
-                selected: this.listType == 'countries',
+                label: this.$t("common.countries"),
+                value: "countries",
+                selected: this.listType == "countries",
             },
-        ].filter(b => ![!this.collection?.hasAuthors ? 'authors' : '', !this.collection?.hasComposers ? 'composers' : '', !this.collection?.hasCountries ? 'countries' : '', !this.collection?.hasThemes ? 'themes' : ''].includes(b.value))
+        ].filter(
+            (b) =>
+                ![
+                    !this.collection?.hasAuthors ? "authors" : "",
+                    !this.collection?.hasComposers ? "composers" : "",
+                    !this.collection?.hasCountries ? "countries" : "",
+                    !this.collection?.hasThemes ? "themes" : "",
+                ].includes(b.value)
+        );
     }
 }
 </script>
@@ -366,6 +367,7 @@ export default class SongList extends Vue {
 .song-list {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
+    padding: var(--st-spacing);
 
     &__filters {
         display: flex;

@@ -1,35 +1,36 @@
 <template>
     <nav class="nav" @click="toggleBurgerMenu">
-        <div class="container nav__wrapper">
-            <img class="nav__logo" :src="logo" @click="$router.push('/')" />
-            <base-button theme="secondary" v-if="isMobileDevice">
-                <i class="fa fa-bars"></i>
-            </base-button>
-            <div
-                class="nav__links gap-x"
-                :class="{
-                    'nav__links-active': openBurgerMenu,
-                    'gap-y': isMobileDevice,
-                }"
+        <div class="nav__header" @click="$router.push('/')">
+            <img class="nav__header__logo" :src="logo" />
+        </div>
+        <div
+            class="nav__links"
+            :class="{
+                'nav__links-active': openBurgerMenu,
+                'gap-y': isMobileDevice,
+            }"
+        >
+            <router-link class="nav__item" :to="{ name: 'main' }">{{
+                $t("common.dashboard")
+            }}</router-link>
+            <router-link class="nav__item" :to="{ name: 'collections' }">{{
+                $t("common.songs")
+            }}</router-link>
+            <router-link class="nav__item" :to="{ name: 'store' }">{{
+                $t("common.store")
+            }}</router-link>
+            <router-link
+                v-if="isAdmin"
+                class="nav__item"
+                :to="{ name: 'admin' }"
+                >Admin</router-link
             >
-                <router-link class="nav__item" :to="{ name: 'main' }">{{
-                    $t("common.dashboard")
-                }}</router-link>
-                <router-link class="nav__item" :to="{ name: 'collections' }">{{
-                    $t("common.songs")
-                }}</router-link>
-                <router-link class="nav__item" :to="{ name: 'store' }">{{
-                    $t("common.store")
-                }}</router-link>
-                <router-link
-                    v-if="isAdmin"
-                    class="nav__item"
-                    :to="{ name: 'admin' }"
-                    >Admin</router-link
-                >
-                <options-component
-                    class="nav__item settings"
-                ></options-component>
+        </div>
+        <div class="nav__user-profile" v-if="user">
+            <img :src="user.image" class="nav__user-profile__image" />
+            <div class="nav__user-profile__info">
+                <b class="nav__user-profile__name">{{ user.displayName }}</b>
+                <small class="nav__user-profile__email">{{ user.email }}</small>
             </div>
         </div>
     </nav>
@@ -49,6 +50,7 @@ import { sessionKey } from "@/store";
     },
 })
 export default class TheNavbar extends Vue {
+    private userStore = useStore(sessionKey);
     public openBurgerMenu = false;
 
     public get logo() {
@@ -67,75 +69,91 @@ export default class TheNavbar extends Vue {
     public get isMobileDevice() {
         return window.orientation != undefined;
     }
+
+    public get user() {
+        return this.userStore.state.currentUser;
+    }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .nav {
     background-color: var(--st-background-color);
-    border-bottom: 1px solid var(--st-border-color);
+    border-right: 1px solid var(--st-border-color);
 
-    width: 100%;
+    height: 100%;
+    max-width: 250px;
     display: flex;
-    justify-content: center;
-    z-index: 10;
-
-    &__wrapper {
-        display: flex;
-        justify-content: space-between;
-    }
+    flex-direction: column;
 
     &__links {
         display: flex;
-        align-items: center;
-        // gap: var(--st-spacing);
+        flex-direction: column;
+        flex-grow: 1;
     }
 
-    &__logo {
-        max-height: 35px;
+    &__header {
+        padding: var(--st-spacing);
         cursor: pointer;
+        border-bottom: 1px solid var(--st-border-color);
+
+        &__logo {
+            max-height: 40px;
+        }
+    }
+
+    &__user-profile {
+        padding: var(--st-spacing);
+        display: flex;
+        align-items: center;
+        gap: var(--st-spacing);
+        justify-self: flex-end;
+        border-top: 1px solid var(--st-border-color);
+
+        &__info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__email {
+            opacity: 0.5;
+        }
+
+        &__image {
+            --st-pfp-size: 40px;
+            border-radius: 100%;
+            max-width: var(--st-pfp-size);
+            max-height: var(--st-pfp-size);
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__settings {
+        justify-self: flex-start;
     }
 
     &__item {
         color: var(--st-text-color);
+        padding: var(--st-spacing);
         text-decoration: none;
+        transition: border-left 0.2s;
 
         &.router-link-exact-active {
             color: var(--st-primary-color);
             position: relative;
+            border-left: 5px solid var(--st-primary-color);
 
-            &:after {
-                content: "";
-                background-color: var(--st-primary-color);
-                position: absolute;
-                top: 100%;
-                left: 0;
-                height: 2px;
-                width: 100%;
-                animation: growFromLeft 0.3s ease;
-            }
-        }
-    }
-
-    @media screen and (max-width: 600px) {
-        .nav__links {
-            padding: var(--st-spacing);
-            background-color: var(--st-background-color);
-            border-left: 1px solid var(--st-border-color);
-            flex-direction: column;
-            position: fixed;
-            height: 100%;
-            top: 0;
-            right: -100%;
-            transition: all 0.5s ease;
-
-            &-active {
-                right: 0;
-            }
-
-            .settings {
-                margin-top: auto;
-            }
+            // &:after {
+            //     content: "";
+            //     background-color: var(--st-primary-color);
+            //     position: absolute;
+            //     top: 100%;
+            //     left: 0;
+            //     height: 2px;
+            //     width: 100%;
+            //     animation: growFromLeft 0.3s ease;
+            // }
         }
     }
 }

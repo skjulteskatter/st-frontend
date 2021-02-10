@@ -10,7 +10,7 @@
         </h2>
         <div class="store-card__footer">
             <p class="store-card__price">
-                {{ product.prices[0].value }}
+                {{ formatPrices(product.prices, "year") }}
             </p>
             <base-button
                 class="store-card__button"
@@ -57,6 +57,16 @@ export default class StoreCard extends Vue {
     public action = () => undefined;
     public userStore = useStore(sessionKey);
     private loading = false;
+
+    public formatPrices(prices: Price[], type: string) {
+        const unformattedPrice = prices.find((price) => price.type == type)
+            ?.value;
+        const formattedPrice = unformattedPrice?.slice(
+            0,
+            unformattedPrice.length - 2
+        );
+        return `${formattedPrice} /${type}`;
+    }
 
     public get languageKey() {
         return this.userStore.getters.languageKey ?? "en";
