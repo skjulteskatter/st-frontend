@@ -48,8 +48,8 @@
             </p>
         </base-card> -->
         <div>{{currentTransposition}}</div>
-        <button @click="currentTransposition += 1">UP</button>
-        <button @click="currentTransposition -= 1">DOWN</button>
+        <button @click="currentTransposition < 12 ? currentTransposition += 1 : undefined">UP</button>
+        <button @click="-12 < currentTransposition ? currentTransposition -= 1 : undefined">DOWN</button>
         <button @click="transpose">SET</button>
         <br/>
         <div v-if="lyrics" v-html="lyrics.transposedContent"></div>
