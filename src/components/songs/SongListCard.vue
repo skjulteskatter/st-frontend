@@ -24,7 +24,7 @@
                     <b>{{ song.number }}</b>
                 </div>
                 <div class="theme-card__list__item__title">
-                    <span>{{ name(song.name) }}</span>
+                    <span>{{ song.getName(languageKey) }}</span>
                 </div>
             </li>
         </ul>
