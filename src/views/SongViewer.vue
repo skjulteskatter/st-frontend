@@ -97,7 +97,7 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.state.lyrics;
+        return this.songStore.state.lyrics ?? this.songStore.getters.lyrics;
     }
 
     public get song(): Song | undefined {
