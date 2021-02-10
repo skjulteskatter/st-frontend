@@ -1,5 +1,5 @@
 <template>
-    <base-card class="song-details__metadata" border secondary v-if="song">
+    <base-card class="song-details__metadata" border v-if="song">
         <h2 class="song-details__metadata__title">
             <span style="opacity: 0.5; padding-right: 0.5em">{{
                 song.number
@@ -107,3 +107,9 @@ export default class SongInfoCard extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+.song-details__metadata {
+    margin-bottom: var(--st-spacing);
+}
+</style>
