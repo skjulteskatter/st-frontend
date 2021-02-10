@@ -14,13 +14,13 @@
             ></song-info-card>
 
             <div class="song-details__buttons">
-                <button
-                    @click="translateTo(l.key)"
+                <base-button
+                    :action="() => translateTo(l.key)"
                     v-for="l in languages"
                     :key="l.key"
                 >
                     {{ l.name }}
-                </button>
+                </base-button>
             </div>
 
             <lyrics-settings
