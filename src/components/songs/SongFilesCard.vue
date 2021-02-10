@@ -1,7 +1,7 @@
 <template>
     <base-card
         class="song-details__files"
-        v-if="song && song.audioFiles.length || song.videoFiles.length"
+        v-if="song && (song.audioFiles.length || song.videoFiles.length)"
         border
     >
         <h2 class="song-details__files__title">Files</h2>
@@ -51,13 +51,13 @@ import { Options, Vue } from "vue-class-component";
 @Options({
     components: {
         BaseCard,
-        Modal
+        Modal,
     },
     props: {
         song: {
-            type: Object
-        }
-    }
+            type: Object,
+        },
+    },
 })
 export default class SongFilesCard extends Vue {
     public song?: Song;
@@ -65,27 +65,13 @@ export default class SongFilesCard extends Vue {
 </script>
 <style lang="scss">
 .song-details {
-    --half-spacing: calc(var(--st-spacing) * 0.5);
-
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: var(--st-spacing);
-
     &__files {
         grid-column: span 2;
 
-        &__video {
-            &__link {
-                text-decoration: none;
-                color: var(--st-primary-color);
-            }
-        }
-
         .card__content {
             .files__container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: var(--st-spacing);
+                display: flex;
+                flex-direction: column;
             }
         }
 

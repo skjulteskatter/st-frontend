@@ -1,7 +1,7 @@
 <template>
     <div v-if="initialized && song">
         <div class="loader" v-if="loading"></div>
-        <div v-if="!loading">
+        <div v-if="!loading" class="song-viewer">
             <base-button v-if="extended && !transposed" @click="extend"
                 >Advanced</base-button
             >
@@ -12,6 +12,8 @@
                 :languageKey="languageKey"
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
+
+            <song-files-card :song="song"></song-files-card>
 
             <div class="song-details__buttons">
                 <base-button
@@ -42,16 +44,12 @@
                 :lyrics="lyrics"
                 :song="song"
             ></song-details>
-
-            <song-files-card
-                :song="song"
-            ></song-files-card>
         </div>
     </div>
 </template>
 <script lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
-import { SongInfoCard, SongFilesCard } from '@/components/songs';
+import { SongInfoCard, SongFilesCard } from "@/components/songs";
 
 import { Options, Vue } from "vue-class-component";
 import {
@@ -70,7 +68,7 @@ import { Collection, Lyrics, Song } from "@/classes";
         TransposedLyricsViewer,
         BaseButton,
         SongInfoCard,
-        SongFilesCard
+        SongFilesCard,
     },
 })
 export default class SongViewer extends Vue {
@@ -148,3 +146,10 @@ export default class SongViewer extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+.song-viewer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+</style>
