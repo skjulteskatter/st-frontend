@@ -264,8 +264,8 @@ export default class SongList extends Vue {
             };
         } = {};
 
-        for (const song of this.filteredSongs) {
-            const letter = song.getName(this.languageKey)?.[0].toUpperCase();
+        for (const song of this.filteredSongs.sort((a, b) => a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1)) {
+            const letter = song.getName(this.languageKey)?.replace(/[\W]/g, '')[0].toUpperCase();
             if (!letter) continue;
 
             songs[letter] = songs[letter] ?? {
@@ -275,6 +275,7 @@ export default class SongList extends Vue {
 
             songs[letter].songs.push(song);
         }
+
         return Object.keys(songs)
             .map((k) => songs[k])
             .sort((a, b) => (a.title > b.title ? 1 : -1));

@@ -46,7 +46,7 @@
                 {{ melodyOrigin }}
             </p>
         </base-card> -->
-        <base-card v-if="lyrics" border>
+        <base-card v-if="lyrics && lyrics.format == 'html'" border>
             <div v-html="lyrics.transposed"></div>
         </base-card>
         <base-card
