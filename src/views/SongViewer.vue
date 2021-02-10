@@ -6,7 +6,7 @@
                 >Advanced</base-button
             >
             <base-button @click="transpose">Transpose</base-button>
-            
+
             <song-info-card
                 :song="song"
                 :languageKey="languageKey"
@@ -14,7 +14,13 @@
             ></song-info-card>
 
             <div class="song-details__buttons">
-                <button @click="translateTo(l.key)" v-for="l in languages" :key="l.key">{{l.name}}</button>
+                <button
+                    @click="translateTo(l.key)"
+                    v-for="l in languages"
+                    :key="l.key"
+                >
+                    {{ l.name }}
+                </button>
             </div>
 
             <lyrics-settings
@@ -74,9 +80,12 @@ export default class SongViewer extends Vue {
 
     public async mounted() {
         if (!this.songStore.getters.collection) {
-            await this.songStore.dispatch('selectCollection', this.$route.params.collection);
+            await this.songStore.dispatch(
+                "selectCollection",
+                this.$route.params.collection
+            );
         }
-        await this.songStore.dispatch('selectSong', this.$route.params.number);
+        await this.songStore.dispatch("selectSong", this.$route.params.number);
     }
 
     public get extended() {
@@ -116,7 +125,7 @@ export default class SongViewer extends Vue {
     public get languages() {
         const languages = this.store.state.languages;
 
-        return languages.filter(l => this.song?.name[l.key]);
+        return languages.filter((l) => this.song?.name[l.key]);
     }
 
     public get initialized() {
@@ -129,9 +138,12 @@ export default class SongViewer extends Vue {
 
     public async translateTo(language: string) {
         if (this.song) {
-            const lyrics = await this.collection?.getLyrics(this.song.number, language);
+            const lyrics = await this.collection?.getLyrics(
+                this.song.number,
+                language
+            );
 
-            this.songStore.commit('lyrics', lyrics);
+            this.songStore.commit("lyrics", lyrics);
         }
     }
 }

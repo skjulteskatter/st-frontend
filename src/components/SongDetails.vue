@@ -29,7 +29,7 @@ import { Lyrics, Song } from "@/classes";
         },
         song: {
             type: Object,
-        }
+        },
     },
 })
 export default class SongDetails extends Vue {
@@ -75,18 +75,6 @@ export default class SongDetails extends Vue {
 </script>
 
 <style lang="scss">
-#biography img {
-    max-width: 100%;
-}
-
-.biography-wrapper {
-    color: var(--st-text-color);
-
-    img {
-        width: 100%;
-    }
-}
-
 .song-details {
     --half-spacing: calc(var(--st-spacing) * 0.5);
 
@@ -101,18 +89,10 @@ export default class SongDetails extends Vue {
     &__files {
         grid-column: span 2;
 
-        &__video {
-            &__link {
-                text-decoration: none;
-                color: var(--st-primary-color);
-            }
-        }
-
         .card__content {
             .files__container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: var(--st-spacing);
+                display: flex;
+                flex-direction: column;
             }
         }
 
