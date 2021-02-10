@@ -34,6 +34,12 @@ export const admin = {
     },
     setRoles(user: User, roles: string[]) {
         return http.patch<User>(`api/Admin/User/${user.id}/Roles`, roles);
+    },
+    clearCache(collectionId: string) {
+        return http.get<void>(`api/Admin/ClearCache/${collectionId}`);
+    },
+    sync(collectionId: string) {
+        return http.get<void>(`api/Admin/Sync/${collectionId}`);
     }
 }
 

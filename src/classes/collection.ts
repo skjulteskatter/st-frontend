@@ -18,7 +18,7 @@ export class Collection {
 
     public themeTypes: Theme[] = [];
 
-    private _loadingLyrics = false;
+    public loadingLyrics = false;
 
     private _authors?: ContributorCollectionItem[];
     private _loadingAuthors = false;
@@ -63,7 +63,7 @@ export class Collection {
     }
 
     public get loading() {
-        return this._loading || this._loadingLyrics || this._loadingAuthors || this._loadingComposers || this._loadingThemes;
+        return this._loading || this._loadingAuthors || this._loadingComposers || this._loadingThemes;
     }
 
     public getSong(number: number) {
@@ -142,11 +142,9 @@ export class Collection {
     }
 
     public async transposeLyrics(number: number, transpose: number) {
-        this._loadingLyrics = true;
-
+        this.loadingLyrics = true;
         const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
-
-        this._loadingLyrics = false;
+        this.loadingLyrics = false;
         return lyrics;
     }
 
