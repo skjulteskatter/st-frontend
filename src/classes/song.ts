@@ -1,6 +1,6 @@
-import showdown from 'showdown';
+import { Converter } from 'showdown';
 import { Contributor } from '.';
-const converter = new showdown.Converter();
+const converter = new Converter();
 
 export class Song implements SongInterface {
     public id: string;
