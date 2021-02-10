@@ -4,6 +4,7 @@
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
             border
+            secondary
         >
             <h2 class="song-details__files__title">Files</h2>
             <div class="files__container">
@@ -42,8 +43,11 @@
                 </base-card>
             </div>
         </base-card>
-        <base-card class="song-details__lyrics">
-            <div v-for="(verse, i) in text" :key="verse.name + verse.content[0] + i">
+        <base-card class="song-details__lyrics" v-if="text.length">
+            <div
+                v-for="(verse, i) in text"
+                :key="verse.name + verse.content[0] + i"
+            >
                 <b>{{ verse.name }}</b>
                 <p v-for="line in verse.content" :key="line">{{ line }}</p>
             </div>
@@ -71,7 +75,7 @@ import { Lyrics, Song } from "@/classes";
         },
         song: {
             type: Object,
-        }
+        },
     },
 })
 export default class SongDetails extends Vue {
@@ -117,18 +121,6 @@ export default class SongDetails extends Vue {
 </script>
 
 <style lang="scss">
-#biography img {
-    max-width: 100%;
-}
-
-.biography-wrapper {
-    color: var(--st-text-color);
-
-    img {
-        width: 100%;
-    }
-}
-
 .song-details {
     --half-spacing: calc(var(--st-spacing) * 0.5);
 
@@ -143,18 +135,10 @@ export default class SongDetails extends Vue {
     &__files {
         grid-column: span 2;
 
-        &__video {
-            &__link {
-                text-decoration: none;
-                color: var(--st-primary-color);
-            }
-        }
-
         .card__content {
             .files__container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: var(--st-spacing);
+                display: flex;
+                flex-direction: column;
             }
         }
 

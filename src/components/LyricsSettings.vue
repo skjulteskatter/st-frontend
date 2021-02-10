@@ -72,6 +72,7 @@
             class="lyrics-settings__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
             border
+            secondary
         >
             <h2 class="lyrics-settings__files__title">Files</h2>
             <div class="files__container">
@@ -311,7 +312,7 @@ export default class LyricsSettings extends Vue {
     grid-gap: var(--st-spacing);
 
     &__files {
-        grid-column: span 5;
+        grid-column: span 2;
 
         &__video {
             &__link {
@@ -322,9 +323,9 @@ export default class LyricsSettings extends Vue {
 
         .card__content {
             .files__container {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                grid-gap: var(--st-spacing);
+                display: flex;
+                flex-direction: column;
+                gap: var(--st-spacing);
             }
         }
 
