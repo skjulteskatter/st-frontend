@@ -5,6 +5,21 @@ type Content = {
     };
 }
 
+const transpositions = {
+    'C': 0,
+    'C#': 1,
+    'D': 2,
+    'Eb': 3,
+    'E': 4,
+    'F': 5,
+    'F#': 6,
+    'G': 7,
+    'G#': 8,
+    'A': 9,
+    'Bb': 10,
+    'B': 11,
+}
+
 export class Lyrics implements LyricsInterface {
     number: number;
     title: string;
@@ -14,7 +29,7 @@ export class Lyrics implements LyricsInterface {
     hasChords: boolean;
     language: Language;
     originalKey: string;
-    transposedToKey?: string;
+    transposed: number;
 
     constructor(lyrics: LyricsInterface) {
         this.number = lyrics.number;
@@ -25,7 +40,7 @@ export class Lyrics implements LyricsInterface {
         this.hasChords = lyrics.hasChords;
         this.originalKey = lyrics.originalKey;
         this.language = lyrics.language;
-        this.transposedToKey = lyrics.transposedToKey;
+        this.transposed = lyrics.transposed;
     }
 
     public get verses() {
@@ -76,8 +91,14 @@ export class Lyrics implements LyricsInterface {
         return lines.join('\n').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
     }
 
-    public get transposed() {
+    public get transposedContent() {
         return this.content as string;
+    }
+
+    public get currentKey() {
+        
+
+        return '';
     }
 
     public get lines() {

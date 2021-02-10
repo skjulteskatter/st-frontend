@@ -1,6 +1,7 @@
 <template>
-    <div class="song-details" v-if="song">
-        <base-card class="song-details__metadata" border secondary>
+    <div v-if="song">
+        <div class="loader" v-if="loading"></div>
+        <!-- <base-card class="song-details__metadata" border secondary>
             <h2 class="song-details__metadata__title">
                 <span style="opacity: 0.5; padding-right: 0.5em">{{
                     song.number
@@ -45,9 +46,14 @@
             <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
                 {{ melodyOrigin }}
             </p>
-        </base-card>
-        <div v-if="lyrics" v-html="lyrics.transposed"></div>
-        <base-card
+        </base-card> -->
+        <div>{{currentTransposition}}</div>
+        <button @click="currentTransposition += 1">UP</button>
+        <button @click="currentTransposition -= 1">DOWN</button>
+        <button @click="transpose">SET</button>
+        <br/>
+        <div v-if="lyrics" v-html="lyrics.transposedContent"></div>
+        <!-- <base-card
             class="song-details__files"
             v-if="song.audioFiles.length || song.videoFiles.length"
             border
@@ -86,10 +92,10 @@
                             Sorry, your browser doesn't support embedded videos.
                         </video>
                     </modal>
-                    <!-- <a class="song-details__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a> -->
+                    <a class="song-details__files__video__link" v-for="video in song.videoFiles" :href="video.directUrl" target="_blank" :key="video">{{video.name}}</a>
                 </base-card>
             </div>
-        </base-card>
+        </base-card> -->
     </div>
 </template>
 
@@ -116,14 +122,14 @@ import { songKey } from "@/store";
     },
 })
 export default class TransposedLyricsViewer extends Vue {
+    private songStore = useStore(songKey);
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public description = "";
     public languageKey = "";
     public title = "";
     public song?: Song;
-
-    private songStore = useStore(songKey);
+    public currentTransposition = this.lyrics?.transposed ?? 0;
 
     public get melodyOrigin() {
         return (
@@ -135,6 +141,14 @@ export default class TransposedLyricsViewer extends Vue {
 
     public get lyrics() {
         return this.songStore.state.lyrics;
+    }
+
+    public transpose() {
+        this.songStore.dispatch("transpose", this.currentTransposition);
+    }
+
+    public get loading() {
+        return this.songStore.getters.collection?.loadingLyrics;
     }
 }
 </script>

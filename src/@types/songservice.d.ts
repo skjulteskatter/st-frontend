@@ -77,7 +77,7 @@ interface LyricsInterface {
     format: string;
     hasChords: boolean;
     originalKey: string;
-    transposedToKey?: string;
+    transposed: number;
 }
 
 interface Verse {
