@@ -6,6 +6,11 @@ export class Collection {
     public key: string;
     public id: string;
     public name: LocaleString;
+
+    public getName(language: string) {
+        return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
+    }
+
     public image: string;
 
     private _initialized = false;
