@@ -1,24 +1,27 @@
 <template>
     <div class="dropdown">
-        <base-button
-            class="dropdown__button"
-            theme="secondary"
-            :action="openDropdown"
-            v-if="label"
-        >
-            <span>{{ label }}</span>
+        <div class="dropdown__button" @click="openDropdown">
+            <base-button
+                class="dropdown__button__button"
+                theme="secondary"
+                :action="openDropdown"
+                v-if="label"
+            >
+                <span>{{ label }}</span>
+                <i
+                    class="fa dropdown__button__icon"
+                    :class="{ 'fa-angle-down': !isOpen, 'fa-angle-up': isOpen }"
+                ></i>
+            </base-button>
+            <slot name="button" v-else></slot>
             <i
-                class="fa dropdown__button__icon"
-                :class="{ 'fa-angle-down': !isOpen, 'fa-angle-up': isOpen }"
+                v-if="icon"
+                :class="['dropdown__icon', 'fa', icon]"
+                @click="openDropdown"
             ></i>
-        </base-button>
-        <i
-            v-if="icon"
-            :class="['dropdown__icon', 'fa', icon]"
-            @click="openDropdown"
-        ></i>
+        </div>
         <base-card v-if="isOpen" class="dropdown__content">
-            <slot></slot>
+            <slot name="default"></slot>
         </base-card>
     </div>
 </template>
@@ -64,8 +67,9 @@ export default class BaseDropdown extends Vue {
     }
 
     &__button {
-        outline: none;
-
+        &__button {
+            outline: none;
+        }
         &__icon {
             display: inline;
             margin-left: var(--st-half-spacing);
