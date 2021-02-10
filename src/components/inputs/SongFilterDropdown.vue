@@ -6,30 +6,34 @@
                 <small>Video</small>
                 <div class="filter gap-x">
                     <input v-model="videoValues.karaoke" type="checkbox" name="karaoke" id="v-karaoke" />
-                    <label for="v-karaoke">Karaoke</label>
+                    <label for="v-karaoke">{{$t('types.karaoke')}}</label>
                 </div>
-                <div class="filter gap-x">
+                <!-- <div class="filter gap-x">
                     <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="v-gathering" />
-                    <label for="v-gathering">Samling</label>
+                    <label for="v-gathering">{{$t('types.gathering')}}</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="videoValues.complete_arrangement" type="checkbox" name="complete" id="v-complete" />
-                    <label for="v-complete">Komplett</label>
-                </div>
+                    <input v-model="videoValues.studio" type="checkbox" name="complete" id="v-complete" />
+                    <label for="v-complete">{{$t('types.studio')}}</label>
+                </div> -->
             </div>
             <div class="grouping">
                 <small>Audio</small>
-                <div class="filter gap-x">
+                <!-- <div class="filter gap-x">
                     <input v-model="audioValues.karaoke" type="checkbox" name="karaoke" id="a-karaoke" />
-                    <label for="a-karaoke">Karaoke</label>
-                </div>
+                    <label for="a-karaoke">{{$t('types.karaoke')}}</label>
+                </div> -->
                 <div class="filter gap-x">
                     <input v-model="audioValues.gathering" type="checkbox" name="gathering" id="a-gathering" />
-                    <label for="a-gathering">Samling</label>
+                    <label for="a-gathering">{{$t('types.gathering')}}</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.complete_arrangement" type="checkbox" name="complete" id="a-complete" />
-                    <label for="a-complete">Komplett</label>
+                    <input v-model="audioValues.studio" type="checkbox" name="studio" id="a-studio" />
+                    <label for="a-studio">{{$t('types.studio')}}</label>
+                </div>
+                <div class="filter gap-x">
+                    <input v-model="audioValues.instrumental" type="checkbox" name="instrumental" id="a-instrumental" />
+                    <label for="a-instrumental">{{$t('types.instrumental')}}</label>
                 </div>
             </div>
             <button @click="apply">APPLY</button>
@@ -60,8 +64,8 @@ import BaseDropdown from "./BaseDropdown.vue";
 export default class SongFilterDropdown extends Vue {
     private sessionStore = useStore(sessionKey);
     private store = useStore(songKey);
-    public videoTypes = ["karaoke", "gathering", "complete_arrangement"];
-    public audioTypes = ["karaoke", "gathering", "complete_arrangement"];
+    public videoTypes = ["karaoke", "gathering", "studio", "instrumental"];
+    public audioTypes = ["gathering", "studio", "instrumental"];
     public themes?: Theme[];
     public origins?: Origin[];
 
