@@ -9,6 +9,7 @@ export class Contributor implements ContributorInterface {
     public country = '';
     public id = '';
     public name = '';
+    public subtitle = '';
 
     constructor(contributor: ContributorInterface) {
         this.biography = contributor.biography;
@@ -16,6 +17,7 @@ export class Contributor implements ContributorInterface {
         this.country = contributor.country;
         this.id = contributor.id;
         this.name = contributor.name;
+        this.subtitle = contributor.subtitle;
     }
 
     public getBiography(language: string) {

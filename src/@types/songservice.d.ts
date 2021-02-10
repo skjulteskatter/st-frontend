@@ -45,6 +45,7 @@ interface ContributorInterface {
     id: string;
     name: string;
     birthYear: number;
+    subtitle: string;
     country: string;
     biography: {
         [languageKey: string]: string;
