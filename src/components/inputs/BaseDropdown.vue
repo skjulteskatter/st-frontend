@@ -4,7 +4,6 @@
             <base-button
                 class="dropdown__button__button"
                 theme="secondary"
-                :action="openDropdown"
                 v-if="label"
             >
                 <span>{{ label }}</span>

@@ -1,6 +1,12 @@
 <template>
     <div id="options" v-if="user">
-        <base-dropdown class="menu-button">
+        <div class="options__footer">
+            <i class="fa fa-cog options__footer__icon"></i>
+            <base-button theme="secondary">{{
+                $t("common.logout")
+            }}</base-button>
+        </div>
+        <!-- <base-dropdown class="menu-button">
             <template #button>
                 <img class="profile-picture" :src="user.image" />
             </template>
@@ -22,7 +28,7 @@
                     </span>
                 </div>
             </template>
-        </base-dropdown>
+        </base-dropdown> -->
     </div>
 </template>
 <script lang="ts">
@@ -57,6 +63,17 @@ export default class OptionsComponent extends Vue {
 <style lang="scss">
 .options {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
+    color: var(--st-text-color);
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &__icon {
+            font-size: 1.2rem;
+        }
+    }
 
     &__content {
         display: flex;
