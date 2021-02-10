@@ -14,13 +14,13 @@
             ></song-info-card>
 
             <div class="song-details__buttons">
-                <base-button
-                    :action="() => translateTo(key)"
-                    v-for="key in Object.keys(song.name)"
-                    :key="key"
+                <button
+                    @click="translateTo(l.key)"
+                    v-for="l in languages"
+                    :key="l.key"
                 >
-                    {{ key.toUpperCase() }}
-                </base-button>
+                    {{ l.name }}
+                </button>
             </div>
 
             <lyrics-settings
@@ -106,7 +106,7 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.state.lyrics;
+        return this.songStore.state.lyrics ?? this.songStore.getters.lyrics;
     }
 
     public get song(): Song | undefined {
@@ -115,6 +115,12 @@ export default class SongViewer extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get languages() {
+        const languages = this.store.state.languages;
+
+        return languages.filter((l) => this.song?.name[l.key]);
     }
 
     public get initialized() {
