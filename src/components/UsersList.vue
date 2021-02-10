@@ -47,7 +47,7 @@
                                                 type="checkbox"
                                                 :checked="
                                                     u.roles.find(
-                                                        (r) => r.name == role
+                                                        (r) => r == role
                                                     )
                                                 "
                                                 @change="toggleRole(u, role)"
@@ -66,7 +66,7 @@
                         </td>
                         <td>{{ u.displayName }}</td>
                         <td>{{ u.email }}</td>
-                        <td>{{ u.roles[0] ? u.roles[0].name : "NOT SET" }}</td>
+                        <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
                         <td>{{ u.id }}</td>
                     </tr>
                 </tbody>

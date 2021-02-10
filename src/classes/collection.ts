@@ -4,6 +4,7 @@ import { Contributor, Lyrics, Song } from ".";
 
 export class Collection {
     public key: string;
+    public defaultType: string;
     public id: string;
     public name: LocaleString;
 
@@ -41,6 +42,7 @@ export class Collection {
 
     constructor(collection: CollectionInterface) {
         this.key = collection.key;
+        this.defaultType = collection.defaultType;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
@@ -150,6 +152,15 @@ export class Collection {
         this.loadingLyrics = true;
         const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
         this.loadingLyrics = false;
+        return lyrics;
+    }
+
+    public async getLyrics(number: number, language: string) {
+        let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
+        if (!lyrics) {
+            lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0));
+            this.lyrics.push(lyrics);
+        }
         return lyrics;
     }
 

@@ -216,7 +216,6 @@ export default class SongList extends Vue {
     }
 
     public async selectSong(number: number) {
-        if (this.disabled.find((s) => s.number == number)) return;
         if (this.collection) {
             this.$router.push({
                 name: "song",
@@ -313,10 +312,6 @@ export default class SongList extends Vue {
         return this.filteredSongs.filter((s: Song) =>
             contributor?.songIds.includes(s.id)
         );
-    }
-
-    public get disabled() {
-        return this.songs.filter((s) => !s.name[this.languageKey]);
     }
 
     public get buttons() {
