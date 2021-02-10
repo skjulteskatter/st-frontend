@@ -47,7 +47,7 @@ export default class Card extends Vue {
 
     &__image {
         background-size: cover;
-        background-position: center;
+        background-position-y: 20%;
         background-repeat: no-repeat;
 
         width: 100%;
