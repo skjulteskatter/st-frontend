@@ -1,6 +1,7 @@
 <template>
-    <div v-if="initialized">
-        <router-view />
+    <div>
+        <div class="loader" v-if="!initialized"></div>
+        <router-view  v-else />
     </div>
 </template>
 

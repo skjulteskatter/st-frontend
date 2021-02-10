@@ -13,7 +13,7 @@
             @click="selectCollection(songbook)"
             border
         >
-            <h3 class="songbooks__book__title">{{ songbook.name[languageKey] }}</h3>
+            <h3 class="songbooks__book__title">{{ songbook.getName(languageKey) }}</h3>
         </base-card>
     </div>
 </template>
@@ -32,6 +32,7 @@ import { Collection } from "@/classes";
 })
 export default class Collections extends Vue {
     private songStore = useStore(songKey);
+    private sessionStore = useStore(sessionKey);
 
     public selectCollection(collection: Collection) {
         if (!this.available.find((c) => c.id == collection.id)) return;
@@ -44,19 +45,19 @@ export default class Collections extends Vue {
     }
 
     public get collections() {
-        return useStore(sessionKey).state.collections ?? [];
+        return this.sessionStore.state.collections ?? [];
     }
 
     public get selected() {
-        return useStore(songKey).getters.collection ?? {};
+        return this.songStore.getters.collection ?? {};
     }
 
     public get available(): Collection[] {
-        return useStore(sessionKey).getters.collections ?? [];
+        return this.sessionStore.getters.collections ?? [];
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
+        return this.sessionStore.getters.languageKey;
     }
 }
 </script>

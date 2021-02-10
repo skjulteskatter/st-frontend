@@ -6,9 +6,12 @@ export class Song implements SongInterface {
     public id: string;
     public number = 0;
     public type: string;
-    public name: {
-        [languageKey: string]: string;
-    } = {};
+    public name: LocaleString;
+
+    public getName(language: string) {
+        return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
+    }
+
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
     public leadSheetUrl = "";
@@ -43,10 +46,6 @@ export class Song implements SongInterface {
         if (Object.keys(this.name).includes(code)) return true;
 
         return false;
-    }
-
-    public getName(language: string) {
-        return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
     }
 
     public get description() {
