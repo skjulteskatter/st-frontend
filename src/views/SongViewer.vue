@@ -16,7 +16,7 @@
                 ></transposed-lyrics-viewer>
 
                 <song-details
-                    v-if="!isExtended && !transposed"
+                    v-if="!transposed"
                     :languageKey="languageKey"
                     :lyrics="lyrics"
                     :song="song"
