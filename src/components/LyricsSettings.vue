@@ -5,7 +5,9 @@
             class="lyrics-settings__controls"
             border
         >
-            <h2 class="lyrics-settings__controls__title">Controls</h2>
+            <h2 class="lyrics-settings__controls__title">
+                {{ $t("song.control") }}
+            </h2>
             <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('lyrics')"
@@ -47,7 +49,9 @@
             class="lyrics-settings__verses"
             border
         >
-            <h2 class="lyrics-settings__verses__title">Verses</h2>
+            <h2 class="lyrics-settings__verses__title">
+                {{ $t("song.verse") }}
+            </h2>
             <label
                 class="lyrics-settings__verses__input"
                 :class="{ selected: selected.includes(key) }"
