@@ -15,7 +15,7 @@
                     <base-button
                         v-if="!disabled.includes(collection.id)"
                         :action="() => clearCollection(collection.id)"
-                        theme="warning"
+                        theme="error"
                     >
                         {{ $t("admin.clearcache") }}
                     </base-button>
