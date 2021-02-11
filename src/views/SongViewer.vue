@@ -33,7 +33,7 @@
                     </base-button>
                     <base-dropdown
                         class="language-dropdown"
-                        :label="$t('common.language')"
+                        :label="language"
                     >
                         <p
                             class="language-dropdown__item selectable"
@@ -87,15 +87,18 @@ export default class SongViewer extends Vue {
     public store = useStore(sessionKey);
     public songStore = useStore(songKey);
     public transposed = false;
+    public number = 0;
 
     public async mounted() {
+        this.number = parseInt(this.$route.params.number as string);
         if (!this.songStore.getters.collection) {
             await this.songStore.dispatch(
                 "selectCollection",
                 this.$route.params.collection
             );
         }
-        await this.songStore.dispatch("selectSong", this.$route.params.number);
+        await this.songStore.dispatch("selectSong", this.number);
+        this.songStore.commit('song', this.number);
     }
 
     public get extended() {
@@ -121,11 +124,11 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.state.lyrics ?? this.songStore.getters.lyrics;
+        return this.songStore.getters.lyrics;
     }
 
     public get song(): Song | undefined {
-        return this.songStore.getters.song;
+        return this.collection?.songs.find(s => s.number == parseInt(this.$route.params.number as string));
     }
 
     public get languageKey() {
@@ -138,6 +141,10 @@ export default class SongViewer extends Vue {
         return languages.filter((l) => this.song?.name[l.key]);
     }
 
+    public get language() {
+        return this.languages.find(l => l.key == this.songStore.state.language)?.name;
+    }
+
     public get initialized() {
         return this.store.state.initialized;
     }
@@ -148,12 +155,12 @@ export default class SongViewer extends Vue {
 
     public async translateTo(language: string) {
         if (this.song) {
-            const lyrics = await this.collection?.getLyrics(
+            await this.collection?.getLyrics(
                 this.song.number,
                 language
             );
 
-            this.songStore.commit("lyrics", lyrics);
+            this.songStore.commit('language', language);
         }
     }
 }

@@ -83,12 +83,7 @@ export default class SongInfoCard extends Vue {
     public verses = 0;
 
     public get title() {
-        return (
-            this.song?.name[this.languageKey] ??
-            this.song?.name.en ??
-            this.song?.name.no ??
-            ""
-        );
+        return this.song?.getName(this.languageKey);
     }
 
     public get description() {

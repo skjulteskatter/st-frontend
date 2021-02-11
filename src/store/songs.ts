@@ -13,6 +13,7 @@ export type SongFilter = {
 
 export interface Songs {
     collectionId?: string;
+    language: string;
     song?: Song;
     songNumber?: number;
     lyrics?: Lyrics;
@@ -43,7 +44,8 @@ export const songStore = createStore<Songs>({
             videoFiles: [],
             audioFiles: [],
             origins: [],
-        }
+        },
+        language: 'en',
     },
     actions: {
         async selectCollection({dispatch, state, commit, getters}, id: string) {
@@ -51,13 +53,14 @@ export const songStore = createStore<Songs>({
                 commit('collections', sessionStore.getters.collections);
             }
 
+            commit('language', sessionStore.getters.languageKey);
             commit('collection', id );
             const list = state.list;
             commit('list', 'default');
             const collection = getters.collection as Collection;
 
             if (collection) {
-                collection.load(sessionStore.getters.languageKey).then(() => {
+                collection.load(state.language).then(() => {
                     dispatch('setList', list);
                 });
             }
@@ -68,18 +71,16 @@ export const songStore = createStore<Songs>({
                 return;
             }
             commit('song', number);
-            let lyrics = collection?.lyrics.find(l => l.number == number);
 
-            if (!lyrics) {
+            if (!getters.lyrics) {
                 const song = collection?.songs.find(s => s.number == number);
                 if (song) {
                     const language = Object.keys(song.name)[0];
+                    commit('language', language);
 
-                    lyrics = await collection.getLyrics(number, language);
+                    collection.getLyrics(number, language);
                 }
             }
-
-            commit('lyrics', lyrics);
         },
         async selectContributor({getters, commit}, contributorId: string) {
             const collection = getters.collection as Collection | undefined;
@@ -115,6 +116,9 @@ export const songStore = createStore<Songs>({
         }
     },
     mutations: {
+        language(state, language: string) {
+            state.language = language;
+        },
         collections(state, collections: Collection[]) {
             state.collections = collections;
             state.initialized = true;
@@ -172,7 +176,7 @@ export const songStore = createStore<Songs>({
             return (getters.collection as Collection | undefined)?.songs.find(s => s.number == state.songNumber);
         },
         lyrics(state, getters) {
-            return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber) ?? state.lyrics;
+            return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber && l.language.key == state.language);
         },
     },
 });
