@@ -1,33 +1,7 @@
 <template>
     <div v-if="song">
-        <div>{{ currentTransposition }}</div>
-        <base-button
-            :action="
-                () =>
-                    currentTransposition < 12
-                        ? (currentTransposition += 1)
-                        : undefined
-            "
-        >
-            UP
-        </base-button>
-        <base-button
-            :action="
-                () =>
-                    currentTransposition > -12
-                        ? (currentTransposition -= 1)
-                        : undefined
-            "
-        >
-            DOWN
-        </base-button>
-        <base-button :action="apply">APPLY</base-button>
         <base-card v-if="lyrics && lyrics.format == 'html'" border>
             <div v-html="lyrics.transposedContent"></div>
-            <div
-                v-if="collection ? collection.loadingLyrics : false"
-                class="loader"
-            ></div>
         </base-card>
     </div>
 </template>
@@ -62,7 +36,6 @@ export default class TransposedLyricsViewer extends Vue {
     public languageKey = "";
     public title = "";
     public song?: Song;
-    public currentTransposition = 0;
 
     public get melodyOrigin() {
         return (
@@ -80,15 +53,6 @@ export default class TransposedLyricsViewer extends Vue {
         return this.songStore.getters.collection;
     }
 
-    public async apply() {
-        if (this.song) {
-            const lyrics = await this.collection?.transposeLyrics(
-                this.song.number,
-                this.currentTransposition
-            );
-            this.songStore.commit("transposedLyrics", lyrics);
-        }
-    }
 }
 </script>
 

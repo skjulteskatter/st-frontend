@@ -54,6 +54,30 @@
                     :lyrics="lyrics"
                     :song="song"
                 ></lyrics-settings>
+                <div v-if="transposed">
+                    <div>{{ currentTransposition }}</div>
+                    <base-button
+                        :action="
+                            () =>
+                                currentTransposition < 11
+                                    ? (currentTransposition += 1)
+                                    : undefined
+                        "
+                    >
+                        UP
+                    </base-button>
+                    <base-button
+                        :action="
+                            () =>
+                                currentTransposition > -11
+                                    ? (currentTransposition -= 1)
+                                    : undefined
+                        "
+                    >
+                        DOWN
+                    </base-button>
+                    <base-button :action="apply">APPLY</base-button>
+                </div>
             </aside>
         </div>
     </div>
@@ -90,6 +114,7 @@ export default class SongViewer extends Vue {
     public songStore = useStore(songKey);
     public transposed = false;
     public number = 0;
+    public currentTransposition = 0;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
@@ -111,6 +136,16 @@ export default class SongViewer extends Vue {
         this.store.commit("extend", false);
         this.songStore.dispatch("transpose", 0);
         this.transposed = true;
+    }
+
+    public async apply() {
+        if (this.song) {
+            const lyrics = await this.collection?.transposeLyrics(
+                this.song.number,
+                this.currentTransposition
+            );
+            this.songStore.commit("transposedLyrics", lyrics);
+        }
     }
 
     public get loading() {
@@ -165,7 +200,6 @@ export default class SongViewer extends Vue {
                 this.song.number,
                 language
             );
-
             this.songStore.commit('language', language);
         }
     }
