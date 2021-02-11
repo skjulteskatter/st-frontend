@@ -149,11 +149,13 @@ export class Collection {
     }
 
     public async getLyrics(number: number, language: string) {
+        this.loadingLyrics = true;
         let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
         if (!lyrics) {
             lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0));
             this.lyrics.push(lyrics);
         }
+        this.loadingLyrics = false;
         return lyrics;
     }
 

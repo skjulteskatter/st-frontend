@@ -15,6 +15,8 @@
                     :song="song"
                 ></transposed-lyrics-viewer>
 
+                <div class="loader" v-if="loadingLyrics"></div>
+
                 <song-details
                     v-if="!transposed"
                     :languageKey="languageKey"
@@ -125,6 +127,10 @@ export default class SongViewer extends Vue {
 
     public get lyrics(): Lyrics | undefined {
         return this.songStore.getters.lyrics;
+    }
+
+    public get loadingLyrics() {
+        return this.collection?.loadingLyrics || false;
     }
 
     public get song(): Song | undefined {
