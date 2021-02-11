@@ -33,10 +33,7 @@
                     <base-button @click="transpose">
                         {{ $t("song.transpose") }}
                     </base-button>
-                    <base-dropdown
-                        class="language-dropdown"
-                        :label="language"
-                    >
+                    <base-dropdown class="language-dropdown" :label="language">
                         <p
                             class="language-dropdown__item selectable"
                             @click="translateTo(l.key)"
@@ -47,37 +44,40 @@
                         </p>
                     </base-dropdown>
                 </div>
-                <song-files-card :song="song"></song-files-card>
-                <lyrics-settings
-                    v-if="isExtended && !transposed"
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
-                    :song="song"
-                ></lyrics-settings>
-                <div v-if="transposed">
-                    <div>{{ currentTransposition }}</div>
-                    <base-button
-                        :action="
-                            () =>
-                                currentTransposition < 11
-                                    ? (currentTransposition += 1)
-                                    : undefined
-                        "
-                    >
-                        UP
-                    </base-button>
-                    <base-button
-                        :action="
-                            () =>
-                                currentTransposition > -11
-                                    ? (currentTransposition -= 1)
-                                    : undefined
-                        "
-                    >
-                        DOWN
-                    </base-button>
-                    <base-button :action="apply">APPLY</base-button>
+                <div class="song-viewer__sidebar__content">
+                    <song-files-card :song="song"></song-files-card>
+                    <lyrics-settings
+                        v-if="isExtended && !transposed"
+                        :languageKey="languageKey"
+                        :lyrics="lyrics"
+                        :song="song"
+                    ></lyrics-settings>
+                    <div v-if="transposed">
+                        <div>{{ currentTransposition }}</div>
+                        <base-button
+                            :action="
+                                () =>
+                                    currentTransposition < 11
+                                        ? (currentTransposition += 1)
+                                        : undefined
+                            "
+                        >
+                            UP
+                        </base-button>
+                        <base-button
+                            :action="
+                                () =>
+                                    currentTransposition > -11
+                                        ? (currentTransposition -= 1)
+                                        : undefined
+                            "
+                        >
+                            DOWN
+                        </base-button>
+                        <base-button :action="apply">APPLY</base-button>
+                    </div>
                 </div>
+                <audio-player></audio-player>
             </aside>
         </div>
     </div>
@@ -93,6 +93,7 @@ import {
     TransposedLyricsViewer,
     BaseButton,
 } from "@/components";
+import { AudioPlayer } from "@/components/media";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
@@ -107,6 +108,7 @@ import { Collection, Lyrics, Song } from "@/classes";
         SongFilesCard,
         BaseDropdown,
         ButtonGroup,
+        AudioPlayer,
     },
 })
 export default class SongViewer extends Vue {
@@ -125,7 +127,7 @@ export default class SongViewer extends Vue {
             );
         }
         await this.songStore.dispatch("selectSong", this.number);
-        this.songStore.commit('song', this.number);
+        this.songStore.commit("song", this.number);
     }
 
     public get extended() {
@@ -169,7 +171,9 @@ export default class SongViewer extends Vue {
     }
 
     public get song(): Song | undefined {
-        return this.collection?.songs.find(s => s.number == parseInt(this.$route.params.number as string));
+        return this.collection?.songs.find(
+            (s) => s.number == parseInt(this.$route.params.number as string)
+        );
     }
 
     public get languageKey() {
@@ -183,7 +187,9 @@ export default class SongViewer extends Vue {
     }
 
     public get language() {
-        return this.languages.find(l => l.key == this.songStore.state.language)?.name;
+        return this.languages.find(
+            (l) => l.key == this.songStore.state.language
+        )?.name;
     }
 
     public get initialized() {
@@ -196,11 +202,8 @@ export default class SongViewer extends Vue {
 
     public async translateTo(language: string) {
         if (this.song) {
-            await this.collection?.getLyrics(
-                this.song.number,
-                language
-            );
-            this.songStore.commit('language', language);
+            await this.collection?.getLyrics(this.song.number, language);
+            this.songStore.commit("language", language);
         }
     }
 }
@@ -234,6 +237,13 @@ export default class SongViewer extends Vue {
         display: flex;
         flex-direction: column;
         gap: var(--st-spacing);
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--st-spacing);
+            overflow-y: auto;
+        }
 
         &__buttons {
             display: flex;
