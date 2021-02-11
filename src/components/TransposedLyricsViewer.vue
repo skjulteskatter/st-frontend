@@ -1,20 +1,40 @@
 <template>
     <div v-if="song">
-        <div>{{currentTransposition}}</div>
-        <button @click="currentTransposition < 12 ? currentTransposition += 1 : undefined">UP</button>
-        <button @click="currentTransposition > -12 ? currentTransposition -= 1 : undefined">DOWN</button>
-        <button @click="apply">APPLY</button>
+        <div>{{ currentTransposition }}</div>
+        <base-button
+            :action="
+                () =>
+                    currentTransposition < 12
+                        ? (currentTransposition += 1)
+                        : undefined
+            "
+        >
+            UP
+        </base-button>
+        <base-button
+            :action="
+                () =>
+                    currentTransposition > -12
+                        ? (currentTransposition -= 1)
+                        : undefined
+            "
+        >
+            DOWN
+        </base-button>
+        <base-button :action="apply">APPLY</base-button>
         <base-card v-if="lyrics && lyrics.format == 'html'" border>
             <div v-html="lyrics.transposedContent"></div>
-            <div v-if="collection ? collection.loadingLyrics : false" class="loader"></div>
+            <div
+                v-if="collection ? collection.loadingLyrics : false"
+                class="loader"
+            ></div>
         </base-card>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
-import Modal from "@/components/Modal.vue";
+import { BaseCard, BaseButton, Modal } from "@/components";
 import { Collection, Song } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
@@ -22,6 +42,7 @@ import { songKey } from "@/store";
 @Options({
     components: {
         BaseCard,
+        BaseButton,
         Modal,
     },
     props: {
@@ -54,15 +75,18 @@ export default class TransposedLyricsViewer extends Vue {
     public get lyrics() {
         return this.songStore.state.transposedLyrics;
     }
-    
+
     public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
     }
 
     public async apply() {
         if (this.song) {
-            const lyrics = await this.collection?.transposeLyrics(this.song.number, this.currentTransposition);
-            this.songStore.commit('transposedLyrics', lyrics);
+            const lyrics = await this.collection?.transposeLyrics(
+                this.song.number,
+                this.currentTransposition
+            );
+            this.songStore.commit("transposedLyrics", lyrics);
         }
     }
 }

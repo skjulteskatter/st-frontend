@@ -4,8 +4,20 @@
         v-if="song && (song.audioFiles.length || song.videoFiles.length)"
         border
     >
-        <h2 class="song-details__files__title">Files</h2>
-        <div class="files__container">
+        <div class="song-details__files__header">
+            <h2 class="song-details__files__title">
+                {{ $t("song.files") }}
+            </h2>
+            <base-button
+                theme="secondary"
+                :action="() => (filesIsOpen = !filesIsOpen)"
+            >
+                <span>{{ $t("common.show") }}</span>
+                <i class="fa fa-angle-down" v-if="!filesIsOpen"></i>
+                <i class="fa fa-angle-up" v-else></i>
+            </base-button>
+        </div>
+        <div class="files__container" v-show="filesIsOpen">
             <base-card
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"
@@ -26,6 +38,7 @@
                 <h3>Video</h3>
                 <modal
                     v-for="video in song.videoFiles"
+                    theme="secondary"
                     :key="video"
                     :label="video.name"
                 >
@@ -44,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { BaseCard, Modal } from "@/components";
+import { BaseCard, Modal, BaseButton } from "@/components";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 
@@ -52,6 +65,7 @@ import { Options, Vue } from "vue-class-component";
     components: {
         BaseCard,
         Modal,
+        BaseButton,
     },
     props: {
         song: {
@@ -61,17 +75,30 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class SongFilesCard extends Vue {
     public song?: Song;
+    public filesIsOpen = false;
 }
 </script>
 <style lang="scss">
 .song-details {
     &__files {
-        grid-column: span 2;
+        flex-shrink: 0;
+
+        &__title {
+            margin: 0;
+        }
+
+        &__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         .card__content {
             .files__container {
                 display: flex;
                 flex-direction: column;
+                gap: var(--st-spacing);
+                margin-top: var(--st-spacing);
             }
         }
 

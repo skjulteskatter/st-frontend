@@ -1,12 +1,13 @@
 <template>
-    <div class="song-details" v-if="song">
-        <base-card class="song-details__lyrics">
-            <div v-for="(verse, i) in text" :key="verse.name + verse.content[0] + i">
-                <b>{{ verse.name }}</b>
-                <p v-for="line in verse.content" :key="line">{{ line }}</p>
-            </div>
-        </base-card>
-    </div>
+    <base-card class="song-details__lyrics" v-if="song">
+        <div
+            v-for="(verse, i) in text"
+            :key="verse.name + verse.content[0] + i"
+        >
+            <b>{{ verse.name }}</b>
+            <p v-for="line in verse.content" :key="line">{{ line }}</p>
+        </div>
+    </base-card>
 </template>
 
 <script lang="ts">
@@ -74,56 +75,23 @@ export default class SongDetails extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .song-details {
-    --half-spacing: calc(var(--st-spacing) * 0.5);
-
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: var(--st-spacing);
-
     &__lyrics {
-        grid-column: span 4;
+        flex-grow: 1;
     }
 
-    &__files {
-        grid-column: span 2;
+    // &__files {
+    //     .card__content {
+    //         .files__container {
+    //             display: flex;
+    //             flex-direction: column;
+    //         }
+    //     }
 
-        .card__content {
-            .files__container {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-
-        figure {
-            margin: 0 0 0.5em 0;
-        }
-    }
-
-    &__metadata {
-        grid-column: span 6;
-
-        &__credits {
-            display: inline-block;
-            color: var(--st-primary-color);
-
-            span {
-                display: inline-block;
-                margin-right: var(--half-spacing);
-            }
-        }
-
-        .card__content {
-            h2 {
-                margin: 0 0 var(--st-spacing);
-            }
-
-            .tag {
-                display: inline-block;
-                margin: 0;
-            }
-        }
-    }
+    //     figure {
+    //         margin: 0 0 0.5em 0;
+    //     }
+    // }
 }
 </style>

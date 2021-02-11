@@ -3,25 +3,11 @@
         <div class="loader" v-if="loading"></div>
         <div v-if="!loading" class="song-viewer">
             <div class="song-viewer__content">
-                <base-button v-if="extended && !transposed" @click="extend"
-                    >Advanced</base-button
-                >
-                <base-button @click="transpose">Transpose</base-button>
-
                 <song-info-card
                     :song="song"
                     :languageKey="languageKey"
                     :verses="lyrics ? Object.keys(lyrics.content).length : 0"
                 ></song-info-card>
-
-                <song-files-card :song="song"></song-files-card>
-
-                <lyrics-settings
-                    v-if="isExtended && !transposed"
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
-                    :song="song"
-                ></lyrics-settings>
 
                 <transposed-lyrics-viewer
                     v-if="transposed"
@@ -38,31 +24,48 @@
             </div>
 
             <aside class="song-viewer__sidebar">
-                <div class="song-details__buttons">
-                    <base-dropdown label="Språk">
-                        <base-button
-                            :action="() => translateTo(l.key)"
+                <div class="song-viewer__sidebar__buttons">
+                    <base-button v-if="extended && !transposed" @click="extend">
+                        {{ $t("song.advanced") }}
+                    </base-button>
+                    <base-button @click="transpose">
+                        {{ $t("song.transpose") }}
+                    </base-button>
+                    <base-dropdown
+                        class="language-dropdown"
+                        :label="$t('common.language')"
+                    >
+                        <p
+                            class="language-dropdown__item selectable"
+                            @click="translateTo(l.key)"
                             v-for="l in languages"
                             :key="l.key"
                         >
                             {{ l.name }}
-                        </base-button>
+                        </p>
                     </base-dropdown>
                 </div>
+                <song-files-card :song="song"></song-files-card>
+                <lyrics-settings
+                    v-if="isExtended && !transposed"
+                    :languageKey="languageKey"
+                    :lyrics="lyrics"
+                    :song="song"
+                ></lyrics-settings>
             </aside>
         </div>
     </div>
 </template>
 <script lang="ts">
-import BaseButton from "@/components/BaseButton.vue";
 import { SongInfoCard, SongFilesCard } from "@/components/songs";
-import { BaseDropdown } from "@/components/inputs";
+import { BaseDropdown, ButtonGroup } from "@/components/inputs";
 
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
     SongDetails,
     TransposedLyricsViewer,
+    BaseButton,
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
@@ -77,6 +80,7 @@ import { Collection, Lyrics, Song } from "@/classes";
         SongInfoCard,
         SongFilesCard,
         BaseDropdown,
+        ButtonGroup,
     },
 })
 export default class SongViewer extends Vue {
@@ -161,6 +165,7 @@ export default class SongViewer extends Vue {
 
     &__content {
         display: flex;
+        flex-grow: 1;
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: var(--st-spacing);
@@ -168,12 +173,35 @@ export default class SongViewer extends Vue {
     }
 
     &__sidebar {
+        min-width: 400px;
         height: 100vh;
         position: sticky;
         top: 0;
         padding: var(--st-spacing);
         background-color: var(--st-background-color);
         border-left: 1px solid var(--st-border-color);
+        animation: slideInFromRight 0.5s;
+
+        overflow-y: auto;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-spacing);
+
+        &__buttons {
+            display: flex;
+            gap: calc(var(--st-spacing) * 0.5);
+        }
+
+        .language-dropdown {
+            &__item {
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--st-primary-color);
+                }
+            }
+        }
     }
 }
 </style>

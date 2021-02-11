@@ -12,9 +12,16 @@
         <p class="song-details__metadata__credits gap-x">
             <span>{{ $t("song.author") }}: </span>
             <span v-for="author in song.authors" :key="author.id">
-                <router-link :to="{name: 'contributor', params: {collection: $route.params.collection, contributor: author.id}}">{{
-                    author.name
-                }}</router-link>
+                <router-link
+                    :to="{
+                        name: 'contributor',
+                        params: {
+                            collection: $route.params.collection,
+                            contributor: author.id,
+                        },
+                    }"
+                    >{{ author.name }}</router-link
+                >
             </span>
         </p>
         <p
@@ -27,9 +34,16 @@
                 :key="composer.id"
                 :label="composer.name"
             >
-                <router-link :to="{name: 'contributor', params: {collection: $route.params.collection, contributor: composer.id}}">{{
-                    composer.name
-                }}</router-link>
+                <router-link
+                    :to="{
+                        name: 'contributor',
+                        params: {
+                            collection: $route.params.collection,
+                            contributor: composer.id,
+                        },
+                    }"
+                    >{{ composer.name }}</router-link
+                >
             </span>
         </p>
         <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
@@ -98,6 +112,7 @@ export default class SongInfoCard extends Vue {
 
 <style lang="scss">
 .song-details__metadata {
-    margin-bottom: var(--st-spacing);
+    width: 100%;
+    height: auto;
 }
 </style>

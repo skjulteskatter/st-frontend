@@ -3,6 +3,7 @@
         <base-button
             :action="openModal"
             class="modal__open-button"
+            :theme="theme"
             v-if="type == 'button'"
             >{{ label }}</base-button
         >
@@ -45,6 +46,9 @@ import BaseButton from "@/components/BaseButton.vue";
             validator: (value: string) =>
                 ["button", "span"].indexOf(value) != -1,
         },
+        theme: {
+            type: String,
+        },
     },
     components: {
         BaseCard,
@@ -56,6 +60,7 @@ export default class Modal extends Vue {
     public mouseOverCard = false;
     public type = "button";
     public label = "";
+    public theme = "primary";
 
     public closeIfOutside() {
         if (!this.mouseOverCard) this.closeModal();

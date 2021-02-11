@@ -263,54 +263,11 @@ export default class LyricsSettings extends Vue {
 
 .lyrics-settings {
     --half-spacing: calc(var(--st-spacing) * 0.5);
+    flex-shrink: 0;
 
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: var(--st-spacing);
-
-    &__files {
-        grid-column: span 2;
-
-        &__video {
-            &__link {
-                text-decoration: none;
-                color: var(--st-primary-color);
-            }
-        }
-
-        .card__content {
-            .files__container {
-                display: flex;
-                flex-direction: column;
-                gap: var(--st-spacing);
-            }
-        }
-
-        figure {
-            margin: 0 0 0.5em 0;
-        }
-    }
-
-    &__metadata {
-        grid-column: span 4;
-
-        &__credits {
-            display: inline-block;
-            margin: 0 0 0 var(--st-spacing);
-            color: var(--st-primary-color);
-        }
-
-        .card__content {
-            h2 {
-                margin: 0 0 var(--st-spacing);
-            }
-
-            .tag {
-                display: inline-block;
-                margin: 0;
-            }
-        }
-    }
+    display: flex;
+    flex-direction: column;
+    gap: var(--st-spacing);
 
     &__controls {
         grid-column: span 2;
