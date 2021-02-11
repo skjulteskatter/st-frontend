@@ -2,7 +2,7 @@
     <base-card
         v-if="product"
         class="store-card"
-        :image="product.collections[0].image"
+        :image="product.collections[0].image || placeholderImage"
         border
     >
         <h2 class="store-card__itle">
@@ -66,6 +66,10 @@ export default class StoreCard extends Vue {
             unformattedPrice.length - 2
         );
         return `${formattedPrice} /${type}`;
+    }
+
+    public get placeholderImage() {
+        return "placeholder.png";
     }
 
     public get languageKey() {
