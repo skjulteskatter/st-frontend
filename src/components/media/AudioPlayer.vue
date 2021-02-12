@@ -22,7 +22,9 @@ import { useStore } from "vuex";
 })
 export default class AudioPlayer extends Vue {
     public updated() {
-        new Plyr(".audio-player__player").play();
+        new Plyr(".audio-player__player", {
+            settings: [],
+        }).play();
     }
 
     public get activeAudio() {
