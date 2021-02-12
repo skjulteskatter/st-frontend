@@ -1,5 +1,5 @@
 <template>
-    <div class="audio-player" v-if="activeAudio.id">
+    <div class="audio-player" v-if="activeAudio && activeAudio.id">
         <b>{{ activeAudio.name }}</b>
         <audio
             class="audio-player__player"
@@ -36,9 +36,6 @@ export default class AudioPlayer extends Vue {
     --plyr-color-main: var(--st-primary-color);
 }
 .audio-player {
-    position: fixed;
-    bottom: 0;
-    left: 0;
     width: 100%;
     text-align: center;
 

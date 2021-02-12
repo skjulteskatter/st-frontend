@@ -81,7 +81,7 @@ export default class TheNavbar extends Vue {
     background-color: var(--st-background-color);
     border-right: 1px solid var(--st-border-color);
 
-    height: 100%;
+    height: auto;
     max-width: 250px;
     display: flex;
     flex-direction: column;

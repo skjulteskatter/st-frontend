@@ -1,84 +1,82 @@
 <template>
-    <div v-if="initialized && song">
-        <div class="loader" v-if="loading"></div>
-        <div v-if="!loading" class="song-viewer">
-            <div class="song-viewer__content">
-                <song-info-card
-                    :song="song"
-                    :languageKey="languageKey"
-                    :verses="lyrics ? Object.keys(lyrics.content).length : 0"
-                ></song-info-card>
+    <div class="loader" v-if="loading"></div>
+    <div v-if="!loading && initialized && song" class="song-viewer">
+        <div class="song-viewer__content">
+            <song-info-card
+                :song="song"
+                :languageKey="languageKey"
+                :verses="lyrics ? Object.keys(lyrics.content).length : 0"
+            ></song-info-card>
 
-                <transposed-lyrics-viewer
-                    v-if="transposed"
-                    :languageKey="languageKey"
-                    :song="song"
-                ></transposed-lyrics-viewer>
+            <transposed-lyrics-viewer
+                v-if="transposed"
+                :languageKey="languageKey"
+                :song="song"
+            ></transposed-lyrics-viewer>
 
-                <div class="loader" v-if="loadingLyrics"></div>
+            <div class="loader" v-if="loadingLyrics"></div>
 
-                <song-details
-                    v-if="!transposed"
+            <song-details
+                v-if="!transposed"
+                :languageKey="languageKey"
+                :lyrics="lyrics"
+                :song="song"
+            ></song-details>
+        </div>
+
+        <aside class="song-viewer__sidebar">
+            <div class="song-viewer__sidebar__buttons">
+                <base-button v-if="extended && !transposed" @click="extend">
+                    {{ $t("song.advanced") }}
+                </base-button>
+                <base-button @click="transpose">
+                    {{ $t("song.transpose") }}
+                </base-button>
+                <base-dropdown class="language-dropdown" :label="language">
+                    <p
+                        class="language-dropdown__item selectable"
+                        @click="translateTo(l.key)"
+                        v-for="l in languages"
+                        :key="l.key"
+                    >
+                        {{ l.name }}
+                    </p>
+                </base-dropdown>
+            </div>
+            <div class="song-viewer__sidebar__content">
+                <song-files-card :song="song"></song-files-card>
+                <lyrics-settings
+                    v-if="isExtended && !transposed"
                     :languageKey="languageKey"
                     :lyrics="lyrics"
                     :song="song"
-                ></song-details>
+                ></lyrics-settings>
+                <div v-if="transposed">
+                    <div>{{ currentTransposition }}</div>
+                    <base-button
+                        :action="
+                            () =>
+                                currentTransposition < 11
+                                    ? (currentTransposition += 1)
+                                    : undefined
+                        "
+                    >
+                        UP
+                    </base-button>
+                    <base-button
+                        :action="
+                            () =>
+                                currentTransposition > -11
+                                    ? (currentTransposition -= 1)
+                                    : undefined
+                        "
+                    >
+                        DOWN
+                    </base-button>
+                    <base-button :action="apply">APPLY</base-button>
+                </div>
             </div>
-
-            <aside class="song-viewer__sidebar">
-                <div class="song-viewer__sidebar__buttons">
-                    <base-button v-if="extended && !transposed" @click="extend">
-                        {{ $t("song.advanced") }}
-                    </base-button>
-                    <base-button @click="transpose">
-                        {{ $t("song.transpose") }}
-                    </base-button>
-                    <base-dropdown class="language-dropdown" :label="language">
-                        <p
-                            class="language-dropdown__item selectable"
-                            @click="translateTo(l.key)"
-                            v-for="l in languages"
-                            :key="l.key"
-                        >
-                            {{ l.name }}
-                        </p>
-                    </base-dropdown>
-                </div>
-                <div class="song-viewer__sidebar__content">
-                    <song-files-card :song="song"></song-files-card>
-                    <lyrics-settings
-                        v-if="isExtended && !transposed"
-                        :languageKey="languageKey"
-                        :lyrics="lyrics"
-                        :song="song"
-                    ></lyrics-settings>
-                    <div v-if="transposed">
-                        <div>{{ currentTransposition }}</div>
-                        <base-button
-                            :action="
-                                () =>
-                                    currentTransposition < 11
-                                        ? (currentTransposition += 1)
-                                        : undefined
-                            "
-                        >
-                            UP
-                        </base-button>
-                        <base-button
-                            :action="
-                                () =>
-                                    currentTransposition > -11
-                                        ? (currentTransposition -= 1)
-                                        : undefined
-                            "
-                        >
-                            DOWN
-                        </base-button>
-                        <base-button :action="apply">APPLY</base-button>
-                    </div>
-                </div>
-            </aside>
-        </div>
+        </aside>
     </div>
 </template>
 <script lang="ts">
@@ -210,6 +208,7 @@ export default class SongViewer extends Vue {
 <style lang="scss">
 .song-viewer {
     display: flex;
+    height: 100%;
 
     &__content {
         display: flex;
@@ -222,7 +221,7 @@ export default class SongViewer extends Vue {
 
     &__sidebar {
         min-width: 400px;
-        height: 100vh;
+        max-height: 100vh;
         position: sticky;
         top: 0;
         padding: var(--st-spacing);
@@ -241,6 +240,7 @@ export default class SongViewer extends Vue {
             flex-direction: column;
             gap: var(--st-spacing);
             overflow-y: auto;
+            flex-grow: 1;
         }
 
         &__buttons {

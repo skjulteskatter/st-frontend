@@ -37,4 +37,7 @@ export default class SongSelector extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.view-song {
+    height: 100%;
+}
 </style>

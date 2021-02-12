@@ -2,7 +2,9 @@
     <div class="dashboard-layout">
         <the-navbar v-if="user"></the-navbar>
         <main v-if="user" class="dashboard-layout__body">
-            <router-view />
+            <div class="dashboard-layout__body__container">
+                <router-view />
+            </div>
             <audio-player></audio-player>
         </main>
     </div>
@@ -50,8 +52,14 @@ export default class DashboardLayout extends Vue {
     height: 100vh;
 
     &__body {
-        overflow-y: auto;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        &__container {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
     }
 }
 </style>
