@@ -2,6 +2,7 @@ interface SongInterface {
     id: string;
     number: number;
     type: string;
+    collection?: CollectionInterface;
     name: {
         [languageKey: string]: string;
     };

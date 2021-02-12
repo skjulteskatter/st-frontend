@@ -1,4 +1,5 @@
 <template>
+    <button @click="$router.push({name: 'search'})" style="float: right;">SEARCH COLLECTIONS</button>
     <div class="songbooks">
         <!-- <div class="loader" v-if="loading"></div> -->
         <base-card

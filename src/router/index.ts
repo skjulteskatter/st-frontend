@@ -12,6 +12,8 @@ const SongList = () => import(/* webpackChunkName: 'songList' */ '../views/SongL
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 const ContributorView = () => import(/* wepbackChunkName: 'contributor' */ '../views/ContributorView.vue');
 
+const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ '../views/dashboard/CompleteSearch.vue');
+
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
 const CreateUser = () => import(/* webpackChunkName: 'createUser' */ '../views/CreateUser.vue');
 
@@ -56,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
                         path: ':collection/:number',
                         name: 'song',
                         component: SongViewer,
+                    },
+                    {
+                        path: 'search',
+                        name: 'search',
+                        component: CompleteSearch,
                     }
                 ]
             },
