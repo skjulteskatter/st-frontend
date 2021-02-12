@@ -36,6 +36,8 @@ export default class AudioPlayer extends Vue {
 <style lang="scss">
 :root {
     --plyr-color-main: var(--st-primary-color);
+    --plyr-audio-controls-background: var(--st-background-color);
+    --plyr-audio-control-color: var(--st-text-color);
 }
 .audio-player {
     width: 100%;
