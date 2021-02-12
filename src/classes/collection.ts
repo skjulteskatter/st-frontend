@@ -81,12 +81,12 @@ export class Collection {
 
         for (const lyrics of this.lyrics) {
 
-            if (lyrics.title.includes(filter)) {
+            if (lyrics.title?.includes(filter)) {
                 numbers.push(lyrics.number);
                 continue;
             }
 
-            if (lyrics.rawContent.includes(filter)) {
+            if (lyrics.rawContent?.includes(filter)) {
                 numbers.push(lyrics.number);
                 continue;
             }
