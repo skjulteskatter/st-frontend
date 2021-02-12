@@ -116,7 +116,7 @@ export default class SongViewer extends Vue {
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
-        if (!this.songStore.getters.collection) {
+        if (this.songStore.getters.collection?.key !== this.$route.params.collection as string) {
             await this.songStore.dispatch(
                 "selectCollection",
                 this.$route.params.collection
