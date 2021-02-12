@@ -55,3 +55,12 @@
         opacity: .7;
     }
 }
+
+@keyframes appearFromBottom {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}

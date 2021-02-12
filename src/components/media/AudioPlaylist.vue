@@ -17,7 +17,9 @@
 </template>
 
 <script lang="ts">
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
+import { useStore } from "vuex";
 
 @Options({
     props: {
@@ -28,10 +30,11 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class AudioPlaylist extends Vue {
+    public store = useStore(songKey);
     public audiofiles = [];
 
     public selectAudio(audio: object) {
-        console.log("Active audio: ", audio);
+        this.store.dispatch("setActiveAudio", audio);
     }
 }
 </script>

@@ -3,6 +3,13 @@
         <div class="nav__header" @click="$router.push('/')">
             <img class="nav__header__logo" :src="logo" />
         </div>
+        <div class="nav__user-profile" v-if="user">
+            <img :src="user.image" class="nav__user-profile__image" />
+            <div class="nav__user-profile__info">
+                <b class="nav__user-profile__name">{{ user.displayName }}</b>
+                <small class="nav__user-profile__email">{{ user.email }}</small>
+            </div>
+        </div>
         <div
             class="nav__links"
             :class="{
@@ -25,13 +32,6 @@
                 :to="{ name: 'admin' }"
                 >Admin</router-link
             >
-        </div>
-        <div class="nav__user-profile" v-if="user">
-            <img :src="user.image" class="nav__user-profile__image" />
-            <div class="nav__user-profile__info">
-                <b class="nav__user-profile__name">{{ user.displayName }}</b>
-                <small class="nav__user-profile__email">{{ user.email }}</small>
-            </div>
         </div>
     </nav>
 </template>
@@ -108,7 +108,7 @@ export default class TheNavbar extends Vue {
         align-items: center;
         gap: var(--st-spacing);
         justify-self: flex-end;
-        border-top: 1px solid var(--st-border-color);
+        background-color: var(--st-secondary-background-color);
 
         &__info {
             display: flex;

@@ -3,6 +3,7 @@
         <the-navbar v-if="user"></the-navbar>
         <main v-if="user" class="dashboard-layout__body">
             <router-view />
+            <audio-player></audio-player>
         </main>
     </div>
 </template>
@@ -12,10 +13,12 @@ import { useStore } from "vuex";
 import { sessionKey } from "../store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
+import { AudioPlayer } from "@/components/media";
 
 @Options({
     components: {
         TheNavbar,
+        AudioPlayer,
     },
 })
 export default class DashboardLayout extends Vue {

@@ -77,7 +77,6 @@
                         <base-button :action="apply">APPLY</base-button>
                     </div>
                 </div>
-                <audio-player :show="true"></audio-player>
             </aside>
         </div>
     </div>
@@ -93,7 +92,6 @@ import {
     TransposedLyricsViewer,
     BaseButton,
 } from "@/components";
-import { AudioPlayer } from "@/components/media";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
@@ -108,7 +106,6 @@ import { Collection, Lyrics, Song } from "@/classes";
         SongFilesCard,
         BaseDropdown,
         ButtonGroup,
-        AudioPlayer,
     },
 })
 export default class SongViewer extends Vue {
@@ -117,6 +114,7 @@ export default class SongViewer extends Vue {
     public transposed = false;
     public number = 0;
     public currentTransposition = 0;
+    public audioPlayer = false;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);

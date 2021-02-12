@@ -1,15 +1,15 @@
 <template>
-    <base-card class="audio-player" v-if="currentAudioFile && show">
-        <b>{{ currentAudioFile.name }}</b>
-        <audio class="audio-player__player">
-            <source :src="currentAudioFile.directUrl" />
-        </audio>
-    </base-card>
+    <div class="audio-player" v-if="activeAudio.id">
+        <b>{{ activeAudio.name }}</b>
+        <audio
+            class="audio-player__player"
+            :src="activeAudio.directUrl"
+        ></audio>
+    </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Song } from "@/classes";
 import { BaseCard } from "@/components";
 import Plyr from "plyr";
 import { songKey } from "@/store";
@@ -19,25 +19,14 @@ import { useStore } from "vuex";
     components: {
         BaseCard,
     },
-    props: {
-        song: {
-            type: Song,
-        },
-        show: {
-            type: Boolean,
-        },
-    },
 })
 export default class AudioPlayer extends Vue {
-    public song: Song = {} as Song;
-    public show = false;
-
-    public mounted() {
-        new Plyr(".audio-player__player");
+    public updated() {
+        new Plyr(".audio-player__player").play();
     }
 
-    public get currentAudioFile() {
-        return useStore(songKey).getters.song?.audioFiles[0];
+    public get activeAudio() {
+        return useStore(songKey).state.activeAudio;
     }
 }
 </script>
@@ -47,12 +36,20 @@ export default class AudioPlayer extends Vue {
     --plyr-color-main: var(--st-primary-color);
 }
 .audio-player {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     text-align: center;
 
-    animation: slideInFromBottom 0.2s;
+    background: var(--st-background-color);
+    padding: var(--st-spacing);
+    border-top: 1px solid var(--st-border-color);
+
+    animation: appearFromBottom 0.5s;
+
+    .plyr__controls {
+        padding: 0;
+    }
 }
 </style>

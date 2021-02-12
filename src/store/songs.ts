@@ -29,6 +29,7 @@ export interface Songs {
         songIds: string[];
     };
     filter: SongFilter;
+    activeAudio?: object;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
@@ -46,15 +47,16 @@ export const songStore = createStore<Songs>({
             origins: [],
         },
         language: 'en',
+        activeAudio: {}
     },
     actions: {
-        async selectCollection({dispatch, state, commit, getters}, id: string) {
+        async selectCollection({ dispatch, state, commit, getters }, id: string) {
             if (!state.initialized) {
                 commit('collections', sessionStore.getters.collections);
             }
 
             commit('language', sessionStore.getters.languageKey);
-            commit('collection', id );
+            commit('collection', id);
             const list = state.list;
             commit('list', 'default');
             const collection = getters.collection as Collection;
@@ -65,7 +67,7 @@ export const songStore = createStore<Songs>({
                 });
             }
         },
-        async selectSong({getters, commit}, number: number) {
+        async selectSong({ getters, commit }, number: number) {
             const collection = getters.collection as Collection | undefined;
             if (!collection) {
                 return;
@@ -82,7 +84,7 @@ export const songStore = createStore<Songs>({
                 }
             }
         },
-        async selectContributor({getters, commit}, contributorId: string) {
+        async selectContributor({ getters, commit }, contributorId: string) {
             const collection = getters.collection as Collection | undefined;
             if (!collection) {
                 return;
@@ -95,7 +97,7 @@ export const songStore = createStore<Songs>({
                 });
             }
         },
-        async transpose({commit, getters}, transpose: number) {
+        async transpose({ commit, getters }, transpose: number) {
             const collection = getters.collection as Collection | undefined;
             if (!collection || !getters.song) {
                 return;
@@ -106,13 +108,16 @@ export const songStore = createStore<Songs>({
             commit('transposedLyrics', lyrics);
             commit('transposition', transpose);
         },
-        async setList({commit, getters}, value: string) {
+        async setList({ commit, getters }, value: string) {
             const r = await (getters.collection as Collection).getList(value);
             if (r == 0) {
                 commit('list', 'default');
             } else {
                 commit('list', value);
             }
+        },
+        setActiveAudio({ commit }, audio: object) {
+            commit('activeAudio', audio)
         }
     },
     mutations: {
@@ -132,7 +137,7 @@ export const songStore = createStore<Songs>({
             state.song = undefined;
             state.contributorItem = undefined;
         },
-        contributor(state, contributor: {songIds: string[]; contributor: Contributor}) {
+        contributor(state, contributor: { songIds: string[]; contributor: Contributor }) {
             state.contributorItem = contributor;
         },
         list(state, list: string) {
@@ -163,6 +168,9 @@ export const songStore = createStore<Songs>({
         },
         filter(state, filter: SongFilter) {
             state.filter = filter;
+        },
+        activeAudio(state, audio: object) {
+            state.activeAudio = audio;
         }
     },
     getters: {
@@ -178,5 +186,8 @@ export const songStore = createStore<Songs>({
         lyrics(state, getters) {
             return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber && l.language.key == state.language);
         },
+        activeAudio(state) {
+            return state.activeAudio;
+        }
     },
 });
