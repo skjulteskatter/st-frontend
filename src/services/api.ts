@@ -79,6 +79,9 @@ export const songs = {
     },
     getAllCountries(collection: string) {
         return http.get<CountryCollectionItem[]>(`api/Countries/${collection}`);
+    },
+    searchCollections(search: string, language: string) {
+        return http.get<SongInterface[]>(`api/Songs/Search/${search}?language=${language}&expand=collection`);
     }
 }
 
