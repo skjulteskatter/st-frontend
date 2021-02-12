@@ -18,24 +18,25 @@
             </base-button>
         </div>
         <div class="files__container" v-show="filesIsOpen">
-            <base-card
+            <div
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"
             >
-                <h3>Audio</h3>
-                <figure v-for="file in song.audioFiles" :key="file">
+                <p class="song-details__files__label">Audio</p>
+                <audio-playlist :audiofiles="song.audioFiles"></audio-playlist>
+                <!-- <figure v-for="file in song.audioFiles" :key="file">
                     <figcaption>{{ file.name }}</figcaption>
                     <audio :src="file.directUrl" controls>
                         Your browser does not support the
                         <code>audio</code> element.
                     </audio>
-                </figure>
-            </base-card>
-            <base-card
+                </figure> -->
+            </div>
+            <div
                 class="song-details__files__video"
                 v-if="song.videoFiles.length"
             >
-                <h3>Video</h3>
+                <p class="song-details__files__label">Video</p>
                 <modal
                     v-for="video in song.videoFiles"
                     theme="secondary"
@@ -51,13 +52,14 @@
                         Sorry, your browser doesn't support embedded videos.
                     </video>
                 </modal>
-            </base-card>
+            </div>
         </div>
     </base-card>
 </template>
 
 <script lang="ts">
 import { BaseCard, Modal, BaseButton } from "@/components";
+import { AudioPlaylist } from "@/components/media";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 
@@ -66,6 +68,7 @@ import { Options, Vue } from "vue-class-component";
         BaseCard,
         Modal,
         BaseButton,
+        AudioPlaylist,
     },
     props: {
         song: {
@@ -82,6 +85,11 @@ export default class SongFilesCard extends Vue {
 .song-details {
     &__files {
         flex-shrink: 0;
+
+        &__label {
+            opacity: 0.7;
+            margin: 0 0 0.3em 0;
+        }
 
         &__title {
             margin: 0;

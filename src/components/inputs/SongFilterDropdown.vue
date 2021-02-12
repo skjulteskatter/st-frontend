@@ -2,14 +2,21 @@
     <base-dropdown :label="$t('common.open')">
         <div class="filter__header gap-x">
             <b>{{ $t("song.filters") }}</b>
-            <base-button theme="primary" :action="apply">Apply</base-button>
+            <base-button theme="primary" :action="apply">
+                {{ $t("common.save") }}
+            </base-button>
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
                 <small>Video</small>
                 <div class="filter gap-x">
-                    <input v-model="videoValues.karaoke" type="checkbox" name="karaoke" id="v-karaoke" />
-                    <label for="v-karaoke">{{$t('types.karaoke')}}</label>
+                    <input
+                        v-model="videoValues.karaoke"
+                        type="checkbox"
+                        name="karaoke"
+                        id="v-karaoke"
+                    />
+                    <label for="v-karaoke">{{ $t("types.karaoke") }}</label>
                 </div>
                 <!-- <div class="filter gap-x">
                     <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="v-gathering" />
@@ -27,16 +34,33 @@
                     <label for="a-karaoke">{{$t('types.karaoke')}}</label>
                 </div> -->
                 <div class="filter gap-x">
-                    <input v-model="audioValues.gathering" type="checkbox" name="gathering" id="a-gathering" />
-                    <label for="a-gathering">{{$t('types.gathering')}}</label>
+                    <input
+                        v-model="audioValues.gathering"
+                        type="checkbox"
+                        name="gathering"
+                        id="a-gathering"
+                    />
+                    <label for="a-gathering">{{ $t("types.gathering") }}</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.studio" type="checkbox" name="studio" id="a-studio" />
-                    <label for="a-studio">{{$t('types.studio')}}</label>
+                    <input
+                        v-model="audioValues.studio"
+                        type="checkbox"
+                        name="studio"
+                        id="a-studio"
+                    />
+                    <label for="a-studio">{{ $t("types.studio") }}</label>
                 </div>
                 <div class="filter gap-x">
-                    <input v-model="audioValues.instrumental" type="checkbox" name="instrumental" id="a-instrumental" />
-                    <label for="a-instrumental">{{$t('types.instrumental')}}</label>
+                    <input
+                        v-model="audioValues.instrumental"
+                        type="checkbox"
+                        name="instrumental"
+                        id="a-instrumental"
+                    />
+                    <label for="a-instrumental">{{
+                        $t("types.instrumental")
+                    }}</label>
                 </div>
             </div>
         </div>
@@ -62,8 +86,8 @@ import BaseButton from "@/components/BaseButton.vue";
         },
         origins: {
             type: Array,
-        }
-    }
+        },
+    },
 })
 export default class SongFilterDropdown extends Vue {
     private sessionStore = useStore(sessionKey);
@@ -88,11 +112,18 @@ export default class SongFilterDropdown extends Vue {
     } = {};
 
     public apply() {
-        const themes = this.collection?.themes?.filter(t => this.themeValues[t.theme.id] == true)?.map(t => t.theme.id) ?? [];
+        const themes =
+            this.collection?.themes
+                ?.filter((t) => this.themeValues[t.theme.id] == true)
+                ?.map((t) => t.theme.id) ?? [];
         //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
 
-        const videos = this.videoTypes.filter(t => this.videoValues[t] == true);
-        const audio = this.audioTypes.filter(t => this.audioValues[t] == true);
+        const videos = this.videoTypes.filter(
+            (t) => this.videoValues[t] == true
+        );
+        const audio = this.audioTypes.filter(
+            (t) => this.audioValues[t] == true
+        );
 
         const filter = Object.assign({}, this.store.state.filter);
 
@@ -101,7 +132,7 @@ export default class SongFilterDropdown extends Vue {
         filter.audioFiles = audio;
         //filter.origins = origins;
 
-        this.store.commit('filter', filter)
+        this.store.commit("filter", filter);
     }
 
     public get languageKey() {

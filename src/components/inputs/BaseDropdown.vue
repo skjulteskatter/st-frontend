@@ -19,7 +19,7 @@
                 @click="openDropdown"
             ></i>
         </div>
-        <base-card v-if="isOpen" class="dropdown__content" @click="isOpen = false">
+        <base-card v-if="isOpen" class="dropdown__content">
             <slot name="default"></slot>
         </base-card>
     </div>

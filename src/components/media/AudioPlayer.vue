@@ -1,5 +1,5 @@
 <template>
-    <base-card class="audio-player" v-if="currentAudioFile">
+    <base-card class="audio-player" v-if="currentAudioFile && show">
         <b>{{ currentAudioFile.name }}</b>
         <audio class="audio-player__player">
             <source :src="currentAudioFile.directUrl" />
@@ -23,17 +23,21 @@ import { useStore } from "vuex";
         song: {
             type: Song,
         },
+        show: {
+            type: Boolean,
+        },
     },
 })
 export default class AudioPlayer extends Vue {
     public song: Song = {} as Song;
-
-    public get currentAudioFile() {
-        return useStore(songKey).getters.song?.audioFiles[0];
-    }
+    public show = false;
 
     public mounted() {
         new Plyr(".audio-player__player");
+    }
+
+    public get currentAudioFile() {
+        return useStore(songKey).getters.song?.audioFiles[0];
     }
 }
 </script>
@@ -48,5 +52,7 @@ export default class AudioPlayer extends Vue {
     left: 0;
     width: 100%;
     text-align: center;
+
+    animation: slideInFromBottom 0.2s;
 }
 </style>

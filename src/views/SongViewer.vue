@@ -77,7 +77,7 @@
                         <base-button :action="apply">APPLY</base-button>
                     </div>
                 </div>
-                <audio-player></audio-player>
+                <audio-player :show="true"></audio-player>
             </aside>
         </div>
     </div>
