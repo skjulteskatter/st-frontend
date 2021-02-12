@@ -206,6 +206,10 @@ export default class SongViewer extends Vue {
 </script>
 
 <style lang="scss">
+::-webkit-scrollbar {
+    display: none;
+}
+
 .song-viewer {
     display: flex;
     height: 100%;
