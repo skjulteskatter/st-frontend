@@ -9,6 +9,7 @@ export type SongFilter = {
     origins: string[];
     videoFiles: string[];
     audioFiles: string[];
+    songTypes: string[];
 }
 
 export interface Songs {
@@ -45,6 +46,7 @@ export const songStore = createStore<Songs>({
             videoFiles: [],
             audioFiles: [],
             origins: [],
+            songTypes: [],
         },
         language: 'en',
         activeAudio: {}

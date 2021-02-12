@@ -4,7 +4,7 @@
             <b class="song-list__item-card__number">{{ song.number }}</b>
             <div class="song-list__item-card__body">
                 <span class="song-list__item-card__title">{{
-                    song.name[languageKey]
+                    song.getName(languageKey)
                 }}</span>
                 <div class="song-list__item-card__contributors">
                     <div class="song-list__item-card__contributor">

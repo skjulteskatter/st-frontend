@@ -74,7 +74,7 @@ export class Collection {
         return this.songs.find(s => s.number == number);
     }
 
-    public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = []) {
+    public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = [], types: string[] = []) {
         filter = filter.toLowerCase().replace(/[^0-9a-zA-Z]/g, "");
 
         const numbers: number[] = [];
@@ -97,6 +97,7 @@ export class Collection {
             && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
             && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
             && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
+            && (types.length == 0 || types.includes(s.type))
         );
     }
 

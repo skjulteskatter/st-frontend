@@ -9,58 +9,44 @@
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
                 <small>Video</small>
-                <div class="filter gap-x">
+                <div class="filter gap-x" v-for="type in videoTypes" :key="type">
                     <input
-                        v-model="videoValues.karaoke"
+                        v-model="videoValues[type]"
                         type="checkbox"
-                        name="karaoke"
-                        id="v-karaoke"
+                        :name="type"
+                        :id="`v-${type}`"
                     />
-                    <label for="v-karaoke">{{ $t("types.karaoke") }}</label>
+                    <label :for="`v-${type}`">
+                        {{$t(`types.${type}`)}}
+                    </label>
                 </div>
-                <!-- <div class="filter gap-x">
-                    <input v-model="videoValues.gathering" type="checkbox" name="gathering" id="v-gathering" />
-                    <label for="v-gathering">{{$t('types.gathering')}}</label>
-                </div>
-                <div class="filter gap-x">
-                    <input v-model="videoValues.studio" type="checkbox" name="complete" id="v-complete" />
-                    <label for="v-complete">{{$t('types.studio')}}</label>
-                </div> -->
             </div>
             <div class="grouping">
                 <small>Audio</small>
-                <!-- <div class="filter gap-x">
-                    <input v-model="audioValues.karaoke" type="checkbox" name="karaoke" id="a-karaoke" />
-                    <label for="a-karaoke">{{$t('types.karaoke')}}</label>
-                </div> -->
-                <div class="filter gap-x">
+                <div class="filter gap-x" v-for="type in audioTypes" :key="type">
                     <input
-                        v-model="audioValues.gathering"
+                        v-model="videoValues[type]"
                         type="checkbox"
-                        name="gathering"
-                        id="a-gathering"
+                        :name="type"
+                        :id="`a-${type}`"
                     />
-                    <label for="a-gathering">{{ $t("types.gathering") }}</label>
+                    <label :for="`a-${type}`">
+                        {{$t(`types.${type}`)}}
+                    </label>
                 </div>
-                <div class="filter gap-x">
+            </div>
+            <div class="grouping">
+                <small>Type</small>
+                <div class="filter gap-x" v-for="type in songTypes" :key="type">
                     <input
-                        v-model="audioValues.studio"
+                        v-model="typeValues[type]"
                         type="checkbox"
-                        name="studio"
-                        id="a-studio"
+                        :name="type"
+                        :id="`t-${type}`"
                     />
-                    <label for="a-studio">{{ $t("types.studio") }}</label>
-                </div>
-                <div class="filter gap-x">
-                    <input
-                        v-model="audioValues.instrumental"
-                        type="checkbox"
-                        name="instrumental"
-                        id="a-instrumental"
-                    />
-                    <label for="a-instrumental">{{
-                        $t("types.instrumental")
-                    }}</label>
+                    <label :for="`t-${type}`">
+                        {{$t(`types.${type}`)}}
+                    </label>
                 </div>
             </div>
         </div>
@@ -92,8 +78,9 @@ import BaseButton from "@/components/BaseButton.vue";
 export default class SongFilterDropdown extends Vue {
     private sessionStore = useStore(sessionKey);
     private store = useStore(songKey);
-    public videoTypes = ["karaoke", "gathering", "studio", "instrumental"];
+    public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental"];
+    public songTypes = ["lyrics", "track", "sheetmusic"]
     public themes?: Theme[];
     public origins?: Origin[];
 
@@ -111,6 +98,11 @@ export default class SongFilterDropdown extends Vue {
         [id: string]: boolean;
     } = {};
 
+    public typeValues: {
+        [id: string]: boolean;
+    } = {};
+
+
     public apply() {
         const themes =
             this.collection?.themes
@@ -124,12 +116,16 @@ export default class SongFilterDropdown extends Vue {
         const audio = this.audioTypes.filter(
             (t) => this.audioValues[t] == true
         );
+        const types = this.songTypes.filter(
+            (t) => this.typeValues[t] == true
+        )
 
         const filter = Object.assign({}, this.store.state.filter);
 
         filter.themes = themes;
         filter.videoFiles = videos;
         filter.audioFiles = audio;
+        filter.songTypes = types;
         //filter.origins = origins;
 
         this.store.commit("filter", filter);
