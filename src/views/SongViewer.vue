@@ -9,7 +9,7 @@
             ></song-info-card>
 
             <transposed-lyrics-viewer
-                v-if="transposed"
+                v-if="transposed && lyrics"
                 :languageKey="languageKey"
                 :song="song"
             ></transposed-lyrics-viewer>
@@ -17,7 +17,7 @@
             <div class="loader" v-if="loadingLyrics"></div>
 
             <song-details
-                v-if="!transposed"
+                v-if="!transposed && lyrics"
                 :languageKey="languageKey"
                 :lyrics="lyrics"
                 :song="song"
