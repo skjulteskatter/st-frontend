@@ -76,7 +76,7 @@ export const songStore = createStore<Songs>({
 
             if (!getters.lyrics) {
                 const song = collection?.songs.find(s => s.number == number);
-                if (song) {
+                if (song && song.type == "lyrics") {
                     const language = Object.keys(song.name)[0];
                     commit('language', language);
 
