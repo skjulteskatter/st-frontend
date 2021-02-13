@@ -1,8 +1,8 @@
 <template>
-    <div class="admin-panel">
-        <div v-if="isAdmin">
-            <h1 class="admin-panel__title">Admin</h1>
-            <hr />
+    <div class="admin-panel" v-if="isAdmin">
+        <h1 class="admin-panel__title">Admin</h1>
+        <hr />
+        <div class="admin-panel__body">
             <base-card class="admin-panel__collections">
                 <base-card
                     v-for="collection in collections"
@@ -21,12 +21,11 @@
                     </base-button>
                 </base-card>
             </base-card>
-
             <users-list :users="users" :currentUser="currentUser"></users-list>
         </div>
-        <div v-else>
-            <h1>{{ $t("admin.noaccess") }}</h1>
-        </div>
+    </div>
+    <div v-else>
+        <h1>{{ $t("admin.noaccess") }}</h1>
     </div>
 </template>
 
@@ -78,6 +77,12 @@ export default class Subscriptions extends Vue {
 <style lang="scss">
 .admin-panel {
     padding: var(--st-spacing);
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-spacing);
+    }
 
     &__collections {
         .card__content {
