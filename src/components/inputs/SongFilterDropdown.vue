@@ -9,7 +9,11 @@
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
                 <small>Video</small>
-                <div class="filter gap-x" v-for="type in videoTypes" :key="type">
+                <div
+                    class="filter gap-x"
+                    v-for="type in videoTypes"
+                    :key="type"
+                >
                     <input
                         v-model="videoValues[type]"
                         type="checkbox"
@@ -17,21 +21,25 @@
                         :id="`v-${type}`"
                     />
                     <label :for="`v-${type}`">
-                        {{$t(`types.${type}`)}}
+                        {{ $t(`types.${type}`) }}
                     </label>
                 </div>
             </div>
             <div class="grouping">
                 <small>Audio</small>
-                <div class="filter gap-x" v-for="type in audioTypes" :key="type">
+                <div
+                    class="filter gap-x"
+                    v-for="type in audioTypes"
+                    :key="type"
+                >
                     <input
-                        v-model="videoValues[type]"
+                        v-model="audioValues[type]"
                         type="checkbox"
                         :name="type"
                         :id="`a-${type}`"
                     />
                     <label :for="`a-${type}`">
-                        {{$t(`types.${type}`)}}
+                        {{ $t(`types.${type}`) }}
                     </label>
                 </div>
             </div>
@@ -45,7 +53,7 @@
                         :id="`t-${type}`"
                     />
                     <label :for="`t-${type}`">
-                        {{$t(`types.${type}`)}}
+                        {{ $t(`types.${type}`) }}
                     </label>
                 </div>
             </div>
@@ -80,7 +88,7 @@ export default class SongFilterDropdown extends Vue {
     private store = useStore(songKey);
     public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental"];
-    public songTypes = ["lyrics", "track", "sheetmusic"]
+    public songTypes = ["lyrics", "track", "sheetmusic"];
     public themes?: Theme[];
     public origins?: Origin[];
 
@@ -102,7 +110,6 @@ export default class SongFilterDropdown extends Vue {
         [id: string]: boolean;
     } = {};
 
-
     public apply() {
         const themes =
             this.collection?.themes
@@ -116,9 +123,7 @@ export default class SongFilterDropdown extends Vue {
         const audio = this.audioTypes.filter(
             (t) => this.audioValues[t] == true
         );
-        const types = this.songTypes.filter(
-            (t) => this.typeValues[t] == true
-        )
+        const types = this.songTypes.filter((t) => this.typeValues[t] == true);
 
         const filter = Object.assign({}, this.store.state.filter);
 
