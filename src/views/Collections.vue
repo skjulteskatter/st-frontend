@@ -1,23 +1,27 @@
 <template>
-    <button @click="$router.push({name: 'search'})" style="float: right;">SEARCH COLLECTIONS</button>
     <div class="songbooks">
-        <!-- <div class="loader" v-if="loading"></div> -->
-        <base-card
-            v-for="songbook in collections"
-            :key="songbook.key"
-            class="songbooks__book clickable"
-            :class="{
-                selected: selected.id == songbook.id,
-                disabled: !available.find((c) => c.id == songbook.id),
-            }"
-            :image="songbook.image"
-            @click="selectCollection(songbook)"
-            border
-        >
-            <h3 class="songbooks__book__title">
-                {{ songbook.getName(languageKey) }}
-            </h3>
-        </base-card>
+        <div class="songbooks__header">
+            <base-button @click="$router.push({ name: 'search' })">
+                {{ $t("common.search") }}
+            </base-button>
+        </div>
+        <div class="songbooks__body">
+            <base-card
+                v-for="songbook in collections"
+                :key="songbook.key"
+                class="songbooks__book clickable"
+                :class="{
+                    disabled: !available.find((c) => c.id == songbook.id),
+                }"
+                :image="songbook.image"
+                @click="selectCollection(songbook)"
+                border
+            >
+                <h3 class="songbooks__book__title">
+                    {{ songbook.getName(languageKey) }}
+                </h3>
+            </base-card>
+        </div>
     </div>
 </template>
 
@@ -25,12 +29,13 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import BaseCard from "@/components/BaseCard.vue";
+import { BaseCard, BaseButton } from "@/components";
 import { Collection } from "@/classes";
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
     },
 })
 export default class Collections extends Vue {
@@ -67,17 +72,28 @@ export default class Collections extends Vue {
 
 <style lang="scss">
 .songbooks {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: var(--st-spacing);
     padding: var(--st-spacing);
+    display: flex;
+    flex-direction: column;
+    gap: var(--st-spacing);
 
-    @media screen and (max-width: 800px) {
-        grid-template-columns: repeat(2, 1fr);
+    &__header {
+        display: flex;
+        justify-content: flex-end;
     }
 
-    @media screen and (max-width: 500px) {
-        grid-template-columns: 1fr;
+    &__body {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: var(--st-spacing);
+
+        @media screen and (max-width: 800px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media screen and (max-width: 500px) {
+            grid-template-columns: 1fr;
+        }
     }
 
     &__book {
