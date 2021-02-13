@@ -12,6 +12,12 @@ export type SongFilter = {
     songTypes: string[];
 }
 
+export type AudioTrack = {
+    file: MediaFile;
+    song?: Song;
+    collection?: Collection;
+}
+
 export interface Songs {
     collectionId?: string;
     language: string;
@@ -30,7 +36,7 @@ export interface Songs {
         songIds: string[];
     };
     filter: SongFilter;
-    activeAudio?: object;
+    audio?: AudioTrack;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
@@ -49,7 +55,6 @@ export const songStore = createStore<Songs>({
             songTypes: [],
         },
         language: 'en',
-        activeAudio: {}
     },
     actions: {
         async selectCollection({ dispatch, state, commit, getters }, id: string) {
@@ -118,9 +123,6 @@ export const songStore = createStore<Songs>({
                 commit('list', value);
             }
         },
-        setActiveAudio({ commit }, audio: object) {
-            commit('activeAudio', audio)
-        }
     },
     mutations: {
         language(state, language: string) {
@@ -171,9 +173,9 @@ export const songStore = createStore<Songs>({
         filter(state, filter: SongFilter) {
             state.filter = filter;
         },
-        activeAudio(state, audio: object) {
-            state.activeAudio = audio;
-        }
+        audio(state, audio: AudioTrack) {
+            state.audio = audio;
+        },
     },
     getters: {
         songs(state, getters) {
@@ -188,8 +190,5 @@ export const songStore = createStore<Songs>({
         lyrics(state, getters) {
             return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber && l.language.key == state.language);
         },
-        activeAudio(state) {
-            return state.activeAudio;
-        }
     },
 });

@@ -17,24 +17,44 @@
 </template>
 
 <script lang="ts">
-import { songKey } from "@/store";
+import { Collection, Song } from "@/classes";
+import { sessionKey, songKey } from "@/store";
+import { AudioTrack } from "@/store/songs";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
 @Options({
     props: {
         audiofiles: {
-            type: undefined,
+            type: Array,
             required: true,
         },
     },
 })
 export default class AudioPlaylist extends Vue {
     public store = useStore(songKey);
-    public audiofiles = [];
+    public sessionStore = useStore(sessionKey);
+    public audiofiles: MediaFile[] = [];
 
-    public selectAudio(audio: object) {
-        this.store.dispatch("setActiveAudio", audio);
+    public selectAudio(audio: MediaFile) {
+        const track: AudioTrack = {
+            file: audio,
+            song: this.song,
+            collection: this.collection,
+        };
+        this.store.commit("audio", track);
+    }
+
+    public get languageKey() {
+        return this.sessionStore.getters.languageKey;
+    }
+
+    public get song(): Song | undefined {
+        return this.store.getters.song;
+    }
+
+    public get collection(): Collection | undefined {
+        return this.store.getters.collection;
     }
 }
 </script>

@@ -1,12 +1,14 @@
 <template>
     <div class="dashboard-layout">
-        <the-navbar v-if="user"></the-navbar>
-        <main v-if="user" class="dashboard-layout__body">
-            <div class="dashboard-layout__body__container">
-                <router-view />
-            </div>
-            <audio-player></audio-player>
-        </main>
+        <div class="dashboard-layout__wrapper">
+            <the-navbar v-if="user"></the-navbar>
+            <main v-if="user" class="dashboard-layout__body">
+                <div class="dashboard-layout__body__container">
+                    <router-view />
+                </div>
+            </main>
+        </div>
+        <audio-player></audio-player>
     </div>
 </template>
 <script lang="ts">
@@ -49,7 +51,14 @@ export default class DashboardLayout extends Vue {
 <style lang="scss">
 .dashboard-layout {
     display: flex;
+    flex-direction: column;
     height: 100vh;
+
+    &__wrapper {
+        display: flex;
+        overflow-y: auto;
+        height: 100%;
+    }
 
     &__body {
         width: 100%;
