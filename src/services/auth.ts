@@ -56,12 +56,13 @@ const providers: {
 }
 
 class Auth {
-    public accessToken = '';
-    public expiresAt = 0;
-    public initing = false;
-    public get emailVerified () {
-        return a().currentUser?.emailVerified
+    private accessToken = '';
+    private expiresAt = 0;
+    
+    public get emailVerified() {
+        return a().currentUser?.emailVerified == true;
     }
+
     public verificationEmailSent = false;
 
     public async setDisplayName(name: string) {
@@ -201,13 +202,15 @@ class Auth {
                 return accessToken;
             }
         }
-        return null;
+        return undefined;
     }
 
     public async getToken() {
-        if (this.token) return this.token;
-        if (a().currentUser?.emailVerified) return await a().currentUser?.getIdToken();
-        return null;
+        let token = this.token;
+        if (!token) {
+            token = this.emailVerified ? await a().currentUser?.getIdToken() : undefined;
+        }
+        return token;
     }
 }
 
