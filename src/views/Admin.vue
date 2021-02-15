@@ -22,6 +22,22 @@
                 </base-card>
             </base-card>
             <users-list :users="users" :currentUser="currentUser"></users-list>
+
+            <base-card class="api-token" border>
+                <div class="api-token__header gap-x">
+                    <h3 class="api-token__title">API token</h3>
+                    <base-button
+                        class="api-token__button"
+                        theme="secondary"
+                        :action="() => (showToken = !showToken)"
+                    >
+                        Toggle API token
+                    </base-button>
+                </div>
+                <p v-if="showToken" class="api-token__token">
+                    {{ token }}
+                </p>
+            </base-card>
         </div>
     </div>
     <div v-else>
@@ -48,6 +64,8 @@ import api from "@/services/api";
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public loading = false;
+    public token = localStorage.getItem("id_token");
+    public showToken = false;
 
     public disabled: string[] = [];
 
@@ -75,6 +93,23 @@ export default class Subscriptions extends Vue {
 </script>
 
 <style lang="scss">
+.api-token {
+    max-width: 720px;
+
+    &__token {
+        overflow-wrap: break-word;
+        font-size: 0.7em;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__title {
+        margin: 0;
+    }
+}
 .admin-panel {
     padding: var(--st-spacing);
 

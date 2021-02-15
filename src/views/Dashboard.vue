@@ -39,24 +39,6 @@
         </base-card>
 
         <settings-card></settings-card>
-
-        <base-card class="api-token" border secondary>
-            <div class="api-token__header gap-x">
-                <h3 class="api-token__title">API token</h3>
-                <base-button
-                    class="api-token__button"
-                    theme="secondary"
-                    :action="
-                        () => {
-                            showApiToken = !showApiToken;
-                        }
-                    "
-                >
-                    Toggle API token
-                </base-button>
-            </div>
-            <p v-if="showApiToken" style="font-size: 0.8em">{{ token }}</p>
-        </base-card>
     </div>
 </template>
 
@@ -77,7 +59,6 @@ import auth from "@/services/auth";
     },
 })
 export default class Dashboard extends Vue {
-    public showApiToken = false;
     public store = useStore(sessionKey);
     public token = localStorage.getItem("id_token");
     public fileName = '';
@@ -171,18 +152,6 @@ export default class Dashboard extends Vue {
         &:not(:last-child) {
             margin-bottom: var(--st-spacing);
         }
-    }
-}
-
-.api-token {
-    &__header {
-        display: flex;
-        align-items: center;
-        // gap: var(--st-spacing);
-    }
-
-    &__title {
-        margin: 0;
     }
 }
 </style>
