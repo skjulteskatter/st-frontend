@@ -6,7 +6,20 @@
         <div class="nav__user-profile" v-if="user">
             <img :src="user.image" class="nav__user-profile__image" />
             <div class="nav__user-profile__info">
-                <b class="nav__user-profile__name">{{ user.displayName }}</b>
+                <div class="nav__user-profile__name">
+                    <b>
+                        {{ user.displayName }}
+                    </b>
+                    <base-dropdown
+                        class="nav__user-profile__dropdown"
+                        icon="fa-angle-down"
+                    >
+                        <base-button :action="logout" theme="warning">
+                            {{ $t("common.logout") }}
+                        </base-button>
+                    </base-dropdown>
+                </div>
+
                 <small class="nav__user-profile__email">{{ user.email }}</small>
             </div>
         </div>
@@ -38,8 +51,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import OptionsComponent from "@/components/OptionsComponent.vue";
-import BaseButton from "@/components/BaseButton.vue";
+import { OptionsComponent, BaseButton } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
@@ -47,6 +60,7 @@ import { sessionKey } from "@/store";
     components: {
         OptionsComponent,
         BaseButton,
+        BaseDropdown,
     },
 })
 export default class TheNavbar extends Vue {
@@ -56,6 +70,12 @@ export default class TheNavbar extends Vue {
     public get logo() {
         // Return the direct url to the logo
         return "https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.jpg";
+    }
+
+    public logout() {
+        this.userStore.dispatch("logout").then(() => {
+            window.location.replace("/login");
+        });
     }
 
     public toggleBurgerMenu() {
@@ -113,6 +133,11 @@ export default class TheNavbar extends Vue {
         &__info {
             display: flex;
             flex-direction: column;
+        }
+
+        &__name {
+            display: flex;
+            gap: calc(var(--st-spacing) * 0.5);
         }
 
         &__email {

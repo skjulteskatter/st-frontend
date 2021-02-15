@@ -13,11 +13,7 @@
                 ></i>
             </base-button>
             <slot name="button" v-else></slot>
-            <i
-                v-if="icon"
-                :class="['dropdown__icon', 'fa', icon]"
-                @click="openDropdown"
-            ></i>
+            <i v-if="icon" :class="['dropdown__icon', 'fa', icon]"></i>
         </div>
         <base-card v-if="isOpen" class="dropdown__content">
             <slot name="default"></slot>
@@ -70,7 +66,7 @@ export default class BaseDropdown extends Vue {
             outline: none;
         }
         &__icon {
-            display: inline;
+            display: inline-block;
             margin-left: var(--st-half-spacing);
         }
     }
