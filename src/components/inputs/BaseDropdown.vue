@@ -66,7 +66,7 @@ export default class BaseDropdown extends Vue {
             outline: none;
         }
         &__icon {
-            display: inline-block;
+            display: inline;
             margin-left: var(--st-half-spacing);
         }
     }
