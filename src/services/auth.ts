@@ -3,6 +3,7 @@ import 'firebase/auth';
 import { firebaseConfig } from '@/config';
 import { sessionStore } from '@/store';
 import router from '@/router';
+import api from './api';
 
 function notInitialized() {
     throw Error('FIREBASE DID NOT INITIALIZE');
@@ -61,6 +62,10 @@ class Auth {
     
     public get emailVerified() {
         return a().currentUser?.emailVerified == true;
+    }
+
+    public get image() {
+        return a().currentUser?.photoURL ?? '';
     }
 
     public verificationEmailSent = false;
@@ -211,6 +216,20 @@ class Auth {
             token = this.emailVerified ? await a().currentUser?.getIdToken() : undefined;
         }
         return token;
+    }
+
+    public async setProfileImage(fileName: string, image: string) {
+        if (!a) {
+            notInitialized();
+        }
+
+        const url = await api.session.uploadImage(fileName, image);
+
+        if (url) {
+            await a().currentUser?.updateProfile({
+                photoURL: url.image,
+            });
+        }
     }
 }
 
