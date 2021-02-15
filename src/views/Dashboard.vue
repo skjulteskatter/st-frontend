@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <input type="file" accept="image/*" @change="handleImage" />
-                <button @click="submit">Submit</button>
+                <base-button :action="submit">Submit</base-button>
                 <div class="loader" v-if="loading"></div>
                 <div
                     class="user-info__subscriptions"
@@ -61,7 +61,7 @@ import auth from "@/services/auth";
 export default class Dashboard extends Vue {
     public store = useStore(sessionKey);
     public token = localStorage.getItem("id_token");
-    public fileName = '';
+    public fileName = "";
     public loading = false;
     private selectedImage?: string;
 
@@ -91,7 +91,7 @@ export default class Dashboard extends Vue {
 
         reader.onload = (e) => {
             const res = e.target?.result;
-            if (typeof(res) == 'string') {
+            if (typeof res == "string") {
                 this.selectedImage = res;
             }
         };
