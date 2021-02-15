@@ -1,20 +1,31 @@
 <template>
-    <div class="audio-player" v-if="audio">
+    <div class="audio-player" v-if="audio && audio.directUrl">
         <div class="audio-player__info">
             <b class="audio-player__name">{{ audio.name }}</b>
             <small class="audio-player__title" v-if="song">
-                {{ song.getName(languageKey) }}
+                <b class="audio-player__title__number">
+                    {{ song.number }}
+                </b>
+                <span>{{ song.getName(languageKey) }}</span>
             </small>
         </div>
-        <div class="audio-player__controls">
+        <div class="audio-player__controls" ref="audioPlayer">
             <audio class="audio-player__player" :src="audio.directUrl"></audio>
+        </div>
+        <div class="audio-player__close">
+            <base-button theme="secondary" :action="closePlayer">
+                <span style="margin-right: 0.5em">
+                    {{ $t("common.close") }}
+                </span>
+                <i class="fa fa-times-circle"></i>
+            </base-button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard } from "@/components";
+import { BaseCard, BaseButton } from "@/components";
 import Plyr from "plyr";
 import { sessionKey, songKey } from "@/store";
 import { useStore } from "vuex";
@@ -22,14 +33,21 @@ import { useStore } from "vuex";
 @Options({
     components: {
         BaseCard,
+        BaseButton,
     },
 })
 export default class AudioPlayer extends Vue {
     public store = useStore(songKey);
+    public player: Plyr = {} as Plyr;
+
     public updated() {
-        new Plyr(".audio-player__player", {
+        this.player = new Plyr(".audio-player__player", {
             settings: [],
-        }).play();
+        });
+
+        if (this.audio?.directUrl) {
+            this.player.play();
+        }
     }
 
     public get audio() {
@@ -43,14 +61,23 @@ export default class AudioPlayer extends Vue {
     public get languageKey() {
         return useStore(sessionKey).getters.languageKey;
     }
+
+    public closePlayer() {
+        // this.player.stop();
+        this.store.commit("audio", {});
+    }
 }
 </script>
 
 <style lang="scss">
 :root {
+    // Plyr styling
     --plyr-color-main: var(--st-primary-color);
     --plyr-audio-controls-background: var(--st-background-color);
     --plyr-audio-control-color: var(--st-text-color);
+    --plyr-control-spacing: var(--st-spacing);
+    --plyr-control-radius: var(--st-border-radius);
+    --plyr-range-thumb-background: var(--st-primary-color);
 }
 .audio-player {
     width: 100%;
@@ -63,7 +90,15 @@ export default class AudioPlayer extends Vue {
 
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: var(--st-spacing);
+
+    &__title {
+        &__number {
+            opacity: 0.5;
+            margin-right: calc(var(--st-spacing) * 0.5);
+        }
+    }
 
     &__info {
         display: flex;
@@ -71,7 +106,7 @@ export default class AudioPlayer extends Vue {
     }
 
     &__controls {
-        max-width: 1000px;
+        max-width: 900px;
         width: 100%;
     }
 
