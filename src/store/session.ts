@@ -160,6 +160,9 @@ export const sessionStore = createStore<Session>({
         },
         isAuthenticated(): boolean {
             return auth.isAuthenticated;
+        },
+        image(): string {
+            return auth.image;
         }
     }
 })

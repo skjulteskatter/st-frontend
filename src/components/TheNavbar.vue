@@ -4,7 +4,7 @@
             <img class="nav__header__logo" :src="logo" />
         </div>
         <div class="nav__user-profile" v-if="user">
-            <img :src="user.image" class="nav__user-profile__image" />
+            <img :src="image" class="nav__user-profile__image" />
             <div class="nav__user-profile__info">
                 <b class="nav__user-profile__name">{{ user.displayName }}</b>
                 <small class="nav__user-profile__email">{{ user.email }}</small>
@@ -72,6 +72,10 @@ export default class TheNavbar extends Vue {
 
     public get user() {
         return this.userStore.state.currentUser;
+    }
+
+    public get image(): string {
+        return this.userStore.getters.image;
     }
 }
 </script>

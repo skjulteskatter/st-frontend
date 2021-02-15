@@ -13,6 +13,9 @@ export const session = {
     },
     createUser(displayName: string) {
         return http.put('api/Session', {displayName});
+    },
+    uploadImage(fileName: string, base64Image: string) {
+        return http.patch<{image: string}>('api/Session/Image', {fileName, base64Image});
     }
 }
 
