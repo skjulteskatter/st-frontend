@@ -5,8 +5,7 @@
             <small class="audio-player__title">
                 <router-link
                     v-if="
-                        audio.category == 'probackmusic' ||
-                        song.type == 'track' 
+                        audio.category == 'probackmusic' || song.type == 'track'
                     "
                     :to="{
                         name: 'contributor',
@@ -30,11 +29,10 @@
             <audio class="audio-player__player" :src="audio.directUrl"></audio>
         </div>
         <div class="audio-player__close">
-            <base-button theme="secondary" :action="closePlayer">
+            <base-button theme="secondary" :action="closePlayer" icon="error">
                 <span style="margin-right: 0.5em">
                     {{ $t("common.close") }}
                 </span>
-                <i class="fa fa-times-circle"></i>
             </base-button>
         </div>
     </div>
