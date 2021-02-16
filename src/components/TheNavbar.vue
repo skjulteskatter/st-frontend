@@ -1,7 +1,8 @@
 <template>
     <nav class="nav" @click="toggleBurgerMenu">
         <div class="nav__header" @click="$router.push('/')">
-            <img class="nav__header__logo" :src="logo" />
+            <!-- <img class="nav__header__logo" :src="logo" /> -->
+            <h1 style="margin: 0">SongTreasures</h1>
         </div>
         <div class="nav__user-profile" v-if="user">
             <img :src="image" class="nav__user-profile__image" />

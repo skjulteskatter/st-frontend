@@ -5,6 +5,8 @@ type Theme = {
     borderColor: string;
     borderRadius?: string;
     fontFamily?: string;
+    primary?: string;
+    secondary?: string;
 }
 
 export class Themes {
@@ -12,16 +14,22 @@ export class Themes {
         [key: string]: Theme;
     } = {
             dark: {
-                background: '#2C2F33',
-                secondaryBackground: '#232527',
+                // background: '#2C2F33',
+                // secondaryBackground: '#232527',
+                // borderColor: '#393d42',
+                background: '#00292e',
+                secondaryBackground: '#001e22',
                 text: '#F5F7FA',
-                borderColor: '#393d42'
+                borderColor: '#1e373a',
+                primary: '#bd9b60',
             },
             light: {
                 background: '#FFFFFF',
                 secondaryBackground: '#F5F6FA',
                 text: '#333333',
-                borderColor: '#E6E9F2'
+                borderColor: '#E6E9F2',
+                primary: '#00292e',
+                secondary: '#bd9b60'
             }
         }
 
@@ -42,7 +50,9 @@ export class Themes {
         this.setCSSProperty('--st-text-color', params.text)
         this.setCSSProperty('--st-border-color', params.borderColor)
         if (params.borderRadius) this.setCSSProperty('--st-border-radius', params.borderRadius)
-        if (params.fontFamily) this.setCSSProperty('--font-family', params.fontFamily)
+        if (params.fontFamily) this.setCSSProperty('--st-primary-font-family', params.fontFamily)
+        if (params.primary) this.setCSSProperty('--st-primary-color', params.primary)
+        if (params.secondary) this.setCSSProperty('--st-secondary-color', params.secondary)
     }
 
     public setCSSProperty(prop: string, value: string) {
@@ -63,7 +73,7 @@ export class Themes {
     }
 
     public get default() {
-        return '#6291EB';
+        return '#00292e';
     }
 }
 

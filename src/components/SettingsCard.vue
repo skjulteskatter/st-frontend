@@ -21,7 +21,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="user-settings__color field gap-x">
+                <!-- <div class="user-settings__color field gap-x">
                     <label for="theme-color">{{
                         `${$t("common.theme")} ${$t(
                             "common.color"
@@ -43,7 +43,7 @@
                         theme="secondary"
                         >Reset</base-button
                     >
-                </div>
+                </div> -->
                 <div class="user-settings__language field gap-x">
                     <label for="language">{{ $t("common.language") }}</label>
                     <hr />
