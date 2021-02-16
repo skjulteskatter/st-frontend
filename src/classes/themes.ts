@@ -28,8 +28,7 @@ export class Themes {
                 secondaryBackground: '#F5F6FA',
                 text: '#333333',
                 borderColor: '#E6E9F2',
-                primary: '#00292e',
-                secondary: '#bd9b60'
+                primary: '#bd9b60',
             }
         }
 
