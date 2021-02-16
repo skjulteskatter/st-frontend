@@ -2,18 +2,21 @@
     <div>
         <div class="loader" v-if="!initialized"></div>
         <router-view v-else />
+        <notification-group />
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import DashboardLayout from "@/layout/DashboardLayout.vue";
 import { useStore } from "vuex";
 import { sessionKey } from "./store";
+import DashboardLayout from "@/layout/DashboardLayout.vue";
+import { NotificationGroup } from "@/components/notification";
 
 @Options({
     components: {
         DashboardLayout,
+        NotificationGroup,
     },
 })
 export default class App extends Vue {

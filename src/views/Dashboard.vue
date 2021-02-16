@@ -17,8 +17,6 @@
                         <p class="user-info__email">{{ user.email }}</p>
                     </div>
                 </div>
-                <input type="file" accept="image/*" @change="handleImage" />
-                <base-button :action="submit">Submit</base-button>
                 <div class="loader" v-if="loading"></div>
                 <div
                     class="user-info__subscriptions"
@@ -37,8 +35,6 @@
                 </div>
             </div>
         </base-card>
-
-        <settings-card></settings-card>
     </div>
 </template>
 
@@ -48,22 +44,17 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import SettingsCard from "@/components/SettingsCard.vue";
-import auth from "@/services/auth";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
-        SettingsCard,
     },
 })
 export default class Dashboard extends Vue {
     public store = useStore(sessionKey);
     public token = localStorage.getItem("id_token");
-    public fileName = "";
     public loading = false;
-    private selectedImage?: string;
 
     public get subscriptions(): Subscription[] {
         return this.store.state.currentUser?.subscriptions ?? [];
@@ -75,35 +66,6 @@ export default class Dashboard extends Vue {
 
     public get user(): User | undefined {
         return this.store.state.currentUser;
-    }
-
-    public handleImage(e: InputEvent) {
-        const target = e.target as HTMLInputElement | undefined;
-        const file = target?.files?.[0];
-        if (file) {
-            this.createBase64Image(file);
-            this.fileName = file.name;
-        }
-    }
-
-    private async createBase64Image(file: File) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const res = e.target?.result;
-            if (typeof res == "string") {
-                this.selectedImage = res;
-            }
-        };
-        reader.readAsDataURL(file);
-    }
-
-    public async submit() {
-        this.loading = true;
-        if (this.fileName && this.selectedImage) {
-            await auth.setProfileImage(this.fileName, this.selectedImage);
-        }
-        this.loading = false;
     }
 }
 </script>

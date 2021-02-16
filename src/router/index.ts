@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ '../layout/DashboardLayout.vue');
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ '../views/Dashboard.vue');
 const Admin = () => import(/* webpackChunkName: 'users' */ '../views/Admin.vue');
+const SettingsView = () => import(/* webpackChunkName: 'settings' */ '../views/SettingsView.vue');
 const SongSelector = () => import(/* webpackChunkName: 'song' */ '../views/SongSelector.vue');
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ '../views/LyricsViewer.vue');
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ '../views/KaraokeViewer.vue');
@@ -75,6 +76,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'store',
                 name: 'store',
                 component: Store,
+            },
+            {
+                path: 'settings',
+                name: 'settings',
+                component: SettingsView
             }
         ],
     },

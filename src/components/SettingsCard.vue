@@ -4,12 +4,23 @@
             <h3 class="user-settings__title">{{ $t("common.settings") }}</h3>
             <div class="user-settings__fields gap-y">
                 <div class="user-settings__name field gap-x">
-                    <label for="theme-mode">{{ $t("common.name") }}</label>
+                    <label for="display-name">{{ $t("common.name") }}</label>
                     <hr />
                     <input
+                        id="display-name"
                         type="text"
                         v-model="newDisplayName"
                         :placeholder="user.displayName"
+                    />
+                </div>
+                <div class="user-settings__image field gap-x">
+                    <label for="image">{{ $t("common.image") }}</label>
+                    <hr />
+                    <input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        @change="handleImage"
                     />
                 </div>
                 <div class="user-settings__theme field gap-x">
@@ -41,7 +52,7 @@
                 </div>
             </div>
             <base-button
-                :loading="loadingSave"
+                :loading="loading"
                 :action="save"
                 icon="check"
                 class="user-settings__save-button"
@@ -55,12 +66,13 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
+import { notificationStore, sessionKey } from "@/store";
 import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
 import { BaseButton, BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
+import auth from "@/services/auth";
 
 @Options({
     components: {
@@ -72,13 +84,17 @@ import { Icon } from "@/components/icon";
 export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
     public store = useStore(sessionKey);
+    public notifications = notificationStore;
     public themes: Themes = themes;
     public newDisplayName = "";
+
+    public fileName = "";
+    private selectedImage?: string;
 
     public theme = localStorage.getItem("theme") ?? "dark";
     public token = localStorage.getItem("id_token");
 
-    public loadingSave = false;
+    public loading = false;
 
     public mounted() {
         this.selectedLanguage =
@@ -90,11 +106,27 @@ export default class SettingsCard extends Vue {
     }
 
     public async save() {
-        this.loadingSave = true;
+        this.loading = true;
         this.setDisplayName;
         await this.store.dispatch("saveSettings", this.user?.settings);
+        // Fire a notification
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: "Successfully saved",
+            icon: "check",
+        });
         this.themes.setTheme(this.theme);
-        this.loadingSave = false;
+        this.submitImage();
+        this.loading = false;
+    }
+
+    public handleImage(e: InputEvent) {
+        const target = e.target as HTMLInputElement | undefined;
+        const file = target?.files?.[0];
+        if (file) {
+            this.createBase64Image(file);
+            this.fileName = file.name;
+        }
     }
 
     public setLanguage() {
@@ -118,6 +150,24 @@ export default class SettingsCard extends Vue {
 
     public async setDisplayName() {
         await this.store.dispatch("setDisplayName", this.newDisplayName);
+    }
+
+    public async submitImage() {
+        if (this.fileName && this.selectedImage) {
+            await auth.setProfileImage(this.fileName, this.selectedImage);
+        }
+    }
+
+    private async createBase64Image(file: File) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const res = e.target?.result;
+            if (typeof res == "string") {
+                this.selectedImage = res;
+            }
+        };
+        reader.readAsDataURL(file);
     }
 }
 </script>

@@ -56,6 +56,10 @@
                 <span>Admin</span>
             </router-link>
         </div>
+        <router-link class="nav__item" :to="{ name: 'settings' }">
+            <icon name="settings" size="20" />
+            <span>{{ $t("common.settings") }}</span>
+        </router-link>
     </nav>
 </template>
 
