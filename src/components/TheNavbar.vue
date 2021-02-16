@@ -15,7 +15,11 @@
                         class="nav__user-profile__dropdown"
                         icon="arrowDown"
                     >
-                        <base-button :action="logout" theme="warning">
+                        <base-button
+                            :action="logout"
+                            theme="warning"
+                            icon="logout"
+                        >
                             {{ $t("common.logout") }}
                         </base-button>
                     </base-dropdown>
