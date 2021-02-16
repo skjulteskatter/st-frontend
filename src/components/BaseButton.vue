@@ -5,20 +5,25 @@
         @click="action"
         :disabled="loading"
     >
-        <span class="button__label-loading" v-if="loading">{{
+        <span class="button__label--loading" v-if="loading">{{
             loadingLabel
         }}</span>
         <span class="spinner" v-if="loading"></span>
         <span class="button__content" v-else>
             <slot></slot>
         </span>
+        <icon size="18" v-if="icon" :name="icon" class="button__icon" />
     </button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { Icon } from "@/components/icon";
 
 @Options({
+    components: {
+        Icon,
+    },
     props: {
         theme: {
             type: String,
@@ -43,6 +48,9 @@ import { Options, Vue } from "vue-class-component";
         loadingLabel: {
             type: String,
         },
+        icon: {
+            type: String,
+        },
     },
 })
 export default class BaseButton extends Vue {
@@ -50,6 +58,7 @@ export default class BaseButton extends Vue {
     public action: Function = () => undefined;
     public loadingLabel = "Loading...";
     public theme = "primary";
+    public icon = "";
 
     public get isLoading() {
         return this.loading;
@@ -65,9 +74,15 @@ export default class BaseButton extends Vue {
     cursor: pointer;
     display: flex;
     justify-content: center;
-    display: inline-block;
+    align-items: center;
+    gap: 10px;
+    // display: inline-block;
 
-    &-loading {
+    &__icon {
+        display: inline-block;
+    }
+
+    &--loading {
         animation: buttonLoading 0.5s ease infinite alternate;
         display: flex;
         align-items: center;

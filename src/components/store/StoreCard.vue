@@ -15,9 +15,10 @@
             <base-button
                 class="store-card__button"
                 v-if="isPurchaseable"
+                icon="shop"
                 :action="action"
             >
-                {{ $t("store.buy") }}
+                <span>{{ $t("store.buy") }}</span>
             </base-button>
             <span class="store-card__subtitle" v-else>
                 {{ $t("store.alreadyown") }}
@@ -31,13 +32,14 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
-import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
+import { BaseCard, BaseButton } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
+        Icon,
     },
     props: {
         product: {

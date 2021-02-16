@@ -13,7 +13,7 @@
                     </b>
                     <base-dropdown
                         class="nav__user-profile__dropdown"
-                        icon="fa-angle-down"
+                        icon="arrowDown"
                     >
                         <base-button :action="logout" theme="warning">
                             {{ $t("common.logout") }}
@@ -31,21 +31,26 @@
                 'gap-y': isMobileDevice,
             }"
         >
-            <router-link class="nav__item" :to="{ name: 'main' }">{{
-                $t("common.dashboard")
-            }}</router-link>
-            <router-link class="nav__item" :to="{ name: 'collections' }">{{
-                $t("common.songs")
-            }}</router-link>
-            <router-link class="nav__item" :to="{ name: 'store' }">{{
-                $t("common.store")
-            }}</router-link>
+            <router-link class="nav__item" :to="{ name: 'main' }">
+                <icon name="home" size="20" />
+                <span>{{ $t("common.dashboard") }}</span>
+            </router-link>
+            <router-link class="nav__item" :to="{ name: 'collections' }">
+                <icon name="book" size="20" />
+                <span>{{ $t("common.songs") }}</span>
+            </router-link>
+            <router-link class="nav__item" :to="{ name: 'store' }">
+                <icon name="shop" size="20" />
+                <span>{{ $t("common.store") }}</span>
+            </router-link>
             <router-link
                 v-if="isAdmin"
                 class="nav__item"
                 :to="{ name: 'admin' }"
-                >Admin</router-link
             >
+                <icon name="adjustments" size="20" />
+                <span>Admin</span>
+            </router-link>
         </div>
     </nav>
 </template>
@@ -54,6 +59,7 @@
 import { Options, Vue } from "vue-class-component";
 import { OptionsComponent, BaseButton } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
+import { Icon } from "@/components/icon";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
@@ -62,6 +68,7 @@ import { sessionKey } from "@/store";
         OptionsComponent,
         BaseButton,
         BaseDropdown,
+        Icon,
     },
 })
 export default class TheNavbar extends Vue {
@@ -108,6 +115,7 @@ export default class TheNavbar extends Vue {
 
     height: auto;
     max-width: 250px;
+    width: 100%;
     display: flex;
     flex-direction: column;
 
@@ -134,11 +142,6 @@ export default class TheNavbar extends Vue {
         gap: var(--st-spacing);
         justify-self: flex-end;
         background-color: var(--st-secondary-background-color);
-
-        &__info {
-            display: flex;
-            flex-direction: column;
-        }
 
         &__name {
             display: flex;
@@ -168,6 +171,10 @@ export default class TheNavbar extends Vue {
         padding: var(--st-spacing);
         text-decoration: none;
         transition: border-left 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: var(--st-spacing);
 
         &.router-link-exact-active {
             color: var(--st-primary-color);

@@ -1,7 +1,10 @@
 <template>
     <div class="songbooks">
         <div class="songbooks__header">
-            <base-button @click="$router.push({ name: 'search' })">
+            <base-button
+                @click="$router.push({ name: 'search' })"
+                icon="search"
+            >
                 {{ $t("common.search") }}
             </base-button>
         </div>

@@ -4,16 +4,13 @@
             <base-button
                 class="dropdown__button__button"
                 theme="secondary"
+                icon="arrowDown"
                 v-if="label"
             >
                 <span>{{ label }}</span>
-                <i
-                    class="fa dropdown__button__icon"
-                    :class="{ 'fa-angle-down': !isOpen, 'fa-angle-up': isOpen }"
-                ></i>
             </base-button>
             <slot name="button" v-else></slot>
-            <i v-if="icon" :class="['dropdown__icon', 'fa', icon]"></i>
+            <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
         </div>
         <base-card v-if="isOpen" class="dropdown__content">
             <slot name="default"></slot>
@@ -23,13 +20,14 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseButton from "@/components/BaseButton.vue";
-import BaseCard from "@/components/BaseCard.vue";
+import { BaseButton, BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         BaseButton,
         BaseCard,
+        Icon,
     },
     props: {
         label: {

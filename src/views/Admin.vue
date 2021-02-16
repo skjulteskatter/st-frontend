@@ -16,6 +16,7 @@
                         v-if="!disabled.includes(collection.id)"
                         :action="() => clearCollection(collection.id)"
                         theme="error"
+                        icon="trash"
                     >
                         {{ $t("admin.clearcache") }}
                     </base-button>

@@ -21,29 +21,6 @@
                         </option>
                     </select>
                 </div>
-                <!-- <div class="user-settings__color field gap-x">
-                    <label for="theme-color">{{
-                        `${$t("common.theme")} ${$t(
-                            "common.color"
-                        ).toLowerCase()}`
-                    }}</label>
-                    <hr />
-                    <input
-                        id="theme-color"
-                        type="color"
-                        v-model="themeColor"
-                        @input="setThemeColor()"
-                    />
-                    <base-button
-                        :action="
-                            () => {
-                                setThemeColor('#5372e2');
-                            }
-                        "
-                        theme="secondary"
-                        >Reset</base-button
-                    >
-                </div> -->
                 <div class="user-settings__language field gap-x">
                     <label for="language">{{ $t("common.language") }}</label>
                     <hr />
@@ -66,9 +43,13 @@
             <base-button
                 :loading="loadingSave"
                 :action="save"
+                icon="check"
                 class="user-settings__save-button"
-                >{{ $t("common.save") }}</base-button
             >
+                <span>
+                    <span>{{ $t("common.save") }}</span>
+                </span>
+            </base-button>
         </div>
     </base-card>
 </template>
@@ -78,13 +59,14 @@ import { sessionKey } from "@/store";
 import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
-import BaseButton from "@/components/BaseButton.vue";
-import BaseCard from "@/components/BaseCard.vue";
+import { BaseButton, BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         BaseButton,
         BaseCard,
+        Icon,
     },
 })
 export default class SettingsCard extends Vue {
@@ -93,7 +75,6 @@ export default class SettingsCard extends Vue {
     public themes: Themes = themes;
     public newDisplayName = "";
 
-    public themeColor = localStorage.getItem("theme_color") ?? themes.default;
     public theme = localStorage.getItem("theme") ?? "dark";
     public token = localStorage.getItem("id_token");
 
@@ -106,10 +87,6 @@ export default class SettingsCard extends Vue {
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
-    }
-
-    public setThemeColor(color?: string) {
-        this.themes.setThemeColor(color ?? this.themeColor);
     }
 
     public async save() {

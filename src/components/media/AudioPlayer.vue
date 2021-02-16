@@ -1,12 +1,29 @@
 <template>
-    <div class="audio-player" v-if="audio && audio.directUrl">
+    <div class="audio-player" v-if="audio && audio.directUrl && song">
         <div class="audio-player__info">
             <b class="audio-player__name">{{ audio.name }}</b>
-            <small class="audio-player__title" v-if="song">
-                <b class="audio-player__title__number">
-                    {{ song.number }}
-                </b>
-                <span>{{ song.getName(languageKey) }}</span>
+            <small class="audio-player__title">
+                <router-link
+                    v-if="
+                        audio.category == 'probackmusic' ||
+                        audio.type == 'track'
+                    "
+                    :to="{
+                        name: 'contributor',
+                        params: {
+                            collection: 'PBM',
+                            contributor: song.composers[0].id,
+                        },
+                    }"
+                >
+                    {{ song.composers[0].name }}
+                </router-link>
+                <router-link v-else to="">
+                    <b class="audio-player__title__number">
+                        {{ song.number }}
+                    </b>
+                    <span>{{ song.getName(languageKey) }}</span>
+                </router-link>
             </small>
         </div>
         <div class="audio-player__controls" ref="audioPlayer">
@@ -94,6 +111,11 @@ export default class AudioPlayer extends Vue {
     gap: var(--st-spacing);
 
     &__title {
+        & > * {
+            text-decoration: none;
+            color: var(--st-text-color);
+        }
+
         &__number {
             opacity: 0.5;
             margin-right: calc(var(--st-spacing) * 0.5);
