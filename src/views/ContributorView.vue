@@ -1,7 +1,14 @@
 <template>
     <div v-if="contributor" class="contributor">
-        <base-card secondary>
-            <h1 class="contribtor__name">{{ contributor.name }}</h1>
+        <base-card class="contributor__biography" secondary>
+            <div class="contributor__biography__header">
+                <p class="contributor__biography__header__title">
+                    {{ $t("song.contributor") }}
+                </p>
+                <h1 class="contributor__biography__header__name">
+                    {{ contributor.name }}
+                </h1>
+            </div>
             <div v-html="contributor.getBiography(languageKey)"></div>
         </base-card>
 
@@ -84,6 +91,19 @@ export default class ContributorView extends Vue {
 <style lang="scss">
 .contributor {
     padding: var(--st-spacing);
+
+    &__biography {
+        &__header {
+            &__title {
+                color: var(--st-primary-color);
+                margin: 0;
+            }
+
+            &__name {
+                margin: 0;
+            }
+        }
+    }
 
     &__songs {
         display: grid;
