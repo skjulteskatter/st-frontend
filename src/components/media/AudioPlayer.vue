@@ -6,7 +6,7 @@
                 <router-link
                     v-if="
                         audio.category == 'probackmusic' ||
-                        audio.type == 'track'
+                        song.type == 'track' 
                     "
                     :to="{
                         name: 'contributor',
