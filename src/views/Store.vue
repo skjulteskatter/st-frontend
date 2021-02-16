@@ -57,7 +57,7 @@ export default class Store extends Vue {
 
     public checkout(product: Product) {
         this.loading = true;
-        const price = product.prices.find((p) => p.type == "month");
+        const price = product.prices.find((p) => p.type == "year");
 
         if (price) {
             this.store.dispatch("startSession", price.id);
