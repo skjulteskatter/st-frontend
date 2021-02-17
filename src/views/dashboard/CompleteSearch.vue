@@ -1,6 +1,6 @@
 <template>
+    <div class="loader" v-if="loading"></div>
     <div class="complete-search">
-        <div class="loader" v-if="loading"></div>
         <search-input v-model="searchQuery" @search="search" />
         <div
             v-for="collection in songsByCollection"
@@ -106,7 +106,7 @@ export default class CompleteSearch extends Vue {
 
 <style lang="scss">
 .complete-search {
-    padding: calc(var(--st-pacing) * 2);
+    padding: calc(var(--st-spacing) * 2);
 
     &__list {
         display: flex;
