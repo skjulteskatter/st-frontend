@@ -134,6 +134,7 @@ export default class Subscriptions extends Vue {
     &__collections {
         .card__content {
             display: flex;
+            flex-wrap: wrap;
             gap: var(--st-spacing);
         }
 

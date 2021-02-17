@@ -2,7 +2,7 @@
     <nav class="nav" @click="toggleBurgerMenu">
         <div class="nav__header" @click="$router.push('/')">
             <!-- <img class="nav__header__logo" :src="logo" /> -->
-            <h1 style="margin: 0">SongTreasures</h1>
+            <h1 class="nav__header__logo">SongTreasures</h1>
         </div>
         <div class="nav__user-profile" v-if="user">
             <img :src="image" class="nav__user-profile__image" />
@@ -126,6 +126,27 @@ export default class TheNavbar extends Vue {
     display: flex;
     flex-direction: column;
 
+    @media screen and (max-width: 1000px) {
+        width: auto;
+
+        .nav__header__logo {
+            width: 20px;
+            overflow: hidden;
+        }
+
+        .nav__user-profile {
+            display: none;
+        }
+
+        .nav__item span {
+            display: none;
+        }
+
+        .nav__item.router-link-exact-active {
+            border-left: none;
+        }
+    }
+
     &__links {
         display: flex;
         flex-direction: column;
@@ -139,6 +160,7 @@ export default class TheNavbar extends Vue {
 
         &__logo {
             max-height: 40px;
+            margin: 0;
         }
     }
 
@@ -187,17 +209,6 @@ export default class TheNavbar extends Vue {
             color: var(--st-primary-color);
             position: relative;
             border-left: 5px solid var(--st-primary-color);
-
-            // &:after {
-            //     content: "";
-            //     background-color: var(--st-primary-color);
-            //     position: absolute;
-            //     top: 100%;
-            //     left: 0;
-            //     height: 2px;
-            //     width: 100%;
-            //     animation: growFromLeft 0.3s ease;
-            // }
         }
     }
 }

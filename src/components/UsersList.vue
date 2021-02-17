@@ -182,7 +182,10 @@ export default class UsersList extends Vue {
 
 .users__table {
     text-align: left;
-    overflow-x: auto;
+
+    .card__content {
+        overflow-x: auto;
+    }
 
     table {
         width: 100%;

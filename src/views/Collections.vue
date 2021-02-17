@@ -61,11 +61,11 @@ export default class Collections extends Vue {
         grid-template-columns: repeat(4, 1fr);
         grid-gap: var(--st-spacing);
 
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 1000px) {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 600px) {
             grid-template-columns: 1fr;
         }
     }
