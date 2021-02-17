@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { OptionsComponent, BaseButton } from "@/components";
+import { BaseButton } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import { Icon } from "@/components/icon";
 import { useStore } from "vuex";
@@ -73,7 +73,6 @@ import { sessionKey } from "@/store";
 
 @Options({
     components: {
-        OptionsComponent,
         BaseButton,
         BaseDropdown,
         Icon,

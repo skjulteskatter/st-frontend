@@ -1,28 +1,10 @@
 <template>
     <base-card style="margin-bottom: var(--st-spacing)">
         <div class="user-settings" v-if="user">
-            <h3 class="user-settings__title">{{ $t("common.settings") }}</h3>
             <div class="user-settings__fields gap-y">
-                <div class="user-settings__name field gap-x">
-                    <label for="display-name">{{ $t("common.name") }}</label>
-                    <hr />
-                    <input
-                        id="display-name"
-                        type="text"
-                        v-model="newDisplayName"
-                        :placeholder="user.displayName"
-                    />
-                </div>
-                <div class="user-settings__image field gap-x">
-                    <label for="image">{{ $t("common.image") }}</label>
-                    <hr />
-                    <input
-                        id="image"
-                        type="file"
-                        accept="image/*"
-                        @change="handleImage"
-                    />
-                </div>
+                <h3 class="user-settings__title">
+                    {{ $t("settings.general") }}
+                </h3>
                 <div class="user-settings__theme field gap-x">
                     <label for="theme-mode">{{ $t("common.theme") }}</label>
                     <hr />
@@ -49,6 +31,31 @@
                             {{ lang.name }}
                         </option>
                     </select>
+                </div>
+            </div>
+            <div class="user-settings__fields gap-y">
+                <h3 class="user-settings__title">
+                    {{ $t("common.user") }}
+                </h3>
+                <div class="user-settings__name field gap-x">
+                    <label for="display-name">{{ $t("common.name") }}</label>
+                    <hr />
+                    <input
+                        id="display-name"
+                        type="text"
+                        v-model="newDisplayName"
+                        :placeholder="user.displayName"
+                    />
+                </div>
+                <div class="user-settings__image field gap-x">
+                    <label for="image">{{ $t("common.image") }}</label>
+                    <hr />
+                    <input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        @change="handleImage"
+                    />
                 </div>
             </div>
             <base-button
@@ -109,14 +116,15 @@ export default class SettingsCard extends Vue {
         this.loading = true;
         this.setDisplayName;
         await this.store.dispatch("saveSettings", this.user?.settings);
-        // Fire a notification
-        this.notifications.dispatch("addNotification", {
-            type: "success",
-            title: "Successfully saved",
-            icon: "check",
-        });
         this.themes.setTheme(this.theme);
         this.submitImage();
+
+        // Fire a success notification
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: this.$t("notification.saved"),
+            icon: "check",
+        });
         this.loading = false;
     }
 
@@ -176,6 +184,7 @@ export default class SettingsCard extends Vue {
 .user-settings {
     display: flex;
     flex-direction: column;
+    gap: var(--st-spacing);
 
     &__fields {
         .field {

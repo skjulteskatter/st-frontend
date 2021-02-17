@@ -1,8 +1,10 @@
 <template>
-    <div class="notification" :class="`${typeClass}`" v-if="show">
-        <b>{{ title }}</b>
-        <icon v-if="icon" :name="icon" size="20" />
-    </div>
+    <transition name="note">
+        <div class="notification" :class="`${typeClass}`" v-if="show">
+            <b>{{ title }}</b>
+            <icon v-if="icon" :name="icon" size="20" />
+        </div>
+    </transition>
 </template>
 
 <script lang="ts">
@@ -68,5 +70,16 @@ export default class Notification extends Vue {
     &--warning {
         background-color: var(--st-warning-color);
     }
+}
+
+.note-enter-active,
+.note-leave-active {
+    transition: all 0.5s;
+}
+
+.note-enter-from,
+.note-leave-to {
+    opacity: 0;
+    transform: translateY(20px);
 }
 </style>

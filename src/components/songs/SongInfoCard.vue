@@ -1,14 +1,16 @@
 <template>
     <base-card class="song-details__metadata" border v-if="song">
         <h2 class="song-details__metadata__title">
-            <span style="opacity: 0.5; padding-right: 0.5em">{{
-                song.number
-            }}</span>
-            {{ title }}
+            <span style="opacity: 0.5; padding-right: 0.5em">
+                {{ song.number }}
+            </span>
+            <span>
+                {{ title }}
+            </span>
         </h2>
-        <span v-if="verses" class="lyrics-settings__metadata__verse-count tag"
-            >{{ verses }} verses</span
-        >
+        <span v-if="verses" class="lyrics-settings__metadata__verse-count tag">
+            {{ verses }} {{ $t("song.verses") }}
+        </span>
         <p class="song-details__metadata__credits gap-x">
             <span>{{ $t("song.author") }}: </span>
             <span v-for="author in song.authors" :key="author.id">
@@ -20,8 +22,9 @@
                             contributor: author.id,
                         },
                     }"
-                    >{{ author.name }}</router-link
                 >
+                    {{ author.name }}
+                </router-link>
             </span>
         </p>
         <p
@@ -42,15 +45,16 @@
                             contributor: composer.id,
                         },
                     }"
-                    >{{ composer.name }}</router-link
                 >
+                    {{ composer.name }}
+                </router-link>
             </span>
         </p>
         <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
-            {{ melodyOrigin }}
+            <span>{{ melodyOrigin }}</span>
         </p>
         <p class="lyrics-settings__metadata__credits" v-if="song.yearWritten">
-            {{ song.yearWritten }}
+            <span>{{ song.yearWritten }}</span>
         </p>
         <div v-if="description" v-html="description"></div>
     </base-card>
@@ -109,5 +113,13 @@ export default class SongInfoCard extends Vue {
 .song-details__metadata {
     width: 100%;
     height: auto;
+
+    &__credits {
+        color: var(--st-primary-color);
+    }
+
+    a {
+        color: var(--st-primary-color);
+    }
 }
 </style>

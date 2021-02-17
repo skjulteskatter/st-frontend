@@ -90,7 +90,7 @@ export default class ContributorView extends Vue {
 
 <style lang="scss">
 .contributor {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__biography {
         &__header {

@@ -1,7 +1,9 @@
 <template>
-    <div class="dashboard">
-        <h1 class="dashboard__title">{{ $t("common.dashboard") }}</h1>
-        <base-card class="user-info" border v-if="user">
+    <div class="dashboard" v-if="user">
+        <h1 class="dashboard__title">
+            {{ $t("common.welcome") }}, {{ user.displayName.split(" ")[0] }}.
+        </h1>
+        <base-card class="user-info" border>
             <div class="user-info__wrapper gap-y">
                 <div class="fields">
                     <div class="user-info__field" v-if="user.roles.length">
@@ -18,23 +20,23 @@
                     </div>
                 </div>
                 <div class="loader" v-if="loading"></div>
-                <div
-                    class="user-info__subscriptions"
-                    v-if="subscriptions.length"
-                >
-                    <label>{{ $t("common.subscriptions") }}</label>
-                    <div class="user-info__subscriptions__cards gap-x">
-                        <base-card
-                            v-for="sub in subscribedCollections"
-                            :key="sub"
-                            border
-                        >
-                            <b>{{ sub.key }}</b>
-                        </base-card>
-                    </div>
-                </div>
             </div>
         </base-card>
+        <div class="dashboard__subscriptions" v-if="subscriptions.length">
+            <h3>
+                {{ $t("common.your") }}
+                {{ $t("common.subscriptions").toLowerCase() }}
+            </h3>
+            <div class="dashboard__subscriptions__cards">
+                <base-card
+                    v-for="sub in subscribedCollections"
+                    :key="sub"
+                    border
+                >
+                    <span>{{ sub.name[languageKey] }}</span>
+                </base-card>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -42,8 +44,7 @@
 import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
+import { BaseCard, BaseButton } from "@/components";
 
 @Options({
     components: {
@@ -67,15 +68,26 @@ export default class Dashboard extends Vue {
     public get user(): User | undefined {
         return this.store.state.currentUser;
     }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
+    }
 }
 </script>
 
 <style lang="scss">
 .dashboard {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__title {
         margin-top: 0;
+    }
+
+    &__subscriptions {
+        &__cards {
+            display: flex;
+            gap: var(--st-spacing);
+        }
     }
 }
 

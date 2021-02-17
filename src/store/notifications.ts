@@ -2,6 +2,7 @@ import { InjectionKey } from 'vue';
 import { createStore, Store } from 'vuex'
 
 export type Notification = {
+	id: string;
 	type: string;
 	title: string;
 	content?: string;
@@ -26,7 +27,7 @@ export const notificationStore = createStore<Notifications>({
 	},
 	mutations: {
 		addNotification(state, notification: Notification) {
-			state.notifications.push(notification);
+			state.notifications.push({ ...notification, id: `${Date.now()}` });
 		}
 	}
 })

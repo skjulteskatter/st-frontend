@@ -1,6 +1,7 @@
 <template>
     <div class="songbooks">
         <div class="songbooks__header">
+            <h1 class="songbooks__header__title">{{ $t("common.songs") }}</h1>
             <base-button
                 @click="$router.push({ name: 'search' })"
                 icon="search"
@@ -75,14 +76,18 @@ export default class Collections extends Vue {
 
 <style lang="scss">
 .songbooks {
-    padding: var(--st-spacing);
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__header {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+
+        &__title {
+            margin: 0;
+        }
     }
 
     &__body {

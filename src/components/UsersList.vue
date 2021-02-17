@@ -75,7 +75,7 @@
     </div>
 </template>
 <script lang="ts">
-import { usersKey } from "@/store";
+import { notificationStore, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import BaseCard from "@/components/BaseCard.vue";
@@ -104,6 +104,8 @@ export default class UsersList extends Vue {
     public disableButton = false;
     public loading = false;
 
+    public notifications = notificationStore;
+
     public async mounted() {
         await this.usersStore.dispatch("getUsers");
         await this.usersStore.dispatch("getRoles");
@@ -113,6 +115,12 @@ export default class UsersList extends Vue {
         this.loading = true;
         this.disableButton = true;
         await this.usersStore.dispatch("getUsers");
+
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: this.$t("notification.fetchedusers"),
+            icon: "check",
+        });
         this.loading = false;
         this.disableButton = false;
     }
@@ -132,6 +140,11 @@ export default class UsersList extends Vue {
     public async saveRoles(user: User) {
         this.loading = true;
         await this.usersStore.dispatch("setRoles", user);
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: this.$t("notification.saved"),
+            icon: "check",
+        });
         this.loading = false;
     }
 }

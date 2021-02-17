@@ -33,7 +33,6 @@
                 />
             </div>
         </div>
-        <hr />
         <div v-if="searchQuery == '' && !loading">
             <div class="song-list__contributors" v-if="listType == 'authors'">
                 <song-list-card
@@ -119,8 +118,7 @@
 </template>
 
 <script lang="ts">
-import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
+import { BaseCard, BaseButton } from "@/components";
 
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
@@ -187,7 +185,7 @@ export default class SongList extends Vue {
                 this.store.state.filter.origins,
                 this.store.state.filter.audioFiles,
                 this.store.state.filter.videoFiles,
-                this.store.state.filter.songTypes,
+                this.store.state.filter.songTypes
             ) ?? []
         );
     }
@@ -368,7 +366,7 @@ export default class SongList extends Vue {
 .song-list {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     animation: slideInFromBottom 0.3s ease;
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__filters {
         display: flex;
@@ -425,6 +423,7 @@ export default class SongList extends Vue {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: var(--st-spacing);
 
         @media screen and (max-width: 600px) {
             flex-direction: column;

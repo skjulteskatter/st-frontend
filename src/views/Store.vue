@@ -15,7 +15,6 @@
                 }}
             </base-button>
         </div>
-        <hr />
         <div class="store__items">
             <store-card
                 v-for="product in products"
@@ -91,7 +90,7 @@ export default class Store extends Vue {
 
 <style lang="scss">
 .store {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__title {
         margin: 0;
@@ -101,6 +100,7 @@ export default class Store extends Vue {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: var(--st-spacing);
     }
 
     hr {

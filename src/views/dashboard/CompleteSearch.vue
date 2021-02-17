@@ -1,18 +1,20 @@
 <template>
     <div class="complete-search">
         <div class="loader" v-if="loading"></div>
-        <input @keydown.enter="search" v-model="searchQuery" type="text" placeholder="Search"/>
-        <button @click="search">SEARCH</button>
-        <div v-for="collection in songsByCollection" :key="collection.collection.id">
-            <h1>{{collection.collection.getName(languageKey)}}</h1>
+        <search-input v-model="searchQuery" @search="search" />
+        <div
+            v-for="collection in songsByCollection"
+            :key="collection.collection.id"
+        >
+            <h1>{{ collection.collection.getName(languageKey) }}</h1>
             <div class="complete-search__list complete-search__list-cards">
-            <song-list-item-card
-                v-for="song in collection.songs.slice(0, 24)"
-                :key="song.id"
-                :song="song"
-                @click="selectSong(collection.collection.key, song.number)"
-            >
-            </song-list-item-card>
+                <song-list-item-card
+                    v-for="song in collection.songs.slice(0, 24)"
+                    :key="song.id"
+                    :song="song"
+                    @click="selectSong(collection.collection.key, song.number)"
+                >
+                </song-list-item-card>
             </div>
         </div>
     </div>
@@ -25,22 +27,30 @@ import api from "@/services/api";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 import { Collection, Song } from "@/classes";
+import { SearchInput } from "@/components/inputs";
+import { BaseButton } from "@/components";
 
 @Options({
     components: {
         SongListItemCard,
-    }
+        SearchInput,
+        BaseButton,
+    },
 })
 export default class CompleteSearch extends Vue {
     public sessionStore = useStore(sessionKey);
     public loading = false;
-    public searchQuery = '';
+    public searchQuery = "";
     public songs: SongInterface[] = [];
 
     public async search() {
         this.loading = true;
+        console.log(this.searchQuery);
         if (this.searchQuery.length > 4) {
-            this.songs = await api.songs.searchCollections(this.searchQuery, this.languageKey);
+            this.songs = await api.songs.searchCollections(
+                this.searchQuery,
+                this.languageKey
+            );
         }
         this.loading = false;
     }
@@ -53,14 +63,18 @@ export default class CompleteSearch extends Vue {
 
         for (const song of this.songs) {
             if (song.collection) {
-                let col = collections.find(c => c.collection.id == song.collection?.id);
+                let col = collections.find(
+                    (c) => c.collection.id == song.collection?.id
+                );
                 if (!col) {
-                    const collection = this.collections.find(c => c.id == song.collection?.id);
+                    const collection = this.collections.find(
+                        (c) => c.id == song.collection?.id
+                    );
                     if (collection) {
                         col = {
                             collection: collection,
                             songs: [],
-                        }
+                        };
                         collections.push(col);
                     }
                 }
@@ -79,17 +93,21 @@ export default class CompleteSearch extends Vue {
     }
 
     public selectSong(collection: string, number: number) {
-        this.$router.push({name: 'song', params: {
-            collection: collection,
-            number: number,
-        }});
+        this.$router.push({
+            name: "song",
+            params: {
+                collection: collection,
+                number: number,
+            },
+        });
     }
 }
 </script>
 
 <style lang="scss">
-
 .complete-search {
+    padding: calc(var(--st-pacing) * 2);
+
     &__list {
         display: flex;
         flex-direction: column;

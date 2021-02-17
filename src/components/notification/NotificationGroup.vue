@@ -1,14 +1,12 @@
 <template>
     <div class="notification-group">
-        <transition-group name="notifications">
-            <notification
-                v-for="notification in notifications"
-                :key="notification.title"
-                :title="notification.title"
-                :icon="notification.icon"
-                :type="notification.type"
-            />
-        </transition-group>
+        <notification
+            v-for="notification in notifications"
+            :key="notification.title"
+            :title="notification.title"
+            :icon="notification.icon"
+            :type="notification.type"
+        />
     </div>
 </template>
 
@@ -48,7 +46,7 @@ export default class NotificationGroup extends Vue {
     transition: all 0.5s;
 }
 
-.notifications-enter,
+.notifications-enter-from,
 .notifications-leave-to {
     opacity: 0;
     transform: translateY(var(--st-spacing));

@@ -1,7 +1,8 @@
 <template>
     <div class="admin-panel" v-if="isAdmin">
-        <h1 class="admin-panel__title">Admin</h1>
-        <hr />
+        <div class="admin-panel__header">
+            <h1 class="admin-panel__title">Admin</h1>
+        </div>
         <div class="admin-panel__body">
             <base-card class="admin-panel__collections">
                 <base-card
@@ -47,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, usersKey } from "@/store";
+import { notificationStore, sessionKey, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import UsersList from "@/components/UsersList.vue";
@@ -64,6 +65,7 @@ import api from "@/services/api";
 })
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
+    public notifications = notificationStore;
     public loading = false;
     public token = localStorage.getItem("id_token");
     public showToken = false;
@@ -89,6 +91,11 @@ export default class Subscriptions extends Vue {
     public clearCollection(collection: string) {
         this.disabled.push(collection);
         api.admin.clearCache(collection);
+        this.notifications.dispatch("addNotification", {
+            type: "error",
+            title: this.$t("notification.cachecleared"),
+            icon: "trash",
+        });
     }
 }
 </script>
@@ -112,7 +119,11 @@ export default class Subscriptions extends Vue {
     }
 }
 .admin-panel {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
+
+    &__header {
+        margin-bottom: var(--st-spacing);
+    }
 
     &__body {
         display: flex;

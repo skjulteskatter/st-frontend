@@ -116,7 +116,10 @@ export default class SongViewer extends Vue {
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
-        if (this.songStore.getters.collection?.key !== this.$route.params.collection as string) {
+        if (
+            this.songStore.getters.collection?.key !==
+            (this.$route.params.collection as string)
+        ) {
             await this.songStore.dispatch(
                 "selectCollection",
                 this.$route.params.collection
@@ -219,7 +222,7 @@ export default class SongViewer extends Vue {
         flex-grow: 1;
         flex-wrap: wrap;
         gap: var(--st-spacing);
-        padding: var(--st-spacing);
+        padding: calc(var(--st-spacing) * 2);
         overflow-y: auto;
     }
 
