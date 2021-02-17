@@ -1,8 +1,8 @@
 <template>
     <nav class="nav" @click="toggleBurgerMenu">
         <div class="nav__header" @click="$router.push('/')">
-            <!-- <img class="nav__header__logo" :src="logo" /> -->
-            <h1 class="nav__header__logo">SongTreasures</h1>
+            <img class="nav__header__logo" :src="logo" />
+            <!-- <h1 class="nav__header__logo">SongTreasures</h1> -->
         </div>
         <div class="nav__user-profile" v-if="user">
             <img :src="image" class="nav__user-profile__image" />
@@ -11,18 +11,6 @@
                     <b>
                         {{ user.displayName }}
                     </b>
-                    <base-dropdown
-                        class="nav__user-profile__dropdown"
-                        icon="arrowDown"
-                    >
-                        <base-button
-                            :action="logout"
-                            theme="warning"
-                            icon="logout"
-                        >
-                            {{ $t("common.logout") }}
-                        </base-button>
-                    </base-dropdown>
                 </div>
 
                 <small class="nav__user-profile__email">{{ user.email }}</small>
@@ -66,7 +54,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
-import { BaseDropdown } from "@/components/inputs";
 import { Icon } from "@/components/icon";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
@@ -74,7 +61,6 @@ import { sessionKey } from "@/store";
 @Options({
     components: {
         BaseButton,
-        BaseDropdown,
         Icon,
     },
 })
@@ -161,6 +147,7 @@ export default class TheNavbar extends Vue {
         &__logo {
             max-height: 40px;
             margin: 0;
+            mix-blend-mode: multiply;
         }
     }
 
