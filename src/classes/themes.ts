@@ -14,9 +14,6 @@ export class Themes {
         [key: string]: Theme;
     } = {
             dark: {
-                // background: '#2C2F33',
-                // secondaryBackground: '#232527',
-                // borderColor: '#393d42',
                 background: '#00292e',
                 secondaryBackground: '#001e22',
                 text: '#F5F7FA',
@@ -64,7 +61,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(localStorage.getItem('theme') ?? 'light');
+        this.setTheme(localStorage.getItem('theme') ?? 'dark');
     }
 
     public get keys() {
