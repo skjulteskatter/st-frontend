@@ -10,66 +10,32 @@
             </base-button>
         </div>
         <div class="songbooks__body">
-            <base-card
-                v-for="songbook in collections"
-                :key="songbook.key"
-                class="songbooks__book clickable"
-                :class="{
-                    disabled: !available.find((c) => c.id == songbook.id),
-                }"
-                :image="songbook.image"
-                @click="selectCollection(songbook)"
-                border
-            >
-                <h3 class="songbooks__book__title">
-                    {{ songbook.getName(languageKey) }}
-                </h3>
-            </base-card>
+            <collection-card
+                v-for="col in collections"
+                :key="col.key"
+                :collection="col"
+            ></collection-card>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { BaseButton, CollectionCard } from "@/components";
+import { sessionKey } from "@/store";
 import { useStore } from "vuex";
-import { sessionKey, songKey } from "@/store";
-import { BaseCard, BaseButton } from "@/components";
-import { Collection } from "@/classes";
 
 @Options({
     components: {
-        BaseCard,
+        CollectionCard,
         BaseButton,
     },
 })
 export default class Collections extends Vue {
-    private songStore = useStore(songKey);
     private sessionStore = useStore(sessionKey);
-
-    public selectCollection(collection: Collection) {
-        if (!this.available.find((c) => c.id == collection.id)) return;
-        this.$router.push({
-            name: "song-list",
-            params: {
-                collection: collection.key,
-            },
-        });
-    }
 
     public get collections() {
         return this.sessionStore.state.collections ?? [];
-    }
-
-    public get selected() {
-        return this.songStore.getters.collection ?? {};
-    }
-
-    public get available(): Collection[] {
-        return this.sessionStore.getters.collections ?? [];
-    }
-
-    public get languageKey() {
-        return this.sessionStore.getters.languageKey;
     }
 }
 </script>
@@ -101,23 +67,6 @@ export default class Collections extends Vue {
 
         @media screen and (max-width: 500px) {
             grid-template-columns: 1fr;
-        }
-    }
-
-    &__book {
-        cursor: pointer;
-
-        &__title {
-            margin: 0;
-        }
-
-        &.selected {
-            border: 2px solid var(--st-primary-color);
-        }
-
-        &.disabled {
-            color: var(--st-border-color);
-            cursor: not-allowed;
         }
     }
 }

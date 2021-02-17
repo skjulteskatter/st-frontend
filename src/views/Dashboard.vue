@@ -28,13 +28,12 @@
                 {{ $t("common.subscriptions").toLowerCase() }}
             </h3>
             <div class="dashboard__subscriptions__cards">
-                <base-card
+                <collection-card
                     v-for="sub in subscribedCollections"
                     :key="sub"
-                    border
-                >
-                    <span>{{ sub.name[languageKey] }}</span>
-                </base-card>
+                    :collection="sub"
+                    :image="undefined"
+                ></collection-card>
             </div>
         </div>
     </div>
@@ -44,12 +43,13 @@
 import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { BaseCard, BaseButton } from "@/components";
+import { BaseCard, BaseButton, CollectionCard } from "@/components";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
+        CollectionCard,
     },
 })
 export default class Dashboard extends Vue {
@@ -87,21 +87,20 @@ export default class Dashboard extends Vue {
         &__cards {
             display: flex;
             gap: var(--st-spacing);
+
+            // display: grid;
+            // grid-template-columns: repeat(4, 1fr);
+            // grid-gap: var(--st-spacing);
+
+            // @media screen and (max-width: 600px) {
+            //     grid-template-columns: 1fr;
+            // }
         }
     }
 }
 
 .user-info {
     margin-bottom: var(--st-spacing);
-
-    &__subscriptions {
-        &__cards {
-            display: flex;
-            // gap: 0.5em;
-            padding-top: 0.5em;
-            max-height: 100px;
-        }
-    }
 
     &__wrapper {
         display: flex;

@@ -7,6 +7,7 @@ import LyricsSettings from './LyricsSettings.vue';
 import OptionsComponent from './OptionsComponent.vue';
 import TransposedLyricsViewer from './TransposedLyricsViewer.vue';
 import SettingsCard from './SettingsCard.vue';
+import CollectionCard from './CollectionCard.vue';
 
 export {
     BaseCard,
@@ -16,5 +17,6 @@ export {
     SongDetails,
     OptionsComponent,
     TransposedLyricsViewer,
-    SettingsCard
+    SettingsCard,
+    CollectionCard
 }
