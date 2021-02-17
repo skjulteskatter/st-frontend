@@ -31,7 +31,7 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
-import { sessionKey } from "@/store";
+import { notificationStore, sessionKey } from "@/store";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -46,6 +46,7 @@ import { StoreCard } from "@/components/store";
 })
 export default class Store extends Vue {
     private store = useStore(stripeKey);
+    private notifications = notificationStore;
     public loading = false;
 
     public mounted() {
@@ -56,6 +57,11 @@ export default class Store extends Vue {
 
     public checkout(product: Product) {
         this.loading = true;
+        this.notifications.dispatch("addNotification", {
+            type: "primary",
+            icon: "shop",
+            title: this.$t("notification.redirecting"),
+        });
         const price = product.prices.find((p) => p.type == "year");
 
         if (price) {
