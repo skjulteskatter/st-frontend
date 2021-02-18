@@ -1,10 +1,5 @@
 <template>
-    <base-card
-        v-if="product"
-        class="store-card"
-        :image="product.collections[0].image || placeholderImage"
-        border
-    >
+    <base-card v-if="product" class="store-card" :image="image" border>
         <h3 class="store-card__itle">
             {{ product.name[languageKey] }}
         </h3>
@@ -70,8 +65,8 @@ export default class StoreCard extends Vue {
         return `${formattedPrice} /${type}`;
     }
 
-    public get placeholderImage() {
-        return "placeholder.png";
+    public get image() {
+        return this.product?.collections[0].image ?? "/img/placeholder.png";
     }
 
     public get languageKey() {

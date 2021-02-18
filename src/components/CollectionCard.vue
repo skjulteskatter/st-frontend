@@ -4,7 +4,7 @@
         :class="{
             disabled: !available.find((c) => c.id == collection.id),
         }"
-        :image="collection.image"
+        :image="image"
         @click="selectCollection(collection)"
         border
     >
@@ -44,6 +44,10 @@ export default class CollectionCard extends Vue {
                 collection: collection.key,
             },
         });
+    }
+
+    public get image() {
+        return this.collection.image ?? "/img/placeholder.png";
     }
 
     public get selected() {
