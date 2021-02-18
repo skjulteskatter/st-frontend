@@ -4,26 +4,20 @@
         <div class="song-list__header">
             <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
             <div class="song-list__filters gap-x" v-if="!loading">
-                <div class="song-list__filters__fields gap-x">
-                    <div class="song-list__filters__field">
-                        <label for="song-category">{{
-                            $t("song.category")
-                        }}</label>
-                        <button-group
-                            :buttons="buttons"
-                            :action="setListType"
-                        ></button-group>
-                    </div>
+                <div class="song-list__filters__field">
+                    <label for="song-category">{{ $t("song.category") }}</label>
+                    <button-group
+                        :buttons="buttons"
+                        :action="setListType"
+                    ></button-group>
+                </div>
 
-                    <div class="song-list__filters__field">
-                        <label for="song-filters">{{
-                            $t("song.filters")
-                        }}</label>
-                        <song-filter-dropdown
-                            :themes="collection.themeTypes"
-                            :origins="collection.origins"
-                        ></song-filter-dropdown>
-                    </div>
+                <div class="song-list__filters__field">
+                    <label for="song-filters">{{ $t("song.filters") }}</label>
+                    <song-filter-dropdown
+                        :themes="collection.themeTypes"
+                        :origins="collection.origins"
+                    ></song-filter-dropdown>
                 </div>
                 <input
                     type="text"
@@ -372,9 +366,8 @@ export default class SongList extends Vue {
         display: flex;
         align-items: flex-end;
 
-        &__fields {
-            display: flex;
-            align-items: flex-end;
+        @media screen and (max-width: 600px) {
+            flex-direction: column;
         }
 
         &__field {

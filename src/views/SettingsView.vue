@@ -19,7 +19,7 @@ export default class SettingsView extends Vue {}
 
 <style lang="scss" >
 .settings-page {
-    padding: var(--st-spacing);
+    padding: calc(var(--st-spacing) * 2);
 
     &__title {
         margin-top: 0;

@@ -112,16 +112,18 @@ export default class CompleteSearch extends Vue {
         display: flex;
         flex-direction: column;
 
-        &-numbers {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            grid-gap: var(--st-half-spacing);
-        }
-
         &-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-gap: var(--st-half-spacing);
+            grid-gap: var(--st-spacing);
+
+            @media screen and (max-width: 1000px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media screen and (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
         }
     }
 }

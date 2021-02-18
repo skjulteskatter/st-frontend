@@ -8,9 +8,9 @@
         @click="selectCollection(collection)"
         border
     >
-        <h3 class="collection-card__title">
+        <p class="collection-card__title">
             {{ collection.getName(languageKey) }}
-        </h3>
+        </p>
     </base-card>
 </template>
 

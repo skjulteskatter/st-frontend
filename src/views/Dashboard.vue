@@ -85,16 +85,19 @@ export default class Dashboard extends Vue {
 
     &__subscriptions {
         &__cards {
-            display: flex;
-            gap: var(--st-spacing);
+            //     display: flex;
+            //     gap: var(--st-spacing);
 
-            // display: grid;
-            // grid-template-columns: repeat(4, 1fr);
-            // grid-gap: var(--st-spacing);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: var(--st-spacing);
 
-            // @media screen and (max-width: 600px) {
-            //     grid-template-columns: 1fr;
-            // }
+            @media screen and (max-width: 1000px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (max-width: 600px) {
+                grid-template-columns: 1fr;
+            }
         }
     }
 }
