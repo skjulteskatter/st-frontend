@@ -1,8 +1,16 @@
 <template>
     <nav class="nav" @click="toggleBurgerMenu">
         <div class="nav__header" @click="$router.push('/')">
-            <img class="nav__header__logo" :src="logo" />
-            <!-- <h1 class="nav__header__logo">SongTreasures</h1> -->
+            <img
+                class="nav__header__logo"
+                alt="logo"
+                src="/img/SongTreasures_logo_v2.svg"
+            />
+            <img
+                src="/img/SongTreasures_logo_v2_icon.svg"
+                alt="logo"
+                class="nav__header__logo--icon"
+            />
         </div>
         <div class="nav__user-profile" v-if="user">
             <img :src="image" class="nav__user-profile__image" />
@@ -68,11 +76,6 @@ export default class TheNavbar extends Vue {
     private userStore = useStore(sessionKey);
     public openBurgerMenu = false;
 
-    public get logo() {
-        // Return the direct url to the logo
-        return "https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo3.jpg";
-    }
-
     public logout() {
         this.userStore.dispatch("logout").then(() => {
             window.location.replace("/login");
@@ -103,6 +106,7 @@ export default class TheNavbar extends Vue {
 
 <style lang="scss">
 .nav {
+    --size: 40px;
     background-color: var(--st-background-color);
     border-right: 1px solid var(--st-border-color);
 
@@ -115,9 +119,13 @@ export default class TheNavbar extends Vue {
     @media screen and (max-width: 1000px) {
         width: auto;
 
+        .nav__header__logo--icon {
+            display: block;
+            height: var(--size);
+        }
+
         .nav__header__logo {
-            width: 20px;
-            overflow: hidden;
+            display: none;
         }
 
         .nav__user-profile {
@@ -145,9 +153,12 @@ export default class TheNavbar extends Vue {
         border-bottom: 1px solid var(--st-border-color);
 
         &__logo {
-            max-height: 40px;
+            max-height: var(--size);
             margin: 0;
-            mix-blend-mode: multiply;
+        }
+
+        &__logo--icon {
+            display: none;
         }
     }
 
@@ -169,10 +180,9 @@ export default class TheNavbar extends Vue {
         }
 
         &__image {
-            --st-pfp-size: 40px;
             border-radius: 100%;
-            max-width: var(--st-pfp-size);
-            max-height: var(--st-pfp-size);
+            max-width: var(--size);
+            max-height: var(--size);
             width: 100%;
             height: 100%;
         }
