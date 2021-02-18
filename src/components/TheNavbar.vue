@@ -132,8 +132,13 @@ export default class TheNavbar extends Vue {
             display: none;
         }
 
-        .nav__item span {
-            display: none;
+        .nav__item {
+            svg {
+                margin: 0 auto;
+            }
+            span {
+                display: none;
+            }
         }
 
         .nav__item.router-link-exact-active {
