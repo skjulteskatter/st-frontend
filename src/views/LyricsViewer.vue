@@ -2,7 +2,9 @@
     <div id="lyrics-wrapper">
         <div class="lyrics">
             <div class="lyrics__credits gap-x" v-if="song">
-                <h1 class="lyrics__number" v-if="song.number">{{ song.number }}</h1>
+                <h1 class="lyrics__number" v-if="song.number">
+                    {{ song.number }}
+                </h1>
                 <div>
                     <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
                     <p
@@ -19,14 +21,19 @@
                         v-if="song.composers.length > 0"
                     >
                         {{ $t("song.composer") }}:
-                        <span v-for="composer in song.composers" :key="composer.id">
+                        <span
+                            v-for="composer in song.composers"
+                            :key="composer.id"
+                        >
                             {{ composer.name }}
                         </span>
                     </p>
                     <p class="lyrics__credits__composer" v-if="melodyOrigin">
                         {{ $t("song.melody") }}: {{ melodyOrigin }}
                     </p>
-                    <p class="lyrics__credits__composer">{{song.yearWritten}}</p>
+                    <p class="lyrics__credits__composer">
+                        {{ song.yearWritten }}
+                    </p>
                 </div>
             </div>
             <div id="text-wrapper">
@@ -140,7 +147,7 @@ export default class LyricsViewer extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #text-wrapper {
     margin-left: 10em;
 }
@@ -159,7 +166,7 @@ export default class LyricsViewer extends Vue {
         padding-bottom: 0.5em;
         display: flex;
         align-items: center;
-        // gap: var(--double-spacing);
+        gap: var(--double-spacing);
 
         &__composer,
         &__author {

@@ -23,7 +23,7 @@ export class Themes {
             light: {
                 background: '#FFFFFF',
                 secondaryBackground: '#F5F6FA',
-                text: '#00292e',
+                text: '#333333',
                 borderColor: '#E6E9F2',
                 primary: '#bd9b60',
             }
