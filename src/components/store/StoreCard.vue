@@ -5,9 +5,9 @@
         :image="product.collections[0].image || placeholderImage"
         border
     >
-        <h2 class="store-card__itle">
+        <h3 class="store-card__itle">
             {{ product.name[languageKey] }}
-        </h2>
+        </h3>
         <div class="store-card__footer">
             <p class="store-card__price">
                 {{ formatPrices(product.prices, "year") }}
