@@ -6,7 +6,7 @@
                 :class="{ disabled: disableButton }"
                 :action="refreshUsers"
                 :loading="loading"
-                loadingLabel="Fetching users"
+                icon="refresh"
                 theme="secondary"
                 >{{ $t("common.update") }}</base-button
             >

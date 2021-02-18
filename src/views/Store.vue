@@ -7,12 +7,12 @@
                 :action="portal"
                 theme="secondary"
                 :loading="loading"
+                icon="collection"
             >
-                {{
-                    `${$t("common.manage")} ${$t(
-                        "common.subscriptions"
-                    ).toLowerCase()}`
-                }}
+                <span>
+                    {{ $t("common.manage") }}
+                    {{ $t("common.subscriptions").toLowerCase() }}
+                </span>
             </base-button>
         </div>
         <div class="store__items">
