@@ -61,7 +61,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(localStorage.getItem('theme') ?? 'dark');
+        this.setTheme(localStorage.getItem('theme') ?? 'light');
     }
 
     public get keys() {
