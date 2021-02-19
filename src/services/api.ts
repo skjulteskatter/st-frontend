@@ -104,6 +104,9 @@ export const stripe = {
     },
     getPortalSession() {
         return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
+    },
+    refreshSubscriptions() {
+        return http.get(`api/Store/Refresh`);
     }
 }
 
@@ -112,6 +115,7 @@ const api = {
     admin,
     songs,
     items,
+    stripe,
 }
 
 export default api

@@ -38,6 +38,9 @@ export const stripeStore = createStore<StripeStore>({
         },
         async getPortal() {
             return await stripeService.portal();
+        },
+        async refreshCollections() {
+            await stripeService.refreshSubscriptions();
         }
     }
 })

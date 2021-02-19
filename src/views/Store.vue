@@ -3,6 +3,14 @@
         <div class="store__header">
             <h1 class="store__title">{{ $t("common.store") }}</h1>
             <base-button
+                theme="secondary"
+                @click="refreshSubscriptions"
+            >
+                <span>
+                    {{ $t("common.refreshSubscriptions")}}
+                </span>
+            </base-button>
+            <base-button
                 v-if="productIds.length"
                 :action="portal"
                 theme="secondary"
@@ -90,6 +98,10 @@ export default class Store extends Vue {
 
     public get productIds() {
         return this.user?.subscriptions.map((s) => s.productId) ?? [];
+    }
+
+    public async refreshSubscriptions() {
+        await this.store.dispatch('refreshCollections');
     }
 }
 </script>

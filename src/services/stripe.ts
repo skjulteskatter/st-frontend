@@ -28,6 +28,10 @@ class StripeService {
     public async portal() {
         return (await api.getPortalSession() as {url: string}).url;
     }
+
+    public refreshSubscriptions() {
+        return api.refreshSubscriptions();
+    }
 }
 
 const stripeService = new StripeService();

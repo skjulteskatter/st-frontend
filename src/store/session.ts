@@ -144,7 +144,7 @@ export const sessionStore = createStore<Session>({
         },
         collections(state): Collection[] {
             if (state.currentUser) {
-                if (state.currentUser.roles.includes("administrator")) {
+                if (state.currentUser.roles.some(r => ["administrator", "extended"].includes(r))) {
                     return state.collections;
                 }
                 const subscriptions = state.currentUser.subscriptions;
