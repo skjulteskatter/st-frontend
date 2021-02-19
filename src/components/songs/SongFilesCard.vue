@@ -11,6 +11,7 @@
             <base-button
                 theme="secondary"
                 :action="() => (filesIsOpen = !filesIsOpen)"
+                icon="arrowDown"
             >
                 <span>{{ $t("common.show") }}</span>
                 <i class="fa fa-angle-down" v-if="!filesIsOpen"></i>
@@ -24,13 +25,6 @@
             >
                 <p class="song-details__files__label">Audio</p>
                 <audio-playlist :audiofiles="song.audioFiles"></audio-playlist>
-                <!-- <figure v-for="file in song.audioFiles" :key="file">
-                    <figcaption>{{ file.name }}</figcaption>
-                    <audio :src="file.directUrl" controls>
-                        Your browser does not support the
-                        <code>audio</code> element.
-                    </audio>
-                </figure> -->
             </div>
             <div
                 class="song-details__files__video"

@@ -85,9 +85,6 @@ export default class Dashboard extends Vue {
 
     &__subscriptions {
         &__cards {
-            //     display: flex;
-            //     gap: var(--st-spacing);
-
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-gap: var(--st-spacing);
@@ -108,7 +105,6 @@ export default class Dashboard extends Vue {
     &__wrapper {
         display: flex;
         flex-direction: column;
-        // gap: var(--st-spacing);
     }
 
     label {
