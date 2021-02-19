@@ -19,7 +19,7 @@ export default class OSMD extends Vue {
             drawTitle: true,
         });
 
-        o.load("/test/osmdtest.mxl").then(() => {
+        o.load("https://dmb-cdn.azureedge.net/files/osmdtest.mxl").then(() => {
             o.render();
         });
     }
