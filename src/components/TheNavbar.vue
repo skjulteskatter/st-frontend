@@ -4,10 +4,10 @@
             <img
                 class="nav__header__logo"
                 alt="logo"
-                src="/img/SongTreasures_logo_v2.svg"
+                src="/img/SongTreasures_logo.svg"
             />
             <img
-                src="/img/SongTreasures_logo_v2_icon.svg"
+                src="/img/SongTreasures_logo_icon.svg"
                 alt="logo"
                 class="nav__header__logo--icon"
             />
