@@ -56,7 +56,7 @@
                     <base-button
                         :action="
                             () =>
-                                currentTransposition < 11
+                                currentTransposition < 12
                                     ? (currentTransposition += 1)
                                     : undefined
                         "
@@ -66,7 +66,7 @@
                     <base-button
                         :action="
                             () =>
-                                currentTransposition > -11
+                                currentTransposition > -12
                                     ? (currentTransposition -= 1)
                                     : undefined
                         "
