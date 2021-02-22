@@ -1,7 +1,10 @@
 <template>
     <div v-if="song">
         <div v-if="lyrics && lyrics.format == 'html'" class="transposed-lyrics-button-list">
-            <base-button v-for="t in Object.keys(transpositions)" :key="t" @click="transpose(transpositions[t])">{{t}}</base-button>
+            <button-group
+                :action="transpose"
+                :buttons="buttons"
+            ></button-group>
         </div>
 
         <base-card v-if="lyrics && lyrics.format == 'html'" border>
@@ -13,6 +16,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton, Modal } from "@/components";
+import { ButtonGroup } from "@/components/inputs";
 import { Collection, Song } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
@@ -22,6 +26,7 @@ import { songKey } from "@/store";
         BaseCard,
         BaseButton,
         Modal,
+        ButtonGroup,
     },
     props: {
         languageKey: {
@@ -40,6 +45,7 @@ export default class TransposedLyricsViewer extends Vue {
     public languageKey = "";
     public title = "";
     public song?: Song;
+    public transposition?: string;
 
     public get melodyOrigin() {
         return (
@@ -55,6 +61,24 @@ export default class TransposedLyricsViewer extends Vue {
 
     public get transpositions() {
         return this.lyrics?.transpositions ?? {};
+    }
+
+    public get buttons() {
+        const buttons: {
+            label: string;
+            value: number;
+            selected: boolean;
+        }[] = [];
+
+        for (const t of Object.keys(this.transpositions)) {
+            buttons.push({
+                label: t,
+                value: this.transpositions[t],
+                selected: this.transposition == t,
+            });
+        }
+
+        return buttons;
     }
 
     public async transpose(to: number) {
