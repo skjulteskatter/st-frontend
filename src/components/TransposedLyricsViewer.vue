@@ -1,5 +1,9 @@
 <template>
     <div v-if="song">
+        <div v-if="lyrics && lyrics.format == 'html'" class="transposed-lyrics-button-list">
+            <base-button v-for="t in Object.keys(transpositions)" :key="t" @click="transpose(transpositions[t])">{{t}}</base-button>
+        </div>
+
         <base-card v-if="lyrics && lyrics.format == 'html'" border>
             <div v-html="lyrics.transposedContent"></div>
         </base-card>
@@ -49,6 +53,20 @@ export default class TransposedLyricsViewer extends Vue {
         return this.songStore.state.transposedLyrics;
     }
 
+    public get transpositions() {
+        return this.lyrics?.transpositions ?? {};
+    }
+
+    public async transpose(to: number) {
+        if (this.song) {
+            const lyrics = await this.collection?.transposeLyrics(
+                this.song.number,
+                to
+            );
+            this.songStore.commit("transposedLyrics", lyrics);
+        }
+    }
+
     public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
     }
@@ -67,6 +85,10 @@ export default class TransposedLyricsViewer extends Vue {
     img {
         max-width: 50%;
     }
+}
+
+.transposed-lyrics-button-list {
+    display: flex;
 }
 
 .song-details {

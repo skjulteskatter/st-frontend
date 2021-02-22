@@ -51,30 +51,6 @@
                     :lyrics="lyrics"
                     :song="song"
                 ></lyrics-settings>
-                <div v-if="transposed">
-                    <div>{{ currentTransposition }}</div>
-                    <base-button
-                        :action="
-                            () =>
-                                currentTransposition < 12
-                                    ? (currentTransposition += 1)
-                                    : undefined
-                        "
-                    >
-                        UP
-                    </base-button>
-                    <base-button
-                        :action="
-                            () =>
-                                currentTransposition > -12
-                                    ? (currentTransposition -= 1)
-                                    : undefined
-                        "
-                    >
-                        DOWN
-                    </base-button>
-                    <base-button :action="apply">APPLY</base-button>
-                </div>
             </div>
         </aside>
     </div>
@@ -162,6 +138,7 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
+        console.log(this.songStore.getters.lyrics);
         return this.songStore.getters.lyrics;
     }
 

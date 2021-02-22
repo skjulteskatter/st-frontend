@@ -80,7 +80,10 @@ interface LyricsInterface {
     format: string;
     hasChords: boolean;
     originalKey: string;
-    transposed: number;
+    transposedToKey: string;
+    transpositions: {
+        [key: string]: number;
+    };
 }
 
 interface Verse {

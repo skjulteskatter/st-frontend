@@ -14,7 +14,10 @@ export class Lyrics implements LyricsInterface {
     hasChords: boolean;
     language: Language;
     originalKey: string;
-    transposed: number;
+    transposedToKey: string;
+    transpositions: {
+        [key: string]: number;
+    };
 
     constructor(lyrics: LyricsInterface) {
         this.number = lyrics.number;
@@ -25,7 +28,8 @@ export class Lyrics implements LyricsInterface {
         this.hasChords = lyrics.hasChords;
         this.originalKey = lyrics.originalKey;
         this.language = lyrics.language;
-        this.transposed = lyrics.transposed;
+        this.transposedToKey = lyrics.transposedToKey;
+        this.transpositions = lyrics.transpositions;
     }
 
     public get verses() {
