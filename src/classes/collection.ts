@@ -144,7 +144,7 @@ export class Collection {
 
     public async transposeLyrics(number: number, transpose: number) {
         this.loadingLyrics = true;
-        const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html', transpose));
+        const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, this._currentLanguage, 'html2', transpose));
         this.loadingLyrics = false;
         return lyrics;
     }
