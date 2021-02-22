@@ -138,7 +138,6 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        console.log(this.songStore.getters.lyrics);
         return this.songStore.getters.lyrics;
     }
 
