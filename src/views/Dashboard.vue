@@ -23,16 +23,18 @@
             </div>
         </base-card>
         <div class="dashboard__subscriptions" v-if="subscriptions.length">
-            <h3>
-                {{ $t("common.your") }}
-                {{ $t("common.subscriptions").toLowerCase() }}
+            <h3 class="dashboard__subscriptions__title">
+                <span>
+                    {{ $t("common.your") }}
+                    {{ $t("common.subscriptions").toLowerCase() }}
+                </span>
+                <Icon name="book" />
             </h3>
             <div class="dashboard__subscriptions__cards">
                 <collection-card
                     v-for="sub in subscribedCollections"
                     :key="sub"
                     :collection="sub"
-                    :image="undefined"
                 ></collection-card>
             </div>
         </div>
@@ -44,12 +46,14 @@ import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
         CollectionCard,
+        Icon,
     },
 })
 export default class Dashboard extends Vue {
@@ -78,12 +82,22 @@ export default class Dashboard extends Vue {
 <style lang="scss">
 .dashboard {
     padding: calc(var(--st-spacing) * 2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--st-spacing);
 
     &__title {
-        margin-top: 0;
+        margin: 0;
     }
 
     &__subscriptions {
+        &__title {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--st-spacing) / 2);
+            margin: 0 0 calc(var(--st-spacing) / 2) 0;
+        }
+
         &__cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
