@@ -1,14 +1,21 @@
 <template>
-    <div v-if="song">
-        <div v-if="lyrics && lyrics.format == 'html'" class="transposed-lyrics-button-list">
-            <button-group
-                :action="transpose"
-                :buttons="buttons"
-            ></button-group>
-        </div>
-
-        <base-card v-if="lyrics && lyrics.format == 'html'" border>
-            <div v-html="lyrics.transposedContent"></div>
+    <div v-if="song" class="transposed-lyrics">
+        <base-card v-if="lyrics && lyrics.format == 'html'" border header>
+            <template #header>
+                <div class="transposed-lyrics__header">
+                    <!-- <small class="transposed-lyrics__header__label">
+                        {{ $t("song.key") }}
+                    </small> -->
+                    <button-group
+                        :action="transpose"
+                        :buttons="buttons"
+                    ></button-group>
+                </div>
+            </template>
+            <div
+                v-html="lyrics.transposedContent"
+                class="transposed-lyrics__body"
+            ></div>
         </base-card>
     </div>
 </template>
@@ -63,7 +70,7 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public get transposition() {
-        return this.lyrics?.transposedToKey ?? this.lyrics?.originalKey ?? '';
+        return this.lyrics?.transposedToKey ?? this.lyrics?.originalKey ?? "";
     }
 
     public get buttons() {
@@ -97,113 +104,52 @@ export default class TransposedLyricsViewer extends Vue {
     public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
     }
-
 }
 </script>
 
 <style lang="scss">
-#biography img {
-    max-width: 100%;
-}
+.transposed-lyrics {
+    width: 100%;
 
-.biography-wrapper {
-    color: var(--st-text-color);
-
-    img {
-        max-width: 50%;
-    }
-}
-
-.transposed-lyrics-button-list {
-    display: flex;
-}
-
-.song-details {
-    --half-spacing: calc(var(--st-spacing) * 0.5);
-
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: var(--st-spacing);
-
-    &__metadata {
-        grid-column: span 4;
-
-        &__credits {
-            display: inline-block;
-            margin: 0 0 0 var(--st-spacing);
-            color: var(--st-primary-color);
-        }
-
-        .card__content {
-            h2 {
-                margin: 0 0 var(--st-spacing);
-            }
-
-            .tag {
-                display: inline-block;
-                margin: 0;
-            }
-        }
-    }
-
-    &__controls {
-        grid-column: span 2;
-
-        .card__content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: var(--st-spacing);
-        }
-
-        &__title {
-            margin: 0;
-            grid-column: span 2;
-        }
-
-        &__update {
-            font-size: 1em;
-            padding: var(--st-spacing);
-        }
-
-        &__open {
-            font-size: 1em;
-        }
-    }
-
-    &__verses {
+    &__header {
+        width: 100%;
         display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
-        &__title {
-            margin-top: 0;
+        &__label {
+            opacity: 0.5;
+            margin-bottom: 0.2em;
         }
+    }
 
-        &__input {
-            border-radius: var(--st-border-radius);
-            overflow: hidden;
-            font-size: 1.1em;
+    &__body {
+        .song {
+            --chord-size: 0.9em;
+            margin: 0 auto;
 
-            display: flex;
-            align-items: center;
+            .verse-title {
+                font-weight: bold;
+            }
 
-            &__check {
-                display: none;
+            .verse {
+                padding: var(--st-spacing);
+                border-left: 1px solid var(--st-border-color);
 
-                &:checked + span {
-                    color: white;
-                    background: var(--st-primary-color);
+                &:not(:last-child) {
+                    margin-bottom: var(--st-spacing);
                 }
-            }
 
-            &__label {
-                width: 100%;
-                padding: var(--half-spacing);
-                background: var(--st-secondary-background-color);
-                color: var(--st-text-color);
-                user-select: none;
-            }
+                .songline {
+                    margin: 0;
+                }
 
-            &:not(:last-child) {
-                margin-bottom: 0.5em;
+                .chords {
+                    color: var(--st-primary-color);
+                    font-weight: bold;
+                    font-size: var(--chord-size);
+                    line-height: var(--chord-size);
+                }
             }
         }
     }
