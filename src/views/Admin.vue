@@ -91,6 +91,7 @@ export default class Subscriptions extends Vue {
     public clearCollection(collection: string) {
         this.disabled.push(collection);
         api.admin.clearCache(collection);
+        // Notification
         this.notifications.dispatch("addNotification", {
             type: "error",
             title: this.$t("notification.cachecleared"),
@@ -102,8 +103,6 @@ export default class Subscriptions extends Vue {
 
 <style lang="scss">
 .api-token {
-    max-width: 720px;
-
     &__token {
         overflow-wrap: break-word;
         font-size: 0.7em;
