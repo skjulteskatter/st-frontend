@@ -1,6 +1,6 @@
 <template>
     <base-card v-if="product" class="store-card" :image="image" border>
-        <h3 class="store-card__itle">
+        <h3 class="store-card__title">
             {{ product.name[languageKey] }}
         </h3>
         <div class="store-card__footer">
