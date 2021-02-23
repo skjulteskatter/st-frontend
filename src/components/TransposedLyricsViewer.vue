@@ -45,7 +45,6 @@ export default class TransposedLyricsViewer extends Vue {
     public languageKey = "";
     public title = "";
     public song?: Song;
-    public transposition?: string;
 
     public get melodyOrigin() {
         return (
@@ -61,6 +60,10 @@ export default class TransposedLyricsViewer extends Vue {
 
     public get transpositions() {
         return this.lyrics?.transpositions ?? {};
+    }
+
+    public get transposition() {
+        return this.lyrics?.transposedToKey ?? this.lyrics?.originalKey ?? '';
     }
 
     public get buttons() {
