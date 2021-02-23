@@ -5,8 +5,11 @@
             class="card__image"
             :style="{ backgroundImage: `url(${image})` }"
         ></div>
+        <div class="card__header" v-if="header">
+            <slot name="header" />
+        </div>
         <div class="card__content">
-            <slot></slot>
+            <slot name="default" />
         </div>
     </div>
 </template>
@@ -22,10 +25,14 @@ import { Options, Vue } from "vue-class-component";
         image: {
             type: String,
         },
+        header: {
+            type: Boolean,
+        },
     },
 })
 export default class Card extends Vue {
     public border = false;
+    public header = false;
     public image = "";
 }
 </script>
@@ -55,12 +62,17 @@ export default class Card extends Vue {
         min-height: 150px;
     }
 
-    &__content {
+    &__content,
+    &__header {
         padding: var(--st-spacing);
 
         & > :first-child {
             margin-top: 0;
         }
+    }
+
+    &__header {
+        border-bottom: 1px solid var(--st-border-color);
     }
 }
 </style>
