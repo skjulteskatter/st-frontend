@@ -190,6 +190,7 @@ export default class TheNavbar extends Vue {
             max-height: var(--size);
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
     }
 
