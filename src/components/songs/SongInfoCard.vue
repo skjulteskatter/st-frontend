@@ -1,61 +1,69 @@
 <template>
-    <base-card class="song-details__metadata" border v-if="song">
-        <h2 class="song-details__metadata__title">
-            <span style="opacity: 0.5; padding-right: 0.5em">
-                {{ song.number }}
-            </span>
-            <span>
-                {{ title }}
-            </span>
-        </h2>
-        <span v-if="verses" class="lyrics-settings__metadata__verse-count tag">
-            {{ verses }} {{ $t("song.verses") }}
-        </span>
-        <p class="song-details__metadata__credits gap-x">
-            <span>{{ $t("song.author") }}: </span>
-            <span v-for="author in song.authors" :key="author.id">
-                <router-link
-                    :to="{
-                        name: 'contributor',
-                        params: {
-                            collection: $route.params.collection,
-                            contributor: author.id,
-                        },
-                    }"
-                >
-                    {{ author.name }}
-                </router-link>
-            </span>
-        </p>
-        <p
-            v-if="song.composers.length > 0"
-            class="song-details__metadata__credits gap-x"
-        >
-            <span>{{ $t("song.composer") }}: </span>
+    <base-card class="song-details__metadata" border v-if="song" header>
+        <template #header>
+            <h2 class="song-details__metadata__title">
+                <span style="opacity: 0.5; padding-right: 0.5em">
+                    {{ song.number }}
+                </span>
+                <span>
+                    {{ title }}
+                </span>
+            </h2>
             <span
-                v-for="composer in song.composers"
-                :key="composer.id"
-                :label="composer.name"
+                v-if="verses"
+                class="lyrics-settings__metadata__verse-count tag"
             >
-                <router-link
-                    :to="{
-                        name: 'contributor',
-                        params: {
-                            collection: $route.params.collection,
-                            contributor: composer.id,
-                        },
-                    }"
-                >
-                    {{ composer.name }}
-                </router-link>
+                {{ verses }} {{ $t("song.verses") }}
             </span>
-        </p>
-        <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
-            <span>{{ melodyOrigin }}</span>
-        </p>
-        <p class="lyrics-settings__metadata__credits" v-if="song.yearWritten">
-            <span>{{ song.yearWritten }}</span>
-        </p>
+            <p class="song-details__metadata__credits gap-x">
+                <span>{{ $t("song.author") }}: </span>
+                <span v-for="author in song.authors" :key="author.id">
+                    <router-link
+                        :to="{
+                            name: 'contributor',
+                            params: {
+                                collection: $route.params.collection,
+                                contributor: author.id,
+                            },
+                        }"
+                    >
+                        {{ author.name }}
+                    </router-link>
+                </span>
+            </p>
+            <p
+                v-if="song.composers.length > 0"
+                class="song-details__metadata__credits gap-x"
+            >
+                <span>{{ $t("song.composer") }}: </span>
+                <span
+                    v-for="composer in song.composers"
+                    :key="composer.id"
+                    :label="composer.name"
+                >
+                    <router-link
+                        :to="{
+                            name: 'contributor',
+                            params: {
+                                collection: $route.params.collection,
+                                contributor: composer.id,
+                            },
+                        }"
+                    >
+                        {{ composer.name }}
+                    </router-link>
+                </span>
+            </p>
+            <p class="lyrics-settings__metadata__credits" v-if="melodyOrigin">
+                <span>{{ melodyOrigin }}</span>
+            </p>
+            <p
+                class="lyrics-settings__metadata__credits"
+                v-if="song.yearWritten"
+            >
+                <span>{{ song.yearWritten }}</span>
+            </p>
+        </template>
         <div v-if="description" v-html="description"></div>
     </base-card>
 </template>
