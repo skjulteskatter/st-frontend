@@ -78,9 +78,7 @@
 import { notificationStore, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import Modal from "@/components/Modal.vue";
+import { BaseCard, BaseButton, Modal } from "@/components";
 
 @Options({
     components: {
