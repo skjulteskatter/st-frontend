@@ -2,26 +2,29 @@
     <div class="store">
         <div class="store__header">
             <h1 class="store__title">{{ $t("common.store") }}</h1>
-            <base-button
-                theme="secondary"
-                @click="refreshSubscriptions"
-            >
-                <span>
-                    {{ $t("common.refreshSubscriptions")}}
-                </span>
-            </base-button>
-            <base-button
-                v-if="productIds.length"
-                :action="portal"
-                theme="secondary"
-                :loading="loading"
-                icon="collection"
-            >
-                <span>
-                    {{ $t("common.manage") }}
-                    {{ $t("common.subscriptions").toLowerCase() }}
-                </span>
-            </base-button>
+            <div class="store__header__buttons">
+                <base-button
+                    theme="secondary"
+                    @click="refreshSubscriptions"
+                    icon="refresh"
+                >
+                    <span>
+                        {{ $t("common.refreshSubscriptions") }}
+                    </span>
+                </base-button>
+                <base-button
+                    v-if="productIds.length"
+                    :action="portal"
+                    theme="secondary"
+                    :loading="loading"
+                    icon="collection"
+                >
+                    <span>
+                        {{ $t("common.manage") }}
+                        {{ $t("common.subscriptions").toLowerCase() }}
+                    </span>
+                </base-button>
+            </div>
         </div>
         <div class="store__items">
             <store-card
@@ -101,7 +104,7 @@ export default class Store extends Vue {
     }
 
     public async refreshSubscriptions() {
-        await this.store.dispatch('refreshCollections');
+        await this.store.dispatch("refreshCollections");
     }
 }
 </script>
@@ -119,6 +122,11 @@ export default class Store extends Vue {
         align-items: center;
         justify-content: space-between;
         margin-bottom: var(--st-spacing);
+
+        &__buttons {
+            display: flex;
+            gap: calc(var(--st-spacing) / 2);
+        }
     }
 
     hr {
