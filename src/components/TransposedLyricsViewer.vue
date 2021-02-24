@@ -18,7 +18,7 @@
                             :value="b.value"
                             :key="b"
                         >
-                            {{ b.label }}
+                            {{ b.label}}
                         </option>
                     </select>
                     <!-- <button-group
@@ -133,6 +133,8 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     &__body {
+        width: 100%;
+
         .song {
             --chord-size: 0.9em;
             margin: 0 auto;
