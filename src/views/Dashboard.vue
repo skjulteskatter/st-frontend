@@ -30,13 +30,13 @@
                 </span>
                 <Icon name="book" />
             </h3>
-            <base-card secondary class="dashboard__subscriptions__cards">
+            <div class="dashboard__subscriptions__cards">
                 <collection-card
                     v-for="sub in subscribedCollections"
                     :key="sub"
                     :collection="sub"
                 ></collection-card>
-            </base-card>
+            </div>
         </div>
     </div>
 </template>
@@ -99,17 +99,15 @@ export default class Dashboard extends Vue {
         }
 
         &__cards {
-            .card__content {
-                display: grid;
-                grid-template-columns: repeat(6, 1fr);
-                grid-gap: var(--st-spacing);
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: var(--st-spacing);
 
-                @media screen and (max-width: 1000px) {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                @media screen and (max-width: 600px) {
-                    grid-template-columns: 1fr;
-                }
+            @media screen and (max-width: 1000px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            @media screen and (max-width: 600px) {
+                grid-template-columns: 1fr;
             }
         }
     }
