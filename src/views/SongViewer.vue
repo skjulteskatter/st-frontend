@@ -13,7 +13,29 @@
                 :lyrics="transposedLyrics"
                 :song="song"
                 ref="transposed"
-            ></transposed-lyrics-viewer>
+            >
+                
+            <div class="transposed-lyrics__header__settings">
+                <base-button @click="exitTransposition">
+                    {{$t("common.close")}}
+                </base-button>
+                <select
+                    id="language"
+                    name="language"
+                    v-model="selectedLanguage"
+                    @change="translateTo"
+                >
+                    <option
+                        v-for="l in languages"
+                        :value="l.key"
+                        :key="l.key"
+                    >
+                        {{ l.name }}
+                    </option>
+                </select>
+            </div>
+            
+            </transposed-lyrics-viewer>
 
             <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
             </open-sheet-music-display> -->
@@ -48,8 +70,11 @@
             </song-details>
         </div>
 
-        <aside class="song-viewer__sidebar">
+        <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
+                <base-button @click="sidebar = false">
+                    {{ $t("common.close") }}
+                </base-button>
                 <base-button v-if="extended && !transposed" @click="extend">
                     {{ $t("song.advanced") }}
                 </base-button>
@@ -105,6 +130,7 @@ export default class SongViewer extends Vue {
     public currentTransposition = 0;
     public audioPlayer = false;
     public selectedLanguage = this.languageKey;
+    public sidebar = true;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
@@ -127,11 +153,12 @@ export default class SongViewer extends Vue {
                 this.songStore.commit("view", "default");
             }
         }
-        this.selectedLanguage = this.languages.find(
+
+        this.selectedLanguage = (this.languages.find(
             (l) => l.key == this.languageKey
         )
             ? this.languageKey
-            : this.languages[0]?.key;
+            : this.languages[0]?.key) ?? this.languageKey;
     }
 
     public get extended() {
@@ -143,21 +170,15 @@ export default class SongViewer extends Vue {
     }
 
     public async transpose() {
-        if (this.type === "transpose") {
-            this.songStore.commit("view", "default");
-            this.transposed = false;
-        } else {
-            console.log(this.languageKey);
-            this.store.commit("extend", false);
-            const lyrics = await this.collection?.transposeLyrics(
-                this.song?.number ?? 0,
-                0,
-                this.songStore.state.language
-            );
-            this.songStore.commit("transposedLyrics", lyrics);
-            this.songStore.commit("view", "transpose");
-            this.transposed = true;
-        }
+        this.store.commit("extend", false);
+        const lyrics = await this.collection?.transposeLyrics(
+            this.song?.number ?? 0,
+            0,
+            this.songStore.state.language
+        );
+        this.songStore.commit("transposedLyrics", lyrics);
+        this.songStore.commit("view", "transpose");
+        this.transposed = true;
     }
 
     public get type() {
@@ -213,8 +234,6 @@ export default class SongViewer extends Vue {
     }
 
     public get sheetMusicUrl() {
-        console.log(this.song?.sheetMusic);
-
         return this.song?.sheetMusic[0]?.directUrl;
     }
 
@@ -229,6 +248,10 @@ export default class SongViewer extends Vue {
                 (this.$refs.transposed as TransposedLyricsViewer).transpose();
             }
         }
+    }
+    
+    public exitTransposition() {
+        this.songStore.commit("view", "default");
     }
 }
 </script>

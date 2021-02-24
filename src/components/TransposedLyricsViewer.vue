@@ -23,6 +23,7 @@
                             </option>
                         </select>
                     </div>
+                    <slot/>
                 </div>
             </template>
             <div
@@ -129,6 +130,13 @@ export default class TransposedLyricsViewer extends Vue {
             display: block;
             opacity: 0.5;
             margin-bottom: 0.2em;
+        }
+
+        &__settings {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            gap: calc(var(--st-spacing) / 2);
         }
     }
 
