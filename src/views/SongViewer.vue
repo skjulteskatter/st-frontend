@@ -127,6 +127,11 @@ export default class SongViewer extends Vue {
                 this.songStore.commit("view", "default");
             }
         }
+        this.selectedLanguage = this.languages.find(
+            (l) => l.key == this.languageKey
+        )
+            ? this.languageKey
+            : this.languages[0]?.key;
     }
 
     public get extended() {
@@ -180,9 +185,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song(): Song | undefined {
-        return this.collection?.songs.find(
-            (s) => s.number == parseInt(this.$route.params.number as string)
-        );
+        return this.collection?.songs.find((s) => s.number == this.number);
     }
 
     public get languageKey() {
