@@ -7,7 +7,7 @@
                 :languageKey="languageKey"
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
-            <base-card style="top:0" class="song-viewer__settings">
+            <base-card v-if="song.hasLyrics" style="top:0" class="song-viewer__settings">
                 <base-button @click="transpose">
                     {{ $t("song.transpose") }}
                 </base-button>
@@ -137,6 +137,7 @@ export default class SongViewer extends Vue {
                 this.songStore.commit("view", "default");
             }
         }
+        this.selectedLanguage = this.languages.find(l => l.key == this.languageKey) ? this.languageKey : this.languages[0]?.key;
     }
 
     public get extended() {
@@ -191,7 +192,7 @@ export default class SongViewer extends Vue {
 
     public get song(): Song | undefined {
         return this.collection?.songs.find(
-            (s) => s.number == parseInt(this.$route.params.number as string)
+            (s) => s.number == this.number
         );
     }
 
