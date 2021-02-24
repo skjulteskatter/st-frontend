@@ -144,20 +144,29 @@ export class Collection {
 
     public async transposeLyrics(number: number, transpose: number, language?: string) {
         this.loadingLyrics = true;
-        const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose));
-        this.loadingLyrics = false;
-        return lyrics;
+        try {
+            const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose));
+            return lyrics;
+        }
+        finally {
+            this.loadingLyrics = false;
+        }
     }
 
     public async getLyrics(number: number, language: string) {
         this.loadingLyrics = true;
-        let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
-        if (!lyrics) {
-            lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0));
-            this.lyrics.push(lyrics);
+        try {
+
+            let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
+            if (!lyrics) {
+                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0));
+                this.lyrics.push(lyrics);
+            }
+            return lyrics;
         }
-        this.loadingLyrics = false;
-        return lyrics;
+        finally {
+            this.loadingLyrics = false;
+        }
     }
 
     public get hasAuthors(): boolean {

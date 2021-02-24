@@ -103,7 +103,7 @@ export default class SongInfoCard extends Vue {
             this.song?.description[this.languageKey] ??
             this.song?.description.en ??
             this.song?.description.no ??
-            ""
+            undefined
         );
     }
 
