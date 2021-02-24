@@ -7,39 +7,36 @@
                 :languageKey="languageKey"
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
-            <div style="top:0" class="song-viewer__settings">
-                <base-card>
-                    <base-button @click="transpose">
-                        {{ $t("song.transpose") }}
-                    </base-button>
-                
-                    <select
-                        id="language"
-                        name="language"
-                        v-model="selectedLanguage"
-                        @change="translateTo"
+            <base-card style="top:0" class="song-viewer__settings">
+                <base-button @click="transpose">
+                    {{ $t("song.transpose") }}
+                </base-button>
+            
+                <select
+                    id="language"
+                    name="language"
+                    v-model="selectedLanguage"
+                    @change="translateTo"
+                >
+                    <option
+                        v-for="l in languages"
+                        :value="l.key"
+                        :key="l.key"
                     >
-                        <option
-                            v-for="l in languages"
-                            :value="l.key"
-                            :key="l.key"
-                        >
-                            {{ l.name }}
-                        </option>
-                    </select>
-                </base-card>
-            </div>
+                        {{ l.name }}
+                    </option>
+                </select>
+            </base-card>
 
             <transposed-lyrics-viewer
                 v-if="type === 'transpose' && lyrics"
-                :languageKey="languageKey"
                 :lyrics="transposedLyrics"
                 :song="song"
                 ref="transposed"
             ></transposed-lyrics-viewer>
 
-            <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
-            </open-sheet-music-display>
+            <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
+            </open-sheet-music-display> -->
 
             <div class="loader" v-if="loadingLyrics"></div>
 
@@ -155,11 +152,12 @@ export default class SongViewer extends Vue {
             this.songStore.commit("view", "default");
             this.transposed = false;
         } else {
+            console.log(this.languageKey);
             this.store.commit("extend", false);
             const lyrics = await this.collection?.transposeLyrics(
                 this.song?.number ?? 0,
                 0,
-                this.languageKey,
+                this.songStore.state.language,
             );
             this.songStore.commit("transposedLyrics", lyrics);
             this.songStore.commit("view", "transpose");
