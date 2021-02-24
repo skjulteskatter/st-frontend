@@ -8,7 +8,7 @@
     >
         <img
             class="collection-card__image"
-            :src="image"
+            :src="`${image}?w=300`"
             :alt="collection.getName(languageKey)"
         />
         <h3 class="collection-card__title">
@@ -76,7 +76,8 @@ export default class CollectionCard extends Vue {
 
     &__image {
         border-radius: var(--st-border-radius);
-        max-width: 100%;
+        max-width: 400px;
+        width: 100%;
     }
 
     &__title {
