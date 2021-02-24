@@ -141,8 +141,13 @@ export default class SongViewer extends Vue {
 
     public async transpose() {
         this.store.commit("extend", false);
+        const lyrics = await this.collection?.transposeLyrics(
+            this.song?.number ?? 0,
+            0,
+            this.languageKey,
+        );
+        this.songStore.commit("transposedLyrics", lyrics);
         this.songStore.commit("view", "transpose");
-        this.songStore.dispatch("transpose", 0);
         this.transposed = true;
     }
 
