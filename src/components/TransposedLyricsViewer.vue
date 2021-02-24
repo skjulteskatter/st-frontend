@@ -3,28 +3,26 @@
         <base-card v-if="lyrics && lyrics.format == 'html'" border header>
             <template #header>
                 <div class="transposed-lyrics__header">
-                    <!-- <small class="transposed-lyrics__header__label">
-                        {{ $t("song.key") }}
-                    </small> -->
-                    
-                    <select
-                        id="transposition"
-                        name="transposition"
-                        v-model="selectedTransposition"
-                        @change="transpose"
-                    >
-                        <option
-                            v-for="b in buttons"
-                            :value="b.value"
-                            :key="b"
+                    <div class="transposed-lyrics__header__item">
+                        <small class="transposed-lyrics__header__label">
+                            {{ $t("song.key") }}
+                        </small>
+
+                        <select
+                            id="transposition"
+                            name="transposition"
+                            v-model="selectedTransposition"
+                            @change="transpose"
                         >
-                            {{ b.label}}
-                        </option>
-                    </select>
-                    <!-- <button-group
-                        :action="transpose"
-                        :buttons="buttons"
-                    ></button-group> -->
+                            <option
+                                v-for="b in buttons"
+                                :value="b.value"
+                                :key="b"
+                            >
+                                {{ b.label }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </template>
             <div
@@ -56,7 +54,7 @@ import { songKey } from "@/store";
         },
         lyrics: {
             type: Object,
-        }
+        },
     },
 })
 export default class TransposedLyricsViewer extends Vue {
@@ -67,7 +65,9 @@ export default class TransposedLyricsViewer extends Vue {
     public title = "";
     public song?: Song;
     public lyrics?: Lyrics;
-    public selectedTransposition = this.transposition ? this.transpositions[this.transposition] : 0;
+    public selectedTransposition = this.transposition
+        ? this.transpositions[this.transposition]
+        : 0;
 
     public get transpositions() {
         return this.lyrics?.transpositions ?? {};
@@ -104,7 +104,7 @@ export default class TransposedLyricsViewer extends Vue {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
                 this.selectedTransposition,
-                this.languageKey,
+                this.languageKey
             );
             this.songStore.commit("transposedLyrics", lyrics);
         }
@@ -123,10 +123,10 @@ export default class TransposedLyricsViewer extends Vue {
     &__header {
         width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        gap: calc(var(--st-spacing) / 2);
 
         &__label {
+            display: block;
             opacity: 0.5;
             margin-bottom: 0.2em;
         }

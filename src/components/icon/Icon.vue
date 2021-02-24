@@ -20,7 +20,7 @@
             />
         </g>
         <path
-            v-if="icons[name].path"
+            v-else-if="icons[name].path"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"

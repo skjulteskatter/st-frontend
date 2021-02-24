@@ -2,7 +2,7 @@
     <div class="loader" v-if="loading"></div>
     <div class="song-list" v-if="collection">
         <div class="song-list__header">
-            <h1 class="song-list__title">{{ $t("common.songs") }}</h1>
+            <h1 class="song-list__title">{{ collection.name[languageKey] }}</h1>
             <div class="song-list__filters gap-x">
                 <div class="song-list__filters__field">
                     <label for="song-category">{{ $t("song.category") }}</label>

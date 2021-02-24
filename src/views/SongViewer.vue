@@ -7,26 +7,6 @@
                 :languageKey="languageKey"
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
-            <base-card v-if="song.hasLyrics" style="top:0" class="song-viewer__settings">
-                <base-button @click="transpose">
-                    {{ $t("song.transpose") }}
-                </base-button>
-            
-                <select
-                    id="language"
-                    name="language"
-                    v-model="selectedLanguage"
-                    @change="translateTo"
-                >
-                    <option
-                        v-for="l in languages"
-                        :value="l.key"
-                        :key="l.key"
-                    >
-                        {{ l.name }}
-                    </option>
-                </select>
-            </base-card>
 
             <transposed-lyrics-viewer
                 v-if="type === 'transpose' && lyrics"
@@ -45,7 +25,27 @@
                 :languageKey="languageKey"
                 :lyrics="lyrics"
                 :song="song"
-            ></song-details>
+            >
+                <div class="song-viewer__settings">
+                    <base-button @click="transpose" icon="music">
+                        {{ $t("song.chords") }}
+                    </base-button>
+                    <select
+                        id="language"
+                        name="language"
+                        v-model="selectedLanguage"
+                        @change="translateTo"
+                    >
+                        <option
+                            v-for="l in languages"
+                            :value="l.key"
+                            :key="l.key"
+                        >
+                            {{ l.name }}
+                        </option>
+                    </select>
+                </div>
+            </song-details>
         </div>
 
         <aside class="song-viewer__sidebar">
@@ -53,16 +53,6 @@
                 <base-button v-if="extended && !transposed" @click="extend">
                     {{ $t("song.advanced") }}
                 </base-button>
-                <!-- <base-dropdown class="language-dropdown" :label="language">
-                    <p
-                        class="language-dropdown__item selectable"
-                        @click="translateTo(l.key)"
-                        v-for="l in languages"
-                        :key="l.key"
-                    >
-                        {{ l.name }}
-                    </p>
-                </base-dropdown> -->
             </div>
             <div class="song-viewer__sidebar__content">
                 <song-files-card :song="song"></song-files-card>
@@ -129,7 +119,7 @@ export default class SongViewer extends Vue {
         }
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
-        
+
         if (this.type === "transpose") {
             if (this.song?.hasLyrics) {
                 this.transpose();
@@ -137,7 +127,11 @@ export default class SongViewer extends Vue {
                 this.songStore.commit("view", "default");
             }
         }
-        this.selectedLanguage = this.languages.find(l => l.key == this.languageKey) ? this.languageKey : this.languages[0]?.key;
+        this.selectedLanguage = this.languages.find(
+            (l) => l.key == this.languageKey
+        )
+            ? this.languageKey
+            : this.languages[0]?.key;
     }
 
     public get extended() {
@@ -158,7 +152,7 @@ export default class SongViewer extends Vue {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song?.number ?? 0,
                 0,
-                this.songStore.state.language,
+                this.songStore.state.language
             );
             this.songStore.commit("transposedLyrics", lyrics);
             this.songStore.commit("view", "transpose");
@@ -191,9 +185,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song(): Song | undefined {
-        return this.collection?.songs.find(
-            (s) => s.number == this.number
-        );
+        return this.collection?.songs.find((s) => s.number == this.number);
     }
 
     public get languageKey() {
@@ -228,7 +220,10 @@ export default class SongViewer extends Vue {
 
     public async translateTo() {
         if (this.song) {
-            await this.collection?.getLyrics(this.song.number, this.selectedLanguage);
+            await this.collection?.getLyrics(
+                this.song.number,
+                this.selectedLanguage
+            );
             this.songStore.commit("language", this.selectedLanguage);
             if (this.type === "transpose") {
                 (this.$refs.transposed as TransposedLyricsViewer).transpose();
@@ -282,7 +277,7 @@ export default class SongViewer extends Vue {
 
         &__buttons {
             display: flex;
-            gap: calc(var(--st-spacing) * 0.5);
+            gap: calc(var(--st-spacing) / 2);
         }
 
         .language-dropdown {
@@ -297,8 +292,10 @@ export default class SongViewer extends Vue {
     }
 
     &__settings {
+        width: 100%;
         display: flex;
-        align-items: flex-end;
+        justify-content: flex-end;
+        gap: calc(var(--st-spacing) / 2);
     }
 }
 </style>

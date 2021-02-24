@@ -1,5 +1,8 @@
 <template>
-    <base-card class="song-details__lyrics" v-if="song">
+    <base-card class="song-details__lyrics" v-if="song" header>
+        <template #header>
+            <slot />
+        </template>
         <div
             v-for="(verse, i) in text"
             :key="verse.name + verse.content[0] + i"
@@ -12,14 +15,14 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
-import Modal from "@/components/Modal.vue";
+import { BaseCard, Modal, BaseButton } from "@/components";
 import { Lyrics, Song } from "@/classes";
 
 @Options({
     components: {
         BaseCard,
         Modal,
+        BaseButton,
     },
     props: {
         lyrics: {
@@ -81,18 +84,5 @@ export default class SongDetails extends Vue {
         width: 100%;
         flex-grow: 1;
     }
-
-    // &__files {
-    //     .card__content {
-    //         .files__container {
-    //             display: flex;
-    //             flex-direction: column;
-    //         }
-    //     }
-
-    //     figure {
-    //         margin: 0 0 0.5em 0;
-    //     }
-    // }
 }
 </style>
