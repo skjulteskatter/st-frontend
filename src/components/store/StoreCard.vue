@@ -1,25 +1,4 @@
 <template>
-    <!-- <base-card v-if="product" class="store-card" :image="image" border>
-        <h3 class="store-card__title">
-            {{ product.name[languageKey] }}
-        </h3>
-        <div class="store-card__footer">
-            <p class="store-card__price">
-                {{ formatPrices(product.prices, "year") }}
-            </p>
-            <base-button
-                class="store-card__button"
-                v-if="isPurchaseable"
-                icon="shop"
-                :action="action"
-            >
-                <span>{{ $t("store.buy") }}</span>
-            </base-button>
-            <span class="store-card__subtitle" v-else>
-                {{ $t("store.alreadyown") }}
-            </span>
-        </div>
-    </base-card> -->
     <div class="store-card" v-if="product">
         <img
             class="store-card__image"
@@ -90,7 +69,9 @@ export default class StoreCard extends Vue {
     }
 
     public get image() {
-        return this.product?.collections[0].image ?? "/img/placeholder.png";
+        return this.product?.collections[0].image
+            ? `${this.product?.collections[0].image}?w=400`
+            : "/img/placeholder.png";
     }
 
     public get languageKey() {
