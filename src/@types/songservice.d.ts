@@ -15,6 +15,7 @@ interface SongInterface {
     originCountry: Country;
     audioFiles: MediaFile[];
     videoFiles: MediaFile[];
+    hasLyrics: boolean;
     details: {
         [languageKey: string]: string;
     };

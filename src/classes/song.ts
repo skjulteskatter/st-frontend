@@ -23,6 +23,7 @@ export class Song implements SongInterface {
         [languageKey: string]: string;
     } = {};
     public melodyOrigin = {} as Origin;
+    public hasLyrics: boolean;
 
     constructor(song: SongInterface) {
         this.id = song.id;
@@ -39,6 +40,7 @@ export class Song implements SongInterface {
         this.melodyOrigin = song.melodyOrigin;
         this.type = song.type;
         this.themes = song.themes;
+        this.hasLyrics = song.hasLyrics;
     }
 
     public language(code: string): boolean {

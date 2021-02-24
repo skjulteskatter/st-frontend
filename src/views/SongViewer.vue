@@ -121,8 +121,13 @@ export default class SongViewer extends Vue {
         }
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
+        
         if (this.type === "transpose") {
-            this.transpose();
+            if (this.song?.hasLyrics) {
+                this.transpose();
+            } else {
+                this.songStore.commit("view", "default");
+            }
         }
     }
 
