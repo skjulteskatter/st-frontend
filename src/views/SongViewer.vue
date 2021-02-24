@@ -27,8 +27,8 @@
                 :song="song"
             >
                 <div class="song-viewer__settings">
-                    <base-button @click="transpose">
-                        {{ $t("song.transpose") }}
+                    <base-button @click="transpose" icon="music">
+                        {{ $t("song.chords") }}
                     </base-button>
                     <select
                         id="language"
