@@ -71,7 +71,11 @@
                 </div>
             </div>
         </template>
-        <div v-if="description" v-html="description"></div>
+        <div
+            v-if="description"
+            class="song-details__metadata__description"
+            v-html="description"
+        ></div>
     </base-card>
 </template>
 <script lang="ts">
@@ -139,6 +143,16 @@ export default class SongInfoCard extends Vue {
         color: var(--st-primary-color);
         display: block;
         margin-bottom: 0.2rem;
+    }
+
+    &__description {
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-spacing);
+
+        & > * {
+            margin: 0;
+        }
     }
 
     a {
