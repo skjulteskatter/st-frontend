@@ -8,8 +8,8 @@
                     </small> -->
                     
                     <select
-                        id="language"
-                        name="language"
+                        id="transposition"
+                        name="transposition"
                         v-model="selectedTransposition"
                         @change="transpose"
                     >
@@ -51,9 +51,6 @@ import { songKey } from "@/store";
         ButtonGroup,
     },
     props: {
-        languageKey: {
-            type: String,
-        },
         song: {
             type: Object,
         },
@@ -64,18 +61,9 @@ export default class TransposedLyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public description = "";
-    public languageKey = "";
     public title = "";
     public song?: Song;
     public selectedTransposition = this.transposition ? this.transpositions[this.transposition] : 0;
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.name[this.languageKey] ??
-            this.song?.melodyOrigin?.name.no ??
-            undefined
-        );
-    }
 
     public get lyrics() {
         return this.songStore.state.transposedLyrics;
@@ -87,6 +75,10 @@ export default class TransposedLyricsViewer extends Vue {
 
     public get transposition() {
         return this.lyrics?.transposedToKey ?? this.lyrics?.originalKey ?? "";
+    }
+
+    public get languageKey() {
+        return this.songStore.state.language;
     }
 
     public get buttons() {
@@ -112,6 +104,7 @@ export default class TransposedLyricsViewer extends Vue {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
                 this.selectedTransposition,
+                this.languageKey,
             );
             this.songStore.commit("transposedLyrics", lyrics);
         }

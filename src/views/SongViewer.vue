@@ -32,7 +32,22 @@
                 <base-button @click="transpose">
                     {{ $t("song.transpose") }}
                 </base-button>
-                <base-dropdown class="language-dropdown" :label="language">
+                
+                <select
+                    id="language"
+                    name="language"
+                    v-model="selectedLanguage"
+                    @change="translateTo"
+                >
+                    <option
+                        v-for="l in languages"
+                        :value="l.key"
+                        :key="l.key"
+                    >
+                        {{ l.name }}
+                    </option>
+                </select>
+                <!-- <base-dropdown class="language-dropdown" :label="language">
                     <p
                         class="language-dropdown__item selectable"
                         @click="translateTo(l.key)"
@@ -41,7 +56,7 @@
                     >
                         {{ l.name }}
                     </p>
-                </base-dropdown>
+                </base-dropdown> -->
             </div>
             <div class="song-viewer__sidebar__content">
                 <song-files-card :song="song"></song-files-card>
@@ -89,6 +104,7 @@ export default class SongViewer extends Vue {
     public number = 0;
     public currentTransposition = 0;
     public audioPlayer = false;
+    public selectedLanguage = this.languageKey;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
@@ -175,10 +191,10 @@ export default class SongViewer extends Vue {
         return this.songStore.getters.collection;
     }
 
-    public async translateTo(language: string) {
+    public async translateTo() {
         if (this.song) {
-            await this.collection?.getLyrics(this.song.number, language);
-            this.songStore.commit("language", language);
+            await this.collection?.getLyrics(this.song.number, this.selectedLanguage);
+            this.songStore.commit("language", this.selectedLanguage);
         }
     }
 }
