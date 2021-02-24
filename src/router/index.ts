@@ -13,8 +13,6 @@ const SongList = () => import(/* webpackChunkName: 'songList' */ '../views/SongL
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 const ContributorView = () => import(/* webpackChunkName: 'contributor' */ '../views/ContributorView.vue');
 
-const OpenSheetMusicDisplay = () => import(/* webpackChunkName: 'osmd' */ '../views/OpenSheetMusicDisplay.vue');
-
 const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ '../views/dashboard/CompleteSearch.vue');
 
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue');
@@ -90,11 +88,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/login',
         name: 'login',
         component: Login
-    },
-    {
-        path: '/osmd',
-        name: 'osmd',
-        component: OpenSheetMusicDisplay,
     },
     {
         path: '/create',

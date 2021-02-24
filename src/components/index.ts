@@ -9,6 +9,8 @@ import TransposedLyricsViewer from './TransposedLyricsViewer.vue';
 import SettingsCard from './SettingsCard.vue';
 import CollectionCard from './CollectionCard.vue';
 
+import OpenSheetMusicDisplay from './OpenSheetMusicDisplay.vue';
+
 export {
     BaseCard,
     BaseButton,
@@ -18,5 +20,6 @@ export {
     OptionsComponent,
     TransposedLyricsViewer,
     SettingsCard,
-    CollectionCard
+    CollectionCard,
+    OpenSheetMusicDisplay,
 }

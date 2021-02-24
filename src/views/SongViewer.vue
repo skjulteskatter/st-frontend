@@ -12,22 +12,22 @@
                     <base-button @click="transpose">
                         {{ $t("song.transpose") }}
                     </base-button>
-                </base-card>
                 
-                <select
-                    id="language"
-                    name="language"
-                    v-model="selectedLanguage"
-                    @change="translateTo"
-                >
-                    <option
-                        v-for="l in languages"
-                        :value="l.key"
-                        :key="l.key"
+                    <select
+                        id="language"
+                        name="language"
+                        v-model="selectedLanguage"
+                        @change="translateTo"
                     >
-                        {{ l.name }}
-                    </option>
-                </select>
+                        <option
+                            v-for="l in languages"
+                            :value="l.key"
+                            :key="l.key"
+                        >
+                            {{ l.name }}
+                        </option>
+                    </select>
+                </base-card>
             </div>
 
             <transposed-lyrics-viewer
@@ -37,6 +37,9 @@
                 :song="song"
                 ref="transposed"
             ></transposed-lyrics-viewer>
+
+            <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
+            </open-sheet-music-display>
 
             <div class="loader" v-if="loadingLyrics"></div>
 
@@ -86,6 +89,8 @@ import {
     SongDetails,
     TransposedLyricsViewer,
     BaseButton,
+    OpenSheetMusicDisplay,
+    BaseCard,
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
@@ -101,6 +106,8 @@ import { Collection, Lyrics, Song } from "@/classes";
         SongFilesCard,
         BaseDropdown,
         ButtonGroup,
+        OpenSheetMusicDisplay,
+        BaseCard,
     },
 })
 export default class SongViewer extends Vue {
@@ -212,6 +219,12 @@ export default class SongViewer extends Vue {
 
     public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
+    }
+
+    public get sheetMusicUrl() {
+        console.log(this.song?.sheetMusic);
+
+        return this.song?.sheetMusic[0]?.directUrl;
     }
 
     public async translateTo() {
