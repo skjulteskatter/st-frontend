@@ -39,7 +39,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton, Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
-import { Collection, Song } from "@/classes";
+import { Collection, Lyrics, Song } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 
@@ -54,6 +54,9 @@ import { songKey } from "@/store";
         song: {
             type: Object,
         },
+        lyrics: {
+            type: Object,
+        }
     },
 })
 export default class TransposedLyricsViewer extends Vue {
@@ -63,11 +66,8 @@ export default class TransposedLyricsViewer extends Vue {
     public description = "";
     public title = "";
     public song?: Song;
+    public lyrics?: Lyrics;
     public selectedTransposition = this.transposition ? this.transpositions[this.transposition] : 0;
-
-    public get lyrics() {
-        return this.songStore.state.transposedLyrics;
-    }
 
     public get transpositions() {
         return this.lyrics?.transpositions ?? {};

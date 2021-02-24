@@ -37,6 +37,7 @@ export interface Songs {
     };
     filter: SongFilter;
     audio?: AudioTrack;
+    view: string;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
@@ -55,6 +56,7 @@ export const songStore = createStore<Songs>({
             songTypes: [],
         },
         language: 'en',
+        view: 'default',
     },
     actions: {
         async selectCollection({ dispatch, state, commit, getters }, id: string) {
@@ -176,6 +178,9 @@ export const songStore = createStore<Songs>({
         audio(state, audio: AudioTrack) {
             state.audio = audio;
         },
+        view(state, view: string) {
+            state.view = view;
+        }
     },
     getters: {
         songs(state, getters) {

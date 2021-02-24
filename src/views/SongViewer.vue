@@ -9,15 +9,17 @@
             ></song-info-card>
 
             <transposed-lyrics-viewer
-                v-if="transposed && lyrics"
+                v-if="type === 'transpose' && lyrics"
                 :languageKey="languageKey"
+                :lyrics="transposedLyrics"
                 :song="song"
+                ref="transposed"
             ></transposed-lyrics-viewer>
 
             <div class="loader" v-if="loadingLyrics"></div>
 
             <song-details
-                v-if="!transposed && lyrics"
+                v-if="type !== 'transpose' && lyrics"
                 :languageKey="languageKey"
                 :lyrics="lyrics"
                 :song="song"
@@ -119,26 +121,28 @@ export default class SongViewer extends Vue {
         }
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
+        if (this.type === "transpose") {
+            this.transpose();
+        }
     }
 
     public get extended() {
         return this.store.getters.extended;
     }
 
+    public get transposedLyrics() {
+        return this.songStore.state.transposedLyrics;
+    }
+
     public async transpose() {
         this.store.commit("extend", false);
+        this.songStore.commit("view", "transpose");
         this.songStore.dispatch("transpose", 0);
         this.transposed = true;
     }
 
-    public async apply() {
-        if (this.song) {
-            const lyrics = await this.collection?.transposeLyrics(
-                this.song.number,
-                this.currentTransposition
-            );
-            this.songStore.commit("transposedLyrics", lyrics);
-        }
+    public get type() {
+        return this.songStore.state.view;
     }
 
     public get loading() {
@@ -195,6 +199,9 @@ export default class SongViewer extends Vue {
         if (this.song) {
             await this.collection?.getLyrics(this.song.number, this.selectedLanguage);
             this.songStore.commit("language", this.selectedLanguage);
+            if (this.type === "transpose") {
+                (this.$refs.transposed as TransposedLyricsViewer).transpose();
+            }
         }
     }
 }
