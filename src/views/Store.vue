@@ -137,7 +137,7 @@ export default class Store extends Vue {
     &__items {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-gap: var(--st-spacing);
+        grid-gap: calc(var(--st-spacing) * 2);
 
         @media screen and (max-width: 1000px) {
             grid-template-columns: repeat(2, 1fr);
