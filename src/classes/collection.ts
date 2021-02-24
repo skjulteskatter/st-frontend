@@ -7,6 +7,7 @@ export class Collection {
     public defaultType: string;
     public id: string;
     public name: LocaleString;
+    public available?: boolean;
 
     public getName(language: string) {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
@@ -44,6 +45,7 @@ export class Collection {
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
+        this.available = collection.available;
     }
 
     private async initialize() {

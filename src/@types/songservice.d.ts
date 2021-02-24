@@ -63,6 +63,7 @@ interface CollectionInterface {
     };
     key: string;
     image: string;
+    available?: boolean;
 }
 
 interface JsonContent {

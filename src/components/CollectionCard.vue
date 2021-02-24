@@ -2,7 +2,7 @@
     <div
         class="collection-card"
         :class="{
-            disabled: !available.find((c) => c.id == collection.id),
+            disabled: !collection.available,
         }"
         @click="selectCollection(collection)"
     >
@@ -36,7 +36,7 @@ export default class CollectionCard extends Vue {
     public collection: Collection = {} as Collection;
 
     public selectCollection(collection: Collection) {
-        if (!this.available.find((c) => c.id == collection.id)) return;
+        if (!this.collection.available) return;
         this.$router.push({
             name: "song-list",
             params: {
@@ -51,10 +51,6 @@ export default class CollectionCard extends Vue {
 
     public get selected() {
         return this.songStore.getters.collection ?? {};
-    }
-
-    public get available(): Collection[] {
-        return this.sessionStore.getters.collections ?? [];
     }
 
     public get languageKey() {
