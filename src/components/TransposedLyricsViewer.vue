@@ -6,10 +6,25 @@
                     <!-- <small class="transposed-lyrics__header__label">
                         {{ $t("song.key") }}
                     </small> -->
-                    <button-group
+                    
+                    <select
+                        id="language"
+                        name="language"
+                        v-model="selectedTransposition"
+                        @input="transpose"
+                    >
+                        <option
+                            v-for="b in buttons"
+                            :value="b.value"
+                            :key="b"
+                        >
+                            {{ b.label }}
+                        </option>
+                    </select>
+                    <!-- <button-group
                         :action="transpose"
                         :buttons="buttons"
-                    ></button-group>
+                    ></button-group> -->
                 </div>
             </template>
             <div
@@ -52,6 +67,7 @@ export default class TransposedLyricsViewer extends Vue {
     public languageKey = "";
     public title = "";
     public song?: Song;
+    public selectedTransposition = this.transposition ? this.transpositions[this.transposition] : 0;
 
     public get melodyOrigin() {
         return (
@@ -91,11 +107,15 @@ export default class TransposedLyricsViewer extends Vue {
         return buttons;
     }
 
-    public async transpose(to: number) {
+    public async transpose() {
+        await new Promise((resolve) => {
+            setTimeout(resolve, 100);
+        });
+
         if (this.song) {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
-                to
+                this.selectedTransposition,
             );
             this.songStore.commit("transposedLyrics", lyrics);
         }
