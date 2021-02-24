@@ -1,17 +1,20 @@
 <template>
-    <base-card
-        class="collection-card clickable"
+    <div
+        class="collection-card"
         :class="{
             disabled: !available.find((c) => c.id == collection.id),
         }"
-        :image="image"
         @click="selectCollection(collection)"
-        border
     >
-        <p class="collection-card__title">
+        <img
+            class="collection-card__image"
+            :src="image"
+            :alt="collection.getName(languageKey)"
+        />
+        <h3 class="collection-card__title">
             {{ collection.getName(languageKey) }}
-        </p>
-    </base-card>
+        </h3>
+    </div>
 </template>
 
 <script lang="ts">
@@ -19,12 +22,8 @@ import { Collection } from "@/classes";
 import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { BaseCard } from "@/components";
 
 @Options({
-    components: {
-        BaseCard,
-    },
     props: {
         collection: {
             type: Collection,
@@ -66,14 +65,28 @@ export default class CollectionCard extends Vue {
 
 <style lang="scss">
 .collection-card {
+    position: relative;
     cursor: pointer;
+
+    &:hover {
+        .collection-card__title {
+            transform: translateY(-0.5rem);
+        }
+    }
+
+    &__image {
+        border-radius: var(--st-border-radius);
+        max-width: 100%;
+    }
 
     &__title {
         margin: 0;
-    }
-
-    &.selected {
-        border: 2px solid var(--st-primary-color);
+        color: white;
+        text-shadow: 0 0 0.5em rgba(black, 0.2);
+        position: absolute;
+        top: var(--st-spacing);
+        left: var(--st-spacing);
+        transition: transform 200ms;
     }
 
     &.disabled {
