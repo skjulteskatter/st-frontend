@@ -1,5 +1,5 @@
 <template>
-    <base-card v-if="product" class="store-card" :image="image" border>
+    <!-- <base-card v-if="product" class="store-card" :image="image" border>
         <h3 class="store-card__title">
             {{ product.name[languageKey] }}
         </h3>
@@ -19,7 +19,31 @@
                 {{ $t("store.alreadyown") }}
             </span>
         </div>
-    </base-card>
+    </base-card> -->
+    <div class="store-card" v-if="product">
+        <img
+            class="store-card__image"
+            :src="image"
+            :alt="product.name[languageKey]"
+        />
+        <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
+        <div class="store-card__footer">
+            <p class="store-card__price">
+                {{ formatPrices(product.prices, "year") }}
+            </p>
+            <base-button
+                class="store-card__button"
+                v-if="isPurchaseable"
+                icon="shop"
+                :action="action"
+            >
+                <span>{{ $t("store.buy") }}</span>
+            </base-button>
+            <span class="store-card__subtitle" v-else>
+                {{ $t("store.alreadyown") }}
+            </span>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -77,9 +101,10 @@ export default class StoreCard extends Vue {
 
 <style lang="scss">
 .store-card {
-    .card__content {
-        display: flex;
-        flex-direction: column;
+    &__image {
+        max-width: 100%;
+        // max-height: 300px;
+        border-radius: var(--st-border-radius);
     }
 
     &__footer {
@@ -95,7 +120,9 @@ export default class StoreCard extends Vue {
     }
 
     &__title {
-        margin-top: 0;
+        margin-top: var(--st-spacing);
+        margin-bottom: calc(var(--st-spacing) / 2);
+        width: 100%;
     }
 
     &__subtitle {
