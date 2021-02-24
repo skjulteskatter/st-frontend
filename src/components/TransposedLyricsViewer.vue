@@ -11,7 +11,7 @@
                         id="language"
                         name="language"
                         v-model="selectedTransposition"
-                        @input="transpose"
+                        @change="transpose"
                     >
                         <option
                             v-for="b in buttons"
@@ -108,10 +108,6 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public async transpose() {
-        await new Promise((resolve) => {
-            setTimeout(resolve, 100);
-        });
-
         if (this.song) {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,

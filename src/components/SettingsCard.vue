@@ -21,7 +21,7 @@
                         id="language"
                         name="language"
                         v-model="selectedLanguage"
-                        @input="setLanguage"
+                        @change="setLanguage"
                     >
                         <option
                             v-for="lang in languages"
@@ -138,14 +138,12 @@ export default class SettingsCard extends Vue {
     }
 
     public setLanguage() {
-        setTimeout(() => {
-            const settings = Object.assign({}, this.user?.settings);
-            const language = this.selectedLanguage;
-            if (language) {
-                settings.languageKey = language.key;
-                this.store.commit("settings", settings);
-            }
-        }, 100);
+        const settings = Object.assign({}, this.user?.settings);
+        const language = this.selectedLanguage;
+        if (language) {
+            settings.languageKey = language.key;
+            this.store.commit("settings", settings);
+        }
     }
 
     public get languages(): Language[] {
