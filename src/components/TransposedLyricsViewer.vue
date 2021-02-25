@@ -1,6 +1,6 @@
 <template>
-    <div v-if="song" class="transposed-lyrics">
-        <base-card v-if="lyrics && lyrics.format == 'html'" border header>
+    <div v-if="lyrics" class="transposed-lyrics">
+        <!-- <base-card v-if="lyrics && lyrics.format == 'html'" border header>
             <template #header>
                 <div class="transposed-lyrics__header">
                     <div class="transposed-lyrics__header__item">
@@ -15,47 +15,47 @@
                             @change="transpose"
                         >
                             <option
-                                v-for="b in buttons"
-                                :value="b.value"
-                                :key="b"
+                                v-for="t in Object.keys(this.transpositions)"
+                                :value="this.transpositions[t]"
+                                :key="t"
                             >
-                                {{ b.label }}
+                                {{ t }}
                             </option>
                         </select>
                     </div>
                     <slot/>
                 </div>
             </template>
-            <div
-                v-html="lyrics.transposedContent"
-                class="transposed-lyrics__body"
-            ></div>
-        </base-card>
+        </base-card> -->
+        
+        <div
+            v-html="lyrics.transposedContent"
+            class="transposed-lyrics__body"
+        ></div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton, Modal } from "@/components";
+import {  BaseButton, Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
-import { Collection, Lyrics, Song } from "@/classes";
+import { Collection, Lyrics } from "@/classes";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 
 @Options({
     components: {
-        BaseCard,
         BaseButton,
         Modal,
         ButtonGroup,
     },
     props: {
-        song: {
-            type: Object,
-        },
         lyrics: {
             type: Object,
         },
+        selectedTransposition: {
+            type: Number,
+        }
     },
 })
 export default class TransposedLyricsViewer extends Vue {
@@ -64,11 +64,8 @@ export default class TransposedLyricsViewer extends Vue {
     public currentVerseNumber = 0;
     public description = "";
     public title = "";
-    public song?: Song;
     public lyrics?: Lyrics;
-    public selectedTransposition = this.transposition
-        ? this.transpositions[this.transposition]
-        : 0;
+    public selectedTransposition = 0;
 
     public get transpositions() {
         return this.lyrics?.transpositions ?? {};
@@ -82,28 +79,10 @@ export default class TransposedLyricsViewer extends Vue {
         return this.songStore.state.language;
     }
 
-    public get buttons() {
-        const buttons: {
-            label: string;
-            value: number;
-            selected: boolean;
-        }[] = [];
-
-        for (const t of Object.keys(this.transpositions)) {
-            buttons.push({
-                label: t,
-                value: this.transpositions[t],
-                selected: this.transposition == t,
-            });
-        }
-
-        return buttons;
-    }
-
     public async transpose() {
-        if (this.song) {
+        if (this.lyrics) {
             const lyrics = await this.collection?.transposeLyrics(
-                this.song.number,
+                this.lyrics.number,
                 this.selectedTransposition,
                 this.languageKey
             );

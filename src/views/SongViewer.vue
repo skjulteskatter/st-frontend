@@ -8,49 +8,10 @@
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
 
-            <transposed-lyrics-viewer
-                v-if="type === 'transpose' && lyrics"
-                :lyrics="transposedLyrics"
-                :song="song"
-                ref="transposed"
-            >
-                
-            <div class="transposed-lyrics__header__settings">
-                <base-button @click="exitTransposition">
-                    {{$t("common.close")}}
-                </base-button>
-                <select
-                    id="language"
-                    name="language"
-                    v-model="selectedLanguage"
-                    @change="translateTo"
-                >
-                    <option
-                        v-for="l in languages"
-                        :value="l.key"
-                        :key="l.key"
-                    >
-                        {{ l.name }}
-                    </option>
-                </select>
-            </div>
-            
-            </transposed-lyrics-viewer>
-
-            <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
-            </open-sheet-music-display> -->
-
-            <div class="loader" v-if="loadingLyrics"></div>
-
-            <song-details
-                v-if="type !== 'transpose' && lyrics"
-                :languageKey="languageKey"
-                :lyrics="lyrics"
-                :song="song"
-            >
-                <div class="song-viewer__settings">
-                    <base-button @click="transpose" icon="music">
-                        {{ $t("song.chords") }}
+            <base-card class="song-viewer__lyrics" header>
+                <template #header>
+                    <!-- <base-button @click="exitTransposition">
+                        {{$t("common.close")}}
                     </base-button>
                     <select
                         id="language"
@@ -65,9 +26,69 @@
                         >
                             {{ l.name }}
                         </option>
-                    </select>
-                </div>
-            </song-details>
+                    </select> -->
+                    <div class="song-viewer__lyrics__header">
+                        <div class="song-viewer__lyrics__header__item">
+                            <select 
+                                    v-if="transposed"
+                                    id="transposition"
+                                    name="transposition"
+                                    v-model="selectedTransposition"
+                                    @change="transpose"
+                                >
+                                <option
+                                    v-for="t in Object.keys(this.transpositions)"
+                                    :value="this.transpositions[t]"
+                                    :key="t"
+                                >
+                                    {{ t }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="song-viewer__lyrics__header__settings">
+                            <base-button @click="transposeToggle" icon="music">
+                                {{ $t("song.chords") }}
+                            </base-button>
+                            <select
+                                id="language"
+                                name="language"
+                                v-model="selectedLanguage"
+                                @change="translateTo"
+                            >
+                                <option
+                                    v-for="l in languages"
+                                    :value="l.key"
+                                    :key="l.key"
+                                >
+                                    {{ l.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </template>
+                <transposed-lyrics-viewer
+                    v-if="type === 'transpose' && lyrics"
+                    :lyrics="transposedLyrics"
+                    ref="transposed"
+                >
+                </transposed-lyrics-viewer>
+                <song-details
+                    v-if="type !== 'transpose' && lyrics"
+                    :languageKey="languageKey"
+                    :lyrics="lyrics"
+                    :song="song"
+                >
+                </song-details>
+            </base-card>
+                
+            <div class="transposed-lyrics__header__settings">
+            </div>
+
+            <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
+            </open-sheet-music-display> -->
+
+            <div class="loader" v-if="loadingLyrics"></div>
+
         </div>
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
@@ -125,12 +146,14 @@ import { Collection, Lyrics, Song } from "@/classes";
 export default class SongViewer extends Vue {
     public store = useStore(sessionKey);
     public songStore = useStore(songKey);
-    public transposed = false;
     public number = 0;
     public currentTransposition = 0;
     public audioPlayer = false;
     public selectedLanguage = this.languageKey;
     public sidebar = true;
+    public selectedTransposition = this.transposition
+        ? this.transpositions[this.transposition]
+        : 0;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);
@@ -148,7 +171,7 @@ export default class SongViewer extends Vue {
 
         if (this.type === "transpose") {
             if (this.song?.hasLyrics) {
-                this.transpose();
+                this.transposeView();
             } else {
                 this.songStore.commit("view", "default");
             }
@@ -169,7 +192,38 @@ export default class SongViewer extends Vue {
         return this.songStore.state.transposedLyrics;
     }
 
+    public transposeToggle() {
+        if (this.type === "transpose") {
+            this.songStore.commit("view", "default");
+        } else {
+            this.transposeView();
+        }
+    }
+
+    public get transpositions() {
+        return this.transposedLyrics?.transpositions ?? {};
+    }
+
+    public get transposition() {
+        return this.transposedLyrics?.transposedToKey ?? this.lyrics?.originalKey ?? "";
+    }
+    
+    public get transposed() {
+        return this.type === "transpose";
+    }
+
     public async transpose() {
+        if (this.lyrics) {
+            const lyrics = await this.collection?.transposeLyrics(
+                this.lyrics.number,
+                this.selectedTransposition,
+                this.languageKey
+            );
+            this.songStore.commit("transposedLyrics", lyrics);
+        }
+    }
+
+    public async transposeView() {
         this.store.commit("extend", false);
         const lyrics = await this.collection?.transposeLyrics(
             this.song?.number ?? 0,
@@ -178,7 +232,6 @@ export default class SongViewer extends Vue {
         );
         this.songStore.commit("transposedLyrics", lyrics);
         this.songStore.commit("view", "transpose");
-        this.transposed = true;
     }
 
     public get type() {
@@ -249,10 +302,6 @@ export default class SongViewer extends Vue {
             }
         }
     }
-    
-    public exitTransposition() {
-        this.songStore.commit("view", "default");
-    }
 }
 </script>
 
@@ -272,6 +321,29 @@ export default class SongViewer extends Vue {
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
         overflow-y: auto;
+    }
+
+    &__lyrics {
+        width: 100%;
+        
+        &__header {
+        width: 100%;
+        display: flex;
+        gap: calc(var(--st-spacing) / 2);
+
+            &__label {
+                display: block;
+                opacity: 0.5;
+                margin-bottom: 0.2em;
+            }
+
+            &__settings {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                gap: calc(var(--st-spacing) / 2);
+            }
+        }
     }
 
     &__sidebar {
@@ -312,13 +384,6 @@ export default class SongViewer extends Vue {
                 }
             }
         }
-    }
-
-    &__settings {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        gap: calc(var(--st-spacing) / 2);
     }
 }
 </style>
