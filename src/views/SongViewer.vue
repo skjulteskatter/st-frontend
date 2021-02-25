@@ -137,7 +137,7 @@ export default class SongViewer extends Vue {
     }
 
     public get sheetMusicUrl() {
-        return this.song?.sheetMusic[0]?.directUrl;
+        return this.song?.sheetMusic?.find(s => s.type === "leadsheet")?.directUrl;
     }
 }
 </script>
