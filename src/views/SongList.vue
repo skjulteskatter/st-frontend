@@ -3,21 +3,40 @@
     <div class="song-list" v-if="collection">
         <div class="song-list__header">
             <h1 class="song-list__title">{{ collection.name[languageKey] }}</h1>
-            <div class="song-list__filters gap-x">
-                <div class="song-list__filters__field">
-                    <label for="song-category">{{ $t("song.category") }}</label>
-                    <button-group
-                        :buttons="buttons"
-                        :action="setListType"
-                    ></button-group>
-                </div>
+            <div class="song-list__filters">
+                <div class="song-list__filters__wrapper gap-x">
+                    <div class="song-list__filters__field">
+                        <label for="song-category">
+                            {{ $t("song.category") }}
+                        </label>
+                        <button-group
+                            :buttons="buttons"
+                            :action="setListType"
+                            class="song-list__filters__category__buttons"
+                        ></button-group>
+                        <select
+                            class="song-list__filters__category__dropdown"
+                            @input="setListType($event.target.value)"
+                        >
+                            <option
+                                v-for="category in buttons"
+                                :key="category.value"
+                                :value="category.value"
+                            >
+                                {{ category.label }}
+                            </option>
+                        </select>
+                    </div>
 
-                <div class="song-list__filters__field">
-                    <label for="song-filters">{{ $t("song.filters") }}</label>
-                    <song-filter-dropdown
-                        :themes="collection.themeTypes"
-                        :origins="collection.origins"
-                    ></song-filter-dropdown>
+                    <div class="song-list__filters__field">
+                        <label for="song-filters">
+                            {{ $t("song.filters") }}
+                        </label>
+                        <song-filter-dropdown
+                            :themes="collection.themeTypes"
+                            :origins="collection.origins"
+                        ></song-filter-dropdown>
+                    </div>
                 </div>
                 <input
                     type="text"
@@ -365,9 +384,30 @@ export default class SongList extends Vue {
     &__filters {
         display: flex;
         align-items: flex-end;
+        gap: calc(var(--st-spacing) / 2);
 
         @media screen and (max-width: 600px) {
             flex-direction: column;
+            width: 100%;
+        }
+
+        &__wrapper {
+            display: flex;
+        }
+
+        &__category {
+            &__buttons {
+                @media (max-width: 1000px) {
+                    display: none;
+                }
+            }
+            &__dropdown {
+                display: none;
+
+                @media (max-width: 1000px) {
+                    display: block;
+                }
+            }
         }
 
         &__field {
@@ -407,7 +447,7 @@ export default class SongList extends Vue {
 
         &-cards {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             grid-gap: var(--st-half-spacing);
         }
     }
