@@ -76,12 +76,6 @@ export default class TheNavbar extends Vue {
     private userStore = useStore(sessionKey);
     public openBurgerMenu = false;
 
-    public logout() {
-        this.userStore.dispatch("logout").then(() => {
-            window.location.replace("/login");
-        });
-    }
-
     public toggleBurgerMenu() {
         this.openBurgerMenu = !this.openBurgerMenu;
     }

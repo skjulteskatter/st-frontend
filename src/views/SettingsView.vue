@@ -1,25 +1,47 @@
 <template>
     <div class="settings-page">
-        <h1 class="settings-page__title">{{ $t("common.settings") }}</h1>
+        <div class="settings-page__header">
+            <h1 class="settings-page__title">{{ $t("common.settings") }}</h1>
+            <base-button theme="error" icon="logout" :action="logout">
+                {{ $t("common.logout") }}
+            </base-button>
+        </div>
         <settings-card></settings-card>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { SettingsCard } from "@/components";
+import { SettingsCard, BaseButton } from "@/components";
+import { useStore } from "vuex";
+import { sessionKey } from "@/store";
 
 @Options({
     components: {
         SettingsCard,
+        BaseButton,
     },
 })
-export default class SettingsView extends Vue {}
+export default class SettingsView extends Vue {
+    private store = useStore(sessionKey);
+
+    public logout() {
+        this.store.dispatch("logout").then(() => {
+            window.location.replace("/login");
+        });
+    }
+}
 </script>
 
 <style lang="scss" >
 .settings-page {
     padding: calc(var(--st-spacing) * 2);
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
     &__title {
         margin-top: 0;
