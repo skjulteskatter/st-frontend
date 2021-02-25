@@ -14,27 +14,25 @@
                 :song="song"
                 ref="transposed"
             >
-                
-            <div class="transposed-lyrics__header__settings">
-                <base-button @click="exitTransposition">
-                    {{$t("common.close")}}
-                </base-button>
-                <select
-                    id="language"
-                    name="language"
-                    v-model="selectedLanguage"
-                    @change="translateTo"
-                >
-                    <option
-                        v-for="l in languages"
-                        :value="l.key"
-                        :key="l.key"
+                <div class="transposed-lyrics__header__settings">
+                    <base-button @click="exitTransposition">
+                        {{ $t("common.close") }}
+                    </base-button>
+                    <select
+                        id="language"
+                        name="language"
+                        v-model="selectedLanguage"
+                        @change="translateTo"
                     >
-                        {{ l.name }}
-                    </option>
-                </select>
-            </div>
-            
+                        <option
+                            v-for="l in languages"
+                            :value="l.key"
+                            :key="l.key"
+                        >
+                            {{ l.name }}
+                        </option>
+                    </select>
+                </div>
             </transposed-lyrics-viewer>
 
             <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
@@ -154,11 +152,10 @@ export default class SongViewer extends Vue {
             }
         }
 
-        this.selectedLanguage = (this.languages.find(
-            (l) => l.key == this.languageKey
-        )
-            ? this.languageKey
-            : this.languages[0]?.key) ?? this.languageKey;
+        this.selectedLanguage =
+            (this.languages.find((l) => l.key == this.languageKey)
+                ? this.languageKey
+                : this.languages[0]?.key) ?? this.languageKey;
     }
 
     public get extended() {
@@ -249,7 +246,7 @@ export default class SongViewer extends Vue {
             }
         }
     }
-    
+
     public exitTransposition() {
         this.songStore.commit("view", "default");
     }
@@ -266,12 +263,15 @@ export default class SongViewer extends Vue {
     height: 100%;
 
     &__content {
-        display: flex;
         flex-grow: 1;
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
         overflow-y: auto;
+
+        & > *:not(:last-child) {
+            margin-bottom: var(--st-spacing);
+        }
     }
 
     &__sidebar {
