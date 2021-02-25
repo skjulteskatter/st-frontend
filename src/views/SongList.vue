@@ -22,6 +22,7 @@
                                 v-for="category in buttons"
                                 :key="category.value"
                                 :value="category.value"
+                                :selected="category.value == listType"
                             >
                                 {{ category.label }}
                             </option>
