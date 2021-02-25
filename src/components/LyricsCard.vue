@@ -1,8 +1,8 @@
 <template>
-    <base-card v-if="lyrics && song" class="lyrics-card__lyrics" header>
+    <base-card v-if="lyrics && song" class="lyrics-card" header>
         <template #header>
-            <div class="lyrics-card__lyrics__header">
-                <div class="lyrics-card__lyrics__header__item">
+            <div class="lyrics-card__header">
+                <div class="lyrics-card__header__item">
                     <select 
                             v-if="transposed"
                             id="transposition"
@@ -19,7 +19,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="lyrics-card__lyrics__header__settings">
+                <div class="lyrics-card__header__settings">
                     <base-button @click="transposeToggle" icon="music">
                         {{ $t("song.chords") }}
                     </base-button>
@@ -48,7 +48,6 @@
         </transposed-lyrics-viewer>
         <lyrics-viewer
             v-else
-            :languageKey="languageKey"
             :lyrics="lyrics"
             :song="song"
         >
@@ -61,11 +60,14 @@ import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
+import { BaseCard, BaseButton } from "./";
 
 @Options({
     components: {
         TransposedLyricsViewer,
         LyricsViewer,
+        BaseCard,
+        BaseButton,
     },
     props: {
         lyrics: {
@@ -86,12 +88,10 @@ export default class LyricsCard extends Vue {
     public lyrics?: Lyrics;
     public collection?: Collection;
     public selectedLanguage = '';
-    public selectedTransposition = this.transposition
-        ? this.transpositions[this.transposition]
-        : 0;
+    public selectedTransposition = 0;
     
     public mounted() {
-        if (this.type === "transpose") {
+        if (this.transposed) {
             if (this.song?.hasLyrics) {
                 this.transposeView();
             } else {
@@ -180,3 +180,25 @@ export default class LyricsCard extends Vue {
     }
 }
 </script>
+<style lang="scss">
+.lyrics-card {
+    &__header {
+        width: 100%;
+        display: flex;
+        gap: calc(var(--st-spacing) / 2);
+
+        &__label {
+            display: block;
+            opacity: 0.5;
+            margin-bottom: 0.2em;
+        }
+
+        &__settings {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            gap: calc(var(--st-spacing) / 2);
+        }
+    }
+}
+</style>

@@ -84,14 +84,14 @@
                 <base-button @click="sidebar = false">
                     {{ $t("common.close") }}
                 </base-button>
-                <base-button v-if="extended && !transposed" @click="extend">
+                <base-button v-if="extended" @click="extend">
                     {{ $t("song.advanced") }}
                 </base-button>
             </div>
             <div class="song-viewer__sidebar__content">
                 <song-files-card :song="song"></song-files-card>
                 <lyrics-settings
-                    v-if="isExtended && !transposed"
+                    v-if="isExtended"
                     :languageKey="languageKey"
                     :lyrics="lyrics"
                     :song="song"
