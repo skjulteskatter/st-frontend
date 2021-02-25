@@ -1,37 +1,5 @@
 <template>
-    <div v-if="lyrics" class="transposed-lyrics">
-        <!-- <base-card v-if="lyrics && lyrics.format == 'html'" border header>
-            <template #header>
-                <div class="transposed-lyrics__header">
-                    <div class="transposed-lyrics__header__item">
-                        <small class="transposed-lyrics__header__label">
-                            {{ $t("song.key") }}
-                        </small>
-
-                        <select
-                            id="transposition"
-                            name="transposition"
-                            v-model="selectedTransposition"
-                            @change="transpose"
-                        >
-                            <option
-                                v-for="t in Object.keys(this.transpositions)"
-                                :value="this.transpositions[t]"
-                                :key="t"
-                            >
-                                {{ t }}
-                            </option>
-                        </select>
-                    </div>
-                    <slot/>
-                </div>
-            </template>
-        </base-card> -->
-        
-        <div
-            v-html="lyrics.transposedContent"
-            class="transposed-lyrics__body"
-        ></div>
+    <div v-if="lyrics" class="transposed-lyrics" v-html="lyrics.transposedContent">
     </div>
 </template>
 
@@ -101,54 +69,31 @@ export default class TransposedLyricsViewer extends Vue {
 .transposed-lyrics {
     width: 100%;
 
-    &__header {
-        width: 100%;
-        display: flex;
-        gap: calc(var(--st-spacing) / 2);
+    .song {
+        --chord-size: 0.9em;
+        margin: 0 auto;
 
-        &__label {
-            display: block;
-            opacity: 0.5;
-            margin-bottom: 0.2em;
+        .verse-title {
+            font-weight: bold;
         }
 
-        &__settings {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            gap: calc(var(--st-spacing) / 2);
-        }
-    }
+        .verse {
+            padding: var(--st-spacing);
+            border-left: 1px solid var(--st-border-color);
 
-    &__body {
-        width: 100%;
-
-        .song {
-            --chord-size: 0.9em;
-            margin: 0 auto;
-
-            .verse-title {
-                font-weight: bold;
+            &:not(:last-child) {
+                margin-bottom: var(--st-spacing);
             }
 
-            .verse {
-                padding: var(--st-spacing);
-                border-left: 1px solid var(--st-border-color);
+            .songline {
+                margin: 0;
+            }
 
-                &:not(:last-child) {
-                    margin-bottom: var(--st-spacing);
-                }
-
-                .songline {
-                    margin: 0;
-                }
-
-                .chords {
-                    color: var(--st-primary-color);
-                    font-weight: bold;
-                    font-size: var(--chord-size);
-                    line-height: var(--chord-size);
-                }
+            .chords {
+                color: var(--st-primary-color);
+                font-weight: bold;
+                font-size: var(--chord-size);
+                line-height: var(--chord-size);
             }
         }
     }

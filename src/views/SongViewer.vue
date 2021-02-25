@@ -15,67 +15,6 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <!-- <base-card v-if="lyrics" class="song-viewer__lyrics" header>
-                <template #header>
-                    <div class="song-viewer__lyrics__header">
-                        <div class="song-viewer__lyrics__header__item">
-                            <select
-                                v-if="transposed"
-                                id="transposition"
-                                name="transposition"
-                                v-model="selectedTransposition"
-                                @change="transpose"
-                            >
-                                <option
-                                    v-for="t in Object.keys(
-                                        this.transpositions
-                                    )"
-                                    :value="this.transpositions[t]"
-                                    :key="t"
-                                >
-                                    {{ t }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="song-viewer__lyrics__header__settings">
-                            <base-button @click="transposeToggle" icon="music">
-                                {{ $t("song.chords") }}
-                            </base-button>
-                            <select
-                                id="language"
-                                name="language"
-                                v-model="selectedLanguage"
-                                @change="translateTo"
-                            >
-                                <option
-                                    v-for="l in languages"
-                                    :value="l.key"
-                                    :key="l.key"
-                                >
-                                    {{ l.name }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </template>
-                <transposed-lyrics-viewer
-                    v-if="type === 'transpose'"
-                    :lyrics="transposedLyrics"
-                    ref="transposed"
-                >
-                </transposed-lyrics-viewer>
-                <song-details
-                    v-else
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
-                    :song="song"
-                >
-                </song-details>
-            </base-card> -->
-
-            <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
-            </open-sheet-music-display> -->
-
             <div class="loader" v-if="loadingLyrics"></div>
         </div>
 
@@ -157,14 +96,16 @@ export default class SongViewer extends Vue {
         return this.store.getters.extended;
     }
 
-    
+    public get isExtended() {
+        return this.store.state.extend;
+    }
 
     public get loading() {
         return this.songStore.getters.collection?.loading;
     }
 
-    public get isExtended() {
-        return this.store.state.extend;
+    public get loadingLyrics() {
+        return this.collection?.loadingLyrics || false;
     }
 
     public extend() {
@@ -173,10 +114,6 @@ export default class SongViewer extends Vue {
 
     public get lyrics(): Lyrics | undefined {
         return this.songStore.getters.lyrics;
-    }
-
-    public get loadingLyrics() {
-        return this.collection?.loadingLyrics || false;
     }
 
     public get song(): Song | undefined {

@@ -1,16 +1,12 @@
 <template>
-    <!-- <base-card class="song-details__lyrics" v-if="song" header>
-        <template #header>
-            <slot />
-        </template> -->
-        <div
-            v-for="(verse, i) in text"
-            :key="verse.name + verse.content[0] + i"
-        >
-            <b>{{ verse.name }}</b>
-            <p v-for="line in verse.content" :key="line">{{ line }}</p>
-        </div>
-    <!-- </base-card> -->
+    <div
+        class="lyrics-viewer"
+        v-for="(verse, i) in text"
+        :key="verse.name + verse.content[0] + i"
+    >
+        <b>{{ verse.name }}</b>
+        <p v-for="line in verse.content" :key="line">{{ line }}</p>
+    </div>
 </template>
 
 <script lang="ts">
@@ -75,10 +71,8 @@ export default class LyricsViewer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.song-details {
-    &__lyrics {
-        width: 100%;
-        flex-grow: 1;
-    }
+.lyrics-viewer {
+    width: 100%;
+    flex-grow: 1;
 }
 </style>
