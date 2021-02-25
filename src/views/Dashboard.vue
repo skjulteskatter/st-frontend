@@ -100,15 +100,8 @@ export default class Dashboard extends Vue {
 
         &__cards {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             grid-gap: var(--st-spacing);
-
-            @media screen and (max-width: 1000px) {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            @media screen and (max-width: 600px) {
-                grid-template-columns: 1fr;
-            }
         }
     }
 }

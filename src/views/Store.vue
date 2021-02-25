@@ -127,6 +127,11 @@ export default class Store extends Vue {
             display: flex;
             gap: calc(var(--st-spacing) / 2);
         }
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     hr {
@@ -136,16 +141,8 @@ export default class Store extends Vue {
 
     &__items {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         grid-gap: calc(var(--st-spacing) * 2);
-
-        @media screen and (max-width: 1000px) {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @media screen and (max-width: 600px) {
-            grid-template-columns: 1fr;
-        }
     }
 }
 </style>
