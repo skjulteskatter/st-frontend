@@ -19,15 +19,17 @@
                 <template #header>
                     <div class="song-viewer__lyrics__header">
                         <div class="song-viewer__lyrics__header__item">
-                            <select 
-                                    v-if="transposed"
-                                    id="transposition"
-                                    name="transposition"
-                                    v-model="selectedTransposition"
-                                    @change="transpose"
-                                >
+                            <select
+                                v-if="transposed"
+                                id="transposition"
+                                name="transposition"
+                                v-model="selectedTransposition"
+                                @change="transpose"
+                            >
                                 <option
-                                    v-for="t in Object.keys(this.transpositions)"
+                                    v-for="t in Object.keys(
+                                        this.transpositions
+                                    )"
                                     :value="this.transpositions[t]"
                                     :key="t"
                                 >
@@ -70,15 +72,11 @@
                 >
                 </song-details>
             </base-card> -->
-                
-            <div class="transposed-lyrics__header__settings">
-            </div>
 
             <!-- <open-sheet-music-display v-if="sheetMusicUrl" :url="sheetMusicUrl">
             </open-sheet-music-display> -->
 
             <div class="loader" v-if="loadingLyrics"></div>
-
         </div>
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
@@ -225,21 +223,24 @@ export default class SongViewer extends Vue {
     height: 100%;
 
     &__content {
-        display: flex;
         flex-grow: 1;
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
         overflow-y: auto;
+
+        & > *:not(:last-child) {
+            margin-bottom: var(--st-spacing);
+        }
     }
 
     &__lyrics {
         width: 100%;
-        
+
         &__header {
-        width: 100%;
-        display: flex;
-        gap: calc(var(--st-spacing) / 2);
+            width: 100%;
+            display: flex;
+            gap: calc(var(--st-spacing) / 2);
 
             &__label {
                 display: block;
