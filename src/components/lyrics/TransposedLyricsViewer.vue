@@ -79,13 +79,14 @@ export default class TransposedLyricsViewer extends Vue {
         return this.songStore.state.language;
     }
 
-    public async transpose() {
+    public async transpose(t: number) {
         if (this.lyrics) {
             const lyrics = await this.collection?.transposeLyrics(
                 this.lyrics.number,
-                this.selectedTransposition,
+                t,
                 this.languageKey
             );
+            this.songStore.commit("view", "transpose");
             this.songStore.commit("transposedLyrics", lyrics);
         }
     }

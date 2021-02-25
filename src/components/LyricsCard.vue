@@ -43,6 +43,7 @@
         <transposed-lyrics-viewer
             v-if="type === 'transpose'"
             :lyrics="transposedLyrics"
+            :selectedTransposition="selectedTransposition"
             ref="transposed"
         >
         </transposed-lyrics-viewer>
@@ -124,8 +125,14 @@ export default class LyricsCard extends Vue {
             );
             this.songStore.commit("language", this.selectedLanguage);
             if (this.type === "transpose") {
-                (this.$refs.transposed as TransposedLyricsViewer).transpose()
+                (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition)
             }
+        }
+    }
+
+    public async transpose() {
+        if (this.type === "transpose") {
+            (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition)
         }
     }
     
@@ -134,17 +141,6 @@ export default class LyricsCard extends Vue {
             this.songStore.commit("view", "default");
         } else {
             this.transposeView();
-        }
-    }
-
-    public async transpose() {
-        if (this.lyrics) {
-            const lyrics = await this.collection?.transposeLyrics(
-                this.lyrics.number,
-                this.selectedTransposition,
-                this.languageKey
-            );
-            this.songStore.commit("transposedLyrics", lyrics);
         }
     }
 
