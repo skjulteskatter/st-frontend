@@ -41,7 +41,6 @@
 </template>
 <script lang="ts">
 import { SongInfoCard, SongFilesCard } from "@/components/songs";
-import { BaseDropdown, ButtonGroup } from "@/components/inputs";
 
 import { Options, Vue } from "vue-class-component";
 import {
@@ -53,7 +52,10 @@ import {
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { Collection, Lyrics, Song } from "@/classes";
+import { 
+    Collection, 
+    Lyrics
+} from "@/classes";
 
 @Options({
     components: {
@@ -62,8 +64,6 @@ import { Collection, Lyrics, Song } from "@/classes";
         BaseButton,
         SongInfoCard,
         SongFilesCard,
-        BaseDropdown,
-        ButtonGroup,
         OpenSheetMusicDisplay,
         BaseCard,
     },
@@ -72,8 +72,6 @@ export default class SongViewer extends Vue {
     public store = useStore(sessionKey);
     public songStore = useStore(songKey);
     public number = 0;
-    public currentTransposition = 0;
-    public audioPlayer = false;
     public selectedLanguage = this.languageKey;
     public sidebar = true;
 
@@ -116,24 +114,12 @@ export default class SongViewer extends Vue {
         return this.songStore.getters.lyrics;
     }
 
-    public get song(): Song | undefined {
+    public get song() {
         return this.collection?.songs.find((s) => s.number == this.number);
     }
 
     public get languageKey() {
         return this.store.getters.languageKey;
-    }
-    
-    public get languages() {
-        const languages = this.store.state.languages;
-
-        return languages.filter((l) => this.song?.name[l.key]);
-    }
-
-    public get language() {
-        return this.languages.find(
-            (l) => l.key == this.songStore.state.language
-        )?.name;
     }
 
     public get initialized() {
@@ -168,29 +154,6 @@ export default class SongViewer extends Vue {
 
         & > *:not(:last-child) {
             margin-bottom: var(--st-spacing);
-        }
-    }
-
-    &__lyrics {
-        width: 100%;
-
-        &__header {
-            width: 100%;
-            display: flex;
-            gap: calc(var(--st-spacing) / 2);
-
-            &__label {
-                display: block;
-                opacity: 0.5;
-                margin-bottom: 0.2em;
-            }
-
-            &__settings {
-                width: 100%;
-                display: flex;
-                justify-content: flex-end;
-                gap: calc(var(--st-spacing) / 2);
-            }
         }
     }
 
