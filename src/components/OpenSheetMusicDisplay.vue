@@ -1,15 +1,14 @@
 <template>
     <div>
-        <button @click="load">LOAD</button>
+        <button v-if="!loaded" @click="load">Leadsheet</button>
         <div id="osmd"></div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-// import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
+import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 // import zip from "jszip";
-// import http from "http";
 
 @Options({
     props: {
@@ -20,10 +19,17 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class OSMD extends Vue {
     public url?: string;
+    public loaded = false;
 
     public async load() {
-        // if (!this.url) return;
+        if (!this.url) return;
 
+        const o = new OpenSheetMusicDisplay("osmd");
+
+        o.load(this.url).then(() => {
+            o.render();
+        });
+        this.loaded = true;
         // const req = http.get(this.url, (res) =>{
         //     if (res.statusCode !== 200) {
         //         console.log(res.statusCode);
