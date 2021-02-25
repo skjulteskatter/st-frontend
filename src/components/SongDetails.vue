@@ -1,8 +1,8 @@
 <template>
-    <base-card class="song-details__lyrics" v-if="song" header>
+    <!-- <base-card class="song-details__lyrics" v-if="song" header>
         <template #header>
             <slot />
-        </template>
+        </template> -->
         <div
             v-for="(verse, i) in text"
             :key="verse.name + verse.content[0] + i"
@@ -10,7 +10,7 @@
             <b>{{ verse.name }}</b>
             <p v-for="line in verse.content" :key="line">{{ line }}</p>
         </div>
-    </base-card>
+    <!-- </base-card> -->
 </template>
 
 <script lang="ts">
