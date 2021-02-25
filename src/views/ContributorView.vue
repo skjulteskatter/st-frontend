@@ -14,18 +14,16 @@
 
         <div class="contributor__songs">
             <div v-for="c in collections" :key="c.id">
-                <div v-if="authorSongs.filter(s => s.collection.id == c.id).length || composerSongs.filter(s => s.collection.id == c.id).length">
-                    <h1>{{c.getName(languageKey)}}</h1>
-                    <div class="contributor__songs">
-                        <song-list-card
-                            :title="$t('song.author')"
-                            :songs="authorSongs.filter(s => s.collection.id == c.id)"
-                        ></song-list-card>
-                        <song-list-card
-                            :title="$t('song.composer')"
-                            :songs="composerSongs.filter(s => s.collection.id == c.id)"
-                        ></song-list-card>
-                    </div>
+                <h1>{{c.getName(languageKey)}}</h1>
+                <div class="contributor__songs">
+                    <song-list-card
+                        :title="$t('song.author')"
+                        :songs="authorSongs.filter(s => s.collection.id == c.id)"
+                    ></song-list-card>
+                    <song-list-card
+                        :title="$t('song.composer')"
+                        :songs="composerSongs.filter(s => s.collection.id == c.id)"
+                    ></song-list-card>
                 </div>
             </div>
         </div>
@@ -89,7 +87,7 @@ export default class ContributorView extends Vue {
     }
 
     public get collections(): Collection[] {
-        return this.sessionStore.getters.collections ?? [];
+        return (this.sessionStore.getters.collections as Collection[] | undefined)?.filter(c => this.authorSongs.filter(s => s.collection?.id == c.id).length || this.composerSongs.filter(s => s.collection?.id == c.id).length) ?? [];
     }
 }
 </script>
