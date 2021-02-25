@@ -2,10 +2,9 @@ import BaseCard from './BaseCard.vue';
 import BaseButton from './BaseButton.vue';
 import Modal from './Modal.vue';
 
-import SongDetails from './SongDetails.vue';
+import LyricsCard from './LyricsCard.vue';
 import LyricsSettings from './LyricsSettings.vue';
 import OptionsComponent from './OptionsComponent.vue';
-import TransposedLyricsViewer from './TransposedLyricsViewer.vue';
 import SettingsCard from './SettingsCard.vue';
 import CollectionCard from './CollectionCard.vue';
 
@@ -16,10 +15,9 @@ export {
     BaseButton,
     Modal,
     LyricsSettings,
-    SongDetails,
     OptionsComponent,
-    TransposedLyricsViewer,
     SettingsCard,
     CollectionCard,
     OpenSheetMusicDisplay,
+    LyricsCard,
 }

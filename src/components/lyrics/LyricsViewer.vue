@@ -28,19 +28,15 @@ import { Lyrics, Song } from "@/classes";
         lyrics: {
             type: Object,
         },
-        languageKey: {
-            type: String,
-        },
         song: {
             type: Object,
         },
     },
 })
-export default class SongDetails extends Vue {
+export default class LyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public lyrics?: Lyrics;
-    public languageKey = "";
     public song?: Song;
 
     public get text() {
