@@ -24,7 +24,6 @@
                                 :to="{
                                     name: 'contributor',
                                     params: {
-                                        collection: $route.params.collection,
                                         contributor: author.id,
                                     },
                                 }"
