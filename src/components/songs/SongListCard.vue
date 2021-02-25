@@ -70,10 +70,17 @@ export default class SongListCard extends Vue {
     }
 
     public selectSong(song: Song) {
-        this.$router.push({
-            name: "song",
-            params: { number: song.number },
-        });
+        if (song.collection) {
+            this.$router.push({
+                name: "song",
+                params: { number: song.number, collection: song.collection.key },
+            });
+        } else {
+            this.$router.push({
+                name: "song",
+                params: { number: song.number },
+            });
+        }
     }
 
     public get anotherLanguage() {

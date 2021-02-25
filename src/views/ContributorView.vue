@@ -13,25 +13,32 @@
         </base-card>
 
         <div class="contributor__songs">
-            <song-list-card
-                :title="$t('song.author')"
-                :songs="authorSongs"
-            ></song-list-card>
-            <song-list-card
-                :title="$t('song.composer')"
-                :songs="composerSongs"
-            ></song-list-card>
+            <div v-for="c in collections" :key="c.id">
+                <div v-if="authorSongs.filter(s => s.collection.id == c.id).length || composerSongs.filter(s => s.collection.id == c.id).length">
+                    <h1>{{c.getName(languageKey)}}</h1>
+                    <div class="contributor__songs">
+                        <song-list-card
+                            :title="$t('song.author')"
+                            :songs="authorSongs.filter(s => s.collection.id == c.id)"
+                        ></song-list-card>
+                        <song-list-card
+                            :title="$t('song.composer')"
+                            :songs="composerSongs.filter(s => s.collection.id == c.id)"
+                        ></song-list-card>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Collection, Song } from "@/classes";
 import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BaseCard } from "@/components";
 import { SongListCard } from "@/components/songs";
+import { Collection, Song } from "@/classes";
 
 @Options({
     components: {
@@ -41,15 +48,16 @@ import { SongListCard } from "@/components/songs";
 })
 export default class ContributorView extends Vue {
     private store = useStore(songKey);
+    private sessionStore = useStore(sessionKey);
     public languageKey = useStore(sessionKey).getters.languageKey;
 
     public async mounted() {
-        if (!this.store.getters.collection) {
-            await this.store.dispatch(
-                "selectCollection",
-                this.$route.params.collection
-            );
-        }
+        // if (!this.store.getters.collection) {
+        //     await this.store.dispatch(
+        //         "selectCollection",
+        //         this.$route.params.collection
+        //     );
+        // }
         await this.store.dispatch(
             "selectContributor",
             this.$route.params.contributor
@@ -64,26 +72,24 @@ export default class ContributorView extends Vue {
         return this.contributorItem?.contributor;
     }
 
-    public get songs(): Song[] {
-        return (
-            (this.store.getters.collection as
-                | Collection
-                | undefined)?.songs.filter((s) =>
-                this.contributorItem?.songIds.includes(s.id)
-            ) ?? []
-        );
+    public get songs(): SongInterface[] {
+        return this.contributorItem?.songs ?? [];
     }
 
     public get authorSongs(): Song[] {
         return this.songs.filter((s) =>
-            s.authors.find((a) => a.id == this.contributor?.id)
-        );
+            s.authorIds?.find((a) => a == this.contributor?.id)
+        ).map(s => new Song(s));
     }
 
     public get composerSongs(): Song[] {
         return this.songs.filter((s) =>
-            s.composers.find((c) => c.id == this.contributor?.id)
-        );
+            s.composerIds?.find((c) => c == this.contributor?.id)
+        ).map(s => new Song(s));
+    }
+
+    public get collections(): Collection[] {
+        return this.sessionStore.getters.collections ?? [];
     }
 }
 </script>

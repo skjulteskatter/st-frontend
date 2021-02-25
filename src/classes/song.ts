@@ -6,6 +6,7 @@ export class Song implements SongInterface {
     public number = 0;
     public type: string;
     public name: LocaleString;
+    public collection?: CollectionInterface;
 
     public getName(language: string) {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
@@ -31,6 +32,7 @@ export class Song implements SongInterface {
         this.number = song.number;
         this.name = song.name;
         this.authors = song.authors;
+        this.collection = song.collection;
         this.composers = song.composers;
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;

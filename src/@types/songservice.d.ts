@@ -7,7 +7,9 @@ interface SongInterface {
         [languageKey: string]: string;
     };
     authors: ContributorInterface[];
+    authorIds?: string[];
     composers: ContributorInterface[];
+    composerIds?: string[];
     melodyOrigin: Origin;
     leadSheetUrl: string;
     yearWritten: number;

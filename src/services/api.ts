@@ -65,8 +65,8 @@ export const songs = {
     getComposer(collection: string, id: string) {
         return http.get<ContributorInterface>(`api/Composer/${collection}/${id}`);
     },
-    getContributor(collection: string, id: string) {
-        return http.get<ContributorCollectionItem>(`api/Contributor/${collection}/${id}?expand=contributor/biography`);
+    getContributor(id: string) {
+        return http.get<ContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`);
     },
     getAllContributors(collection: string) {
         return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}`);

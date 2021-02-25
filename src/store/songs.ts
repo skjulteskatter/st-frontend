@@ -34,6 +34,7 @@ export interface Songs {
     contributorItem?: {
         contributor: Contributor;
         songIds: string[];
+        songs?: SongInterface[];
     };
     filter: SongFilter;
     audio?: AudioTrack;
@@ -93,16 +94,17 @@ export const songStore = createStore<Songs>({
                 }
             }
         },
-        async selectContributor({ getters, commit }, contributorId: string) {
-            const collection = getters.collection as Collection | undefined;
-            if (!collection) {
-                return;
-            }
-            const contributor = await api.songs.getContributor(collection.key, contributorId);
+        async selectContributor({ commit }, contributorId: string) {
+            // const collection = getters.collection as Collection | undefined;
+            // if (!collection) {
+            //     return;
+            // }
+            const contributor = await api.songs.getContributor(contributorId);
             if (contributor) {
                 commit('contributor', {
                     songIds: contributor.songIds,
-                    contributor: new Contributor(contributor.contributor)
+                    contributor: new Contributor(contributor.contributor),
+                    songs: contributor.songs,
                 });
             }
         },

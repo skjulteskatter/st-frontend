@@ -22,7 +22,7 @@
                 <div class="loader" v-if="loading"></div>
             </div>
         </base-card>
-        <div class="dashboard__subscriptions" v-if="subscriptions.length">
+        <div class="dashboard__subscriptions">
             <h3 class="dashboard__subscriptions__title">
                 <span>
                     {{ $t("common.your") }}

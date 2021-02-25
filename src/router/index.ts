@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
                 ]
             },
             {
-                path: 'contributors/:collection/:contributor',
+                path: 'contributors/:contributor',
                 name: 'contributor',
                 component: ContributorView,
             },

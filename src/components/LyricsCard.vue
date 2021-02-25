@@ -131,9 +131,7 @@ export default class LyricsCard extends Vue {
     }
 
     public async transpose() {
-        if (this.type === "transpose") {
-            (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition)
-        }
+        (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition);
     }
     
     public transposeToggle() {
@@ -148,7 +146,7 @@ export default class LyricsCard extends Vue {
         this.store.commit("extend", false);
         const lyrics = await this.collection?.transposeLyrics(
             this.song?.number ?? 0,
-            0,
+            this.selectedTransposition,
             this.songStore.state.language
         );
         this.songStore.commit("transposedLyrics", lyrics);
