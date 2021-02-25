@@ -113,10 +113,28 @@ export default class TheNavbar extends Vue {
     height: auto;
     max-width: 250px;
     width: 100%;
+
     display: flex;
     flex-direction: column;
 
-    @media screen and (max-width: 1000px) {
+    z-index: 9999;
+
+    @media (max-width: 600px) {
+        flex-direction: initial;
+        max-width: none;
+        border-bottom: 1px solid var(--st-border-color);
+        position: sticky;
+        top: 0;
+        left: 0;
+
+        .nav__links {
+            flex-direction: initial;
+            flex-grow: 0;
+            margin-left: auto;
+        }
+    }
+
+    @media (max-width: 1000px) {
         width: auto;
 
         .nav__header__logo--icon {

@@ -58,6 +58,10 @@ export default class DashboardLayout extends Vue {
         display: flex;
         overflow-y: auto;
         height: 100%;
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+        }
     }
 
     &__body {
