@@ -18,11 +18,11 @@
                 <div class="contributor__songs">
                     <song-list-card
                         :title="$t('song.author')"
-                        :songs="authorSongs.filter(s => s.collection.id == c.id)"
+                        :songs="authorSongs.filter(s => s.collection ? s.collection.id == c.id : false)"
                     ></song-list-card>
                     <song-list-card
                         :title="$t('song.composer')"
-                        :songs="composerSongs.filter(s => s.collection.id == c.id)"
+                        :songs="composerSongs.filter(s => s.collection ? s.collection.id == c.id : false)"
                     ></song-list-card>
                 </div>
             </div>

@@ -8,6 +8,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
+import { TransposeCalculator } from "../osmd/transpose";
 // import zip from "jszip";
 
 @Options({
@@ -27,6 +28,10 @@ export default class OSMD extends Vue {
         const o = new OpenSheetMusicDisplay("osmd");
 
         o.load(this.url).then(() => {
+            o.TransposeCalculator = new TransposeCalculator();  
+
+            o.Sheet.Transpose = 4;
+
             o.render();
         });
         this.loaded = true;
