@@ -46,7 +46,6 @@
                                 :to="{
                                     name: 'contributor',
                                     params: {
-                                        collection: $route.params.collection,
                                         contributor: composer.id,
                                     },
                                 }"
