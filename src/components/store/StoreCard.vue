@@ -112,6 +112,7 @@ export default class StoreCard extends Vue {
         margin-top: var(--st-spacing);
         margin-bottom: calc(var(--st-spacing) / 2);
         width: 100%;
+        word-wrap: break-word;
     }
 
     &__subtitle {
