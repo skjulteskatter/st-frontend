@@ -1,6 +1,6 @@
 <template>
     <div v-if="contributor" class="contributor">
-        <base-card class="contributor__biography" secondary>
+        <div class="contributor__biography" secondary>
             <div class="contributor__biography__header">
                 <p class="contributor__biography__header__title">
                     {{ $t("song.contributor") }}
@@ -10,19 +10,27 @@
                 </h1>
             </div>
             <div v-html="contributor.getBiography(languageKey)"></div>
-        </base-card>
+        </div>
 
         <div class="contributor__songs">
             <div v-for="c in collections" :key="c.id">
-                <h1>{{c.getName(languageKey)}}</h1>
+                <h2>{{ c.getName(languageKey) }}</h2>
                 <div class="contributor__songs">
                     <song-list-card
                         :title="$t('song.author')"
-                        :songs="authorSongs.filter(s => s.collection ? s.collection.id == c.id : false)"
+                        :songs="
+                            authorSongs.filter((s) =>
+                                s.collection ? s.collection.id == c.id : false
+                            )
+                        "
                     ></song-list-card>
                     <song-list-card
                         :title="$t('song.composer')"
-                        :songs="composerSongs.filter(s => s.collection ? s.collection.id == c.id : false)"
+                        :songs="
+                            composerSongs.filter((s) =>
+                                s.collection ? s.collection.id == c.id : false
+                            )
+                        "
                     ></song-list-card>
                 </div>
             </div>
@@ -75,26 +83,44 @@ export default class ContributorView extends Vue {
     }
 
     public get authorSongs(): Song[] {
-        return this.songs.filter((s) =>
-            s.authorIds?.find((a) => a == this.contributor?.id)
-        ).map(s => new Song(s));
+        return this.songs
+            .filter((s) => s.authorIds?.find((a) => a == this.contributor?.id))
+            .map((s) => new Song(s));
     }
 
     public get composerSongs(): Song[] {
-        return this.songs.filter((s) =>
-            s.composerIds?.find((c) => c == this.contributor?.id)
-        ).map(s => new Song(s));
+        return this.songs
+            .filter((s) =>
+                s.composerIds?.find((c) => c == this.contributor?.id)
+            )
+            .map((s) => new Song(s));
     }
 
     public get collections(): Collection[] {
-        return (this.sessionStore.getters.collections as Collection[] | undefined)?.filter(c => this.authorSongs.filter(s => s.collection?.id == c.id).length || this.composerSongs.filter(s => s.collection?.id == c.id).length) ?? [];
+        return (
+            (this.sessionStore.getters.collections as
+                | Collection[]
+                | undefined)?.filter(
+                (c) =>
+                    this.authorSongs.filter((s) => s.collection?.id == c.id)
+                        .length ||
+                    this.composerSongs.filter((s) => s.collection?.id == c.id)
+                        .length
+            ) ?? []
+        );
     }
 }
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .contributor {
     padding: calc(var(--st-spacing) * 2);
+
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
 
     &__biography {
         &__header {
@@ -114,7 +140,7 @@ export default class ContributorView extends Vue {
         grid-template-columns: repeat(2, 1fr);
         grid-gap: var(--st-spacing);
 
-        @media screen and (max-width: 600px) {
+        @include breakpoint("small") {
             grid-template-columns: 1fr;
         }
     }

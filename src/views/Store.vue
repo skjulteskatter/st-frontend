@@ -110,8 +110,14 @@ export default class Store extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .store {
     padding: calc(var(--st-spacing) * 2);
+
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
 
     &__title {
         margin: 0;
@@ -128,7 +134,7 @@ export default class Store extends Vue {
             gap: calc(var(--st-spacing) / 2);
         }
 
-        @media (max-width: 600px) {
+        @include breakpoint("small") {
             flex-direction: column;
             align-items: flex-start;
         }
