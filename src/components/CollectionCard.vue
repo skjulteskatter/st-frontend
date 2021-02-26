@@ -11,9 +11,9 @@
             :src="`${image}?w=300`"
             :alt="collection.getName(languageKey)"
         />
-        <h3 class="collection-card__title">
+        <h4 class="collection-card__title">
             {{ collection.getName(languageKey) }}
-        </h3>
+        </h4>
     </div>
 </template>
 
@@ -79,7 +79,7 @@ export default class CollectionCard extends Vue {
     &__title {
         margin: 0;
         color: white;
-        text-shadow: 0 0 0.5em rgba(black, 0.2);
+        text-shadow: 0 0 0.3em rgba(black, 0.3);
         position: absolute;
         top: var(--st-spacing);
         left: var(--st-spacing);

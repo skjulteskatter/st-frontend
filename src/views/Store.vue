@@ -7,6 +7,7 @@
                     theme="secondary"
                     @click="refreshSubscriptions"
                     icon="refresh"
+                    class="refresh-button"
                 >
                     <span>
                         {{ $t("common.refreshSubscriptions") }}
@@ -18,6 +19,7 @@
                     theme="secondary"
                     :loading="loading"
                     icon="collection"
+                    class="manage-button"
                 >
                     <span>
                         {{ $t("common.manage") }}
@@ -135,8 +137,12 @@ export default class Store extends Vue {
         }
 
         @include breakpoint("small") {
-            flex-direction: column;
-            align-items: flex-start;
+            .refresh-button,
+            .manage-button {
+                .button__content {
+                    display: none;
+                }
+            }
         }
     }
 
@@ -147,7 +153,7 @@ export default class Store extends Vue {
 
     &__items {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         grid-gap: var(--st-spacing);
     }
 }
