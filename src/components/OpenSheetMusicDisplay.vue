@@ -6,7 +6,7 @@
             @change="load"
             v-model="transposition"    
         >
-            <option :value="transpositions[t]" v-for="t in Object.keys(transpositions)" :key="t">{{t}}</option>
+            <option :value="ts[t]" v-for="t in Object.keys(ts)" :key="t">{{t}}</option>
         </select>
         <div id="osmd"></div>
     </div>
@@ -32,10 +32,23 @@ export default class OSMD extends Vue {
     public url?: string;
     public loaded = false;
     public transposition = 0;
-    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", ]
+    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", ]
     public transpositions: {
         [key: string]: number;
     } = {};
+
+    public get ts() {
+        const t: {
+            [key: string]: number;
+        } = {};
+
+        for (const k of Object.keys(this.transpositions)) {
+            if (this.keys.includes(k)) {
+                t[k] = this.transpositions[k];
+            }
+        }
+        return t;
+    }
 
     public o?: OpenSheetMusicDisplay;
 
