@@ -10,7 +10,6 @@
 
             <open-sheet-music-display
                 :url="sheetMusicUrl"
-                :transpositions="song.transpositions"
                 :originalKey="song.originalKey"
                 v-if="sheetMusicUrl"
             >
@@ -139,7 +138,9 @@ export default class SongViewer extends Vue {
     }
 
     public get sheetMusicUrl() {
-        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
+        return this.song
+            ?.sheetMusic
+            ?.find((s) => s.category === "leadsheet")
             ?.directUrl;
     }
 }
