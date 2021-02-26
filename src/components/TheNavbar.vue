@@ -97,6 +97,7 @@ export default class TheNavbar extends Vue {
 
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
 
     z-index: 9999;
 
