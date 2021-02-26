@@ -76,11 +76,13 @@ export default class TransposedLyricsViewer extends Vue {
         --chord-size: 0.9em;
         margin: 0 auto;
 
-        .verse-title {
+        .verse-title,
+        .chorus-title {
             font-weight: bold;
         }
 
-        .verse {
+        .verse,
+        .chorus {
             &:not(:last-child) {
                 margin-bottom: var(--st-spacing);
             }
