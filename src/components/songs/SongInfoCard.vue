@@ -56,6 +56,26 @@
                     </small>
                     <small
                         class="song-details__metadata__credits"
+                        v-if=" song.copyright.melody && song.copyright.text && identicalCopyright"
+                    >
+                        © {{ getLocaleString(song.copyright.melody.name) }}
+                    </small>
+                    <div v-else>
+                        <small
+                            class="song-details__metadata__credits"
+                            v-if="song.copyright.text"
+                        >
+                            {{ $t("song.text" )}} ©: {{ getLocaleString(song.copyright.text.name) }}
+                        </small>
+                        <small
+                            class="song-details__metadata__credits"
+                            v-if="song.copyright.melody"
+                        >
+                            {{ $t("song.melody" )}} ©: {{ getLocaleString(song.copyright.melody.name) }}
+                        </small>
+                    </div>
+                    <small
+                        class="song-details__metadata__credits"
                         v-if="melodyOrigin"
                     >
                         {{ melodyOrigin }}
@@ -107,6 +127,10 @@ export default class SongInfoCard extends Vue {
         return this.song?.getName(this.languageKey);
     }
 
+    public getLocaleString(dictionary: {[key: string]: string}) {
+        return dictionary[this.languageKey] ?? dictionary[Object.keys(dictionary)[0]];
+    }
+
     public get description() {
         return (
             this.song?.description[this.languageKey] ??
@@ -122,6 +146,10 @@ export default class SongInfoCard extends Vue {
             this.song?.melodyOrigin?.name.no ??
             undefined
         );
+    }
+
+    public get identicalCopyright() {
+        return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
     }
 }
 </script>

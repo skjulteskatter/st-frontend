@@ -19,12 +19,23 @@ interface SongInterface {
     videoFiles: MediaFile[];
     sheetMusic: MediaFile[];
     hasLyrics: boolean;
+    copyright: {
+        text?: Copyright;
+        melody?: Copyright;
+    };
     transpositions: {
         [key: string]: number;
     };
     originalKey: string;
     details: {
         [languageKey: string]: string;
+    };
+}
+
+interface Copyright {
+    id: string;
+    name: {
+        [key: string]: string;
     };
 }
 
