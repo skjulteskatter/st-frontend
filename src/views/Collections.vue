@@ -41,6 +41,8 @@ export default class Collections extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .songbooks {
     display: flex;
     flex-direction: column;
@@ -61,11 +63,11 @@ export default class Collections extends Vue {
         grid-template-columns: repeat(4, 1fr);
         grid-gap: var(--st-spacing);
 
-        @media screen and (max-width: 1000px) {
+        @include breakpoint("medium") {
             grid-template-columns: repeat(2, 1fr);
         }
 
-        @media screen and (max-width: 600px) {
+        @include breakpoint("small") {
             grid-template-columns: 1fr;
         }
     }

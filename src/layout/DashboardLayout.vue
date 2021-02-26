@@ -49,6 +49,8 @@ export default class DashboardLayout extends Vue {
 }
 </script>
 <style lang="scss">
+@import "../style/mixins";
+
 .dashboard-layout {
     display: flex;
     flex-direction: column;
@@ -59,7 +61,7 @@ export default class DashboardLayout extends Vue {
         overflow-y: auto;
         height: 100%;
 
-        @media (max-width: 600px) {
+        @include breakpoint("small") {
             flex-direction: column;
         }
     }

@@ -179,6 +179,8 @@ export default class SettingsCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "../style/mixins";
+
 .user-settings {
     display: flex;
     flex-direction: column;
@@ -226,7 +228,7 @@ export default class SettingsCard extends Vue {
         align-self: flex-end;
         margin-top: var(--st-spacing);
 
-        @media screen and (max-width: 600px) {
+        @include breakpoint("small") {
             align-self: initial;
         }
     }
