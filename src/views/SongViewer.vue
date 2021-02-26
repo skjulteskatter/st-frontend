@@ -29,7 +29,11 @@
                 <base-button @click="sidebar = false">
                     {{ $t("common.close") }}
                 </base-button>
-                <base-button v-if="extended" @click="extend">
+                <base-button
+                    v-if="extended"
+                    @click="extend"
+                    class="song-viewer__sidebar__buttons--advanced"
+                >
                     {{ $t("song.advanced") }}
                 </base-button>
             </div>
@@ -182,6 +186,19 @@ export default class SongViewer extends Vue {
         display: flex;
         flex-direction: column;
         gap: var(--st-spacing);
+
+        @include breakpoint("small") {
+            border-top: 1px solid var(--st-border-color);
+            position: fixed;
+            top: auto;
+            bottom: 0;
+            min-width: 0;
+            width: 100%;
+
+            .song-viewer__sidebar__buttons--advanced {
+                display: none;
+            }
+        }
 
         &__content {
             display: flex;
