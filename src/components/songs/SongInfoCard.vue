@@ -128,7 +128,7 @@ export default class SongInfoCard extends Vue {
     }
 
     public getLocaleString(dictionary: {[key: string]: string}) {
-        return dictionary[this.languageKey] ?? dictionary[Object.keys(dictionary)[0]];
+        return dictionary[this.languageKey] ?? dictionary.en ?? dictionary[Object.keys(dictionary)[0]];
     }
 
     public get description() {
