@@ -32,6 +32,7 @@ export default class OSMD extends Vue {
     public url?: string;
     public loaded = false;
     public transposition = 0;
+    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", ]
     public transpositions: {
         [key: string]: number;
     } = {};
@@ -42,7 +43,7 @@ export default class OSMD extends Vue {
         } = {};
 
         for (const k of Object.keys(this.transpositions)) {
-            if ((!k.includes("#") || k == "F#") && k != "Gb") {
+            if (this.keys.includes(k)) {
                 t[k] = this.transpositions[k];
             }
         }
