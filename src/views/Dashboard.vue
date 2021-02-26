@@ -80,11 +80,17 @@ export default class Dashboard extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .dashboard {
     padding: calc(var(--st-spacing) * 2);
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
+
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
 
     &__title {
         margin: 0;

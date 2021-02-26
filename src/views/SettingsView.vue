@@ -34,8 +34,14 @@ export default class SettingsView extends Vue {
 </script>
 
 <style lang="scss" >
+@import "../style/mixins";
+
 .settings-page {
     padding: calc(var(--st-spacing) * 2);
+
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
 
     &__header {
         display: flex;

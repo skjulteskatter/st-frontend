@@ -13,7 +13,6 @@
                 :transpositions="song.transpositions"
                 v-if="sheetMusicUrl"
             >
-
             </open-sheet-music-display>
             <lyrics-card
                 v-if="lyrics"
@@ -59,10 +58,7 @@ import {
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
-import { 
-    Collection, 
-    Lyrics
-} from "@/classes";
+import { Collection, Lyrics } from "@/classes";
 
 @Options({
     components: {
@@ -138,12 +134,15 @@ export default class SongViewer extends Vue {
     }
 
     public get sheetMusicUrl() {
-        return this.song?.sheetMusic?.find(s => s.category === "leadsheet")?.directUrl;
+        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
+            ?.directUrl;
     }
 }
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -158,6 +157,10 @@ export default class SongViewer extends Vue {
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
         overflow-y: auto;
+
+        @include breakpoint("medium") {
+            padding: var(--st-spacing);
+        }
 
         & > *:not(:last-child) {
             margin-bottom: var(--st-spacing);

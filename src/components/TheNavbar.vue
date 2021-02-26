@@ -28,7 +28,6 @@
             class="nav__links"
             :class="{
                 'nav__links-active': openBurgerMenu,
-                'gap-y': isMobileDevice,
             }"
         >
             <router-link class="nav__item" :to="{ name: 'main' }">
@@ -99,6 +98,8 @@ export default class TheNavbar extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .nav {
     --size: 40px;
     background-color: var(--st-background-color);
@@ -113,7 +114,7 @@ export default class TheNavbar extends Vue {
 
     z-index: 9999;
 
-    @media (max-width: 600px) {
+    @include breakpoint("small") {
         flex-direction: initial;
         max-width: none;
         border-bottom: 1px solid var(--st-border-color);
@@ -128,7 +129,7 @@ export default class TheNavbar extends Vue {
         }
     }
 
-    @media (max-width: 1000px) {
+    @include breakpoint("medium") {
         width: auto;
 
         .nav__header__logo--icon {

@@ -367,6 +367,8 @@ export default class SongList extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .warning {
     opacity: 0.4;
 }
@@ -382,12 +384,16 @@ export default class SongList extends Vue {
     animation: slideInFromBottom 0.3s ease;
     padding: calc(var(--st-spacing) * 2);
 
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
+
     &__filters {
         display: flex;
         align-items: flex-end;
         gap: calc(var(--st-spacing) / 2);
 
-        @media screen and (max-width: 600px) {
+        @include breakpoint("small") {
             flex-direction: column;
             width: 100%;
         }
@@ -398,14 +404,14 @@ export default class SongList extends Vue {
 
         &__category {
             &__buttons {
-                @media (max-width: 1000px) {
+                @include breakpoint("medium") {
                     display: none;
                 }
             }
             &__dropdown {
                 display: none;
 
-                @media (max-width: 1000px) {
+                @include breakpoint("medium") {
                     display: block;
                 }
             }
@@ -459,7 +465,7 @@ export default class SongList extends Vue {
         align-items: center;
         margin-bottom: var(--st-spacing);
 
-        @media screen and (max-width: 600px) {
+        @include breakpoint("small") {
             flex-direction: column;
             align-items: flex-start;
             gap: var(--st-spacing);

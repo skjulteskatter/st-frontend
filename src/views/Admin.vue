@@ -102,6 +102,8 @@ export default class Subscriptions extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .api-token {
     &__token {
         overflow-wrap: break-word;
@@ -119,6 +121,10 @@ export default class Subscriptions extends Vue {
 }
 .admin-panel {
     padding: calc(var(--st-spacing) * 2);
+
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
 
     &__header {
         margin-bottom: var(--st-spacing);
