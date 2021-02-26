@@ -109,6 +109,10 @@ export default class TheNavbar extends Vue {
         left: 0;
         height: min-content;
 
+        .nav__header {
+            border-bottom: none;
+        }
+
         .nav__links {
             flex-direction: initial;
             flex-grow: 0;
