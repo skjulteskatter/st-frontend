@@ -2,10 +2,11 @@
     <div>
         <button v-if="!loaded" @click="load">Leadsheet</button>
         <select
+            v-if="loaded"
             @change="load"
             v-model="transposition"    
         >
-            <option :value="t" v-for="t in transpositions" :key="t">{{t}}</option>
+            <option :value="transpositions[t]" v-for="t in Object.keys(transpositions)" :key="t">{{t}}</option>
         </select>
         <div id="osmd"></div>
     </div>
@@ -22,13 +23,19 @@ import { TransposeCalculator } from "../osmd/transpose";
         url: {
             type: String
         },
+        transpositions: {
+            type: Object
+        }
     }
 })
 export default class OSMD extends Vue {
     public url?: string;
     public loaded = false;
     public transposition = 0;
-    public transpositions = [-3, -2, -1, 0, 1, 2, 3];
+    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", ]
+    public transpositions: {
+        [key: string]: number;
+    } = {};
 
     public o?: OpenSheetMusicDisplay;
 

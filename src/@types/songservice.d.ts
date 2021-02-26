@@ -19,6 +19,10 @@ interface SongInterface {
     videoFiles: MediaFile[];
     sheetMusic: MediaFile[];
     hasLyrics: boolean;
+    transpositions: {
+        [key: string]: number;
+    };
+    originalKey: string;
     details: {
         [languageKey: string]: string;
     };

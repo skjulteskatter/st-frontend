@@ -10,6 +10,7 @@
 
             <open-sheet-music-display
                 :url="sheetMusicUrl"
+                :transpositions="song.transpositions"
                 v-if="sheetMusicUrl"
             >
 

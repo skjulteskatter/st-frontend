@@ -7,6 +7,10 @@ export class Song implements SongInterface {
     public type: string;
     public name: LocaleString;
     public collection?: CollectionInterface;
+    public transpositions: {
+        [key: string]: number;
+    };
+    public originalKey: string;
 
     public getName(language: string) {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)[0]];
@@ -45,6 +49,8 @@ export class Song implements SongInterface {
         this.type = song.type;
         this.themes = song.themes;
         this.hasLyrics = song.hasLyrics;
+        this.originalKey = song.originalKey;
+        this.transpositions = song.transpositions;
     }
 
     public language(code: string): boolean {
