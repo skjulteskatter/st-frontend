@@ -1,5 +1,10 @@
 <template>
     <div class="audio-player" v-if="audio && audio.directUrl && song">
+        <Icon
+            class="audio-player__close--mobile"
+            name="error"
+            @click="closePlayer"
+        />
         <div class="audio-player__info">
             <b class="audio-player__name">{{ audio.name }}</b>
             <small class="audio-player__title">
@@ -41,6 +46,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton } from "@/components";
+import { Icon } from "@/components/icon";
 import Plyr from "plyr";
 import { sessionKey, songKey } from "@/store";
 import { useStore } from "vuex";
@@ -49,6 +55,7 @@ import { useStore } from "vuex";
     components: {
         BaseCard,
         BaseButton,
+        Icon,
     },
 })
 export default class AudioPlayer extends Vue {
@@ -85,6 +92,8 @@ export default class AudioPlayer extends Vue {
 </script>
 
 <style lang="scss">
+@import "../../style/mixins";
+
 :root {
     // Plyr styling
     --plyr-color-main: var(--st-primary-color);
@@ -108,6 +117,31 @@ export default class AudioPlayer extends Vue {
     align-items: center;
     gap: var(--st-spacing);
 
+    position: relative;
+
+    @include breakpoint("medium") {
+        flex-direction: column;
+
+        .audio-player__info {
+            align-items: center;
+        }
+
+        .audio-player__close {
+            display: none;
+
+            &--mobile {
+                display: block;
+                position: absolute;
+                top: var(--st-spacing);
+                right: var(--st-spacing);
+            }
+        }
+    }
+
+    &__close--mobile {
+        display: none;
+    }
+
     &__title {
         & > * {
             text-decoration: none;
@@ -130,7 +164,8 @@ export default class AudioPlayer extends Vue {
         width: 100%;
     }
 
-    .plyr__controls {
+    .plyr__controls,
+    .plyr__control {
         padding: 0;
     }
 }
