@@ -1,11 +1,14 @@
 <template>
-    <div v-if="lyrics" class="transposed-lyrics" v-html="lyrics.transposedContent">
-    </div>
+    <div
+        v-if="lyrics"
+        class="transposed-lyrics"
+        v-html="lyrics.transposedContent"
+    ></div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import {  BaseButton, Modal } from "@/components";
+import { BaseButton, Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "vuex";
@@ -23,7 +26,7 @@ import { songKey } from "@/store";
         },
         selectedTransposition: {
             type: Number,
-        }
+        },
     },
 })
 export default class TransposedLyricsViewer extends Vue {
@@ -78,9 +81,6 @@ export default class TransposedLyricsViewer extends Vue {
         }
 
         .verse {
-            padding: var(--st-spacing);
-            border-left: 1px solid var(--st-border-color);
-
             &:not(:last-child) {
                 margin-bottom: var(--st-spacing);
             }

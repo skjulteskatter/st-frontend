@@ -81,7 +81,15 @@ export default class StoreCard extends Vue {
 </script>
 
 <style lang="scss">
+@import "../../style/mixins";
+
 .store-card {
+    @include breakpoint("small") {
+        .store-card__price {
+            display: none;
+        }
+    }
+
     &__image {
         max-width: 100%;
         // max-height: 300px;

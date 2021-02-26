@@ -3,13 +3,13 @@
         <template #header>
             <div class="lyrics-card__header">
                 <div class="lyrics-card__header__item">
-                    <select 
-                            v-if="transposed"
-                            id="transposition"
-                            name="transposition"
-                            v-model="selectedTransposition"
-                            @change="transpose"
-                        >
+                    <select
+                        v-if="transposed"
+                        id="transposition"
+                        name="transposition"
+                        v-model="selectedTransposition"
+                        @change="transpose"
+                    >
                         <option
                             v-for="t in Object.keys(this.transpositions)"
                             :value="this.transpositions[t]"
@@ -47,12 +47,7 @@
             ref="transposed"
         >
         </transposed-lyrics-viewer>
-        <lyrics-viewer
-            v-else
-            :lyrics="lyrics"
-            :song="song"
-        >
-        </lyrics-viewer>
+        <lyrics-viewer v-else :lyrics="lyrics" :song="song"></lyrics-viewer>
     </base-card>
 </template>
 <script lang="ts">
@@ -72,15 +67,15 @@ import { BaseCard, BaseButton } from "./";
     },
     props: {
         lyrics: {
-            type: Object
+            type: Object,
         },
         song: {
-            type: Object
+            type: Object,
         },
         collection: {
-            type: Object
+            type: Object,
         },
-    }
+    },
 })
 export default class LyricsCard extends Vue {
     public store = useStore(sessionKey);
@@ -88,9 +83,9 @@ export default class LyricsCard extends Vue {
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
-    public selectedLanguage = '';
+    public selectedLanguage = "";
     public selectedTransposition = 0;
-    
+
     public mounted() {
         if (this.transposed) {
             if (this.song?.hasLyrics) {
@@ -100,11 +95,10 @@ export default class LyricsCard extends Vue {
             }
         }
 
-        this.selectedLanguage = (this.languages.find(
-            (l) => l.key == this.languageKey
-        )
-            ? this.languageKey
-            : this.languages[0]?.key) ?? this.languageKey;
+        this.selectedLanguage =
+            (this.languages.find((l) => l.key == this.languageKey)
+                ? this.languageKey
+                : this.languages[0]?.key) ?? this.languageKey;
     }
 
     public get languageKey() {
@@ -125,15 +119,19 @@ export default class LyricsCard extends Vue {
             );
             this.songStore.commit("language", this.selectedLanguage);
             if (this.type === "transpose") {
-                (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition)
+                (this.$refs.transposed as TransposedLyricsViewer).transpose(
+                    this.selectedTransposition
+                );
             }
         }
     }
 
     public async transpose() {
-        (this.$refs.transposed as TransposedLyricsViewer).transpose(this.selectedTransposition);
+        (this.$refs.transposed as TransposedLyricsViewer).transpose(
+            this.selectedTransposition
+        );
     }
-    
+
     public transposeToggle() {
         if (this.type === "transpose") {
             this.songStore.commit("view", "default");
@@ -152,7 +150,7 @@ export default class LyricsCard extends Vue {
         this.songStore.commit("transposedLyrics", lyrics);
         this.songStore.commit("view", "transpose");
     }
-    
+
     public get transposedLyrics() {
         return this.songStore.state.transposedLyrics;
     }
@@ -162,9 +160,13 @@ export default class LyricsCard extends Vue {
     }
 
     public get transposition() {
-        return this.transposedLyrics?.transposedToKey ?? this.lyrics?.originalKey ?? "";
+        return (
+            this.transposedLyrics?.transposedToKey ??
+            this.lyrics?.originalKey ??
+            ""
+        );
     }
-    
+
     public get transposed() {
         return this.type === "transpose";
     }

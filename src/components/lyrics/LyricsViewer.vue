@@ -74,5 +74,7 @@ export default class LyricsViewer extends Vue {
 .lyrics-viewer {
     width: 100%;
     flex-grow: 1;
+    line-height: 0.9em;
+    margin-bottom: calc(var(--st-spacing) * 2);
 }
 </style>
