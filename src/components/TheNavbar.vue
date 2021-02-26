@@ -1,5 +1,5 @@
 <template>
-    <nav class="nav" @click="toggleBurgerMenu">
+    <nav class="nav">
         <div class="nav__header" @click="$router.push('/')">
             <img
                 class="nav__header__logo"
@@ -24,12 +24,7 @@
                 <small class="nav__user-profile__email">{{ user.email }}</small>
             </div>
         </div>
-        <div
-            class="nav__links"
-            :class="{
-                'nav__links-active': openBurgerMenu,
-            }"
-        >
+        <div class="nav__links">
             <router-link class="nav__item" :to="{ name: 'main' }">
                 <icon name="home" size="20" />
                 <span>{{ $t("common.dashboard") }}</span>
@@ -73,18 +68,9 @@ import { sessionKey } from "@/store";
 })
 export default class TheNavbar extends Vue {
     private userStore = useStore(sessionKey);
-    public openBurgerMenu = false;
-
-    public toggleBurgerMenu() {
-        this.openBurgerMenu = !this.openBurgerMenu;
-    }
 
     public get isAdmin() {
         return useStore(sessionKey).getters.isAdmin;
-    }
-
-    public get isMobileDevice() {
-        return window.orientation != undefined;
     }
 
     public get user() {
@@ -121,6 +107,7 @@ export default class TheNavbar extends Vue {
         position: sticky;
         top: 0;
         left: 0;
+        height: min-content;
 
         .nav__links {
             flex-direction: initial;
