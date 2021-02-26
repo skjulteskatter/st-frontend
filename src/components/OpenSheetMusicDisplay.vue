@@ -1,13 +1,19 @@
 <template>
     <div>
         <button v-if="!loaded" @click="load">Leadsheet</button>
-        <select
+        <!-- <select
             v-if="loaded"
             @change="load"
             v-model="transposition"    
         >
             <option :value="ts[t]" v-for="t in Object.keys(ts)" :key="t">{{t}}</option>
-        </select>
+        </select> -->
+        <div v-if="loaded" style="display:flex;">
+            <base-button @click="close">{{ $t('common.close') }}</base-button>
+            <base-button @click="transpose(transposition + 1)">+</base-button>
+            <base-button>{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
+            <base-button @click="transpose(transposition - 1)">-</base-button>
+        </div>
         <div id="osmd"></div>
     </div>
 </template>
@@ -16,23 +22,31 @@
 import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 import { TransposeCalculator } from "../osmd/transpose";
+import { BaseButton } from "@/components";
 // import zip from "jszip";
 
 @Options({
+    components: {
+        BaseButton,
+    },
     props: {
         url: {
             type: String
         },
         transpositions: {
             type: Object
+        },
+        originalKey: {
+            type: String
         }
     }
 })
 export default class OSMD extends Vue {
     public url?: string;
+    public originalKey = "C";
     public loaded = false;
     public transposition = 0;
-    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", ]
+    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb"]
     public transpositions: {
         [key: string]: number;
     } = {};
@@ -52,12 +66,25 @@ export default class OSMD extends Vue {
 
     public o?: OpenSheetMusicDisplay;
 
-    public mounted() {
-        this.o = new OpenSheetMusicDisplay("osmd");
+    public transpose(n: number) {
+        this.transposition = n;
+        this.load();
+    }
+
+    public close() {
+        this.o?.clear();
+
+        const el = document.getElementById("osmd");
+        if (el) {
+            el.innerHTML = '';
+        }
+        this.loaded = false;
     }
 
     public async load() {
-        if (!this.url || !this.o) return;
+        if (!this.o) this.o = new OpenSheetMusicDisplay("osmd");
+
+        if (!this.url) return;
 
         await this.o.load(this.url);
 

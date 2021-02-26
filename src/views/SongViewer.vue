@@ -11,6 +11,7 @@
             <open-sheet-music-display
                 :url="sheetMusicUrl"
                 :transpositions="song.transpositions"
+                :originalKey="song.originalKey"
                 v-if="sheetMusicUrl"
             >
             </open-sheet-music-display>
