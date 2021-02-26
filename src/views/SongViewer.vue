@@ -8,7 +8,11 @@
                 :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
 
-            <open-sheet-music-display :url="sheetMusicUrl" v-if="sheetMusicUrl">
+            <open-sheet-music-display
+                :url="sheetMusicUrl"
+                :transpositions="song.transpositions"
+                v-if="sheetMusicUrl"
+            >
             </open-sheet-music-display>
             <lyrics-card
                 v-if="lyrics"

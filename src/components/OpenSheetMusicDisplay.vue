@@ -1,6 +1,13 @@
 <template>
     <div>
         <button v-if="!loaded" @click="load">Leadsheet</button>
+        <select
+            v-if="loaded"
+            @change="load"
+            v-model="transposition"    
+        >
+            <option :value="transpositions[t]" v-for="t in Object.keys(transpositions)" :key="t">{{t}}</option>
+        </select>
         <div id="osmd"></div>
     </div>
 </template>
@@ -15,89 +22,42 @@ import { TransposeCalculator } from "../osmd/transpose";
     props: {
         url: {
             type: String
+        },
+        transpositions: {
+            type: Object
         }
     }
 })
 export default class OSMD extends Vue {
     public url?: string;
     public loaded = false;
+    public transposition = 0;
+    public keys = ["Bb", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", ]
+    public transpositions: {
+        [key: string]: number;
+    } = {};
+
+    public o?: OpenSheetMusicDisplay;
+
+    public mounted() {
+        this.o = new OpenSheetMusicDisplay("osmd");
+    }
 
     public async load() {
-        if (!this.url) return;
+        if (!this.url || !this.o) return;
 
-        const o = new OpenSheetMusicDisplay("osmd");
+        await this.o.load(this.url);
 
-        o.load(this.url).then(() => {
-            o.TransposeCalculator = new TransposeCalculator();  
+        this.o.TransposeCalculator = new TransposeCalculator();
 
-            o.Sheet.Transpose = 4;
+        this.o.Sheet.Transpose = this.transposition;
 
-            o.render();
-        });
+        this.o.updateGraphic();
+
+        this.o.render();
+        
         this.loaded = true;
-        // const req = http.get(this.url, (res) =>{
-        //     if (res.statusCode !== 200) {
-        //         console.log(res.statusCode);
-        //         // handle error
-        //         return;
-        //     }
-        //     const data: Buffer[] = [];
-        //     let dataLen = 0;
 
-        //     // don't set the encoding, it will break everything !
-        //     // or, if you must, set it to null. In that case the chunk will be a string.
-
-        //     res.on("data", function (chunk: Buffer) {
-        //         data.push(chunk);
-        //         dataLen += chunk.length;
-        //     });
-
-        //     res.on("end", function () {
-        //         const buf = Buffer.concat(data);
-
-        //         console.log(buf.toString());
-        //         const o = new OpenSheetMusicDisplay("osmd");
-
-        //         o.setOptions({
-        //             backend: "svg",
-        //             drawTitle: true,
-        //         });
-
-        //         o.load(buf.toString()).then(() => {
-        //             o.render();
-        //         });
-                    
-                    
-        //         // });
-
-        //         // // here we go !
-        //         // zip.loadAsync(buf).then(function (z) {
-        //         //     const fileName = Object.keys(z.files).find(f => !f.startsWith("META")) ?? '';
-        //         //     return z.file(fileName)?.async("string") ?? '';
-        //         // }).then(function (text) {
-
-        //         //     const o = new OpenSheetMusicDisplay("osmd");
-
-        //         //     o.setOptions({
-        //         //         backend: "svg",
-        //         //         drawTitle: true,
-        //         //     });
-
-        //         //     o.load(text).then(() => {
-        //         //         o.render();         
-
-                        
-                        
-        //         //     });
-
-        //         //     console.log(text);
-        //         // });
-        //     });
-        // });
-
-        // req.on("error", function(err) {
-        // // handle error
-        // });
     }
 }
 </script>
