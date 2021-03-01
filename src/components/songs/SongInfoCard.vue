@@ -11,10 +11,10 @@
             </h2>
             <div class="song-details__metadata__content">
                 <span
-                    v-if="verses"
+                    v-if="song.verses"
                     class="song-details__metadata__verse-count tag"
                 >
-                    {{ verses }} {{ $t("song.verses") }}
+                    {{ song.verses }} {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
                 </span>
                 <div class="song-details__metadata__info">
                     <small class="song-details__metadata__credits gap-x">
@@ -113,15 +113,11 @@ import { BaseCard, Modal } from "@/components";
         song: {
             type: Object,
         },
-        verses: {
-            type: Number,
-        },
     },
 })
 export default class SongInfoCard extends Vue {
     public languageKey = "";
     public song?: Song;
-    public verses = 0;
 
     public get title() {
         return this.song?.getName(this.languageKey);
