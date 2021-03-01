@@ -11,7 +11,7 @@
                         </label>
                         <button-group
                             :buttons="buttons"
-                            :action="setListType"
+                            @click="setListType"
                             class="song-list__filters__category__buttons"
                         ></button-group>
                         <select
@@ -54,7 +54,7 @@
                     :key="author.contributor.id"
                     :songs="contributorSongs(author)"
                     :title="author.contributor.name"
-                    :action="() => gotoContributor(author.contributor)"
+                    @click="gotoContributor(author.contributor)"
                 ></song-list-card>
             </div>
 
@@ -64,7 +64,7 @@
                     :key="composer.contributor.id"
                     :songs="contributorSongs(composer)"
                     :title="composer.contributor.name"
-                    :action="() => gotoContributor(composer.contributor)"
+                    @click="gotoContributor(composer.contributor)"
                 ></song-list-card>
             </div>
 

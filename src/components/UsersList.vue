@@ -4,7 +4,7 @@
             <h2>{{ $t("admin.users") }}</h2>
             <base-button
                 :class="{ disabled: disableButton }"
-                :action="refreshUsers"
+                @click="refreshUsers"
                 :loading="loading"
                 icon="refresh"
                 theme="secondary"
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <base-button
-                                    :action="() => saveRoles(u)"
+                                    @click="saveRoles(u)"
                                     class="edit-user__save"
                                     :loading="loading"
                                     >{{ $t("common.save") }}</base-button

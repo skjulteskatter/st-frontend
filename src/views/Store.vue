@@ -15,7 +15,7 @@
                 </base-button>
                 <base-button
                     v-if="productIds.length"
-                    :action="portal"
+                    @click="portal"
                     theme="secondary"
                     :loading="loading"
                     icon="collection"
@@ -33,7 +33,7 @@
                 v-for="product in products"
                 :key="product.id"
                 :product="product"
-                :action="() => checkout(product)"
+                @click="checkout(product)"
                 :isPurchaseable="!productIds.includes(product.id)"
             ></store-card>
         </div>

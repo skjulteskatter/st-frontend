@@ -34,7 +34,7 @@
             <audio class="audio-player__player" :src="audio.directUrl"></audio>
         </div>
         <div class="audio-player__close">
-            <base-button theme="secondary" :action="closePlayer" icon="error">
+            <base-button theme="secondary" @click="closePlayer" icon="error">
                 <span style="margin-right: 0.5em">
                     {{ $t("common.close") }}
                 </span>

@@ -60,7 +60,7 @@
             </div>
             <base-button
                 :loading="loading"
-                :action="save"
+                @click="save"
                 icon="check"
                 class="user-settings__save-button"
             >

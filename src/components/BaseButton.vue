@@ -2,7 +2,6 @@
     <button
         class="button"
         :class="[`button-${theme}`, { 'button-loading': loading }]"
-        @click="action"
         :disabled="loading"
         v-bind="$attrs"
     >
@@ -40,9 +39,6 @@ import { Icon } from "@/components/icon";
                 );
             },
         },
-        action: {
-            type: Function,
-        },
         loading: {
             type: Boolean,
         },
@@ -56,7 +52,6 @@ import { Icon } from "@/components/icon";
 })
 export default class BaseButton extends Vue {
     public loading = false;
-    public action: Function = () => undefined;
     public loadingLabel = "Loading...";
     public theme = "primary";
     public icon = "";

@@ -2,7 +2,7 @@
     <base-dropdown :label="$t('common.open')">
         <div class="filter__header gap-x">
             <b>{{ $t("song.filters") }}</b>
-            <base-button theme="primary" :action="apply">
+            <base-button theme="primary" @click="apply">
                 {{ $t("common.save") }}
             </base-button>
         </div>

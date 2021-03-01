@@ -14,7 +14,7 @@
                 class="store-card__button"
                 v-if="isPurchaseable"
                 icon="shop"
-                :action="action"
+                @click="action"
             >
                 <span>{{ $t("store.buy") }}</span>
             </base-button>

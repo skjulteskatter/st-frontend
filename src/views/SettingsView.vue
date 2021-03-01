@@ -2,7 +2,7 @@
     <div class="settings-page">
         <div class="settings-page__header">
             <h1 class="settings-page__title">{{ $t("common.settings") }}</h1>
-            <base-button theme="error" icon="logout" :action="logout">
+            <base-button theme="error" icon="logout" @click="logout">
                 {{ $t("common.logout") }}
             </base-button>
         </div>

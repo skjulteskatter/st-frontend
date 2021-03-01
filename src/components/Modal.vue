@@ -1,7 +1,7 @@
 <template>
     <div class="modal">
         <base-button
-            :action="openModal"
+            @click="openModal"
             class="modal__open-button"
             :theme="theme"
             v-if="type == 'button'"
@@ -19,7 +19,7 @@
                 >
                     <slot></slot>
                     <base-button
-                        :action="closeModal"
+                        @click="closeModal"
                         class="modal__popup__card__close-button"
                         theme="secondary"
                         >{{ $t("common.close") }}</base-button

@@ -25,12 +25,12 @@
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
-                <base-button :action="(sidebar = false)">
+                <base-button @click="sidebar = false">
                     {{ $t("common.close") }}
                 </base-button>
                 <base-button
                     v-if="extended"
-                    :action="extend"
+                    @click="extend"
                     class="song-viewer__sidebar__buttons--advanced"
                 >
                     {{ $t("song.advanced") }}

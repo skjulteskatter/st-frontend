@@ -15,7 +15,7 @@
                     <b>{{ collection.key }}</b>
                     <base-button
                         v-if="!disabled.includes(collection.id)"
-                        :action="() => clearCollection(collection.id)"
+                        @click="clearCollection(collection.id)"
                         theme="error"
                         icon="trash"
                     >
@@ -31,7 +31,7 @@
                     <base-button
                         class="api-token__button"
                         theme="secondary"
-                        :action="() => (showToken = !showToken)"
+                        @click="showToken = !showToken"
                     >
                         Toggle API token
                     </base-button>

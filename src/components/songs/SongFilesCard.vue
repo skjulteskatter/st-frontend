@@ -10,7 +10,7 @@
             </h2>
             <base-button
                 theme="secondary"
-                :action="() => (filesIsOpen = !filesIsOpen)"
+                @click="filesIsOpen = !filesIsOpen"
                 icon="arrowDown"
             >
                 <span>{{ $t("common.show") }}</span>

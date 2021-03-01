@@ -6,29 +6,6 @@
                 $t("common.logout")
             }}</base-button>
         </div>
-        <!-- <base-dropdown class="menu-button">
-            <template #button>
-                <img class="profile-picture" :src="user.image" />
-            </template>
-            <template #default>
-                <div class="options__content gap-y">
-                    <span class="options__content__item">
-                        <span class="fa fa-cog"></span>
-                        <span>{{ $t("common.settings") }}</span>
-                    </span>
-                    <span class="options__content__item">
-                        <base-button
-                            class="options__content__item__button"
-                            theme="secondary"
-                            :action="logout"
-                        >
-                            <span class="fa fa-sign-out-alt"></span>
-                            <span>{{ $t("common.logout") }}</span>
-                        </base-button>
-                    </span>
-                </div>
-            </template>
-        </base-dropdown> -->
     </div>
 </template>
 <script lang="ts">
