@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button v-if="!loaded" @click="load">Leadsheet</button>
+        <base-button v-if="!loaded" :action="load">Leadsheet</base-button>
         <!-- <select
             v-if="loaded"
             @change="load"
@@ -8,11 +8,15 @@
         >
             <option :value="ts[t]" v-for="t in Object.keys(ts)" :key="t">{{t}}</option>
         </select> -->
-        <div v-if="loaded" style="display:flex;">
-            <base-button @click="close">{{ $t('common.close') }}</base-button>
-            <base-button @click="transpose(transposition - 1)">-</base-button>
-            <base-button>{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
-            <base-button @click="transpose(transposition + 1)">+</base-button>
+        <div v-if="loaded" style="display: flex">
+            <base-button :action="close">{{ $t("common.close") }}</base-button>
+            <base-button :action="transpose(transposition - 1)">-</base-button>
+            <base-button
+                >{{ originalKey }} ({{
+                    transposition > 0 ? "+" + transposition : transposition
+                }})</base-button
+            >
+            <base-button :action="transpose(transposition + 1)">+</base-button>
         </div>
         <div id="osmd"></div>
     </div>
@@ -30,12 +34,12 @@ import { BaseButton } from "@/components";
     },
     props: {
         url: {
-            type: String
+            type: String,
         },
         originalKey: {
-            type: String
-        }
-    }
+            type: String,
+        },
+    },
 })
 export default class OSMD extends Vue {
     public url?: string;
@@ -55,7 +59,7 @@ export default class OSMD extends Vue {
 
         const el = document.getElementById("osmd");
         if (el) {
-            el.innerHTML = '';
+            el.innerHTML = "";
         }
         this.loaded = false;
     }
@@ -74,9 +78,8 @@ export default class OSMD extends Vue {
         this.o.updateGraphic();
 
         this.o.render();
-        
-        this.loaded = true;
 
+        this.loaded = true;
     }
 }
 </script>

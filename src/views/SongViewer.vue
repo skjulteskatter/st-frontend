@@ -26,12 +26,12 @@
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
-                <base-button @click="sidebar = false">
+                <base-button :action="(sidebar = false)">
                     {{ $t("common.close") }}
                 </base-button>
                 <base-button
                     v-if="extended"
-                    @click="extend"
+                    :action="extend"
                     class="song-viewer__sidebar__buttons--advanced"
                 >
                     {{ $t("song.advanced") }}
@@ -138,9 +138,7 @@ export default class SongViewer extends Vue {
     }
 
     public get sheetMusicUrl() {
-        return this.song
-            ?.sheetMusic
-            ?.find((s) => s.category === "leadsheet")
+        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
             ?.directUrl;
     }
 }

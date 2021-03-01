@@ -41,8 +41,8 @@
             >
                 Open KaraokeViewer
             </base-button>
-            <base-button @click="setLineSize(1)">1</base-button>
-            <base-button @click="setLineSize(2)">2</base-button>
+            <base-button :action="() => setLineSize(1)">1</base-button>
+            <base-button :action="() => setLineSize(2)">2</base-button>
         </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
