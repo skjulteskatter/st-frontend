@@ -22,12 +22,12 @@ import { BaseButton } from "@/components";
     },
     props: {
         url: {
-            type: String
+            type: String,
         },
         originalKey: {
-            type: String
-        }
-    }
+            type: String,
+        },
+    },
 })
 export default class OSMD extends Vue {
     public url?: string;
@@ -51,7 +51,7 @@ export default class OSMD extends Vue {
 
         const el = document.getElementById("osmd");
         if (el) {
-            el.innerHTML = '';
+            el.innerHTML = "";
         }
         this.loaded = false;
     }
@@ -70,9 +70,8 @@ export default class OSMD extends Vue {
         this.o.updateGraphic();
 
         this.o.render();
-        
-        this.loaded = true;
 
+        this.loaded = true;
     }
 }
 </script>
