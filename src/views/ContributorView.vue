@@ -137,12 +137,8 @@ export default class ContributorView extends Vue {
 
     &__songs {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         grid-gap: var(--st-spacing);
-
-        @include breakpoint("small") {
-            grid-template-columns: 1fr;
-        }
     }
 }
 </style>
