@@ -26,6 +26,7 @@ export interface Songs {
     lyrics?: Lyrics;
     transposedLyrics?: Lyrics;
     transposition?: number;
+    smTransposition?: number;
     verses: Verse[];
     lines: string[];
     collections: Collection[];
@@ -167,6 +168,9 @@ export const songStore = createStore<Songs>({
         },
         transposition(state, transposition: number) {
             state.transposition = transposition;
+        },
+        smTransposition(state, transposition: number) {
+            state.smTransposition = transposition;
         },
         lines(state, lines: string[]) {
             state.lines = lines;

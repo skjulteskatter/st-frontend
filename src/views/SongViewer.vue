@@ -6,8 +6,11 @@
                 :song="song"
                 :languageKey="languageKey"
             ></song-info-card>
-            <base-button @click="showSheetMusic = true" v-if="sheetMusicUrl">
-                {{ $t("song.leadSheet") }}
+            <base-button
+                @click="showSheetMusic = !showSheetMusic"
+                v-if="sheetMusicUrl"
+                >
+                {{ $t('song.leadSheet' )}}
             </base-button>
             <open-sheet-music-display
                 :url="sheetMusicUrl"

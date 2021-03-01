@@ -15,6 +15,8 @@ import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 import { TransposeCalculator } from "../osmd/transpose";
 import { BaseButton } from "@/components";
+import { useStore } from "vuex";
+import { songKey } from "@/store";
 
 @Options({
     components: {
@@ -30,10 +32,10 @@ import { BaseButton } from "@/components";
     },
 })
 export default class OSMD extends Vue {
+    private songStore = useStore(songKey);
     public url?: string;
     public originalKey = "C";
     public loaded = false;
-    public transposition = 0;
 
     public o?: OpenSheetMusicDisplay;
 
@@ -42,8 +44,12 @@ export default class OSMD extends Vue {
     }
 
     public transpose(n: number) {
-        this.transposition = n;
+        this.songStore.commit("smTransposition", n);
         this.load();
+    }
+
+    public get transposition() {
+        return this.songStore.state.smTransposition ?? 0;
     }
 
     public close() {
