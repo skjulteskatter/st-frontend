@@ -5,7 +5,6 @@
             <song-info-card
                 :song="song"
                 :languageKey="languageKey"
-                :verses="lyrics ? Object.keys(lyrics.content).length : 0"
             ></song-info-card>
 
             <open-sheet-music-display

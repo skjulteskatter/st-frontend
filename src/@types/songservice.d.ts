@@ -27,6 +27,7 @@ interface SongInterface {
         [key: string]: number;
     };
     originalKey: string;
+    verses: number;
     details: {
         [languageKey: string]: string;
     };
