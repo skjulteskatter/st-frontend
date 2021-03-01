@@ -30,7 +30,7 @@
                 </base-button>
                 <base-button
                     v-if="extended"
-                    @click="extend"
+                    :action="extend"
                     class="song-viewer__sidebar__buttons--advanced"
                 >
                     {{ $t("song.advanced") }}
