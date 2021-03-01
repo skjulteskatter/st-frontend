@@ -4,6 +4,7 @@
         :class="[`button-${theme}`, { 'button-loading': loading }]"
         @click="action"
         :disabled="loading"
+        v-bind="$attrs"
     >
         <span class="button__label--loading" v-if="loading">{{
             loadingLabel

@@ -51,6 +51,7 @@ export default class Notification extends Vue {
     background-color: var(--st-primary-color);
     border-radius: var(--st-border-radius);
     box-shadow: 0px 10px 20px rgba(black, 0.2);
+    color: white;
 
     animation: slideInFromBottom 0.2s;
 
@@ -80,6 +81,6 @@ export default class Notification extends Vue {
 .note-enter-from,
 .note-leave-to {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-1rem);
 }
 </style>

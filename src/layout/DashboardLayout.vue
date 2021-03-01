@@ -8,6 +8,7 @@
                 </div>
             </main>
         </div>
+        <feedback-form></feedback-form>
         <audio-player></audio-player>
     </div>
 </template>
@@ -18,11 +19,13 @@ import { sessionKey } from "../store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
+import { FeedbackForm } from "@/components/feedback";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
+        FeedbackForm,
     },
 })
 export default class DashboardLayout extends Vue {
