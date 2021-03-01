@@ -83,10 +83,7 @@ export default class FeedbackForm extends Vue {
         this.closeForm();
         this.populateUserInfo();
 
-        alert(`Title: ${this.form.title}
-			Description: ${this.form.description}
-			Platform: ${this.form.user.platform}
-			Page: ${this.form.user.page}`);
+        console.log(this.form);
         this.notifications.dispatch("addNotification", {
             title: "Feedback sent",
             type: "success",
