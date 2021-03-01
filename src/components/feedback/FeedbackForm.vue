@@ -12,6 +12,13 @@
                     required
                     :label="$t('feedback.problem')"
                     v-model="form.title"
+                    type="text"
+                ></base-input>
+                <base-input
+                    required
+                    :label="$t('feedback.describe')"
+                    v-model="form.description"
+                    type="textarea"
                 ></base-input>
                 <div class="feedback-form__form__actions">
                     <base-button theme="primary" icon="send" type="submit"
