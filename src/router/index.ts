@@ -23,6 +23,8 @@ const Success = () => import(/* webpackChunkName: 'success' */ '../views/Success
 const NotFound = () => import(/* webpackChunkName: 'notFound' */ '../views/NotFound.vue');
 const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ '../views/VerifyEmail.vue');
 
+const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ '../views/SheetMusic.vue');
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
@@ -118,6 +120,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: NotFound,
+    },
+    {
+        path: '/sheetmusic/:id',
+        name: 'sheet-music',
+        component: SheetMusic
     }
 ]
 
