@@ -7,7 +7,7 @@
                 :languageKey="languageKey"
             ></song-info-card>
             <base-button
-                :action="() => showSheetMusic = true"
+                @click="showSheetMusic = !showSheetMusic"
                 v-if="sheetMusicUrl"
                 >
                 {{ $t('song.leadSheet' )}}
