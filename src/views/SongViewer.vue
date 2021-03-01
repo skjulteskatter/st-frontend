@@ -6,11 +6,16 @@
                 :song="song"
                 :languageKey="languageKey"
             ></song-info-card>
-
+            <base-button
+                :action="() => showSheetMusic = true"
+                v-if="sheetMusicUrl"
+                >
+                {{ $t('song.leadSheet' )}}
+            </base-button>
             <open-sheet-music-display
                 :url="sheetMusicUrl"
                 :originalKey="song.originalKey"
-                v-if="sheetMusicUrl"
+                v-if="showSheetMusic"
             >
             </open-sheet-music-display>
             <lyrics-card
@@ -80,6 +85,7 @@ export default class SongViewer extends Vue {
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = true;
+    public showSheetMusic = false;
 
     public async mounted() {
         this.number = parseInt(this.$route.params.number as string);

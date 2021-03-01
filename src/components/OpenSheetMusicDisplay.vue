@@ -1,13 +1,5 @@
 <template>
     <div>
-        <button v-if="!loaded" @click="load">Leadsheet</button>
-        <!-- <select
-            v-if="loaded"
-            @change="load"
-            v-model="transposition"    
-        >
-            <option :value="ts[t]" v-for="t in Object.keys(ts)" :key="t">{{t}}</option>
-        </select> -->
         <div v-if="loaded" style="display:flex;">
             <base-button @click="close">{{ $t('common.close') }}</base-button>
             <base-button @click="transpose(transposition - 1)">-</base-button>
@@ -44,6 +36,10 @@ export default class OSMD extends Vue {
     public transposition = 0;
 
     public o?: OpenSheetMusicDisplay;
+
+    public mounted() {
+        this.load();
+    }
 
     public transpose(n: number) {
         this.transposition = n;
