@@ -1,9 +1,9 @@
 <template>
     <div>
         <div v-if="loaded" style="display:flex;">
-            <base-button @click="transpose(transposition - 1)">-</base-button>
-            <base-button>{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
-            <base-button @click="transpose(transposition + 1)">+</base-button>
+            <base-button @click="transposition > -12 ? transpose(transposition - 1) : undefined">-</base-button>
+            <base-button @click="transpose(0)">{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
+            <base-button @click="transposition < 12 ? transpose(transposition + 1) : undefined">+</base-button>
         </div>
         <div id="osmd"></div>
     </div>

@@ -1,5 +1,6 @@
 import { Converter } from 'showdown';
 const converter = new Converter();
+converter.setOption('simpleLineBreaks', true);
 
 export class Song implements SongInterface {
     public id: string;
