@@ -1,7 +1,6 @@
 <template>
     <div>
         <div v-if="loaded" style="display:flex;">
-            <base-button @click="close">{{ $t('common.close') }}</base-button>
             <base-button @click="transpose(transposition - 1)">-</base-button>
             <base-button>{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
             <base-button @click="transpose(transposition + 1)">+</base-button>
@@ -58,16 +57,6 @@ export default class OSMD extends Vue {
 
     public get transposition() {
         return this.songStore.state.smTransposition ?? 0;
-    }
-
-    public close() {
-        this.o?.clear();
-
-        const el = document.getElementById("osmd");
-        if (el) {
-            el.innerHTML = "";
-        }
-        this.loaded = false;
     }
 
     public async getMusicXml() {
