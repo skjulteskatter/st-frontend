@@ -27,7 +27,7 @@
         <div class="nav__links">
             <router-link class="nav__item" :to="{ name: 'main' }">
                 <icon name="home" size="20" />
-                <span>{{ $t("common.dashboard") }}</span>
+                <span>{{ $t("common.home") }}</span>
             </router-link>
             <!-- <router-link class="nav__item" :to="{ name: 'collections' }">
                 <icon name="book" size="20" />
