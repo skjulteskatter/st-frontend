@@ -55,7 +55,7 @@
                     :key="author.contributor.id"
                     :songs="contributorSongs(author)"
                     :title="author.contributor.name"
-                    @click="gotoContributor(author.contributor)"
+                    :action="() => gotoContributor(author.contributor)"
                 ></song-list-card>
             </div>
 
@@ -65,7 +65,7 @@
                     :key="composer.contributor.id"
                     :songs="contributorSongs(composer)"
                     :title="composer.contributor.name"
-                    @click="gotoContributor(composer.contributor)"
+                    :action="() => gotoContributor(composer.contributor)"
                 ></song-list-card>
             </div>
 
@@ -121,7 +121,7 @@
                 v-for="song in filteredSongs.slice(0, 24)"
                 :key="song.id"
                 :song="song"
-                @click="selectSong(song.number)"
+                :action="selectSong(song.number)"
             >
             </song-list-item-card>
         </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="back-button" @click="$router.go(-1)">
-        <Icon name="arrowLeft" />
+        <Icon name="arrowLeft" size="20" />
         <span>{{ $t("common.back") }}</span>
     </div>
 </template>
@@ -22,6 +22,7 @@ export default class BackButton extends Vue {}
     display: flex;
     align-items: center;
 
+    width: min-content;
     margin-bottom: var(--st-spacing);
     cursor: pointer;
 }

@@ -1,6 +1,7 @@
 <template>
     <div v-if="contributor" class="contributor">
-        <div class="contributor__biography" secondary>
+        <back-button />
+        <div class="contributor__biography">
             <div class="contributor__biography__header">
                 <p class="contributor__biography__header__title">
                     {{ $t("song.contributor") }}
@@ -42,7 +43,7 @@
 import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { BaseCard } from "@/components";
+import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 
@@ -50,6 +51,7 @@ import { Collection, Song } from "@/classes";
     components: {
         BaseCard,
         SongListCard,
+        BackButton,
     },
 })
 export default class ContributorView extends Vue {
