@@ -6,6 +6,41 @@ import auth from '@/services/auth'
 import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection } from '@/classes';
+import { songStore } from './songs';
+
+const smTs: {
+    [key: string]: number;
+} = {
+    "C": 0,
+    "Db": -1,
+    "D": -2,
+    "Eb": 9,
+    "E": 8,
+    "F": 7,
+    "F#": 6,
+    "G": 5,
+    "Ab": 4,
+    "A": 3,
+    "Bb": 2,
+    "B": 1,
+}
+
+const ts: {
+    [key: string]: number;
+} = {
+    "C": 0,
+    "Db": 11,
+    "D": 10,
+    "Eb": 9,
+    "E": 8,
+    "F": 7,
+    "F#": 6,
+    "G": 5,
+    "Ab": 4,
+    "A": 3,
+    "Bb": 2,
+    "B": 1,
+}
 
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
@@ -22,6 +57,8 @@ async function init(commit: Commit) {
         router.replace({name: 'main'});
     }
     commit('initialized', true);
+    songStore.commit("smTransposition", smTs[user.settings?.defaultTransposition ?? "C"]);
+    songStore.commit("transposition", ts[user.settings?.defaultTransposition ?? "C"]);
 }
 
 export interface Session {
@@ -100,7 +137,7 @@ export const sessionStore = createStore<Session>({
     mutations: {
         user(state, user: User) {
             state.currentUser = user;
-            if (user.settings) localStorage.setItem('languageKey', user.settings.languageKey);
+            if (user.settings?.languageKey) localStorage.setItem('languageKey', user.settings.languageKey);
         },
         logout(state) {
             state.currentUser = undefined;

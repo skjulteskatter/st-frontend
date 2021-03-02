@@ -32,6 +32,24 @@
                         </option>
                     </select>
                 </div>
+                <div class="user-settings__key field gap-x">
+                    <label for="language">{{ $t("common.language") }}</label>
+                    <hr />
+                    <select
+                        id="transposition-key"
+                        name="transposition-key"
+                        v-model="selectedKey"
+                        @change="setKey"
+                    >
+                        <option
+                            v-for="k in transpositions"
+                            :value="k"
+                            :key="k"
+                        >
+                            {{ k }}
+                        </option>
+                    </select>
+                </div>
             </div>
             <div class="user-settings__fields gap-y">
                 <h3 class="user-settings__title">
@@ -90,10 +108,12 @@ import auth from "@/services/auth";
 })
 export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
+    public selectedKey = "";
     public store = useStore(sessionKey);
     public notifications = notificationStore;
     public themes: Themes = themes;
     public newDisplayName = "";
+    public transpositions = ["Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "F#", "G"]
 
     public fileName = "";
     private selectedImage?: string;
@@ -110,6 +130,8 @@ export default class SettingsCard extends Vue {
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
+        
+        this.selectedKey = this.user?.settings?.defaultTransposition ?? "C";
     }
 
     public async save() {
@@ -142,6 +164,15 @@ export default class SettingsCard extends Vue {
         const language = this.selectedLanguage;
         if (language) {
             settings.languageKey = language.key;
+            this.store.commit("settings", settings);
+        }
+    }
+
+    public setKey() {
+        const settings = Object.assign({}, this.user?.settings);
+        const key = this.selectedKey;
+        if (key) {
+            settings.defaultTransposition = key;
             this.store.commit("settings", settings);
         }
     }

@@ -85,8 +85,11 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public selectedTransposition = 0;
+    public loaded = false;
 
     public mounted() {
+        this.selectedTransposition = this.songStore.state.transposition ?? 0;
+
         if (this.transposed) {
             if (this.song?.hasLyrics) {
                 this.transposeView();

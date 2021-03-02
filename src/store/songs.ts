@@ -142,7 +142,6 @@ export const songStore = createStore<Songs>({
             state.lyrics = undefined;
             state.songNumber = undefined;
             state.transposedLyrics = undefined;
-            state.transposition = undefined;
             state.song = undefined;
             state.contributorItem = undefined;
         },
@@ -155,7 +154,6 @@ export const songStore = createStore<Songs>({
         song(state, songNumber: number) {
             state.songNumber = songNumber;
             state.lyrics = undefined;
-            state.transposition = undefined;
         },
         lyrics(state, lyrics: Lyrics) {
             state.lyrics = lyrics;
@@ -167,7 +165,9 @@ export const songStore = createStore<Songs>({
             state.verses = verses;
         },
         transposition(state, transposition: number) {
+            console.log(state.transposition)
             state.transposition = transposition;
+            console.log(state.transposition)
         },
         smTransposition(state, transposition: number) {
             state.smTransposition = transposition;
