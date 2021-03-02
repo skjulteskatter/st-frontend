@@ -14,12 +14,19 @@
                 >
                     <b>{{ collection.key }}</b>
                     <base-button
-                        v-if="!disabled.includes(collection.id)"
+                        :loading="loadingClearCache.includes(collection.id)"
                         @click="clearCollection(collection.id)"
                         theme="error"
                         icon="trash"
                     >
                         {{ $t("admin.clearcache") }}
+                    </base-button>
+                    <base-button
+                        @click="syncCollection(collection.id)"
+                        icon="refresh"
+                        :loading="loadingSync.includes(collection.id)"
+                    >
+                        Files
                     </base-button>
                 </base-card>
             </base-card>
@@ -70,7 +77,9 @@ export default class Subscriptions extends Vue {
     public token = localStorage.getItem("id_token");
     public showToken = false;
 
-    public disabled: string[] = [];
+    public loadingSync: string[] = [];
+
+    public loadingClearCache: string[] = [];
 
     get users(): User[] {
         return useStore(usersKey).state.users ?? [];
@@ -88,15 +97,36 @@ export default class Subscriptions extends Vue {
         return useStore(sessionKey).getters.isAdmin;
     }
 
-    public clearCollection(collection: string) {
-        this.disabled.push(collection);
-        api.admin.clearCache(collection);
+    public async clearCollection(collection: string) {
+        this.loadingClearCache.push(collection);
         // Notification
         this.notifications.dispatch("addNotification", {
             type: "error",
             title: this.$t("notification.cachecleared"),
             icon: "trash",
         });
+        try {
+            await api.admin.clearCache(collection);
+        }
+        catch {
+            console.log("no content")
+        }
+        this.loadingClearCache = this.loadingClearCache.filter(c => c != collection);
+    }
+
+    public async syncCollection(collection: string){
+        this.loadingSync.push(collection);
+        this.notifications.dispatch("addNotification", {
+            type: "error",
+            title: this.$t("notification.syncingfiles"),
+            icon: "trash",
+        });
+        try {
+            await api.admin.sync(collection);
+        } catch {
+            console.log("no content")
+        }
+        this.loadingSync = this.loadingSync.filter(c => c !== collection);
     }
 }
 </script>
