@@ -64,8 +64,6 @@ export default class OSMD extends Vue {
 
         const result = await (await fetch(this.url)).text();
         const xml = result.replace(/<stem>\w*<\/stem>/gm, "");
-
-        console.log(xml);
         return xml;
     }
 
