@@ -1,25 +1,36 @@
 <template>
-    <div>
-        <div v-if="loaded" style="display:flex;">
-            <base-button @click="transpose(transposition - 1)">-</base-button>
-            <base-button>{{ originalKey }} ({{ transposition > 0 ? '+' + transposition : transposition }})</base-button>
-            <base-button @click="transpose(transposition + 1)">+</base-button>
-        </div>
+    <base-card class="sheetmusic" header>
+        <template #header>
+            <div v-if="loaded" class="sheetmusic__controls">
+                <base-button @click="transpose(transposition - 1)"
+                    >-</base-button
+                >
+                <span class="sheetmusic__key">
+                    {{ originalKey }} ({{
+                        transposition > 0 ? "+" + transposition : transposition
+                    }})
+                </span>
+                <base-button @click="transpose(transposition + 1)"
+                    >+</base-button
+                >
+            </div>
+        </template>
         <div id="osmd"></div>
-    </div>
+    </base-card>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 import { TransposeCalculator } from "../osmd/transpose";
-import { BaseButton } from "@/components";
+import { BaseButton, BaseCard } from "@/components";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 
 @Options({
     components: {
         BaseButton,
+        BaseCard,
     },
     props: {
         url: {
@@ -29,8 +40,8 @@ import { songKey } from "@/store";
             type: String,
         },
         initialTransposition: {
-            type: String
-        }
+            type: String,
+        },
     },
 })
 export default class OSMD extends Vue {
@@ -60,7 +71,7 @@ export default class OSMD extends Vue {
     }
 
     public async getMusicXml() {
-        if (!this.url) return '';
+        if (!this.url) return "";
 
         const result = await (await fetch(this.url)).text();
         const xml = result.replace(/<stem>\w*<\/stem>/gm, "");
@@ -84,3 +95,16 @@ export default class OSMD extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+.sheetmusic {
+    &__controls {
+        display: flex;
+        align-items: center;
+    }
+
+    &__key {
+        padding: 0 var(--st-spacing);
+    }
+}
+</style>
