@@ -24,6 +24,7 @@
                     <base-button
                         @click="syncCollection(collection.id)"
                         icon="refresh"
+                        theme="secondary"
                         :loading="loadingSync.includes(collection.id)"
                     >
                         Files
@@ -107,14 +108,15 @@ export default class Subscriptions extends Vue {
         });
         try {
             await api.admin.clearCache(collection);
+        } catch {
+            console.log("no content");
         }
-        catch {
-            console.log("no content")
-        }
-        this.loadingClearCache = this.loadingClearCache.filter(c => c != collection);
+        this.loadingClearCache = this.loadingClearCache.filter(
+            (c) => c != collection
+        );
     }
 
-    public async syncCollection(collection: string){
+    public async syncCollection(collection: string) {
         this.loadingSync.push(collection);
         this.notifications.dispatch("addNotification", {
             type: "error",
@@ -124,9 +126,9 @@ export default class Subscriptions extends Vue {
         try {
             await api.admin.sync(collection);
         } catch {
-            console.log("no content")
+            console.log("no content");
         }
-        this.loadingSync = this.loadingSync.filter(c => c !== collection);
+        this.loadingSync = this.loadingSync.filter((c) => c !== collection);
     }
 }
 </script>
