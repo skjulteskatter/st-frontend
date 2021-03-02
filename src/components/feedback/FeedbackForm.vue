@@ -32,7 +32,7 @@
             <span class="feedback-form__button__label">
                 {{ $t("feedback.reporterror") }}
             </span>
-            <Icon name="speaker" size="20" />
+            <Icon name="exclamation" size="20" />
         </button>
     </div>
 </template>

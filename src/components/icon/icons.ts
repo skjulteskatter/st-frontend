@@ -62,6 +62,9 @@ export default {
 		},
 		send: {
 			path: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
+		},
+		exclamation: {
+			path: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
 		}
 	}
 }
