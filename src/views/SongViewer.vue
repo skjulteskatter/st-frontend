@@ -2,6 +2,7 @@
     <div class="loader" v-if="loading"></div>
     <div v-if="!loading && initialized && song" class="song-viewer">
         <div class="song-viewer__content">
+            <back-button />
             <song-info-card
                 :song="song"
                 :languageKey="languageKey"
@@ -9,8 +10,8 @@
             <base-button
                 @click="showSheetMusic = !showSheetMusic"
                 v-if="sheetMusicUrl"
-                >
-                {{ $t('song.leadSheet' )}}
+            >
+                {{ $t("song.leadSheet") }}
             </base-button>
             <open-sheet-music-display
                 :url="sheetMusicUrl"
@@ -63,6 +64,7 @@ import {
     BaseButton,
     OpenSheetMusicDisplay,
     BaseCard,
+    BackButton,
 } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
@@ -77,6 +79,7 @@ import { Collection, Lyrics } from "@/classes";
         SongFilesCard,
         OpenSheetMusicDisplay,
         BaseCard,
+        BackButton,
     },
 })
 export default class SongViewer extends Vue {

@@ -1,6 +1,7 @@
 <template>
     <div class="loader" v-if="loading"></div>
     <div class="song-list" v-if="collection">
+        <back-button />
         <div class="song-list__header">
             <h1 class="song-list__title">{{ collection.name[languageKey] }}</h1>
             <div class="song-list__filters">
@@ -145,6 +146,7 @@ import {
     SongListCard,
 } from "@/components/songs";
 import { ButtonGroup, SongFilterDropdown } from "@/components/inputs";
+import { BackButton } from "@/components";
 
 @Options({
     components: {
@@ -155,6 +157,7 @@ import { ButtonGroup, SongFilterDropdown } from "@/components/inputs";
         SongListCard,
         ButtonGroup,
         SongFilterDropdown,
+        BackButton,
     },
 })
 export default class SongList extends Vue {
