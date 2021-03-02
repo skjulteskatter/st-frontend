@@ -3,6 +3,7 @@
         <open-sheet-music-display
             :url="url"
             :originalKey="originalKey"
+            :initialTransposition="transposition"
         ></open-sheet-music-display>
     </div>
 </template>
@@ -16,12 +17,18 @@ import { OpenSheetMusicDisplay } from "@/components";
     }
 })
 export default class SheetMusic extends Vue {
+    public searchParams = new URLSearchParams(window.location.search);
+
     public get url() {
         return `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
     }
 
     public get originalKey() {
-        return (new URLSearchParams(window.location.search)).get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+        return this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+    }
+
+    public get transposition() {
+        return parseInt(this.searchParams.get("transposition") ?? "0");
     }
 }
 </script>

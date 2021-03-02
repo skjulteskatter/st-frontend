@@ -29,6 +29,9 @@ import { songKey } from "@/store";
         originalKey: {
             type: String,
         },
+        initialTransposition: {
+            type: String
+        }
     },
 })
 export default class OSMD extends Vue {
@@ -36,11 +39,16 @@ export default class OSMD extends Vue {
     public url?: string;
     public originalKey = "C";
     public loaded = false;
+    public initialTransposition?: number;
 
     public o?: OpenSheetMusicDisplay;
 
     public mounted() {
-        this.load();
+        if (this.initialTransposition) {
+            this.transpose(this.initialTransposition);
+        } else {
+            this.load();
+        }
     }
 
     public transpose(n: number) {
