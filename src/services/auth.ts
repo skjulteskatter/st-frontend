@@ -83,7 +83,7 @@ class Auth {
         if (token !== '') {
             this.accessToken = token;
             localStorage.setItem('id_token', token);
-            this.expiresAt = 3600 * 1000 + new Date().getTime();
+            this.expiresAt = 3600 * 1000 - 60000 + new Date().getTime();
             localStorage.setItem('id_expires_at', `${this.expiresAt}`);
         }
     }
