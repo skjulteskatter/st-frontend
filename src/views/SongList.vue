@@ -11,7 +11,7 @@
                         </label>
                         <button-group
                             :buttons="buttons"
-                            @click="setListType"
+                            :action="setListType"
                             class="song-list__filters__category__buttons"
                         ></button-group>
                         <select
