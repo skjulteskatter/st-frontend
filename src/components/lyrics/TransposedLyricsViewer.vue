@@ -24,27 +24,11 @@ import { songKey } from "@/store";
         lyrics: {
             type: Object,
         },
-        selectedTransposition: {
-            type: Number,
-        },
     },
 })
 export default class TransposedLyricsViewer extends Vue {
     private songStore = useStore(songKey);
-    public selectVerses: string[] = [];
-    public currentVerseNumber = 0;
-    public description = "";
-    public title = "";
     public lyrics?: Lyrics;
-    public selectedTransposition = 0;
-
-    public get transpositions() {
-        return this.lyrics?.transpositions ?? {};
-    }
-
-    public get transposition() {
-        return this.lyrics?.transposedToKey ?? this.lyrics?.originalKey ?? "";
-    }
 
     public get languageKey() {
         return this.songStore.state.language;

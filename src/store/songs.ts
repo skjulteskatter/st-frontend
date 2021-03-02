@@ -165,9 +165,7 @@ export const songStore = createStore<Songs>({
             state.verses = verses;
         },
         transposition(state, transposition: number) {
-            console.log(state.transposition)
             state.transposition = transposition;
-            console.log(state.transposition)
         },
         smTransposition(state, transposition: number) {
             state.smTransposition = transposition;

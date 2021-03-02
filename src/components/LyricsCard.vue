@@ -84,12 +84,10 @@ export default class LyricsCard extends Vue {
     public lyrics?: Lyrics;
     public collection?: Collection;
     public selectedLanguage = "";
-    public selectedTransposition = 0;
+    //public selectedTransposition = 0;
     public loaded = false;
 
     public mounted() {
-        this.selectedTransposition = this.songStore.state.transposition ?? 0;
-
         if (this.transposed) {
             if (this.song?.hasLyrics) {
                 this.transposeView();
@@ -102,6 +100,25 @@ export default class LyricsCard extends Vue {
             (this.languages.find((l) => l.key == this.languageKey)
                 ? this.languageKey
                 : this.languages[0]?.key) ?? this.languageKey;
+    }
+
+    public get selectedTransposition() {
+        const t = this.songStore.state.transposition ?? 0;
+
+        const ts: number[] = [];
+        for (const k of Object.keys(this.transpositions)) {
+            ts.push(this.transpositions[k]);
+        }
+
+        if (ts.includes(t)) {
+            return t;
+        } else {
+            return t + 12;
+        }
+    }
+
+    public set selectedTransposition(v) {
+        this.songStore.commit("transposition", v)
     }
 
     public get languageKey() {
@@ -159,7 +176,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get transpositions() {
-        return this.transposedLyrics?.transpositions ?? {};
+        return this.song?.transpositions ?? {};
     }
 
     public get transposition() {
