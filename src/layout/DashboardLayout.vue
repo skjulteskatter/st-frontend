@@ -7,8 +7,8 @@
                     <router-view />
                 </div>
             </main>
+            <feedback-form></feedback-form>
         </div>
-        <feedback-form></feedback-form>
         <audio-player></audio-player>
     </div>
 </template>
@@ -63,6 +63,8 @@ export default class DashboardLayout extends Vue {
         display: flex;
         overflow-y: auto;
         height: 100%;
+
+        position: relative;
 
         @include breakpoint("small") {
             flex-direction: column;
