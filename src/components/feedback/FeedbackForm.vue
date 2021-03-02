@@ -7,7 +7,7 @@
         ></div>
         <base-card class="feedback-form__card" v-if="showForm" border>
             <form @submit.prevent="sendFeedback" class="feedback-form__form">
-                <b>{{ $t("feedback.sendfeedback") }}</b>
+                <b>{{ $t("feedback.reporterror") }}</b>
                 <base-input
                     required
                     :label="$t('feedback.problem')"
@@ -30,7 +30,7 @@
         <button class="feedback-form__button" @click="openForm">
             <div class="feedback-form__button__background"></div>
             <span class="feedback-form__button__label">
-                {{ $t("feedback.sendfeedback") }}
+                {{ $t("feedback.reporterror") }}
             </span>
             <Icon name="speaker" size="20" />
         </button>
@@ -88,8 +88,7 @@ export default class FeedbackForm extends Vue {
     public populateUserInfo() {
         this.form.user.platform = navigator.userAgent;
         this.form.user.page = this.$route.fullPath;
-        this.form.user.email =
-            this.userStore.state.currentUser?.email ?? "";
+        this.form.user.email = this.userStore.state.currentUser?.email ?? "";
     }
 
     public sendFeedback() {
@@ -98,7 +97,7 @@ export default class FeedbackForm extends Vue {
 
         console.log(this.form);
         this.notifications.dispatch("addNotification", {
-            title: "Feedback sent",
+            title: "Report sent",
             type: "success",
             icon: "check",
         });
@@ -160,7 +159,7 @@ export default class FeedbackForm extends Vue {
 
             background: var(--st-background-color);
             border: 1px solid var(--st-border-color);
-            width: 30%;
+            width: 35%;
             height: 100%;
 
             border-radius: 2rem;
