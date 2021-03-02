@@ -33,7 +33,7 @@
                     </select>
                 </div>
                 <div class="user-settings__key field gap-x">
-                    <label for="language">{{ $t("common.language") }}</label>
+                    <label for="language">{{ $t("song.key") }}</label>
                     <hr />
                     <select
                         id="transposition-key"
@@ -41,11 +41,7 @@
                         v-model="selectedKey"
                         @change="setKey"
                     >
-                        <option
-                            v-for="k in transpositions"
-                            :value="k"
-                            :key="k"
-                        >
+                        <option v-for="k in transpositions" :value="k" :key="k">
                             {{ k }}
                         </option>
                     </select>
@@ -113,7 +109,20 @@ export default class SettingsCard extends Vue {
     public notifications = notificationStore;
     public themes: Themes = themes;
     public newDisplayName = "";
-    public transpositions = ["Ab", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "F#", "G"]
+    public transpositions = [
+        "Ab",
+        "A",
+        "Bb",
+        "B",
+        "C",
+        "Db",
+        "D",
+        "Eb",
+        "E",
+        "F",
+        "F#",
+        "G",
+    ];
 
     public fileName = "";
     private selectedImage?: string;
@@ -130,7 +139,7 @@ export default class SettingsCard extends Vue {
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
-        
+
         this.selectedKey = this.user?.settings?.defaultTransposition ?? "C";
     }
 

@@ -7,7 +7,7 @@
                     <router-view />
                 </div>
             </main>
-            <feedback-form></feedback-form>
+            <!-- <feedback-form></feedback-form> -->
         </div>
         <audio-player></audio-player>
     </div>
