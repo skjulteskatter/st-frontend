@@ -70,12 +70,20 @@ export default class OSMD extends Vue {
         this.loaded = false;
     }
 
+    public async getMusicXml() {
+        if (!this.url) return '';
+
+        const result = await (await fetch(this.url)).text();
+        const xml = result.replace(/<stem>\w*<\/stem>/gm, "");
+
+        console.log(xml);
+        return xml;
+    }
+
     public async load() {
         if (!this.o) this.o = new OpenSheetMusicDisplay("osmd");
 
-        if (!this.url) return;
-
-        await this.o.load(this.url);
+        await this.o.load(await this.getMusicXml());
 
         this.o.TransposeCalculator = new TransposeCalculator();
 
