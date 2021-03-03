@@ -76,6 +76,7 @@ export default class TransposedLyricsViewer extends Vue {
             .songline {
                 margin: 0;
                 border-collapse: collapse;
+                white-space: pre;
 
                 td {
                     padding: 0;
