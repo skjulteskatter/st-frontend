@@ -64,7 +64,16 @@ export default class OSMD extends Vue {
 
     public transpose(n: number) {
         this.songStore.commit("smTransposition", n);
-        this.load();
+
+        if (this.o) {
+            this.o.Sheet.Transpose = this.transposition;
+
+            this.o.updateGraphic();
+
+            this.o.render();
+        } else {
+            this.load();
+        }
     }
 
     public get transposition() {
