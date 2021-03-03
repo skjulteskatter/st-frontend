@@ -2,7 +2,7 @@
     <base-card class="sheetmusic" header>
         <template #header>
             <div v-if="loaded" class="sheetmusic__controls">
-                <base-button @click="transpose(transposition - 1)"
+                <base-button @click="transposition > -12 ? transpose(transposition - 1) : undefined"
                     >-</base-button
                 >
                 <span class="sheetmusic__key">
@@ -10,7 +10,7 @@
                         transposition > 0 ? "+" + transposition : transposition
                     }})
                 </span>
-                <base-button @click="transpose(transposition + 1)"
+                <base-button @click="transposition < 12 ? transpose(transposition + 1) : undefined"
                     >+</base-button
                 >
             </div>
