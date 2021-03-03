@@ -180,6 +180,9 @@ export default class TheNavbar extends Vue {
         justify-self: flex-end;
         background-color: var(--st-secondary-background-color);
 
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
         &__name {
             display: flex;
             gap: calc(var(--st-spacing) * 0.5);

@@ -82,15 +82,10 @@ export default class Modal extends Vue {
 }
 
 .modal {
-    &__open-button {
-        width: 100%;
-        cursor: pointer;
-    }
-
     &__popup {
         width: 100vw;
         height: 100vh;
-        z-index: 9999;
+        z-index: 99999;
 
         position: fixed;
         top: 0;

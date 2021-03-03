@@ -29,9 +29,9 @@
                                 v-if="u.id != getCurrentUser.id"
                             >
                                 <div class="loading" v-if="loading"></div>
-                                <h2 style="margin-top: 0">
+                                <h4 style="margin-top: 0">
                                     {{ u.displayName }}
-                                </h2>
+                                </h4>
                                 <div class="edit-user__form">
                                     <div class="edit-user__form__field">
                                         <label
@@ -190,7 +190,7 @@ export default class UsersList extends Vue {
         border-collapse: collapse;
 
         th {
-            padding: 0.5em;
+            padding: 0.3em;
         }
 
         tr {
@@ -200,7 +200,7 @@ export default class UsersList extends Vue {
         }
 
         td {
-            padding: 0.5em;
+            padding: 0.3em;
 
             & > {
                 margin: 0;
