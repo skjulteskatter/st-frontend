@@ -2,7 +2,7 @@
     <base-card class="sheetmusic" header>
         <template #header>
             <div v-if="loaded" class="sheetmusic__controls">
-                <base-button @click="transpose(transposition - 1)"
+                <base-button @click="transposition > -12 ? transpose(transposition - 1) : undefined"
                     >-</base-button
                 >
                 <span class="sheetmusic__key">
@@ -10,7 +10,7 @@
                         transposition > 0 ? "+" + transposition : transposition
                     }})
                 </span>
-                <base-button @click="transpose(transposition + 1)"
+                <base-button @click="transposition < 12 ? transpose(transposition + 1) : undefined"
                     >+</base-button
                 >
             </div>
@@ -57,13 +57,23 @@ export default class OSMD extends Vue {
         if (this.initialTransposition) {
             this.transpose(this.initialTransposition);
         } else {
+            this.o?.clear();
             this.load();
         }
     }
 
     public transpose(n: number) {
         this.songStore.commit("smTransposition", n);
-        this.load();
+
+        if (this.o) {
+            this.o.Sheet.Transpose = this.transposition;
+
+            this.o.updateGraphic();
+
+            this.o.render();
+        } else {
+            this.load();
+        }
     }
 
     public get transposition() {
