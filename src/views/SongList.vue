@@ -121,7 +121,7 @@
                 v-for="song in filteredSongs.slice(0, 24)"
                 :key="song.id"
                 :song="song"
-                :action="selectSong(song.number)"
+                :action="() => selectSong(song.number)"
             >
             </song-list-item-card>
         </div>
