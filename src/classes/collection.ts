@@ -104,6 +104,15 @@ export class Collection {
             }
         }
 
+        for (const song of this.songs) {
+            if (!numbers.includes(song.number)) {
+                if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
+                    numbers.push(song.number);
+                    continue;
+                }
+            }
+        }
+
         return {
             songs: this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
                 && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
