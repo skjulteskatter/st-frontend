@@ -14,7 +14,8 @@
                     v-if="song.verses"
                     class="song-details__metadata__verse-count tag"
                 >
-                    {{ song.verses }} {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
+                    {{ song.verses }}
+                    {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
                 </span>
                 <div class="song-details__metadata__info">
                     <small class="song-details__metadata__credits gap-x">
@@ -56,7 +57,11 @@
                     </small>
                     <small
                         class="song-details__metadata__credits"
-                        v-if=" song.copyright.melody && song.copyright.text && identicalCopyright"
+                        v-if="
+                            song.copyright.melody &&
+                            song.copyright.text &&
+                            identicalCopyright
+                        "
                     >
                         © {{ getLocaleString(song.copyright.melody.name) }}
                     </small>
@@ -65,13 +70,15 @@
                             class="song-details__metadata__credits"
                             v-if="song.copyright.text"
                         >
-                            {{ $t("song.text" )}} ©: {{ getLocaleString(song.copyright.text.name) }}
+                            {{ $t("song.text") }} ©:
+                            {{ getLocaleString(song.copyright.text.name) }}
                         </small>
                         <small
                             class="song-details__metadata__credits"
                             v-if="song.copyright.melody"
                         >
-                            {{ $t("song.melody" )}} ©: {{ getLocaleString(song.copyright.melody.name) }}
+                            {{ $t("song.melody") }} ©:
+                            {{ getLocaleString(song.copyright.melody.name) }}
                         </small>
                     </div>
                     <small
@@ -123,8 +130,12 @@ export default class SongInfoCard extends Vue {
         return this.song?.getName(this.languageKey);
     }
 
-    public getLocaleString(dictionary: {[key: string]: string}) {
-        return dictionary[this.languageKey] ?? dictionary.en ?? dictionary[Object.keys(dictionary)[0]];
+    public getLocaleString(dictionary: { [key: string]: string }) {
+        return (
+            dictionary[this.languageKey] ??
+            dictionary.en ??
+            dictionary[Object.keys(dictionary)[0]]
+        );
     }
 
     public get description() {
@@ -153,7 +164,6 @@ export default class SongInfoCard extends Vue {
 <style lang="scss">
 .song-details__metadata {
     width: 100%;
-    height: auto;
 
     &__content {
         display: flex;

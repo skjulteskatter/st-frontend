@@ -14,10 +14,10 @@ export class Themes {
         [key: string]: Theme;
     } = {
             dark: {
-                background: '#00292e',
-                secondaryBackground: '#001e22',
+                background: '#181818',
+                secondaryBackground: '#0F0F0F',
                 text: '#F5F7FA',
-                borderColor: '#1e373a',
+                borderColor: '#252525',
                 primary: '#bd9b60',
             },
             light: {

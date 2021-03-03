@@ -1,5 +1,5 @@
 <template>
-    <base-card class="theme-card" border v-if="title && songs.length > 0">
+    <base-card class="theme-card" v-if="title && songs.length > 0">
         <div class="theme-card__header">
             <b
                 class="theme-card__title"
@@ -73,7 +73,10 @@ export default class SongListCard extends Vue {
         if (song.collection) {
             this.$router.push({
                 name: "song",
-                params: { number: song.number, collection: song.collection.key },
+                params: {
+                    number: song.number,
+                    collection: song.collection.key,
+                },
             });
         } else {
             this.$router.push({
@@ -84,7 +87,9 @@ export default class SongListCard extends Vue {
     }
 
     public get anotherLanguage() {
-        return this.songs.filter((s) => s.type == 'lyrics' && !s.name[this.languageKey]);
+        return this.songs.filter(
+            (s) => s.type == "lyrics" && !s.name[this.languageKey]
+        );
     }
 }
 </script>
