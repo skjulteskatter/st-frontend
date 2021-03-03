@@ -77,7 +77,7 @@ export class Lyrics implements LyricsInterface {
             }
         }
 
-        return lines.join(' ');
+        return lines.join(' ').replace(/[^A-Za-z0-9æøå ,.]/g, '').replace('  ', ' ');
     }
 
     public get transposedContent() {

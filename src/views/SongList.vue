@@ -123,7 +123,7 @@
                 :key="song.id"
                 :song="song"
                 :context="context[song.number]"
-                :action="() => selectSong(song.number)"
+                @click="selectSong(song.number)"
             >
             </song-list-item-card>
         </div>

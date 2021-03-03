@@ -86,10 +86,13 @@ export class Collection {
 
         for (const lyrics of this.lyrics) {
 
-            if (lyrics.rawContent.toLowerCase()?.includes(filter)) {
+
+            const content = lyrics.rawContent.toLowerCase();
+            
+            if (content.includes(filter)) {
                 numbers.push(lyrics.number);
 
-                const index = lyrics.rawContent.toLowerCase().indexOf(filter);
+                const index = content.indexOf(filter);
 
                 const start = (index - 20) > 0 ? index - 20 : 0;
 
