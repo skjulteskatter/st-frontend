@@ -57,6 +57,7 @@ export default class OSMD extends Vue {
         if (this.initialTransposition) {
             this.transpose(this.initialTransposition);
         } else {
+            this.o?.clear();
             this.load();
         }
     }
