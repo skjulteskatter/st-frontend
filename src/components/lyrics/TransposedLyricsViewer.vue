@@ -57,8 +57,10 @@ export default class TransposedLyricsViewer extends Vue {
     width: 100%;
 
     .song {
-        --chord-size: 0.9em;
+        --chord-size: 1em;
         margin: 0 auto;
+        font-size: 0.8em;
+        line-height: 1.5em;
 
         .verse-title,
         .chorus-title {
@@ -73,6 +75,11 @@ export default class TransposedLyricsViewer extends Vue {
 
             .songline {
                 margin: 0;
+                border-collapse: collapse;
+
+                td {
+                    padding: 0;
+                }
             }
 
             .chords {
