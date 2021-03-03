@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'; 
 import 'firebase/auth';
+import 'firebase/performance';
 import { firebaseConfig } from '@/config';
 import { sessionStore } from '@/store';
 import router from '@/router';
@@ -21,6 +22,8 @@ function notLoggedIn() {
 firebase.initializeApp(firebaseConfig);
 
 const a = firebase.auth;
+
+firebase.performance();
 
 if (!a) {
     notInitialized();
