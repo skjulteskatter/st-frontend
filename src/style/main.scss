@@ -1,21 +1,6 @@
+@import 'defaults';
 @import 'components';
 @import 'layout';
 @import 'animation';
 @import 'variables';
 @import 'mixins';
-
-*,
-*:before,
-*:after {
-	box-sizing: border-box;
-	outline-color: var(--st-primary-color);
-    font-family: inherit;
-}
-
-body {
-	margin: 0;
-	font-family: var(--st-primary-font-family);
-    background-color: var(--st-secondary-background-color);
-	overflow-y: overlay;
-	scroll-behavior: smooth;
-}

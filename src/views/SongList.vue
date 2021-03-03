@@ -441,7 +441,7 @@ export default class SongList extends Vue {
     }
 
     &__contributors {
-        columns: 300px;
+        columns: 325px;
         column-gap: var(--st-spacing);
     }
 
