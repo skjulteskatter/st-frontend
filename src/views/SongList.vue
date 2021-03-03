@@ -44,7 +44,8 @@
                     type="text"
                     class="song-list__search"
                     :placeholder="$t('common.search')"
-                    v-model="searchQuery"
+                    v-model="searchString"
+                    @keydown.enter="search"
                 />
             </div>
         </div>
@@ -121,6 +122,7 @@
                 v-for="song in filteredSongs.slice(0, 24)"
                 :key="song.id"
                 :song="song"
+                :context="context[song.number]"
                 :action="() => selectSong(song.number)"
             >
             </song-list-item-card>
@@ -165,7 +167,12 @@ export default class SongList extends Vue {
     private songStore = useStore(songKey);
 
     public searchQuery = "";
+    public searchString = "";
     public store = useStore(songKey);
+
+    public search() {
+        this.searchQuery = this.searchString;
+    }
 
     public async mounted() {
         await this.songStore.dispatch(
@@ -193,8 +200,12 @@ export default class SongList extends Vue {
         return this.store.getters.collection?.lyrics ?? [];
     }
 
+    public get context() {
+        return this.filteredObjects.context;    
+    }
+
     // Filtered songs. Returns all songs if no filters are applied.
-    public get filteredSongs() {
+    public get filteredObjects() {
         return (
             this.collection?.filteredSongs(
                 this.searchQuery,
@@ -203,8 +214,15 @@ export default class SongList extends Vue {
                 this.store.state.filter.audioFiles,
                 this.store.state.filter.videoFiles,
                 this.store.state.filter.songTypes
-            ) ?? []
+            ) ?? {
+                songs: [],
+                context: {}
+            }
         );
+    }
+
+    public get filteredSongs() {
+        return this.filteredObjects.songs;
     }
 
     public get collection(): Collection | undefined {

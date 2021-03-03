@@ -77,7 +77,7 @@ export class Lyrics implements LyricsInterface {
             }
         }
 
-        return lines.join('\n').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+        return lines.join(' ');
     }
 
     public get transposedContent() {

@@ -77,30 +77,42 @@ export class Collection {
     }
 
     public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = [], types: string[] = []) {
-        filter = filter.toLowerCase().replace(/[^0-9a-zA-Z]/g, "");
+        filter = filter.toLowerCase();
 
         const numbers: number[] = [];
+        const context: {
+            [key: string]: string;
+        } = {};
 
         for (const lyrics of this.lyrics) {
+
+            if (lyrics.rawContent.toLowerCase()?.includes(filter)) {
+                numbers.push(lyrics.number);
+
+                const index = lyrics.rawContent.toLowerCase().indexOf(filter);
+
+                const start = (index - 20) > 0 ? index - 20 : 0;
+
+                context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? '...' : '') + lyrics.rawContent.substr(start, filter.length + 40) + '...';
+
+                continue;
+            }
 
             if (lyrics.title?.includes(filter)) {
                 numbers.push(lyrics.number);
                 continue;
             }
-
-            if (lyrics.rawContent?.includes(filter)) {
-                numbers.push(lyrics.number);
-                continue;
-            }
         }
 
-        return this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
-            && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
-            && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
-            && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
-            && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
-            && (types.length == 0 || types.includes(s.type))
-        );
+        return {
+            songs: this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
+                && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
+                && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
+                && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
+                && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
+                && (types.length == 0 || types.includes(s.type))
+            ), context
+        }
     }
 
     public get origins() {

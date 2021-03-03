@@ -1,6 +1,6 @@
 <template>
     <base-card class="song-list__item-card clickable" border>
-        <div class="song-list__item-card__wrapper gap-x">
+        <div class="song-list__item-card__wrapper gap-x" v-if="song">
             <b class="song-list__item-card__number">{{ song.number }}</b>
             <div class="song-list__item-card__body">
                 <span class="song-list__item-card__title">{{
@@ -26,6 +26,7 @@
                             >{{ composer.name }}</small
                         >
                     </div>
+                    <small>{{context}}</small>
                 </div>
             </div>
         </div>
@@ -45,12 +46,16 @@ import { sessionKey } from "@/store";
     },
     props: {
         song: {
-            type: Song,
+            type: Object,
         },
+        context: {
+            type: String,
+        }
     },
 })
 export default class SongListItemCard extends Vue {
-    public song: Song = {} as Song;
+    public song?: Song;
+    public context = '';
 
     public get languageKey() {
         return useStore(sessionKey).getters.languageKey ?? "en";
