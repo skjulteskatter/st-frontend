@@ -18,6 +18,7 @@
                     <th>{{ $t("common.name") }}</th>
                     <th>Email</th>
                     <th>{{ $t("common.role") }}</th>
+                    <th>Last Login</th>
                     <th>Id</th>
                 </thead>
                 <tbody>
@@ -67,6 +68,7 @@
                         <td>{{ u.displayName }}</td>
                         <td>{{ u.email }}</td>
                         <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
+                        <td>{{ u.lastLogin }}</td>
                         <td>{{ u.id }}</td>
                     </tr>
                 </tbody>
