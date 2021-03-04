@@ -145,10 +145,13 @@ export default class SettingsCard extends Vue {
 
     public async save() {
         this.loading = true;
-        this.setDisplayName;
         await this.store.dispatch("saveSettings", this.user?.settings);
         this.themes.setTheme(this.theme);
         this.submitImage();
+
+        if (this.newDisplayName) {
+            this.setDisplayName();
+        } 
 
         // Fire a success notification
         this.notifications.dispatch("addNotification", {

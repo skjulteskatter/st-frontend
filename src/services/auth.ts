@@ -234,6 +234,10 @@ class Auth {
             });
         }
     }
+
+    public get user() {
+        return a()?.currentUser;
+    }
 }
 
 const auth = new Auth()
