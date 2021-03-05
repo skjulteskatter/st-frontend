@@ -3,7 +3,9 @@
         <div class="success__content">
             <h1 class="success__title">Thank you for your purchase!</h1>
             <p class="success__text">Your product should be available soon.</p>
-            <router-link class="success__link" to="/">Go to dashboard</router-link>
+            <router-link class="success__link" to="/"
+                >Go to dashboard</router-link
+            >
         </div>
     </div>
 </template>
@@ -27,7 +29,7 @@ export default class Success extends Vue {
     align-items: center;
 
     &__link {
-        color: var(--st-primary-color);
+        color: var(--st-color-primary);
     }
 }
 </style>

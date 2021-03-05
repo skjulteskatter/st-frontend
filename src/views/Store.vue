@@ -4,7 +4,7 @@
             <h1 class="store__title">{{ $t("common.store") }}</h1>
             <div class="store__header__buttons">
                 <base-button
-                    theme="secondary"
+                    theme="tertiary"
                     @click="refreshSubscriptions"
                     icon="refresh"
                     class="refresh-button"
@@ -16,7 +16,7 @@
                 <base-button
                     v-if="productIds.length"
                     @click="portal"
-                    theme="secondary"
+                    theme="tertiary"
                     :loading="loading"
                     icon="collection"
                     class="manage-button"
@@ -147,7 +147,7 @@ export default class Store extends Vue {
     }
 
     hr {
-        border: 1px solid var(--st-border-color);
+        border: 1px solid var(--st-color-border);
         margin: var(--st-spacing) 0;
     }
 

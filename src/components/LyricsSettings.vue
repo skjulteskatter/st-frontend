@@ -317,14 +317,14 @@ export default class LyricsSettings extends Vue {
 
                 &:checked + span {
                     color: white;
-                    background: var(--st-primary-color);
+                    background: var(--st-color-primary);
                 }
             }
 
             &__label {
                 width: 100%;
                 padding: var(--half-spacing);
-                background: var(--st-secondary-background-color);
+                background: var(--st-color-background);
                 color: var(--st-text-color);
                 user-select: none;
             }

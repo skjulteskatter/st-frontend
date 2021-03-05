@@ -2,41 +2,38 @@
 *:before,
 *:after {
 	box-sizing: border-box;
-	outline-color: var(--st-primary-color);
-    font-family: inherit;
+	outline-color: var(--st-color-primary);
+    font-family: var(--st-font-family);
 }
 
 body {
 	margin: 0;
-	font-family: var(--st-primary-font-family);
-    background-color: var(--st-secondary-background-color);
 	overflow-y: overlay;
-	scroll-behavior: smooth;
 }
 
 select {
-    background: var(--st-background-color);
-    border: 1px solid var(--st-border-color);
+    background: var(--st-color-background-light);
+    border: 1px solid var(--st-color-border);
     border-radius: var(--st-border-radius);
-    color: var(--st-text-color);
+    color: var(--st-color-text);
     padding: calc(var(--st-spacing)*.5);
 }
 
 input[type=text], input[type=email] {
     padding: calc(var(--st-spacing)*.5);
-    background: transparent;
-    border: 1px solid var(--st-border-color);
+    background: var(--st-color-background-light);
+    border: 1px solid var(--st-color-border);
     border-radius: var(--st-border-radius);
-    color: var(--st-text-color);
+    color: var(--st-color-text);
     height: 100%;
 }
 
 input[type=file] {
     padding: calc(var(--st-spacing)*.5);
-    background: transparent;
-    border: 1px solid var(--st-border-color);
+    background: var(--st-color-background-light);
+    border: 1px solid var(--st-color-border);
     border-radius: var(--st-border-radius);
-    color: var(--st-text-color);
+    color: var(--st-color-text);
     height: 100%;
     width: auto;
 
@@ -47,29 +44,22 @@ input[type=file] {
 
 textarea {
     padding: var(--st-spacing);
-    background: transparent;
+    background: var(--st-color-background-light);
     border: none;
-    border: 1px solid var(--st-border-color);
+    border: 1px solid var(--st-color-border);
     border-radius: var(--st-border-radius);
-    color: var(--st-text-color);
+    color: var(--st-color-text);
     font-family: inherit;
     resize: none;
 }
 
 button {
-    padding: .5em;
-    background: var(--st-primary-color);
+    padding: calc(var(--st-spacing)/2);
+    background: var(--st-color-primary);
     color: white;
     border: none;
     border-radius: var(--st-border-radius);
     cursor: pointer;
-
-    &[secondary] {
-        background: var(--st-background-color);
-        color: var(--st-text-color);
-        border: 1px solid var(--st-border-color);
-        font-weight: 400;
-    }
 }
 
 section {
@@ -77,12 +67,12 @@ section {
 }
 
 p {
-    font-family: var(--st-secondary-font-family);
+    font-family: var(--st-font-family);
 	font-size: .8em;
     line-height: 1.5em;
 }
 
 hr {
-    border: 1px solid var(--st-border-color);
+    border: 1px solid var(--st-color-border);
     margin: var(--st-spacing) 0;
 }

@@ -33,12 +33,12 @@
             </base-card>
             <users-list :users="users" :currentUser="currentUser"></users-list>
 
-            <base-card class="api-token" border>
+            <base-card class="api-token">
                 <div class="api-token__header gap-x">
                     <h3 class="api-token__title">API token</h3>
                     <base-button
                         class="api-token__button"
-                        theme="secondary"
+                        theme="primary"
                         @click="showToken = !showToken"
                     >
                         Toggle API token
@@ -138,13 +138,15 @@ export default class Subscriptions extends Vue {
 
 .api-token {
     &__token {
-        overflow-wrap: break-word;
+        word-wrap: break-word;
         font-size: 0.7em;
+        max-width: 100%;
     }
 
     &__header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
 
     &__title {
@@ -170,9 +172,9 @@ export default class Subscriptions extends Vue {
 
     &__collections {
         .card__content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--st-spacing);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-gap: var(--st-spacing);
         }
 
         &__item {

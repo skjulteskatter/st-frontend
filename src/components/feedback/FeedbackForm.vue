@@ -157,8 +157,8 @@ export default class FeedbackForm extends Vue {
             bottom: 0;
             right: 0;
 
-            background: var(--st-background-color);
-            border: 1px solid var(--st-border-color);
+            background: var(--st-color-background-card);
+            border: 1px solid var(--st-color-border);
             width: 35%;
             height: 100%;
 

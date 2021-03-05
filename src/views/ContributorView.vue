@@ -127,7 +127,7 @@ export default class ContributorView extends Vue {
     &__biography {
         &__header {
             &__title {
-                color: var(--st-primary-color);
+                color: var(--st-color-primary);
                 margin: 0;
             }
 

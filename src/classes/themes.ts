@@ -5,8 +5,6 @@ type Theme = {
     borderColor: string;
     borderRadius?: string;
     fontFamily?: string;
-    primary?: string;
-    secondary?: string;
 }
 
 export class Themes {
@@ -18,14 +16,12 @@ export class Themes {
                 secondaryBackground: '#0F0F0F',
                 text: '#F5F7FA',
                 borderColor: '#252525',
-                primary: '#bd9b60',
             },
             light: {
-                background: '#FFFFFF',
-                secondaryBackground: '#F5F6FA',
-                text: '#333333',
-                borderColor: '#E6E9F2',
-                primary: '#bd9b60',
+                background: 'var(--st-color-grey)',
+                secondaryBackground: 'var(--st-color-white)',
+                text: 'var(--st-color-grey-dark)',
+                borderColor: 'var(--st-color-tertiary)',
             }
         }
 
@@ -36,19 +32,23 @@ export class Themes {
             throw new Error("Theme not valid");
         }
 
-        this.setThemeProperties(theme);
+        // this.setThemeProperties(theme);
+
+        // Add 'darkmode' class if user applies darkmode
+        const app = document.getElementById('songtreasures');
+        if (key == 'dark') app?.classList.add('darkmode');
+        else if (key == 'light') app?.classList.remove('darkmode');
+
         localStorage.setItem('theme', key)
     }
 
     public setThemeProperties(params: Theme) {
-        this.setCSSProperty('--st-background-color', params.background)
-        this.setCSSProperty('--st-secondary-background-color', params.secondaryBackground)
-        this.setCSSProperty('--st-text-color', params.text)
-        this.setCSSProperty('--st-border-color', params.borderColor)
+        this.setCSSProperty('--st-color-background', params.background)
+        this.setCSSProperty('--st-color-background-card', params.secondaryBackground)
+        this.setCSSProperty('--st-color-text', params.text)
+        this.setCSSProperty('--st-color-border', params.borderColor)
         if (params.borderRadius) this.setCSSProperty('--st-border-radius', params.borderRadius)
-        if (params.fontFamily) this.setCSSProperty('--st-primary-font-family', params.fontFamily)
-        if (params.primary) this.setCSSProperty('--st-primary-color', params.primary)
-        if (params.secondary) this.setCSSProperty('--st-secondary-color', params.secondary)
+        if (params.fontFamily) this.setCSSProperty('--st-font-family', params.fontFamily)
     }
 
     public setCSSProperty(prop: string, value: string) {
@@ -57,7 +57,7 @@ export class Themes {
 
     public setThemeColor(color: string) {
         localStorage.setItem('theme_color', color)
-        this.setCSSProperty('--st-primary-color', color)
+        this.setCSSProperty('--st-color-primary', color)
     }
 
     public load() {
@@ -69,7 +69,7 @@ export class Themes {
     }
 
     public get default() {
-        return '#00292e';
+        return '#D2A04A';
     }
 }
 

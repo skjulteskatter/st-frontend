@@ -1,18 +1,14 @@
 <template>
     <div class="dropdown">
         <div class="dropdown__button" @click="openDropdown">
-            <base-button
-                class="dropdown__button__button"
-                theme="secondary"
-                icon="arrowDown"
-                v-if="label"
-            >
+            <button class="dropdown__button__button" v-if="label">
                 <span>{{ label }}</span>
-            </base-button>
+                <Icon name="arrowDown" size="18" />
+            </button>
             <slot name="button" v-else></slot>
             <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
         </div>
-        <base-card v-if="isOpen" class="dropdown__content">
+        <base-card v-if="isOpen" class="dropdown__content" border>
             <slot name="default"></slot>
         </base-card>
     </div>
@@ -20,12 +16,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton, BaseCard } from "@/components";
+import { BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 
 @Options({
     components: {
-        BaseButton,
         BaseCard,
         Icon,
     },
@@ -61,7 +56,14 @@ export default class BaseDropdown extends Vue {
 
     &__button {
         &__button {
-            outline: none;
+            background: var(--st-color-background-light);
+            color: var(--st-color-text);
+            border: 1px solid var(--st-color-border);
+            padding: var(--st-half-spacing);
+
+            display: flex;
+            align-items: center;
+            gap: var(--st-half-spacing);
         }
         &__icon {
             display: inline;

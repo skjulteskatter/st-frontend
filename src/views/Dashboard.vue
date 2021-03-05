@@ -3,7 +3,7 @@
         <h1 class="dashboard__title">
             {{ $t("common.welcome") }}, {{ user.displayName.split(" ")[0] }}.
         </h1>
-        <base-card class="user-info" border>
+        <base-card class="user-info">
             <div class="user-info__wrapper gap-y">
                 <div class="fields">
                     <div class="user-info__field" v-if="user.roles.length">

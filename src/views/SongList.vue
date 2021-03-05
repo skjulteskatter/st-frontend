@@ -40,12 +40,12 @@
                         ></song-filter-dropdown>
                     </div>
                 </div>
-                <input
+                <search-input
                     type="text"
                     class="song-list__search"
                     :placeholder="$t('common.search')"
                     v-model="searchString"
-                    @keydown.enter="search"
+                    @search="search"
                 />
             </div>
         </div>
@@ -147,7 +147,11 @@ import {
     SongListItemCard,
     SongListCard,
 } from "@/components/songs";
-import { ButtonGroup, SongFilterDropdown } from "@/components/inputs";
+import {
+    ButtonGroup,
+    SongFilterDropdown,
+    SearchInput,
+} from "@/components/inputs";
 import { BackButton } from "@/components";
 
 @Options({
@@ -160,6 +164,7 @@ import { BackButton } from "@/components";
         ButtonGroup,
         SongFilterDropdown,
         BackButton,
+        SearchInput,
     },
 })
 export default class SongList extends Vue {
@@ -201,7 +206,7 @@ export default class SongList extends Vue {
     }
 
     public get context() {
-        return this.filteredObjects.context;    
+        return this.filteredObjects.context;
     }
 
     // Filtered songs. Returns all songs if no filters are applied.
@@ -216,7 +221,7 @@ export default class SongList extends Vue {
                 this.store.state.filter.songTypes
             ) ?? {
                 songs: [],
-                context: {}
+                context: {},
             }
         );
     }
@@ -501,8 +506,8 @@ export default class SongList extends Vue {
         max-width: 52px;
         min-height: 40px;
         width: 100%;
-        background-color: var(--st-background-color);
-        border: 1px solid var(--st-border-color);
+        background-color: var(--st-color-background-card);
+        border: 1px solid var(--st-color-border);
         border-radius: var(--st-border-radius);
 
         cursor: pointer;
@@ -512,11 +517,11 @@ export default class SongList extends Vue {
         align-items: center;
 
         &.selected {
-            border: 2px solid var(--st-primary-color);
+            border: 2px solid var(--st-color-primary);
         }
 
         &.disabled {
-            color: var(--st-border-color);
+            color: var(--st-color-border);
             cursor: not-allowed;
         }
     }

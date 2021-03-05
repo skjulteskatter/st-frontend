@@ -31,7 +31,7 @@ import { FeedbackForm } from "@/components/feedback";
 export default class DashboardLayout extends Vue {
     mounted() {
         document.documentElement.style.setProperty(
-            "--st-primary-color",
+            "--st-color-primary",
             localStorage.getItem("theme_color") || themes.default
         );
         themes.load();

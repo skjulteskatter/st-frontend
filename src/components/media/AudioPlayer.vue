@@ -34,7 +34,7 @@
             <audio class="audio-player__player" :src="audio.directUrl"></audio>
         </div>
         <div class="audio-player__close">
-            <base-button theme="secondary" @click="closePlayer" icon="error">
+            <base-button theme="tertiary" @click="closePlayer" icon="error">
                 <span style="margin-right: 0.5em">
                     {{ $t("common.close") }}
                 </span>
@@ -94,21 +94,21 @@ export default class AudioPlayer extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-:root {
+#songtreasures {
     // Plyr styling
-    --plyr-color-main: var(--st-primary-color);
-    --plyr-audio-controls-background: var(--st-background-color);
-    --plyr-audio-control-color: var(--st-text-color);
+    --plyr-color-main: var(--st-color-primary);
+    --plyr-audio-controls-background: var(--st-color-background-light);
+    --plyr-audio-control-color: var(--st-color-text);
     --plyr-control-spacing: var(--st-spacing);
     --plyr-control-radius: var(--st-border-radius);
-    --plyr-range-thumb-background: var(--st-primary-color);
+    --plyr-range-thumb-background: var(--st-color-primary);
 }
 .audio-player {
     width: 100%;
 
-    background: var(--st-background-color);
+    background: var(--st-color-background-light);
     padding: var(--st-spacing);
-    border-top: 1px solid var(--st-border-color);
+    border-top: 1px solid var(--st-color-border);
 
     animation: appearFromBottom 0.5s;
 

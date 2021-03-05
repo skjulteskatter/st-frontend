@@ -84,7 +84,7 @@ export default class TransposedLyricsViewer extends Vue {
             }
 
             .chords {
-                color: var(--st-primary-color);
+                color: var(--st-color-primary);
                 font-weight: bold;
                 font-size: var(--chord-size);
                 line-height: var(--chord-size);

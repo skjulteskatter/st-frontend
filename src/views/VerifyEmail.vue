@@ -1,7 +1,9 @@
 <template>
     <div class="not-found">
         <div class="not-found__content">
-            <h1 class="not-found__title">A verification link has been sent to your email.</h1>
+            <h1 class="not-found__title">
+                A verification link has been sent to your email.
+            </h1>
             <button @click="sendVerificationEmail">Resend</button>
         </div>
     </div>
@@ -11,13 +13,12 @@
 import auth from "@/services/auth";
 import { Vue } from "vue-class-component";
 
-
 export default class VerifyEmail extends Vue {
     public verificationEmailSent = auth.verificationEmailSent;
 
     public mounted() {
         if (auth.emailVerified) {
-            this.$router.push({name: 'main'});
+            this.$router.push({ name: "main" });
         }
     }
 
@@ -39,7 +40,7 @@ export default class VerifyEmail extends Vue {
     justify-content: center;
 
     &__link {
-        color: var(--st-primary-color);
+        color: var(--st-color-primary);
     }
 }
 </style>

@@ -152,7 +152,7 @@ export default class SongFilterDropdown extends Vue {
 
 <style lang="scss">
 .grouping {
-    border: 1px dashed var(--st-border-color);
+    border: 1px dashed var(--st-color-border);
     border-radius: var(--st-border-radius);
     padding: calc(var(--st-spacing) * 0.5);
 }

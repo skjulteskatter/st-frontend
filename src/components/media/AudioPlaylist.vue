@@ -61,7 +61,7 @@ export default class AudioPlaylist extends Vue {
 
 <style lang="scss">
 .audio-playlist {
-    border: 1px solid var(--st-border-color);
+    border: 1px solid var(--st-color-border);
     border-radius: var(--st-border-radius);
 
     &__file {
@@ -74,7 +74,7 @@ export default class AudioPlaylist extends Vue {
         &__category {
             padding: calc(var(--st-spacing) * 0.5);
             opacity: 0.5;
-            border-left: 1px solid var(--st-border-color);
+            border-left: 1px solid var(--st-color-border);
         }
 
         &__name {
@@ -84,13 +84,13 @@ export default class AudioPlaylist extends Vue {
 
         &:hover {
             .audio-playlist__file__name {
-                color: var(--st-primary-color);
+                color: var(--st-color-primary);
                 margin-left: var(--st-border-radius);
             }
         }
 
         &:not(:last-child) {
-            border-bottom: 1px solid var(--st-border-color);
+            border-bottom: 1px solid var(--st-color-border);
         }
     }
 }

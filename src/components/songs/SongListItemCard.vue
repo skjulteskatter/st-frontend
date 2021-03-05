@@ -1,11 +1,11 @@
 <template>
-    <base-card class="song-list__item-card clickable" border>
+    <base-card class="song-list__item-card clickable">
         <div class="song-list__item-card__wrapper gap-x" v-if="song">
             <b class="song-list__item-card__number">{{ song.number }}</b>
             <div class="song-list__item-card__body">
-                <span class="song-list__item-card__title">{{
+                <b class="song-list__item-card__title">{{
                     song.getName(languageKey)
-                }}</span>
+                }}</b>
                 <div class="song-list__item-card__contributors">
                     <div class="song-list__item-card__contributor">
                         <small>{{ $t("song.author") }}: </small>
@@ -16,7 +16,7 @@
                         >
                     </div>
                     <div
-                        class="song-list__item-card__ontributor"
+                        class="song-list__item-card__contributor"
                         v-if="song.composers.length"
                     >
                         <small>{{ $t("song.composer") }}: </small>
@@ -26,7 +26,7 @@
                             >{{ composer.name }}</small
                         >
                     </div>
-                    <small>{{context}}</small>
+                    <p class="context">{{ context }}</p>
                 </div>
             </div>
         </div>
@@ -50,12 +50,12 @@ import { sessionKey } from "@/store";
         },
         context: {
             type: String,
-        }
+        },
     },
 })
 export default class SongListItemCard extends Vue {
     public song?: Song;
-    public context = '';
+    public context = "";
 
     public get languageKey() {
         return useStore(sessionKey).getters.languageKey ?? "en";
@@ -75,6 +75,11 @@ export default class SongListItemCard extends Vue {
 
     &__contributors {
         opacity: 0.5;
+    }
+
+    .context {
+        margin: 0.5em 0 0 0;
+        opacity: 0.6;
     }
 }
 </style>

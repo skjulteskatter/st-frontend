@@ -4,6 +4,7 @@
             @click="openModal"
             class="modal__open-button"
             :theme="theme"
+            icon="pencil"
             v-if="type == 'button'"
             >{{ label }}</base-button
         >
@@ -21,7 +22,7 @@
                     <base-button
                         @click="closeModal"
                         class="modal__popup__card__close-button"
-                        theme="secondary"
+                        theme="tertiary"
                         >{{ $t("common.close") }}</base-button
                     >
                 </base-card>
@@ -60,7 +61,7 @@ export default class Modal extends Vue {
     public mouseOverCard = false;
     public type = "button";
     public label = "";
-    public theme = "primary";
+    public theme = "";
 
     public closeIfOutside() {
         if (!this.mouseOverCard) this.closeModal();

@@ -238,7 +238,7 @@ export default class SettingsCard extends Vue {
 
             hr {
                 border: none;
-                border-top: 1px solid var(--st-border-color);
+                border-top: 1px solid var(--st-color-border);
                 width: 100%;
             }
         }
@@ -249,7 +249,7 @@ export default class SettingsCard extends Vue {
 
         input[type="color"] {
             border-radius: var(--st-border-radius);
-            border: 1px solid var(--st-border-color);
+            border: 1px solid var(--st-color-border);
             height: 30px;
             background: var(--secondary-backround-color);
 

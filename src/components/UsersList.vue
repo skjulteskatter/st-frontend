@@ -1,17 +1,17 @@
 <template>
     <div id="users">
         <div class="header gap-x">
-            <h2>{{ $t("admin.users") }}</h2>
+            <h3>{{ $t("admin.users") }}</h3>
             <base-button
                 :class="{ disabled: disableButton }"
                 @click="refreshUsers"
                 :loading="loading"
                 icon="refresh"
-                theme="secondary"
+                theme="primary"
                 >{{ $t("common.update") }}</base-button
             >
         </div>
-        <base-card class="users__table" border>
+        <base-card class="users__table">
             <table>
                 <thead>
                     <th></th>
@@ -26,6 +26,7 @@
                             <modal
                                 :label="$t('common.edit')"
                                 class="edit-user"
+                                theme="tertiary"
                                 v-if="u.id != getCurrentUser.id"
                             >
                                 <div class="loading" v-if="loading"></div>
@@ -195,7 +196,7 @@ export default class UsersList extends Vue {
 
         tr {
             &:nth-child(odd) {
-                background: var(--st-secondary-background-color);
+                background: var(--st-color-background);
             }
         }
 

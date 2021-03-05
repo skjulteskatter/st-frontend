@@ -32,6 +32,7 @@ import { Icon } from "@/components/icon";
                     [
                         "primary",
                         "secondary",
+                        "tertiary",
                         "success",
                         "error",
                         "warning",
@@ -101,25 +102,31 @@ export default class BaseButton extends Vue {
     }
 
     &-primary {
-        background-color: var(--st-primary-color);
+        background-color: var(--st-color-primary);
     }
 
     &-secondary {
-        background-color: var(--st-background-color);
-        border: 1px solid var(--st-border-color);
-        color: var(--st-text-color);
+        background-color: var(--st-color-secondary);
+        border: 1px solid var(--st-color-border);
+        color: var(--st-color-text-dm);
+    }
+
+    &-tertiary {
+        background-color: transparent;
+        border: 1px solid var(--st-color-primary);
+        color: var(--st-color-primary);
     }
 
     &-warning {
-        background-color: var(--st-warning-color);
+        background-color: var(--st-color-warning);
     }
 
     &-success {
-        background-color: var(--st-success-color);
+        background-color: var(--st-color-success);
     }
 
     &-error {
-        background-color: var(--st-error-color);
+        background-color: var(--st-color-error);
     }
 }
 </style>

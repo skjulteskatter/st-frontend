@@ -3,22 +3,17 @@
         class="song-details__files"
         v-if="song && (song.audioFiles.length || song.videoFiles.length)"
         border
+        header
+        toggleable
     >
-        <div class="song-details__files__header">
-            <h2 class="song-details__files__title">
-                {{ $t("song.files") }}
-            </h2>
-            <base-button
-                theme="secondary"
-                @click="filesIsOpen = !filesIsOpen"
-                icon="arrowDown"
-            >
-                <span>{{ $t("common.show") }}</span>
-                <i class="fa fa-angle-down" v-if="!filesIsOpen"></i>
-                <i class="fa fa-angle-up" v-else></i>
-            </base-button>
-        </div>
-        <div class="files__container" v-show="filesIsOpen">
+        <template #header>
+            <div class="song-details__files__header">
+                <h2 class="song-details__files__title">
+                    {{ $t("song.files") }}
+                </h2>
+            </div>
+        </template>
+        <div class="files__container">
             <div
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"
@@ -72,7 +67,6 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class SongFilesCard extends Vue {
     public song?: Song;
-    public filesIsOpen = false;
 }
 </script>
 <style lang="scss">

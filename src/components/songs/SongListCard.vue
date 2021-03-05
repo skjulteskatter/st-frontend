@@ -117,7 +117,7 @@ export default class SongListCard extends Vue {
             cursor: pointer;
 
             &:hover {
-                color: var(--st-primary-color);
+                color: var(--st-color-primary);
 
                 .theme-card__list__item__title {
                     text-decoration: underline;
@@ -143,7 +143,7 @@ export default class SongListCard extends Vue {
                 cursor: pointer;
 
                 &:hover {
-                    color: var(--st-primary-color);
+                    color: var(--st-color-primary);
 
                     .theme-card__list__item__title {
                         text-decoration: underline;

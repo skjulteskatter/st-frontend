@@ -28,12 +28,11 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class ButtonGroup extends Vue {
-    public buttons: 
-            {
-                label: string;
-                value: string;
-                selected: boolean;
-            }[] = [];
+    public buttons: {
+        label: string;
+        value: string;
+        selected: boolean;
+    }[] = [];
     public action?: Function;
 }
 </script>
@@ -41,24 +40,24 @@ export default class ButtonGroup extends Vue {
 <style lang="scss">
 .button-group {
     border-radius: var(--st-border-radius);
-    border: 1px solid var(--st-border-color);
+    border: 1px solid var(--st-color-border);
     overflow: hidden;
 
     display: flex;
 
     &__button {
-        color: var(--st-text-color);
-        background-color: var(--st-background-color);
+        color: var(--st-color-text);
+        background-color: var(--st-color-background-light);
         padding: calc(var(--st-spacing) * 0.5);
         border-radius: 0px;
 
         &--selected {
-            background-color: var(--st-primary-color);
+            background-color: var(--st-color-primary);
             color: white;
         }
 
         &:not(:last-child) {
-            border-right: 1px solid var(--st-border-color);
+            border-right: 1px solid var(--st-color-border);
         }
     }
 }

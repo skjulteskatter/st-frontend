@@ -1,5 +1,5 @@
 <template>
-    <base-card class="song-details__metadata" border v-if="song" header>
+    <base-card class="song-details__metadata" v-if="song" header toggleable>
         <template #header>
             <h2 class="song-details__metadata__title">
                 <span style="opacity: 0.5; padding-right: 0.5em">
@@ -172,7 +172,7 @@ export default class SongInfoCard extends Vue {
     }
 
     &__credits {
-        color: var(--st-primary-color);
+        color: var(--st-color-primary);
         display: block;
         margin-bottom: 0.2rem;
     }
@@ -188,7 +188,7 @@ export default class SongInfoCard extends Vue {
     }
 
     a {
-        color: var(--st-primary-color);
+        color: var(--st-color-primary);
     }
 }
 </style>

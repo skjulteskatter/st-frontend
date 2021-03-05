@@ -6,9 +6,17 @@
             :style="{ backgroundImage: `url(${image})` }"
         ></div>
         <div class="card__header" v-if="header">
-            <slot name="header" />
+            <div>
+                <slot name="header" />
+            </div>
+            <Icon
+                class="toggle-button"
+                v-if="toggleable"
+                :name="isOpen ? 'arrowDown' : 'arrowUp'"
+                @click="isOpen = !isOpen"
+            />
         </div>
-        <div class="card__content">
+        <div class="card__content" v-if="!(header && isOpen)">
             <slot name="default" />
         </div>
     </div>
@@ -16,6 +24,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { Icon } from "@/components/icon";
 
 @Options({
     props: {
@@ -28,18 +37,26 @@ import { Options, Vue } from "vue-class-component";
         header: {
             type: Boolean,
         },
+        toggleable: {
+            type: Boolean,
+        },
+    },
+    components: {
+        Icon,
     },
 })
 export default class Card extends Vue {
     public border = false;
     public header = false;
+    public toggleable = false;
     public image = "";
+    private isOpen = false;
 }
 </script>
 
 <style lang="scss">
 .card {
-    background: var(--st-background-color);
+    background: var(--st-color-background-medium);
     border-radius: var(--st-border-radius);
     overflow: hidden;
     // will-change: transform;
@@ -50,7 +67,7 @@ export default class Card extends Vue {
     }
 
     &-border {
-        border: 1px solid var(--st-border-color);
+        border: 1px solid var(--st-color-border);
     }
 
     &__image {
@@ -66,13 +83,21 @@ export default class Card extends Vue {
     &__header {
         padding: var(--st-spacing);
 
-        & > :first-child {
+        h1,
+        h2 {
             margin-top: 0;
         }
     }
 
     &__header {
-        border-bottom: 1px solid var(--st-border-color);
+        border-bottom: 1px solid var(--st-color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        .toggle-button {
+            cursor: pointer;
+        }
     }
 }
 </style>

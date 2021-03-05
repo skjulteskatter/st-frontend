@@ -10,6 +10,7 @@
             <base-button
                 @click="showSheetMusic = !showSheetMusic"
                 v-if="sheetMusicUrl"
+                theme="tertiary"
             >
                 {{ $t("song.leadSheet") }}
             </base-button>
@@ -31,7 +32,7 @@
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
-                <base-button @click="sidebar = false">
+                <base-button @click="sidebar = false" theme="tertiary">
                     {{ $t("common.close") }}
                 </base-button>
                 <base-button
@@ -180,13 +181,13 @@ export default class SongViewer extends Vue {
     }
 
     &__sidebar {
-        min-width: 400px;
+        min-width: 350px;
         max-height: 100vh;
         position: sticky;
         top: 0;
         padding: var(--st-spacing);
-        background-color: var(--st-background-color);
-        border-left: 1px solid var(--st-border-color);
+        background-color: var(--st-color-background-light);
+        border-left: 1px solid var(--st-color-border);
         animation: slideInFromRight 0.5s;
 
         overflow-y: auto;
@@ -196,7 +197,7 @@ export default class SongViewer extends Vue {
         gap: var(--st-spacing);
 
         @include breakpoint("small") {
-            border-top: 1px solid var(--st-border-color);
+            border-top: 1px solid var(--st-color-border);
             position: fixed;
             top: auto;
             bottom: 0;
@@ -226,7 +227,7 @@ export default class SongViewer extends Vue {
                 cursor: pointer;
 
                 &:hover {
-                    color: var(--st-primary-color);
+                    color: var(--st-color-primary);
                 }
             }
         }

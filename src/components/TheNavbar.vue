@@ -88,8 +88,8 @@ export default class TheNavbar extends Vue {
 
 .nav {
     --size: 40px;
-    background-color: var(--st-background-color);
-    border-right: 1px solid var(--st-border-color);
+    background-color: var(--st-color-background-light);
+    border-right: 1px solid var(--st-color-border);
 
     height: auto;
     max-width: 250px;
@@ -104,7 +104,7 @@ export default class TheNavbar extends Vue {
     @include breakpoint("small") {
         flex-direction: initial;
         max-width: none;
-        border-bottom: 1px solid var(--st-border-color);
+        border-bottom: 1px solid var(--st-color-border);
         position: sticky;
         top: 0;
         left: 0;
@@ -160,7 +160,7 @@ export default class TheNavbar extends Vue {
     &__header {
         padding: var(--st-spacing);
         cursor: pointer;
-        border-bottom: 1px solid var(--st-border-color);
+        border-bottom: 1px solid var(--st-color-border);
 
         &__logo {
             max-height: var(--size);
@@ -178,7 +178,7 @@ export default class TheNavbar extends Vue {
         align-items: center;
         gap: var(--st-spacing);
         justify-self: flex-end;
-        background-color: var(--st-secondary-background-color);
+        background-color: var(--st-color-background-medium);
 
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -217,9 +217,9 @@ export default class TheNavbar extends Vue {
         gap: var(--st-spacing);
 
         &.router-link-exact-active {
-            color: var(--st-primary-color);
+            color: var(--st-color-primary);
             position: relative;
-            border-left: 5px solid var(--st-primary-color);
+            border-left: 5px solid var(--st-color-primary);
         }
     }
 }

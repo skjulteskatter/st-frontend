@@ -101,25 +101,25 @@ export default class Login extends Vue {
     justify-content: center;
     align-items: center;
 
-    background: var(--st-background-color);
+    background: var(--st-color-background-card);
 }
 
 #login-card {
     max-width: 500px;
     width: 100%;
 
-    background: var(--st-secondary-background-color);
+    background: var(--st-color-background);
 }
 
 .social {
     &-button {
         width: 50px;
         height: 50px;
-        background: var(--st-background-color);
+        background: var(--st-color-background-card);
         padding: 0.5em;
         border-radius: 100%;
         outline: 0;
-        border: 1px solid var(--st-border-color);
+        border: 1px solid var(--st-color-border);
 
         & img {
             width: 100%;
@@ -150,8 +150,8 @@ export default class Login extends Vue {
 
         input {
             padding: var(--st-spacing);
-            background: var(--st-background-color);
-            border: 1px solid var(--st-border-color);
+            background: var(--st-color-background-card);
+            border: 1px solid var(--st-color-border);
             border-radius: var(--st-border-radius);
         }
 

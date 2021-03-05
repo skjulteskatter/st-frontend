@@ -58,7 +58,7 @@ export default class Notification extends Vue {
     border-radius: var(--st-border-radius);
     border-left: 5px solid var(--st-color-primary);
     box-shadow: 0px 10px 20px rgba(black, 0.2);
-    color: var(--st-color-text-lm);
+    color: var(--st-color-text);
 
     animation: slideInFromBottom 0.2s;
     position: relative;
