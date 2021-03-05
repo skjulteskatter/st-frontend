@@ -7,6 +7,7 @@ interface User {
     subscriptions: Subscription[];
     roles: string[];
     settings?: UserSettings;
+    lastLogin: Date;
 }
 
 interface UserSettings {

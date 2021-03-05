@@ -44,6 +44,8 @@ const ts: {
 
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
+    user.displayName = auth.user?.displayName ?? user.displayName;
+
     commit('user', user);
     try {
         const languages = await api.items.getLanguages();
