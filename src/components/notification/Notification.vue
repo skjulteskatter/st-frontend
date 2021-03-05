@@ -1,8 +1,14 @@
 <template>
     <transition name="note">
         <div class="notification" :class="`${typeClass}`" v-if="show">
-            <b>{{ title }}</b>
-            <icon v-if="icon" :name="icon" size="20" />
+            <small>{{ title }}</small>
+            <!-- <icon v-if="icon" :name="icon" size="20" /> -->
+            <Icon
+                name="error"
+                class="notification__close"
+                size="18"
+                @click="show = false"
+            />
         </div>
     </transition>
 </template>
@@ -48,12 +54,14 @@ export default class Notification extends Vue {
 <style lang="scss">
 .notification {
     padding: var(--st-spacing);
-    background-color: var(--st-primary-color);
+    background-color: var(--st-color-background-light);
     border-radius: var(--st-border-radius);
+    border-left: 5px solid var(--st-color-primary);
     box-shadow: 0px 10px 20px rgba(black, 0.2);
-    color: white;
+    color: var(--st-color-text-lm);
 
     animation: slideInFromBottom 0.2s;
+    position: relative;
 
     display: flex;
     justify-content: space-between;
@@ -61,15 +69,19 @@ export default class Notification extends Vue {
     gap: var(--st-spacing);
 
     &--success {
-        background-color: var(--st-success-color);
+        border-color: var(--st-color-success);
     }
 
     &--error {
-        background-color: var(--st-error-color);
+        border-color: var(--st-color-error);
     }
 
     &--warning {
-        background-color: var(--st-warning-color);
+        border-color: var(--st-warning-color);
+    }
+
+    &__close {
+        float: right;
     }
 }
 
