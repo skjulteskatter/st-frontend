@@ -69,8 +69,8 @@ export default class CollectionList extends Vue {
     }
 
     &__title {
-        opacity: 0.6;
         text-transform: uppercase;
+        opacity: 0.6;
     }
 }
 </style>
