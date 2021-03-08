@@ -80,6 +80,7 @@ export default class Modal extends Vue {
 <style lang="scss" scoped>
 .wrapper {
     max-width: 900px;
+    background-color: transparent;
 }
 
 .modal {
