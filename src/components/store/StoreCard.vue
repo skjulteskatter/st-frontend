@@ -13,10 +13,11 @@
             <base-button
                 class="store-card__button"
                 v-if="isPurchaseable"
-                icon="shop"
+                icon="info"
+                theme="primary"
                 @click="action"
             >
-                <span>{{ $t("store.buy") }}</span>
+                <span>{{ $t("store.seemore") }}</span>
             </base-button>
             <span class="store-card__subtitle" v-else>
                 {{ $t("store.alreadyown") }}
@@ -93,7 +94,7 @@ export default class StoreCard extends Vue {
     &__image {
         max-width: 100%;
         // max-height: 300px;
-        border-radius: var(--st-border-radius);
+        border-radius: 0.5rem;
     }
 
     &__footer {

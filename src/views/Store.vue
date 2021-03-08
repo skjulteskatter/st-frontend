@@ -33,7 +33,13 @@
                 v-for="product in products"
                 :key="product.id"
                 :product="product"
-                @click="checkout(product)"
+                :action="
+                    () =>
+                        $router.push({
+                            name: 'store-item',
+                            params: { id: product.id },
+                        })
+                "
                 :isPurchaseable="!productIds.includes(product.id)"
             ></store-card>
         </div>
@@ -68,20 +74,20 @@ export default class Store extends Vue {
         }
     }
 
-    public checkout(product: Product) {
-        this.loading = true;
-        this.notifications.dispatch("addNotification", {
-            type: "primary",
-            icon: "shop",
-            title: this.$t("notification.redirecting"),
-        });
-        const price = product.prices.find((p) => p.type == "year");
+    // public checkout(product: Product) {
+    //     this.loading = true;
+    //     this.notifications.dispatch("addNotification", {
+    //         type: "primary",
+    //         icon: "shop",
+    //         title: this.$t("notification.redirecting"),
+    //     });
+    //     const price = product.prices.find((p) => p.type == "year");
 
-        if (price) {
-            this.store.dispatch("startSession", price.id);
-            this.loading = false;
-        }
-    }
+    //     if (price) {
+    //         this.store.dispatch("startSession", price.id);
+    //         this.loading = false;
+    //     }
+    // }
 
     public portal() {
         this.loading = true;

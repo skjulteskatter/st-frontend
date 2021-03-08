@@ -1,8 +1,8 @@
 <template>
     <div class="dashboard-layout">
-        <div class="dashboard-layout__wrapper">
-            <the-navbar v-if="user"></the-navbar>
-            <main v-if="user" class="dashboard-layout__body">
+        <div class="dashboard-layout__wrapper" v-if="user">
+            <the-navbar></the-navbar>
+            <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
                     <router-view />
                 </div>

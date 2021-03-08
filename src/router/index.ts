@@ -12,6 +12,7 @@ const Collections = () => import(/* webpackChunkName: 'collections' */ '../views
 const SongList = () => import(/* webpackChunkName: 'songList' */ '../views/SongList.vue');
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views/SongViewer.vue');
 const ContributorView = () => import(/* webpackChunkName: 'contributor' */ '../views/ContributorView.vue');
+const StoreItem = () => import(/* webpackChunkName: 'store-item' */ '../views/store/StoreItem.vue');
 
 const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ '../views/dashboard/CompleteSearch.vue');
 
@@ -78,6 +79,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'store',
                 name: 'store',
                 component: Store,
+            },
+            {
+                path: 'store/:id',
+                name: 'store-item',
+                component: StoreItem
             },
             {
                 path: 'settings',
