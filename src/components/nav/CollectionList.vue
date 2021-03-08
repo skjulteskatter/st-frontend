@@ -9,7 +9,7 @@
                     class="collection-list__link selectable"
                     :to="{
                         name: 'song-list',
-                        params: { collection: collection.id },
+                        params: { collection: collection.key },
                     }"
                     >{{ collection.name[languageKey] }}</router-link
                 >

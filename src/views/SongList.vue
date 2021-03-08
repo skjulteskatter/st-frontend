@@ -175,17 +175,31 @@ export default class SongList extends Vue {
     public searchString = "";
     public store = useStore(songKey);
 
+    public cId = '';
+
     public search() {
         this.searchQuery = this.searchString;
     }
 
-    public async mounted() {
+    private async loadCollection() {
+        console.log("LOADING")
+        this.cId = this.$route.params.collection as string;
         await this.songStore.dispatch(
             "selectCollection",
             this.$route.params.collection
         );
         if (!this.buttons.find((b) => b.value == this.listType)) {
             this.listType = "default";
+        }
+    }
+
+    public mounted() {
+        this.loadCollection();
+    }
+
+    public updated() {
+        if (this.$route.params.collection !== this.cId) {
+            this.loadCollection();
         }
     }
 
