@@ -1,6 +1,6 @@
 <template>
-    <div class="loader" v-if="loading"></div>
     <div class="complete-search">
+        <div class="loader" v-if="loading"></div>
         <back-button />
         <search-input v-model="searchQuery" @search="search" />
         <div
@@ -23,13 +23,14 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { SongListItemCard } from "@/components/songs";
 import api from "@/services/api";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 import { Collection, Song } from "@/classes";
-import { SearchInput } from "@/components/inputs";
+
 import { BaseButton, BackButton } from "@/components";
+import { SongListItemCard } from "@/components/songs";
+import { SearchInput } from "@/components/inputs";
 
 @Options({
     components: {
