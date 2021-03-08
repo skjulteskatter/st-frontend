@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class="lyrics-card__header__settings">
-                    <base-button @click="transposeToggle" icon="music">
+                    <base-button v-if="lyrics.hasChords" @click="transposeToggle" icon="music">
                         {{ $t("song.chords") }}
                     </base-button>
                     <select
