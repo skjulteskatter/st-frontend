@@ -51,7 +51,7 @@ export default class StoreItem extends Vue {
 
     public checkout(product: Product) {
         this.loading = true;
-        this.notifications.dispatch("addNotification", {
+        this.notifications?.dispatch("addNotification", {
             type: "primary",
             icon: "shop",
             title: this.$t("notification.redirecting"),
