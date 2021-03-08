@@ -2,45 +2,51 @@
     <div class="wrapper">
         <base-card id="login-card" v-if="initialized && !user" border>
             <div class="login gap-y">
-                <h1 class="login__title">Please log in</h1>
-                <div class="social">
-                    <button
-                        class="social-button clickable"
-                        @click="login('google')"
-                    >
-                        <img alt="GOOGLE ICON" src="/img/google.png" />
-                    </button>
-                    <!-- <button
-                        class="social-button hover clickable"
-                        @click="login('microsoft')"
-                    >
-                        <img alt="MICROSOFT" src="/img/microsoft.png" />
-                    </button> -->
-                    <!-- <button class="social-button hover" @click="login('twitter')"><img alt="TWITTER ICON" src="/img/twitter.svg"/></button> -->
-                </div>
+                <h1 class="login__title">Sign in</h1>
                 <form @submit.prevent="submitForm" class="login__form gap-y">
-                    <div class="login__form__email">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" v-model="form.email" />
-                    </div>
-                    <div class="login__form__password">
-                        <label for="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            v-model="form.password"
-                        />
-                    </div>
+                    <base-input
+                        label="Email"
+                        type="email"
+                        v-model="form.email"
+                    />
+                    <base-input
+                        label="Password"
+                        type="password"
+                        v-model="form.password"
+                    />
                     <div class="login__form__stay">
                         <label>
                             <input type="checkbox" v-model="stayLoggedIn" />
                             <span>Remember me</span>
                         </label>
                     </div>
-                    <button type="submit" class="login__form__submit">
-                        Log in
-                    </button>
+                    <base-button type="submit" class="login__form__submit">
+                        Sign in
+                    </base-button>
                 </form>
+                <div class="social">
+                    <span class="social__label">Or with</span>
+                    <div class="social__buttons">
+                        <button
+                            class="social__button clickable"
+                            @click="login('google')"
+                        >
+                            <img alt="GOOGLE ICON" src="/img/google.png" />
+                        </button>
+                        <!-- <button
+                            class="social__button clickable"
+                            @click="login('microsoft')"
+                        >
+                            <img alt="MICROSOFT" src="/img/microsoft.png" />
+                        </button>
+                        <button
+                            class="social__button clickable"
+                            @click="login('twitter')"
+                        >
+                            <img alt="TWITTER ICON" src="/img/twitter.svg" />
+                        </button> -->
+                    </div>
+                </div>
             </div>
         </base-card>
     </div>
@@ -50,11 +56,14 @@
 import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import BaseCard from "@/components/BaseCard.vue";
+import { BaseCard, BaseButton } from "@/components";
+import { BaseInput } from "@/components/inputs";
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
+        BaseInput,
     },
 })
 export default class Login extends Vue {
@@ -101,27 +110,47 @@ export default class Login extends Vue {
     justify-content: center;
     align-items: center;
 
-    background: var(--st-color-background-card);
+    background: var(--st-color-background-dark);
 }
 
 #login-card {
     max-width: 500px;
     width: 100%;
 
-    background: var(--st-color-background);
+    background: var(--st-color-background-light);
+
+    .card__content {
+        padding: 2rem;
+    }
 }
 
 .social {
-    &-button {
-        width: 50px;
-        height: 50px;
-        background: var(--st-color-background-card);
-        padding: 0.5em;
-        border-radius: 100%;
-        outline: 0;
-        border: 1px solid var(--st-color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--st-spacing);
+    width: 100%;
 
-        & img {
+    &__label {
+        opacity: 0.5;
+        color: var(--st-color-text);
+    }
+
+    &__buttons {
+        & > *:not(:last-child) {
+            margin-right: 1.5rem;
+        }
+    }
+
+    &__button {
+        --size: 30px;
+        width: var(--size);
+        height: var(--size);
+        background: transparent;
+        padding: 0;
+        border-radius: 100%;
+
+        img {
             width: 100%;
         }
     }
@@ -131,35 +160,23 @@ export default class Login extends Vue {
     display: flex;
     align-items: center;
     flex-direction: column;
-    // gap: var(--st-spacing);
-
-    &__title {
-        margin: 0;
-    }
+    gap: var(--st-spacing);
 
     &__form {
         width: 100%;
         display: flex;
         flex-direction: column;
-        // gap: var(--st-spacing);
-
-        &__submit {
-            font-size: inherit;
-            padding: var(--st-spacing);
-        }
 
         input {
-            padding: var(--st-spacing);
-            background: var(--st-color-background-card);
+            padding: calc(var(--st-spacing) / 2);
+            background: var(--st-color-background-medium);
             border: 1px solid var(--st-color-border);
             border-radius: var(--st-border-radius);
         }
 
-        // &__stay {
-        //     input {
-
-        //     }
-        // }
+        &__submit {
+            margin-top: var(--st-spacing);
+        }
 
         &__email,
         &__password {

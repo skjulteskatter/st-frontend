@@ -2,8 +2,7 @@
     <label class="base-input">
         <small class="base-input__label" v-if="label">{{ label }}</small>
         <input
-            v-if="type == 'text'"
-            type="text"
+            v-if="type != 'textarea'"
             class="base-input__input"
             v-bind="$attrs"
             :value="modelValue"
