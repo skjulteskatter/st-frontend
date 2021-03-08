@@ -1,7 +1,7 @@
 <template>
     <div class="store-item">
         <back-button />
-        <section class="store-item__body">
+        <section class="store-item__body" v-if="product">
             <img
                 class="store-item__image"
                 :src="image"
@@ -22,7 +22,7 @@
                     <base-button
                         theme="secondary"
                         icon="shop"
-                        @click="checkout(product)"
+                        @click="product ? checkout(product) : undefined"
                     >
                         {{ $t("store.buy") }}
                     </base-button>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, stripeKey } from "@/store";
+import { notificationKey, sessionKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
@@ -46,6 +46,7 @@ import { BackButton, BaseButton } from "@/components";
 })
 export default class StoreItem extends Vue {
     private store = useStore(stripeKey);
+    private notifications = useStore(notificationKey);
     public loading = false;
 
     public checkout(product: Product) {
@@ -64,14 +65,14 @@ export default class StoreItem extends Vue {
     }
 
     public get image() {
-        return this.product.collections[0].image + "?w=400";
+        return this.product?.collections[0].image + "?w=400";
     }
 
     public get products() {
         return this.store.state.products;
     }
 
-    public get product(): Product {
+    public get product() {
         return this.products.find((p) => p.id == this.$route.params.id);
     }
 
