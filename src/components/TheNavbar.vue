@@ -16,7 +16,10 @@
             <full-search-input></full-search-input>
         </div>
         <div class="nav__links">
-            <router-link class="nav__item" :to="{ name: 'search' }">
+            <router-link
+                class="nav__item nav__search-link"
+                :to="{ name: 'search' }"
+            >
                 <icon name="search" size="20" />
                 <span>{{ $t("common.search") }}</span>
             </router-link>
@@ -166,12 +169,20 @@ export default class TheNavbar extends Vue {
             display: flex !important;
         }
 
+        .nav__search-link {
+            display: flex !important;
+        }
+
         .nav__item.router-link-exact-active {
             border-left: none;
         }
     }
 
     &__settings {
+        display: none !important;
+    }
+
+    &__search-link {
         display: none !important;
     }
 
