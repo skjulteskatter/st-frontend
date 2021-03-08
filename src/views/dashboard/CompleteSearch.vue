@@ -1,6 +1,7 @@
 <template>
     <div class="loader" v-if="loading"></div>
     <div class="complete-search">
+        <back-button />
         <search-input v-model="searchQuery" @search="search" />
         <div
             v-for="collection in songsByCollection"
@@ -28,13 +29,14 @@ import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 import { Collection, Song } from "@/classes";
 import { SearchInput } from "@/components/inputs";
-import { BaseButton } from "@/components";
+import { BaseButton, BackButton } from "@/components";
 
 @Options({
     components: {
         SongListItemCard,
         SearchInput,
         BaseButton,
+        BackButton,
     },
 })
 export default class CompleteSearch extends Vue {
@@ -42,6 +44,13 @@ export default class CompleteSearch extends Vue {
     public loading = false;
     public searchQuery = "";
     public songs: SongInterface[] = [];
+
+    public mounted() {
+        if (this.$route.query.q) {
+            this.searchQuery = this.$route.query.q?.toString() ?? "";
+            this.search();
+        }
+    }
 
     public async search() {
         this.loading = true;
