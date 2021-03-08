@@ -46,6 +46,7 @@
                 <span>Admin</span>
             </router-link>
         </div>
+        <collection-list></collection-list>
         <router-link class="nav__item" :to="{ name: 'settings' }">
             <icon name="settings" size="20" />
             <span>{{ $t("common.settings") }}</span>
@@ -57,6 +58,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
+import { CollectionList } from "@/components/nav";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
@@ -64,6 +66,7 @@ import { sessionKey } from "@/store";
     components: {
         BaseButton,
         Icon,
+        CollectionList,
     },
 })
 export default class TheNavbar extends Vue {
