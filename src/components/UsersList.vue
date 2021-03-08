@@ -204,6 +204,7 @@ export default class UsersList extends Vue {
 
         td {
             padding: 0.3em;
+            font-size: 0.9em;
 
             & > {
                 margin: 0;
