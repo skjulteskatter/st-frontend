@@ -42,7 +42,7 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseInput } from "@/components/inputs";
 import { BaseCard, BaseButton } from "@/components";
-import { notificationStore, sessionKey } from "@/store";
+import { notificationKey, sessionKey } from "@/store";
 import { useStore } from "vuex";
 
 @Options({
@@ -54,7 +54,7 @@ import { useStore } from "vuex";
     },
 })
 export default class FeedbackForm extends Vue {
-    private notifications = notificationStore;
+    private notificationStore = useStore(notificationKey);
     private userStore = useStore(sessionKey);
     public showForm = false;
     public form = {
@@ -96,7 +96,7 @@ export default class FeedbackForm extends Vue {
         this.populateUserInfo();
 
         console.log(this.form);
-        this.notifications.dispatch("addNotification", {
+        this.notificationStore.dispatch("addNotification", {
             title: "Report sent",
             type: "success",
             icon: "check",

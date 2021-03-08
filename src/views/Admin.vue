@@ -56,12 +56,10 @@
 </template>
 
 <script lang="ts">
-import { notificationStore, sessionKey, usersKey } from "@/store";
+import { notificationKey, sessionKey, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import UsersList from "@/components/UsersList.vue";
-import BaseButton from "@/components/BaseButton.vue";
-import BaseCard from "@/components/BaseCard.vue";
+import { UsersList, BaseButton, BaseCard } from "@/components";
 import api from "@/services/api";
 
 @Options({
@@ -73,7 +71,7 @@ import api from "@/services/api";
 })
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
-    public notifications = notificationStore;
+    public notificationStore = useStore(notificationKey);
     public loading = false;
     public token = localStorage.getItem("id_token");
     public showToken = false;
@@ -101,7 +99,7 @@ export default class Subscriptions extends Vue {
     public async clearCollection(collection: string) {
         this.loadingClearCache.push(collection);
         // Notification
-        this.notifications.dispatch("addNotification", {
+        this.notificationStore.dispatch("addNotification", {
             type: "error",
             title: this.$t("notification.cachecleared"),
             icon: "trash",
@@ -118,7 +116,7 @@ export default class Subscriptions extends Vue {
 
     public async syncCollection(collection: string) {
         this.loadingSync.push(collection);
-        this.notifications.dispatch("addNotification", {
+        this.notificationStore.dispatch("addNotification", {
             type: "error",
             title: this.$t("notification.syncingfiles"),
             icon: "trash",

@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { notificationStore, sessionKey } from "@/store";
+import { notificationKey, sessionKey } from "@/store";
 import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
@@ -106,7 +106,7 @@ export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
     public selectedKey = "";
     public store = useStore(sessionKey);
-    public notifications = notificationStore;
+    public notificationStore = useStore(notificationKey);
     public themes: Themes = themes;
     public newDisplayName = "";
     public transpositions = [
@@ -151,10 +151,10 @@ export default class SettingsCard extends Vue {
 
         if (this.newDisplayName) {
             this.setDisplayName();
-        } 
+        }
 
         // Fire a success notification
-        this.notifications.dispatch("addNotification", {
+        this.notificationStore.dispatch("addNotification", {
             type: "success",
             title: this.$t("notification.saved"),
             icon: "check",
