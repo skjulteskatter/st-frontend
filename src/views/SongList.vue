@@ -182,7 +182,6 @@ export default class SongList extends Vue {
     }
 
     private async loadCollection() {
-        console.log("LOADING")
         this.cId = this.$route.params.collection as string;
         await this.songStore.dispatch(
             "selectCollection",
