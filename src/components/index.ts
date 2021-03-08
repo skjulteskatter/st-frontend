@@ -10,6 +10,7 @@ import CollectionCard from './CollectionCard.vue';
 import BackButton from './BackButton.vue';
 
 import OpenSheetMusicDisplay from './OpenSheetMusicDisplay.vue';
+import UsersList from './UsersList.vue';
 
 export {
     BaseCard,
@@ -21,5 +22,6 @@ export {
     CollectionCard,
     OpenSheetMusicDisplay,
     LyricsCard,
-    BackButton
+    BackButton,
+    UsersList
 }
