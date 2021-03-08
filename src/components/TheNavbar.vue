@@ -24,10 +24,6 @@
                 <icon name="home" size="20" />
                 <span>{{ $t("common.home") }}</span>
             </router-link>
-            <!-- <router-link class="nav__item" :to="{ name: 'collections' }">
-                <icon name="book" size="20" />
-                <span>{{ $t("common.songs") }}</span>
-            </router-link> -->
             <router-link class="nav__item" :to="{ name: 'store' }">
                 <icon name="shop" size="20" />
                 <span>{{ $t("common.store") }}</span>

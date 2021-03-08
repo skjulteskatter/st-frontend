@@ -2,12 +2,14 @@
     <div class="complete-search">
         <div class="loader" v-if="loading"></div>
         <back-button />
+        <h1>{{ $t("common.search") }}</h1>
         <search-input v-model="searchQuery" @search="search" />
         <div
             v-for="collection in songsByCollection"
             :key="collection.collection.id"
+            class="complete-search__collection"
         >
-            <h1>{{ collection.collection.getName(languageKey) }}</h1>
+            <h2>{{ collection.collection.getName(languageKey) }}</h2>
             <div class="complete-search__list complete-search__list-cards">
                 <song-list-item-card
                     v-for="song in collection.songs.slice(0, 24)"
@@ -119,6 +121,13 @@ export default class CompleteSearch extends Vue {
 
 .complete-search {
     padding: calc(var(--st-spacing) * 2);
+    @include breakpoint("medium") {
+        padding: var(--st-spacing);
+    }
+
+    &__collection {
+        margin-top: 2rem;
+    }
 
     &__list {
         display: flex;
