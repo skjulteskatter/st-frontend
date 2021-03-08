@@ -13,9 +13,10 @@
     left: 0;
 
     &:after {
+        --size: 60px;
         content: '';
-        width: 100px;
-        height: 100px;
+        width: var(--size);
+        height: var(--size);
 
         border-radius: 100%;
         border-bottom: 10px solid var(--st-color-primary);
