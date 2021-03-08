@@ -41,6 +41,7 @@ export default class CollectionList extends Vue {
 @import "../../style/mixins";
 
 .collection-list {
+    margin-top: 1rem;
     padding: var(--st-spacing);
     font-size: 0.9em;
     flex-grow: 1;
@@ -50,8 +51,7 @@ export default class CollectionList extends Vue {
     }
 
     &__list {
-        padding-left: 1em;
-        line-height: 1.3em;
+        padding-left: 1.3em;
         font-weight: 300;
         margin-top: 0.5em;
         list-style: circle;
@@ -61,6 +61,7 @@ export default class CollectionList extends Vue {
         color: var(--st-color-text);
         display: block;
         text-decoration: none;
+        margin-bottom: 0.2em;
 
         &:hover {
             color: var(--st-color-primary);
