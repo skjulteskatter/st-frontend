@@ -16,6 +16,10 @@
             <full-search-input></full-search-input>
         </div>
         <div class="nav__links">
+            <router-link class="nav__item" :to="{ name: 'search' }">
+                <icon name="search" size="20" />
+                <span>{{ $t("common.search") }}</span>
+            </router-link>
             <router-link class="nav__item" :to="{ name: 'main' }">
                 <icon name="home" size="20" />
                 <span>{{ $t("common.home") }}</span>
