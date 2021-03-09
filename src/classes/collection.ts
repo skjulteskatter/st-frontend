@@ -79,39 +79,47 @@ export class Collection {
     public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = [], types: string[] = []) {
         filter = filter.toLowerCase();
 
-        const numbers: number[] = [];
+
         const context: {
             [key: string]: string;
         } = {};
 
-        for (const lyrics of this.lyrics) {
+        const number = parseInt(filter);
+
+        let numbers: number[] = [];
+        
+        if (number) {
+            numbers = this.songs.filter(s => s.number == number || s.number.toString().includes(number.toString())).map(s => s.number);
+        } else {
+            for (const lyrics of this.lyrics) {
 
 
-            const content = lyrics.rawContent.toLowerCase();
-            
-            if (content.includes(filter)) {
-                numbers.push(lyrics.number);
-
-                const index = content.indexOf(filter);
-
-                const start = (index - 20) > 0 ? index - 20 : 0;
-
-                context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? '...' : '') + lyrics.rawContent.substr(start, filter.length + 40) + '...';
-
-                continue;
-            }
-
-            if (lyrics.title?.includes(filter)) {
-                numbers.push(lyrics.number);
-                continue;
-            }
-        }
-
-        for (const song of this.songs) {
-            if (!numbers.includes(song.number)) {
-                if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
-                    numbers.push(song.number);
+                const content = lyrics.rawContent.toLowerCase();
+                
+                if (content.includes(filter)) {
+                    numbers.push(lyrics.number);
+    
+                    const index = content.indexOf(filter);
+    
+                    const start = (index - 20) > 0 ? index - 20 : 0;
+    
+                    context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? '...' : '') + lyrics.rawContent.substr(start, filter.length + 40) + '...';
+    
                     continue;
+                }
+    
+                if (lyrics.title?.includes(filter)) {
+                    numbers.push(lyrics.number);
+                    continue;
+                }
+            }
+    
+            for (const song of this.songs) {
+                if (!numbers.includes(song.number)) {
+                    if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
+                        numbers.push(song.number);
+                        continue;
+                    }
                 }
             }
         }
