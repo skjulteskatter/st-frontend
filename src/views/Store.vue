@@ -47,6 +47,14 @@
                 v-if="allCollectionProduct"
                 :key="allCollectionProduct.id"
                 :product="allCollectionProduct"
+                :action="
+                    () =>
+                        $router.push({
+                            name: 'store-item',
+                            params: { id: allCollectionProduct ? allCollectionProduct.id : ''},
+                        })
+                "
+                :isPurchaseable="!productIds.includes(allCollectionProduct.id)"
             ></store-card>
         </div>
     </div>

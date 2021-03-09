@@ -5,11 +5,11 @@
             <img
                 class="store-item__image"
                 :src="image"
-                :alt="product.name[languageKey]"
+                :alt="product.getName(languageKey)"
             />
             <div class="store-item__body__info">
                 <h1 class="store-item__title">
-                    {{ product.name[languageKey] }}
+                    {{ product.getName(languageKey) }}
                 </h1>
                 <span class="store-item__price-tag">
                     {{ formatPrices(product.prices, "year") }}

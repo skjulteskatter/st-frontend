@@ -158,10 +158,11 @@ class Http {
             console.log("REFRESHING TOKEN")
             if (e == 401) {
                 token = await auth.getToken();
+                return await fetch(path, o)
+                    .then(this.validateResponse)
+                    .then(this.parseJson);
             }
-            return await fetch(path, o)
-                .then(this.validateResponse)
-                .then(this.parseJson);
+            throw e;
         }
     }
 }
