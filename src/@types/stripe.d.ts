@@ -21,6 +21,6 @@ declare module "checkout" {
 
     interface SetupResponse {
         key: string;
-        products: Product[];
+        products: ProductInterface[];
     }
 }

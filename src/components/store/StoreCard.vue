@@ -3,8 +3,8 @@
         <img
             class="store-card__image clickable"
             :src="image"
-            :alt="product.name[languageKey]"
-            @click="gotoCollection(product)"
+            :alt="product.getName(languageKey)"
+            @click="product ? gotoCollection(product) : undefined"
         />
         <div class="store-card__footer">
             <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
@@ -33,6 +33,7 @@ import { sessionKey } from "@/store";
 
 import { BaseCard, BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
+import { Product } from "@/classes/product";
 
 @Options({
     components: {
@@ -57,7 +58,6 @@ export default class StoreCard extends Vue {
     public isPurchaseable = false;
     public action = () => undefined;
     public userStore = useStore(sessionKey);
-    private loading = false;
 
     public gotoCollection(product: Product) {
         const collectionKey = product?.collections[0].key ?? "";

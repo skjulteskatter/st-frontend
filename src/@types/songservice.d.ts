@@ -120,13 +120,14 @@ interface Price {
     type: string;
 }
 
-interface Product {
+interface ProductInterface {
     id: string;
     name: {
         [languageKey: string]: string;
     };
     collections: Collection[];
     prices: Price[];
+    priority: number;
 }
 
 interface ThemeCollectionItem {

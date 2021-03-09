@@ -1,3 +1,4 @@
+import { Product } from "@/classes/product";
 import stripeService from "@/services/stripe";
 import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
@@ -31,7 +32,7 @@ export const stripeStore = createStore<StripeStore>({
             await stripeService.init(result.key);
             
             commit('setKey', result.key);
-            commit('setProducts', result.products);
+            commit('setProducts', result.products.map(p => new Product(p)));
         },
         async startSession(state, priceId: string) {
             await stripeService.checkout(priceId);

@@ -40,6 +40,7 @@ import { notificationKey, sessionKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
+import { Product } from "@/classes/product";
 
 @Options({
     components: {

@@ -42,6 +42,12 @@
                 "
                 :isPurchaseable="!productIds.includes(product.id)"
             ></store-card>
+            <br/>
+            <store-card
+                v-if="allCollectionProduct"
+                :key="allCollectionProduct.id"
+                :product="allCollectionProduct"
+            ></store-card>
         </div>
     </div>
 </template>
@@ -99,8 +105,8 @@ export default class Store extends Vue {
 
     public get products() {
         return this.store.state.products.sort(
-            (a, b) => b.collections.length - a.collections.length
-        );
+            (a, b) => b.priority - a.priority
+        ).filter(p => p.collections.length == 1);
     }
 
     public get user() {
@@ -113,6 +119,10 @@ export default class Store extends Vue {
 
     public async refreshSubscriptions() {
         await this.store.dispatch("refreshCollections");
+    }
+
+    public get allCollectionProduct() {
+        return this.store.state.products.find(p => p.collections.length > 1);
     }
 }
 </script>
