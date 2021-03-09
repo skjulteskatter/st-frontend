@@ -216,7 +216,15 @@ class Auth {
     public async getToken() {
         let token = this.token;
         if (!token) {
-            token = this.emailVerified ? await a().currentUser?.getIdToken() : undefined;
+            token = this.emailVerified ? await this.getNewToken() : undefined;
+        }
+        return token;
+    }
+    
+    public async getNewToken() {
+        const token = await a().currentUser?.getIdToken();
+        if (token) {
+            this.setToken(token);
         }
         return token;
     }

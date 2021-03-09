@@ -11,7 +11,7 @@
                         name: 'song-list',
                         params: { collection: collection.key },
                     }"
-                    >{{ collection.name[languageKey] }}</router-link
+                    >{{ collection.getName(languageKey) }}</router-link
                 >
             </li>
         </ul>
@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { Collection } from "@/classes";
 import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
@@ -27,7 +28,7 @@ import { useStore } from "vuex";
 export default class CollectionList extends Vue {
     private store = useStore(sessionKey);
 
-    public get collections() {
+    public get collections(): Collection[] {
         return this.store.getters.collections;
     }
 

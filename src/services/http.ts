@@ -7,14 +7,9 @@ class Http {
             if (response.status >= 200 && response.status < 300) {
                 resolve(response)
             } else if (response.status === 401) {
-                setTimeout(() => {
-                    if (!auth.isAuthenticated) {
-                        return "";
-                    }
-                }, 10000)
                 // auth.startLogin();
                 // resolve(null);
-                reject(new Error('Unauthorized'))
+                reject(401)
             } else {
                 const error = new Error(response.statusText)
                 // error.response = response;
@@ -143,7 +138,7 @@ class Http {
 
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
-        const token = await auth.getToken();
+        let token = await auth.getToken();
         if (token == null && !bypassAuth) throw new Error("No Authorization token available")
 
         const headers = Object.assign({
@@ -153,11 +148,21 @@ class Http {
 
         const o = Object.assign(
         options, {headers});
-
-        const result = fetch(path, o)
-            .then(this.validateResponse)
-            .then(this.parseJson)
-        return result;
+        try { 
+            console.log("POGGERS")
+            return await fetch(path, o)
+                .then(this.validateResponse)
+                .then(this.parseJson);
+        }
+        catch (e) {
+            console.log("REFRESHING TOKEN")
+            if (e == 401) {
+                token = await auth.getToken();
+            }
+            return await fetch(path, o)
+                .then(this.validateResponse)
+                .then(this.parseJson);
+        }
     }
 }
 
