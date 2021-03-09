@@ -73,7 +73,26 @@ export default class BaseButton extends Vue {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    position: relative;
+    overflow: hidden;
     // display: inline-block;
+
+    &:hover {
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(white, 0.15);
+            z-index: 1;
+        }
+    }
+
+    &__content {
+        z-index: 2;
+    }
 
     &__icon {
         display: inline-block;
@@ -115,6 +134,15 @@ export default class BaseButton extends Vue {
         background-color: transparent;
         border: 1px solid var(--st-color-primary);
         color: var(--st-color-primary);
+
+        &:hover {
+            background-color: var(--st-color-primary);
+            color: var(--st-color-text-dm);
+
+            &:after {
+                background: transparent;
+            }
+        }
     }
 
     &-warning {
