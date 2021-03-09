@@ -35,7 +35,7 @@ export class Themes {
         // this.setThemeProperties(theme);
 
         // Add 'darkmode' class if user applies darkmode
-        const app = document.getElementById('songtreasures');
+        const app = document.querySelector('body');
         if (key == 'dark') app?.classList.add('darkmode');
         else if (key == 'light') app?.classList.remove('darkmode');
 

@@ -35,7 +35,7 @@ export default class App extends Vue {
 <style lang="scss">
 @import "@/style/main";
 
-#songtreasures {
+body {
     --st-color-background-dark: var(--st-color-ui-lm-medium);
     --st-color-background-medium: var(--st-color-ui-lm-light);
     --st-color-background-light: white;
