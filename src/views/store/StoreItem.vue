@@ -11,6 +11,9 @@
                 <h1 class="store-item__title">
                     {{ product.name[languageKey] }}
                 </h1>
+                <span class="store-item__price-tag">
+                    {{ formatPrices(product.prices, "year") }}
+                </span>
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Perferendis ratione, deleniti veritatis ea quam esse qui
@@ -64,6 +67,16 @@ export default class StoreItem extends Vue {
         }
     }
 
+    public formatPrices(prices: Price[], type: string) {
+        const unformattedPrice = prices.find((price) => price.type == type)
+            ?.value;
+        const formattedPrice = unformattedPrice?.slice(
+            0,
+            unformattedPrice.length - 2
+        );
+        return `${formattedPrice} /${type}`;
+    }
+
     public get image() {
         return this.product?.collections[0].image + "?w=400";
     }
@@ -92,8 +105,15 @@ export default class StoreItem extends Vue {
         padding: var(--st-spacing);
     }
 
+    &__price-tag {
+        color: var(--st-color-primary);
+    }
+
     &__title {
         margin-top: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     &__image {
@@ -110,6 +130,10 @@ export default class StoreItem extends Vue {
 
             .store-item__body__info {
                 margin: var(--st-spacing) 0 0 0;
+            }
+
+            .store-item__body__footer {
+                flex-direction: column;
             }
         }
 

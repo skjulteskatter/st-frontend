@@ -6,23 +6,22 @@
             :alt="product.name[languageKey]"
             @click="gotoCollection(product)"
         />
-        <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
         <div class="store-card__footer">
-            <p class="store-card__price">
+            <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
+            <!-- <p class="store-card__price">
                 {{ formatPrices(product.prices, "year") }}
-            </p>
+            </p> -->
             <base-button
                 class="store-card__button"
-                v-if="isPurchaseable"
                 icon="info"
                 theme="primary"
                 @click="action"
             >
                 <span>{{ $t("store.seemore") }}</span>
             </base-button>
-            <span class="store-card__subtitle" v-else>
+            <!-- <span class="store-card__subtitle" v-else>
                 {{ $t("store.alreadyown") }}
-            </span>
+            </span> -->
         </div>
     </div>
 </template>
@@ -103,6 +102,10 @@ export default class StoreCard extends Vue {
         }
     }
 
+    &__button {
+        flex-shrink: 0;
+    }
+
     &__image {
         max-width: 100%;
         border-radius: 0.5rem;
@@ -113,8 +116,9 @@ export default class StoreCard extends Vue {
     &__footer {
         width: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
     }
 
     &__price {
@@ -123,10 +127,9 @@ export default class StoreCard extends Vue {
     }
 
     &__title {
-        margin-top: var(--st-spacing);
-        margin-bottom: calc(var(--st-spacing) / 2);
         width: 100%;
-        word-wrap: break-word;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     &__subtitle {
