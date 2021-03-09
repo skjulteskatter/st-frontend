@@ -89,7 +89,7 @@ export default class LyricsCard extends Vue {
 
     public mounted() {
         if (this.transposed) {
-            if (this.song?.hasLyrics) {
+            if (this.song?.hasLyrics && this.lyrics?.hasChords) {
                 this.transposeView();
             } else {
                 this.songStore.commit("view", "default");
