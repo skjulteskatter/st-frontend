@@ -1,9 +1,10 @@
 <template>
     <div class="store-card" v-if="product">
         <img
-            class="store-card__image"
+            class="store-card__image clickable"
             :src="image"
             :alt="product.name[languageKey]"
+            @click="gotoCollection(product)"
         />
         <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
         <div class="store-card__footer">
@@ -59,6 +60,17 @@ export default class StoreCard extends Vue {
     public userStore = useStore(sessionKey);
     private loading = false;
 
+    public gotoCollection(product: Product) {
+        const collectionKey = product?.collections[0].key ?? "";
+
+        this.$router.push({
+            name: "song-list",
+            params: {
+                collection: collectionKey,
+            },
+        });
+    }
+
     public formatPrices(prices: Price[], type: string) {
         const unformattedPrice = prices.find((price) => price.type == type)
             ?.value;
@@ -93,8 +105,9 @@ export default class StoreCard extends Vue {
 
     &__image {
         max-width: 100%;
-        // max-height: 300px;
         border-radius: 0.5rem;
+        border: 3px solid var(--st-color-border);
+        object-fit: cover;
     }
 
     &__footer {
