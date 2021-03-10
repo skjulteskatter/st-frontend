@@ -1,5 +1,5 @@
 <template>
-    <base-card class="sheetmusic" header>
+    <base-card class="sheetmusic" header toggleable>
         <template #header>
             <div v-if="loaded" class="sheetmusic__controls">
                 <base-button
@@ -33,9 +33,9 @@
 import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
 import { TransposeCalculator } from "../osmd/transpose";
-import { BaseButton, BaseCard } from "@/components";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
+import { BaseButton, BaseCard } from "@/components";
 
 @Options({
     components: {
@@ -86,6 +86,13 @@ export default class OSMD extends Vue {
         }
     }
 
+    public get pageZoom(): number {
+        const breakpoint = 700;
+        const pageWidth = window.innerWidth;
+        const zoomLevel = pageWidth < breakpoint ? 0.4 : 1;
+        return zoomLevel;
+    }
+
     public get transposition() {
         return this.songStore.state.smTransposition ?? 0;
     }
@@ -107,6 +114,21 @@ export default class OSMD extends Vue {
 
         this.o.Sheet.Transpose = this.transposition;
 
+        // Set options (colors, fonts)
+        this.o.setOptions({
+            backend: "canvas",
+            // defaultColorTitle: "var(--st-color-text)",
+            // defaultColorStem: "var(--st-color-text)",
+            // defaultColorRest: "var(--st-color-text)",
+            // defaultColorLabel: "var(--st-color-text)",
+            // defaultColorNotehead: "var(--st-color-text)",
+            pageFormat: "A4_P",
+            defaultFontFamily: "Inter",
+            pageBackgroundColor: "#ffffff",
+        });
+
+        this.o.zoom = this.pageZoom;
+
         this.o.updateGraphic();
 
         this.o.render();
@@ -117,6 +139,10 @@ export default class OSMD extends Vue {
 </script>
 
 <style lang="scss">
+#osmd {
+    max-width: 900px;
+}
+
 .sheetmusic {
     &__controls {
         display: flex;

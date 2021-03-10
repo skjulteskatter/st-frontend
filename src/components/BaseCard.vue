@@ -16,7 +16,7 @@
                 @click="isOpen = !isOpen"
             />
         </div>
-        <div class="card__content" v-if="!(header && isOpen)">
+        <div class="card__content" v-show="!(header && isOpen)">
             <slot name="default" />
         </div>
     </div>
@@ -59,7 +59,6 @@ export default class Card extends Vue {
     background: var(--st-color-background-medium);
     border-radius: var(--st-border-radius);
     overflow: hidden;
-    // will-change: transform;
     animation: slideInFromBottom 0.3s ease;
 
     &[secondary] {
