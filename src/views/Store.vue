@@ -8,6 +8,7 @@
                     @click="refreshSubscriptions"
                     icon="refresh"
                     class="refresh-button"
+                    :loading="loadingSubs"
                 >
                     <span>
                         {{ $t("common.refreshSubscriptions") }}
@@ -81,6 +82,7 @@ export default class Store extends Vue {
     private store = useStore(stripeKey);
     private notifications = notificationStore;
     public loading = false;
+    public loadingSubs = false;
 
     public mounted() {
         if (!this.store.state.initialized) {
@@ -126,7 +128,9 @@ export default class Store extends Vue {
     }
 
     public async refreshSubscriptions() {
+        this.loadingSubs = true;
         await this.store.dispatch("refreshCollections");
+        this.loadingSubs = false;
     }
 
     public get allCollectionProduct() {
