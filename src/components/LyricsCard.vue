@@ -1,8 +1,9 @@
 <template>
-    <base-card v-if="lyrics && song" class="lyrics-card" header>
+    <base-card v-if="lyrics && song" class="lyrics-card" header toggleable>
         <template #header>
+            <h4 class="lyrics-card__title">{{ $t("song.lyrics") }}</h4>
             <div class="lyrics-card__header">
-                <div class="lyrics-card__header__item">
+                <div class="lyrics-card__header__settings">
                     <select
                         v-if="transposed"
                         id="transposition"
@@ -18,9 +19,12 @@
                             {{ t }}
                         </option>
                     </select>
-                </div>
-                <div class="lyrics-card__header__settings">
-                    <base-button v-if="lyrics.hasChords" @click="transposeToggle" icon="music">
+                    <base-button
+                        v-if="lyrics.hasChords"
+                        @click="transposeToggle"
+                        icon="music"
+                        theme="tertiary"
+                    >
                         {{ $t("song.chords") }}
                     </base-button>
                     <select
@@ -118,7 +122,7 @@ export default class LyricsCard extends Vue {
     }
 
     public set selectedTransposition(v) {
-        this.songStore.commit("transposition", v)
+        this.songStore.commit("transposition", v);
     }
 
     public get languageKey() {
@@ -198,6 +202,10 @@ export default class LyricsCard extends Vue {
 </script>
 <style lang="scss">
 .lyrics-card {
+    &__title {
+        margin: 0 0 0.5em 0;
+    }
+
     &__header {
         width: 100%;
         display: flex;

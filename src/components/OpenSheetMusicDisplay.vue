@@ -1,28 +1,31 @@
 <template>
     <base-card class="sheetmusic" header toggleable>
         <template #header>
+            <h4 class="sheetmusic__title">{{ $t("song.leadSheet") }}</h4>
             <div v-if="loaded" class="sheetmusic__controls">
-                <base-button
+                <Icon
+                    name="arrowLeft"
+                    class="sheetmusic__controls__button"
                     @click="
                         transposition > -12
                             ? transpose(transposition - 1)
                             : undefined
                     "
-                    >-</base-button
-                >
+                />
                 <span class="sheetmusic__key">
                     {{ originalKey }} ({{
                         transposition > 0 ? "+" + transposition : transposition
                     }})
                 </span>
-                <base-button
+                <Icon
+                    name="arrowRight"
+                    class="sheetmusic__controls__button"
                     @click="
                         transposition < 12
                             ? transpose(transposition + 1)
                             : undefined
                     "
-                    >+</base-button
-                >
+                />
             </div>
         </template>
         <div id="osmd"></div>
@@ -36,11 +39,13 @@ import { TransposeCalculator } from "../osmd/transpose";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 import { BaseButton, BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         BaseButton,
         BaseCard,
+        Icon,
     },
     props: {
         url: {
@@ -144,9 +149,21 @@ export default class OSMD extends Vue {
 }
 
 .sheetmusic {
+    &__title {
+        margin: 0 0 0.5em 0;
+    }
+
     &__controls {
+        padding: 0.5em;
+        border: 1px solid var(--st-color-primary);
+        border-radius: var(--st-border-radius);
         display: flex;
         align-items: center;
+
+        &__button {
+            color: var(--st-color-primary);
+            cursor: pointer;
+        }
     }
 
     &__key {
