@@ -74,6 +74,9 @@ export default {
 		},
 		arrowUp: {
 			path: 'M5 15l7-7 7 7'
+		},
+		arrowRight: {
+			path: 'M9 5l7 7-7 7'
 		}
 	}
 }
