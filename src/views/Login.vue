@@ -1,18 +1,25 @@
 <template>
     <div class="wrapper">
-        <base-card id="login-card" v-if="initialized && !user" border>
+        <base-card id="login-card" v-if="initialized && !user">
             <div class="login gap-y">
-                <h1 class="login__title">Sign in</h1>
+                <img
+                    src="/img/SongTreasures_logo.svg"
+                    alt="SongTreasures logo"
+                    class="logo"
+                />
+                <h2 class="login__title">Sign in</h2>
                 <form @submit.prevent="submitForm" class="login__form gap-y">
                     <base-input
                         label="Email"
                         type="email"
                         v-model="form.email"
+                        required
                     />
                     <base-input
                         label="Password"
                         type="password"
                         v-model="form.password"
+                        required
                     />
                     <div class="login__form__stay">
                         <label>
@@ -33,18 +40,20 @@
                         >
                             <img alt="GOOGLE ICON" src="/img/google.png" />
                         </button>
-                        <!-- <button
-                            class="social__button clickable"
+                        <button
+                            class="social__button"
                             @click="login('microsoft')"
+                            disabled
                         >
                             <img alt="MICROSOFT" src="/img/microsoft.png" />
                         </button>
                         <button
-                            class="social__button clickable"
+                            class="social__button"
                             @click="login('twitter')"
+                            disabled
                         >
                             <img alt="TWITTER ICON" src="/img/twitter.svg" />
-                        </button> -->
+                        </button>
                     </div>
                 </div>
             </div>
@@ -101,6 +110,8 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss">
+@import "../style/mixins";
+
 .wrapper {
     width: 100vw;
     height: 100vh;
@@ -118,6 +129,15 @@ export default class Login extends Vue {
     width: 100%;
 
     background: var(--st-color-background-light);
+
+    @include breakpoint("small") {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 
     .card__content {
         padding: 2rem;
@@ -143,12 +163,18 @@ export default class Login extends Vue {
     }
 
     &__button {
-        --size: 30px;
+        --size: 40px;
         width: var(--size);
         height: var(--size);
         background: transparent;
         padding: 0;
         border-radius: 100%;
+
+        &[disabled] {
+            opacity: 0.5;
+            filter: grayscale(1);
+            cursor: not-allowed;
+        }
 
         img {
             width: 100%;
@@ -161,6 +187,10 @@ export default class Login extends Vue {
     align-items: center;
     flex-direction: column;
     gap: var(--st-spacing);
+
+    .logo {
+        max-height: 4em;
+    }
 
     &__form {
         width: 100%;
