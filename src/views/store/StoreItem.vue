@@ -53,19 +53,15 @@ export default class StoreItem extends Vue {
     private notifications = useStore(notificationKey);
     public loading = false;
 
-    public checkout(product: Product) {
+    public async checkout(product: Product) {
         this.loading = true;
-        this.notifications?.dispatch("addNotification", {
+        await this.notifications?.dispatch("addNotification", {
             type: "primary",
             icon: "shop",
             title: this.$t("notification.redirecting"),
         });
-        const price = product.prices.find((p) => p.type == "year");
-
-        if (price) {
-            this.store.dispatch("startSession", price.id);
-            this.loading = false;
-        }
+        await this.store.dispatch("startSession", product.id);
+        this.loading = false;
     }
 
     public formatPrices(prices: Price[], type: string) {
