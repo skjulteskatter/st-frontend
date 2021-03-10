@@ -2,30 +2,45 @@
     <base-card class="sheetmusic" header toggleable>
         <template #header>
             <h4 class="sheetmusic__title">{{ $t("song.leadSheet") }}</h4>
-            <div v-if="loaded" class="sheetmusic__controls">
-                <Icon
-                    name="arrowLeft"
-                    class="sheetmusic__controls__button"
-                    @click="
-                        transposition > -12
-                            ? transpose(transposition - 1)
-                            : undefined
-                    "
-                />
-                <span class="sheetmusic__key">
-                    {{ originalKey }} ({{
-                        transposition > 0 ? "+" + transposition : transposition
-                    }})
-                </span>
-                <Icon
-                    name="arrowRight"
-                    class="sheetmusic__controls__button"
-                    @click="
-                        transposition < 12
-                            ? transpose(transposition + 1)
-                            : undefined
-                    "
-                />
+            <div v-if="loaded" class="sheetmusic__controls gap-x">
+                <div class="sheetmusic__controls__transpose">
+                    <Icon
+                        name="arrowLeft"
+                        class="sheetmusic__controls__button"
+                        @click="
+                            transposition > -12
+                                ? transpose(transposition - 1)
+                                : undefined
+                        "
+                    />
+                    <span class="sheetmusic__key">
+                        {{ originalKey }} ({{
+                            transposition > 0
+                                ? "+" + transposition
+                                : transposition
+                        }})
+                    </span>
+                    <Icon
+                        name="arrowRight"
+                        class="sheetmusic__controls__button"
+                        @click="
+                            transposition < 12
+                                ? transpose(transposition + 1)
+                                : undefined
+                        "
+                    />
+                </div>
+                <div class="sheetmusic__controls__zoom">
+                    <small>{{ zoomValue * 100 }}%</small>
+                    <input
+                        type="range"
+                        v-model="zoomValue"
+                        @change="update"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                    />
+                </div>
             </div>
         </template>
         <div id="osmd"></div>
@@ -65,6 +80,7 @@ export default class OSMD extends Vue {
     public originalKey = "C";
     public loaded = false;
     public initialTransposition?: number;
+    public zoomValue = 1;
 
     public o?: OpenSheetMusicDisplay;
 
@@ -91,11 +107,22 @@ export default class OSMD extends Vue {
         }
     }
 
-    public get pageZoom(): number {
+    public update() {
+        if (this.o) {
+            this.setZoom();
+            this.o.render();
+            console.log("updated");
+        }
+    }
+
+    public setZoom() {
         const breakpoint = 700;
         const pageWidth = window.innerWidth;
         const zoomLevel = pageWidth < breakpoint ? 0.4 : 1;
-        return zoomLevel;
+
+        if (this.o) {
+            this.o.zoom = +this.zoomValue ?? zoomLevel;
+        }
     }
 
     public get transposition() {
@@ -132,7 +159,7 @@ export default class OSMD extends Vue {
             pageBackgroundColor: "#ffffff",
         });
 
-        this.o.zoom = this.pageZoom;
+        this.setZoom();
 
         this.o.updateGraphic();
 
@@ -154,11 +181,25 @@ export default class OSMD extends Vue {
     }
 
     &__controls {
-        padding: 0.5em;
-        border: 1px solid var(--st-color-primary);
-        border-radius: var(--st-border-radius);
         display: flex;
         align-items: center;
+
+        &__transpose {
+            padding: 0.5em;
+            border: 1px solid var(--st-color-primary);
+            border-radius: var(--st-border-radius);
+            display: flex;
+            align-items: center;
+        }
+
+        &__zoom {
+            display: flex;
+            flex-direction: column;
+
+            // input[type=range] {
+
+            // }
+        }
 
         &__button {
             color: var(--st-color-primary);
