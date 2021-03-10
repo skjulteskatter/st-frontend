@@ -34,8 +34,8 @@ export const stripeStore = createStore<StripeStore>({
             commit('setKey', result.key);
             commit('setProducts', result.products.map(p => new Product(p)));
         },
-        async startSession(state, priceId: string) {
-            await stripeService.checkout(priceId);
+        async startSession(state, productId: string) {
+            await stripeService.checkout(productId);
         },
         async getPortal() {
             return await stripeService.portal();

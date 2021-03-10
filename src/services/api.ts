@@ -92,9 +92,9 @@ export const stripe = {
     setup() {
         return http.get<SetupResponse>('api/Store/Setup')
     },
-    startSession(priceId: string) {
+    startSession(productId: string) {
         return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { 
-            priceId,
+            productId,
             cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
         });
