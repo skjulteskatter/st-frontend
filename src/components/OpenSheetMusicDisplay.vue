@@ -36,8 +36,8 @@
                         type="range"
                         v-model="zoomValue"
                         @change="update"
-                        min="0"
-                        max="1"
+                        min="0.5"
+                        max="1.5"
                         step="0.1"
                     />
                 </div>
