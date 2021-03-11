@@ -4,7 +4,6 @@
             @click="openModal"
             class="modal__open-button"
             :theme="theme"
-            icon="pencil"
             v-if="type == 'button'"
             >{{ label }}</base-button
         >
