@@ -31,13 +31,13 @@
                     />
                 </div>
                 <div class="sheetmusic__controls__zoom">
-                    <small>{{ zoomValue * 100 }}%</small>
+                    <small>{{ Math.floor(zoomValue * 100) }}%</small>
                     <input
                         type="range"
                         v-model="zoomValue"
                         @change="update"
-                        min="0.5"
-                        max="1.5"
+                        min="0.4"
+                        max="1.4"
                         step="0.1"
                     />
                 </div>
@@ -85,6 +85,10 @@ export default class OSMD extends Vue {
     public o?: OpenSheetMusicDisplay;
 
     public mounted() {
+        if (window.innerWidth < 700) {
+            this.zoomValue = 0.5;
+        }
+
         if (this.initialTransposition) {
             this.transpose(this.initialTransposition);
         } else {
@@ -195,6 +199,8 @@ export default class OSMD extends Vue {
         &__zoom {
             display: flex;
             flex-direction: column;
+
+            width: 150px;
 
             // input[type=range] {
 

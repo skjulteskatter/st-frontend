@@ -24,7 +24,7 @@
             <open-sheet-music-display
                 :url="sheetMusicUrl"
                 :originalKey="song.originalKey"
-                v-if="showSheetMusic"
+                v-if="sheetMusicUrl && showSheetMusic"
             >
             </open-sheet-music-display>
             <div class="loader" v-if="loadingLyrics"></div>
