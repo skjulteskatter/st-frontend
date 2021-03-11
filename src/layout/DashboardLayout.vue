@@ -32,7 +32,7 @@ export default class DashboardLayout extends Vue {
     mounted() {
         document.documentElement.style.setProperty(
             "--st-color-primary",
-            localStorage.getItem("theme_color") || themes.default
+            themes.default
         );
         themes.load();
         if (this.initialized && !this.user) {
