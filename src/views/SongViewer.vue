@@ -2,7 +2,13 @@
     <div class="loader" v-if="loading"></div>
     <div v-if="!loading && initialized && song" class="song-viewer">
         <div class="song-viewer__content">
-            <back-button />
+            <div class="song-viewer__header">
+                <back-button />
+                <base-button @click="sidebar = !sidebar" icon="documents">
+                    {{ $t(`common.${sidebar ? "close" : "show"}`) }}
+                    {{ $t("song.files").toLowerCase() }}
+                </base-button>
+            </div>
             <song-info-card
                 :song="song"
                 :languageKey="languageKey"
@@ -14,13 +20,6 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <!-- <base-button
-                @click="showSheetMusic = !showSheetMusic"
-                v-if="sheetMusicUrl"
-                theme="tertiary"
-            >
-                {{ $t("song.leadSheet") }}
-            </base-button> -->
             <open-sheet-music-display
                 :url="sheetMusicUrl"
                 :originalKey="song.originalKey"
@@ -32,9 +31,6 @@
 
         <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
-                <base-button @click="sidebar = false" theme="tertiary">
-                    {{ $t("common.close") }}
-                </base-button>
                 <base-button
                     v-if="extended"
                     @click="extend"
@@ -88,7 +84,7 @@ export default class SongViewer extends Vue {
     public songStore = useStore(songKey);
     public number = 0;
     public selectedLanguage = this.languageKey;
-    public sidebar = true;
+    public sidebar = false;
     public showSheetMusic = true;
 
     public async mounted() {
@@ -163,6 +159,11 @@ export default class SongViewer extends Vue {
 .song-viewer {
     display: flex;
     height: 100%;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
 
     &__content {
         flex-grow: 1;
