@@ -33,7 +33,7 @@
                     </select>
                 </div>
                 <div class="user-settings__key field gap-x">
-                    <label for="language">{{ $t("song.key") }}</label>
+                    <label for="transposition-key">{{ $t("song.key") }}</label>
                     <hr />
                     <select
                         id="transposition-key"
@@ -42,6 +42,20 @@
                         @change="setKey"
                     >
                         <option v-for="k in transpositions" :value="k" :key="k">
+                            {{ k }}
+                        </option>
+                    </select>
+                </div>
+                <div class="user-settings__key field gap-x">
+                    <label for="transcode">{{ $t("song.transcode") }}</label>
+                    <hr />
+                    <select
+                        id="transcode"
+                        name="transcode"
+                        v-model="selectedTranscode"
+                        @change="setTranscode"
+                    >
+                        <option v-for="k in transcodes" :value="k" :key="k">
                             {{ k }}
                         </option>
                     </select>
@@ -105,6 +119,7 @@ import auth from "@/services/auth";
 export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
     public selectedKey = "";
+    public selectedTranscode = "";
     public store = useStore(sessionKey);
     public notificationStore = useStore(notificationKey);
     public themes: Themes = themes;
@@ -122,6 +137,16 @@ export default class SettingsCard extends Vue {
         "F",
         "F#",
         "G",
+    ];
+    public transcodes = [
+        "common",
+        "dutch",
+        "german",
+        "latin",
+        "solfege",
+        "scandinavian",
+        "nashville",
+        "roman",
     ];
 
     public fileName = "";
@@ -141,6 +166,8 @@ export default class SettingsCard extends Vue {
             ({} as Language);
 
         this.selectedKey = this.user?.settings?.defaultTransposition ?? "C";
+
+        this.selectedTranscode = this.user?.settings?.defaultTranscode ?? "common";
     }
 
     public async save() {
@@ -185,6 +212,15 @@ export default class SettingsCard extends Vue {
         const key = this.selectedKey;
         if (key) {
             settings.defaultTransposition = key;
+            this.store.commit("settings", settings);
+        }
+    }
+
+    public setTranscode() {
+        const settings = Object.assign({}, this.user?.settings);
+        const transcode = this.selectedTranscode;
+        if (transcode) {
+            settings.defaultTranscode = transcode;
             this.store.commit("settings", settings);
         }
     }

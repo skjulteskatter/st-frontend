@@ -169,7 +169,8 @@ export default class LyricsCard extends Vue {
         const lyrics = await this.collection?.transposeLyrics(
             this.song?.number ?? 0,
             this.selectedTransposition,
-            this.songStore.state.language
+            this.songStore.state.language,
+            this.songStore.state.transcode,
         );
         this.songStore.commit("transposedLyrics", lyrics);
         this.songStore.commit("view", "transpose");

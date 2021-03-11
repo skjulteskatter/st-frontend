@@ -34,12 +34,17 @@ export default class TransposedLyricsViewer extends Vue {
         return this.songStore.state.language;
     }
 
+    public get transcode() {
+        return this.songStore.state.transcode;
+    }
+
     public async transpose(t: number) {
         if (this.lyrics) {
             const lyrics = await this.collection?.transposeLyrics(
                 this.lyrics.number,
                 t,
-                this.languageKey
+                this.languageKey,
+                this.transcode,
             );
             this.songStore.commit("view", "transpose");
             this.songStore.commit("transposedLyrics", lyrics);

@@ -13,6 +13,7 @@ interface User {
 interface UserSettings {
     languageKey?: string;
     defaultTransposition?: string;
+    defaultTranscode?: string;
 }
 
 interface Subscription {

@@ -21,6 +21,7 @@ export type AudioTrack = {
 export interface Songs {
     collectionId?: string;
     language: string;
+    transcode: string;
     song?: Song;
     songNumber?: number;
     lyrics?: Lyrics;
@@ -59,6 +60,7 @@ export const songStore = createStore<Songs>({
         },
         language: 'en',
         view: 'default',
+        transcode: 'common',
     },
     actions: {
         async selectCollection({ dispatch, state, commit, getters }, id: string) {
@@ -67,6 +69,7 @@ export const songStore = createStore<Songs>({
             }
 
             commit('language', sessionStore.getters.languageKey);
+            commit('transcode', sessionStore.state.currentUser?.settings?.defaultTranscode ?? 'common');
             commit('collection', id);
             const list = state.list;
             commit('list', 'default');
@@ -132,6 +135,9 @@ export const songStore = createStore<Songs>({
     mutations: {
         language(state, language: string) {
             state.language = language;
+        },
+        transcode(state, transcode: string) {
+            state.transcode = transcode;
         },
         collections(state, collections: Collection[]) {
             state.collections = collections;

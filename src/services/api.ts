@@ -53,8 +53,8 @@ export const songs = {
     getAllSongs(collection: string) {
         return http.get<SongInterface[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`);
     },
-    getLyrics(collection: string, number: number, language: string, format: string, transpose: number) {
-        return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}`);
+    getLyrics(collection: string, number: number, language: string, format: string, transpose: number, transcode: string) {
+        return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`);
     },
     getAllLyrics(collection: string, language: string, format: string, transpose: number) {
         return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);

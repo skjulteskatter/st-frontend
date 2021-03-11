@@ -176,10 +176,10 @@ export class Collection {
         return 1;
     }
 
-    public async transposeLyrics(number: number, transpose: number, language?: string) {
+    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string) {
         this.loadingLyrics = true;
         try {
-            const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose));
+            const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose, transcode ?? 'common'));
             return lyrics;
         }
         finally {
@@ -193,7 +193,7 @@ export class Collection {
 
             let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
             if (!lyrics) {
-                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0));
+                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0, 'common'));
                 this.lyrics.push(lyrics);
             }
             return lyrics;
