@@ -227,11 +227,7 @@ export default class SongList extends Vue {
         return (
             this.collection?.filteredSongs(
                 this.searchQuery,
-                this.store.state.filter.themes,
-                this.store.state.filter.origins,
-                this.store.state.filter.audioFiles,
-                this.store.state.filter.videoFiles,
-                this.store.state.filter.songTypes
+                this.store.state.filter
             ) ?? {
                 songs: [],
                 context: {},

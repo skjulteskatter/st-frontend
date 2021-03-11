@@ -1,4 +1,5 @@
 import api from "@/services/api";
+import { SongFilter } from "@/store/songs";
 import { Contributor, Lyrics, Song } from ".";
 
 
@@ -76,7 +77,7 @@ export class Collection {
         return this.songs.find(s => s.number == number);
     }
 
-    public filteredSongs(filter: string, themes: string[] = [], origins: string[] = [], audio: string[] = [], video: string[] = [], types: string[] = []) {
+    public filteredSongs(filter: string, songFilter: SongFilter) {
         filter = filter.toLowerCase();
 
 
@@ -124,14 +125,21 @@ export class Collection {
             }
         }
 
+        const {themes, audioFiles, videoFiles, origins, songTypes, sheetMusicTypes } = songFilter;
+
+        const songs = this.songs.filter(s => 
+            (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
+            && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
+            && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
+            && (audioFiles.length == 0 || s.audioFiles.filter(a => audioFiles.includes(a.category)).length)
+            && (videoFiles.length == 0 || s.videoFiles.filter(v => videoFiles.includes(v.category)).length)
+            && (songTypes.length == 0 || songTypes.includes(s.type))
+            && (sheetMusicTypes.length == 0 || s.sheetMusic.find(sm => sheetMusicTypes.includes(sm.category)))
+        );
+
         return {
-            songs: this.songs.filter(s => (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
-                && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
-                && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
-                && (audio.length == 0 || s.audioFiles.filter(a => audio.includes(a.category)).length)
-                && (video.length == 0 || s.videoFiles.filter(v => video.includes(v.category)).length)
-                && (types.length == 0 || types.includes(s.type))
-            ), context
+            songs,
+            context
         }
     }
 

@@ -57,6 +57,20 @@
                     </label>
                 </div>
             </div>
+            <div class="grouping">
+                <small>{{ $t('types.sheetmusic') }}</small>
+                <div class="filter gap-x" v-for="type in sheetMusicTypes" :key="type">
+                    <input
+                        v-model="sheetMusicValues[type]"
+                        type="checkbox"
+                        :name="type"
+                        :id="`sm-${type}`"
+                    />
+                    <label :for="`sm-${type}`">
+                        {{ $t(`types.${type}`) }}
+                    </label>
+                </div>
+            </div>
         </div>
     </base-dropdown>
 </template>
@@ -89,6 +103,7 @@ export default class SongFilterDropdown extends Vue {
     public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental"];
     public songTypes = ["lyrics", "track", "sheetmusic"];
+    public sheetMusicTypes = ["leadsheet", "5part"];
     public themes?: Theme[];
     public origins?: Origin[];
 
@@ -103,6 +118,10 @@ export default class SongFilterDropdown extends Vue {
         [id: string]: boolean;
     } = {};
     public videoValues: {
+        [id: string]: boolean;
+    } = {};
+
+    public sheetMusicValues: {
         [id: string]: boolean;
     } = {};
 
@@ -131,6 +150,7 @@ export default class SongFilterDropdown extends Vue {
         filter.videoFiles = videos;
         filter.audioFiles = audio;
         filter.songTypes = types;
+        filter.sheetMusicTypes = this.sheetMusicTypes.filter((t) => this.sheetMusicValues[t] == true);
         //filter.origins = origins;
 
         this.store.commit("filter", filter);
