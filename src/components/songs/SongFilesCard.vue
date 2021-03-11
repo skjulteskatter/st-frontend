@@ -28,7 +28,7 @@
                 <p class="song-details__files__label">Video</p>
                 <modal
                     v-for="video in song.videoFiles"
-                    theme="secondary"
+                    theme="tertiary"
                     :key="video"
                     :label="video.name"
                 >
@@ -37,6 +37,7 @@
                         width="500"
                         type="video/mp4"
                         controls
+                        autoplay
                     >
                         Sorry, your browser doesn't support embedded videos.
                     </video>

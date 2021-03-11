@@ -175,7 +175,7 @@ export default class SongList extends Vue {
     public searchString = "";
     public store = useStore(songKey);
 
-    public cId = '';
+    public cId = "";
 
     public search() {
         this.searchQuery = this.searchString;
@@ -369,22 +369,22 @@ export default class SongList extends Vue {
                 selected: this.listType == "title",
             },
             {
-                label: this.$t("song.authors"),
+                label: this.$t("song.author"),
                 value: "authors",
                 selected: this.listType == "authors",
             },
             {
-                label: this.$t("song.composers"),
+                label: this.$t("song.composer"),
                 value: "composers",
                 selected: this.listType == "composers",
             },
             {
-                label: this.$t("song.themes"),
+                label: this.$t("song.theme"),
                 value: "themes",
                 selected: this.listType == "themes",
             },
             {
-                label: this.$t("common.countries"),
+                label: this.$t("common.country"),
                 value: "countries",
                 selected: this.listType == "countries",
             },

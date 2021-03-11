@@ -145,7 +145,7 @@ export default class TheNavbar extends Vue {
 
         .nav__header__logo--icon {
             display: block;
-            height: var(--size);
+            height: calc(var(--size) * 0.75);
         }
 
         .nav__header__logo {

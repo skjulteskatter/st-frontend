@@ -109,7 +109,7 @@ export default class StoreCard extends Vue {
     &__image {
         max-width: 100%;
         border-radius: 0.5rem;
-        border: 3px solid var(--st-color-border);
+        border: 3px solid var(--st-color-background-light);
         object-fit: cover;
     }
 

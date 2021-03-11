@@ -72,7 +72,7 @@ export default class CollectionCard extends Vue {
 
     &__image {
         border-radius: var(--st-border-radius);
-        border: 3px solid var(--st-color-border);
+        border: 3px solid var(--st-color-background-light);
         max-width: 400px;
         width: 100%;
     }
