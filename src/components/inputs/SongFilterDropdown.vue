@@ -8,6 +8,9 @@
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
+                <input v-model="typeValues.lyrics" type="checkbox" name="lyrics" id="lyrics"><label for="lyrics">{{ $t("types.lyrics") }}</label>
+            </div>
+            <div class="grouping">
                 <input v-model="typeValues.video" type="checkbox" name="video" id="video"><label for="video">{{ $t("types.video") }}</label>
                 <div
                     class="filter gap-x"
