@@ -41,8 +41,8 @@ export const admin = {
     clearCache(collectionId: string) {
         return http.get<void>(`api/Admin/ClearCache/${collectionId}`);
     },
-    sync(collectionId: string) {
-        return http.get<void>(`api/Admin/Sync/${collectionId}`);
+    sync() {
+        return http.get<{result: string}>(`api/Admin/Sync`);
     }
 }
 

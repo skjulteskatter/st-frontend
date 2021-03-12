@@ -21,15 +21,15 @@
                     >
                         {{ $t("admin.clearcache") }}
                     </base-button>
-                    <base-button
-                        @click="syncCollection(collection.id)"
-                        icon="refresh"
-                        theme="secondary"
-                        :loading="loadingSync.includes(collection.id)"
-                    >
-                        Files
-                    </base-button>
                 </base-card>
+                <base-button
+                    @click="syncFiles()"
+                    icon="refresh"
+                    theme="secondary"
+                    :loading="loadingSync"
+                >
+                    Files
+                </base-button>
             </base-card>
             <users-list :users="users" :currentUser="currentUser"></users-list>
 
@@ -76,7 +76,7 @@ export default class Subscriptions extends Vue {
     public token = localStorage.getItem("id_token");
     public showToken = false;
 
-    public loadingSync: string[] = [];
+    public loadingSync = false;
 
     public loadingClearCache: string[] = [];
 
@@ -114,19 +114,23 @@ export default class Subscriptions extends Vue {
         );
     }
 
-    public async syncCollection(collection: string) {
-        this.loadingSync.push(collection);
+    public async syncFiles() {
+        this.loadingSync = true;
         this.notificationStore.dispatch("addNotification", {
             type: "error",
             title: this.$t("notification.syncingfiles"),
             icon: "trash",
         });
         try {
-            await api.admin.sync(collection);
+            this.notificationStore.dispatch("addNotification", {
+                type: "success",
+                title: (await api.admin.sync()).result,
+                icon: "refresh"
+            });
         } catch {
             console.log("no content");
         }
-        this.loadingSync = this.loadingSync.filter((c) => c !== collection);
+        this.loadingSync = false;
     }
 }
 </script>
