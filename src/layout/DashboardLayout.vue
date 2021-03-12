@@ -4,7 +4,11 @@
             <the-navbar></the-navbar>
             <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
-                    <router-view />
+                    <router-view v-slot="{ Component }">
+                        <transition name="view" mode="out-in">
+                            <component :is="Component" />
+                        </transition>
+                    </router-view>
                 </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
@@ -81,5 +85,24 @@ export default class DashboardLayout extends Vue {
             overflow-y: auto;
         }
     }
+}
+
+// Animation
+.view-enter-active,
+.view-leave-active {
+    transition: opacity 150ms;
+}
+
+.view-enter {
+    opacity: 0;
+}
+
+.view-leave-to {
+    opacity: 0;
+}
+
+.view-enter-to,
+.view-leave {
+    opacity: 1;
 }
 </style>

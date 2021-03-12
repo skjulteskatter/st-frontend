@@ -43,7 +43,7 @@
                 "
                 :isPurchaseable="!productIds.includes(product.id)"
             ></store-card>
-            <br/>
+            <br />
             <store-card
                 v-if="allCollectionProduct"
                 :key="allCollectionProduct.id"
@@ -52,7 +52,11 @@
                     () =>
                         $router.push({
                             name: 'store-item',
-                            params: { id: allCollectionProduct ? allCollectionProduct.id : ''},
+                            params: {
+                                id: allCollectionProduct
+                                    ? allCollectionProduct.id
+                                    : '',
+                            },
                         })
                 "
                 :isPurchaseable="!productIds.includes(allCollectionProduct.id)"
@@ -114,9 +118,9 @@ export default class Store extends Vue {
     }
 
     public get products() {
-        return this.store.state.products.sort(
-            (a, b) => b.priority - a.priority
-        ).filter(p => p.collections.length == 1);
+        return this.store.state.products
+            .sort((a, b) => b.priority - a.priority)
+            .filter((p) => p.collections.length == 1);
     }
 
     public get user() {
@@ -134,7 +138,7 @@ export default class Store extends Vue {
     }
 
     public get allCollectionProduct() {
-        return this.store.state.products.find(p => p.collections.length > 1);
+        return this.store.state.products.find((p) => p.collections.length > 1);
     }
 }
 </script>

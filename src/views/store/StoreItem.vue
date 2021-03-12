@@ -12,7 +12,10 @@
                     {{ product.getName(languageKey) }}
                 </h1>
                 <span class="store-item__price-tag">
-                    {{ formatPrices(product.prices, "year") }}
+                    {{
+                        formatPrices(product.prices, "year") ||
+                        formatPrices(product.prices, "month")
+                    }}
                 </span>
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -121,6 +124,7 @@ export default class StoreItem extends Vue {
     &__body {
         display: flex;
         padding: 0;
+        animation: slideInFromBottom 250ms;
 
         @include breakpoint("small") {
             flex-direction: column;

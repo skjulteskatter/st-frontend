@@ -96,6 +96,8 @@ export default class StoreCard extends Vue {
 @import "../../style/mixins";
 
 .store-card {
+    animation: slideInFromBottom 250ms;
+
     @include breakpoint("small") {
         .store-card__price {
             display: none;

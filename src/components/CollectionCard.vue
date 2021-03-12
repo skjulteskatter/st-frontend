@@ -63,6 +63,7 @@ export default class CollectionCard extends Vue {
 .collection-card {
     position: relative;
     cursor: pointer;
+    animation: slideInFromBottom 250ms;
 
     &:hover {
         .collection-card__title {
