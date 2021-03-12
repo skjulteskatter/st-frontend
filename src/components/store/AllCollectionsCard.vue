@@ -1,27 +1,25 @@
 <template>
-    <div class="store-card" v-if="product">
-        <img
-            class="store-card__image clickable"
-            :src="image"
-            :alt="product.getName(languageKey)"
-            @click="product ? gotoCollection(product) : undefined"
-        />
-        <div class="store-card__footer">
-            <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
-            <!-- <p class="store-card__price">
-                {{ formatPrices(product.prices, "year") }}
-            </p> -->
+    <div class="all-collections-card" v-if="product">
+        <div class="all-collections-card__image">
+            <img
+                v-for="image in images"
+                :key="image"
+                :src="image"
+                :alt="product?.getName(languageKey)"
+            />
+        </div>
+        <div class="all-collections-card__footer">
+            <h3 class="all-collections-card__title">
+                {{ product.name[languageKey] }}
+            </h3>
             <base-button
-                class="store-card__button"
+                class="all-collections-card__button"
                 icon="info"
                 theme="primary"
                 @click="action"
             >
                 <span>{{ $t("store.seemore") }}</span>
             </base-button>
-            <!-- <span class="store-card__subtitle" v-else>
-                {{ $t("store.alreadyown") }}
-            </span> -->
         </div>
     </div>
 </template>
@@ -53,37 +51,15 @@ import { Product } from "@/classes/product";
         },
     },
 })
-export default class StoreCard extends Vue {
+export default class AllCollectionsCard extends Vue {
     public product?: Product;
-    public isPurchaseable = false;
     public action = () => undefined;
     public userStore = useStore(sessionKey);
 
-    public gotoCollection(product: Product) {
-        const collectionKey = product?.collections[0].key ?? "";
-
-        this.$router.push({
-            name: "song-list",
-            params: {
-                collection: collectionKey,
-            },
-        });
-    }
-
-    public formatPrices(prices: Price[], type: string) {
-        const unformattedPrice = prices.find((price) => price.type == type)
-            ?.value;
-        const formattedPrice = unformattedPrice?.slice(
-            0,
-            unformattedPrice.length - 2
+    public get images(): Array {
+        return this.product?.collections.map(
+            (collection) => collection.image + "?w=400"
         );
-        return `${formattedPrice} /${type}`;
-    }
-
-    public get image() {
-        return this.product?.collections[0].image
-            ? `${this.product?.collections[0].image}?w=400`
-            : "/img/placeholder.png";
     }
 
     public get languageKey() {
@@ -95,13 +71,13 @@ export default class StoreCard extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-.store-card {
+.all-collections-card {
     animation: slideInFromBottom 250ms;
     display: flex;
     flex-direction: column;
 
     @include breakpoint("small") {
-        .store-card__price {
+        .all-collections-card__price {
             display: none;
         }
     }
@@ -112,9 +88,17 @@ export default class StoreCard extends Vue {
 
     &__image {
         max-width: 100%;
+        min-height: 170px;
         border-radius: 0.5rem;
         border: 3px solid var(--st-color-background-light);
-        object-fit: cover;
+        overflow: hidden;
+        display: flex;
+
+        img {
+            width: 25%;
+            object-fit: cover;
+            flex-shrink: 1;
+        }
     }
 
     &__footer {
@@ -123,7 +107,6 @@ export default class StoreCard extends Vue {
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
-        flex-grow: 1;
     }
 
     &__price {

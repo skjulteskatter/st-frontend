@@ -43,8 +43,9 @@
                 "
                 :isPurchaseable="!productIds.includes(product.id)"
             ></store-card>
-            <br />
-            <store-card
+        </div>
+        <div class="store__items">
+            <all-collections-card
                 v-if="allCollectionProduct"
                 :key="allCollectionProduct.id"
                 :product="allCollectionProduct"
@@ -60,7 +61,7 @@
                         })
                 "
                 :isPurchaseable="!productIds.includes(allCollectionProduct.id)"
-            ></store-card>
+            ></all-collections-card>
         </div>
     </div>
 </template>
@@ -73,13 +74,14 @@ import { notificationStore, sessionKey } from "@/store";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { StoreCard } from "@/components/store";
+import { StoreCard, AllCollectionsCard } from "@/components/store";
 
 @Options({
     components: {
         BaseCard,
         BaseButton,
         StoreCard,
+        AllCollectionsCard,
     },
 })
 export default class Store extends Vue {
@@ -147,11 +149,11 @@ export default class Store extends Vue {
 @import "../style/mixins";
 
 .store {
-    padding: calc(var(--st-spacing) * 2);
+    // padding: calc(var(--st-spacing) * 2);
 
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
+    // @include breakpoint("medium") {
+    //     padding: var(--st-spacing);
+    // }
 
     &__title {
         margin: 0;
@@ -162,6 +164,13 @@ export default class Store extends Vue {
         align-items: center;
         justify-content: space-between;
         margin-bottom: var(--st-spacing);
+
+        padding: calc(var(--st-spacing) * 2);
+        padding-bottom: 0;
+        @include breakpoint("medium") {
+            padding: var(--st-spacing);
+            padding-bottom: 0;
+        }
 
         &__buttons {
             display: flex;
@@ -185,8 +194,15 @@ export default class Store extends Vue {
 
     &__items {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(7, minmax(130px, 1fr));
         grid-gap: var(--st-spacing);
+        overflow-x: auto;
+
+        padding: 0 calc(var(--st-spacing) * 2) calc(var(--st-spacing) * 2)
+            calc(var(--st-spacing) * 2);
+        @include breakpoint("medium") {
+            padding: 0 var(--st-spacing) var(--st-spacing) var(--st-spacing);
+        }
     }
 }
 </style>
