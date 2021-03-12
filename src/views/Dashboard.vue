@@ -106,8 +106,9 @@ export default class Dashboard extends Vue {
 
         &__cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(7, minmax(100px, 1fr));
             grid-gap: var(--st-spacing);
+            overflow-x: auto;
         }
     }
 }
