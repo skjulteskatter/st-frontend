@@ -56,10 +56,10 @@ export default class AllCollectionsCard extends Vue {
     public action = () => undefined;
     public userStore = useStore(sessionKey);
 
-    public get images(): Array {
+    public get images(): string[] {
         return this.product?.collections.map(
             (collection) => collection.image + "?w=400"
-        );
+        ) ?? [];
     }
 
     public get languageKey() {

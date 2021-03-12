@@ -8,7 +8,7 @@
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
-                <small>Video</small>
+                <input v-model="typeValues.video" type="checkbox" name="video" id="video"><label for="video">Video</label>
                 <div
                     class="filter gap-x"
                     v-for="type in videoTypes"
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="grouping">
-                <small>Audio</small>
+                <input v-model="typeValues.audio" type="checkbox" name="audio" id="audio"><label for="audio">Audio</label>
                 <div
                     class="filter gap-x"
                     v-for="type in audioTypes"
@@ -43,9 +43,9 @@
                     </label>
                 </div>
             </div>
-            <div class="grouping">
+            <!-- <div class="grouping">
                 <small>Type</small>
-                <div class="filter gap-x" v-for="type in songTypes" :key="type">
+                <div class="filter gap-x" v-for="type in contentTypes" :key="type">
                     <input
                         v-model="typeValues[type]"
                         type="checkbox"
@@ -56,7 +56,7 @@
                         {{ $t(`types.${type}`) }}
                     </label>
                 </div>
-            </div>
+            </div> -->
             <div class="grouping">
                 <small>{{ $t('types.sheetmusic') }}</small>
                 <div class="filter gap-x" v-for="type in sheetMusicTypes" :key="type">
@@ -102,17 +102,10 @@ export default class SongFilterDropdown extends Vue {
     private store = useStore(songKey);
     public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental"];
-    public songTypes = ["lyrics", "track", "sheetmusic"];
+    public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];
     public sheetMusicTypes = ["leadsheet", "5part"];
     public themes?: Theme[];
     public origins?: Origin[];
-
-    public themeValues: {
-        [id: string]: boolean;
-    } = {};
-    public originValues: {
-        [id: string]: boolean;
-    } = {};
 
     public audioValues: {
         [id: string]: boolean;
@@ -124,16 +117,35 @@ export default class SongFilterDropdown extends Vue {
     public sheetMusicValues: {
         [id: string]: boolean;
     } = {};
-
     public typeValues: {
         [id: string]: boolean;
     } = {};
 
+    public mounted() {
+        const filter = Object.assign({}, this.store.state.filter);
+
+        for (const t of filter.audioFiles) {
+            this.audioValues[t] = true;
+        }
+
+        for (const t of filter.videoFiles) {
+            this.videoValues[t] = true;
+        }
+
+        for (const t of filter.sheetMusicTypes) {
+            this.sheetMusicValues[t] = true;
+        }
+
+        for (const t of filter.contentTypes) {
+            this.typeValues[t] = true;
+        }
+    }
+
     public apply() {
-        const themes =
-            this.collection?.themes
-                ?.filter((t) => this.themeValues[t.theme.id] == true)
-                ?.map((t) => t.theme.id) ?? [];
+        // const themes =
+        //     this.collection?.themes
+        //         ?.filter((t) => this.themeValues[t.theme.id] == true)
+        //         ?.map((t) => t.theme.id) ?? [];
         //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
 
         const videos = this.videoTypes.filter(
@@ -142,14 +154,13 @@ export default class SongFilterDropdown extends Vue {
         const audio = this.audioTypes.filter(
             (t) => this.audioValues[t] == true
         );
-        const types = this.songTypes.filter((t) => this.typeValues[t] == true);
+        const types = this.contentTypes.filter((t) => this.typeValues[t] == true);
 
         const filter = Object.assign({}, this.store.state.filter);
 
-        filter.themes = themes;
         filter.videoFiles = videos;
         filter.audioFiles = audio;
-        filter.songTypes = types;
+        filter.contentTypes = types;
         filter.sheetMusicTypes = this.sheetMusicTypes.filter((t) => this.sheetMusicValues[t] == true);
         //filter.origins = origins;
 

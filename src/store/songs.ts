@@ -9,8 +9,12 @@ export type SongFilter = {
     origins: string[];
     videoFiles: string[];
     audioFiles: string[];
-    songTypes: string[];
+    contentTypes: string[];
     sheetMusicTypes: string[];
+    hasLyrics: boolean;
+    hasAudioFiles: boolean;
+    hasVideoFiles: boolean;
+    hasSheetMusic: boolean;
 }
 
 export type AudioTrack = {
@@ -57,8 +61,12 @@ export const songStore = createStore<Songs>({
             videoFiles: [],
             audioFiles: [],
             origins: [],
-            songTypes: [],
+            contentTypes: [],
             sheetMusicTypes: [],
+            hasAudioFiles: false,
+            hasLyrics: false,
+            hasSheetMusic: false,
+            hasVideoFiles: false,
         },
         language: 'en',
         view: 'default',

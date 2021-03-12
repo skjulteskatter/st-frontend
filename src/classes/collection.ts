@@ -125,7 +125,7 @@ export class Collection {
             }
         }
 
-        const {themes, audioFiles, videoFiles, origins, songTypes, sheetMusicTypes } = songFilter;
+        const {themes, audioFiles, videoFiles, origins, contentTypes, sheetMusicTypes } = songFilter;
 
         const songs = this.songs.filter(s => 
             (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
@@ -133,7 +133,11 @@ export class Collection {
             && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
             && (audioFiles.length == 0 || s.audioFiles.filter(a => audioFiles.includes(a.category)).length)
             && (videoFiles.length == 0 || s.videoFiles.filter(v => videoFiles.includes(v.category)).length)
-            && (songTypes.length == 0 || songTypes.includes(s.type))
+            && (contentTypes.length == 0 || (contentTypes.includes("lyrics") 
+                && s.hasLyrics) || (contentTypes.includes("audio") 
+                && s.audioFiles.length > 0) || (contentTypes.includes("video") 
+                && s.videoFiles.length > 0) || (contentTypes.includes("sheetmusic") 
+                && s.sheetMusic.length > 0) )
             && (sheetMusicTypes.length == 0 || s.sheetMusic.find(sm => sheetMusicTypes.includes(sm.category)))
         );
 
