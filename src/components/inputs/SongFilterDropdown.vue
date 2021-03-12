@@ -8,7 +8,7 @@
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
-                <input v-model="typeValues.video" type="checkbox" name="video" id="video"><label for="video">Video</label>
+                <input v-model="typeValues.video" type="checkbox" name="video" id="video"><label for="video">{{ $t("types.video") }}</label>
                 <div
                     class="filter gap-x"
                     v-for="type in videoTypes"
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="grouping">
-                <input v-model="typeValues.audio" type="checkbox" name="audio" id="audio"><label for="audio">Audio</label>
+                <input v-model="typeValues.audio" type="checkbox" name="audio" id="audio"><label for="audio">{{ $t("types.audio") }}</label>
                 <div
                     class="filter gap-x"
                     v-for="type in audioTypes"
@@ -58,7 +58,7 @@
                 </div>
             </div> -->
             <div class="grouping">
-                <small>{{ $t('types.sheetmusic') }}</small>
+                <input v-model="typeValues.sheetmusic" type="checkbox" name="sheetmusic" id="sheetmusic"><label for="sheetmusic">{{ $t("types.sheetmusic") }}</label>
                 <div class="filter gap-x" v-for="type in sheetMusicTypes" :key="type">
                     <input
                         v-model="sheetMusicValues[type]"
