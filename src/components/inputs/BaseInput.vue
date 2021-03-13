@@ -5,6 +5,7 @@
             v-if="type != 'textarea'"
             class="base-input__input"
             v-bind="$attrs"
+            :type="type"
             :value="modelValue"
             @input="(event) => $emit('update:modelValue', event.target.value)"
         />
