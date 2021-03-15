@@ -86,6 +86,8 @@ export const sessionStore = createStore<Session>({
         async startSession({commit}) {
             if (auth.isAuthenticated) {
                 await init(commit);
+            } else {
+                await auth.sendLinkToEmail();
             }
         },
         async socialLogin({commit}, provider: string) {
@@ -93,6 +95,8 @@ export const sessionStore = createStore<Session>({
 
             if (auth.isAuthenticated) {
                 await init(commit);
+            } else {
+                await auth.sendLinkToEmail();
             }
         },
         async createUser({commit}, object: { 
@@ -104,6 +108,8 @@ export const sessionStore = createStore<Session>({
 
             if (auth.isAuthenticated) {
                 await init(commit);
+            } else {
+                await auth.sendLinkToEmail();
             }
         },
         async loginWithEmailPassword({ commit }, obj: {
@@ -115,6 +121,8 @@ export const sessionStore = createStore<Session>({
 
             if (auth.isAuthenticated) {
                 await init(commit);
+            } else {
+                await auth.sendLinkToEmail();
             }
         },
         async saveSettings({ state, commit }) {

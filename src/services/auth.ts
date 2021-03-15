@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'; 
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/performance';
 import { firebaseConfig } from '@/config';
@@ -31,9 +31,6 @@ if (!a) {
 
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
-        auth.setToken(
-            await user.getIdToken()
-        );
         sessionStore.commit('error', '');
         return true;
     } else {
@@ -42,7 +39,6 @@ async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
         return false;
     }
 }
-
 
 const providers: {
     [key: string]: firebase.auth.AuthProvider;
@@ -80,15 +76,6 @@ class Auth {
         await a().currentUser?.updateProfile({
             displayName: name,
         });
-    }
-
-    public setToken(token: string) {
-        if (token !== '') {
-            this.accessToken = token;
-            localStorage.setItem('id_token', token);
-            this.expiresAt = 3600 * 1000 - 60000 + new Date().getTime();
-            localStorage.setItem('id_expires_at', `${this.expiresAt}`);
-        }
     }
 
     public async login(providerName: string) {
@@ -139,8 +126,20 @@ class Auth {
         }
 
         const result = await a()
-            .createUserWithEmailAndPassword(email, password);
-        
+            .createUserWithEmailAndPassword(email, password)
+            .catch(e => {
+                switch (e.code) {
+                    case "auth/email-already-in-use": 
+                        console.log("email in use");
+
+                        console.log(a().currentUser);
+                        break;
+                    default:
+                        console.log(e.code);
+                }
+            });
+        if (!result) return;
+
         const user = result.user;
 
         await user?.updateProfile({
@@ -163,10 +162,10 @@ class Auth {
                 url: window.origin,
             });
             this.verificationEmailSent = true;
+            router.push({name: 'verify-email'});
         } else {
             notLoggedIn();
         }
-        router.push({name: 'verify-email'});
     }
 
     public async logout() {
@@ -180,53 +179,24 @@ class Auth {
         const user = a().currentUser;
 
         if (user?.emailVerified) {
-            this.setToken(
-                await user.getIdToken()
-            );
             return 'VERIFIED_EMAIL';
         }
         return 'CODE_NOT_VALID';
     }
 
     public get isAuthenticated() {
-        this.accessToken = this.accessToken || localStorage.getItem('id_token') || '';
-        if (!this.accessToken || !this.emailVerified) {
-            return false;
+        const user = a().currentUser;
+        if (user?.emailVerified) {
+            return true;
         }
-        const expiresAt = this.expiresAt || localStorage.getItem('id_expires_at') || '';
-        const authenticated = new Date().getTime() < expiresAt;
-        return authenticated;
-    }
-
-    public get token() {
-        const expires =
-            this.expiresAt ||
-            parseInt(localStorage.getItem('id_expires_at') || '0');
-        if (expires > Date.now()) {
-            const accessToken =
-                this.accessToken ||
-                localStorage.getItem('id_token');
-            if (accessToken) {
-                return accessToken;
-            }
-        }
-        return undefined;
+        return false;
     }
 
     public async getToken() {
-        let token = this.token;
-        if (!token) {
-            token = this.emailVerified ? await this.getNewToken() : undefined;
+        const user = a().currentUser;
+        if (user?.emailVerified) {
+            return await user.getIdToken();
         }
-        return token;
-    }
-    
-    public async getNewToken() {
-        const token = await a().currentUser?.getIdToken();
-        if (token) {
-            this.setToken(token);
-        }
-        return token;
     }
 
     public async setProfileImage(fileName: string, image: string) {
@@ -246,13 +216,28 @@ class Auth {
     public get user() {
         return a()?.currentUser;
     }
+
+    // public renderUi() {
+    //     // eslint-disable-next-line @typescript-eslint/no-var-requires
+    //     const firebaseui = require('firebaseui');
+
+    //     const ui = new firebaseui.auth.AuthUI(a());
+
+    //     ui.start('#firebase-auth-container', {
+    //         signInOptions: [
+    //             a.EmailAuthProvider.PROVIDER_ID,
+    //             a.GoogleAuthProvider.PROVIDER_ID,
+    //             a.FacebookAuthProvider.PROVIDER_ID,
+    //         ],
+    //         signInSuccessUrl: '/'
+    //     })
+    // }
 }
 
 const auth = new Auth()
 
 a().onAuthStateChanged(async s => {
     if (s) {
-        auth.setToken(await s.getIdToken());
         await sessionStore.dispatch('startSession');
     }
     sessionStore.commit('initialized', true);

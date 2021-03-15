@@ -1,4 +1,5 @@
 <template>
+    <!-- <div id="firebase-auth-container"></div> -->
     <div class="wrapper">
         <base-card id="login-card" v-if="initialized && !user">
             <div class="login gap-y">
@@ -56,6 +57,7 @@
                         </button>
                     </div>
                 </div>
+                <router-link :to="{name:'create-user'}">Create account</router-link>
             </div>
         </base-card>
     </div>

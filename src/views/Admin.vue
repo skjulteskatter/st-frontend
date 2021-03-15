@@ -61,6 +61,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { UsersList, BaseButton, BaseCard } from "@/components";
 import api from "@/services/api";
+import auth from "@/services/auth";
 
 @Options({
     components: {
@@ -73,12 +74,16 @@ export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public notificationStore = useStore(notificationKey);
     public loading = false;
-    public token = localStorage.getItem("id_token");
+    public token? = '';
     public showToken = false;
 
     public loadingSync = false;
 
     public loadingClearCache: string[] = [];
+
+    public async mounted() {
+        this.token = await auth.getToken();
+    }
 
     get users(): User[] {
         return useStore(usersKey).state.users ?? [];

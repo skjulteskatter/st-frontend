@@ -1,5 +1,5 @@
 <template>
-    <base-card class="sheetmusic" header toggleable>
+    <base-card class="sheetmusic" :header="!embed" toggleable>
         <template #header>
             <h4 class="sheetmusic__title">{{ $t("song.leadSheet") }}</h4>
             <div v-if="loaded" class="sheetmusic__controls gap-x">
@@ -72,6 +72,9 @@ import { Icon } from "@/components/icon";
         initialTransposition: {
             type: String,
         },
+        embed: {
+            type: Boolean
+        }
     },
 })
 export default class OSMD extends Vue {
@@ -81,6 +84,7 @@ export default class OSMD extends Vue {
     public loaded = false;
     public initialTransposition?: number;
     public zoomValue = 1;
+    public embed = false;
 
     public o?: OpenSheetMusicDisplay;
 

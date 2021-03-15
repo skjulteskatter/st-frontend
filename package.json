@@ -17,6 +17,7 @@
     "@types/showdown": "^1.9.3",
     "core-js": "^3.9.1",
     "firebase": "^8.2.9",
+    "firebaseui": "^4.8.0",
     "isomorphic-fetch": "^3.0.0",
     "jszip": "^3.6.0",
     "less-loader": "^7.3.0",

@@ -4,6 +4,7 @@
             :url="url"
             :originalKey="originalKey"
             :initialTransposition="transposition"
+            :embed="embed"
         ></open-sheet-music-display>
     </div>
 </template>
@@ -29,6 +30,14 @@ export default class SheetMusic extends Vue {
 
     public get transposition() {
         return parseInt(this.searchParams.get("transposition") ?? "0");
+    }
+
+    public get embed() {
+        const query = (new URLSearchParams(window.location.search)).get("embed");
+
+        const embed = ['', "true"].includes(query ?? 'false');
+
+        return embed;
     }
 }
 </script>
