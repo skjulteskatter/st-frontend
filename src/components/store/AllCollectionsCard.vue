@@ -57,9 +57,11 @@ export default class AllCollectionsCard extends Vue {
     public userStore = useStore(sessionKey);
 
     public get images(): string[] {
-        return this.product?.collections.map(
-            (collection) => collection.image + "?w=400"
-        ) ?? [];
+        return (
+            this.product?.collections.map(
+                (collection) => collection.image + "?w=400"
+            ) ?? []
+        );
     }
 
     public get languageKey() {
@@ -88,7 +90,7 @@ export default class AllCollectionsCard extends Vue {
 
     &__image {
         max-width: 100%;
-        min-height: 170px;
+        height: 100%;
         border-radius: 0.5rem;
         border: 3px solid var(--st-color-background-light);
         overflow: hidden;

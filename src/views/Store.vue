@@ -1,7 +1,7 @@
 <template>
     <div class="store">
         <div class="store__header">
-            <h1 class="store__title">{{ $t("common.store") }}</h1>
+            <h1 class="store__title">{{ $t("common.collections") }}</h1>
             <div class="store__header__buttons">
                 <base-button
                     theme="tertiary"
@@ -29,25 +29,17 @@
                 </base-button>
             </div>
         </div>
-        <div class="store__items">
-            <store-card
-                v-for="product in products"
-                :key="product.id"
-                :product="product"
-                :action="
-                    () =>
-                        $router.push({
-                            name: 'store-item',
-                            params: { id: product.id },
-                        })
-                "
-                :isPurchaseable="!productIds.includes(product.id)"
-            ></store-card>
-        </div>
-        <div class="store__items">
+        <div class="store__owned">
+            <p class="store__owned__title">
+                {{ $t("common.your") }}
+                {{ $t("common.collections").toLowerCase() }}
+            </p>
+            <product-slider
+                :products="ownedProducts"
+                v-if="ownedProducts.length"
+            ></product-slider>
             <all-collections-card
                 v-if="allCollectionProduct"
-                :key="allCollectionProduct.id"
                 :product="allCollectionProduct"
                 :action="
                     () =>
@@ -60,8 +52,14 @@
                             },
                         })
                 "
-                :isPurchaseable="!productIds.includes(allCollectionProduct.id)"
             ></all-collections-card>
+        </div>
+        <div class="store__available" v-if="availableProducts.length">
+            <p class="store__available__title">
+                {{ $t("common.available") }}
+                {{ $t("common.collections").toLowerCase() }}
+            </p>
+            <product-slider :products="availableProducts"></product-slider>
         </div>
     </div>
 </template>
@@ -74,7 +72,11 @@ import { notificationStore, sessionKey } from "@/store";
 
 import BaseCard from "@/components/BaseCard.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { StoreCard, AllCollectionsCard } from "@/components/store";
+import {
+    StoreCard,
+    AllCollectionsCard,
+    ProductSlider,
+} from "@/components/store";
 
 @Options({
     components: {
@@ -82,6 +84,7 @@ import { StoreCard, AllCollectionsCard } from "@/components/store";
         BaseButton,
         StoreCard,
         AllCollectionsCard,
+        ProductSlider,
     },
 })
 export default class Store extends Vue {
@@ -123,6 +126,14 @@ export default class Store extends Vue {
         return this.store.state.products
             .sort((a, b) => b.priority - a.priority)
             .filter((p) => p.collections.length == 1);
+    }
+
+    public get ownedProducts() {
+        return this.products.filter((p) => this.productIds.includes(p.id));
+    }
+
+    public get availableProducts() {
+        return this.products.filter((p) => !this.productIds.includes(p.id));
     }
 
     public get user() {
@@ -192,17 +203,31 @@ export default class Store extends Vue {
         margin: var(--st-spacing) 0;
     }
 
+    &__owned,
+    &__available {
+        margin-bottom: 2rem;
+
+        & > * {
+            padding: 0 calc(var(--st-spacing) * 2) calc(var(--st-spacing) * 2)
+                calc(var(--st-spacing) * 2);
+            @include breakpoint("medium") {
+                padding: 0 var(--st-spacing) var(--st-spacing) var(--st-spacing);
+            }
+        }
+
+        &__title {
+            margin: 0;
+            padding-bottom: 0;
+            margin-bottom: 0.5em;
+            font-size: 1em;
+        }
+    }
+
     &__items {
         display: grid;
-        grid-template-columns: repeat(7, minmax(130px, 1fr));
+        grid-template-columns: repeat(8, minmax(130px, 1fr));
         grid-gap: var(--st-spacing);
         overflow-x: auto;
-
-        padding: 0 calc(var(--st-spacing) * 2) calc(var(--st-spacing) * 2)
-            calc(var(--st-spacing) * 2);
-        @include breakpoint("medium") {
-            padding: 0 var(--st-spacing) var(--st-spacing) var(--st-spacing);
-        }
     }
 }
 </style>
