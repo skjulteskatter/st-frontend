@@ -148,7 +148,6 @@ class Http {
 
         const o = Object.assign(
         options, {headers});
-        console.log("RETRIEVING FROM API")
         return await fetch(path, o)
             .then(this.validateResponse)
             .then(this.parseJson);
