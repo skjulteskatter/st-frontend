@@ -125,6 +125,8 @@ class Auth {
             notInitialized();
         }
 
+        // const methods = await a().fetchSignInMethodsForEmail(email);
+
         const result = await a()
             .createUserWithEmailAndPassword(email, password)
             .catch(e => {
@@ -195,7 +197,9 @@ class Auth {
     public async getToken() {
         const user = a().currentUser;
         if (user?.emailVerified) {
-            return await user.getIdToken();
+            const token = await user.getIdToken();
+            localStorage.setItem('id_token', token);
+            return token;
         }
     }
 
