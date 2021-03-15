@@ -28,8 +28,8 @@
                 <span>{{ $t("common.home") }}</span>
             </router-link>
             <router-link class="nav__item" :to="{ name: 'store' }">
-                <icon name="shop" size="20" />
-                <span>{{ $t("common.store") }}</span>
+                <icon name="collection" size="20" />
+                <span>{{ $t("common.collections") }}</span>
             </router-link>
             <router-link
                 v-if="isAdmin"

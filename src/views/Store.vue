@@ -1,7 +1,7 @@
 <template>
     <div class="store">
         <div class="store__header">
-            <h1 class="store__title">{{ $t("common.store") }}</h1>
+            <h1 class="store__title">{{ $t("common.collections") }}</h1>
             <div class="store__header__buttons">
                 <base-button
                     theme="tertiary"
