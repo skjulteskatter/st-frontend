@@ -7,7 +7,7 @@
             @click="product ? gotoCollection(product) : undefined"
         />
         <div class="store-card__footer">
-            <h3 class="store-card__title">{{ product.name[languageKey] }}</h3>
+            <h3 class="store-card__title">{{ product.getName(languageKey) }}</h3>
             <!-- <p class="store-card__price">
                 {{ formatPrices(product.prices, "year") }}
             </p> -->
@@ -111,6 +111,7 @@ export default class StoreCard extends Vue {
     }
 
     &__image {
+        margin-top: 5px;
         max-width: 100%;
         border-radius: 0.5rem;
         border: 3px solid var(--st-color-background-light);
