@@ -82,7 +82,7 @@ export default class StoreCard extends Vue {
 
     public get image() {
         return this.product?.collections[0].image
-            ? `${this.product?.collections[0].image}?w=400`
+            ? `${this.product?.collections[0].image}?w=200&q=50`
             : "/img/placeholder.png";
     }
 
