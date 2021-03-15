@@ -138,8 +138,8 @@ class Http {
 
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
-        let token = await auth.getToken();
-        if (token == null && !bypassAuth) throw new Error("No Authorization token available")
+        const token = await auth.getToken();
+        if (!token && !bypassAuth) throw new Error("No Authorization token available")
 
         const headers = Object.assign({
             'Authorization': `Bearer ${token}`,
@@ -148,22 +148,10 @@ class Http {
 
         const o = Object.assign(
         options, {headers});
-        try { 
-            console.log("POGGERS")
-            return await fetch(path, o)
-                .then(this.validateResponse)
-                .then(this.parseJson);
-        }
-        catch (e) {
-            console.log("REFRESHING TOKEN")
-            if (e == 401) {
-                token = await auth.getToken();
-                return await fetch(path, o)
-                    .then(this.validateResponse)
-                    .then(this.parseJson);
-            }
-            throw e;
-        }
+        console.log("RETRIEVING FROM API")
+        return await fetch(path, o)
+            .then(this.validateResponse)
+            .then(this.parseJson);
     }
 }
 
