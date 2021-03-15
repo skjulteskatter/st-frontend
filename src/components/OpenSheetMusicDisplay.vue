@@ -31,10 +31,10 @@
                     />
                 </div>
                 <div class="sheetmusic__controls__zoom">
-                    <small>{{ Math.floor(zoomValue * 100) }}%</small>
+                    <small>{{ Math.floor(zoom * 100) }}%</small>
                     <input
                         type="range"
-                        v-model="zoomValue"
+                        v-model="zoom"
                         @change="update"
                         min="0.4"
                         max="1.4"
@@ -74,6 +74,9 @@ import { Icon } from "@/components/icon";
         },
         embed: {
             type: Boolean
+        },
+        zoom: {
+            type: Number
         }
     },
 })
@@ -83,14 +86,14 @@ export default class OSMD extends Vue {
     public originalKey = "C";
     public loaded = false;
     public initialTransposition?: number;
-    public zoomValue = 1;
+    public zoom = 1;
     public embed = false;
 
     public o?: OpenSheetMusicDisplay;
 
     public mounted() {
         if (window.innerWidth < 700) {
-            this.zoomValue = 0.5;
+            this.zoom = this.zoom == 1 ? 0.5 : this.zoom;
         }
 
         if (this.initialTransposition) {
@@ -129,7 +132,7 @@ export default class OSMD extends Vue {
         const zoomLevel = pageWidth < breakpoint ? 0.4 : 1;
 
         if (this.o) {
-            this.o.zoom = +this.zoomValue ?? zoomLevel;
+            this.o.zoom = +this.zoom ?? zoomLevel;
         }
     }
 

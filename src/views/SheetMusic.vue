@@ -5,6 +5,7 @@
             :originalKey="originalKey"
             :initialTransposition="transposition"
             :embed="embed"
+            :zoom="zoom"
         ></open-sheet-music-display>
     </div>
 </template>
@@ -33,11 +34,19 @@ export default class SheetMusic extends Vue {
     }
 
     public get embed() {
-        const query = (new URLSearchParams(window.location.search)).get("embed");
+        const query = this.searchParams.get("embed");
 
         const embed = ['', "true"].includes(query ?? 'false');
 
         return embed;
+    }
+
+    public get zoom() {
+        const query = this.searchParams.get("zoom");
+
+        const zoom = parseInt(query ?? "100")/100;
+
+        return zoom;
     }
 }
 </script>
