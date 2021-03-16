@@ -25,7 +25,7 @@
                 <base-button
                     @click="clearCollection('Landax')"
                     icon="trash"
-                    theme="secondary"
+                    theme="error"
                     :loading="loadingClearCache.includes('Landax')"
                 >
                     Clear Landax
