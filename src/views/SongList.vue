@@ -153,6 +153,8 @@ import {
     SearchInput,
 } from "@/components/inputs";
 import { BackButton } from "@/components";
+import { ApiContributor, ApiThemeCollectionItem, ApiCountryCollectionItem } from "dmb-api";
+import { ContributorCollectionItem } from "@/classes/contributorCollectionItem";
 
 @Options({
     components: {
@@ -322,19 +324,19 @@ export default class SongList extends Vue {
             .sort((a, b) => (a.title > b.title ? 1 : -1));
     }
 
-    public themeSongs(theme: ThemeCollectionItem) {
+    public themeSongs(theme: ApiThemeCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
             theme?.songIds.includes(s.id)
         );
     }
 
-    public countrySongs(country: CountryCollectionItem) {
+    public countrySongs(country: ApiCountryCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
             country?.songIds.includes(s.id)
         );
     }
 
-    public gotoContributor(contributor: ContributorInterface) {
+    public gotoContributor(contributor: ApiContributor) {
         if (this.collection) {
             this.$router.push({
                 name: "contributor",

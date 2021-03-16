@@ -1,5 +1,8 @@
+import { Collection, Lyrics, Song } from '@/classes';
+import { ContributorCollectionItem } from '@/classes/contributorCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
+import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
 import auth from './auth';
 import http from './http';
 
@@ -39,7 +42,10 @@ export const admin = {
         return http.patch<User>(`api/Admin/User/${user.id}/Roles`, roles);
     },
     clearCache(collectionId: string) {
-        return http.get<void>(`api/Admin/ClearCache/${collectionId}`);
+        return http.get<string>(`api/Admin/ClearCache/${collectionId}`);
+    },
+    clearLandaxCache() {
+        return http.get<string>(`api/Admin/ClearCache/Landax`);
     },
     sync() {
         return http.get<{result: string}>(`api/Admin/Sync`);
@@ -47,44 +53,44 @@ export const admin = {
 }
 
 export const songs = {
-    getCollections() {
-        return http.get<CollectionInterface[]>('api/Collections');
+    async getCollections() {
+        return (await http.get<ApiCollection[]>('api/Collections')).map(c => new Collection(c));
     },
-    getAllSongs(collection: string) {
-        return http.get<SongInterface[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`);
+    async getAllSongs(collection: string) {
+        return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`)).map(s => new Song(s));
     },
-    getLyrics(collection: string, number: number, language: string, format: string, transpose: number, transcode: string) {
-        return http.get<LyricsInterface>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`);
+    async getLyrics(collection: string, number: number, language: string, format: string, transpose: number, transcode: string) {
+        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
     },
-    getAllLyrics(collection: string, language: string, format: string, transpose: number) {
-        return http.get<LyricsInterface[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`);
+    async getAllLyrics(collection: string, language: string, format: string, transpose: number) {
+        return (await http.get<ApiLyrics[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`)).map(l => new Lyrics(l));
     },
-    getAuthor(collection: string, id: string) {
-        return http.get<ContributorInterface>(`api/Author/${collection}/${id}`);
+    async getContributor(id: string) {
+        return await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`);
     },
-    getComposer(collection: string, id: string) {
-        return http.get<ContributorInterface>(`api/Composer/${collection}/${id}`);
+    async getAllContributors(collection: string) {
+        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection}`)).map(c => new ContributorCollectionItem(c));
     },
-    getContributor(id: string) {
-        return http.get<ContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`);
+    async getAllAuthors(collection: string) {
+        return (await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection}`)).map(c => new ContributorCollectionItem(c));
     },
-    getAllContributors(collection: string) {
-        return http.get<ContributorCollectionItem[]>(`api/Contributors/${collection}`);
-    },
-    getAllAuthors(collection: string) {
-        return http.get<ContributorCollectionItem[]>(`api/Authors/${collection}`);
-    },
-    getAllComposers(collection: string) {
-        return http.get<ContributorCollectionItem[]>(`api/Composers/${collection}`);
+    async getAllComposers(collection: string) {
+        return (await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection}`)).map(c => new ContributorCollectionItem(c));
     },
     getAllThemes(collection: string) {
-        return http.get<ThemeCollectionItem[]>(`api/Themes/${collection}`);
+        return http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`);
     },
     getAllCountries(collection: string) {
-        return http.get<CountryCollectionItem[]>(`api/Countries/${collection}`);
+        return http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`);
     },
-    searchCollections(search: string, language: string) {
-        return http.get<SongInterface[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,authors,composers`);
+    /**
+     * Search accross collections.
+     * @param search 
+     * @param language 
+     * @returns 
+     */
+    async searchCollections(search: string, language: string) {
+        return (await http.get<ApiSong[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,authors,composers`)).map(s => new Song(s));
     }
 }
 

@@ -1,6 +1,8 @@
 import api from "@/services/api";
 import { SongFilter } from "@/store/songs";
+import { ApiCollection, ApiCountryCollectionItem, ApiThemeCollectionItem } from "dmb-api";
 import { Contributor, Lyrics, Song } from ".";
+import { ContributorCollectionItem } from "./contributorCollectionItem";
 
 
 export class Collection {
@@ -22,7 +24,7 @@ export class Collection {
     public contributors: Contributor[] = [];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
-    public themes: ThemeCollectionItem[] = [];
+    public themes: ApiThemeCollectionItem[] = [];
 
     public themeTypes: Theme[] = [];
 
@@ -35,12 +37,12 @@ export class Collection {
     private _loadingComposers = false;
     private _loadingThemes = false;
 
-    private _countries?: CountryCollectionItem[];
+    private _countries?: ApiCountryCollectionItem[];
     private _loadingCountries = false;
 
     private _currentLanguage = '';
 
-    constructor(collection: CollectionInterface) {
+    constructor(collection: ApiCollection) {
         this.key = collection.key;
         this.defaultType = collection.defaultType;
         this.id = collection.id;
@@ -52,7 +54,7 @@ export class Collection {
     private async initialize() {
         if (!this._initialized) {
             this._initialized = true;
-            this.songs = (await api.songs.getAllSongs(this.key)).map(s => new Song(s));
+            this.songs = await api.songs.getAllSongs(this.key);
             this.themes = await api.songs.getAllThemes(this.key);
         }
     }
@@ -63,7 +65,7 @@ export class Collection {
         await this.initialize();
 
         if (this._currentLanguage != language) {
-            this.lyrics = (await api.songs.getAllLyrics(this.key, language, 'json', 0)).map(l => new Lyrics(l));
+            this.lyrics = await api.songs.getAllLyrics(this.key, language, 'json', 0);
             this._currentLanguage = language;
         }
         this._loading = false;
@@ -188,10 +190,10 @@ export class Collection {
         return 1;
     }
 
-    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string) {
+    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            const lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose, transcode ?? 'common'));
+            const lyrics = await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose, transcode ?? 'common');
             return lyrics;
         }
         finally {
@@ -199,7 +201,7 @@ export class Collection {
         }
     }
 
-    public async getLyrics(number: number, language: string) {
+    public async getLyrics(number: number, language: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
 
@@ -239,7 +241,7 @@ export class Collection {
         return this._composers ? this._composers : [];
     }
 
-    public get countries(): CountryCollectionItem[] {
+    public get countries(): ApiCountryCollectionItem[] {
         return this._countries ? this._countries : [];
     }
 }

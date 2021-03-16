@@ -33,6 +33,7 @@ import { Collection, Song } from "@/classes";
 import { BaseButton, BackButton } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
+import { ApiSong } from "dmb-api";
 
 @Options({
     components: {
@@ -46,7 +47,7 @@ export default class CompleteSearch extends Vue {
     public sessionStore = useStore(sessionKey);
     public loading = false;
     public searchQuery = "";
-    public songs: SongInterface[] = [];
+    public songs: ApiSong[] = [];
 
     public mounted() {
         if (this.$route.query.q) {

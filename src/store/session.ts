@@ -50,7 +50,7 @@ async function init(commit: Commit) {
     try {
         const languages = await api.items.getLanguages();
         commit('languages', languages);
-        const collections = (await api.songs.getCollections()).map(c => new Collection(c));
+        const collections = await api.songs.getCollections();
         commit('collections', collections);
     } catch (e) {
         console.log(e);

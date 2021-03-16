@@ -3,6 +3,7 @@ import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 import api from '@/services/api';
+import { ApiSong, MediaFile } from 'dmb-api';
 
 export type SongFilter = {
     themes: string[];
@@ -41,7 +42,7 @@ export interface Songs {
     contributorItem?: {
         contributor: Contributor;
         songIds: string[];
-        songs?: SongInterface[];
+        songs?: ApiSong[];
     };
     filter: SongFilter;
     audio?: AudioTrack;

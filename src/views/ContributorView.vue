@@ -46,6 +46,7 @@ import { useStore } from "vuex";
 import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
+import { ApiSong } from "dmb-api";
 
 @Options({
     components: {
@@ -80,7 +81,7 @@ export default class ContributorView extends Vue {
         return this.contributorItem?.contributor;
     }
 
-    public get songs(): SongInterface[] {
+    public get songs(): ApiSong[] {
         return this.contributorItem?.songs ?? [];
     }
 

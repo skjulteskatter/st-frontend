@@ -1,3 +1,5 @@
+import { ApiLyrics } from "dmb-api";
+
 type Content = {
     [key: string]: {
         name: string;
@@ -5,7 +7,7 @@ type Content = {
     };
 }
 
-export class Lyrics implements LyricsInterface {
+export class Lyrics {
     number: number;
     title: string;
     collectionKey: string;
@@ -19,7 +21,7 @@ export class Lyrics implements LyricsInterface {
         [key: string]: number;
     };
 
-    constructor(lyrics: LyricsInterface) {
+    constructor(lyrics: ApiLyrics) {
         this.number = lyrics.number;
         this.title = lyrics.title;
         this.collectionKey = lyrics.collectionKey;

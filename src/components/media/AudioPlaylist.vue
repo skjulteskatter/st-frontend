@@ -20,6 +20,7 @@
 import { Collection, Song } from "@/classes";
 import { sessionKey, songKey } from "@/store";
 import { AudioTrack } from "@/store/songs";
+import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 

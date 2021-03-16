@@ -1,13 +1,14 @@
 import { Converter } from 'showdown';
+import { ApiCollection, ApiContributor, ApiSong, MediaFile } from "dmb-api";
 const converter = new Converter();
 converter.setOption('simpleLineBreaks', true);
 
-export class Song implements SongInterface {
+export class Song {
     public id: string;
     public number = 0;
     public type: string;
     public name: LocaleString;
-    public collection?: CollectionInterface;
+    public collection?: ApiCollection;
     public copyright: {
         melody?: Copyright;
         text?: Copyright;
@@ -22,8 +23,8 @@ export class Song implements SongInterface {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.filter(n => !n.startsWith("_"))[0]];
     }
 
-    public authors: ContributorInterface[] = []
-    public composers: ContributorInterface[] = [];
+    public authors: ApiContributor[] = []
+    public composers: ApiContributor[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
     public themes: Theme[] = [];
@@ -37,7 +38,7 @@ export class Song implements SongInterface {
     public melodyOrigin = {} as Origin;
     public hasLyrics: boolean;
 
-    constructor(song: SongInterface) {
+    constructor(song: ApiSong) {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;

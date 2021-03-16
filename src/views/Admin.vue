@@ -23,6 +23,14 @@
                     </base-button>
                 </base-card>
                 <base-button
+                    @click="clearCollection('Landax')"
+                    icon="trash"
+                    theme="secondary"
+                    :loading="loadingClearCache.includes('Landax')"
+                >
+                    Clear Landax
+                </base-button>
+                <base-button
                     @click="syncFiles()"
                     icon="refresh"
                     theme="secondary"
@@ -106,14 +114,9 @@ export default class Subscriptions extends Vue {
         // Notification
         this.notificationStore.dispatch("addNotification", {
             type: "error",
-            title: this.$t("notification.cachecleared"),
+            title: await api.admin.clearCache(collection),
             icon: "trash",
         });
-        try {
-            await api.admin.clearCache(collection);
-        } catch {
-            console.log("no content");
-        }
         this.loadingClearCache = this.loadingClearCache.filter(
             (c) => c != collection
         );

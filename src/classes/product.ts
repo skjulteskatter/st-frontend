@@ -1,11 +1,13 @@
-export class Product implements ProductInterface {
+import { ApiProduct } from "dmb-api";
+
+export class Product {
     public collections;
     public id;
     public name;
     public prices;
     public priority;
 
-    constructor(product: ProductInterface) {
+    constructor(product: ApiProduct) {
         this.collections = product.collections;
         this.id = product.id;
         this.name = product.name;
