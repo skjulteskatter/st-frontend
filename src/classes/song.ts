@@ -3,15 +3,15 @@ import { ApiSong, MediaFile } from "dmb-api";
 import { Collection } from './collection';
 import { Contributor } from './contributor';
 import { Participant } from './participant';
+import { BaseClass } from './baseClass';
 const converter = new Converter();
 converter.setOption('simpleLineBreaks', true);
 
 
-export class Song implements ApiSong {
+export class Song extends BaseClass implements ApiSong {
     public id: string;
     public number = 0;
     public type: string;
-    public name: LocaleString;
     public collection?: Collection;
     public copyright: {
         melody?: Copyright;
@@ -22,10 +22,6 @@ export class Song implements ApiSong {
     };
     public originalKey: string;
     public verses: number;
-
-    public getName(language: string) {
-        return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.filter(n => !n.startsWith("_"))[0]];
-    }
 
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
@@ -44,6 +40,7 @@ export class Song implements ApiSong {
     public hasLyrics: boolean;
 
     constructor(song: ApiSong) {
+        super();
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;

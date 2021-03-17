@@ -1,22 +1,15 @@
 import api from "@/services/api";
 import { SongFilter } from "@/store/songs";
 import { ApiCollection } from "dmb-api";
-import { Contributor, Lyrics, Song } from ".";
-import { ContributorCollectionItem } from "./collectionItems/contributorCollectionItem";
-import { CountryCollectionItem } from "./collectionItems/countryCollectionItem";
-import { ThemeCollectionItem } from "./collectionItems/themeCollectionItem";
+import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
+import { BaseClass } from "./baseClass";
 
 
-export class Collection implements ApiCollection {
+export class Collection extends BaseClass implements ApiCollection {
     public key: string;
     public defaultType: string;
     public id: string;
-    public name: LocaleString;
     public available?: boolean;
-
-    public getName(language: string) {
-        return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.filter(n => !n.startsWith("_"))[0]];
-    }
 
     public image: string;
 
@@ -45,6 +38,7 @@ export class Collection implements ApiCollection {
     private _currentLanguage = '';
 
     constructor(collection: ApiCollection) {
+        super();
         this.key = collection.key;
         this.defaultType = collection.defaultType;
         this.id = collection.id;

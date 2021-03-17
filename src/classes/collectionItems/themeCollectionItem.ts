@@ -11,4 +11,8 @@ export class ThemeCollectionItem implements ApiThemeCollectionItem {
         this.songIds = ci.songIds;
         this.songs = ci.songs?.map(s => new Song(s)) ?? [];
     }
+
+    public getName(languageKey: string) {
+        return this.theme.name[languageKey] ?? this.theme.name[0];
+    }
 }

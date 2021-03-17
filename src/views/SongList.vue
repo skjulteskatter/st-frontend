@@ -54,7 +54,7 @@
                 <song-list-card
                     v-for="author in collection.authors"
                     :key="author.contributor.id"
-                    :songs="contributorSongs(author)"
+                    :songs="songs.filter(s => author.songIds.includes(s.id))"
                     :title="author.contributor.name"
                     :action="() => gotoContributor(author.contributor)"
                 ></song-list-card>
@@ -64,7 +64,7 @@
                 <song-list-card
                     v-for="composer in collection.composers"
                     :key="composer.contributor.id"
-                    :songs="contributorSongs(composer)"
+                    :songs="songs.filter(s => composer.songIds.includes(s.id))"
                     :title="composer.contributor.name"
                     :action="() => gotoContributor(composer.contributor)"
                 ></song-list-card>
@@ -74,7 +74,7 @@
                 <song-list-card
                     v-for="theme in collection.themes"
                     :key="theme.theme.id"
-                    :songs="themeSongs(theme)"
+                    :songs="songs.filter(s => theme?.songIds.includes(s.id))"
                     :title="theme ? theme.theme.name[languageKey] : ''"
                 ></song-list-card>
             </div>
@@ -83,7 +83,7 @@
                 <song-list-card
                     v-for="country in collection.countries"
                     :key="country ? country.country.countryCode : Math.random()"
-                    :songs="country ? countrySongs(country) : []"
+                    :songs="songs.filter(s => country?.songIds.includes(s.id))"
                     :title="country ? country.country.name : ''"
                 ></song-list-card>
             </div>
@@ -153,8 +153,8 @@ import {
     SearchInput,
 } from "@/components/inputs";
 import { BackButton } from "@/components";
-import { ApiContributor, ApiThemeCollectionItem, ApiCountryCollectionItem } from "dmb-api";
-import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
+import { ApiContributor } from "dmb-api";
+import { CountryCollectionItem, ThemeCollectionItem } from "@/classes/collectionItems";
 
 @Options({
     components: {
@@ -324,13 +324,13 @@ export default class SongList extends Vue {
             .sort((a, b) => (a.title > b.title ? 1 : -1));
     }
 
-    public themeSongs(theme: ApiThemeCollectionItem) {
+    public themeSongs(theme: ThemeCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
             theme?.songIds.includes(s.id)
         );
     }
 
-    public countrySongs(country: ApiCountryCollectionItem) {
+    public countrySongs(country: CountryCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
             country?.songIds.includes(s.id)
         );
@@ -350,12 +350,6 @@ export default class SongList extends Vue {
 
     public setListType(value: string) {
         this.listType = value;
-    }
-
-    public contributorSongs(contributor: ContributorCollectionItem) {
-        return this.filteredSongs.filter((s: Song) =>
-            contributor?.songIds.includes(s.id)
-        );
     }
 
     public get buttons() {
