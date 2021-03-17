@@ -31,6 +31,14 @@
                     Clear Landax
                 </base-button>
                 <base-button
+                    @click="clearCollection('Index')"
+                    icon="refresh"
+                    theme="secondary"
+                    :loading="loadingClearCache.includes('Index')"
+                >
+                    Index Songs
+                </base-button>
+                <base-button
                     @click="syncFiles()"
                     icon="refresh"
                     theme="secondary"
