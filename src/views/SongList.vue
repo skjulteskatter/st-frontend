@@ -54,7 +54,7 @@
                 <song-list-card
                     v-for="ci in collection.authors"
                     :key="ci.item.id"
-                    :songs="songs.filter(s => ci.songIds.includes(s.id))"
+                    :songs="filteredSongs.filter(s => ci.songIds.includes(s.id))"
                     :title="ci.item.name"
                     :action="() => gotoContributor(ci.item)"
                 ></song-list-card>
@@ -64,7 +64,7 @@
                 <song-list-card
                     v-for="ci in collection.composers"
                     :key="ci.item.id"
-                    :songs="songs.filter(s => ci.songIds.includes(s.id))"
+                    :songs="filteredSongs.filter(s => ci.songIds.includes(s.id))"
                     :title="ci.item.name"
                     :action="() => gotoContributor(ci.item)"
                 ></song-list-card>
@@ -74,7 +74,7 @@
                 <song-list-card
                     v-for="theme in collection.themes"
                     :key="theme.item.id"
-                    :songs="songs.filter(s => theme?.songIds.includes(s.id))"
+                    :songs="filteredSongs.filter(s => theme?.songIds.includes(s.id))"
                     :title="theme ? theme.item.name[languageKey] : ''"
                 ></song-list-card>
             </div>
