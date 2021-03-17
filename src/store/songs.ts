@@ -116,11 +116,7 @@ export const songStore = createStore<Songs>({
             // }
             const contributor = await api.songs.getContributor(contributorId);
             if (contributor) {
-                commit('contributor', {
-                    songIds: contributor.songIds,
-                    contributor: new Contributor(contributor.contributor),
-                    songs: contributor.songs,
-                });
+                commit('contributor', contributor);
             }
         },
         async transpose({ commit, getters }, transpose: number) {

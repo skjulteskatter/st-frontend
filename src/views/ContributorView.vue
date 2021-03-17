@@ -87,15 +87,13 @@ export default class ContributorView extends Vue {
 
     public get authorSongs(): Song[] {
         return this.songs
-            .filter((s) => s.authorIds?.find((a) => a == this.contributor?.id))
+            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "author"))
             .map((s) => new Song(s));
     }
 
     public get composerSongs(): Song[] {
         return this.songs
-            .filter((s) =>
-                s.composerIds?.find((c) => c == this.contributor?.id)
-            )
+            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "composer"))
             .map((s) => new Song(s));
     }
 
