@@ -13,7 +13,7 @@
             />
         </div>
         <div class="nav__search">
-            <full-search-input></full-search-input>
+            <FullSearchInput />
         </div>
         <div class="nav__links">
             <router-link
@@ -47,24 +47,8 @@
                 <span>{{ $t("common.settings") }}</span>
             </router-link>
         </div>
-        <collection-list></collection-list>
-        <div class="nav__user-profile" v-if="user">
-            <img :src="image" class="nav__user-profile__image" />
-            <div class="nav__user-profile__info">
-                <div class="nav__user-profile__name">
-                    <b>
-                        {{ user.displayName }}
-                    </b>
-                </div>
-
-                <small class="nav__user-profile__email">{{ user.email }}</small>
-            </div>
-            <Icon
-                name="settings"
-                @click="$router.push({ name: 'settings' })"
-                style="cursor: pointer"
-            />
-        </div>
+        <CollectionList />
+        <UserProfile class="nav__user-profile" />
     </nav>
 </template>
 
@@ -73,7 +57,7 @@ import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import { FullSearchInput } from "@/components/inputs";
-import { CollectionList } from "@/components/nav";
+import { CollectionList, UserProfile } from "@/components/nav";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
@@ -83,6 +67,7 @@ import { sessionKey } from "@/store";
         Icon,
         CollectionList,
         FullSearchInput,
+        UserProfile,
     },
 })
 export default class TheNavbar extends Vue {
@@ -90,14 +75,6 @@ export default class TheNavbar extends Vue {
 
     public get isAdmin() {
         return useStore(sessionKey).getters.isAdmin;
-    }
-
-    public get user() {
-        return this.userStore.state.currentUser;
-    }
-
-    public get image(): string {
-        return this.userStore.getters.image;
     }
 }
 </script>
@@ -214,37 +191,6 @@ export default class TheNavbar extends Vue {
 
         &__logo--icon {
             display: none;
-        }
-    }
-
-    &__user-profile {
-        display: flex;
-        align-items: center;
-        gap: var(--st-spacing);
-
-        padding: var(--st-spacing);
-        background-color: var(--st-color-background-medium);
-
-        text-overflow: ellipsis;
-        font-size: 0.9em;
-        white-space: nowrap;
-
-        &__name {
-            display: flex;
-            gap: calc(var(--st-spacing) * 0.5);
-        }
-
-        &__email {
-            opacity: 0.5;
-        }
-
-        &__image {
-            border-radius: 100%;
-            max-width: var(--size);
-            max-height: var(--size);
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
     }
 
