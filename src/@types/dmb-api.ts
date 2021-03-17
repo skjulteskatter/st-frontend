@@ -23,6 +23,7 @@ declare module "dmb-api" {
         authorIds?: string[];
         composers: ApiContributor[];
         composerIds?: string[];
+        participants: ApiParticipant[];
         melodyOrigin: Origin;
         leadSheetUrl: string;
         yearWritten: number;
@@ -96,6 +97,12 @@ declare module "dmb-api" {
         collections: ApiCollection[];
         prices: Price[];
         priority: number;
+    }
+
+    interface ApiParticipant {
+        contributorId: string;
+        contributor: ApiContributor;
+        type: string;
     }
 
     interface MediaFile {

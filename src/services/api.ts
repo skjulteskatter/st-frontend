@@ -59,7 +59,7 @@ export const songs = {
         return (await http.get<ApiCollection[]>('api/Collections')).map(c => new Collection(c));
     },
     async getAllSongs(collection: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=composers,authors,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`)).map(s => new Song(s));
+        return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`)).map(s => new Song(s));
     },
     async getLyrics(collection: string, number: number, language: string, format: string, transpose: number, transcode: string) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));

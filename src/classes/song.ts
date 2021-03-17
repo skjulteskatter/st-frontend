@@ -2,8 +2,10 @@ import { Converter } from 'showdown';
 import { ApiSong, MediaFile } from "dmb-api";
 import { Collection } from './collection';
 import { Contributor } from './contributor';
+import { Participant } from './participant';
 const converter = new Converter();
 converter.setOption('simpleLineBreaks', true);
+
 
 export class Song implements ApiSong {
     public id: string;
@@ -27,6 +29,7 @@ export class Song implements ApiSong {
 
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
+    public participants: Participant[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
     public themes: Theme[] = [];
@@ -44,8 +47,9 @@ export class Song implements ApiSong {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
-        this.authors = song.authors.map(a => new Contributor(a));
-        this.composers = song.composers.map(c => new Contributor(c));
+        this.participants = song.participants.map(c => new Participant(c));
+        this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor);
+        this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor);
         this.collection = song.collection ? new Collection(song.collection) : undefined;
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
