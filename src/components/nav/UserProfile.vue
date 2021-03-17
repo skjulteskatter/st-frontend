@@ -41,8 +41,6 @@ export default class UserProfile extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/mixins";
-
 .user-profile {
     display: flex;
     align-items: center;
