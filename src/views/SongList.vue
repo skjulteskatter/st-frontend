@@ -52,39 +52,39 @@
         <div v-if="searchQuery == '' && !loading">
             <div class="song-list__contributors" v-if="listType == 'authors'">
                 <song-list-card
-                    v-for="author in collection.authors"
-                    :key="author.contributor.id"
-                    :songs="songs.filter(s => author.songIds.includes(s.id))"
-                    :title="author.contributor.name"
-                    :action="() => gotoContributor(author.contributor)"
+                    v-for="ci in collection.authors"
+                    :key="ci.item.id"
+                    :songs="songs.filter(s => ci.songIds.includes(s.id))"
+                    :title="ci.item.name"
+                    :action="() => gotoContributor(ci.item)"
                 ></song-list-card>
             </div>
 
             <div class="song-list__contributors" v-if="listType == 'composers'">
                 <song-list-card
-                    v-for="composer in collection.composers"
-                    :key="composer.contributor.id"
-                    :songs="songs.filter(s => composer.songIds.includes(s.id))"
-                    :title="composer.contributor.name"
-                    :action="() => gotoContributor(composer.contributor)"
+                    v-for="ci in collection.composers"
+                    :key="ci.item.id"
+                    :songs="songs.filter(s => ci.songIds.includes(s.id))"
+                    :title="ci.item.name"
+                    :action="() => gotoContributor(ci.item)"
                 ></song-list-card>
             </div>
 
             <div class="song-list__contributors" v-if="listType == 'themes'">
                 <song-list-card
                     v-for="theme in collection.themes"
-                    :key="theme.theme.id"
+                    :key="theme.item.id"
                     :songs="songs.filter(s => theme?.songIds.includes(s.id))"
-                    :title="theme ? theme.theme.name[languageKey] : ''"
+                    :title="theme ? theme.item.name[languageKey] : ''"
                 ></song-list-card>
             </div>
 
             <div class="song-list__contributors" v-if="listType == 'countries'">
                 <song-list-card
                     v-for="country in collection.countries"
-                    :key="country ? country.country.countryCode : Math.random()"
+                    :key="country ? country.item.countryCode : Math.random()"
                     :songs="songs.filter(s => country?.songIds.includes(s.id))"
-                    :title="country ? country.country.name : ''"
+                    :title="country ? country.item.name : ''"
                 ></song-list-card>
             </div>
 

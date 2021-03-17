@@ -78,7 +78,7 @@ export default class ContributorView extends Vue {
     }
 
     public get contributor() {
-        return this.contributorItem?.contributor;
+        return this.contributorItem?.item;
     }
 
     public get songs(): ApiSong[] {

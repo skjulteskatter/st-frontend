@@ -1,9 +1,9 @@
-import { Lyrics, Collection, Song, Contributor } from '@/classes';
+import { Lyrics, Collection, Song, Contributor, ContributorCollectionItem } from '@/classes';
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import { sessionStore } from './session';
 import api from '@/services/api';
-import { ApiSong, MediaFile } from 'dmb-api';
+import { MediaFile } from 'dmb-api';
 
 export type SongFilter = {
     themes: string[];
@@ -39,11 +39,7 @@ export interface Songs {
     collections: Collection[];
     initialized: boolean;
     list: string;
-    contributorItem?: {
-        contributor: Contributor;
-        songIds: string[];
-        songs?: ApiSong[];
-    };
+    contributorItem?: ContributorCollectionItem;
     filter: SongFilter;
     audio?: AudioTrack;
     view: string;
@@ -158,7 +154,7 @@ export const songStore = createStore<Songs>({
             state.song = undefined;
             state.contributorItem = undefined;
         },
-        contributor(state, contributor: { songIds: string[]; contributor: Contributor }) {
+        contributor(state, contributor: { songIds: string[]; item: Contributor; songs: Song[] }) {
             state.contributorItem = contributor;
         },
         list(state, list: string) {
