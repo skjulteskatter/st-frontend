@@ -486,7 +486,7 @@ export default class SongList extends Vue {
         &-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            grid-gap: var(--st-half-spacing);
+            grid-gap: var(--st-spacing);
         }
     }
 
