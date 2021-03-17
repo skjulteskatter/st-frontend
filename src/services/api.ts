@@ -1,5 +1,7 @@
 import { Collection, Lyrics, Song } from '@/classes';
-import { ContributorCollectionItem } from '@/classes/contributorCollectionItem';
+import { ContributorCollectionItem } from '@/classes/collectionItems/contributorCollectionItem';
+import { CountryCollectionItem } from '@/classes/collectionItems/countryCollectionItem';
+import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
 import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
@@ -77,11 +79,11 @@ export const songs = {
     async getAllComposers(collection: string) {
         return (await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection}`)).map(c => new ContributorCollectionItem(c));
     },
-    getAllThemes(collection: string) {
-        return http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`);
+    async getAllThemes(collection: string) {
+        return (await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`)).map(ci => new ThemeCollectionItem(ci));
     },
-    getAllCountries(collection: string) {
-        return http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`);
+    async getAllCountries(collection: string) {
+        return (await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`)).map(ci => new CountryCollectionItem(ci));
     },
     /**
      * Search accross collections.

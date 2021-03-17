@@ -1,11 +1,13 @@
 import api from "@/services/api";
 import { SongFilter } from "@/store/songs";
-import { ApiCollection, ApiCountryCollectionItem, ApiThemeCollectionItem } from "dmb-api";
+import { ApiCollection } from "dmb-api";
 import { Contributor, Lyrics, Song } from ".";
-import { ContributorCollectionItem } from "./contributorCollectionItem";
+import { ContributorCollectionItem } from "./collectionItems/contributorCollectionItem";
+import { CountryCollectionItem } from "./collectionItems/countryCollectionItem";
+import { ThemeCollectionItem } from "./collectionItems/themeCollectionItem";
 
 
-export class Collection {
+export class Collection implements ApiCollection {
     public key: string;
     public defaultType: string;
     public id: string;
@@ -24,7 +26,7 @@ export class Collection {
     public contributors: Contributor[] = [];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
-    public themes: ApiThemeCollectionItem[] = [];
+    public themes: ThemeCollectionItem[] = [];
 
     public themeTypes: Theme[] = [];
 
@@ -37,7 +39,7 @@ export class Collection {
     private _loadingComposers = false;
     private _loadingThemes = false;
 
-    private _countries?: ApiCountryCollectionItem[];
+    private _countries?: CountryCollectionItem[];
     private _loadingCountries = false;
 
     private _currentLanguage = '';
@@ -241,7 +243,7 @@ export class Collection {
         return this._composers ? this._composers : [];
     }
 
-    public get countries(): ApiCountryCollectionItem[] {
+    public get countries(): CountryCollectionItem[] {
         return this._countries ? this._countries : [];
     }
 }

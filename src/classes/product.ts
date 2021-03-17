@@ -1,6 +1,6 @@
 import { ApiProduct } from "dmb-api";
 
-export class Product {
+export class Product implements ApiProduct {
     public collections;
     public id;
     public name;

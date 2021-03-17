@@ -1,5 +1,5 @@
 import { ApiContributorCollectionItem, ApiSong } from "dmb-api";
-import { Contributor } from "./contributor";
+import { Contributor } from "../contributor";
 
 export class ContributorCollectionItem {
     public contributor: Contributor;

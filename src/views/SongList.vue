@@ -154,7 +154,7 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ApiContributor, ApiThemeCollectionItem, ApiCountryCollectionItem } from "dmb-api";
-import { ContributorCollectionItem } from "@/classes/contributorCollectionItem";
+import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
 
 @Options({
     components: {

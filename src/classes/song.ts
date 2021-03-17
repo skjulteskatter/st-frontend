@@ -1,14 +1,16 @@
 import { Converter } from 'showdown';
-import { ApiCollection, ApiContributor, ApiSong, MediaFile } from "dmb-api";
+import { ApiSong, MediaFile } from "dmb-api";
+import { Collection } from './collection';
+import { Contributor } from './contributor';
 const converter = new Converter();
 converter.setOption('simpleLineBreaks', true);
 
-export class Song {
+export class Song implements ApiSong {
     public id: string;
     public number = 0;
     public type: string;
     public name: LocaleString;
-    public collection?: ApiCollection;
+    public collection?: Collection;
     public copyright: {
         melody?: Copyright;
         text?: Copyright;
@@ -23,8 +25,8 @@ export class Song {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.filter(n => !n.startsWith("_"))[0]];
     }
 
-    public authors: ApiContributor[] = []
-    public composers: ApiContributor[] = [];
+    public authors: Contributor[] = []
+    public composers: Contributor[] = [];
     public leadSheetUrl = "";
     public yearWritten = 0;
     public themes: Theme[] = [];
@@ -42,9 +44,9 @@ export class Song {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
-        this.authors = song.authors;
-        this.collection = song.collection;
-        this.composers = song.composers;
+        this.authors = song.authors.map(a => new Contributor(a));
+        this.composers = song.composers.map(c => new Contributor(c));
+        this.collection = song.collection ? new Collection(song.collection) : undefined;
         this.leadSheetUrl = song.leadSheetUrl;
         this.yearWritten = song.yearWritten;
         this.originCountry = song.originCountry;

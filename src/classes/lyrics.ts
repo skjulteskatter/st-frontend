@@ -7,7 +7,7 @@ type Content = {
     };
 }
 
-export class Lyrics {
+export class Lyrics implements ApiLyrics {
     number: number;
     title: string;
     collectionKey: string;
