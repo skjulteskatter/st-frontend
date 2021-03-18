@@ -10,6 +10,7 @@
                 </span>
             </h2>
             <div class="song-details__metadata__content">
+                <img v-if="song.image" :src="song.image" height="100">
                 <span
                     v-if="song.verses"
                     class="song-details__metadata__verse-count tag"

@@ -12,6 +12,7 @@ export class Song extends BaseClass implements ApiSong {
     public id: string;
     public number = 0;
     public type: string;
+    public image?: string;
     public collection?: Collection;
     public copyright: {
         melody?: Copyright;
@@ -63,6 +64,7 @@ export class Song extends BaseClass implements ApiSong {
         this.transpositions = song.transpositions;
         this.copyright = song.copyright;
         this.verses = song.verses;
+        this.image = song.image;
     }
 
     public language(code: string): boolean {
