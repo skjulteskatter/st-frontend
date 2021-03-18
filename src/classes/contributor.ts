@@ -1,6 +1,7 @@
 import { ApiContributor } from 'dmb-api';
 import { Converter } from 'showdown';
 const converter = new Converter();
+converter.setOption('simpleLineBreaks', true);
 
 export class Contributor implements ApiContributor {
     public biography: {
