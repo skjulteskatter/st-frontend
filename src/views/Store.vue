@@ -30,37 +30,35 @@
             </div>
         </div>
         <div class="store__owned">
-            <p class="store__owned__title">
+            <!-- <p class="store__owned__title">
                 {{ $t("common.your") }}
                 {{ $t("common.collections").toLowerCase() }}
-            </p>
-            <product-slider
-                :products="ownedProducts"
-                v-if="ownedProducts.length"
-            ></product-slider>
-            <all-collections-card
-                v-if="allCollectionProduct"
-                :product="allCollectionProduct"
-                :action="
-                    () =>
-                        $router.push({
-                            name: 'store-item',
-                            params: {
-                                id: allCollectionProduct
-                                    ? allCollectionProduct.id
-                                    : '',
-                            },
-                        })
-                "
-            ></all-collections-card>
+            </p> -->
+            <product-slider :products="products" v-if="products.length">
+                <all-collections-card
+                    v-if="allCollectionProduct"
+                    :product="allCollectionProduct"
+                    :action="
+                        () =>
+                            $router.push({
+                                name: 'store-item',
+                                params: {
+                                    id: allCollectionProduct
+                                        ? allCollectionProduct.id
+                                        : '',
+                                },
+                            })
+                    "
+                ></all-collections-card>
+            </product-slider>
         </div>
-        <div class="store__available" v-if="availableProducts.length">
+        <!-- <div class="store__available" v-if="availableProducts.length">
             <p class="store__available__title">
                 {{ $t("common.available") }}
                 {{ $t("common.collections").toLowerCase() }}
             </p>
             <product-slider :products="availableProducts"></product-slider>
-        </div>
+        </div> -->
     </div>
 </template>
 
