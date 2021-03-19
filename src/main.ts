@@ -3,8 +3,6 @@ import App from './App.vue'
 import i18n from './i18n';
 import router from './router';
 import { sessionStore, sessionKey, usersStore, usersKey, songStore, songKey, stripeKey, stripeStore, notificationStore, notificationKey } from './store';
-import './style/chordpro.less';
-
 
 createApp(App)
     .use(sessionStore, sessionKey)

@@ -15,6 +15,7 @@ declare module "dmb-api" {
         id: string;
         number: number;
         type: string;
+        image?: string;
         collection?: ApiCollection;
         name: {
             [languageKey: string]: string;

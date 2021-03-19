@@ -1,5 +1,5 @@
 <template>
-    <base-card class="song-details__metadata" v-if="song" header toggleable>
+    <base-card class="song-details__metadata" v-if="song" header toggleable v-cloak>
         <template #header>
             <h2 class="song-details__metadata__title">
                 <span style="opacity: 0.5; padding-right: 0.5em">
@@ -10,14 +10,15 @@
                 </span>
             </h2>
             <div class="song-details__metadata__content">
+                <img id="song-details-image" class="song-details__metadata__image" v-if="song.image" height="100">
                 <span
-                    v-if="song.verses"
-                    class="song-details__metadata__verse-count tag"
+                    v-if="song.verses && imageLoaded"
+                    class="song-details__metadata__verse-count tag song-details-transition"
                 >
                     {{ song.verses }}
                     {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
                 </span>
-                <div class="song-details__metadata__info">
+                <div class="song-details__metadata__info" v-if="imageLoaded">
                     <small class="song-details__metadata__credits gap-x">
                         <span>{{ $t("song.author") }}: </span>
                         <span v-for="author in song.authors" :key="author.id">
@@ -125,6 +126,25 @@ import { BaseCard, Modal } from "@/components";
 export default class SongInfoCard extends Vue {
     public languageKey = "";
     public song?: Song;
+    public imageLoaded = false;
+
+    public mounted() {
+        if (this.song?.image) {
+            const image = document.getElementById("song-details-image") as HTMLImageElement;
+
+            image.style.display = "none";
+
+            image.src = this.song.image;
+
+            image.onload = () => {
+                image.classList.add("song-details-transition");
+                this.imageLoaded = true;
+                image.style.display = "";
+            }
+        } else {
+            this.imageLoaded = true;
+        }
+    }
 
     public get title() {
         return this.song?.getName(this.languageKey);
@@ -162,8 +182,31 @@ export default class SongInfoCard extends Vue {
 </script>
 
 <style lang="scss">
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.song-details-transition {
+    animation: 0.5s ease-out 0s 1 slideInFromLeft;
+}
+
 .song-details__metadata {
     width: 100%;
+
+    &__info {
+        animation: 0.5s ease-out 0s 1 slideInFromLeft;
+    }
 
     &__content {
         display: flex;

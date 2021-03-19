@@ -83,7 +83,7 @@
                 <song-list-card
                     v-for="country in collection.countries"
                     :key="country ? country.item.countryCode : Math.random()"
-                    :songs="songs.filter(s => country?.songIds.includes(s.id))"
+                    :songs="filteredSongs.filter(s => country?.songIds.includes(s.id))"
                     :title="country ? country.item.name : ''"
                 ></song-list-card>
             </div>
