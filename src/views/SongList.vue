@@ -4,7 +4,7 @@
         <back-button />
         <div class="song-list__header">
             <h1 class="song-list__title">{{ collection.name[languageKey] }}</h1>
-            <div class="song-list__filters">
+            <div class="song-list__filters" v-if="!loading">
                 <div class="song-list__filters__wrapper gap-x">
                     <div class="song-list__filters__field">
                         <label for="song-category">

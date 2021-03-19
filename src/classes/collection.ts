@@ -20,6 +20,14 @@ export class Collection extends BaseClass implements ApiCollection {
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
     public themes: ThemeCollectionItem[] = [];
+    
+    public hasAuthors = false;
+
+    public hasComposers = false;
+
+    public hasCountries = false;
+
+    public hasThemes = false;
 
     public themeTypes: Theme[] = [];
 
@@ -51,6 +59,14 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
             this.songs = await api.songs.getAllSongs(this.key);
+
+            for (const song of this.songs) {
+                this.hasAuthors = this.hasAuthors || song.participants.find(p => p.type == "author") !== undefined;
+                this.hasComposers = this.hasComposers || song.participants.find(p => p.type == "composer") !== undefined;
+                this.hasThemes = this.hasThemes || song.themes.length > 0;
+                this.hasCountries = this.hasCountries || song.originCountry !== undefined;
+            }
+
             this.themes = await api.songs.getAllThemes(this.key);
         }
     }
@@ -211,22 +227,6 @@ export class Collection extends BaseClass implements ApiCollection {
         finally {
             this.loadingLyrics = false;
         }
-    }
-
-    public get hasAuthors(): boolean {
-        return this.songs.find(s => s.authors?.length > 0) != undefined;
-    }
-
-    public get hasComposers(): boolean {
-        return this.songs.find(s => s.composers?.length > 0) != undefined;
-    }
-
-    public get hasCountries(): boolean {
-        return this.songs.find(s => s.originCountry) != undefined;
-    }
-
-    public get hasThemes(): boolean {
-        return this.songs.find(s => s.themes?.length > 0) != undefined;
     }
 
     public get authors(): ContributorCollectionItem[] {
