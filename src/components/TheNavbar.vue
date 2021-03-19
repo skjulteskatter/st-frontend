@@ -15,68 +15,28 @@
         <div class="nav__search">
             <FullSearchInput />
         </div>
-        <div class="nav__links">
-            <router-link
-                class="nav__item nav__search-link"
-                :to="{ name: 'search' }"
-            >
-                <icon name="search" size="20" />
-                <span>{{ $t("common.search") }}</span>
-            </router-link>
-            <router-link class="nav__item" :to="{ name: 'main' }">
-                <icon name="home" size="20" />
-                <span>{{ $t("common.home") }}</span>
-            </router-link>
-            <router-link class="nav__item" :to="{ name: 'store' }">
-                <icon name="collection" size="20" />
-                <span>{{ $t("common.collections") }}</span>
-            </router-link>
-            <router-link
-                v-if="isAdmin"
-                class="nav__item"
-                :to="{ name: 'admin' }"
-            >
-                <icon name="adjustments" size="20" />
-                <span>Admin</span>
-            </router-link>
-            <router-link
-                class="nav__item nav__settings"
-                :to="{ name: 'settings' }"
-            >
-                <Icon name="settings" size="20" />
-                <span>{{ $t("common.settings") }}</span>
-            </router-link>
-        </div>
-        <CollectionList />
-        <UserProfile class="nav__user-profile" />
+        <nav-links />
+        <collection-list />
+        <user-profile class="nav__user-profile" />
     </nav>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import { FullSearchInput } from "@/components/inputs";
-import { CollectionList, UserProfile } from "@/components/nav";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
+import { CollectionList, UserProfile, NavLinks } from "@/components/nav";
 
 @Options({
     components: {
-        BaseButton,
         Icon,
         CollectionList,
         FullSearchInput,
         UserProfile,
+        NavLinks,
     },
 })
-export default class TheNavbar extends Vue {
-    private userStore = useStore(sessionKey);
-
-    public get isAdmin() {
-        return useStore(sessionKey).getters.isAdmin;
-    }
-}
+export default class TheNavbar extends Vue {}
 </script>
 
 <style lang="scss">
@@ -109,12 +69,6 @@ export default class TheNavbar extends Vue {
         .nav__header {
             border-bottom: none;
         }
-
-        .nav__links {
-            flex-direction: initial;
-            flex-grow: 0;
-            margin-left: auto;
-        }
     }
 
     @include breakpoint("medium") {
@@ -133,25 +87,12 @@ export default class TheNavbar extends Vue {
             display: none;
         }
 
-        .nav__item {
-            svg {
-                margin: 0 auto;
-            }
-            span {
-                display: none;
-            }
-        }
-
         .nav__settings {
             display: flex !important;
         }
 
         .nav__search-link {
             display: flex !important;
-        }
-
-        .nav__item.router-link-exact-active {
-            border-left: none;
         }
     }
 
@@ -175,11 +116,6 @@ export default class TheNavbar extends Vue {
         }
     }
 
-    &__links {
-        display: flex;
-        flex-direction: column;
-    }
-
     &__header {
         padding: var(--st-spacing);
         cursor: pointer;
@@ -191,23 +127,6 @@ export default class TheNavbar extends Vue {
 
         &__logo--icon {
             display: none;
-        }
-    }
-
-    &__item {
-        color: var(--st-text-color);
-        padding: var(--st-spacing);
-        text-decoration: none;
-        transition: border-left 0.2s;
-
-        display: flex;
-        align-items: center;
-        gap: var(--st-spacing);
-
-        &.router-link-exact-active {
-            color: var(--st-color-primary);
-            position: relative;
-            border-left: 5px solid var(--st-color-primary);
         }
     }
 }
