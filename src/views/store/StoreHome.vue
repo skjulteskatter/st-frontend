@@ -1,16 +1,71 @@
 <template>
-    <div class="store">
-        <router-view />
+    <div class="store__header">
+        <h1 class="store__title">{{ $t("common.collections") }}</h1>
+        <div class="store__header__buttons">
+            <base-button
+                theme="tertiary"
+                @click="refreshSubscriptions"
+                icon="refresh"
+                class="refresh-button"
+                :loading="loadingSubs"
+            >
+                <span>
+                    {{ $t("common.refreshSubscriptions") }}
+                </span>
+            </base-button>
+            <base-button
+                v-if="productIds.length"
+                @click="portal"
+                theme="tertiary"
+                :loading="loading"
+                icon="collection"
+                class="manage-button"
+            >
+                <span>
+                    {{ $t("common.manage") }}
+                    {{ $t("common.subscriptions").toLowerCase() }}
+                </span>
+            </base-button>
+        </div>
     </div>
+    <div class="store__owned">
+        <!-- <p class="store__owned__title">
+                {{ $t("common.your") }}
+                {{ $t("common.collections").toLowerCase() }}
+            </p> -->
+        <product-slider :products="products" v-if="products.length">
+            <all-collections-card
+                v-if="allCollectionProduct"
+                :product="allCollectionProduct"
+                :action="
+                    () =>
+                        $router.push({
+                            name: 'store-item',
+                            params: {
+                                id: allCollectionProduct
+                                    ? allCollectionProduct.id
+                                    : '',
+                            },
+                        })
+                "
+            ></all-collections-card>
+        </product-slider>
+    </div>
+    <!-- <div class="store__available" v-if="availableProducts.length">
+            <p class="store__available__title">
+                {{ $t("common.available") }}
+                {{ $t("common.collections").toLowerCase() }}
+            </p>
+            <product-slider :products="availableProducts"></product-slider>
+        </div> -->
 </template>
 
 <script lang="ts">
+import { notificationStore, sessionKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { stripeKey } from "@/store/stripe";
-import { notificationStore, sessionKey } from "@/store";
 
-import BaseButton from "@/components/BaseButton.vue";
+import { BaseButton } from "@/components";
 import {
     StoreCard,
     AllCollectionsCard,
@@ -25,7 +80,7 @@ import {
         ProductSlider,
     },
 })
-export default class Store extends Vue {
+export default class StoreHome extends Vue {
     private store = useStore(stripeKey);
     private notifications = notificationStore;
     public loading = false;
@@ -36,21 +91,6 @@ export default class Store extends Vue {
             this.store.dispatch("setup");
         }
     }
-
-    // public checkout(product: Product) {
-    //     this.loading = true;
-    //     this.notifications.dispatch("addNotification", {
-    //         type: "primary",
-    //         icon: "shop",
-    //         title: this.$t("notification.redirecting"),
-    //     });
-    //     const price = product.prices.find((p) => p.type == "year");
-
-    //     if (price) {
-    //         this.store.dispatch("startSession", price.id);
-    //         this.loading = false;
-    //     }
-    // }
 
     public portal() {
         this.loading = true;
@@ -95,7 +135,7 @@ export default class Store extends Vue {
 </script>
 
 <style lang="scss">
-@import "../style/mixins";
+@import "../../style/mixins";
 
 .store {
     // padding: calc(var(--st-spacing) * 2);
