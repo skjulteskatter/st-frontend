@@ -20,10 +20,12 @@ import { NotificationGroup } from "@/components/notification";
     },
 })
 export default class App extends Vue {
-    public onLyrics = false;
+    public session = useStore(sessionKey);
 
     public mounted() {
-        this.onLyrics = this.$route.name == "lyrics";
+        if (window.location.pathname.startsWith("/store/")) {
+            this.session.commit("redirect", window.location.pathname);
+        }
     }
 
     public get initialized() {

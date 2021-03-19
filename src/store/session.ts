@@ -42,6 +42,8 @@ const ts: {
     "B": 1,
 }
 
+let redirectAfterLogin = "/";
+
 async function init(commit: Commit) {
     const user = await api.session.getCurrentUser();
     user.displayName = auth.user?.displayName ?? user.displayName;
@@ -56,7 +58,7 @@ async function init(commit: Commit) {
         console.log(e);
     }
     if (router.currentRoute.value.name == "login") {
-        router.replace({name: 'main'});
+        router.push(redirectAfterLogin);
     }
     commit('initialized', true);
     songStore.commit("smTransposition", smTs[user.settings?.defaultTransposition ?? "C"]);
@@ -83,9 +85,11 @@ export const sessionStore = createStore<Session>({
         error: '',
     },
     actions: {
-        async startSession({commit}) {
+        async startSession({state, commit}) {
             if (auth.isAuthenticated) {
-                await init(commit);
+                if (!state.initialized) {
+                    await init(commit);
+                }
             } else {
                 await auth.sendLinkToEmail();
             }
@@ -180,6 +184,9 @@ export const sessionStore = createStore<Session>({
         },
         error(state, value: string) {
             state.error = value;
+        },
+        redirect(state, value: string) {
+            redirectAfterLogin = value;
         }
     },
     getters: {
