@@ -50,19 +50,9 @@
             </div>
         </div>
         <div v-if="searchQuery == '' && !loading">
-            <div class="song-list__contributors" v-if="listType == 'authors'">
+            <div class="song-list__contributors" v-if="['composers', 'authors'].includes(listType)">
                 <song-list-card
-                    v-for="ci in collection.authors"
-                    :key="ci.item.id"
-                    :songs="filteredSongs.filter(s => ci.songIds.includes(s.id))"
-                    :title="ci.item.name"
-                    :action="() => gotoContributor(ci.item)"
-                ></song-list-card>
-            </div>
-
-            <div class="song-list__contributors" v-if="listType == 'composers'">
-                <song-list-card
-                    v-for="ci in collection.composers"
+                    v-for="ci in collection.getContributors(listType)"
                     :key="ci.item.id"
                     :songs="filteredSongs.filter(s => ci.songIds.includes(s.id))"
                     :title="ci.item.name"

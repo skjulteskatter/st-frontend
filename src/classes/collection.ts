@@ -240,4 +240,14 @@ export class Collection extends BaseClass implements ApiCollection {
     public get countries(): CountryCollectionItem[] {
         return this._countries ? this._countries : [];
     }
+
+    public getContributors(type: string) {
+        if (type == 'authors') {
+            return this.authors;
+        } else if (type == 'composers') {
+            return this.composers;
+        } else {
+            return [];
+        }
+    }
 }
