@@ -42,7 +42,8 @@ export default class ProductSlider extends Vue {
     display: grid;
     grid-template-columns: repeat(8, minmax(130px, 1fr));
     grid-gap: var(--st-spacing);
-    overflow-x: auto;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 
     padding: 0 calc(var(--st-spacing) * 2) calc(var(--st-spacing) * 2)
         calc(var(--st-spacing) * 2);

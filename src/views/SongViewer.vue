@@ -170,7 +170,8 @@ export default class SongViewer extends Vue {
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
-        overflow-y: auto;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
 
         @include breakpoint("medium") {
             padding: var(--st-spacing);
@@ -191,7 +192,7 @@ export default class SongViewer extends Vue {
         border-left: 1px solid var(--st-color-border);
         animation: slideInFromRight 0.5s;
 
-        overflow-y: auto;
+        overflow-y: scroll;
 
         display: flex;
         flex-direction: column;
@@ -214,7 +215,7 @@ export default class SongViewer extends Vue {
             display: flex;
             flex-direction: column;
             gap: var(--st-spacing);
-            overflow-y: auto;
+            overflow-y: scroll;
             flex-grow: 1;
         }
 

@@ -108,7 +108,8 @@ export default class Dashboard extends Vue {
             display: grid;
             grid-template-columns: repeat(7, minmax(100px, 1fr));
             grid-gap: var(--st-spacing);
-            overflow-x: auto;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
         }
     }
 }
