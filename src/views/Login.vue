@@ -85,6 +85,12 @@ export default class Login extends Vue {
     public stayLoggedIn = false;
     private store = useStore(sessionKey);
 
+    public mounted() {
+        if (this.store.state.currentUser) {
+            this.$router.push({name: "main"});
+        }
+    }
+
     public submitForm() {
         this.store.dispatch("loginWithEmailPassword", {
             email: this.form.email,
