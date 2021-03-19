@@ -12,6 +12,7 @@
                     })
             "
         ></store-card>
+        <slot />
     </div>
 </template>
 
@@ -40,7 +41,7 @@ export default class ProductSlider extends Vue {
 
 .product-slider {
     display: grid;
-    grid-template-columns: repeat(8, minmax(130px, 1fr));
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
     grid-gap: var(--st-spacing);
     overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
@@ -49,6 +50,10 @@ export default class ProductSlider extends Vue {
         calc(var(--st-spacing) * 2);
     @include breakpoint("medium") {
         padding: 0 var(--st-spacing) var(--st-spacing) var(--st-spacing);
+    }
+
+    @include breakpoint("small") {
+        grid-template-columns: repeat(8, minmax(130px, 1fr));
     }
 }
 </style>
