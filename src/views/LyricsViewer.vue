@@ -67,6 +67,7 @@ import { sessionKey, songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import themes from "@/classes/themes";
+import { Song } from "@/classes";
 
 @Options({})
 export default class LyricsViewer extends Vue {
@@ -80,13 +81,13 @@ export default class LyricsViewer extends Vue {
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit("setSong", JSON.parse(songItem));
+            this.store.commit("setSong", new Song(JSON.parse(songItem)));
         }
         window.addEventListener("storage", (event) => {
             if (event.key == "song") {
                 const item = localStorage.getItem("song");
                 if (item) {
-                    this.store.commit("setSong", JSON.parse(item));
+                    this.store.commit("setSong", new Song(JSON.parse(item)));
                 }
             }
             if (event.key == "lyrics") {
