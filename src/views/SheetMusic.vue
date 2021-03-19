@@ -5,7 +5,7 @@
             :originalKey="originalKey"
             :initialTransposition="transposition"
             :embed="embed"
-            :zoom="zoom"
+            :initialZoom="zoom"
         ></open-sheet-music-display>
     </div>
 </template>
@@ -29,8 +29,12 @@ export default class SheetMusic extends Vue {
         return this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
     }
 
+    public get transposeKey() {
+        return this.searchParams.get("transposition");
+    }
+
     public get transposition() {
-        return parseInt(this.searchParams.get("transposition") ?? "0");
+        return this.transposeKey ? parseInt(this.transposeKey) : undefined;
     }
 
     public get embed() {

@@ -2,6 +2,7 @@
     <base-card class="sheetmusic" :header="!embed" toggleable>
         <template #header>
             <h4 class="sheetmusic__title">{{ $t("song.leadSheet") }}</h4>
+            <base-button @click="transpose(0)" v-if="!loaded">Load</base-button>
             <div v-if="loaded" class="sheetmusic__controls gap-x">
                 <div class="sheetmusic__controls__transpose">
                     <Icon
@@ -75,7 +76,7 @@ import { Icon } from "@/components/icon";
         embed: {
             type: Boolean
         },
-        zoom: {
+        initialZoom: {
             type: Number
         }
     },
@@ -88,15 +89,20 @@ export default class OSMD extends Vue {
     public initialTransposition?: number;
     public zoom = 1;
     public embed = false;
+    public initialZoom? = undefined;
 
     public o?: OpenSheetMusicDisplay;
 
     public mounted() {
-        if (window.innerWidth < 700) {
-            this.zoom = this.zoom == 1 ? 0.5 : this.zoom;
+        if (this.initialZoom !== undefined) {
+            this.zoom = this.initialZoom ?? 1;
+        } else {
+            if (window.innerWidth < 700) {
+                this.zoom = this.zoom == 1 ? 0.5 : this.zoom;
+            }
         }
 
-        if (this.initialTransposition) {
+        if (this.initialTransposition !== undefined) {
             this.transpose(this.initialTransposition);
         } else {
             this.o?.clear();
@@ -122,7 +128,6 @@ export default class OSMD extends Vue {
         if (this.o) {
             this.setZoom();
             this.o.render();
-            console.log("updated");
         }
     }
 
@@ -132,7 +137,7 @@ export default class OSMD extends Vue {
         const zoomLevel = pageWidth < breakpoint ? 0.4 : 1;
 
         if (this.o) {
-            this.o.zoom = +this.zoom ?? zoomLevel;
+            this.o.zoom = this.zoom ?? zoomLevel;
         }
     }
 
