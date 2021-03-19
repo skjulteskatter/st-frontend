@@ -65,8 +65,6 @@ export default class DashboardLayout extends Vue {
 
     &__wrapper {
         display: flex;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
         height: 100%;
 
         position: relative;
@@ -83,8 +81,11 @@ export default class DashboardLayout extends Vue {
 
         &__container {
             flex-grow: 1;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
+            overflow-y: auto;
+
+            @include breakpoint("small") {
+                overflow-y: scroll;
+            }
         }
     }
 }

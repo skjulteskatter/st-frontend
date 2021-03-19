@@ -170,11 +170,11 @@ export default class SongViewer extends Vue {
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
 
         @include breakpoint("medium") {
             padding: var(--st-spacing);
+            overflow-y: scroll;
         }
 
         & > *:not(:last-child) {
@@ -192,7 +192,7 @@ export default class SongViewer extends Vue {
         border-left: 1px solid var(--st-color-border);
         animation: slideInFromRight 0.5s;
 
-        overflow-y: scroll;
+        overflow-y: auto;
 
         display: flex;
         flex-direction: column;
@@ -205,6 +205,7 @@ export default class SongViewer extends Vue {
             bottom: 0;
             min-width: 0;
             width: 100%;
+            overflow-y: scroll;
 
             .song-viewer__sidebar__buttons--advanced {
                 display: none;
@@ -215,8 +216,12 @@ export default class SongViewer extends Vue {
             display: flex;
             flex-direction: column;
             gap: var(--st-spacing);
-            overflow-y: scroll;
+            overflow-y: auto;
             flex-grow: 1;
+
+            @include breakpoint("small") {
+                overflow-y: scroll;
+            }
         }
 
         &__buttons {
