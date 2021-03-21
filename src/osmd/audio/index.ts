@@ -1,33 +1,36 @@
 import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager } from "@/assets/js/osmd";
 
-var demoPlaybackControl = function(osmd: OpenSheetMusicDisplay) {
+export const PlaybackControl = function(osmd: OpenSheetMusicDisplay) {
 
-    var playbackListener = {
+    const playbackListener = {
         play() {
-            followCursorCheckbox.checked = true;
-            openSheetMusicDisplay.FollowCursor = true;
+            console.log("PLAY");
         },
-        pause() {},
-        reset() {},
-        bpmChanged() {},
-        volumeChanged() {},
-        volumeMute() {},
-        volumeUnmute() {}
+        pause() {
+            console.log("PLAY");},
+        reset() {
+            console.log("PLAY");},
+        bpmChanged() {
+            console.log("PLAY");},
+        volumeChanged() {
+            console.log("PLAY");},
+        volumeMute() {
+            console.log("PLAY");},
+        volumeUnmute() {
+            console.log("PLAY");}
     }
 
-    var timingSource = new LinearTimingSource();
-    var playbackManager = new PlaybackManager(timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
+    const timingSource = new LinearTimingSource();
+    const playbackManager = new PlaybackManager(timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
     playbackManager.DoPlayback = true;
     playbackManager.DoPreCount = false;
-    var playbackControlPanel = new ControlPanel();
+    const playbackControlPanel = new ControlPanel();
     playbackControlPanel.addListener(playbackManager);
     playbackControlPanel.addListener(playbackListener);
 
     function initialize() {
         timingSource.reset();
         timingSource.pause();
-        timingSource.Settings = osmd.sheet.playbackSettings;
-        playbackManager.initialize(osmd.sheet.musicPartManager);
         playbackManager.addListener(osmd.cursor);
         playbackManager.reset();
         osmd.PlaybackManager = playbackManager;
@@ -35,9 +38,11 @@ var demoPlaybackControl = function(osmd: OpenSheetMusicDisplay) {
         playbackControlPanel.addVolumeTrack(playbackManager.Metronome.Name, playbackManager.Metronome.Id, playbackManager.Metronome.Volume*100);
         for(const instrId of playbackManager.InstrumentIdMapping.keys()) {
             const instr = playbackManager.InstrumentIdMapping.getValue(instrId);
-            playbackControlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
+            if (instr) {
+                playbackControlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
+            }
         }
-        playbackControlPanel.bpmChanged(osmd.sheet.DefaultStartTempoInBpm);
+        playbackControlPanel.bpmChanged(osmd.Sheet.DefaultStartTempoInBpm);
     }
 
     function showControls() {

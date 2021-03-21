@@ -52,6 +52,7 @@
 import { Options, Vue } from "vue-class-component";
 import { OpenSheetMusicDisplay } from "@/assets/js/osmd";
 import { TransposeCalculator } from "../osmd/transpose";
+import { PlaybackControl } from "../osmd/audio";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 import { BaseButton, BaseCard } from "@/components";
@@ -180,6 +181,11 @@ export default class OSMD extends Vue {
         this.o.updateGraphic();
 
         this.o.render();
+        
+
+        const pbc = PlaybackControl(this.o);
+
+        pbc.initialize();
 
         this.loaded = true;
     }
