@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { ITransposeCalculator, Pitch, NoteEnum, AccidentalEnum, KeyInstruction } from "opensheetmusicdisplay";
+import { ITransposeCalculator, Pitch, NoteEnum, AccidentalEnum, KeyInstruction } from "@/assets/js/osmd";
 
 export class TransposeCalculator implements ITransposeCalculator {
     private static keyMapping: number[] = [0, -5, 2, -3, 4, -1, 6, 1, -4, 3, -2, 5];

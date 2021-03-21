@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
+import { OpenSheetMusicDisplay } from "@/assets/js/osmd";
 import { TransposeCalculator } from "../osmd/transpose";
 import { useStore } from "vuex";
 import { songKey } from "@/store";

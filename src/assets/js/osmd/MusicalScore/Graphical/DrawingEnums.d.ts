@@ -1,0 +1,79 @@
+import { Dictionary } from "typescript-collections";
+/**
+ * The supported styles to draw a rectangle on the music sheet
+ */
+export declare enum OutlineAndFillStyleEnum {
+    BaseWritingColor = 0,
+    FollowingCursor = 1,
+    AlternativeFollowingCursor = 2,
+    PlaybackCursor = 3,
+    Highlighted = 4,
+    ErrorUnderlay = 5,
+    Selected = 6,
+    SelectionSymbol = 7,
+    DebugColor1 = 8,
+    DebugColor2 = 9,
+    DebugColor3 = 10,
+    SplitScreenDivision = 11,
+    GreyTransparentOverlay = 12,
+    MarkedArea1 = 13,
+    MarkedArea2 = 14,
+    MarkedArea3 = 15,
+    MarkedArea4 = 16,
+    MarkedArea5 = 17,
+    MarkedArea6 = 18,
+    MarkedArea7 = 19,
+    MarkedArea8 = 20,
+    MarkedArea9 = 21,
+    MarkedArea10 = 22,
+    Comment1 = 23,
+    Comment2 = 24,
+    Comment3 = 25,
+    Comment4 = 26,
+    Comment5 = 27,
+    Comment6 = 28,
+    Comment7 = 29,
+    Comment8 = 30,
+    Comment9 = 31,
+    Comment10 = 32
+}
+export declare const OUTLINE_AND_FILL_STYLE_DICT: Dictionary<OutlineAndFillStyleEnum, string>;
+export declare enum StyleSets {
+    MarkedArea = 0,
+    Comment = 1
+}
+/**
+ * The layers which one can draw on (not supported)
+ */
+export declare enum GraphicalLayers {
+    Background = 0,
+    Highlight = 1,
+    MeasureError = 2,
+    SelectionSymbol = 3,
+    Cursor = 4,
+    PSI_Debug = 5,
+    Notes = 6,
+    Comment = 7,
+    Debug_above = 8
+}
+export declare enum NoteState {
+    Normal = 0,
+    Selected = 1,
+    Follow_Confirmed = 2,
+    QFeedback_NotFound = 3,
+    QFeedback_OK = 4,
+    QFeedback_Perfect = 5,
+    Debug1 = 6,
+    Debug2 = 7,
+    Debug3 = 8
+}
+export declare enum AutoColorSet {
+    C = "#d82c6b",
+    D = "#F89D15",
+    E = "#FFE21A",
+    F = "#4dbd5c",
+    G = "#009D96",
+    A = "#43469d",
+    B = "#76429c",
+    Rest = "#000000"
+}
