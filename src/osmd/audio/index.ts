@@ -1,30 +1,31 @@
 import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager } from "@/assets/js/osmd";
 
-export const PlaybackControl = function(osmd: OpenSheetMusicDisplay) {
+export const PlaybackControl = function(osmd: OpenSheetMusicDisplay, pbcp: HTMLElement) {
 
     const playbackListener = {
         play() {
-            console.log("PLAY");
+            console.log("play")
+            osmd.FollowCursor = true;
         },
         pause() {
-            console.log("PLAY");},
+            console.log("pause");},
         reset() {
-            console.log("PLAY");},
+            console.log("reset");},
         bpmChanged() {
-            console.log("PLAY");},
+            console.log("changebpm");},
         volumeChanged() {
-            console.log("PLAY");},
+            console.log("volume");},
         volumeMute() {
-            console.log("PLAY");},
+            console.log("mute");},
         volumeUnmute() {
-            console.log("PLAY");}
+            console.log("unmute");}
     }
 
     const timingSource = new LinearTimingSource();
     const playbackManager = new PlaybackManager(timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
     playbackManager.DoPlayback = true;
     playbackManager.DoPreCount = false;
-    const playbackControlPanel = new ControlPanel();
+    const playbackControlPanel = new ControlPanel(pbcp);
     playbackControlPanel.addListener(playbackManager);
     playbackControlPanel.addListener(playbackListener);
 

@@ -3,6 +3,7 @@
         <template #header>
             <h4 class="sheetmusic__title">{{ $t("song.leadSheet") }}</h4>
             <base-button @click="transpose(0)" v-if="!loaded">Load</base-button>
+            <button id="pb-control">Controls</button>
             <div v-if="loaded" class="sheetmusic__controls gap-x">
                 <div class="sheetmusic__controls__transpose">
                     <Icon
@@ -45,6 +46,7 @@
             </div>
         </template>
         <div id="osmd"></div>
+        <div id="pb-control-panel" style="width:200px"></div>
     </base-card>
 </template>
 
@@ -149,13 +151,52 @@ export default class OSMD extends Vue {
     public async getMusicXml() {
         if (!this.url) return "";
 
+        console.log(this.url);
+
         const result = await (await fetch(this.url)).text();
         const xml = result.replace(/<stem>\w*<\/stem>/gm, "");
         return xml;
     }
 
     public async load() {
-        if (!this.o) this.o = new OpenSheetMusicDisplay("osmd");
+        if (!this.o) this.o = new OpenSheetMusicDisplay("osmd", {
+            autoResize: true,
+            backend: "canvas",
+            //backend: "canvas",
+            disableCursor: false,
+            drawingParameters: "default", // try compact (instead of default)
+            drawPartNames: true, // try false
+            // drawTitle: false,
+            // drawSubtitle: false,
+            drawFingerings: true,
+            fingeringPosition: "left", // left is default. try right. experimental: auto, above, below.
+            // fingeringInsideStafflines: "true", // default: false. true draws fingerings directly above/below notes
+            setWantedStemDirectionByXml: true, // try false, which was previously the default behavior
+            // drawUpToMeasureNumber: 3, // draws only up to measure 3, meaning it draws measure 1 to 3 of the piece.
+
+            //drawMeasureNumbers: false, // disable drawing measure numbers
+            //measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
+            useXMLMeasureNumbers: true, // read measure numbers from xml
+
+            // coloring options
+            coloringEnabled: true,
+            // defaultColorNotehead: "#CC0055", // try setting a default color. default is black (undefined)
+            // defaultColorStem: "#BB0099",
+
+            autoBeam: false, // try true, OSMD Function Test AutoBeam sample
+            autoBeamOptions: {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                beam_rests: false,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                beam_middle_rests_only: false,
+                //groups: [[3,4], [1,1]],
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                maintain_stem_directions: false
+            },
+            // pageBackgroundColor: pageBackgroundColor,
+            // renderSingleHorizontalStaffline: singleHorizontalStaffline
+            pageBackgroundColor: "#ffffff"
+        });
 
         await this.o.load(await this.getMusicXml());
 
@@ -164,17 +205,17 @@ export default class OSMD extends Vue {
         this.o.Sheet.Transpose = this.transposition;
 
         // Set options (colors, fonts)
-        this.o.setOptions({
-            backend: "canvas",
-            // defaultColorTitle: "var(--st-color-text)",
-            // defaultColorStem: "var(--st-color-text)",
-            // defaultColorRest: "var(--st-color-text)",
-            // defaultColorLabel: "var(--st-color-text)",
-            // defaultColorNotehead: "var(--st-color-text)",
-            pageFormat: "A4_P",
-            defaultFontFamily: "Inter",
-            pageBackgroundColor: "#ffffff",
-        });
+        // this.o.setOptions({
+        //     backend: "canvas",
+        //     // defaultColorTitle: "var(--st-color-text)",
+        //     // defaultColorStem: "var(--st-color-text)",
+        //     // defaultColorRest: "var(--st-color-text)",
+        //     // defaultColorLabel: "var(--st-color-text)",
+        //     // defaultColorNotehead: "var(--st-color-text)",
+        //     pageFormat: "A4_P",
+        //     defaultFontFamily: "Inter",
+        //     pageBackgroundColor: "#ffffff",
+        // });
 
         this.setZoom();
 
@@ -182,10 +223,20 @@ export default class OSMD extends Vue {
 
         this.o.render();
         
+        const pbcButton = document.getElementById("pb-control");
+        const pbcp = document.getElementById("pb-control-panel");
+        if (!pbcButton || !pbcp) throw new Error("Couldnt get element");
 
-        const pbc = PlaybackControl(this.o);
+        const playbackControl = PlaybackControl(this.o, pbcp);
+        pbcButton.addEventListener("click", function(){
+            if(!playbackControl.IsClosed()){
+                playbackControl.hideControls();
+            } else {
+                playbackControl.showControls();
+            }
+        });
 
-        pbc.initialize();
+        playbackControl.initialize();
 
         this.loaded = true;
     }
