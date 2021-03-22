@@ -154,7 +154,18 @@ export default class OSMD extends Vue {
     }
 
     public async load() {
-        if (!this.o) this.o = new OpenSheetMusicDisplay("osmd");
+        if (!this.o) this.o = new OpenSheetMusicDisplay("osmd", {
+            backend: "canvas",
+            // defaultColorTitle: "var(--st-color-text)",
+            // defaultColorStem: "var(--st-color-text)",
+            // defaultColorRest: "var(--st-color-text)",
+            // defaultColorLabel: "var(--st-color-text)",
+            // defaultColorNotehead: "var(--st-color-text)",
+            drawTitle: false,
+            drawSubtitle: false,
+            defaultFontFamily: "Inter",
+            pageBackgroundColor: "#ffffff",
+        });
 
         await this.o.load(await this.getMusicXml());
 
@@ -163,17 +174,6 @@ export default class OSMD extends Vue {
         this.o.Sheet.Transpose = this.transposition;
 
         // Set options (colors, fonts)
-        this.o.setOptions({
-            backend: "canvas",
-            // defaultColorTitle: "var(--st-color-text)",
-            // defaultColorStem: "var(--st-color-text)",
-            // defaultColorRest: "var(--st-color-text)",
-            // defaultColorLabel: "var(--st-color-text)",
-            // defaultColorNotehead: "var(--st-color-text)",
-            pageFormat: "A4_P",
-            defaultFontFamily: "Inter",
-            pageBackgroundColor: "#ffffff",
-        });
 
         this.setZoom();
 
