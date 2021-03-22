@@ -22,7 +22,7 @@
             </lyrics-card>
             <open-sheet-music-display
                 :url="sheetMusicUrl"
-                :originalKey="song.originalKey"
+                :initialTransposition="transposition"
                 v-if="sheetMusicUrl && showSheetMusic"
             >
             </open-sheet-music-display>
@@ -59,7 +59,7 @@ import {
     LyricsSettings,
     LyricsCard,
     BaseButton,
-    OpenSheetMusicDisplay,
+    OSMD as OpenSheetMusicDisplay,
     BaseCard,
     BackButton,
 } from "@/components";
@@ -100,6 +100,10 @@ export default class SongViewer extends Vue {
         }
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
+    }
+
+    public get transposition() {
+        return this.songStore.state.smTransposition;
     }
 
     public get extended() {

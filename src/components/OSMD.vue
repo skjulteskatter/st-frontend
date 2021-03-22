@@ -76,10 +76,10 @@ export default class OSMD extends Vue {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private playbackControl: any;
     private initialZoom?: number;
-    public zoom = 0;
+    public zoom = 1;
 
     mounted() {
-        this.transposition = this.initialTransposition != undefined ? this.initialTransposition : -3;
+        this.transposition = this.initialTransposition != undefined ? this.initialTransposition : 0;
         this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 700 ? 0.5 : this.zoom;
 
         const canvas = document.getElementById("osmd-canvas");
@@ -114,6 +114,7 @@ export default class OSMD extends Vue {
                 //coloringEnabled: true,
                 // defaultColorNotehead: "#CC0055", // try setting a default color. default is black (undefined)
                 // defaultColorStem: "#BB0099",
+                defaultFontFamily: "Inter",
 
                 autoBeam: true, // try true, OSMD Function Test AutoBeam sample
                 autoBeamOptions: {
@@ -139,6 +140,8 @@ export default class OSMD extends Vue {
 
     public async getMusicXml() {
         if (!this.url) return "";
+
+        console.log(this.url);
 
         const result = await (await fetch(this.url)).text();
         return result;
