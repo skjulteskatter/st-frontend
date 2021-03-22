@@ -17,10 +17,10 @@ export const session = {
         return http.patch('api/Session', settings)
     },
     createUser(displayName: string) {
-        return http.put('api/Session', {displayName});
+        return http.put('api/Session', { displayName });
     },
     uploadImage(fileName: string, base64Image: string) {
-        return http.patch<{image: string}>('api/Session/Image', {fileName, base64Image});
+        return http.patch<{ image: string }>('api/Session/Image', { fileName, base64Image });
     }
 }
 
@@ -50,7 +50,7 @@ export const admin = {
         return http.get<string>(`api/Admin/ClearCache/Landax`);
     },
     sync() {
-        return http.get<{result: string}>(`api/Admin/Sync`);
+        return http.get<{ result: string }>(`api/Admin/Sync`);
     }
 }
 
@@ -92,7 +92,7 @@ export const songs = {
      * @returns 
      */
     async searchCollections(search: string, language: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,authors,composers`)).map(s => new Song(s));
+        return (await http.get<ApiSong[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,participants/contributor`)).map(s => new Song(s));
     }
 }
 
@@ -101,7 +101,7 @@ export const stripe = {
         return http.get<SetupResponse>('api/Store/Setup')
     },
     startSession(productId: string) {
-        return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, { 
+        return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, {
             productId,
             cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
