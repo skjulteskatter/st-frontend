@@ -6,6 +6,10 @@
                 <b class="song-list__item-card__title">{{
                     song.getName(languageKey)
                 }}</b>
+                <small class="song-list__item-card__info">
+                    <span class="tag">{{ song.verses }} verses</span>
+                    <span>{{ song.originalKey }}</span>
+                </small>
                 <div class="song-list__item-card__contributors">
                     <div class="song-list__item-card__contributor">
                         <small>{{ $t("song.author") }}: </small>
@@ -75,6 +79,11 @@ export default class SongListItemCard extends Vue {
 
     &__contributors {
         opacity: 0.5;
+    }
+
+    &__info {
+        display: block;
+        margin: 0.5rem 0;
     }
 
     .context {
