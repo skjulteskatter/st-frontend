@@ -2,36 +2,46 @@
     <div class="osmd-wrapper">
         <div class="osmd-controls">
             <div class="osmd-controls__transpose">
-                <small>Transpose</small>
-                    <Icon
-                        name="arrowLeft"
-                        class="sheetmusic__controls__button"
-                        @click="
-                            transposition > -12
-                                ? transpose(transposition - 1)
-                                : undefined
-                        "
+                <Icon
+                    name="arrowLeft"
+                    class="osmd-controls__button"
+                    @click="
+                        transposition > -12
+                            ? transpose(transposition - 1)
+                            : undefined
+                    "
+                />
+                <span class="osmd-controls__key">
+                    Key ({{
+                        transposition > 0
+                            ? "+" + transposition
+                            : transposition
+                    }})
+                </span>
+                <Icon
+                    name="arrowRight"
+                    class="osmd-controls__button"
+                    @click="
+                        transposition < 12
+                            ? transpose(transposition + 1)
+                            : undefined
+                    "
+                />
+                <div class="osmd-controls__zoom">
+                    <small>{{ Math.floor(zoom * 100) }}%</small>
+                    <input
+                        type="range"
+                        v-model="zoom"
+                        @change="rerender"
+                        min="0.4"
+                        max="1.4"
+                        step="0.1"
                     />
-                    <span class="sheetmusic__key">
-                        Key ({{
-                            transposition > 0
-                                ? "+" + transposition
-                                : transposition
-                        }})
-                    </span>
-                    <Icon
-                        name="arrowRight"
-                        class="sheetmusic__controls__button"
-                        @click="
-                            transposition < 12
-                                ? transpose(transposition + 1)
-                                : undefined
-                        "
-                    />
+                </div>
             </div>
         </div>
         <div id="osmd-canvas"></div>
-        <div id="pb-controls"></div>
+        <div id="pb-controls" style="left: 100px; max-width: 500px;"></div>
     </div>
 </template>
 <script lang="ts">
@@ -50,6 +60,9 @@ import { Icon } from "@/components/icon";
         },
         initialTransposition: {
             type: Number
+        },
+        initialZoom: {
+            type: Number
         }
     }
 })
@@ -57,16 +70,24 @@ export default class OSMD extends Vue {
     private url?: string;
     private osmd: OpenSheetMusicDisplay = undefined as unknown as OpenSheetMusicDisplay;
     private canvas: HTMLElement = undefined as unknown as HTMLElement;
+    private pbcanvas: HTMLElement = undefined as unknown as HTMLElement;
     private initialTransposition?: number;
-    private transposition = 0;
+    public transposition = 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private playbackControl: any;
+    private initialZoom?: number;
+    public zoom = 0;
 
     mounted() {
         this.transposition = this.initialTransposition != undefined ? this.initialTransposition : -3;
+        this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 700 ? 0.5 : this.zoom;
 
         const canvas = document.getElementById("osmd-canvas");
+        const pbcanvas = document.getElementById("pb-controls");
 
-        if (canvas) {
+        if (canvas && pbcanvas) {
             this.canvas = canvas;
+            this.pbcanvas = pbcanvas;
             
             this.osmd = new OpenSheetMusicDisplay(this.canvas, {
                 autoResize: true,
@@ -104,11 +125,10 @@ export default class OSMD extends Vue {
                     // eslint-disable-next-line @typescript-eslint/camelcase
                     maintain_stem_directions: false
                 },
-                pageFormat: "A4_P",
                 pageBackgroundColor: "#FFFFFF",
             });
 
-            const playbackControl = this.demoPlaybackControl(this.osmd);
+            this.playbackControl = this.demoPlaybackControl(this.osmd);
 
             this.init();
 
@@ -138,12 +158,17 @@ export default class OSMD extends Vue {
 
         this.osmd.updateGraphic();
 
+        this.osmd.zoom = this.zoom;
+
         this.osmd.render();
+
+        this.playbackControl.initialize();
     }
 
     public rerender() {
         this.disable();
         if (this.osmd?.IsReadyToRender()) {
+            this.osmd.zoom = this.zoom;
             this.osmd.render();
         }
         this.enable();
@@ -170,7 +195,6 @@ export default class OSMD extends Vue {
     public demoPlaybackControl(osmd: OpenSheetMusicDisplay) {
         const openSheetMusicDisplay = this.osmd;
 
-
         const playbackListener = {
             play() {
                 openSheetMusicDisplay.FollowCursor = true;
@@ -194,7 +218,8 @@ export default class OSMD extends Vue {
         const playbackManager = new PlaybackManager(timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
         playbackManager.DoPlayback = true;
         playbackManager.DoPreCount = false;
-        const playbackControlPanel = new ControlPanel();
+
+        const playbackControlPanel = new ControlPanel(this.pbcanvas);
         playbackControlPanel.addListener(playbackManager);
         playbackControlPanel.addListener(playbackListener);
 
@@ -237,3 +262,41 @@ export default class OSMD extends Vue {
     }
 }
 </script>
+<style lang="scss">
+.osmd-controls {
+    &__title {
+        margin: 0 0 0.5em 0;
+    }
+    display: flex;
+    align-items: center;
+
+    &__transpose {
+        padding: 0.5em;
+        border: 1px solid var(--st-color-primary);
+        border-radius: var(--st-border-radius);
+        display: flex;
+        align-items: center;
+    }
+
+    &__zoom {
+        display: flex;
+        flex-direction: column;
+
+        width: 150px;
+
+        // input[type=range] {
+
+        // }
+    }
+
+    &__button {
+        color: var(--st-color-primary);
+        cursor: pointer;
+    }
+
+    &__key {
+        padding: 0 var(--st-spacing);
+    }
+}
+</style>
+
