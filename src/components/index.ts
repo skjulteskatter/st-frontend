@@ -10,6 +10,8 @@ import CollectionCard from './CollectionCard.vue';
 import BackButton from './BackButton.vue';
 
 import OpenSheetMusicDisplay from './OpenSheetMusicDisplay.vue';
+import OSMD from './OSMD.vue';
+
 import UsersList from './UsersList.vue';
 
 export {
@@ -21,6 +23,7 @@ export {
     SettingsCard,
     CollectionCard,
     OpenSheetMusicDisplay,
+    OSMD,
     LyricsCard,
     BackButton,
     UsersList
