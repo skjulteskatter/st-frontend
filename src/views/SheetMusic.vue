@@ -11,7 +11,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { OSMD as OpenSheetMusicDisplay } from "@/components"; 
+import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
 
 @Options({
     components: {

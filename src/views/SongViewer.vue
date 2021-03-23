@@ -20,7 +20,7 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <iframe v-if="sheetMusicUrl" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`" style="width:100%; height:100%">
+            <iframe v-if="sheetMusicUrl" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`" style="width:100%; height:80%">
             </iframe>
             <!-- <open-sheet-music-display
                 :url="sheetMusicUrl"
@@ -61,7 +61,6 @@ import {
     LyricsSettings,
     LyricsCard,
     BaseButton,
-    OSMD as OpenSheetMusicDisplay,
     BaseCard,
     BackButton,
 } from "@/components";
@@ -76,7 +75,6 @@ import { Collection, Lyrics } from "@/classes";
         BaseButton,
         SongInfoCard,
         SongFilesCard,
-        OpenSheetMusicDisplay,
         BaseCard,
         BackButton,
     },
@@ -100,7 +98,7 @@ export default class SongViewer extends Vue {
                 this.$route.params.collection
             );
         }
-        
+
         while(this.collection?.loading) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
