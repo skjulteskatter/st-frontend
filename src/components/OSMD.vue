@@ -104,24 +104,21 @@ export default class OSMD extends Vue {
             
             this.osmd = new OpenSheetMusicDisplay(this.canvas, {
                 autoResize: true,
-                backend: "canvas",
-                disableCursor: false,
+                backend: "svg",
                 drawingParameters: "default", // try compact (instead of default)
-                drawPartNames: true, // try false
+                drawPartNames: false, // try false
                 drawTitle: false,
                 drawSubtitle: false,
-                drawFingerings: true,
-                fingeringPosition: "left", // left is default. try right. experimental: auto, above, below.
+                disableCursor: false,
                 // fingeringInsideStafflines: "true", // default: false. true draws fingerings directly above/below notes
                 setWantedStemDirectionByXml: false, // try false, which was previously the default behavior
                 // drawUpToMeasureNumber: 3, // draws only up to measure 3, meaning it draws measure 1 to 3 of the piece.
                 drawUpToMeasureNumber: Number.MAX_SAFE_INTEGER,
                 drawFromMeasureNumber: 0,
 
-
                 //drawMeasureNumbers: false, // disable drawing measure numbers
-                measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
-                //useXMLMeasureNumbers: true, // read measure numbers from xml
+                //measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
+                useXMLMeasureNumbers: true, // read measure numbers from xml
 
                 // coloring options
                 //coloringEnabled: true,
@@ -129,16 +126,16 @@ export default class OSMD extends Vue {
                 // defaultColorStem: "#BB0099",
                 defaultFontFamily: "Inter",
 
-                autoBeam: false, // try true, OSMD Function Test AutoBeam sample
-                autoBeamOptions: {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    beam_rests: false,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    beam_middle_rests_only: false,
-                    //groups: [[3,4], [1,1]],
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    maintain_stem_directions: false
-                },
+                // autoBeam: false, // try true, OSMD Function Test AutoBeam sample
+                // autoBeamOptions: {
+                //     // eslint-disable-next-line @typescript-eslint/camelcase
+                //     beam_rests: false,
+                //     // eslint-disable-next-line @typescript-eslint/camelcase
+                //     beam_middle_rests_only: false,
+                //     //groups: [[3,4], [1,1]],
+                //     // eslint-disable-next-line @typescript-eslint/camelcase
+                //     maintain_stem_directions: false
+                // },
                 pageBackgroundColor: "#FFFFFF",
             });
 
@@ -165,16 +162,24 @@ export default class OSMD extends Vue {
         this.osmd.setLogLevel("warn");
 
         await this.osmd.load(await this.getMusicXml());
-        
-        this.osmd.TransposeCalculator = new TransposeCalculator();
 
-        this.osmd.Sheet.Transpose = this.transposition;
+        // this.osmd.TransposeCalculator = new TransposeCalculator();
+
+        // this.osmd.Sheet.Transpose = this.transposition;
 
         this.osmd.updateGraphic();
 
-        this.osmd.zoom = this.zoom;
+        // this.osmd.zoom = this.zoom;
 
         this.osmd.render();
+
+        this.osmd.enableOrDisableCursor(true);
+
+        this.osmd.cursor.cursorElement.style.zIndex = "100";
+
+        console.log(this.osmd.cursor);
+        
+        // this.osmd.cursor.reset();
 
         this.playbackControl.initialize();
     }
@@ -217,15 +222,15 @@ export default class OSMD extends Vue {
                 console.log("pause");
             },
             reset() {
-                console.log("pause");},
+                console.log("reset");},
             bpmChanged() {
-                console.log("pause");},
+                console.log("bpm");},
             volumeChanged() {
-                console.log("pause");},
+                console.log("volume");},
             volumeMute() {
-                console.log("pause");},
+                console.log("volume");},
             volumeUnmute() {
-                console.log("pause");}
+                console.log("volume");}
         }
 
         const timingSource = new LinearTimingSource();
@@ -293,6 +298,7 @@ export default class OSMD extends Vue {
 }
 </script>
 <style lang="scss">
+
 .osmd-controls {
     &__title {
         margin: 0 0 0.5em 0;
@@ -552,7 +558,6 @@ transform: translateX(-50%) scale(1);
 }
 
 .playback-buttons{
-    position: fixed;
     bottom: 5px;
     left: calc(50% - 56px);
 }
