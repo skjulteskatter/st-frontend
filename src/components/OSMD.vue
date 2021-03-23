@@ -163,21 +163,19 @@ export default class OSMD extends Vue {
 
         await this.osmd.load(await this.getMusicXml());
 
-        // this.osmd.TransposeCalculator = new TransposeCalculator();
+        this.osmd.TransposeCalculator = new TransposeCalculator();
 
-        // this.osmd.Sheet.Transpose = this.transposition;
+        this.osmd.Sheet.Transpose = this.transposition;
 
         this.osmd.updateGraphic();
 
-        // this.osmd.zoom = this.zoom;
+        this.osmd.zoom = this.zoom;
 
         this.osmd.render();
 
         this.osmd.enableOrDisableCursor(true);
 
         this.osmd.cursor.cursorElement.style.zIndex = "100";
-
-        console.log(this.osmd.cursor);
         
         // this.osmd.cursor.reset();
 
@@ -189,6 +187,8 @@ export default class OSMD extends Vue {
         if (this.osmd?.IsReadyToRender()) {
             this.osmd.zoom = this.zoom;
             this.osmd.render();
+            this.osmd.enableOrDisableCursor(true);
+            this.osmd.cursor.cursorElement.style.zIndex = "100";
         }
         this.enable();
     }
@@ -199,6 +199,10 @@ export default class OSMD extends Vue {
         this.osmd.Sheet.Transpose = this.transposition;
 
         this.osmd.updateGraphic();
+
+        this.osmd.enableOrDisableCursor(true);
+
+        this.osmd.cursor.cursorElement.style.zIndex = "100";
         
         this.rerender();
     }
