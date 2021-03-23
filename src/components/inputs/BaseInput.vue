@@ -7,6 +7,7 @@
             v-bind="$attrs"
             :type="type"
             :value="modelValue"
+            :disabled="disabled"
             @input="(event) => $emit('update:modelValue', event.target.value)"
         />
         <textarea
@@ -32,6 +33,9 @@ import { Options, Vue } from "vue-class-component";
         type: {
             type: String,
         },
+        disabled: {
+            type: Boolean
+        }
     },
     emits: ["update:modelValue"],
 })
@@ -39,6 +43,7 @@ export default class BaseInput extends Vue {
     public label = "";
     public modelValue = "";
     public type = "text";
+    public disabled = false;
 }
 </script>
 

@@ -9,39 +9,46 @@
                     class="logo"
                 />
                 <h2 class="login__title">Sign in</h2>
+                <h3 v-if="noAccount">No account found with that email</h3>
                 <form @submit.prevent="submitForm" class="login__form gap-y">
                     <base-input
                         label="Email"
                         type="email"
                         v-model="form.email"
                         required
+                        :disabled="providers.length > 0"
                     />
                     <base-input
+                        class="transition-from-bottom"
                         label="Password"
                         type="password"
+                        v-if="providers.includes('password')"
                         v-model="form.password"
                         required
                     />
-                    <div class="login__form__stay">
+                    <div class="login__form__stay transition-from-bottom"
+                        v-if="providers.includes('password')"
+                        >
                         <label>
                             <input type="checkbox" v-model="stayLoggedIn" />
                             <span>Remember me</span>
                         </label>
                     </div>
-                    <base-button type="submit" class="login__form__submit">
+                    <base-button v-if="providers.filter(p => p != 'password').length < 1" type="submit" class="login__form__submit">
                         Sign in
                     </base-button>
                 </form>
-                <div class="social">
-                    <span class="social__label">Or with</span>
+                <div class="social transition-from-bottom" v-if="providers.filter(p => p != 'password').length > 0">
+                    <span class="social__label">Sign in with</span>
                     <div class="social__buttons">
                         <button
+                            v-if="providers.includes('google.com')"
                             class="social__button clickable"
                             @click="login('google')"
                         >
                             <img alt="GOOGLE ICON" src="/img/google.png" />
                         </button>
-                        <button
+                        <!-- <button
                             class="social__button"
                             @click="login('microsoft')"
                             disabled
@@ -54,7 +61,7 @@
                             disabled
                         >
                             <img alt="TWITTER ICON" src="/img/twitter.svg" />
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <router-link :to="{name:'create-user'}">Create account</router-link>
@@ -69,6 +76,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BaseCard, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
+import auth from "@/services/auth";
 
 @Options({
     components: {
@@ -82,8 +90,10 @@ export default class Login extends Vue {
         email: "",
         password: "",
     };
+    public noAccount = false;
     public stayLoggedIn = false;
     private store = useStore(sessionKey);
+    public providers: string[] = [];
 
     public mounted() {
         if (this.store.state.currentUser) {
@@ -91,12 +101,20 @@ export default class Login extends Vue {
         }
     }
 
-    public submitForm() {
-        this.store.dispatch("loginWithEmailPassword", {
-            email: this.form.email,
-            password: this.form.password,
-            stayLoggedIn: this.stayLoggedIn,
-        });
+    public async submitForm() {
+        if (this.form.email && !this.form.password) {
+            this.noAccount = false;
+            this.providers = await auth.getProviders(this.form.email);
+            if (!this.providers?.length) {
+                this.noAccount = true;
+            }
+        } else {
+            this.store.dispatch("loginWithEmailPassword", {
+                email: this.form.email,
+                password: this.form.password,
+                stayLoggedIn: this.stayLoggedIn,
+            });
+        }
     }
 
     public createUser() {
@@ -119,6 +137,21 @@ export default class Login extends Vue {
 
 <style lang="scss">
 @import "../style/mixins";
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transition-from-bottom {
+    animation: 0.5s ease-out 0s 1 slideInFromBottom;
+}
 
 .wrapper {
     width: 100vw;

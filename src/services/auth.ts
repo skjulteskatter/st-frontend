@@ -69,6 +69,10 @@ class Auth {
 
     public verificationEmailSent = false;
 
+    public async getProviders(email: string) {
+        return await a().fetchSignInMethodsForEmail(email);
+    }
+
     public async setDisplayName(name: string) {
         if (!a) {
             notInitialized();
@@ -153,6 +157,24 @@ class Auth {
             return 'VERIFICATION_EMAIL_SENT';
         }
         return 'FAILED_SIGNIN';
+    }
+
+    public async resetPassword(oldPassword: string, password: string) {
+        const user = a().currentUser;
+
+        if (user) {
+            try {
+                await user.updatePassword(password);
+            }
+            catch (e) {
+                console.log(e);
+                if (!user.email) throw new Error("No email found on account ???");
+
+                await a().signInWithEmailAndPassword(user.email, oldPassword);
+
+                await user.updatePassword(password);
+            }
+        }
     }
 
     public async sendLinkToEmail() {

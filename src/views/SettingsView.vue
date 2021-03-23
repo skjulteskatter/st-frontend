@@ -7,6 +7,14 @@
             </base-button>
         </div>
         <settings-card></settings-card>
+        <base-button @click="updatePassword = !updatePassword">Set new password</base-button>
+        <div v-if="updatePassword">
+            <form @submit="resetPassword">
+                <base-input type="password" v-model="oldPassword" label="Old password"/>
+                <base-input type="password" v-model="newPassword" label="New password"/>
+                <base-input type="password" v-model="repeatPassword" label="Repeat password"/>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -15,20 +23,35 @@ import { Options, Vue } from "vue-class-component";
 import { SettingsCard, BaseButton } from "@/components";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
+import { BaseInput } from "@/components/inputs";
+import auth from "@/services/auth";
 
 @Options({
     components: {
         SettingsCard,
         BaseButton,
+        BaseInput
     },
 })
 export default class SettingsView extends Vue {
     private store = useStore(sessionKey);
 
+    public updatePassword = false;
+
+    public newPassword = "";
+    public repeatPassword = "";
+    public oldPassword = "";
+
     public logout() {
         this.store.dispatch("logout").then(() => {
             window.location.replace("/login");
         });
+    }
+
+    public resetPassword() {
+        if (this.newPassword == this.repeatPassword) {
+            auth.resetPassword(this.oldPassword, this.newPassword);
+        }
     }
 }
 </script>
