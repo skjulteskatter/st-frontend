@@ -104,7 +104,7 @@ export default class OSMD extends Vue {
             
             this.osmd = new OpenSheetMusicDisplay(this.canvas, {
                 autoResize: true,
-                backend: "svg",
+                backend: "canvas",
                 drawingParameters: "default", // try compact (instead of default)
                 drawPartNames: false, // try false
                 drawTitle: false,
