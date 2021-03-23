@@ -11,8 +11,10 @@
                             : undefined
                     "
                 />
-                <span class="osmd-controls__key">
-                    Key ({{
+                <span class="osmd-controls__key" 
+                    @click="transpose(0)"
+                >
+                    {{ originalKey ?? "Key" }} ({{
                         transposition > 0
                             ? "+" + transposition
                             : transposition
@@ -65,6 +67,9 @@ import { BaseButton } from "@/components";
         },
         initialZoom: {
             type: Number
+        },
+        originalKey: {
+            type: String
         }
     }
 })
@@ -74,6 +79,7 @@ export default class OSMD extends Vue {
     private canvas: HTMLElement = undefined as unknown as HTMLElement;
     private pbcanvas: HTMLElement = undefined as unknown as HTMLElement;
     private initialTransposition?: number;
+    public originalKey?: string;
     public transposition = 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public playbackControl: any;
@@ -93,7 +99,7 @@ export default class OSMD extends Vue {
 
     mounted() {
         this.transposition = this.initialTransposition != undefined ? this.initialTransposition : 0;
-        this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 700 ? 0.5 : this.zoom;
+        this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
 
         const canvas = document.getElementById("osmd-canvas");
         const pbcanvas = document.getElementById("pb-controls");

@@ -48,7 +48,7 @@ export default class SheetMusic extends Vue {
     public get zoom() {
         const query = this.searchParams.get("zoom");
 
-        const zoom = parseInt(query ?? "100")/100;
+        const zoom = query ? parseInt(query)/100 : undefined;
 
         return zoom;
     }
