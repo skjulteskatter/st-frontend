@@ -100,6 +100,11 @@ export default class SongViewer extends Vue {
                 this.$route.params.collection
             );
         }
+        
+        while(this.collection?.loading) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
     }
