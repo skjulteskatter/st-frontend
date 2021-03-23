@@ -20,12 +20,14 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <open-sheet-music-display
+            <iframe v-if="sheetMusicUrl" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`" style="width:100%; height:100%">
+            </iframe>
+            <!-- <open-sheet-music-display
                 :url="sheetMusicUrl"
                 :initialTransposition="transposition"
                 v-if="sheetMusicUrl && showSheetMusic"
             >
-            </open-sheet-music-display>
+            </open-sheet-music-display> -->
             <div class="loader" v-if="loadingLyrics"></div>
         </div>
 
@@ -148,7 +150,7 @@ export default class SongViewer extends Vue {
 
     public get sheetMusicUrl() {
         return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
-            ?.directUrl;
+            ?.id;
     }
 }
 </script>

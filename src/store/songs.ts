@@ -96,12 +96,24 @@ export const songStore = createStore<Songs>({
             commit('song', number);
 
             if (!getters.lyrics) {
+
+                let i = 0;
+                while(collection.songs.length < 1) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    if (i > 10) break;
+                    i++;
+
+                    console.log("PROMISE");
+
+                    console.log(collection.songs.length);
+                }
                 const song = collection?.songs.find(s => s.number == number);
+
                 if (song && song.type == "lyrics") {
                     const language = Object.keys(song.name)[0];
                     commit('language', language);
 
-                    collection.getLyrics(number, language);
+                    const l = await collection.getLyrics(number, language);
                 }
             }
         },

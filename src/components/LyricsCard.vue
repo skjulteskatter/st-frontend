@@ -164,6 +164,10 @@ export default class LyricsCard extends Vue {
         }
     }
 
+    public get actualLyrics() {
+        return this.lyrics ?? this.songStore.getters.lyrics;
+    }
+
     public async transposeView() {
         this.store.commit("extend", false);
         const lyrics = await this.collection?.transposeLyrics(

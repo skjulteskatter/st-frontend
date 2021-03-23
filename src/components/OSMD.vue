@@ -1,5 +1,5 @@
 <template>
-    <div class="osmd-wrapper">
+    <div class="osmd-wrapper" v-if="createdDone">
         <div class="osmd-controls">
             <div class="osmd-controls__transpose">
                 <Icon
@@ -47,7 +47,6 @@
 <script lang="ts">
 import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "@/assets/js/osmd";
 import { Options, Vue } from "vue-class-component";
-
 import { Icon } from "@/components/icon";
 
 @Options({
@@ -77,6 +76,17 @@ export default class OSMD extends Vue {
     private playbackControl: any;
     private initialZoom?: number;
     public zoom = 1;
+    public createdDone = false;
+
+    unmounted() {
+        this.createdDone = false;
+        this.osmd.clear();
+        this.playbackControl.clear();
+    }
+
+    created() {
+        this.createdDone = true;
+    }
 
     mounted() {
         this.transposition = this.initialTransposition != undefined ? this.initialTransposition : 0;
@@ -141,8 +151,6 @@ export default class OSMD extends Vue {
     public async getMusicXml() {
         if (!this.url) return "";
 
-        console.log(this.url);
-
         const result = await (await fetch(this.url)).text();
         return result;
     }
@@ -151,7 +159,7 @@ export default class OSMD extends Vue {
         if (!this.url) throw new Error("URL not found. Aborting load");
         this.canvas.innerHTML = "";
 
-        this.osmd.setLogLevel("debug");
+        this.osmd.setLogLevel("warn");
 
         await this.osmd.load(await this.getMusicXml());
         
@@ -252,6 +260,12 @@ export default class OSMD extends Vue {
             playbackControlPanel.hideAndClear();
         }
 
+        function clear() {
+            playbackControlPanel.hideAndClear();
+            playbackManager.Dispose();
+            timingSource.reset();
+        }
+
         function IsClosed() {
             return playbackControlPanel.IsClosed;
         }
@@ -260,7 +274,8 @@ export default class OSMD extends Vue {
             initialize: initialize,
             showControls: showControls,
             hideControls: hideControls,
-            IsClosed: IsClosed
+            IsClosed: IsClosed,
+            clear
         }
     }
 }
