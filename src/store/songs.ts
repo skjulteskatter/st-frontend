@@ -113,7 +113,7 @@ export const songStore = createStore<Songs>({
                     const language = Object.keys(song.name)[0];
                     commit('language', language);
 
-                    const l = await collection.getLyrics(number, language);
+                    await collection.getLyrics(number, language);
                 }
             }
         },
