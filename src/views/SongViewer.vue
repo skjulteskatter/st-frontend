@@ -20,7 +20,7 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`" style="width:100%; height:80%">
+            <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
             </iframe>
             <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
             <!-- <open-sheet-music-display
