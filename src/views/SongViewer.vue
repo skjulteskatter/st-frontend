@@ -4,10 +4,20 @@
         <div class="song-viewer__content">
             <div class="song-viewer__header">
                 <back-button />
-                <base-button @click="sidebar = !sidebar" icon="documents">
-                    {{ $t(`common.${sidebar ? "close" : "show"}`) }}
-                    {{ $t("song.files").toLowerCase() }}
-                </base-button>
+                <div class="song-viewer__header__buttons">
+                    <router-link
+                        :to="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`"
+                    >
+                        <base-button icon="music">
+                            {{ $t("common.show") }}
+                            {{ $t("song.sheetmusic").toLowerCase() }}
+                        </base-button>
+                    </router-link>
+                    <base-button @click="sidebar = !sidebar" icon="documents">
+                        {{ $t(`common.${sidebar ? "close" : "show"}`) }}
+                        {{ $t("song.files").toLowerCase() }}
+                    </base-button>
+                </div>
             </div>
             <song-info-card
                 :song="song"
@@ -100,8 +110,8 @@ export default class SongViewer extends Vue {
             );
         }
 
-        while(this.collection?.loading) {
-            await new Promise(resolve => setTimeout(resolve, 100));
+        while (this.collection?.loading) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
         await this.songStore.dispatch("selectSong", this.number);
@@ -170,9 +180,20 @@ export default class SongViewer extends Vue {
     display: flex;
     height: 100%;
 
+    .sheetmusic {
+        width: 100%;
+        min-height: 50%;
+    }
+
     &__header {
         display: flex;
         justify-content: space-between;
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+            gap: var(--st-spacing);
+        }
     }
 
     &__content {
