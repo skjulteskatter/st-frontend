@@ -18,6 +18,13 @@ export type SongFilter = {
     hasSheetMusic: boolean;
 }
 
+export type SheetMusicOptions = {
+    show: boolean;
+    url?: string;
+    originalKey?: string;
+    transposition?: number;
+}
+
 export type AudioTrack = {
     file: MediaFile;
     song?: Song;
@@ -43,6 +50,7 @@ export interface Songs {
     filter: SongFilter;
     audio?: AudioTrack;
     view: string;
+    sheetMusic: SheetMusicOptions;
 }
 export const songKey: InjectionKey<Store<Songs>> = Symbol();
 
@@ -68,6 +76,9 @@ export const songStore = createStore<Songs>({
         language: 'en',
         view: 'default',
         transcode: 'common',
+        sheetMusic: {
+            show: false,
+        }
     },
     actions: {
         async selectCollection({ dispatch, state, commit, getters }, id: string) {
@@ -195,6 +206,9 @@ export const songStore = createStore<Songs>({
         },
         view(state, view: string) {
             state.view = view;
+        },
+        sheetMusic(state, o: SheetMusicOptions) {
+            state.sheetMusic = o;
         }
     },
     getters: {

@@ -11,7 +11,8 @@
                             : undefined
                     "
                 />
-                <span class="osmd-controls__key" 
+                <span 
+                    class="osmd-controls__key"
                     @click="transpose(0)"
                 >
                     {{ originalKey ?? "Key" }} ({{
@@ -34,7 +35,7 @@
                     <input
                         type="range"
                         v-model="zoom"
-                        @change="rerender"
+                        @change="setZoom"
                         min="0.4"
                         max="1.4"
                         step="0.1"
@@ -42,16 +43,14 @@
                 </div>
             </div>
         </div>
-        <div id="osmd-canvas"></div>
-        <div id="pb-controls" style="left: 100px; max-width: 500px;"></div>
         <base-button @click="playbackControl.toggleControls()">Controls</base-button>
     </div>
 </template>
 <script lang="ts">
-import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "@/assets/js/osmd";
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseButton } from "@/components";
+import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
@@ -75,7 +74,7 @@ import { BaseButton } from "@/components";
 })
 export default class OSMD extends Vue {
     private url?: string;
-    private osmd: OpenSheetMusicDisplay = undefined as unknown as OpenSheetMusicDisplay;
+    public osmd = osmd;
     private canvas: HTMLElement = undefined as unknown as HTMLElement;
     private pbcanvas: HTMLElement = undefined as unknown as HTMLElement;
     private initialTransposition?: number;
@@ -86,224 +85,30 @@ export default class OSMD extends Vue {
     private initialZoom?: number;
     public zoom = 1;
     public createdDone = false;
+    public loading: string[] = [];
 
-    unmounted() {
-        this.createdDone = false;
-        this.osmd.clear();
-        this.playbackControl.clear();
-    }
+    public async mounted() {
+        console.log("MOUNTED")
 
-    created() {
-        this.createdDone = true;
-    }
+        await this.osmd.load({
+            show: true,
+            url: this.url,
+            originalKey: this.originalKey,
+            transposition: this.initialTransposition,
+        });
 
-    mounted() {
-        this.transposition = this.initialTransposition != undefined ? this.initialTransposition : 0;
-        this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
-
-        const canvas = document.getElementById("osmd-canvas");
-        const pbcanvas = document.getElementById("pb-controls");
-
-        if (canvas && pbcanvas) {
-            this.canvas = canvas;
-            this.pbcanvas = pbcanvas;
-            
-            this.osmd = new OpenSheetMusicDisplay(this.canvas, {
-                autoResize: true,
-                backend: "canvas",
-                drawingParameters: "default", // try compact (instead of default)
-                drawPartNames: false, // try false
-                drawTitle: false,
-                drawSubtitle: false,
-                disableCursor: false,
-                // fingeringInsideStafflines: "true", // default: false. true draws fingerings directly above/below notes
-                setWantedStemDirectionByXml: false, // try false, which was previously the default behavior
-                // drawUpToMeasureNumber: 3, // draws only up to measure 3, meaning it draws measure 1 to 3 of the piece.
-                drawUpToMeasureNumber: Number.MAX_SAFE_INTEGER,
-                drawFromMeasureNumber: 0,
-
-                //drawMeasureNumbers: false, // disable drawing measure numbers
-                //measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
-                useXMLMeasureNumbers: true, // read measure numbers from xml
-
-                // coloring options
-                //coloringEnabled: true,
-                // defaultColorNotehead: "#CC0055", // try setting a default color. default is black (undefined)
-                // defaultColorStem: "#BB0099",
-                defaultFontFamily: "Inter",
-
-                // autoBeam: false, // try true, OSMD Function Test AutoBeam sample
-                // autoBeamOptions: {
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     beam_rests: false,
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     beam_middle_rests_only: false,
-                //     //groups: [[3,4], [1,1]],
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     maintain_stem_directions: false
-                // },
-                pageBackgroundColor: "#FFFFFF",
-            });
-
-            this.playbackControl = this.demoPlaybackControl(this.osmd);
-
-            this.init();
-
-        } else {
-            throw new Error("Couldn't get the canvas for OSMD")
-        }
-    }
-
-    public async getMusicXml() {
-        if (!this.url) return "";
-
-        const result = await (await fetch(this.url)).text();
-        return result;
-    }
-
-    public async init() {
-        if (!this.url) throw new Error("URL not found. Aborting load");
-        this.canvas.innerHTML = "";
-
-        this.osmd.setLogLevel("warn");
-
-        await this.osmd.load(await this.getMusicXml());
-
-        this.osmd.TransposeCalculator = new TransposeCalculator();
-
-        this.osmd.Sheet.Transpose = this.transposition;
-
-        this.osmd.updateGraphic();
-
-        this.osmd.zoom = this.zoom;
-
-        this.osmd.render();
-
-        this.osmd.enableOrDisableCursor(true);
-
-        this.osmd.cursor.cursorElement.style.zIndex = "100";
-        
-        // this.osmd.cursor.reset();
-
-        this.playbackControl.initialize();
-    }
-
-    public rerender() {
-        this.disable();
-        if (this.osmd?.IsReadyToRender()) {
-            this.osmd.zoom = this.zoom;
-            this.osmd.render();
-            this.osmd.enableOrDisableCursor(true);
-            this.osmd.cursor.cursorElement.style.zIndex = "100";
-        }
-        this.enable();
+        console.log("DONE LOADING")
     }
 
     public transpose(n: number) {
+        this.osmd.transpose(n);
         this.transposition = n;
-
-        this.osmd.Sheet.Transpose = this.transposition;
-
-        this.osmd.updateGraphic();
-
-        this.osmd.enableOrDisableCursor(true);
-
-        this.osmd.cursor.cursorElement.style.zIndex = "100";
-        
-        this.rerender();
     }
 
-    public disable() {
-        this.canvas.style.opacity = "0.4";
-    }
+    public setZoom() {
+        this.osmd.zoom = this.zoom;
 
-    public enable() {
-        this.canvas.style.opacity = "";
-    }
-
-    public demoPlaybackControl(osmd: OpenSheetMusicDisplay) {
-        const openSheetMusicDisplay = this.osmd;
-
-        const playbackListener = {
-            play() {
-                openSheetMusicDisplay.FollowCursor = true;
-            },
-            pause() {
-                console.log("pause");
-            },
-            reset() {
-                console.log("reset");},
-            bpmChanged() {
-                console.log("bpm");},
-            volumeChanged() {
-                console.log("volume");},
-            volumeMute() {
-                console.log("volume");},
-            volumeUnmute() {
-                console.log("volume");}
-        }
-
-        const timingSource = new LinearTimingSource();
-        const playbackManager = new PlaybackManager(timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
-        playbackManager.DoPlayback = true;
-        playbackManager.DoPreCount = false;
-
-        const playbackControlPanel = new ControlPanel(this.pbcanvas);
-        playbackControlPanel.addListener(playbackManager);
-        playbackControlPanel.addListener(playbackListener);
-
-        function initialize() {
-            timingSource.reset();
-            timingSource.pause();
-            timingSource.Settings = osmd.Sheet.SheetPlaybackSetting;
-            playbackManager.initialize(osmd.Sheet.MusicPartManager);
-            playbackManager.addListener(osmd.cursor);
-            playbackManager.reset();
-            osmd.PlaybackManager = playbackManager;
-            playbackControlPanel.clearVolumeTracks();
-            playbackControlPanel.addVolumeTrack(playbackManager.Metronome.Name, playbackManager.Metronome.Id, playbackManager.Metronome.Volume*100);
-            for(const instrId of playbackManager.InstrumentIdMapping.keys()) {
-                const instr = playbackManager.InstrumentIdMapping.getValue(instrId);
-                if (!instr) continue;
-                playbackControlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
-            }
-            playbackControlPanel.bpmChanged(osmd.Sheet.DefaultStartTempoInBpm);
-        }
-
-        function showControls() {
-            playbackControlPanel.show();
-        }
-
-        function hideControls() {
-            playbackControlPanel.hideAndClear();
-        }
-
-        function clear() {
-            playbackControlPanel.hideAndClear();
-            playbackManager.Dispose();
-            timingSource.reset();
-        }
-
-        function IsClosed() {
-            return playbackControlPanel.IsClosed;
-        }
-
-        function toggleControls() {
-            if (IsClosed()) {
-                showControls();
-            } else {
-                hideControls();
-            }
-        }
-
-        return { 
-            initialize: initialize,
-            showControls: showControls,
-            hideControls: hideControls,
-            IsClosed: IsClosed,
-            clear,
-            toggleControls
-        }
+        this.osmd.rerender();
     }
 }
 </script>
@@ -338,10 +143,19 @@ export default class OSMD extends Vue {
     &__button {
         color: var(--st-color-primary);
         cursor: pointer;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 
     &__key {
         padding: 0 var(--st-spacing);
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 }
 

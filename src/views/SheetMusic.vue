@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="showSheetMusic">
         <open-sheet-music-display
             :url="url"
             :originalKey="originalKey"
@@ -12,6 +12,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
+import { useStore } from "vuex";
+import { songKey } from "@/store";
 
 @Options({
     components: {
@@ -20,13 +22,14 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 })
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
+    public songStore = useStore(songKey);
 
     public get url() {
-        return `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
+        return this.songStore.state.sheetMusic.url ?? `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
     }
 
     public get originalKey() {
-        return this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+        return this.songStore.state.sheetMusic.originalKey ?? this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
     }
 
     public get transposeKey() {
@@ -34,7 +37,7 @@ export default class SheetMusic extends Vue {
     }
 
     public get transposition() {
-        return this.transposeKey ? parseInt(this.transposeKey) : undefined;
+        return this.songStore.state.sheetMusic.transposition ?? (this.transposeKey ? parseInt(this.transposeKey) : undefined);
     }
 
     public get embed() {
@@ -51,6 +54,10 @@ export default class SheetMusic extends Vue {
         const zoom = query ? parseInt(query)/100 : undefined;
 
         return zoom;
+    }
+
+    public get showSheetMusic() {
+        return this.songStore.state.sheetMusic.show;
     }
 }
 </script>

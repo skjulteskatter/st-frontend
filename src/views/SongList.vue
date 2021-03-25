@@ -65,16 +65,16 @@
                     v-for="theme in collection.themes"
                     :key="theme.item.id"
                     :songs="filteredSongs.filter(s => theme?.songIds.includes(s.id))"
-                    :title="theme ? theme.item.name[languageKey] : ''"
+                    :title="theme?.item.name[languageKey] ?? ''"
                 ></song-list-card>
             </div>
 
             <div class="song-list__contributors" v-if="listType == 'countries'">
                 <song-list-card
                     v-for="country in collection.countries"
-                    :key="country ? country.item.countryCode : Math.random()"
+                    :key="country?.item.countryCode ?? Math.random()"
                     :songs="filteredSongs.filter(s => country?.songIds.includes(s.id))"
-                    :title="country ? country.item.name : ''"
+                    :title="country?.item.name ?? ''"
                 ></song-list-card>
             </div>
 
@@ -84,9 +84,9 @@
             >
                 <song-list-card
                     v-for="s in songsByNumber"
-                    :key="s ? s.title : Math.random()"
-                    :songs="s ? s.songs : []"
-                    :title="s ? s.title : ''"
+                    :key="s?.title ?? Math.random()"
+                    :songs="s?.songs ?? []"
+                    :title="s?.title ?? ''"
                     :count="false"
                 ></song-list-card>
             </div>
@@ -97,9 +97,9 @@
             >
                 <song-list-card
                     v-for="s in songsByTitle"
-                    :key="s ? s.title : Math.random()"
-                    :songs="s ? s.songs : []"
-                    :title="s ? s.title : ''"
+                    :key="s?.title ?? Math.random()"
+                    :songs="s?.songs ?? []"
+                    :title="s?.title ?? ''"
                 ></song-list-card>
             </div>
         </div>

@@ -5,14 +5,15 @@
             <div class="song-viewer__header">
                 <back-button />
                 <div class="song-viewer__header__buttons">
-                    <router-link
-                        :to="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}`"
+                    <!-- <router-link
+                        v-if="sheetMusicUrl"
+                        :to="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`"
                     >
                         <base-button icon="music">
                             {{ $t("common.show") }}
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
-                    </router-link>
+                    </router-link> -->
                     <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
@@ -30,15 +31,15 @@
                 :collection="collection"
             >
             </lyrics-card>
-            <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
-            </iframe>
+            <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
+            </iframe> -->
             <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
-            <!-- <open-sheet-music-display
-                :url="sheetMusicUrl"
+            <open-sheet-music-display
+                :url="'https://dmb-cdn.azureedge.net/files/' + sheetMusicUrl"
                 :initialTransposition="transposition"
-                v-if="sheetMusicUrl && showSheetMusic"
+                v-if="sheetMusicUrl"
             >
-            </open-sheet-music-display> -->
+            </open-sheet-music-display>
             <div class="loader" v-if="loadingLyrics"></div>
         </div>
 
@@ -66,7 +67,7 @@
 </template>
 <script lang="ts">
 import { SongInfoCard, SongFilesCard } from "@/components/songs";
-
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
@@ -78,6 +79,7 @@ import {
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
+import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {
@@ -88,6 +90,7 @@ import { Collection, Lyrics } from "@/classes";
         SongFilesCard,
         BaseCard,
         BackButton,
+        OpenSheetMusicDisplay,
     },
 })
 export default class SongViewer extends Vue {
@@ -96,9 +99,13 @@ export default class SongViewer extends Vue {
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
-    public showSheetMusic = true;
+
+    public unmounted() {
+        this.songStore.commit("sheetMusic", {show: false});
+    }
 
     public async mounted() {
+        this.songStore.commit("sheetMusic", {show: false});
         this.number = parseInt(this.$route.params.number as string);
         if (
             this.songStore.getters.collection?.key !==
@@ -116,6 +123,18 @@ export default class SongViewer extends Vue {
 
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
+
+
+        if (this.sheetMusicUrl) {
+            const o: SheetMusicOptions = {
+                show: true,
+                url: 'https://dmb-cdn.azureedge.net/files/' + this.sheetMusicUrl,
+                originalKey: this.song?.originalKey,
+                transposition: this.transposition,
+            }
+
+            this.songStore.commit("sheetMusic", o);
+        }
     }
 
     public get transposition() {

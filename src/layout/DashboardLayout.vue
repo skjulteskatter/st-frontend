@@ -10,6 +10,10 @@
                         </transition>
                     </router-view>
                 </div>
+                <div>
+                    <div id="osmd-canvas"></div>
+                    <div id="pb-controls"></div>
+                </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
         </div>
@@ -29,7 +33,7 @@ import { FeedbackForm } from "@/components/feedback";
     components: {
         TheNavbar,
         AudioPlayer,
-        FeedbackForm,
+        FeedbackForm
     },
 })
 export default class DashboardLayout extends Vue {
