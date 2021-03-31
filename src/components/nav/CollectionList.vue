@@ -6,7 +6,7 @@
         <ul class="collection-list__list">
             <li v-for="collection in collections" :key="collection.id">
                 <router-link
-                    class="collection-list__link selectable"
+                    class="collection-list__link"
                     :to="{
                         name: 'song-list',
                         params: { collection: collection.key },
@@ -52,20 +52,24 @@ export default class CollectionList extends Vue {
     }
 
     &__list {
-        padding-left: 1.3em;
         font-weight: 300;
+        padding: 0;
         margin-top: 0.5em;
-        list-style: circle;
+        list-style: none;
     }
 
     &__link {
         color: var(--st-color-text);
         display: block;
         text-decoration: none;
-        margin-bottom: 0.2em;
+        margin-bottom: 0.25em;
+        padding: 0.25em;
+        border: 1px solid var(--st-color-border);
+        border-radius: var(--st-border-radius);
 
         &:hover {
             color: var(--st-color-primary);
+            border: 1px solid var(--st-color-primary);
         }
     }
 
