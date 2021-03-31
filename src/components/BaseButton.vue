@@ -126,7 +126,6 @@ export default class BaseButton extends Vue {
 
     &-secondary {
         background-color: var(--st-color-secondary);
-        border: 1px solid var(--st-color-border);
         color: var(--st-color-text-dm);
     }
 
