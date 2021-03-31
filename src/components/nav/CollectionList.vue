@@ -1,5 +1,5 @@
 <template>
-    <div class="collection-list">
+    <div class="collection-list" v-if="collections.length > 0">
         <small class="collection-list__title">
             {{ $t("common.subscriptions") }}
         </small>
