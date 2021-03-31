@@ -50,11 +50,16 @@
             </div>
         </div>
         <div v-if="searchQuery == '' && !loading">
-            <div class="song-list__contributors" v-if="['composers', 'authors'].includes(listType)">
+            <div
+                class="song-list__contributors"
+                v-if="['composers', 'authors'].includes(listType)"
+            >
                 <song-list-card
                     v-for="ci in collection.getContributors(listType)"
                     :key="ci.item.id"
-                    :songs="filteredSongs.filter(s => ci.songIds.includes(s.id))"
+                    :songs="
+                        filteredSongs.filter((s) => ci.songIds.includes(s.id))
+                    "
                     :title="ci.item.name"
                     :action="() => gotoContributor(ci.item)"
                 ></song-list-card>
@@ -64,7 +69,11 @@
                 <song-list-card
                     v-for="theme in collection.themes"
                     :key="theme.item.id"
-                    :songs="filteredSongs.filter(s => theme?.songIds.includes(s.id))"
+                    :songs="
+                        filteredSongs.filter((s) =>
+                            theme?.songIds.includes(s.id)
+                        )
+                    "
                     :title="theme ? theme.item.name[languageKey] : ''"
                 ></song-list-card>
             </div>
@@ -73,7 +82,11 @@
                 <song-list-card
                     v-for="country in collection.countries"
                     :key="country ? country.item.countryCode : Math.random()"
-                    :songs="filteredSongs.filter(s => country?.songIds.includes(s.id))"
+                    :songs="
+                        filteredSongs.filter((s) =>
+                            country?.songIds.includes(s.id)
+                        )
+                    "
                     :title="country ? country.item.name : ''"
                 ></song-list-card>
             </div>
@@ -144,7 +157,10 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ApiContributor } from "dmb-api";
-import { CountryCollectionItem, ThemeCollectionItem } from "@/classes/collectionItems";
+import {
+    CountryCollectionItem,
+    ThemeCollectionItem,
+} from "@/classes/collectionItems";
 
 @Options({
     components: {
@@ -461,6 +477,10 @@ export default class SongList extends Vue {
     &__contributors {
         columns: 325px;
         column-gap: var(--st-spacing);
+
+        & > .card {
+            margin-bottom: var(--st-spacing);
+        }
     }
 
     &__list {

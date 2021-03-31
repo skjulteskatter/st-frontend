@@ -14,7 +14,7 @@
         </div>
 
         <div class="contributor__songs">
-            <div v-for="c in collections" :key="c.id">
+            <base-card v-for="c in collections" :key="c.id">
                 <h2>{{ c.getName(languageKey) }}</h2>
                 <div class="contributor__songs">
                     <song-list-card
@@ -24,6 +24,7 @@
                                 s.collection ? s.collection.id == c.id : false
                             )
                         "
+                        border
                     ></song-list-card>
                     <song-list-card
                         :title="$t('song.composer')"
@@ -32,9 +33,10 @@
                                 s.collection ? s.collection.id == c.id : false
                             )
                         "
+                        border
                     ></song-list-card>
                 </div>
-            </div>
+            </base-card>
         </div>
     </div>
 </template>
@@ -87,13 +89,25 @@ export default class ContributorView extends Vue {
 
     public get authorSongs(): Song[] {
         return this.songs
-            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "author"))
+            .filter((s) =>
+                s.participants.find(
+                    (p) =>
+                        p.contributorId == this.contributor?.id &&
+                        p.type == "author"
+                )
+            )
             .map((s) => new Song(s));
     }
 
     public get composerSongs(): Song[] {
         return this.songs
-            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "composer"))
+            .filter((s) =>
+                s.participants.find(
+                    (p) =>
+                        p.contributorId == this.contributor?.id &&
+                        p.type == "composer"
+                )
+            )
             .map((s) => new Song(s));
     }
 

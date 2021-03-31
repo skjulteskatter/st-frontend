@@ -96,8 +96,11 @@ export default class SongListCard extends Vue {
 
 <style lang="scss">
 .theme-card {
-    margin-bottom: var(--st-spacing);
     break-inside: avoid;
+
+    @supports not (gap: 1rem) {
+        margin-bottom: var(--st-spacing);
+    }
 
     &__header {
         display: flex;
