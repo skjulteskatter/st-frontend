@@ -8,7 +8,6 @@ class OSMD {
     public originalKey?: string;
     public transposition = 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public playbackControl: any;
     private initialZoom?: number;
     public zoom = 1;
     public createdDone = false;
@@ -16,7 +15,7 @@ class OSMD {
 
     private controlPanel: ControlPanel = {} as ControlPanel;
     private timingSource = new LinearTimingSource();
-    private playbackManager = new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
+    private playbackManager = () => new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, new BasicAudioPlayer(), undefined as unknown as IMessageViewer);
 
     constructor() {
         this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
@@ -78,7 +77,29 @@ class OSMD {
 
             this.controlPanel = new ControlPanel(pbcanvas);
 
-            this.playbackControl = this.demoPlaybackControl();
+            const o = this.osmd;
+
+            const playbackListener = {
+                play() {
+                    o.cursor.cursorElement.style.zIndex = "100";
+                    o.FollowCursor = true;
+                },
+                pause() {
+                    console.log("pause");
+                },
+                reset() {
+                    console.log("reset");},
+                bpmChanged() {
+                    console.log("bpm");},
+                volumeChanged() {
+                    console.log("volume");},
+                volumeMute() {
+                    console.log("volume");},
+                volumeUnmute() {
+                    console.log("volume");}
+            }
+
+            this.controlPanel.addListener(playbackListener);
 
         } else {
             throw new Error("Couldn't get the canvas for OSMD")
@@ -111,7 +132,7 @@ class OSMD {
         
         // this.osmd.cursor.reset();
 
-        this.playbackControl.initialize(this.osmd);
+        this.loadPlaybackManager();
 
         // this.playbackControl.initialize();
     }
@@ -149,105 +170,41 @@ class OSMD {
         this.rerender();
     }
 
-    public demoPlaybackControl() {
-        const openSheetMusicDisplay = this.osmd;
+    public showControls() {
+        this.controlPanel.show();
+    }
 
-        const playbackListener = {
-            play() {
-                openSheetMusicDisplay.cursor.cursorElement.style.zIndex = "100";
-                openSheetMusicDisplay.FollowCursor = true;
-            },
-            pause() {
-                console.log("pause");
-            },
-            reset() {
-                console.log("reset");},
-            bpmChanged() {
-                console.log("bpm");},
-            volumeChanged() {
-                console.log("volume");},
-            volumeMute() {
-                console.log("volume");},
-            volumeUnmute() {
-                console.log("volume");}
-        }
+    public hideControls() {
+        this.controlPanel.hideAndClear();
+    }
 
-        const timingSource = this.timingSource;
-        const playbackManager = this.playbackManager;
-        playbackManager.DoPlayback = true;
-        playbackManager.DoPreCount = false;
-
-        const playbackControlPanel = this.controlPanel;
-        playbackControlPanel.addListener(playbackManager);
-        playbackControlPanel.addListener(playbackListener);
-
-        function initialize(osmd: OpenSheetMusicDisplay) {
-            timingSource.reset();
-            timingSource.pause();
-            timingSource.Settings = osmd.Sheet.SheetPlaybackSetting;
-            playbackManager.initialize(osmd.Sheet.MusicPartManager);
-            playbackManager.addListener(osmd.cursor);
-            playbackManager.reset();
-            osmd.PlaybackManager = playbackManager;
-            playbackControlPanel.clearVolumeTracks();
-            playbackControlPanel.addVolumeTrack(playbackManager.Metronome.Name, playbackManager.Metronome.Id, playbackManager.Metronome.Volume*100);
-            for(const instrId of playbackManager.InstrumentIdMapping.keys()) {
-                const instr = playbackManager.InstrumentIdMapping.getValue(instrId);
-                if (!instr) continue;
-                playbackControlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
-            }
-            playbackControlPanel.bpmChanged(osmd.Sheet.DefaultStartTempoInBpm);
-        }
-
-        function showControls() {
-            playbackControlPanel.show();
-        }
-
-        function hideControls() {
-            playbackControlPanel.hideAndClear();
-        }
-
-        function clear() {
-            playbackControlPanel.hideAndClear();
-            playbackControlPanel.clearVolumeTracks();
-            playbackManager.Dispose();
-            timingSource.reset();
-        }
-
-        function IsClosed() {
-            return playbackControlPanel.IsClosed;
-        }
-
-        function toggleControls() {
-            if (IsClosed()) {
-                showControls();
-            } else {
-                hideControls();
-            }
-        }
-
-        return { 
-            initialize: initialize,
-            showControls: showControls,
-            hideControls: hideControls,
-            IsClosed: IsClosed,
-            clear,
-            toggleControls
-        }
+    public clear() {
+        this.hideControls();
+        this.controlPanel.clearVolumeTracks();
+        this.timingSource.pause();
+        this.timingSource.reset();
     }
 
     private loadPlaybackManager() {
         this.timingSource.reset();
         this.timingSource.pause();
         this.timingSource.Settings = this.osmd.Sheet.SheetPlaybackSetting;
-        this.playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
-        this.playbackManager.addListener(this.osmd.cursor);
-        this.playbackManager.reset();
-        this.osmd.PlaybackManager = this.playbackManager;
+        // this.playbackManager.Dispose();
+        this.osmd.PlaybackManager?.Dispose();
+
+        const playbackManager = this.playbackManager();
+
+        playbackManager.DoPlayback = true;
+        playbackManager.DoPreCount = false;
+        playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
+        playbackManager.addListener(this.osmd.cursor);
+        playbackManager.reset();
+        this.osmd.PlaybackManager = playbackManager;
+        this.controlPanel.addListener(playbackManager);
         this.controlPanel.clearVolumeTracks();
-        this.controlPanel.addVolumeTrack(this.playbackManager.Metronome.Name, this.playbackManager.Metronome.Id, this.playbackManager.Metronome.Volume*100);
-        for(const instrId of this.playbackManager.InstrumentIdMapping.keys()) {
-            const instr = this.playbackManager.InstrumentIdMapping.getValue(instrId);
+        this.controlPanel.addVolumeTrack(playbackManager.Metronome.Name, playbackManager.Metronome.Id, playbackManager.Metronome.Volume*100);
+        for(const instrId of playbackManager.InstrumentIdMapping.keys()) {
+            const instr = playbackManager.InstrumentIdMapping.getValue(instrId);
             if (!instr) continue;
             this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
         }
