@@ -16,7 +16,7 @@
         <div class="contributor__songs">
             <base-card v-for="c in collections" :key="c.id">
                 <h2>{{ c.getName(languageKey) }}</h2>
-                <div class="contributor__songs">
+                <div class="contributor__songs__wrapper">
                     <song-list-card
                         :title="$t('song.author')"
                         :songs="
@@ -151,9 +151,16 @@ export default class ContributorView extends Vue {
     }
 
     &__songs {
+        margin-top: calc(var(--st-spacing) * 2);
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         grid-gap: var(--st-spacing);
+
+        &__wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--st-spacing);
+        }
     }
 }
 </style>
