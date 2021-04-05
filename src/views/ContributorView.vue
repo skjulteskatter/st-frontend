@@ -2,14 +2,17 @@
     <div v-if="contributor" class="contributor">
         <back-button />
         <div class="contributor__biography">
-            <div class="contributor__biography__header">
+            <base-card class="contributor__biography__header" secondary border>
                 <p class="contributor__biography__header__title">
                     {{ $t("song.contributor") }}
                 </p>
                 <h1 class="contributor__biography__header__name">
                     {{ contributor.name }}
                 </h1>
-            </div>
+                <small class="contributor__biography__header__subtitle">
+                    {{ contributor.subtitle }}
+                </small>
+            </base-card>
             <div v-html="contributor.getBiography(languageKey)"></div>
         </div>
 
@@ -146,6 +149,10 @@ export default class ContributorView extends Vue {
 
             &__name {
                 margin: 0;
+            }
+
+            &__subtitle {
+                opacity: 0.6;
             }
         }
     }
