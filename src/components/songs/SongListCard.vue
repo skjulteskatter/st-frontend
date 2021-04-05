@@ -134,7 +134,7 @@ export default class SongListCard extends Vue {
         padding: 0;
         font-size: 0.8rem;
         color: var(--st-text-color);
-        opacity: 0.8;
+        // opacity: 0.8;
 
         &__item {
             display: flex;
