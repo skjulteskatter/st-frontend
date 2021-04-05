@@ -9,7 +9,10 @@
                 <h1 class="contributor__biography__header__name">
                     {{ contributor.name }}
                 </h1>
-                <small class="contributor__biography__header__subtitle">
+                <small
+                    class="contributor__biography__header__subtitle"
+                    v-if="contributor.subtitle"
+                >
                     {{ contributor.subtitle }}
                 </small>
             </base-card>
