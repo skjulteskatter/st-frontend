@@ -343,14 +343,22 @@ export default class OSMD extends Vue {
 }
 </script>
 <style lang="scss">
+@import "../style/mixins";
+
 .osmd-controls {
-    &__title {
-        margin: 0;
-    }
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     margin-bottom: var(--st-spacing);
+
+    @include breakpoint("small") {
+        flex-direction: column;
+        align-items: initial;
+    }
+
+    &__title {
+        margin: 0;
+    }
 
     &__transpose {
         padding: 0.5em;
