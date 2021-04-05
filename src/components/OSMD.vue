@@ -1,6 +1,7 @@
 <template>
     <div class="osmd-wrapper" v-if="createdDone">
         <div class="osmd-controls">
+            <h4 class="osmd-controls__title">{{ $t("song.sheetmusic") }}</h4>
             <div class="osmd-controls__transpose">
                 <Icon
                     name="arrowLeft"
@@ -344,10 +345,12 @@ export default class OSMD extends Vue {
 <style lang="scss">
 .osmd-controls {
     &__title {
-        margin: 0 0 0.5em 0;
+        margin: 0;
     }
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--st-spacing);
 
     &__transpose {
         padding: 0.5em;
