@@ -57,6 +57,13 @@
                         >
                             <img alt="GOOGLE ICON" src="/img/google.png" />
                         </button>
+                        <button
+                            v-if="providers.includes('apple.com')"
+                            class="social__button clickable"
+                            @click="login('apple')"
+                        >
+                            <img alt="APPLE ICON" src="/img/apple.svg" />
+                        </button>
                         <!-- <button
                             class="social__button"
                             @click="login('microsoft')"
@@ -116,6 +123,7 @@ export default class Login extends Vue {
         if (this.form.email && !this.form.password) {
             this.noAccount = false;
             this.providers = await auth.getProviders(this.form.email);
+            console.log(this.providers);
             if (!this.providers?.length) {
                 this.noAccount = true;
             }
