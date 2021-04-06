@@ -46,16 +46,23 @@
                 </form>
                 <div
                     class="social transition-from-bottom"
-                    v-if="providers.filter((p) => p != 'password').length > 0"
+                    v-if="providers.filter((p) => p != 'password').length > 0 || noAccount"
                 >
                     <span class="social__label">Sign in with</span>
                     <div class="social__buttons">
                         <button
-                            v-if="providers.includes('google.com')"
+                            v-if="providers.includes('google.com') || noAccount"
                             class="social__button clickable"
                             @click="login('google')"
                         >
                             <img alt="GOOGLE ICON" src="/img/google.png" />
+                        </button>
+                        <button
+                            v-if="providers.includes('apple.com') || noAccount"
+                            class="social__button clickable"
+                            @click="login('apple')"
+                        >
+                            <img alt="APPLE ICON" src="/img/apple.svg" />
                         </button>
                         <!-- <button
                             class="social__button"
@@ -74,7 +81,7 @@
                     </div>
                 </div>
                 <router-link :to="{ name: 'create-user' }"
-                    >Create account</router-link
+                    >Or Create account</router-link
                 >
             </div>
         </base-card>
@@ -116,6 +123,7 @@ export default class Login extends Vue {
         if (this.form.email && !this.form.password) {
             this.noAccount = false;
             this.providers = await auth.getProviders(this.form.email);
+            console.log(this.providers);
             if (!this.providers?.length) {
                 this.noAccount = true;
             }

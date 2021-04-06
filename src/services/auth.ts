@@ -53,6 +53,13 @@ const providers: {
         return p;
     })(),
     facebook: new a.FacebookAuthProvider(),
+    apple: (() => {
+        const p = new a.OAuthProvider("apple.com");
+        p.addScope("email");
+        p.addScope("name");
+
+        return p;
+    })(),
 }
 
 class Auth {
