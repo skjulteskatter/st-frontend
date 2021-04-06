@@ -40,7 +40,7 @@
             </div>
         </div>
         <div id="osmd-canvas"></div>
-        <div id="pb-controls" style="left: 100px; max-width: 500px"></div>
+        <div id="pb-controls" style="left: 100px; text-align: center"></div>
         <base-button @click="playbackControl.toggleControls()"
             >Controls</base-button
         >
@@ -240,25 +240,25 @@ export default class OSMD extends Vue {
         const openSheetMusicDisplay = this.osmd;
 
         const playbackListener = {
-            play() {
+            async play(): Promise<void> {
                 openSheetMusicDisplay.FollowCursor = true;
             },
-            pause() {
+            async pause() {
                 console.log("pause");
             },
-            reset() {
+            async reset() {
                 console.log("reset");
             },
-            bpmChanged() {
+            async bpmChanged() {
                 console.log("bpm");
             },
-            volumeChanged() {
+            async volumeChanged() {
                 console.log("volume");
             },
-            volumeMute() {
+            async volumeMute() {
                 console.log("volume");
             },
-            volumeUnmute() {
+            async volumeUnmute() {
                 console.log("volume");
             },
         };
@@ -387,6 +387,10 @@ export default class OSMD extends Vue {
     &__key {
         padding: 0 var(--st-spacing);
     }
+}
+
+#pb-controls .control-panel {
+    position: unset;
 }
 
 .osmd-wapper {

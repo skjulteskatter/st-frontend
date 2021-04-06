@@ -1,7 +1,7 @@
 let basePath = 'https://songtreasures.azurewebsites.net/'
 
 if (process.env.NODE_ENV == "development") {
-    basePath = 'https://songtreasures.azurewebsites.net/';
+    basePath = 'https://songtreasures-build.azurewebsites.net/'//'https://localhost:44301/'//'https://songtreasures.azurewebsites.net/';
 }
 
 export const firebaseConfig = {

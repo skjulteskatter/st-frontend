@@ -5,8 +5,8 @@ export declare class ControlPanel extends AUIController<IPlaybackParametersListe
     volumeUnmute(instrument: number): void;
     bpmChanged(newNpm: number): void;
     volumeChanged(channels: number, newVolume: number): void;
-    play(): void;
-    pause(): void;
+    play(): Promise<void>;
+    pause(): Promise<void>;
     reset(): void;
     private controlPanelElement;
     private playbackButtonsContainerElement;
