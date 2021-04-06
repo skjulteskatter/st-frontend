@@ -23,13 +23,16 @@ class OSMD {
         const canvas = document.getElementById("osmd-canvas");
         const pbcanvas = document.getElementById("pb-controls");
 
-        this.init(canvas, pbcanvas);
+        //this.init(canvas, pbcanvas);
     }
 
     public async init(canvas: HTMLElement | null, pbcanvas: HTMLElement | null) {
         while(!canvas || !pbcanvas) {
             canvas = document.getElementById("osmd-canvas");
             pbcanvas = document.getElementById("pb-controls");
+            
+            console.log("RETRY")
+        
 
             await new Promise(resolve => setTimeout(resolve, 100));
         }
@@ -80,23 +83,28 @@ class OSMD {
             const o = this.osmd;
 
             const playbackListener = {
-                play() {
+                async play() {
                     o.cursor.cursorElement.style.zIndex = "100";
                     o.FollowCursor = true;
                 },
-                pause() {
+                async pause() {
                     console.log("pause");
                 },
-                reset() {
-                    console.log("reset");},
-                bpmChanged() {
-                    console.log("bpm");},
-                volumeChanged() {
-                    console.log("volume");},
-                volumeMute() {
-                    console.log("volume");},
-                volumeUnmute() {
-                    console.log("volume");}
+                async reset() {
+                    console.log("reset");
+                },
+                async bpmChanged() {
+                    console.log("bpm");
+                },
+                async volumeChanged() {
+                    console.log("volume");
+                },
+                async volumeMute() {
+                    console.log("volume");
+                },
+                async volumeUnmute() {
+                    console.log("volume");
+                }
             }
 
             this.controlPanel.addListener(playbackListener);

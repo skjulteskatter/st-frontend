@@ -1,5 +1,5 @@
 <template>
-    <div class="osmd-wrapper" v-if="createdDone">
+    <div class="osmd-wrapper" v-if="true">
         <div class="osmd-controls">
             <h4 class="osmd-controls__title">{{ $t("song.sheetmusic") }}</h4>
             <div class="osmd-controls__transpose">
@@ -42,6 +42,7 @@
                 </div>
             </div>
         </div>
+        <div id="osmd-canvas"></div>
         <base-button @click="playbackControl.toggleControls()">Controls</base-button>
     </div>
 </template>
@@ -88,6 +89,11 @@ export default class OSMD extends Vue {
 
     public async mounted() {
         console.log("MOUNTED")
+
+        const canvas = document.getElementById("osmd-canvas");
+        const pbcanvas = document.getElementById("pb-controls");
+
+        await this.osmd.init(canvas, pbcanvas);
 
         await this.osmd.load({
             show: true,

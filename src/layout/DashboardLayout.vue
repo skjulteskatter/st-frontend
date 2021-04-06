@@ -10,10 +10,7 @@
                         </transition>
                     </router-view>
                 </div>
-                <div>
-                    <div id="osmd-canvas"></div>
-                    <div id="pb-controls"></div>
-                </div>
+                <div id="pb-controls"></div>
             </main>
             <!-- <feedback-form></feedback-form> -->
         </div>
