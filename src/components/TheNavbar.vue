@@ -1,17 +1,6 @@
 <template>
     <nav class="nav">
-        <div class="nav__header" @click="$router.push('/')">
-            <img
-                class="nav__header__logo"
-                alt="logo"
-                src="/img/SongTreasures_logo.svg"
-            />
-            <img
-                src="/img/SongTreasures_logo_icon.svg"
-                alt="logo"
-                class="nav__header__logo--icon"
-            />
-        </div>
+        <nav-logo />
         <div class="nav__search">
             <FullSearchInput />
         </div>
@@ -25,7 +14,12 @@
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { FullSearchInput } from "@/components/inputs";
-import { CollectionList, UserProfile, NavLinks } from "@/components/nav";
+import {
+    CollectionList,
+    UserProfile,
+    NavLinks,
+    NavLogo,
+} from "@/components/nav";
 
 @Options({
     components: {
@@ -34,6 +28,7 @@ import { CollectionList, UserProfile, NavLinks } from "@/components/nav";
         FullSearchInput,
         UserProfile,
         NavLinks,
+        NavLogo,
     },
 })
 export default class TheNavbar extends Vue {}
@@ -65,39 +60,18 @@ export default class TheNavbar extends Vue {}
         top: 0;
         left: 0;
         height: min-content;
-
-        .nav__header {
-            border-bottom: none;
-        }
     }
 
     @include breakpoint("medium") {
         width: auto;
 
-        .nav__header__logo--icon {
-            display: block;
-            height: calc(var(--size) * 0.75);
-        }
-
-        .nav__header__logo {
-            display: none;
-        }
-
         .nav__user-profile {
             display: none;
-        }
-
-        .nav__settings {
-            display: flex !important;
         }
 
         .nav__search-link {
             display: flex !important;
         }
-    }
-
-    &__settings {
-        display: none !important;
     }
 
     &__search-link {
@@ -113,20 +87,6 @@ export default class TheNavbar extends Vue {}
 
         input {
             background-color: rgba(white, 0.1) !important;
-        }
-    }
-
-    &__header {
-        padding: var(--st-spacing);
-        cursor: pointer;
-
-        &__logo {
-            max-height: var(--size);
-            margin: 0;
-        }
-
-        &__logo--icon {
-            display: none;
         }
     }
 }

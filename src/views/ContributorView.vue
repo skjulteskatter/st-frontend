@@ -2,21 +2,27 @@
     <div v-if="contributor" class="contributor">
         <back-button />
         <div class="contributor__biography">
-            <div class="contributor__biography__header">
+            <base-card class="contributor__biography__header" secondary border>
                 <p class="contributor__biography__header__title">
                     {{ $t("song.contributor") }}
                 </p>
                 <h1 class="contributor__biography__header__name">
                     {{ contributor.name }}
                 </h1>
-            </div>
+                <small
+                    class="contributor__biography__header__subtitle"
+                    v-if="contributor.subtitle"
+                >
+                    {{ contributor.subtitle }}
+                </small>
+            </base-card>
             <div v-html="contributor.getBiography(languageKey)"></div>
         </div>
 
         <div class="contributor__songs">
-            <div v-for="c in collections" :key="c.id">
+            <base-card v-for="c in collections" :key="c.id">
                 <h2>{{ c.getName(languageKey) }}</h2>
-                <div class="contributor__songs">
+                <div class="contributor__songs__wrapper">
                     <song-list-card
                         :title="$t('song.author')"
                         :songs="
@@ -24,6 +30,7 @@
                                 s.collection ? s.collection.id == c.id : false
                             )
                         "
+                        border
                     ></song-list-card>
                     <song-list-card
                         :title="$t('song.composer')"
@@ -32,9 +39,10 @@
                                 s.collection ? s.collection.id == c.id : false
                             )
                         "
+                        border
                     ></song-list-card>
                 </div>
-            </div>
+            </base-card>
         </div>
     </div>
 </template>
@@ -87,13 +95,25 @@ export default class ContributorView extends Vue {
 
     public get authorSongs(): Song[] {
         return this.songs
-            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "author"))
+            .filter((s) =>
+                s.participants.find(
+                    (p) =>
+                        p.contributorId == this.contributor?.id &&
+                        p.type == "author"
+                )
+            )
             .map((s) => new Song(s));
     }
 
     public get composerSongs(): Song[] {
         return this.songs
-            .filter((s) => s.participants.find((p) => p.contributorId == this.contributor?.id && p.type == "composer"))
+            .filter((s) =>
+                s.participants.find(
+                    (p) =>
+                        p.contributorId == this.contributor?.id &&
+                        p.type == "composer"
+                )
+            )
             .map((s) => new Song(s));
     }
 
@@ -133,13 +153,24 @@ export default class ContributorView extends Vue {
             &__name {
                 margin: 0;
             }
+
+            &__subtitle {
+                opacity: 0.6;
+            }
         }
     }
 
     &__songs {
+        margin-top: calc(var(--st-spacing) * 2);
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         grid-gap: var(--st-spacing);
+
+        &__wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--st-spacing);
+        }
     }
 }
 </style>

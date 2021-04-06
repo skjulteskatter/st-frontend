@@ -191,9 +191,9 @@ export default class SongViewer extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
-::-webkit-scrollbar {
-    display: none;
-}
+// ::-webkit-scrollbar {
+//     display: none;
+// }
 
 .song-viewer {
     display: flex;
@@ -201,7 +201,8 @@ export default class SongViewer extends Vue {
 
     .sheetmusic {
         width: 100%;
-        min-height: 50%;
+        height: 80%;
+        border: none;
     }
 
     &__header {

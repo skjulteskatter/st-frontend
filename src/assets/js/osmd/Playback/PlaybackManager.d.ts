@@ -88,13 +88,14 @@ export declare class PlaybackManager implements IPlaybackParametersListener {
     SoloAttenuationValue: number;
     playVoiceEntry(voiceEntry: VoiceEntry): void;
     initialize(musicPartMng: MusicPartManager): void;
-    play(): void;
-    pause(): void;
+    play(): Promise<void>;
+    pause(): Promise<void>;
     reset(): void;
     Dispose(): void;
     setSound(instrumentId: number, newSoundId: MidiInstrument): boolean;
     protected setBpm(bpm: number): void;
     handlePlaybackEvent(): void;
+    private NotesPlaybackEventOccurred;
     calculateFinalVolume(volume: number): number;
     private loop;
     private stopAllCurrentlyPlayingNotes;

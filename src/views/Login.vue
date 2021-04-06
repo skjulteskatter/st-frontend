@@ -19,26 +19,35 @@
                         :disabled="providers.length > 0"
                     />
                     <base-input
-                        class="transition-from-bottom"
                         label="Password"
                         type="password"
                         v-if="providers.includes('password')"
                         v-model="form.password"
                         required
                     />
-                    <div class="login__form__stay transition-from-bottom"
+                    <div
+                        class="login__form__stay"
                         v-if="providers.includes('password')"
-                        >
+                    >
                         <label>
                             <input type="checkbox" v-model="stayLoggedIn" />
                             <span>Remember me</span>
                         </label>
                     </div>
-                    <base-button v-if="providers.filter(p => p != 'password').length < 1" type="submit" class="login__form__submit">
+                    <base-button
+                        v-if="
+                            providers.filter((p) => p != 'password').length < 1
+                        "
+                        type="submit"
+                        class="login__form__submit"
+                    >
                         Sign in
                     </base-button>
                 </form>
-                <div class="social transition-from-bottom" v-if="providers.filter(p => p != 'password').length > 0">
+                <div
+                    class="social transition-from-bottom"
+                    v-if="providers.filter((p) => p != 'password').length > 0"
+                >
                     <span class="social__label">Sign in with</span>
                     <div class="social__buttons">
                         <button
@@ -64,7 +73,9 @@
                         </button> -->
                     </div>
                 </div>
-                <router-link :to="{name:'create-user'}">Create account</router-link>
+                <router-link :to="{ name: 'create-user' }"
+                    >Create account</router-link
+                >
             </div>
         </base-card>
     </div>
@@ -97,7 +108,7 @@ export default class Login extends Vue {
 
     public mounted() {
         if (this.store.state.currentUser) {
-            this.$router.push({name: "main"});
+            this.$router.push({ name: "main" });
         }
     }
 
@@ -137,21 +148,6 @@ export default class Login extends Vue {
 
 <style lang="scss">
 @import "../style/mixins";
-
-@keyframes slideInFromBottom {
-    0% {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.transition-from-bottom {
-    animation: 0.5s ease-out 0s 1 slideInFromBottom;
-}
 
 .wrapper {
     width: 100vw;

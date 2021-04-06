@@ -18,7 +18,7 @@ import { songKey } from "@/store";
 @Options({
     components: {
         OpenSheetMusicDisplay,
-    }
+    },
 })
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
@@ -43,7 +43,7 @@ export default class SheetMusic extends Vue {
     public get embed() {
         const query = this.searchParams.get("embed");
 
-        const embed = ['', "true"].includes(query ?? 'false');
+        const embed = ["", "true"].includes(query ?? "false");
 
         return embed;
     }
@@ -51,7 +51,7 @@ export default class SheetMusic extends Vue {
     public get zoom() {
         const query = this.searchParams.get("zoom");
 
-        const zoom = query ? parseInt(query)/100 : undefined;
+        const zoom = query ? parseInt(query) / 100 : undefined;
 
         return zoom;
     }

@@ -8,7 +8,7 @@ export declare class LinearTimingSource extends AbstractTimingSource {
     getCurrentTimeInMs(): number;
     getCurrentAudioDelayRevisedTimestamp(): Fraction;
     getTimestampForTimeInMs(timesInMs: number): Fraction;
-    start(): void;
-    pause(): void;
+    start(): Promise<void>;
+    pause(): Promise<void>;
     reset(): void;
 }

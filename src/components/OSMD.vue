@@ -1,6 +1,7 @@
 <template>
     <div class="osmd-wrapper" v-if="createdDone">
         <div class="osmd-controls">
+            <h4 class="osmd-controls__title">{{ $t("song.sheetmusic") }}</h4>
             <div class="osmd-controls__transpose">
                 <Icon
                     name="arrowLeft"
@@ -16,9 +17,7 @@
                     @click="transpose(0)"
                 >
                     {{ originalKey ?? "Key" }} ({{
-                        transposition > 0
-                            ? "+" + transposition
-                            : transposition
+                        transposition > 0 ? "+" + transposition : transposition
                     }})
                 </span>
                 <Icon
@@ -55,22 +54,22 @@ import { osmd } from "@/services/osmd";
 @Options({
     components: {
         Icon,
-        BaseButton
+        BaseButton,
     },
     props: {
         url: {
-            type: String
+            type: String,
         },
         initialTransposition: {
-            type: Number
+            type: Number,
         },
         initialZoom: {
-            type: Number
+            type: Number,
         },
         originalKey: {
-            type: String
-        }
-    }
+            type: String,
+        },
+    },
 })
 export default class OSMD extends Vue {
     private url?: string;
@@ -113,13 +112,22 @@ export default class OSMD extends Vue {
 }
 </script>
 <style lang="scss">
+@import "../style/mixins";
 
 .osmd-controls {
-    &__title {
-        margin: 0 0 0.5em 0;
-    }
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--st-spacing);
+
+    @include breakpoint("small") {
+        flex-direction: column;
+        align-items: initial;
+    }
+
+    &__title {
+        margin: 0;
+    }
 
     &__transpose {
         padding: 0.5em;
@@ -159,13 +167,17 @@ export default class OSMD extends Vue {
     }
 }
 
-body {
+#pb-controls .control-panel {
+    position: unset;
+}
+
+.osmd-wapper {
     --mdc-theme-primary: #eb6201;
-    --mdc-theme-secondary:  #eb6201;
+    --mdc-theme-secondary: #eb6201;
 }
 /* tooltip styles. Unused for now - Perhaps remove if it remains so */
 [data-md-tooltip] {
-position: relative;
+    position: relative;
 }
 [data-md-tooltip]:before {
     content: attr(data-md-tooltip);
@@ -181,7 +193,7 @@ position: relative;
     color: white;
     border-radius: 2px;
     font-size: 12px;
-    font-family: Roboto,sans-serif;
+    font-family: Roboto, sans-serif;
     font-weight: 400;
     z-index: 99999;
 }
@@ -189,74 +201,74 @@ position: relative;
     background: var(--mdc-theme-primary);
 }
 [data-md-tooltip]:hover:before {
-transform: translateX(-50%) scale(1); 
+    transform: translateX(-50%) scale(1);
 }
 /* POSITIONING */
 
 .left {
     text-align: left;
-  }
-  
-  .right {
+}
+
+.right {
     text-align: right;
-  }
-  
-  .center {
+}
+
+.center {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-  }
-  
-  .justify {
+}
+
+.justify {
     text-align: justify;
-  }
+}
 
-  .d-inline-block{
-      display: inline-block;
-  }
+.d-inline-block {
+    display: inline-block;
+}
 
-  .d-block{
-      display: block;
-  }
+.d-block {
+    display: block;
+}
 
-  .d-inline{
-      display: inline;
-  }
+.d-inline {
+    display: inline;
+}
 
-  .d-none{
-      display: none;
-  }
+.d-none {
+    display: none;
+}
 
-  .v-align-middle{
-      vertical-align: middle;
-  }
+.v-align-middle {
+    vertical-align: middle;
+}
 
-  .v-align-top{
-      vertical-align: top;
-  }
+.v-align-top {
+    vertical-align: top;
+}
 
-  .v-align-bottom{
-      vertical-align: bottom;
-  }
-  
-  /* ==== GRID SYSTEM ==== */
-  
-  .container {
+.v-align-bottom {
+    vertical-align: bottom;
+}
+
+/* ==== GRID SYSTEM ==== */
+
+.container {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-  }
-  
-  .row {
+}
+
+.row {
     position: relative;
     width: 100%;
-  }
-  
-  .row [class^="col"] {
+}
+
+.row [class^="col"] {
     float: left;
     margin: 0.5rem 2%;
     min-height: 0.125rem;
-  }
+}
 
 .col-1 {
     width: 6.3333%;
@@ -306,46 +318,57 @@ transform: translateX(-50%) scale(1);
     width: 98%;
 }
 
-.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
     display: inline-block;
 }
 
-.mdc-touch-target-wrapper{
+.mdc-touch-target-wrapper {
     z-index: 99;
 }
-.annotation-ui-container{
-    font-family: 'Roboto', sans-serif;
+.annotation-ui-container {
+    font-family: "Roboto", sans-serif;
 }
 
-.toolbar{
+.toolbar {
     padding: 8px;
     border-bottom: solid 1px #888888;
 }
 
-.text-center{
+.text-center {
     text-align: center;
 }
 
-.half-container{
+.half-container {
     display: inline-block;
     width: 49.2%;
     vertical-align: middle;
 }
 
-.settings-button-container{
-    position:fixed;
+.settings-button-container {
+    position: fixed;
     bottom: 15px;
     left: 5px;
     z-index: 50;
 }
 
-.settings-button-container .mdc-fab{
+.settings-button-container .mdc-fab {
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.control-panel{
-    position:fixed;
+.control-panel {
+    position: fixed;
     bottom: 60px;
     left: 0;
     padding: 0 5px;
@@ -354,20 +377,21 @@ transform: translateX(-50%) scale(1);
     background: transparent;
 }
 
-.controls-container{
+.controls-container {
     width: 350px;
 }
 
-.playback-title-bar{
+.playback-title-bar {
     margin-bottom: 8px;
 }
 
-.controls-container .volume-toolbar, .controls-container .metronome-toolbar{
+.controls-container .volume-toolbar,
+.controls-container .metronome-toolbar {
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.controls-container .metronome-toolbar{
+.controls-container .metronome-toolbar {
     margin-top: 10px;
 }
 
@@ -376,12 +400,14 @@ transform: translateX(-50%) scale(1);
     padding: 0px;
 }
 
-.controls-container .mdc-button.mdc-button--outlined.mdc-icon-button--on .mdc-button__ripple{
+.controls-container
+    .mdc-button.mdc-button--outlined.mdc-icon-button--on
+    .mdc-button__ripple {
     background-color: rgba(241, 154, 92, 0.25);
     transition: background-color 0.5s ease;
 }
 
-.playback-buttons{
+.playback-buttons {
     bottom: 5px;
     left: calc(50% - 56px);
 }
@@ -391,38 +417,38 @@ transform: translateX(-50%) scale(1);
 }
 
 .playpause-button.playing .pause-icon {
-    display:block;
+    display: block;
 }
 
 .playpause-button.playing .play-icon {
-    display:none;
+    display: none;
 }
 
-.slider-container{
+.slider-container {
     margin-left: 10px;
 }
 
-.annotation-menu{
-    position:fixed;
+.annotation-menu {
+    position: fixed;
     bottom: 60px;
     left: 5px;
     width: 375px;
     max-width: 90%;
     overflow-x: hidden;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
 
-.preview-container{
+.preview-container {
     position: fixed;
     bottom: 60px;
     left: 385px;
     width: 90px;
     height: 90px;
     max-width: 10%;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
 
-.preview-container > #render-element{
+.preview-container > #render-element {
     text-align: center;
     width: 100%;
     line-height: 1.5;
@@ -437,7 +463,8 @@ transform: translateX(-50%) scale(1);
     transition: visibility 0.5s ease;
 }
 
-.comment-input-dragger, .symbol-placer-dragger{
+.comment-input-dragger,
+.symbol-placer-dragger {
     font-size: 1.25rem;
     cursor: pointer;
     z-index: 999;
@@ -445,7 +472,7 @@ transform: translateX(-50%) scale(1);
 }
 
 .comment-input {
-    background-color: rgba(255, 255, 128, .4);
+    background-color: rgba(255, 255, 128, 0.4);
     border: dotted 1px blue;
     resize: none;
     overflow: hidden;
@@ -454,42 +481,42 @@ transform: translateX(-50%) scale(1);
     z-index: 1000;
 }
 
-.mdc-tab-scroller__scroll-content{
+.mdc-tab-scroller__scroll-content {
     overflow-y: hidden;
 }
 
-#add-symbol-mode{
+#add-symbol-mode {
     overflow-y: hidden;
 }
 
-.gonville-icon{
+.gonville-icon {
     font-family: Gonville;
     max-height: 100%;
     margin-top: -18px;
 }
 /*Special rules for custom SVG icon*/
-.symbol-icon-group{
+.symbol-icon-group {
     fill: var(--mdc-theme-text-secondary-on-background);
     stroke: var(--mdc-theme-text-secondary-on-background);
 }
 
-.mdc-tab--active .symbol-icon-group{
+.mdc-tab--active .symbol-icon-group {
     fill: var(--mdc-theme-primary);
     stroke: var(--mdc-theme-primary);
 }
 
-.gonville-icon div span{
+.gonville-icon div span {
     padding: 0px 2px;
 }
 
-.symbol-render{
+.symbol-render {
     font-family: Gonville;
     display: inline-block;
     z-index: 1000;
     line-height: 1;
 }
 
-.symbol-render-measure{
+.symbol-render-measure {
     position: absolute;
     visibility: hidden;
     font-family: Gonville;
@@ -504,21 +531,21 @@ transform: translateX(-50%) scale(1);
     outline-offset: 0px;
 }
 
-#text-measure-element{
+#text-measure-element {
     position: absolute;
     visibility: hidden;
     line-height: 1;
     z-index: -99999;
 }
 
-#dragger-measure-element{
+#dragger-measure-element {
     font-size: 1.25rem;
     position: absolute;
     visibility: hidden;
     z-index: -99999;
 }
 
-#text-measure-element.symbol{
+#text-measure-element.symbol {
     font-family: Gonville;
 }
 
@@ -532,7 +559,7 @@ transform: translateX(-50%) scale(1);
     list-style: none;
 }
 
-.color-swatch-list .color-swatch{
+.color-swatch-list .color-swatch {
     display: inline-block;
     border: 0;
     vertical-align: baseline;
@@ -547,28 +574,30 @@ transform: translateX(-50%) scale(1);
     transition: border-width 0.6s linear;
 }
 
-.color-swatch-list .color-swatch.selected{
+.color-swatch-list .color-swatch.selected {
     outline: 2px solid;
 }
 
-.color-swatch-list .color-swatch.selected{
+.color-swatch-list .color-swatch.selected {
     outline-color: #000000;
 }
 
-.color-swatch-list .color-swatch.selected.negative{
+.color-swatch-list .color-swatch.selected.negative {
     outline-color: #666666;
 }
 
-.symbol-swatch-list .symbol-swatch.selected{
+.symbol-swatch-list .symbol-swatch.selected {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 80px;
 }
 
-.symbol-swatch-list .symbol-swatch, .preview-container > #render-element, .gonville-icons{
+.symbol-swatch-list .symbol-swatch,
+.preview-container > #render-element,
+.gonville-icons {
     font-family: Gonville;
 }
 
-.layer-list-item{
+.layer-list-item {
     border-bottom: 1px solid #666666;
     font-weight: bold;
     color: #333333;
@@ -576,20 +605,21 @@ transform: translateX(-50%) scale(1);
     transition: background-color 0.5s ease;
 }
 
-.layer-list-item .text-content{
+.layer-list-item .text-content {
     padding-top: 15px;
     padding-bottom: 15px;
 }
 
-.layer-list-item:hover{
-    background-color: rgba(0,0,0,0.05);
+.layer-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .layer-list-item.selected {
     background-color: #eb620160;
 }
 
-.layer-list-item .mdc-icon-button, .add-layer-controls-container .mdc-icon-button{
+.layer-list-item .mdc-icon-button,
+.add-layer-controls-container .mdc-icon-button {
     float: right;
 }
 
@@ -597,27 +627,27 @@ transform: translateX(-50%) scale(1);
     z-index: 50;
 }
 
-.splide{
+.splide {
     padding: 2rem 3rem;
 }
 
-.splide.vertical{
+.splide.vertical {
     padding: 3.5rem 2rem;
 }
 
-.splide.splide.vertical .splide__list{
+.splide.splide.vertical .splide__list {
     border-top: 1px solid #666666;
 }
 
-.splide.vertical .splide__list{
+.splide.vertical .splide__list {
     width: 100%;
 }
 
-.splide__arrow{
+.splide__arrow {
     z-index: 20;
 }
 
-.splide__pagination__page{
+.splide__pagination__page {
     background-color: #aaa;
 }
 
