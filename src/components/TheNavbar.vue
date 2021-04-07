@@ -72,9 +72,14 @@ export default class TheNavbar extends Vue {}
         .nav__search-link {
             display: flex !important;
         }
+
+        .nav__settings {
+            display: flex !important;
+        }
     }
 
-    &__search-link {
+    &__search-link,
+    &__settings {
         display: none !important;
     }
 
