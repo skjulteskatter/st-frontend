@@ -5,8 +5,6 @@ import { Contributor } from './contributor';
 import { Participant } from './participant';
 import { BaseClass } from './baseClass';
 const converter = new Converter();
-converter.setOption('simpleLineBreaks', true);
-
 
 export class Song extends BaseClass implements ApiSong {
     public id: string;
