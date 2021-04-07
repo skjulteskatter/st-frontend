@@ -6,7 +6,6 @@ import { Participant } from './participant';
 import { BaseClass } from './baseClass';
 const converter = new Converter();
 
-
 export class Song extends BaseClass implements ApiSong {
     public id: string;
     public number = 0;

@@ -7,7 +7,7 @@
             </base-button>
         </div>
         <settings-card></settings-card>
-        <base-button @click="updatePassword = !updatePassword">Set new password</base-button>
+        <base-button v-if="passwordUser" @click="updatePassword = !updatePassword">Set new password</base-button>
         <div v-if="updatePassword">
             <form @submit="resetPassword">
                 <base-input type="password" v-model="oldPassword" label="Old password"/>
@@ -52,6 +52,10 @@ export default class SettingsView extends Vue {
         if (this.newPassword == this.repeatPassword) {
             auth.resetPassword(this.oldPassword, this.newPassword);
         }
+    }
+
+    public get passwordUser() {
+        return auth.user?.providerData.find(p => p?.providerId == "password");
     }
 }
 </script>
