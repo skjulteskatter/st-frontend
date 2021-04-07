@@ -3,18 +3,25 @@
         <back-button />
         <div class="contributor__biography">
             <base-card class="contributor__biography__header" secondary border>
-                <p class="contributor__biography__header__title">
-                    {{ $t("song.contributor") }}
-                </p>
-                <h1 class="contributor__biography__header__name">
-                    {{ contributor.name }}
-                </h1>
-                <small
-                    class="contributor__biography__header__subtitle"
-                    v-if="contributor.subtitle"
-                >
-                    {{ contributor.subtitle }}
-                </small>
+                <img
+                    :src="contributor.image"
+                    v-if="contributor.image"
+                    class="contributor__biography__header__portrait"
+                />
+                <div>
+                    <p class="contributor__biography__header__title">
+                        {{ $t("song.contributor") }}
+                    </p>
+                    <h1 class="contributor__biography__header__name">
+                        {{ contributor.name }}
+                    </h1>
+                    <small
+                        class="contributor__biography__header__subtitle"
+                        v-if="contributor.subtitle"
+                    >
+                        {{ contributor.subtitle }}
+                    </small>
+                </div>
             </base-card>
             <div v-html="contributor.getBiography(languageKey)"></div>
         </div>
@@ -145,6 +152,12 @@ export default class ContributorView extends Vue {
 
     &__biography {
         &__header {
+            .card__content {
+                display: flex;
+                align-items: center;
+                gap: var(--st-spacing);
+            }
+
             &__title {
                 color: var(--st-color-primary);
                 margin: 0;
@@ -156,6 +169,10 @@ export default class ContributorView extends Vue {
 
             &__subtitle {
                 opacity: 0.6;
+            }
+
+            &__portrait {
+                max-width: 4rem;
             }
         }
     }
