@@ -11,8 +11,10 @@
             :options="songStore.state.sheetMusic"
         ></open-sheet-music-display>
         <div id="osmd-canvas"></div>
-        <base-button @click="osmd.toggleControls()">Controls</base-button>
-        <div id="pb-canvas"></div>
+        
+        <div id="pb-canvas">
+            <base-button @click="osmd.toggleControls()">Controls</base-button>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -89,3 +91,15 @@ export default class SheetMusic extends Vue {
     }
 }
 </script>
+<style lang="scss">
+#pb-canvas .control-panel {
+    background-color: var(--st-color-ui-lm-medium);
+    width: 350px;
+    left: unset;
+}
+
+#pb-canvas {
+    width: 100%;
+    text-align: center;
+}
+</style>
