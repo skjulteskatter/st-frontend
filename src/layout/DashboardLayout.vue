@@ -9,8 +9,9 @@
                             <component :is="Component" />
                         </transition>
                     </router-view>
+                    <div id="osmd-canvas"></div>
+                    <div id="pb-controls"></div>
                 </div>
-                <div id="pb-controls"></div>
             </main>
             <!-- <feedback-form></feedback-form> -->
         </div>
@@ -25,6 +26,7 @@ import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
+import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
@@ -34,7 +36,7 @@ import { FeedbackForm } from "@/components/feedback";
     },
 })
 export default class DashboardLayout extends Vue {
-    mounted() {
+    async mounted() {
         document.documentElement.style.setProperty(
             "--st-color-primary",
             themes.default
@@ -43,6 +45,11 @@ export default class DashboardLayout extends Vue {
         if (this.initialized && !this.user) {
             this.$router.push({ name: "login" });
         }
+
+        while(!this.user) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        await osmd.init(null, null);
     }
 
     public get user() {

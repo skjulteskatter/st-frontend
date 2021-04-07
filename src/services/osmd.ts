@@ -19,20 +19,12 @@ class OSMD {
 
     constructor() {
         this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
-        
-        const canvas = document.getElementById("osmd-canvas");
-        const pbcanvas = document.getElementById("pb-controls");
-
-        //this.init(canvas, pbcanvas);
     }
 
     public async init(canvas: HTMLElement | null, pbcanvas: HTMLElement | null) {
         while(!canvas || !pbcanvas) {
             canvas = document.getElementById("osmd-canvas");
             pbcanvas = document.getElementById("pb-controls");
-            
-            console.log("RETRY")
-        
 
             await new Promise(resolve => setTimeout(resolve, 100));
         }
@@ -78,8 +70,7 @@ class OSMD {
                 pageBackgroundColor: "#FFFFFF",
             });
 
-            this.controlPanel = new ControlPanel(pbcanvas);
-
+            this.controlPanel = new ControlPanel(this.pbcanvas);
             const o = this.osmd;
 
             const playbackListener = {
@@ -109,6 +100,8 @@ class OSMD {
 
             this.controlPanel.addListener(playbackListener);
 
+            console.log("INITIALIZED OSMD");
+
         } else {
             throw new Error("Couldn't get the canvas for OSMD")
         }
@@ -120,7 +113,6 @@ class OSMD {
         this.transposition = sheetMusic.transposition ?? 0;
 
         this.canvas.innerHTML = "";
-        this.pbcanvas.innerHTML = "";
 
         this.osmd.setLogLevel("warn");
 
@@ -139,6 +131,8 @@ class OSMD {
         this.osmd.enableOrDisableCursor(true);
         
         // this.osmd.cursor.reset();
+
+        console.log("LOAD PBMG")
 
         this.loadPlaybackManager();
 
@@ -186,6 +180,14 @@ class OSMD {
         this.controlPanel.hideAndClear();
     }
 
+    public toggleControls() {
+        if (this.controlPanel.IsClosed) {
+            this.showControls();
+        } else {
+            this.hideControls();
+        }
+    }
+
     public clear() {
         this.hideControls();
         this.controlPanel.clearVolumeTracks();
@@ -194,13 +196,18 @@ class OSMD {
     }
 
     private loadPlaybackManager() {
+        this.osmd.FollowCursor = true;
+        console.log("INIT TIMINGSOURCE")
         this.timingSource.reset();
         this.timingSource.pause();
         this.timingSource.Settings = this.osmd.Sheet.SheetPlaybackSetting;
         // this.playbackManager.Dispose();
         this.osmd.PlaybackManager?.Dispose();
 
+        console.log("DECLARE PBMG")
         const playbackManager = this.playbackManager();
+
+        console.log(this.controlPanel);
 
         playbackManager.DoPlayback = true;
         playbackManager.DoPreCount = false;
@@ -217,6 +224,8 @@ class OSMD {
             this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
         }
         this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
+
+        console.log(this.controlPanel);
     }
 }
 

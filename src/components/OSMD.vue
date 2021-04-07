@@ -42,8 +42,7 @@
                 </div>
             </div>
         </div>
-        <div id="osmd-canvas"></div>
-        <base-button @click="playbackControl.toggleControls()">Controls</base-button>
+        <base-button @click="osmd.toggleControls()">Controls</base-button>
     </div>
 </template>
 <script lang="ts">
@@ -89,11 +88,6 @@ export default class OSMD extends Vue {
 
     public async mounted() {
         console.log("MOUNTED")
-
-        const canvas = document.getElementById("osmd-canvas");
-        const pbcanvas = document.getElementById("pb-controls");
-
-        await this.osmd.init(canvas, pbcanvas);
 
         await this.osmd.load({
             show: true,

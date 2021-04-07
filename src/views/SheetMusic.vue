@@ -8,12 +8,16 @@
             :initialZoom="zoom"
         ></open-sheet-music-display>
     </div>
+    <div id="osmd-canvas"></div>
+    <div id="pb-canvas"></div>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
 import { useStore } from "vuex";
 import { songKey } from "@/store";
+import { osmd } from "@/services/osmd";
+import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {
@@ -23,6 +27,21 @@ import { songKey } from "@/store";
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
     public songStore = useStore(songKey);
+
+    public async mounted() {
+        const canvas = document.getElementById("osmd-canvas");
+        const pbcanvas = document.getElementById("pb-canvas");
+        await osmd.init(canvas, pbcanvas);
+
+        const o: SheetMusicOptions = {
+            show: true,
+            url: this.url,
+            originalKey: this.originalKey,
+            transposition: this.transposition,
+        }
+
+        this.songStore.commit("sheetMusic", o) 
+    }
 
     public get url() {
         return this.songStore.state.sheetMusic.url ?? `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
