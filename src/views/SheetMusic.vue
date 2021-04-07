@@ -8,7 +8,8 @@
             :initialZoom="zoom"
         ></open-sheet-music-display> -->
         <open-sheet-music-display
-            :options="songStore.state.sheetMusic"
+            v-if="url"
+            :options="options"
         ></open-sheet-music-display>
         <div id="osmd-canvas"></div>
         
@@ -24,6 +25,7 @@ import { BaseButton } from "@/components";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 import { osmd } from "@/services/osmd";
+import { SheetMusicOptions } from "@/store/songs";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -88,6 +90,15 @@ export default class SheetMusic extends Vue {
 
     public get showSheetMusic() {
         return this.songStore.state.sheetMusic.show;
+    }
+
+    public get options(): SheetMusicOptions {
+        return {
+            show: this.showSheetMusic,
+            url: this.url,
+            originalKey: this.originalKey,
+            transposition: this.transposition,
+        }
     }
 }
 </script>
