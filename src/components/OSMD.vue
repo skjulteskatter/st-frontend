@@ -1,5 +1,5 @@
 <template>
-    <div class="osmd-wrapper" v-if="true">
+    <div class="osmd-wrapper">
         <div class="osmd-controls">
             <h4 class="osmd-controls__title">{{ $t("song.sheetmusic") }}</h4>
             <div class="osmd-controls__transpose">
@@ -16,7 +16,7 @@
                     class="osmd-controls__key"
                     @click="transpose(0)"
                 >
-                    {{ originalKey ?? "Key" }} ({{
+                    {{ options.originalKey ?? "Key" }} ({{
                         transposition > 0 ? "+" + transposition : transposition
                     }})
                 </span>
@@ -42,7 +42,6 @@
                 </div>
             </div>
         </div>
-        <base-button @click="osmd.toggleControls()">Controls</base-button>
     </div>
 </template>
 <script lang="ts">
@@ -50,6 +49,7 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
+import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {
@@ -57,46 +57,31 @@ import { osmd } from "@/services/osmd";
         BaseButton,
     },
     props: {
-        url: {
-            type: String,
-        },
-        initialTransposition: {
-            type: Number,
-        },
-        initialZoom: {
-            type: Number,
-        },
-        originalKey: {
-            type: String,
-        },
+        options: {
+            type: Object
+        }
     },
+    name: "OSMD"
 })
 export default class OSMD extends Vue {
-    private url?: string;
     public osmd = osmd;
-    private canvas: HTMLElement = undefined as unknown as HTMLElement;
-    private pbcanvas: HTMLElement = undefined as unknown as HTMLElement;
-    private initialTransposition?: number;
     public originalKey?: string;
     public transposition = 0;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public playbackControl: any;
-    private initialZoom?: number;
     public zoom = 1;
     public createdDone = false;
     public loading: string[] = [];
+    public options: SheetMusicOptions = {show: false};
 
     public async mounted() {
-        console.log("MOUNTED")
+        this.transposition = this.options.transposition ?? 0;
 
-        await this.osmd.load({
-            show: true,
-            url: this.url,
-            originalKey: this.originalKey,
-            transposition: this.initialTransposition,
-        });
-
-        console.log("DONE LOADING")
+        try {
+            await this.osmd.load(this.options);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     public transpose(n: number) {
@@ -165,10 +150,6 @@ export default class OSMD extends Vue {
             transform: translateY(-2px);
         }
     }
-}
-
-#pb-controls .control-panel {
-    position: unset;
 }
 
 .osmd-wapper {

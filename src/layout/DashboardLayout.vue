@@ -4,15 +4,18 @@
             <the-navbar></the-navbar>
             <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
-                    <router-view v-slot="{ Component }">
+                    <router-view v-slot="{ Component }" v-if="$route.name != 'songs-sheet-music'">
                         <transition name="view" mode="out-in">
                             <component :is="Component" />
                         </transition>
                     </router-view>
-                    <div :style="{display: showSheetMusic ? 'unset' : 'none'}">
+                    <!-- <div :style="{display: showSheetMusic ? '' : 'none'}">
                         <div id="osmd-canvas"></div>
-                        <div id="pb-controls"></div>
-                    </div>
+                        <div id="pb-controls">
+                            <base-button @click="osmd.toggleControls()">Controls</base-button>
+                        </div>
+                    </div> -->
+                    <sheet-music :style="$route.name == 'songs-sheet-music' ? '' : 'display: none !important;'"></sheet-music>
                 </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
@@ -29,17 +32,22 @@ import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
 import { osmd } from "@/services/osmd";
+import { BaseButton } from "@/components";
+import SheetMusic from "@/views/SheetMusic.vue";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
-        FeedbackForm
+        FeedbackForm,
+        BaseButton,
+        SheetMusic,
     },
 })
 export default class DashboardLayout extends Vue {
     public sessionStore = useStore(sessionKey);
     public songStore = useStore(songKey);
+    public osmd = osmd;
 
     async mounted() {
         document.documentElement.style.setProperty(
@@ -51,10 +59,7 @@ export default class DashboardLayout extends Vue {
             this.$router.push({ name: "login" });
         }
 
-        while(!this.user) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        await osmd.init(null, null);
+        // await osmd.init(null, null);
     }
 
     public get user() {
@@ -74,6 +79,26 @@ export default class DashboardLayout extends Vue {
 </script>
 <style lang="scss">
 @import "../style/mixins";
+
+#osmd-canvas {
+    position: relative;
+    display: flex;
+}
+
+#pb-controls .control-panel {
+    position: unset;
+    z-index: 1000;
+    background-color: var(--st-color-ui-lm-medium);
+    width: 350px;
+}
+
+#pb-controls {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    z-index: 50;
+    width: 100%;
+}
 
 .dashboard-layout {
     display: flex;

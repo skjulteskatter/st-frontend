@@ -69,6 +69,11 @@ const routes: Array<RouteRecordRaw> = [
                         name: 'search',
                         component: CompleteSearch,
                         props: { q: "" }
+                    },
+                    {
+                        path: 'sheetmusic',
+                        name: 'songs-sheet-music',
+                        component: SheetMusic
                     }
                 ]
             },

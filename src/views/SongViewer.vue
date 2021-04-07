@@ -34,12 +34,12 @@
             <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
             </iframe> -->
             <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
-            <open-sheet-music-display
+            <!-- <open-sheet-music-display
                 :url="'https://dmb-cdn.azureedge.net/files/' + sheetMusicUrl"
                 :initialTransposition="transposition"
                 v-if="sheetMusicUrl"
             >
-            </open-sheet-music-display>
+            </open-sheet-music-display> -->
             <div class="loader" v-if="loadingLyrics"></div>
         </div>
 
@@ -100,9 +100,9 @@ export default class SongViewer extends Vue {
     public selectedLanguage = this.languageKey;
     public sidebar = false;
 
-    public unmounted() {
-        this.songStore.commit("sheetMusic", {show: false});
-    }
+    // public unmounted() {
+    //     this.songStore.commit("sheetMusic", {show: false});
+    // }
 
     public async mounted() {
         this.songStore.commit("sheetMusic", {show: false});
@@ -123,18 +123,6 @@ export default class SongViewer extends Vue {
 
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
-
-
-        if (this.sheetMusicUrl) {
-            const o: SheetMusicOptions = {
-                show: true,
-                url: 'https://dmb-cdn.azureedge.net/files/' + this.sheetMusicUrl,
-                originalKey: this.song?.originalKey,
-                transposition: this.transposition,
-            }
-
-            this.songStore.commit("sheetMusic", o);
-        }
     }
 
     public get transposition() {
@@ -180,11 +168,6 @@ export default class SongViewer extends Vue {
     public get collection(): Collection | undefined {
         return this.songStore.getters.collection;
     }
-
-    public get sheetMusicUrl() {
-        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
-            ?.id;
-    }
 }
 </script>
 
@@ -221,11 +204,11 @@ export default class SongViewer extends Vue {
         flex-wrap: wrap;
         gap: var(--st-spacing);
         padding: calc(var(--st-spacing) * 2);
-        overflow-y: auto;
+        //overflow-y: auto;
 
         @include breakpoint("medium") {
             padding: var(--st-spacing);
-            overflow-y: scroll;
+            //overflow-y: scroll;
         }
 
         & > *:not(:last-child) {

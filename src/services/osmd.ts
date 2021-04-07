@@ -2,6 +2,7 @@ import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, 
 import { SheetMusicOptions } from "@/store/songs";
 
 class OSMD {
+    private initialized = false;
     private osmd: OpenSheetMusicDisplay = {} as OpenSheetMusicDisplay;
     public canvas: HTMLElement = {} as HTMLElement;
     public pbcanvas: HTMLElement = {} as HTMLElement;
@@ -21,10 +22,20 @@ class OSMD {
         this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
     }
 
-    public async init(canvas: HTMLElement | null, pbcanvas: HTMLElement | null) {
+    public async init(c: HTMLElement | null, pbc: HTMLElement | null) {
+
+        if (this.initialized) {
+            console.log("ALREADY INITIALIZED")
+            return;
+        }
+        let canvas = c;
+        let pbcanvas = pbc;
+
         while(!canvas || !pbcanvas) {
             canvas = document.getElementById("osmd-canvas");
-            pbcanvas = document.getElementById("pb-controls");
+            pbcanvas = document.getElementById("pb-canvas");
+
+            console.log("COULDNT FIND ELEMENTS")
 
             await new Promise(resolve => setTimeout(resolve, 100));
         }
@@ -38,8 +49,8 @@ class OSMD {
                 backend: "canvas",
                 drawingParameters: "default", // try compact (instead of default)
                 drawPartNames: false, // try false
-                drawTitle: false,
-                drawSubtitle: false,
+                drawTitle: true,
+                drawSubtitle: true,
                 disableCursor: false,
                 // fingeringInsideStafflines: "true", // default: false. true draws fingerings directly above/below notes
                 setWantedStemDirectionByXml: false, // try false, which was previously the default behavior
@@ -102,6 +113,8 @@ class OSMD {
 
             console.log("INITIALIZED OSMD");
 
+            this.initialized = true;
+
         } else {
             throw new Error("Couldn't get the canvas for OSMD")
         }
@@ -110,12 +123,15 @@ class OSMD {
     public async load(sheetMusic: SheetMusicOptions) {
         if (!sheetMusic.url) throw new Error("URL not found. Aborting load");
 
+        while(!this.initialized) {
+            console.log("WAITING INITIALIZATION")
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
         this.transposition = sheetMusic.transposition ?? 0;
 
-        this.canvas.innerHTML = "";
-
         this.osmd.setLogLevel("warn");
-
+        
         await this.osmd.load(sheetMusic.url);
 
         this.osmd.TransposeCalculator = new TransposeCalculator();
@@ -131,8 +147,6 @@ class OSMD {
         this.osmd.enableOrDisableCursor(true);
         
         // this.osmd.cursor.reset();
-
-        console.log("LOAD PBMG")
 
         this.loadPlaybackManager();
 
