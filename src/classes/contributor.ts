@@ -11,6 +11,7 @@ export class Contributor implements ApiContributor {
     public id = '';
     public name = '';
     public subtitle = '';
+    public image = '';
 
     constructor(contributor: ApiContributor) {
         this.biography = contributor.biography;
@@ -19,6 +20,7 @@ export class Contributor implements ApiContributor {
         this.id = contributor.id;
         this.name = contributor.name;
         this.subtitle = contributor.subtitle;
+        this.image = contributor.image;
     }
 
     public getBiography(language: string) {
