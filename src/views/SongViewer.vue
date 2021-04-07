@@ -134,8 +134,6 @@ export default class SongViewer extends Vue {
             }
 
             this.songStore.commit("sheetMusic", o);
-
-            console.log(o);
         }
     }
 

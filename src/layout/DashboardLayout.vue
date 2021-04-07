@@ -9,8 +9,10 @@
                             <component :is="Component" />
                         </transition>
                     </router-view>
-                    <div id="osmd-canvas"></div>
-                    <div id="pb-controls"></div>
+                    <div :style="{display: showSheetMusic ? 'unset' : 'none'}">
+                        <div id="osmd-canvas"></div>
+                        <div id="pb-controls"></div>
+                    </div>
                 </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
@@ -21,7 +23,7 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
-import { sessionKey } from "../store";
+import { sessionKey, songKey } from "../store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
@@ -36,6 +38,9 @@ import { osmd } from "@/services/osmd";
     },
 })
 export default class DashboardLayout extends Vue {
+    public sessionStore = useStore(sessionKey);
+    public songStore = useStore(songKey);
+
     async mounted() {
         document.documentElement.style.setProperty(
             "--st-color-primary",
@@ -53,13 +58,17 @@ export default class DashboardLayout extends Vue {
     }
 
     public get user() {
-        return useStore(sessionKey).state.currentUser;
+        return this.sessionStore.state.currentUser;
     }
     public get isAdmin() {
-        return useStore(sessionKey).getters.isAdmin;
+        return this.sessionStore.getters.isAdmin;
     }
     public get initialized() {
-        return useStore(sessionKey).state.initialized;
+        return this.sessionStore.state.initialized;
+    }
+
+    public get showSheetMusic() {
+        return this.songStore.state.sheetMusic.show;
     }
 }
 </script>
