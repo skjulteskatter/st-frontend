@@ -8,7 +8,7 @@
             :initialZoom="zoom"
         ></open-sheet-music-display> -->
         <open-sheet-music-display
-            v-if="url"
+            v-if="url && ['sheet-music', 'songs-sheet-music'].includes(routeName)"
             :options="options"
         ></open-sheet-music-display>
         <div id="osmd-canvas"></div>
@@ -40,7 +40,7 @@ export default class SheetMusic extends Vue {
     public songStore = useStore(songKey);
     public osmd = osmd;
 
-    public async created() {
+    public async mounted() {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
 
@@ -51,7 +51,6 @@ export default class SheetMusic extends Vue {
         //     originalKey: this.originalKey,
         //     transposition: this.transposition,
         // }
-        console.log(this.songStore.state.sheetMusic);
 
         // this.songStore.commit("sheetMusic", o) 
     }
@@ -62,6 +61,10 @@ export default class SheetMusic extends Vue {
 
     public get originalKey() {
         return this.songStore.state.sheetMusic.originalKey ?? this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+    }
+
+    public get routeName() {
+        return this.$route.name?.toString() ?? '';
     }
 
     public get transposeKey() {

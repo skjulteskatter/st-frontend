@@ -38,7 +38,7 @@ class OSMD {
             canvas = document.getElementById("osmd-canvas");
             pbcanvas = document.getElementById("pb-canvas");
 
-            console.log("COULDNT FIND ELEMENTS")
+            console.log("COULDN'T FIND ELEMENTS")
 
             await new Promise(resolve => setTimeout(resolve, 100));
         }
@@ -224,10 +224,6 @@ class OSMD {
         this.audioPlayer.close();
         // this.playbackManager.Dispose();
 
-        console.log("DECLARE PBMG")
-
-        console.log(this.controlPanel);
-
         this.playbackManager.DoPlayback = true;
         this.playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
         this.playbackManager.addListener(this.osmd.cursor);
@@ -242,8 +238,6 @@ class OSMD {
             this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
         }
         this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
-
-        console.log(this.controlPanel);
     }
 }
 
