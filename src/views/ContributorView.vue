@@ -2,7 +2,12 @@
     <div v-if="contributor" class="contributor">
         <back-button />
         <div class="contributor__biography">
-            <base-card class="contributor__biography__header" secondary border>
+            <img
+                :src="contributor.image"
+                v-if="contributor.image"
+                class="contributor__biography__header__portrait"
+            />
+            <div class="contributor__biography__header">
                 <p class="contributor__biography__header__title">
                     {{ $t("song.contributor") }}
                 </p>
@@ -15,8 +20,11 @@
                 >
                     {{ contributor.subtitle }}
                 </small>
-            </base-card>
-            <div v-html="contributor.getBiography(languageKey)"></div>
+            </div>
+            <div
+                v-html="contributor.getBiography(languageKey)"
+                class="contributor__biography__bio"
+            ></div>
         </div>
 
         <div class="contributor__songs">
@@ -144,7 +152,20 @@ export default class ContributorView extends Vue {
     }
 
     &__biography {
+        columns: auto 300px;
+
+        @include breakpoint("small") {
+            flex-direction: column;
+            align-items: initial;
+
+            .contributor__biography__header__portrait {
+                max-width: 100%;
+            }
+        }
+
         &__header {
+            break-inside: avoid;
+
             &__title {
                 color: var(--st-color-primary);
                 margin: 0;
@@ -155,7 +176,15 @@ export default class ContributorView extends Vue {
             }
 
             &__subtitle {
-                opacity: 0.6;
+                opacity: 0.5;
+                font-style: italic;
+            }
+
+            &__portrait {
+                max-width: 100%;
+                border-radius: var(--st-border-radius);
+                border: 3px solid var(--st-color-background-medium);
+                margin-bottom: var(--st-spacing);
             }
         }
     }
