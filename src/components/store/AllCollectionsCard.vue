@@ -9,9 +9,9 @@
             />
         </div>
         <div class="all-collections-card__footer">
-            <h3 class="all-collections-card__title">
+            <h4 class="all-collections-card__title">
                 {{ product.name[languageKey] }}
-            </h3>
+            </h4>
             <base-button
                 class="all-collections-card__button"
                 icon="info"
@@ -78,6 +78,8 @@ export default class AllCollectionsCard extends Vue {
     display: flex;
     flex-direction: column;
     background: var(--st-color-background-medium);
+    border-radius: var(--st-border-radius);
+    overflow: hidden;
 
     @include breakpoint("small") {
         .all-collections-card__price {
@@ -120,6 +122,7 @@ export default class AllCollectionsCard extends Vue {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
+        margin: 0;
     }
 
     &__subtitle {
