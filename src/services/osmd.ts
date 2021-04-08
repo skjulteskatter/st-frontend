@@ -11,7 +11,7 @@ class OSMD {
     private initialZoom?: number;
     public zoom = 1;
     public createdDone = false;
-    public loading: string[] = [];
+    public loading = false;
 
     private controlPanel: ControlPanel = {} as ControlPanel;
     private timingSource = new LinearTimingSource();
@@ -128,6 +128,7 @@ class OSMD {
     }
 
     public async load(sheetMusic: SheetMusicOptions) {
+        this.loading = true;
         if (!sheetMusic.url) throw new Error("URL not found. Aborting load");
 
         while(!this.initialized) {
@@ -249,6 +250,7 @@ class OSMD {
             this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
         }
         this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
+        this.loading = false;
     }
 }
 
