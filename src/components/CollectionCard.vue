@@ -11,9 +11,9 @@
             :src="`${image}?w=300`"
             :alt="collection.getName(languageKey)"
         />
-        <h4 class="collection-card__title">
+        <p class="collection-card__title">
             {{ collection.getName(languageKey) }}
-        </h4>
+        </p>
     </div>
 </template>
 
@@ -64,28 +64,24 @@ export default class CollectionCard extends Vue {
     position: relative;
     cursor: pointer;
     animation: slideInFromBottom 250ms;
-
-    &:hover {
-        .collection-card__title {
-            transform: translateY(-0.5rem);
-        }
-    }
+    background-color: var(--st-color-background-medium);
+    border-radius: var(--st-border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     &__image {
         border-radius: var(--st-border-radius);
-        border: 3px solid var(--st-color-background-light);
         max-width: 400px;
         width: 100%;
     }
 
     &__title {
         margin: 0;
-        color: white;
-        text-shadow: 0 0 0.3em rgba(black, 0.3);
-        position: absolute;
-        top: var(--st-spacing);
-        left: var(--st-spacing);
-        transition: transform 200ms;
+        padding: calc(var(--st-spacing) / 2);
+        color: var(--st-color-text-dark);
+        background: var(--st-color-background-light);
+        flex-grow: 1;
     }
 
     &.disabled {
