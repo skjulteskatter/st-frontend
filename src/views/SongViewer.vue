@@ -79,7 +79,6 @@ import {
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
-import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {
