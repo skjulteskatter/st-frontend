@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="loader" v-if="osmd.loading"></div>
+    <div :style="osmd.loading ? 'opacity: 0' : ''">
         <!-- <open-sheet-music-display
             :url="url"
             :originalKey="originalKey"

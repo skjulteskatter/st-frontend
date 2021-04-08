@@ -14,7 +14,7 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
-                    <base-button @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button>
+                    <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button>
                     <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
