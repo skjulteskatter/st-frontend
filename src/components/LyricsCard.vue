@@ -41,7 +41,7 @@
                             {{ l.name }}
                         </option>
                     </select>
-                    <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button>
+                    <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
                 </div>
             </div>
         </template>
@@ -62,8 +62,8 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
 import { BaseCard, BaseButton } from "./";
-import { SheetMusicOptions } from "@/store/songs";
-import { osmd } from "@/services/osmd";
+// import { SheetMusicOptions } from "@/store/songs";
+// import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
@@ -108,27 +108,27 @@ export default class LyricsCard extends Vue {
                 ? this.languageKey
                 : this.languages[0]?.key) ?? this.languageKey;
         
-        if (this.sheetMusicUrl) {
-            const o: SheetMusicOptions = {
-                show: true,
-                url: 'https://dmb-cdn.azureedge.net/files/' + this.sheetMusicUrl,
-                originalKey: this.song?.originalKey,
-                transposition: this.songStore.state.smTransposition,
-            }
+        // if (this.sheetMusicUrl) {
+        //     const o: SheetMusicOptions = {
+        //         show: true,
+        //         url: 'https://dmb-cdn.azureedge.net/files/' + this.sheetMusicUrl,
+        //         originalKey: this.song?.originalKey,
+        //         transposition: this.songStore.state.smTransposition,
+        //     }
 
-            this.songStore.commit("sheetMusic", o);
-        }
+        //     this.songStore.commit("sheetMusic", o);
+        // }
     }
 
-    public sheetMusic() {
-        this.$router.push({name: "songs-sheet-music"});
-        osmd.load(this.songStore.state.sheetMusic);
-    }
+    // public sheetMusic() {
+    //     this.$router.push({name: "songs-sheet-music"});
+    //     osmd.load(this.songStore.state.sheetMusic);
+    // }
 
-    public get sheetMusicUrl() {
-        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
-            ?.id;
-    }
+    // public get sheetMusicUrl() {
+    //     return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
+    //         ?.id;
+    // }
 
     public get selectedTransposition() {
         const t = this.songStore.state.transposition ?? 0;

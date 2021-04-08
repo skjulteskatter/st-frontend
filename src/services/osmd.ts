@@ -17,8 +17,7 @@ class OSMD {
     private controlPanel: ControlPanel = {} as ControlPanel;
     private timingSource = new LinearTimingSource();
     private audioPlayer = new BasicAudioPlayer();
-    //private playbackManager = () => new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, this.audioPlayer, undefined as unknown as IMessageViewer);
-
+    // private playbackManagerCreator = () => new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, this.audioPlayer, undefined as unknown as IMessageViewer);
     private playbackManager = new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, this.audioPlayer, undefined as unknown as IMessageViewer);
 
     constructor() {
@@ -152,7 +151,7 @@ class OSMD {
         
         this.osmd.enableOrDisableCursor(true);
         
-        // this.osmd.cursor.reset();
+        this.osmd.cursor.reset();
 
         this.loadPlaybackManager();
 
@@ -221,17 +220,17 @@ class OSMD {
         this.timingSource.reset();
         this.timingSource.pause();
         this.timingSource.Settings = this.osmd.Sheet.SheetPlaybackSetting;
-        this.audioPlayer.close();
         // this.playbackManager.Dispose();
 
-        this.playbackManager.DoPlayback = true;
+        // this.playbackManager = this.playbackManagerCreator();
+
         this.playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
         this.playbackManager.addListener(this.osmd.cursor);
         this.playbackManager.reset();
-        this.osmd.PlaybackManager = this.playbackManager;
+        // this.osmd.PlaybackManager = this.playbackManager;
         this.controlPanel.addListener(this.playbackManager);
         this.controlPanel.clearVolumeTracks();
-        this.controlPanel.addVolumeTrack(this.playbackManager.Metronome.Name, this.playbackManager.Metronome.Id, this.playbackManager.Metronome.Volume*100);
+        // this.controlPanel.addVolumeTrack(this.playbackManager.Metronome.Name, this.playbackManager.Metronome.Id, this.playbackManager.Metronome.Volume*100);
         for(const instrId of this.playbackManager.InstrumentIdMapping.keys()) {
             const instr = this.playbackManager.InstrumentIdMapping.getValue(instrId);
             if (!instr) continue;

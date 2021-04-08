@@ -40,6 +40,17 @@ export default class SheetMusic extends Vue {
     public songStore = useStore(songKey);
     public osmd = osmd;
 
+    public created() {
+        const o = localStorage.getItem("sheetmusic_options");
+
+        if (o && this.$route.params.id?.length < 10) {
+            const options = JSON.parse(o) as SheetMusicOptions;
+            if (!this.songStore.state.sheetMusic.url) {
+                this.songStore.commit("sheetMusic", options);
+            }
+        }
+    }
+
     public async mounted() {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
@@ -52,7 +63,7 @@ export default class SheetMusic extends Vue {
         //     transposition: this.transposition,
         // }
 
-        // this.songStore.commit("sheetMusic", o) 
+        // this.songStore.commit("sheetMusic", o)
     }
 
     public get url() {

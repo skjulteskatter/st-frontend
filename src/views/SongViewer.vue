@@ -14,6 +14,7 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
+                    <base-button @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button>
                     <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
@@ -79,6 +80,8 @@ import {
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
+// import { osmd } from "@/services/osmd";
+import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {
@@ -123,6 +126,26 @@ export default class SongViewer extends Vue {
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
     }
+
+    public sheetMusic() {
+        // this.$router.push({name: "songs-sheet-music"});
+        // osmd.load(this.songStore.state.sheetMusic);
+        const options: SheetMusicOptions = {
+            show: true,
+            url: this.leadSheet?.directUrl,
+            originalKey: this.song?.originalKey,
+            transposition: this.transposition,
+        };
+
+        localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+
+        window.open("/sheetmusic/HV", "Lyrics Viewer", "resizeable,scrollbars");
+    }
+
+    public get leadSheet() {
+        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet");
+    }
+
 
     public get transposition() {
         return this.songStore.state.smTransposition;
