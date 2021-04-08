@@ -1,13 +1,15 @@
 <template>
     <div class="store-card" v-if="product">
         <img
-            class="store-card__image clickable"
+            class="store-card__image"
             :src="image"
             :alt="product.getName(languageKey)"
             @click="product ? gotoCollection(product) : undefined"
         />
         <div class="store-card__footer">
-            <h3 class="store-card__title">{{ product.getName(languageKey) }}</h3>
+            <h3 class="store-card__title">
+                {{ product.getName(languageKey) }}
+            </h3>
             <!-- <p class="store-card__price">
                 {{ formatPrices(product.prices, "year") }}
             </p> -->
@@ -31,15 +33,12 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
-import { BaseCard, BaseButton } from "@/components";
-import { Icon } from "@/components/icon";
+import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 
 @Options({
     components: {
-        BaseCard,
         BaseButton,
-        Icon,
     },
     props: {
         product: {
@@ -97,8 +96,8 @@ export default class StoreCard extends Vue {
 
 .store-card {
     animation: slideInFromBottom 250ms;
-    display: flex;
-    flex-direction: column;
+    background-color: var(--st-color-background-medium);
+    padding: var(--st-spacing);
 
     @include breakpoint("small") {
         .store-card__price {
@@ -111,20 +110,20 @@ export default class StoreCard extends Vue {
     }
 
     &__image {
-        margin-top: 5px;
-        max-width: 100%;
-        border-radius: 0.5rem;
-        border: 3px solid var(--st-color-background-light);
+        width: 100%;
         object-fit: cover;
     }
 
     &__footer {
         width: 100%;
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         flex-grow: 1;
+
+        @include breakpoint("medium") {
+            flex-direction: column;
+        }
     }
 
     &__price {
