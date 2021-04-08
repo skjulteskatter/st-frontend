@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "@/assets/js/osmd";
 import { SheetMusicOptions } from "@/store/songs";
 
