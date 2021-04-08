@@ -15,7 +15,7 @@
                             <base-button @click="osmd.toggleControls()">Controls</base-button>
                         </div>
                     </div> -->
-                    <sheet-music :style="$route.name == 'songs-sheet-music' ? '' : 'display: none !important;'"></sheet-music>
+                    <!-- <sheet-music :style="$route.name == 'songs-sheet-music' ? '' : 'display: none !important;'"></sheet-music> -->
                 </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
