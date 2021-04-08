@@ -3,7 +3,7 @@
         <back-button />
         <div class="contributor__biography">
             <img
-                :src="contributor.image"
+                :src="contributor.image || '/img/portrait-placeholder.png'"
                 v-if="contributor.image"
                 class="contributor__biography__header__portrait"
             />
@@ -77,12 +77,6 @@ export default class ContributorView extends Vue {
     public languageKey = useStore(sessionKey).getters.languageKey;
 
     public async mounted() {
-        // if (!this.store.getters.collection) {
-        //     await this.store.dispatch(
-        //         "selectCollection",
-        //         this.$route.params.collection
-        //     );
-        // }
         await this.store.dispatch(
             "selectContributor",
             this.$route.params.contributor
@@ -185,6 +179,7 @@ export default class ContributorView extends Vue {
                 border-radius: var(--st-border-radius);
                 border: 3px solid var(--st-color-background-medium);
                 margin-bottom: var(--st-spacing);
+                animation: slideInFromBottom 250ms ease-out;
             }
         }
     }
