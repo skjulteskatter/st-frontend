@@ -7,9 +7,9 @@
             @click="product ? gotoCollection(product) : undefined"
         />
         <div class="store-card__footer">
-            <h3 class="store-card__title">
+            <h4 class="store-card__title">
                 {{ product.getName(languageKey) }}
-            </h3>
+            </h4>
             <!-- <p class="store-card__price">
                 {{ formatPrices(product.prices, "year") }}
             </p> -->
@@ -97,7 +97,10 @@ export default class StoreCard extends Vue {
 .store-card {
     animation: slideInFromBottom 250ms;
     background-color: var(--st-color-background-medium);
-    padding: var(--st-spacing);
+    border-radius: var(--st-border-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     @include breakpoint("small") {
         .store-card__price {
@@ -112,13 +115,20 @@ export default class StoreCard extends Vue {
     &__image {
         width: 100%;
         object-fit: cover;
+        transition: transform 150ms;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 
     &__footer {
         width: 100%;
+        padding: var(--st-spacing);
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        background: var(--st-color-background-light);
         flex-grow: 1;
 
         @include breakpoint("medium") {
@@ -135,6 +145,7 @@ export default class StoreCard extends Vue {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
+        margin: 0;
     }
 
     &__subtitle {

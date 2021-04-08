@@ -77,6 +77,7 @@ export default class AllCollectionsCard extends Vue {
     animation: slideInFromBottom 250ms;
     display: flex;
     flex-direction: column;
+    background: var(--st-color-background-medium);
 
     @include breakpoint("small") {
         .all-collections-card__price {
@@ -91,8 +92,6 @@ export default class AllCollectionsCard extends Vue {
     &__image {
         max-width: 100%;
         height: 100%;
-        border-radius: 0.5rem;
-        border: 3px solid var(--st-color-background-light);
         overflow: hidden;
         display: flex;
 
@@ -106,9 +105,10 @@ export default class AllCollectionsCard extends Vue {
     &__footer {
         width: 100%;
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        align-items: flex-start;
+        padding: var(--st-spacing);
+        background: var(--st-color-background-light);
+        flex-grow: 1;
     }
 
     &__price {
