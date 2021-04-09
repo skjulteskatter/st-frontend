@@ -18,12 +18,18 @@ export type SongFilter = {
     hasSheetMusic: boolean;
 }
 
+export enum SheetMusicTypes {
+    PDF = "sheetmusic-pdf",
+    XML = "sheetmusic"
+}
+
 export type SheetMusicOptions = {
     show: boolean;
     url?: string;
     originalKey?: string;
     transposition?: number;
     zoom?: number;
+    type?: string;
 }
 
 export type AudioTrack = {

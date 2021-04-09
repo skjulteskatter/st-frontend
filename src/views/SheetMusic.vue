@@ -1,6 +1,6 @@
 <template>
     <div class="loader" v-if="osmd.loading"></div>
-    <div :style="osmd.loading ? 'opacity: 0' : ''">
+    <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
         <!-- <open-sheet-music-display
             :url="url"
             :originalKey="originalKey"
@@ -8,17 +8,16 @@
             :embed="embed"
             :initialZoom="zoom"
         ></open-sheet-music-display> -->
-        <base-button class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
+        <base-button v-if="type != pdfType" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
         <open-sheet-music-display
-            v-if="url && ['sheet-music', 'songs-sheet-music'].includes(routeName)"
+            v-if="type != pdfType && url && ['sheet-music', 'songs-sheet-music'].includes(routeName)"
             :options="options"
         ></open-sheet-music-display>
-        <div class="sheetmusic-footer">
-            <div id="osmd-canvas"></div>
-            
-            <div id="pb-canvas">
-            </div>
-        </div>
+        <object v-if="type == pdfType" :data="options.url" type="application/pdf" width="100%" height="100%">
+            <p>Couldn't load PDF</p>
+        </object>
+        <div id="osmd-canvas"></div>
+        <div id="pb-canvas"></div>
     </div>
 </template>
 <script lang="ts">
@@ -28,7 +27,7 @@ import { BaseButton } from "@/components";
 import { useStore } from "vuex";
 import { songKey } from "@/store";
 import { osmd } from "@/services/osmd";
-import { SheetMusicOptions } from "@/store/songs";
+import { SheetMusicOptions, SheetMusicTypes } from "@/store/songs";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -42,6 +41,7 @@ export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
     public songStore = useStore(songKey);
     public osmd = osmd;
+    public pdfType = SheetMusicTypes.PDF;
 
     public created() {
         const o = localStorage.getItem("sheetmusic_options");
@@ -58,7 +58,14 @@ export default class SheetMusic extends Vue {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
 
-        await osmd.init(c, pbc);
+        console.log(this.options);
+
+        if (this.type != SheetMusicTypes.PDF) {
+            await osmd.init(c, pbc);
+        } else if (this.options.url) {
+            console.log("POPOPO")
+        }
+
         // const o: SheetMusicOptions = {
         //     show: true,
         //     url: this.url,
@@ -109,17 +116,26 @@ export default class SheetMusic extends Vue {
         return this.songStore.state.sheetMusic.show;
     }
 
+    public get type() {
+        return this.songStore.state.sheetMusic.type ?? this.searchParams.get("type");
+    }
+
     public get options(): SheetMusicOptions {
         return {
             show: this.showSheetMusic,
             url: this.url,
             originalKey: this.originalKey,
             transposition: this.transposition,
+            type: this.type ?? undefined,
         }
     }
 }
 </script>
 <style lang="scss">
+.sheetmusic-viewer {
+    height: 100vh;
+}
+
 #pb-canvas .control-panel {
     background-color: var(--st-color-ui-lm-medium);
     width: 350px;

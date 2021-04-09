@@ -14,7 +14,21 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
-                    <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button>
+                    <select v-if="song.sheetMusic.length"
+                        id="sheetmusic"
+                        name="sheetmusic"
+                        v-model="selectedSheetMusic"
+                        @change="sheetMusic"
+                    >
+                        <option
+                            v-for="sheet in song.sheetMusic"
+                            :value="sheet"
+                            :key="sheet.id"
+                        >
+                            {{ $t(`types.${sheet.category}`)}}
+                        </option>
+                    </select>
+                    <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
                     <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
@@ -82,6 +96,7 @@ import { sessionKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { SheetMusicOptions } from "@/store/songs";
+import { MediaFile } from "dmb-api";
 
 @Options({
     components: {
@@ -101,6 +116,7 @@ export default class SongViewer extends Vue {
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
+    public selectedSheetMusic?: MediaFile;
 
     // public unmounted() {
     //     this.songStore.commit("sheetMusic", {show: false});
@@ -132,9 +148,10 @@ export default class SongViewer extends Vue {
         // osmd.load(this.songStore.state.sheetMusic);
         const options: SheetMusicOptions = {
             show: true,
-            url: this.leadSheet?.directUrl,
+            url: this.selectedSheetMusic?.directUrl,
             originalKey: this.song?.originalKey,
             transposition: this.transposition,
+            type: this.selectedSheetMusic?.type
         };
 
         localStorage.setItem("sheetmusic_options", JSON.stringify(options));
