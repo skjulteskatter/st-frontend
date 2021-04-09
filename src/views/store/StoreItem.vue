@@ -118,7 +118,6 @@ export default class StoreItem extends Vue {
 
     &__image {
         border-radius: 0.5rem;
-        border: 5px solid var(--st-color-background-light);
     }
 
     &__body {
