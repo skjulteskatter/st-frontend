@@ -90,6 +90,8 @@ class OSMD {
                 },
                 drawHiddenNotes: true,
                 pageBackgroundColor: "#FFFFFF",
+                newSystemFromXML: true,
+                pageFormat: "A4 P"
             });
 
             this.playbackManager = new PlaybackManager(this.timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
