@@ -10,7 +10,7 @@
         ></open-sheet-music-display> -->
         <base-button v-if="type != pdfType" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
         <open-sheet-music-display
-            v-if="type != pdfType && url && ['sheet-music', 'songs-sheet-music'].includes(routeName)"
+            v-if="type != pdfType && url && ['sheet-music', 'sheet-music-embed'].includes(routeName)"
             :options="options"
         ></open-sheet-music-display>
         <object v-if="type == pdfType" :data="options.url" type="application/pdf" width="100%" height="100%">
