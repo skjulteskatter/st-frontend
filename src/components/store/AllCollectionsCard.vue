@@ -59,7 +59,7 @@ export default class AllCollectionsCard extends Vue {
     public get images(): string[] {
         return (
             this.product?.collections.map(
-                (collection) => collection.image + "?w=400"
+                (collection) => collection.image + "?w=300&q=50"
             ) ?? []
         );
     }
