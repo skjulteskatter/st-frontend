@@ -8,7 +8,7 @@
     >
         <img
             class="collection-card__image"
-            :src="`${image}?w=300`"
+            :src="image"
             :alt="collection.getName(languageKey)"
         />
         <p class="collection-card__title">
@@ -46,7 +46,7 @@ export default class CollectionCard extends Vue {
     }
 
     public get image() {
-        return this.collection.image ?? "/img/placeholder.png";
+        return this.collection.image + "?w=200";
     }
 
     public get selected() {
