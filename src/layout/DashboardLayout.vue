@@ -80,25 +80,25 @@ export default class DashboardLayout extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
-#osmd-canvas {
-    position: relative;
-    display: flex;
-}
+// #osmd-canvas {
+//     position: relative;
+//     display: flex;
+// }
 
-#pb-controls .control-panel {
-    position: unset;
-    z-index: 1000;
-    background-color: var(--st-color-ui-lm-medium);
-    width: 350px;
-}
+// #pb-controls .control-panel {
+//     position: unset;
+//     z-index: 1000;
+//     background-color: var(--st-color-ui-lm-medium);
+//     width: 350px;
+// }
 
-#pb-controls {
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    z-index: 50;
-    width: 100%;
-}
+// #pb-controls {
+//     text-align: center;
+//     position: fixed;
+//     bottom: 0;
+//     z-index: 50;
+//     width: 100%;
+// }
 
 .dashboard-layout {
     display: flex;

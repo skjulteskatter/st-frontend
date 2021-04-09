@@ -1,6 +1,10 @@
 /* eslint-disable */
 import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "@/assets/js/osmd";
 import { SheetMusicOptions } from "@/store/songs";
+const timingSource = new LinearTimingSource();
+const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
+playbackManager.DoPlayback = true;
+playbackManager.DoPreCount = false;
 
 class OSMD {
     private initialized = false;
@@ -15,7 +19,7 @@ class OSMD {
     public loading = false;
 
     private controlPanel: ControlPanel = {} as ControlPanel;
-    private timingSource = new LinearTimingSource();
+    private timingSource = timingSource;
     // private playbackManagerCreator = () => new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, this.audioPlayer, undefined as unknown as IMessageViewer);
     private playbackManager = {} as PlaybackManager;
 
@@ -60,7 +64,7 @@ class OSMD {
                 drawFromMeasureNumber: 0,
 
                 //drawMeasureNumbers: false, // disable drawing measure numbers
-                //measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
+                measureNumberInterval: 4, // draw measure numbers only every 4 bars (and at the beginning of a new system)
                 useXMLMeasureNumbers: true, // read measure numbers from xml
 
                 // coloring options
@@ -69,16 +73,22 @@ class OSMD {
                 // defaultColorStem: "#BB0099",
                 defaultFontFamily: "Inter",
 
-                // autoBeam: false, // try true, OSMD Function Test AutoBeam sample
-                // autoBeamOptions: {
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     beam_rests: false,
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     beam_middle_rests_only: false,
-                //     //groups: [[3,4], [1,1]],
-                //     // eslint-disable-next-line @typescript-eslint/camelcase
-                //     maintain_stem_directions: false
-                // },
+                drawPartAbbreviations: true,
+                drawCredits: true,
+                drawSlurs: true,
+                percussionOneLineCutoff: 4,
+
+                autoBeam: true, // try true, OSMD Function Test AutoBeam sample
+                autoBeamOptions: {
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    beam_rests: false,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    beam_middle_rests_only: false,
+                    //groups: [[3,4], [1,1]],
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    maintain_stem_directions: false
+                },
+                drawHiddenNotes: true,
                 pageBackgroundColor: "#FFFFFF",
             });
 
@@ -232,9 +242,6 @@ class OSMD {
         // this.playbackManager = this.playbackManagerCreator();
 
         console.log(this.osmd.Sheet.MusicPartManager.MusicSheet.Instruments);
-
-        const playbackManager = new PlaybackManager(this.timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
-        playbackManager.DoPlayback = true;
         playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
         playbackManager.addListener(this.osmd.cursor);
         playbackManager.reset();

@@ -8,14 +8,16 @@
             :embed="embed"
             :initialZoom="zoom"
         ></open-sheet-music-display> -->
+        <base-button class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
         <open-sheet-music-display
             v-if="url && ['sheet-music', 'songs-sheet-music'].includes(routeName)"
             :options="options"
         ></open-sheet-music-display>
-        <div id="osmd-canvas"></div>
-        
-        <div id="pb-canvas">
-            <base-button @click="osmd.toggleControls()">Controls</base-button>
+        <div class="sheetmusic-footer">
+            <div id="osmd-canvas"></div>
+            
+            <div id="pb-canvas">
+            </div>
         </div>
     </div>
 </template>
@@ -127,5 +129,16 @@ export default class SheetMusic extends Vue {
 #pb-canvas {
     width: 100%;
     text-align: center;
+}
+
+.playback-buttons {
+    position: fixed;
+    bottom: 10px;
+}
+
+.pbcontrol-toggle {
+    position: fixed;
+    z-index: 50;
+    bottom: 10px;
 }
 </style>

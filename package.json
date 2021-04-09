@@ -21,6 +21,7 @@
     "jszip": "^3.6.0",
     "less-loader": "^7.3.0",
     "opensheetmusicdisplay": "^0.9.5",
+    "pdfjs-dist": "^2.7.570",
     "plyr": "^3.6.4",
     "showdown": "^1.9.1",
     "vue": "^3.0.11",
