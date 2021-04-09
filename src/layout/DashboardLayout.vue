@@ -31,9 +31,7 @@ import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
-import { osmd } from "@/services/osmd";
 import { BaseButton } from "@/components";
-import SheetMusic from "@/views/SheetMusic.vue";
 
 @Options({
     components: {
@@ -41,13 +39,11 @@ import SheetMusic from "@/views/SheetMusic.vue";
         AudioPlayer,
         FeedbackForm,
         BaseButton,
-        SheetMusic,
     },
 })
 export default class DashboardLayout extends Vue {
     public sessionStore = useStore(sessionKey);
     public songStore = useStore(songKey);
-    public osmd = osmd;
 
     async mounted() {
         document.documentElement.style.setProperty(
@@ -70,10 +66,6 @@ export default class DashboardLayout extends Vue {
     }
     public get initialized() {
         return this.sessionStore.state.initialized;
-    }
-
-    public get showSheetMusic() {
-        return this.songStore.state.sheetMusic.show;
     }
 }
 </script>

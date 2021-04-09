@@ -21,12 +21,19 @@ export const session = {
     },
     uploadImage(fileName: string, base64Image: string) {
         return http.patch<{ image: string }>('api/Session/Image', { fileName, base64Image });
-    }
+    },
 }
 
 export const items = {
     getLanguages() {
         return http.get<Language[]>('api/Languages');
+    },
+    getTranslations(languages: string[]) {
+        return http.get<{
+            [key: string]: {
+                [key: string]: string;
+            };
+        }>('api/Localization?languages=' + languages.join(","), true);
     }
 }
 

@@ -10,12 +10,10 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "./store";
-import DashboardLayout from "@/layout/DashboardLayout.vue";
 import { NotificationGroup } from "@/components/notification";
 
 @Options({
     components: {
-        DashboardLayout,
         NotificationGroup,
     },
 })

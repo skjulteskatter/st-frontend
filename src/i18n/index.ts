@@ -1,4 +1,4 @@
-import sanity from "@/services/sanity";
+import api from "@/services/api";
 import { sessionStore } from "@/store";
 import { createI18n } from "vue-i18n";
 
@@ -20,7 +20,11 @@ const lanKey = localStorage.getItem('languageKey') ?? 'en'
 let currentTranslation = validLanguages.includes(lanKey) ? lanKey : 'en';
 
 export async function setLocale(locale: string) {
-    translations = (await sanity.getAllTranslations(locale)).reduce((a, b) => ({...a, [b.key]: b.value}), {});
+    const result = await api.items.getTranslations([locale]);
+    translations = {};
+    for (const l of Object.keys(result)) {
+        translations[l] = result[l][locale];
+    }
     i18n.global.setLocaleMessage('current', translations);
     currentTranslation = locale;
 }
@@ -31,7 +35,14 @@ export async function ensureLanguageIsFetched() {
     const lan = sessionStore.getters.languageKey;
     if (!englishIsFetched) {
         englishIsFetched = true;
-        i18n.global.setLocaleMessage('en', (await sanity.getAllTranslations('en')).reduce((a, b) => ({...a, [b.key]: b.value}), {}))
+        const result = await api.items.getTranslations(['en']);
+        const english: {
+            [key: string]: string;
+        } = {};
+        for (const l of Object.keys(result)) {
+            english[l] = result[l]['en'];
+        }
+        i18n.global.setLocaleMessage('en', english)
     }
     if (!translations || currentTranslation !== lan) {
         await setLocale(lan);

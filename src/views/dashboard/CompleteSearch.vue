@@ -58,7 +58,6 @@ export default class CompleteSearch extends Vue {
 
     public async search() {
         this.loading = true;
-        console.log(this.searchQuery);
         if (this.searchQuery.length > 4) {
             this.songs = await api.songs.searchCollections(
                 this.searchQuery,
