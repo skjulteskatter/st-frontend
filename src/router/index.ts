@@ -70,11 +70,11 @@ const routes: Array<RouteRecordRaw> = [
                         component: CompleteSearch,
                         props: { q: "" }
                     },
-                    {
-                        path: 'sheetmusic',
-                        name: 'songs-sheet-music',
-                        component: SheetMusic
-                    }
+                    // {
+                    //     path: 'sheetmusic',
+                    //     name: 'songs-sheet-music',
+                    //     component: SheetMusic
+                    // }
                 ]
             },
             {
@@ -144,6 +144,11 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/sheetmusic/:id',
+        name: 'sheet-music-embed',
+        component: SheetMusic
+    },
+    {
+        path: '/sheetmusic',
         name: 'sheet-music',
         component: SheetMusic
     }

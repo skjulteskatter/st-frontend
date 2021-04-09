@@ -76,6 +76,7 @@ export default class OSMD extends Vue {
 
     public async mounted() {
         this.transposition = this.options.transposition ?? 0;
+        this.zoom = this.osmd.zoom;
 
         try {
             await this.osmd.load(this.options);

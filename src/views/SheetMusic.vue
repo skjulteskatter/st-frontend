@@ -46,7 +46,7 @@ export default class SheetMusic extends Vue {
     public created() {
         const o = localStorage.getItem("sheetmusic_options");
 
-        if (o && this.$route.params.id?.length < 10) {
+        if (o && !this.$route.params.id) {
             const options = JSON.parse(o) as SheetMusicOptions;
             if (!this.songStore.state.sheetMusic.url) {
                 this.songStore.commit("sheetMusic", options);

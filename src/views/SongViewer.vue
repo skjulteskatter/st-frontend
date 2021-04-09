@@ -139,7 +139,7 @@ export default class SongViewer extends Vue {
 
         localStorage.setItem("sheetmusic_options", JSON.stringify(options));
 
-        window.open("/sheetmusic/HV", "Lyrics Viewer", "resizeable,scrollbars");
+        window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
     }
 
     public get leadSheet() {

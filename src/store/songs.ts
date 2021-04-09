@@ -23,6 +23,7 @@ export type SheetMusicOptions = {
     url?: string;
     originalKey?: string;
     transposition?: number;
+    zoom?: number;
 }
 
 export type AudioTrack = {
