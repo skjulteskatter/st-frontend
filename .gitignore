@@ -25,3 +25,4 @@ pnpm-debug.log*
 .firebase/
 src/assets/js/osmd/index_old.js
 src/assets/js/osmd/index_old2.js
+firebase-debug.log
