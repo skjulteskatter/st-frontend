@@ -14,18 +14,22 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
-                    <select v-if="song.sheetMusic.length"
+                    <select
+                        v-if="song.sheetMusic.length"
                         id="sheetmusic"
                         name="sheetmusic"
                         v-model="selectedSheetMusic"
                         @change="sheetMusic"
                     >
+                        <option value="undefined" seclected disabled hidden>
+                            {{ $t("song.sheetmusic") }}
+                        </option>
                         <option
                             v-for="sheet in song.sheetMusic"
                             :value="sheet"
                             :key="sheet.id"
                         >
-                            {{ $t(`types.${sheet.category}`)}}
+                            {{ $t(`types.${sheet.category}`) }}
                         </option>
                     </select>
                     <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
@@ -123,7 +127,7 @@ export default class SongViewer extends Vue {
     // }
 
     public async mounted() {
-        this.songStore.commit("sheetMusic", {show: false});
+        this.songStore.commit("sheetMusic", { show: false });
         this.number = parseInt(this.$route.params.number as string);
         if (
             this.songStore.getters.collection?.key !==
@@ -151,7 +155,7 @@ export default class SongViewer extends Vue {
             url: this.selectedSheetMusic?.directUrl,
             originalKey: this.song?.originalKey,
             transposition: this.transposition,
-            type: this.selectedSheetMusic?.type
+            type: this.selectedSheetMusic?.type,
         };
 
         localStorage.setItem("sheetmusic_options", JSON.stringify(options));
@@ -162,7 +166,6 @@ export default class SongViewer extends Vue {
     public get leadSheet() {
         return this.song?.sheetMusic?.find((s) => s.category === "leadsheet");
     }
-
 
     public get transposition() {
         return this.songStore.state.smTransposition;
