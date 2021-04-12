@@ -1,6 +1,13 @@
 <template>
-    <base-card class="song-details__metadata" v-if="song" header toggleable v-cloak>
+    <base-card
+        class="song-details__metadata"
+        v-if="song"
+        header
+        toggleable
+        v-cloak
+    >
         <template #header>
+            <p class="song-details__metadata__collection">{{ collection }}</p>
             <h2 class="song-details__metadata__title">
                 <span style="opacity: 0.5; padding-right: 0.5em">
                     {{ song.number }}
@@ -10,7 +17,12 @@
                 </span>
             </h2>
             <div class="song-details__metadata__content">
-                <img id="song-details-image" class="song-details__metadata__image" v-if="song.image" height="100">
+                <img
+                    id="song-details-image"
+                    class="song-details__metadata__image"
+                    v-if="song.image"
+                    height="100"
+                />
                 <span
                     v-if="song.verses && imageLoaded"
                     class="song-details__metadata__verse-count tag song-details-transition"
@@ -108,6 +120,8 @@
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal } from "@/components";
+import { useStore } from "vuex";
+import { songKey } from "@/store";
 
 @Options({
     components: {
@@ -127,10 +141,13 @@ export default class SongInfoCard extends Vue {
     public languageKey = "";
     public song?: Song;
     public imageLoaded = false;
+    public store = useStore(songKey);
 
     public mounted() {
         if (this.song?.image) {
-            const image = document.getElementById("song-details-image") as HTMLImageElement;
+            const image = document.getElementById(
+                "song-details-image"
+            ) as HTMLImageElement;
 
             image.style.display = "none";
 
@@ -140,10 +157,18 @@ export default class SongInfoCard extends Vue {
                 image.classList.add("song-details-transition");
                 this.imageLoaded = true;
                 image.style.display = "";
-            }
+            };
         } else {
             this.imageLoaded = true;
         }
+    }
+
+    public get collection() {
+        const id = this.store.state.collectionId;
+        const collection = this.store.state.collections.find(
+            (c) => c.key == id
+        );
+        return collection?.getName(this.languageKey);
     }
 
     public get title() {
@@ -203,6 +228,11 @@ export default class SongInfoCard extends Vue {
 
 .song-details__metadata {
     width: 100%;
+
+    &__collection {
+        opacity: 0.5;
+        margin-top: 0;
+    }
 
     &__info {
         animation: 0.5s ease-out 0s 1 slideInFromLeft;
