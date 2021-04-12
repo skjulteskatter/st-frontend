@@ -4,7 +4,7 @@ import { CountryCollectionItem } from '@/classes/collectionItems/countryCollecti
 import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
-import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
+import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem, MediaFile } from 'dmb-api';
 import auth from './auth';
 import http from './http';
 
@@ -103,6 +103,24 @@ export const songs = {
     }
 }
 
+export const playlists = {
+    async getPlaylists() {
+        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/file'));
+    },
+    async getPlaylist(id: string) {
+        return (await http.get<ApiPlaylist>('api/Playlists/' + id + '?expand=entries/file'));
+    },
+    async createPlaylist(name: string) {
+        return (await http.post('api/Playlists', {name})) as ApiPlaylist;
+    },
+    async addFileToPlaylist(playlist: ApiPlaylist, file: MediaFile) {
+        return (await http.post(`api/Playlists/${playlist.id}/${file.id}`))
+    },
+    async removeFileFromPlaylist(playlist: ApiPlaylist, file: MediaFile) {
+        return (await http.delete(`api/Playlists/${playlist.id}/${file.id}`));
+    }
+}
+
 export const stripe = {
     setup() {
         return http.get<SetupResponse>('api/Store/Setup')
@@ -131,6 +149,7 @@ const api = {
     songs,
     items,
     stripe,
+    playlists,
 }
 
 export default api

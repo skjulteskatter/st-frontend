@@ -54,7 +54,7 @@ class Http {
      */
     public post<T, Y = T>(
         path: string,
-        content: Y,
+        content?: Y,
         options?: object
     ): Promise<T> {
 
@@ -63,7 +63,7 @@ class Http {
             Object.assign(
                 {
                     method: 'POST',
-                    body: JSON.stringify(content),
+                    body: content ? JSON.stringify(content) : undefined,
                     headers: {
                         'Content-Type': 'application/json'
                     }

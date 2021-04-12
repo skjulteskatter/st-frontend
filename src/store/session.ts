@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import api from '@/services/api'
+import api, { songs } from '@/services/api'
 import { InjectionKey } from 'vue'
 import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
@@ -7,6 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection } from '@/classes';
 import { songStore } from './songs';
+import { ApiPlaylist } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -54,6 +55,8 @@ async function init(commit: Commit) {
         commit('languages', languages);
         const collections = await api.songs.getCollections();
         commit('collections', collections);
+        const playlists = await api.playlists.getPlaylists();
+        commit("playlists", playlists);
     } catch (e) {
         console.log(e);
     }
@@ -72,6 +75,7 @@ export interface Session {
     collections: Collection[];
     extend: boolean;
     error: string;
+    playlists: ApiPlaylist[];
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
@@ -83,6 +87,7 @@ export const sessionStore = createStore<Session>({
         collections: [],
         extend: false,
         error: '',
+        playlists: []
     },
     actions: {
         async startSession({state, commit}) {
@@ -178,6 +183,9 @@ export const sessionStore = createStore<Session>({
             } else {
                 state.collections.push(collection);
             }
+        },
+        playlists(state, playlists: ApiPlaylist[]) {
+            state.playlists = playlists;
         },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;

@@ -107,6 +107,23 @@ declare module "dmb-api" {
         type: string;
     }
 
+    interface ApiPlaylist {
+        id: string;
+        name: string;
+        userId: string;
+        entries: ApiPlaylistEntry[];
+        sharedWithIds: string[];
+        shareKey: string;
+    }
+
+    interface ApiPlaylistEntry {
+        id: string;
+        addedAt: string;
+        addedById: string;
+        fileId: string;
+        file: MediaFile;
+    }
+
     interface MediaFile {
         id: string;
         type: string;
