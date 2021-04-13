@@ -1,17 +1,17 @@
 <template>
-    <div class="collection-list" v-if="collections.length > 0">
-        <small class="collection-list__title">
-            {{ $t("common.subscriptions") }}
+    <div class="playlist-list" v-if="playlists.length > 0">
+        <small class="playlist-list__title">
+            {{ $t("common.playlists") }}
         </small>
-        <ul class="collection-list__list">
-            <li v-for="collection in collections" :key="collection.id">
+        <ul class="playlist-list__list">
+            <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="collection-list__link"
+                    class="playlist-list__link"
                     :to="{
-                        name: 'song-list',
-                        params: { collection: collection.key },
+                        name: 'playlist',
+                        params: { playlist: playlist.id },
                     }"
-                    >{{ collection.getName(languageKey) }}</router-link
+                    >{{ playlist.name }}</router-link
                 >
             </li>
         </ul>
@@ -25,13 +25,17 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
 @Options({
-    name: "collection-list"
+    name: "playlist-list",
 })
 export default class CollectionList extends Vue {
     private store = useStore(sessionKey);
 
     public get collections(): Collection[] {
         return this.store.getters.collections;
+    }
+
+    public get playlists() {
+        return this.store.state.playlists;
     }
 
     public get languageKey() {
@@ -43,7 +47,7 @@ export default class CollectionList extends Vue {
 <style lang="scss" scoped>
 @import "../../style/mixins";
 
-.collection-list {
+.playlist-list {
     margin-top: 1rem;
     padding: var(--st-spacing);
     font-size: 0.9em;
