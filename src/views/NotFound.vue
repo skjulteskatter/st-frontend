@@ -9,7 +9,7 @@
     </div>
 </template>
 <script lang="ts">
-import { Options, Vue } from "node_modules/vue-class-component/dist/vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
 @Options({
     name: "not-found"

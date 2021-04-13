@@ -1,5 +1,6 @@
 import config from '../config'
 import auth from './auth'
+import { notify } from './notify'
 
 class Http {
     public validateResponse(response: Response): Promise<Response> {
@@ -11,9 +12,10 @@ class Http {
                 // resolve(null);
                 reject(401)
             } else {
-                const error = new Error(response.statusText)
+                const error = new Error(response.statusText);
                 // error.response = response;
-                reject(error)
+                notify("error", response.statusText, "alert");
+                reject(error);
             }
         })
     }
@@ -154,9 +156,14 @@ class Http {
 
         const o = Object.assign(
         options, {headers});
-        return await fetch(path, o)
+        try {
+            return await fetch(path, o)
             .then(this.validateResponse)
             .then(this.parseJson);
+        }
+        catch {
+            notify("error", "Couldn't fetch from API", "warning", "Backend down?")
+        }
     }
 }
 

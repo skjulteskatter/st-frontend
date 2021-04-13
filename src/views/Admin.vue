@@ -90,6 +90,7 @@ import auth from "@/services/auth";
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public notificationStore = useStore(notificationKey);
+    public sessionStore = useStore(sessionKey);
     public loading = false;
     public token? = '';
     public showToken = false;
@@ -103,19 +104,19 @@ export default class Subscriptions extends Vue {
     }
 
     get users(): User[] {
-        return useStore(usersKey).state.users ?? [];
+        return this.usersStore.state.users ?? [];
     }
 
     public get currentUser() {
-        return useStore(sessionKey).state.currentUser;
+        return this.sessionStore.state.currentUser;
     }
 
     public get collections() {
-        return useStore(sessionKey).state.collections;
+        return this.sessionStore.state.collections;
     }
 
     public get isAdmin(): boolean {
-        return useStore(sessionKey).getters.isAdmin;
+        return this.sessionStore.getters.isAdmin;
     }
 
     public async clearCollection(collection: string) {
