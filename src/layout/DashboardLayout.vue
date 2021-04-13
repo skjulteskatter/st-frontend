@@ -40,6 +40,7 @@ import { BaseButton } from "@/components";
         FeedbackForm,
         BaseButton,
     },
+    name: "dashboard-layout"
 })
 export default class DashboardLayout extends Vue {
     public sessionStore = useStore(sessionKey);

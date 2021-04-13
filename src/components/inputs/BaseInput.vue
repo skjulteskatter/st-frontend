@@ -23,6 +23,7 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
+    name: "base-input",
     props: {
         label: {
             type: String,

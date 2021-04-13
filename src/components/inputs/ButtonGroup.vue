@@ -18,6 +18,7 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
+    name: "button-group",
     props: {
         buttons: {
             type: Array,

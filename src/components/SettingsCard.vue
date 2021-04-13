@@ -115,6 +115,7 @@ import auth from "@/services/auth";
         BaseCard,
         Icon,
     },
+    name: "settings-card"
 })
 export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;

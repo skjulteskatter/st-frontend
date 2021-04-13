@@ -13,6 +13,7 @@ import { Icon } from "@/components/icon";
     components: {
         Icon,
     },
+    name: "back-button"
 })
 export default class BackButton extends Vue {}
 </script>

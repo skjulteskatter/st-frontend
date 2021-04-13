@@ -16,6 +16,7 @@ import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
 
 @Options({
+    name: "notification-group",
     components: {
         Notification,
     },

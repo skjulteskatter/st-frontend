@@ -87,6 +87,7 @@ import BaseDropdown from "./BaseDropdown.vue";
 import BaseButton from "@/components/BaseButton.vue";
 
 @Options({
+    name: "song-filter-dropdown",
     components: {
         BaseDropdown,
         BaseButton,

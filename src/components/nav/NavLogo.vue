@@ -14,8 +14,11 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
+@Options({
+    name: "nav-logo"
+})
 export default class NavLogo extends Vue {}
 </script>
 

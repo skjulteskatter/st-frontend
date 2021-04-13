@@ -34,6 +34,7 @@ import { Options, Vue } from "vue-class-component";
 import icons from "./icons";
 
 @Options({
+    name: "icon",
     props: {
         name: {
             type: String,

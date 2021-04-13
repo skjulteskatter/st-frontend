@@ -20,6 +20,7 @@ import { BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 
 @Options({
+    name: "base-dropdown",
     components: {
         BaseCard,
         Icon,

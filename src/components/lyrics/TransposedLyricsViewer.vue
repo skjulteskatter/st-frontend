@@ -15,6 +15,7 @@ import { useStore } from "vuex";
 import { songKey } from "@/store";
 
 @Options({
+    name: "transposed-lyrics-viewer",
     components: {
         BaseButton,
         Modal,

@@ -23,6 +23,7 @@ import { BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 
 @Options({
+    name: "search-input",
     components: {
         BaseButton,
         Icon,

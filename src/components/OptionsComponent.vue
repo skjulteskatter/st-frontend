@@ -21,6 +21,7 @@ import { BaseDropdown } from "@/components/inputs";
         BaseButton,
         BaseDropdown,
     },
+    name: "options-component"
 })
 export default class OptionsComponent extends Vue {
     private store = useStore(sessionKey);

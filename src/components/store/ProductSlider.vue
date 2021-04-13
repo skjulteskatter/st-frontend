@@ -30,6 +30,7 @@ import StoreCard from "./StoreCard.vue";
     components: {
         StoreCard,
     },
+    name: "product-slider"
 })
 export default class ProductSlider extends Vue {
     public products: Product[] = [];
