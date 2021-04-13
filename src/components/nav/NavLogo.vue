@@ -3,10 +3,10 @@
         <img
             class="nav-logo__image"
             alt="logo"
-            src="/img/SongTreasures_logo.svg"
+            :src="`/img/logo/${logoStyle}.svg`"
         />
         <img
-            src="/img/SongTreasures_logo_icon.svg"
+            src="/img/logo/icon.svg"
             alt="logo"
             class="nav-logo__image--icon"
         />
@@ -17,22 +17,27 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "nav-logo"
+    name: "nav-logo",
 })
-export default class NavLogo extends Vue {}
+export default class NavLogo extends Vue {
+    public get logoStyle() {
+        return document.body.classList.contains("darkmode") ? "light" : "dark";
+    }
+}
 </script>
 
 <style lang="scss" scoped>
 @import "../../style/mixins";
 
 .nav-logo {
-    --size: 40px;
+    --size: 50px;
 
     padding: var(--st-spacing);
     cursor: pointer;
 
     &__image {
         max-height: var(--size);
+        max-width: 100%;
         margin: 0;
     }
 
