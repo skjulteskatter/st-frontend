@@ -73,7 +73,13 @@ export class Lyrics implements ApiLyrics {
     public get rawContent() {
         const lines = [];
 
-        for (const key of Object.keys(this.content)) {
+        if (typeof(this.content) == typeof("")) {
+            throw new Error(`Number ${this.number} is bugged. Check with system admin.`)
+        }
+        
+        const keys = Object.keys(this.content ?? {}) ?? [];
+
+        for (const key of keys) {
             for (const line of (this.content as JsonContent)[key].content) {
                 lines.push(line);
             }

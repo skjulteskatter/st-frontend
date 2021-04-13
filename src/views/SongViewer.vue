@@ -120,7 +120,7 @@ export default class SongViewer extends Vue {
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
-    public selectedSheetMusic?: MediaFile;
+    public selectedSheetMusic?: MediaFile = {} as MediaFile;
 
     // public unmounted() {
     //     this.songStore.commit("sheetMusic", {show: false});
