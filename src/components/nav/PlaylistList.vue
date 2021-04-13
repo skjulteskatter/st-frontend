@@ -2,17 +2,21 @@
     <div class="playlist-list" v-if="playlists.length > 0">
         <small class="playlist-list__title">
             {{ $t("common.playlists") }}
+            <router-link class="playlist-list__title__link" to="/playlists"
+                >Se alle</router-link
+            >
         </small>
         <ul class="playlist-list__list">
             <li v-for="playlist in playlists" :key="playlist.id">
-                <router-link
+                <!-- <router-link
                     class="playlist-list__link"
                     :to="{
                         name: 'playlist',
                         params: { playlist: playlist.id },
                     }"
                     >{{ playlist.name }}</router-link
-                >
+                > -->
+                <span class="playlist-list__link">{{ playlist.name }}</span>
             </li>
         </ul>
     </div>
@@ -21,12 +25,11 @@
 <script lang="ts">
 import { Collection } from "@/classes";
 import { sessionKey } from "@/store";
+import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
-@Options({
-    name: "playlist-list",
-})
+@Options({})
 export default class CollectionList extends Vue {
     private store = useStore(sessionKey);
 
@@ -34,7 +37,7 @@ export default class CollectionList extends Vue {
         return this.store.getters.collections;
     }
 
-    public get playlists() {
+    public get playlists(): ApiPlaylist[] {
         return this.store.state.playlists;
     }
 
@@ -82,6 +85,8 @@ export default class CollectionList extends Vue {
     &__title {
         text-transform: uppercase;
         opacity: 0.6;
+        display: flex;
+        justify-content: space-between;
     }
 }
 </style>

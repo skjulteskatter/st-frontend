@@ -12,9 +12,11 @@
             </div>
         </header>
         <div class="playlists__wrapper">
-            <base-card v-for="playlist in playlists" :key="playlist.id">
-                <strong>{{ playlist.name }}</strong>
-            </base-card>
+            <playlist-card
+                v-for="playlist in playlists"
+                :key="playlist.id"
+                :playlist="playlist"
+            />
         </div>
     </div>
 </template>
@@ -23,13 +25,14 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
-import { BaseButton, BaseCard } from "@/components";
+import { BaseButton } from "@/components";
+import PlaylistCard from "@/components/playlist/PlaylistCard.vue";
 import { ApiPlaylist } from "dmb-api";
 
 @Options({
     components: {
         BaseButton,
-        BaseCard,
+        PlaylistCard,
     },
 })
 export default class PlaylistOverview extends Vue {
@@ -49,6 +52,12 @@ export default class PlaylistOverview extends Vue {
 
     @include breakpoint("medium") {
         padding: var(--st-spacing);
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--st-spacing);
     }
 
     &__title {
