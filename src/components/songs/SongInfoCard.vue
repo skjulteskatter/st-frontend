@@ -136,6 +136,7 @@ import { songKey } from "@/store";
             type: Object,
         },
     },
+    name: "song-info-card"
 })
 export default class SongInfoCard extends Vue {
     public languageKey = "";

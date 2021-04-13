@@ -30,6 +30,7 @@ import {
         NavLinks,
         NavLogo,
     },
+    name: "the-navbar"
 })
 export default class TheNavbar extends Vue {}
 </script>

@@ -11,6 +11,7 @@ import { useStore } from "vuex";
 import themes from "@/classes/themes";
 
 @Options({
+    name: "karaoke-viewer"
 })
 export default class LyricsViewer extends Vue {
     public store = useStore(songKey);

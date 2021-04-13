@@ -46,6 +46,7 @@ import { notificationKey, sessionKey } from "@/store";
 import { useStore } from "vuex";
 
 @Options({
+    name: "feedback-form",
     components: {
         Icon,
         BaseCard,

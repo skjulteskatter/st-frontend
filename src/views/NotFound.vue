@@ -8,14 +8,22 @@
         </div>
     </div>
 </template>
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
 
+@Options({
+    name: "not-found"
+})
+export default class NotFound extends Vue {
+    
+}
+</script>
 <style lang="scss" scoped>
 .not-found {
     width: 100%;
     height: 100vh;
     text-align: center;
     padding: var(--st-spacing);
-
     display: flex;
     align-items: center;
     justify-content: center;

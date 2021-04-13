@@ -10,6 +10,7 @@ import { Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
 
 @Options({
+    name: "song-list-item-number",
     components: {
         BaseCard,
     },

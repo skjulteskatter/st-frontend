@@ -101,6 +101,7 @@ import Modal from "@/components/Modal.vue";
             type: Object,
         },
     },
+    name: "lyrics-settings"
 })
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];

@@ -50,6 +50,7 @@ import { Icon } from "@/components/icon";
             type: String,
         },
     },
+    name: "base-button"
 })
 export default class BaseButton extends Vue {
     public loading = false;

@@ -23,6 +23,7 @@ import { useStore } from "vuex";
 import { Icon } from "@/components/icon";
 
 @Options({
+    name: "user-profile",
     components: {
         Icon,
     },

@@ -113,6 +113,7 @@ import { MediaFile } from "dmb-api";
         BackButton,
         OpenSheetMusicDisplay,
     },
+    name: "song-viewer"
 })
 export default class SongViewer extends Vue {
     public store = useStore(sessionKey);

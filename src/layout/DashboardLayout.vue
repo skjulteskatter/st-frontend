@@ -9,13 +9,6 @@
                             <component :is="Component" />
                         </transition>
                     </router-view>
-                    <!-- <div :style="{display: showSheetMusic ? '' : 'none'}">
-                        <div id="osmd-canvas"></div>
-                        <div id="pb-controls">
-                            <base-button @click="osmd.toggleControls()">Controls</base-button>
-                        </div>
-                    </div> -->
-                    <!-- <sheet-music :style="$route.name == 'songs-sheet-music' ? '' : 'display: none !important;'"></sheet-music> -->
                 </div>
             </main>
             <!-- <feedback-form></feedback-form> -->
@@ -40,6 +33,7 @@ import { BaseButton } from "@/components";
         FeedbackForm,
         BaseButton,
     },
+    name: "dashboard-layout"
 })
 export default class DashboardLayout extends Vue {
     public sessionStore = useStore(sessionKey);
@@ -71,26 +65,6 @@ export default class DashboardLayout extends Vue {
 </script>
 <style lang="scss">
 @import "../style/mixins";
-
-// #osmd-canvas {
-//     position: relative;
-//     display: flex;
-// }
-
-// #pb-controls .control-panel {
-//     position: unset;
-//     z-index: 1000;
-//     background-color: var(--st-color-ui-lm-medium);
-//     width: 350px;
-// }
-
-// #pb-controls {
-//     text-align: center;
-//     position: fixed;
-//     bottom: 0;
-//     z-index: 50;
-//     width: 100%;
-// }
 
 .dashboard-layout {
     display: flex;

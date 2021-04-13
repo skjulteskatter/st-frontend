@@ -18,6 +18,7 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 
 @Options({
+    name: "notification",
     components: {
         Icon,
     },

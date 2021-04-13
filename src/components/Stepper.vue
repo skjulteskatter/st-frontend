@@ -27,6 +27,7 @@ import { Options, Vue } from "vue-class-component";
 			default: () => undefined,
 		},
 	},
+	name: "stepper"
 })
 export default class Stepper extends Vue {
 	public steps: Step[] = [];

@@ -11,8 +11,11 @@
 
 <script lang="ts">
 import auth from "@/services/auth";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
+@Options({
+    name: "verify-email"
+})
 export default class VerifyEmail extends Vue {
     public verificationEmailSent = auth.verificationEmailSent;
 

@@ -25,6 +25,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
 @Options({
+    name: "audio-playlist",
     props: {
         audiofiles: {
             type: Array,

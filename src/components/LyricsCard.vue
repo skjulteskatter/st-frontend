@@ -83,6 +83,7 @@ import { BaseCard, BaseButton } from "./";
             type: Object,
         },
     },
+    name: "lyrics-card"
 })
 export default class LyricsCard extends Vue {
     public store = useStore(sessionKey);

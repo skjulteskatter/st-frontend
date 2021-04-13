@@ -15,6 +15,7 @@ import { BaseCard, Modal, BaseButton } from "@/components";
 import { Lyrics, Song } from "@/classes";
 
 @Options({
+    name: "lyrics-viewer",
     components: {
         BaseCard,
         Modal,

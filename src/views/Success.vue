@@ -10,8 +10,11 @@
     </div>
 </template>
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
+@Options({
+    name: "success"
+})
 export default class Success extends Vue {
     public mounted() {
         // setTimeout(() => this.$router.push({name: 'main'}), 5000);

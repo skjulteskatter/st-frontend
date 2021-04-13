@@ -52,6 +52,7 @@ import { sessionKey, songKey } from "@/store";
 import { useStore } from "vuex";
 
 @Options({
+    name: "audio-player",
     components: {
         BaseCard,
         BaseButton,

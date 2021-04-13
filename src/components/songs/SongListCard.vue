@@ -57,6 +57,7 @@ import { Song } from "@/classes";
             type: Function,
         },
     },
+    name: "song-list-card"
 })
 export default class SongListCard extends Vue {
     private userStore = useStore(sessionKey);

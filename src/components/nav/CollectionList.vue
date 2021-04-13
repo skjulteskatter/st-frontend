@@ -24,7 +24,9 @@ import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 
-@Options({})
+@Options({
+    name: "collection-list"
+})
 export default class CollectionList extends Vue {
     private store = useStore(sessionKey);
 

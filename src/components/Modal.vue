@@ -54,6 +54,7 @@ import BaseButton from "@/components/BaseButton.vue";
         BaseCard,
         BaseButton,
     },
+    name: "modal",
 })
 export default class Modal extends Vue {
     public modalIsOpen = false;

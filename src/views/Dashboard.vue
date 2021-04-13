@@ -55,6 +55,7 @@ import { Icon } from "@/components/icon";
         CollectionCard,
         Icon,
     },
+    name: "dashboard"
 })
 export default class Dashboard extends Vue {
     public store = useStore(sessionKey);

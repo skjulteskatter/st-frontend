@@ -97,4 +97,14 @@ export class Song extends BaseClass implements ApiSong {
 
         return names.join('').replace(/[^0-9a-zA-Z]/g, '');
     }
+
+    public get names() {
+        const names: string[] = [];
+
+        for (const key of Object.keys(this.name)) {
+            names.push(this.name[key]);
+        }
+
+        return names;
+    }
 }

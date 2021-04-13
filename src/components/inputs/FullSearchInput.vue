@@ -7,6 +7,7 @@ import { Options, Vue } from "vue-class-component";
 import SearchInput from "./SearchInput.vue";
 
 @Options({
+    name: "full-search-input",
     components: {
         SearchInput,
     },

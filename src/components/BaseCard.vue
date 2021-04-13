@@ -47,6 +47,7 @@ import { Icon } from "@/components/icon";
     components: {
         Icon,
     },
+    name: "base-card"
 })
 export default class Card extends Vue {
     public border = false;

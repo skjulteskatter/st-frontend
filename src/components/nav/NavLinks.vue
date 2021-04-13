@@ -40,6 +40,7 @@ import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 
 @Options({
+    name: "nav-links",
     components: {
         Icon,
     },

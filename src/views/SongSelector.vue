@@ -8,7 +8,9 @@ import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
 
-@Options({})
+@Options({
+    name: "song-selector"
+})
 export default class SongSelector extends Vue {
     private songStore = useStore(songKey);
 

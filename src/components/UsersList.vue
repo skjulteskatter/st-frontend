@@ -84,6 +84,7 @@ import { useStore } from "vuex";
 import { BaseCard, BaseButton, Modal } from "@/components";
 
 @Options({
+    name: "users-list",
     components: {
         BaseCard,
         BaseButton,

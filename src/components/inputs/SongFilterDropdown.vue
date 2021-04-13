@@ -87,6 +87,7 @@ import BaseDropdown from "./BaseDropdown.vue";
 import BaseButton from "@/components/BaseButton.vue";
 
 @Options({
+    name: "song-filter-dropdown",
     components: {
         BaseDropdown,
         BaseButton,
@@ -104,7 +105,7 @@ export default class SongFilterDropdown extends Vue {
     private sessionStore = useStore(sessionKey);
     private store = useStore(songKey);
     public videoTypes = ["karaoke"];
-    public audioTypes = ["gathering", "studio", "instrumental"];
+    public audioTypes = ["gathering", "studio", "instrumental", "live_performance", "demo", "playback"];
     public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];
     public sheetMusicTypes = ["leadsheet", "5part"];
     public themes?: Theme[];
