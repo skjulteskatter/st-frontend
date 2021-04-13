@@ -106,8 +106,21 @@ export class Collection extends BaseClass implements ApiCollection {
         if (number) {
             numbers = this.songs.filter(s => s.number == number || s.number.toString().includes(number.toString())).map(s => s.number);
         } else {
-            for (const lyrics of this.lyrics) {
+            for (const song of this.songs) {
+                if (!numbers.includes(song.number)) {
+                    if (song.names.find(n => n.toLowerCase().includes(filter)) || song.id.toLowerCase().includes(filter)) {
+                        numbers.push(song.number);
+                        continue;
+                    }
+                    if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
+                        numbers.push(song.number);
+                        continue;
+                    }
+                }
+            }
 
+            for (const lyrics of this.lyrics) {
+                if (numbers.includes(lyrics.number)) continue;
 
                 const content = lyrics.rawContent.toLowerCase();
                 
@@ -126,15 +139,6 @@ export class Collection extends BaseClass implements ApiCollection {
                 if (lyrics.title?.includes(filter)) {
                     numbers.push(lyrics.number);
                     continue;
-                }
-            }
-    
-            for (const song of this.songs) {
-                if (!numbers.includes(song.number)) {
-                    if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
-                        numbers.push(song.number);
-                        continue;
-                    }
                 }
             }
         }
