@@ -8,15 +8,14 @@
         </small>
         <ul class="playlist-list__list">
             <li v-for="playlist in playlists" :key="playlist.id">
-                <!-- <router-link
+                <router-link
                     class="playlist-list__link"
                     :to="{
-                        name: 'playlist',
-                        params: { playlist: playlist.id },
+                        name: 'playlist-view',
+                        params: { id: playlist.id },
                     }"
                     >{{ playlist.name }}</router-link
-                > -->
-                <span class="playlist-list__link">{{ playlist.name }}</span>
+                >
             </li>
         </ul>
     </div>
