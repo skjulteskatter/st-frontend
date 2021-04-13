@@ -46,7 +46,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="user-settings__key field gap-x">
+                <!-- <div class="user-settings__key field gap-x">
                     <label for="transcode">{{ $t("song.transcode") }}</label>
                     <hr />
                     <select
@@ -59,7 +59,7 @@
                             {{ k }}
                         </option>
                     </select>
-                </div>
+                </div> -->
             </div>
             <div class="user-settings__fields gap-y">
                 <h3 class="user-settings__title">
