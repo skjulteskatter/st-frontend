@@ -14,6 +14,8 @@ const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views
 const ContributorView = () => import(/* webpackChunkName: 'contributor' */ '../views/ContributorView.vue');
 const StoreItem = () => import(/* webpackChunkName: 'store-item' */ '../views/store/StoreItem.vue');
 const StoreHome = () => import(/* webpackChunkName: 'store-home' */ '../views/store/StoreHome.vue');
+const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ '../views/playlist/PlaylistOverview.vue');
+
 
 const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ '../views/dashboard/CompleteSearch.vue');
 
@@ -104,6 +106,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'settings',
                 name: 'settings',
                 component: SettingsView
+            },
+            {
+                path: '/playlists',
+                name: 'playlists',
+                component: PlaylistOverview
             }
         ],
     },
