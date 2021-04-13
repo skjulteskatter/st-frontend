@@ -102,6 +102,7 @@ import auth from "@/services/auth";
         BaseButton,
         BaseInput,
     },
+    name: "login"
 })
 export default class Login extends Vue {
     public form = {

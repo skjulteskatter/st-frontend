@@ -50,6 +50,7 @@ import { Product } from "@/classes/product";
         BackButton,
         BaseButton,
     },
+    name: "store-item"
 })
 export default class StoreItem extends Vue {
     private store = useStore(stripeKey);

@@ -32,6 +32,7 @@ import auth from "@/services/auth";
         BaseButton,
         BaseInput
     },
+    name: "settings-view"
 })
 export default class SettingsView extends Vue {
     private store = useStore(sessionKey);

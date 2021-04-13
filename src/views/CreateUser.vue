@@ -64,6 +64,7 @@ import BaseCard from "@/components/BaseCard.vue";
     components: {
         BaseCard,
     },
+    name: "create-user"
 })
 export default class Login extends Vue {
     public form = {

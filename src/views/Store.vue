@@ -24,6 +24,7 @@ import {
         AllCollectionsCard,
         ProductSlider,
     },
+    name: "store"
 })
 export default class Store extends Vue {
     private store = useStore(stripeKey);

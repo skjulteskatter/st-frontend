@@ -85,6 +85,7 @@ import auth from "@/services/auth";
         BaseButton,
         BaseCard,
     },
+    name: "admin"
 })
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);

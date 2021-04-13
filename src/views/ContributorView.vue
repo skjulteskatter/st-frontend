@@ -70,6 +70,7 @@ import { ApiSong } from "dmb-api";
         SongListCard,
         BackButton,
     },
+    name: "contributor-view"
 })
 export default class ContributorView extends Vue {
     private store = useStore(songKey);

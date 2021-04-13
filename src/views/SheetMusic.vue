@@ -35,7 +35,7 @@ import { SheetMusicOptions, SheetMusicTypes } from "@/store/songs";
         OpenSheetMusicDisplay,
         BaseButton
     },
-    name: "SheetMusic"
+    name: "sheet-music"
 })
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);

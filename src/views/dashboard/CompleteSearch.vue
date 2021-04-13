@@ -42,6 +42,7 @@ import { ApiSong } from "dmb-api";
         BaseButton,
         BackButton,
     },
+    name: "complete-search"
 })
 export default class CompleteSearch extends Vue {
     public sessionStore = useStore(sessionKey);

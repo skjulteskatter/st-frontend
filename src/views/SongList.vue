@@ -166,6 +166,7 @@ import {
         BackButton,
         SearchInput,
     },
+    name: "song-list"
 })
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
