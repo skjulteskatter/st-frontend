@@ -1,10 +1,10 @@
-import CollectionList from './CollectionList.vue'
+import PlaylistList from './PlaylistList.vue'
 import UserProfile from './UserProfile.vue'
 import NavLinks from './NavLinks.vue'
 import NavLogo from './NavLogo.vue'
 
 export {
-	CollectionList,
+	PlaylistList,
 	UserProfile,
 	NavLinks,
 	NavLogo,
