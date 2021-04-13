@@ -14,6 +14,8 @@ const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ '../views
 const ContributorView = () => import(/* webpackChunkName: 'contributor' */ '../views/ContributorView.vue');
 const StoreItem = () => import(/* webpackChunkName: 'store-item' */ '../views/store/StoreItem.vue');
 const StoreHome = () => import(/* webpackChunkName: 'store-home' */ '../views/store/StoreHome.vue');
+const Playlist = () => import(/* webpackChunkName: 'playlist' */ '../views/playlist/Playlist.vue');
+const PlaylistView = () => import(/* webpackChunkName: 'playlist-view' */ '../views/playlist/PlaylistView.vue');
 const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ '../views/playlist/PlaylistOverview.vue');
 
 
@@ -110,7 +112,19 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/playlists',
                 name: 'playlists',
-                component: PlaylistOverview
+                component: Playlist,
+                children: [
+                    {
+                        path: '',
+                        name: 'playlist-overview',
+                        component: PlaylistOverview
+                    },
+                    {
+                        path: ':id',
+                        name: 'playlist-view',
+                        component: PlaylistView
+                    }
+                ]
             }
         ],
     },

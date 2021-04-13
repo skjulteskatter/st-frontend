@@ -30,6 +30,7 @@ import PlaylistCard from "@/components/playlist/PlaylistCard.vue";
 import { ApiPlaylist } from "dmb-api";
 
 @Options({
+    name: "playlist-overview",
     components: {
         BaseButton,
         PlaylistCard,
@@ -45,15 +46,7 @@ export default class PlaylistOverview extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/mixins";
-
 .playlists {
-    padding: calc(var(--st-spacing) * 2);
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
     &__wrapper {
         display: flex;
         flex-direction: column;
