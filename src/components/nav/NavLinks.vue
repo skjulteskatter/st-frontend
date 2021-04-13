@@ -58,6 +58,7 @@ export default class NavLinks extends Vue {
 .nav-links {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 
     &__item {
         color: var(--st-text-color);
