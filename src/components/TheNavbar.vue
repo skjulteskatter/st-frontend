@@ -5,7 +5,7 @@
             <FullSearchInput />
         </div>
         <nav-links />
-        <collection-list />
+        <playlist-list />
         <user-profile class="nav__user-profile" />
     </nav>
 </template>
@@ -14,23 +14,18 @@
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { FullSearchInput } from "@/components/inputs";
-import {
-    CollectionList,
-    UserProfile,
-    NavLinks,
-    NavLogo,
-} from "@/components/nav";
+import { PlaylistList, UserProfile, NavLinks, NavLogo } from "@/components/nav";
 
 @Options({
     components: {
         Icon,
-        CollectionList,
+        PlaylistList,
         FullSearchInput,
         UserProfile,
         NavLinks,
         NavLogo,
     },
-    name: "the-navbar"
+    name: "the-navbar",
 })
 export default class TheNavbar extends Vue {}
 </script>
