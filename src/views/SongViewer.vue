@@ -21,7 +21,7 @@
                         v-model="selectedSheetMusic"
                         @change="sheetMusic"
                     >
-                        <option value="undefined" seclected disabled hidden>
+                        <option value="undefined" selected disabled hidden>
                             {{ $t("song.sheetmusic") }}
                         </option>
                         <option
