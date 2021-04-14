@@ -1,20 +1,31 @@
 <template>
     <base-card class="playlist-entry-card">
-        <router-link
-            class="playlist-entry-card__title"
-            :to="{
-                name: 'song',
-                params: {
-                    collection: entry.item.collectionId,
-                    number: entry.item.number,
-                },
-            }"
-        >
-            {{ entry.item.name[languageKey] }}
-        </router-link>
-        <small class="playlist-entry-card__collection">
-            {{ collection }}
-        </small>
+        <div class="playlist-entry-card__wrapper">
+            <div class="playlist-entry-card__info">
+                <router-link
+                    class="playlist-entry-card__title"
+                    :to="{
+                        name: 'song',
+                        params: {
+                            collection: collection.key,
+                            number: entry.item.number,
+                        },
+                    }"
+                >
+                    {{ entry.item.name[languageKey] }}
+                </router-link>
+                <small class="playlist-entry-card__collection">
+                    {{ collection.name[languageKey] }}
+                    {{ entry.item.number }}
+                </small>
+            </div>
+            <small
+                class="playlist-entry-card__remove"
+                @click="removeFromPlaylist"
+            >
+                {{ $t("playlist.remove") }}
+            </small>
+        </div>
     </base-card>
 </template>
 
@@ -22,8 +33,8 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
-import { ApiPlaylistEntry } from "dmb-api";
-import { BaseCard } from "@/components";
+import { ApiPlaylist, ApiPlaylistEntry } from "dmb-api";
+import { BaseCard, BaseButton } from "@/components";
 
 @Options({
     name: "playlist-entry-card",
@@ -32,14 +43,27 @@ import { BaseCard } from "@/components";
             type: Object,
             required: true,
         },
+        playlist: {
+            type: Object,
+            required: true,
+        },
     },
     components: {
         BaseCard,
+        BaseButton,
     },
 })
 export default class PlaylistEntryCard extends Vue {
     private store = useStore(sessionKey);
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
+    public playlist: ApiPlaylist = {} as ApiPlaylist;
+
+    public removeFromPlaylist() {
+        this.store.dispatch("removeFromPlaylist", {
+            playlist: this.playlist,
+            song: this.entry,
+        });
+    }
 
     public get languageKey() {
         return this.store.getters.languageKey;
@@ -49,14 +73,32 @@ export default class PlaylistEntryCard extends Vue {
         const collection = this.store.state.collections.find(
             (c) => (c.id = this.entry.item.id)
         );
-        return collection?.name[this.languageKey];
+        return collection;
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/mixins";
+
 .playlist-entry-card {
     margin-bottom: var(--st-spacing);
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @include breakpoint("small") {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    &__remove {
+        color: var(--st-color-error);
+        cursor: pointer;
+    }
 
     &__collection {
         display: block;
