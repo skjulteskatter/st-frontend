@@ -171,6 +171,14 @@ export const sessionStore = createStore<Session>({
         }){
             const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.song);
             console.log(res);
+        },
+        async removeFromPlaylist({ commit }, obj: {
+            playlist: ApiPlaylist;
+            song: Song;
+        }){
+            // Remove entry from playlist
+            const res = await api.playlists.removeSongFromPlaylist(obj.playlist, obj.song);
+            console.log(res);
         }
     },
     mutations: {
