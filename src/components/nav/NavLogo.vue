@@ -37,7 +37,7 @@ export default class NavLogo extends Vue {
 .nav-logo {
     --size: 50px;
 
-    padding: var(--st-spacing);
+    padding: var(--st-spacing) var(--st-spacing) 0 var(--st-spacing);
     cursor: pointer;
 
     &__image {
@@ -55,6 +55,8 @@ export default class NavLogo extends Vue {
     }
 
     @include breakpoint("medium") {
+        padding: var(--st-spacing);
+
         .nav-logo__image--icon {
             display: block;
             height: calc(var(--size) * 0.75);
