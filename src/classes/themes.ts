@@ -69,7 +69,7 @@ export class Themes {
     }
 
     public get default() {
-        return '#CAA970';
+        return '#BD9B60';
     }
 }
 
