@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import api, { songs } from '@/services/api'
+import api from '@/services/api'
 import { InjectionKey } from 'vue'
 import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist, ApiPlaylistEntry } from 'dmb-api';
+import { ApiPlaylist } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -165,9 +165,9 @@ export const sessionStore = createStore<Session>({
 
             commit('deletePlaylist', id);
         },
-        async addToPlaylist({ commit }){
-            // Add song to playlist
-        }
+        // async addToPlaylist({ commit }){
+        //     // Add song to playlist
+        // }
     },
     mutations: {
         user(state, user: User) {
