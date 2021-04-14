@@ -33,6 +33,7 @@ export default class NavLogo extends Vue {
     --size: 50px;
 
     padding: var(--st-spacing);
+    padding-bottom: 0;
     cursor: pointer;
 
     &__image {
