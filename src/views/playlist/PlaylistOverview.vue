@@ -6,13 +6,21 @@
                 {{ $t("common.playlists").toLowerCase() }}
             </h1>
             <div class="playlists__actions">
-                <base-button
+                <modal
                     theme="primary"
+                    :label="$t('playlist.createnew')"
                     icon="plus"
-                    @click="createPlaylist"
                 >
-                    {{ $t("playlist.createnew") }}
-                </base-button>
+                    <form @submit.prevent="createPlaylist">
+                        <base-input
+                            :label="$t('common.name')"
+                            v-model="playlistName"
+                        />
+                        <base-button theme="secondary" type="submit">
+                            {{ $t("playlist.createnew") }}
+                        </base-button>
+                    </form>
+                </modal>
             </div>
         </header>
         <div class="playlists__wrapper">
@@ -29,22 +37,28 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
-import { BaseButton } from "@/components";
-import PlaylistCard from "@/components/playlist/PlaylistCard.vue";
 import { ApiPlaylist } from "dmb-api";
+
+import { BaseButton, Modal } from "@/components";
+import { BaseInput } from "@/components/inputs";
+import PlaylistCard from "@/components/playlist/PlaylistCard.vue";
 
 @Options({
     name: "playlist-overview",
     components: {
         BaseButton,
         PlaylistCard,
+        Modal,
+        BaseInput,
     },
 })
 export default class PlaylistOverview extends Vue {
     private store = useStore(sessionKey);
+    public playlistName = "";
 
     public createPlaylist() {
-        this.store.dispatch("createPlaylist", { name: "This is a test" });
+        this.store.dispatch("createPlaylist", { name: this.playlistName });
+        this.playlistName = "";
     }
 
     public get playlists(): ApiPlaylist[] {

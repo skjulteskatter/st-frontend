@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist } from 'dmb-api';
+import { ApiPlaylist, ApiPlaylistEntry } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -152,13 +152,21 @@ export const sessionStore = createStore<Session>({
                 displayName: name,
             }, state.currentUser))
         },
-        async createPlaylist({state,commit}, obj: { name: string }){
+        async createPlaylist({ commit }, obj: { name: string }){
             // Create playlist
-            await api.session.createPlaylist(obj.name);
+            const res = await api.session.createPlaylist(obj.name);
+
+            commit('playlist', res);
         },
-        async deletePlaylist({state,commit}, id){
+        async deletePlaylist({ commit }, id){
             // Delete playlist
-            await api.session.deletePlaylist(id);
+            const res = await api.session.deletePlaylist(id);
+            console.log(res, id);
+
+            commit('deletePlaylist', id);
+        },
+        async addToPlaylist({ commit }){
+            // Add song to playlist
         }
     },
     mutations: {
@@ -194,6 +202,15 @@ export const sessionStore = createStore<Session>({
         },
         playlists(state, playlists: ApiPlaylist[]) {
             state.playlists = playlists;
+        },
+        playlist(state, playlist: ApiPlaylist) {
+            state.playlists.push(playlist);
+        },
+        deletePlaylist(state, id: string){
+            const playlist = state.playlists.find(p => p.id == id);
+            if (!playlist) return;
+
+            state.playlists.splice(state.playlists.indexOf(playlist), 1);
         },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;
