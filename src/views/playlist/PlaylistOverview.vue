@@ -23,14 +23,16 @@
                 </modal>
             </div>
         </header>
-        <div class="playlists__wrapper">
+        <div class="playlists__wrapper" v-if="playlists.length">
             <playlist-card
                 v-for="playlist in playlists"
                 :key="playlist.id"
                 :playlist="playlist"
             />
         </div>
-        <h3 class="playlists__noplaylists">{{ $t("playlist.noplaylists") }}</h3>
+        <h3 class="playlists__noplaylists" v-else>
+            {{ $t("playlist.noplaylists") }}
+        </h3>
     </div>
 </template>
 
