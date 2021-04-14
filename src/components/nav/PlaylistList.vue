@@ -72,6 +72,7 @@ export default class CollectionList extends Vue {
         text-decoration: none;
         margin-bottom: 0.25em;
         padding: 0.25em;
+        // border: 1px solid currentColor;
         border: 1px solid var(--st-color-border);
         border-radius: var(--st-border-radius);
 
@@ -86,6 +87,15 @@ export default class CollectionList extends Vue {
         opacity: 0.6;
         display: flex;
         justify-content: space-between;
+
+        &__link {
+            color: inherit;
+            font-weight: bold;
+
+            &:hover {
+                color: var(--st-color-primary);
+            }
+        }
     }
 }
 </style>
