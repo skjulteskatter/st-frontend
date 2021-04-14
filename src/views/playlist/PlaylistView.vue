@@ -21,6 +21,7 @@
                 v-for="entry in playlist.entries"
                 :key="entry.id"
                 :entry="entry"
+                :playlist="playlist"
             />
         </div>
     </div>
