@@ -30,6 +30,7 @@
                 :playlist="playlist"
             />
         </div>
+        <h3 class="playlists__noplaylists">{{ $t("playlist.noplaylists") }}</h3>
     </div>
 </template>
 
@@ -82,6 +83,14 @@ export default class PlaylistOverview extends Vue {
     &__header {
         display: flex;
         justify-content: space-between;
+    }
+
+    &__noplaylists {
+        opacity: 0.5;
+        background-color: var(--st-color-background-medium);
+        padding: var(--st-spacing);
+        border-radius: var(--st-border-radius);
+        text-align: center;
     }
 }
 </style>
