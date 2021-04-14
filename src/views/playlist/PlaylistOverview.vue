@@ -44,7 +44,7 @@ import { ApiPlaylist } from "dmb-api";
 
 import { BaseButton, Modal } from "@/components";
 import { BaseInput } from "@/components/inputs";
-import PlaylistCard from "@/components/playlist/PlaylistCard.vue";
+import { PlaylistCard } from "@/components/playlist";
 
 @Options({
     name: "playlist-overview",

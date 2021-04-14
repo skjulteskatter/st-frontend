@@ -17,26 +17,11 @@
             {{ $t("playlist.nosongs") }}
         </h2>
         <div class="playlist-view__songs" v-else>
-            <base-card
+            <playlist-entry-card
                 v-for="entry in playlist.entries"
                 :key="entry.id"
-                class="playlist-view__songs__entry"
-            >
-                <router-link
-                    :to="{
-                        name: 'song',
-                        params: {
-                            collection: entry.item.collectionId,
-                            number: entry.item.number,
-                        },
-                    }"
-                    class="playlist-view__songs__entry__title"
-                >
-                    <strong>
-                        {{ entry.item.name[languageKey] }}
-                    </strong>
-                </router-link>
-            </base-card>
+                :entry="entry"
+            />
         </div>
     </div>
 </template>
@@ -46,6 +31,7 @@ import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton, BaseCard } from "@/components";
+import { PlaylistEntryCard } from "@/components/playlist";
 
 @Options({
     name: "playlist-view",
@@ -53,6 +39,7 @@ import { BackButton, BaseButton, BaseCard } from "@/components";
         BackButton,
         BaseButton,
         BaseCard,
+        PlaylistEntryCard,
     },
 })
 export default class PlaylistView extends Vue {
@@ -79,21 +66,6 @@ export default class PlaylistView extends Vue {
 .playlist-view {
     &__title {
         margin: 0 0 0.2em 0;
-    }
-
-    &__songs {
-        &__entry {
-            margin-bottom: var(--st-spacing);
-
-            &__title {
-                text-decoration: none;
-                color: var(--st-color-text-dark);
-
-                &:hover {
-                    color: var(--st-color-primary);
-                }
-            }
-        }
     }
 
     &__count {
