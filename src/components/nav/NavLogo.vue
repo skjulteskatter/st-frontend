@@ -1,9 +1,14 @@
 <template>
     <div class="nav-logo" @click="$router.push('/')">
         <img
-            class="nav-logo__image"
+            class="nav-logo__image nav-logo__image--light"
             alt="logo"
-            :src="`/img/logo/${logoStyle}.svg`"
+            :src="`/img/logo/light.svg`"
+        />
+        <img
+            class="nav-logo__image nav-logo__image--dark"
+            alt="logo"
+            :src="`/img/logo/dark.svg`"
         />
         <img
             src="/img/logo/icon.svg"
@@ -20,8 +25,8 @@ import { Options, Vue } from "vue-class-component";
     name: "nav-logo",
 })
 export default class NavLogo extends Vue {
-    public get logoStyle() {
-        return document.body.classList.contains("darkmode") ? "light" : "dark";
+    public get darkmode(): boolean {
+        return document.body.classList.contains("darkmode");
     }
 }
 </script>
@@ -40,6 +45,10 @@ export default class NavLogo extends Vue {
         max-height: var(--size);
         max-width: 100%;
         margin: 0;
+
+        &--light {
+            display: none;
+        }
     }
 
     &__image--icon {
@@ -55,6 +64,16 @@ export default class NavLogo extends Vue {
         .nav-logo__image {
             display: none;
         }
+    }
+}
+
+body.darkmode .nav-logo__image {
+    &--dark {
+        display: none;
+    }
+
+    &--light {
+        display: block;
     }
 }
 </style>
