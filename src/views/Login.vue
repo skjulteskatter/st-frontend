@@ -4,7 +4,7 @@
         <base-card id="login-card" v-if="initialized && !user">
             <div class="login gap-y">
                 <img
-                    src="/img/SongTreasures_logo.svg"
+                    src="/img/logo/dark.svg"
                     alt="SongTreasures logo"
                     class="logo"
                 />
@@ -46,7 +46,10 @@
                 </form>
                 <div
                     class="social transition-from-bottom"
-                    v-if="providers.filter((p) => p != 'password').length > 0 || noAccount"
+                    v-if="
+                        providers.filter((p) => p != 'password').length > 0 ||
+                        noAccount
+                    "
                 >
                     <span class="social__label">Sign in with</span>
                     <div class="social__buttons">
@@ -102,7 +105,7 @@ import auth from "@/services/auth";
         BaseButton,
         BaseInput,
     },
-    name: "login"
+    name: "login",
 })
 export default class Login extends Vue {
     public form = {
