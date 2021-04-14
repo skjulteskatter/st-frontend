@@ -14,6 +14,21 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
+                    <modal
+                        theme="secondary"
+                        icon="plus"
+                        :label="$t('playlist.addtoplaylist')"
+                    >
+                        <p
+                            class="song-viewer__playlist"
+                            v-for="playlist in playlists"
+                            :key="playlist.id"
+                            @click="addToPlaylist(playlist)"
+                        >
+                            {{ playlist.name }}
+                            <small>{{ playlist.entries.length }}</small>
+                        </p>
+                    </modal>
                     <select
                         v-if="song.sheetMusic.length"
                         id="sheetmusic"
@@ -94,13 +109,14 @@ import {
     BaseButton,
     BaseCard,
     BackButton,
+    Modal,
 } from "@/components";
 import { useStore } from "vuex";
-import { sessionKey, songKey } from "@/store";
+import { notificationKey, sessionKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { SheetMusicOptions } from "@/store/songs";
-import { MediaFile } from "dmb-api";
+import { ApiPlaylist, MediaFile } from "dmb-api";
 
 @Options({
     components: {
@@ -112,12 +128,14 @@ import { MediaFile } from "dmb-api";
         BaseCard,
         BackButton,
         OpenSheetMusicDisplay,
+        Modal,
     },
-    name: "song-viewer"
+    name: "song-viewer",
 })
 export default class SongViewer extends Vue {
     public store = useStore(sessionKey);
     public songStore = useStore(songKey);
+    public notifications = useStore(notificationKey);
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
@@ -162,6 +180,25 @@ export default class SongViewer extends Vue {
         localStorage.setItem("sheetmusic_options", JSON.stringify(options));
 
         window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    }
+
+    public addToPlaylist(playlist: ApiPlaylist) {
+        // Add song to playlist with ID
+        this.store.dispatch("addToPlaylist", {
+            playlist: playlist,
+            song: this.song,
+            type: "song",
+        });
+
+        // this.notifications.dispatch("addNotification", {
+        //     type: "success",
+        //     title: "Added to playlist",
+        //     icon: "check",
+        // });
+    }
+
+    public get playlists() {
+        return this.store.getters.playlists;
     }
 
     public get leadSheet() {
@@ -229,6 +266,15 @@ export default class SongViewer extends Vue {
         width: 100%;
         height: 80%;
         border: none;
+    }
+
+    &__playlist {
+        width: 100%;
+        margin-top: 0;
+        padding: 0.5em;
+        border: 1px solid var(--st-color-border);
+        border-radius: var(--st-border-radius);
+        cursor: pointer;
     }
 
     &__header {

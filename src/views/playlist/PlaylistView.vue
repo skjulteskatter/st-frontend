@@ -22,7 +22,7 @@
                 :key="entry.id"
                 class="playlist-view__songs__entry"
             >
-                {{ entry.addedAt }}
+                {{ entry }}
             </p>
         </div>
     </div>
@@ -33,12 +33,14 @@ import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
+import { SongListItemCard } from "@/components/songs";
 
 @Options({
     name: "playlist-view",
     components: {
         BackButton,
         BaseButton,
+        SongListItemCard,
     },
 })
 export default class PlaylistView extends Vue {

@@ -21,12 +21,6 @@ export const session = {
     },
     uploadImage(fileName: string, base64Image: string) {
         return http.patch<{ image: string }>('api/Session/Image', { fileName, base64Image });
-    },
-    createPlaylist(name: string){
-        return http.post('api/Playlists', { name });
-    },
-    deletePlaylist(id: string){
-        return http.delete(`api/Playlists/${id}`);
     }
 }
 
@@ -119,11 +113,20 @@ export const playlists = {
     async createPlaylist(name: string) {
         return (await http.post('api/Playlists', {name})) as ApiPlaylist;
     },
+    async deletePlaylist(id: string){
+        return (await http.delete(`api/Playlists/${id}`));
+    },
     async addFileToPlaylist(playlist: ApiPlaylist, file: MediaFile) {
-        return (await http.post(`api/Playlists/${playlist.id}/${file.id}`))
+        return (await http.post(`api/Playlists/${playlist.id}/file/${file.id}`));
     },
     async removeFileFromPlaylist(playlist: ApiPlaylist, file: MediaFile) {
-        return (await http.delete(`api/Playlists/${playlist.id}/${file.id}`));
+        return (await http.delete(`api/Playlists/${playlist.id}/file/${file.id}`));
+    },
+    async addSongToPlaylist(playlist: ApiPlaylist, song: Song) {
+        return (await http.post(`api/Playlists/${playlist.id}/song/${song.id}`));
+    },
+    async removeSongFromPlaylist(playlist: ApiPlaylist, song: Song) {
+        return (await http.delete(`api/Playlists/${playlist.id}/song/${song.id}`));
     }
 }
 

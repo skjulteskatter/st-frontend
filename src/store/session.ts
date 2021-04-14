@@ -5,7 +5,7 @@ import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
-import { Collection } from '@/classes';
+import { Collection, Song } from '@/classes';
 import { songStore } from './songs';
 import { ApiPlaylist } from 'dmb-api';
 
@@ -154,20 +154,24 @@ export const sessionStore = createStore<Session>({
         },
         async createPlaylist({ commit }, obj: { name: string }){
             // Create playlist
-            const res = await api.session.createPlaylist(obj.name);
+            const res = await api.playlists.createPlaylist(obj.name);
 
             commit('playlist', res);
         },
         async deletePlaylist({ commit }, id){
             // Delete playlist
-            const res = await api.session.deletePlaylist(id);
+            const res = await api.playlists.deletePlaylist(id);
             console.log(res, id);
 
             commit('deletePlaylist', id);
         },
-        // async addToPlaylist({ commit }){
-        //     // Add song to playlist
-        // }
+        async addToPlaylist({ commit }, obj: {
+            playlist: ApiPlaylist;
+            song: Song;
+        }){
+            const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.song);
+            console.log(res);
+        }
     },
     mutations: {
         user(state, user: User) {
