@@ -1,4 +1,3 @@
-
 declare module "dmb-api" {
     interface ApiCollection {
         id: string;
@@ -122,6 +121,7 @@ declare module "dmb-api" {
         addedById: string;
         fileId: string;
         file: MediaFile;
+        item: ApiSong | MediaFile;
     }
 
     interface MediaFile {
