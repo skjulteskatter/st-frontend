@@ -2,5 +2,20 @@
 	"name": "SongTreasures",
 	"short_name": "SongTreasures",
 	"display": "standalone",
-	"theme_color": "#bd9b60"
+	"theme_color": "#CAA970",
+	"background_color": "#FFFFFF",
+	"icons": [
+		{
+			"src": "icons/manifest-icon-200.png",
+			"sizes": "200x200",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "icons/manifest-icon-400.png",
+			"sizes": "400x400",
+			"type": "image/png",
+			"purpose": "maskable any"
+		}	
+	]
 }
