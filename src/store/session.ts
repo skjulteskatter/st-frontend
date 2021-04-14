@@ -151,6 +151,14 @@ export const sessionStore = createStore<Session>({
             commit('user', Object.assign({
                 displayName: name,
             }, state.currentUser))
+        },
+        async createPlaylist({state,commit}, obj: { name: string }){
+            // Create playlist
+            await api.session.createPlaylist(obj.name);
+        },
+        async deletePlaylist({state,commit}, id){
+            // Delete playlist
+            await api.session.deletePlaylist(id);
         }
     },
     mutations: {
@@ -225,6 +233,9 @@ export const sessionStore = createStore<Session>({
         },
         image(): string {
             return auth.image;
+        },
+        playlists(state): ApiPlaylist[] {
+            return state.playlists;
         }
     }
 })

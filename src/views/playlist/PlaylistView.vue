@@ -1,5 +1,5 @@
 <template>
-    <div class="playlist-view">
+    <div class="playlist-view" v-if="playlist">
         <back-button />
         <header class="playlist-view__header">
             <span>
@@ -9,10 +9,22 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
             </span>
+            <base-button icon="trash" theme="error" @click="deletePlaylist">
+                {{ $t("playlist.delete") }}
+            </base-button>
         </header>
         <h2 v-if="!playlist.entries.length" class="playlist-view__nosongs">
             {{ $t("playlist.nosongs") }}
         </h2>
+        <div class="playlist-view__songs" v-else>
+            <p
+                v-for="entry in playlist.entries"
+                :key="entry.id"
+                class="playlist-view__songs__entry"
+            >
+                {{ entry.addedAt }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -20,16 +32,22 @@
 import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { BackButton } from "@/components";
+import { BackButton, BaseButton } from "@/components";
 
 @Options({
     name: "playlist-view",
     components: {
         BackButton,
+        BaseButton,
     },
 })
 export default class PlaylistView extends Vue {
     private store = useStore(sessionKey);
+
+    public deletePlaylist() {
+        this.store.dispatch("deletePlaylist", this.playlist?.id);
+        this.$router.push("/playlists");
+    }
 
     public get playlist() {
         return this.store.state.playlists.find(
@@ -52,6 +70,7 @@ export default class PlaylistView extends Vue {
     &__header {
         display: flex;
         justify-content: space-between;
+        align-items: flex-start;
     }
 
     &__nosongs {

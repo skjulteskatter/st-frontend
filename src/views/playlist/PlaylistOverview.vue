@@ -6,7 +6,11 @@
                 {{ $t("common.playlists").toLowerCase() }}
             </h1>
             <div class="playlists__actions">
-                <base-button theme="secondary" icon="plus">
+                <base-button
+                    theme="secondary"
+                    icon="plus"
+                    @click="createPlaylist"
+                >
                     {{ $t("playlist.createnew") }}
                 </base-button>
             </div>
@@ -39,8 +43,12 @@ import { ApiPlaylist } from "dmb-api";
 export default class PlaylistOverview extends Vue {
     private store = useStore(sessionKey);
 
+    public createPlaylist() {
+        this.store.dispatch("createPlaylist", { name: "This is a test" });
+    }
+
     public get playlists(): ApiPlaylist[] {
-        return this.store.state.playlists;
+        return this.store.getters.playlists;
     }
 }
 </script>

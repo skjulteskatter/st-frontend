@@ -22,6 +22,12 @@ export const session = {
     uploadImage(fileName: string, base64Image: string) {
         return http.patch<{ image: string }>('api/Session/Image', { fileName, base64Image });
     },
+    createPlaylist(name: string){
+        return http.post('api/Playlists', { name });
+    },
+    deletePlaylist(id: string){
+        return http.delete(`api/Playlists/${id}`);
+    }
 }
 
 export const items = {
