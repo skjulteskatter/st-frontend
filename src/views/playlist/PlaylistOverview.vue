@@ -7,7 +7,7 @@
             </h1>
             <div class="playlists__actions">
                 <base-button
-                    theme="secondary"
+                    theme="primary"
                     icon="plus"
                     @click="createPlaylist"
                 >
