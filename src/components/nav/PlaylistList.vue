@@ -14,8 +14,10 @@
                         name: 'playlist-view',
                         params: { id: playlist.id },
                     }"
-                    >{{ playlist.name }}</router-link
                 >
+                    {{ playlist.name }}
+                    <small>{{ playlist.entries.length }}</small>
+                </router-link>
             </li>
         </ul>
         <p class="playlist-list__create" v-else>
@@ -84,7 +86,8 @@ export default class CollectionList extends Vue {
 
     &__link {
         color: var(--st-color-text);
-        display: block;
+        display: flex;
+        justify-content: space-between;
         text-decoration: none;
         margin-bottom: 0.25em;
         padding: 0.25em;
