@@ -105,10 +105,10 @@ export const songs = {
 
 export const playlists = {
     async getPlaylists() {
-        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/file'));
+        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/item'));
     },
     async getPlaylist(id: string) {
-        return (await http.get<ApiPlaylist>('api/Playlists/' + id + '?expand=entries/file'));
+        return (await http.get<ApiPlaylist>('api/Playlists/' + id + '?expand=entries/item'));
     },
     async createPlaylist(name: string) {
         return (await http.post('api/Playlists', {name})) as ApiPlaylist;
