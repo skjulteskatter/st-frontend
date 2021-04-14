@@ -1,12 +1,12 @@
 <template>
-    <div class="playlist-list" v-if="playlists.length > 0">
+    <div class="playlist-list">
         <small class="playlist-list__title">
             {{ $t("common.playlists") }}
             <router-link class="playlist-list__title__link" to="/playlists"
                 >Se alle</router-link
             >
         </small>
-        <ul class="playlist-list__list">
+        <ul class="playlist-list__list" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
                     class="playlist-list__link"
@@ -18,6 +18,9 @@
                 >
             </li>
         </ul>
+        <p class="playlist-list__create" v-else>
+            {{ $t("playlist.noplaylists") }}
+        </p>
     </div>
 </template>
 
@@ -27,8 +30,13 @@ import { sessionKey } from "@/store";
 import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
+import { BaseButton } from "@/components";
 
-@Options({})
+@Options({
+    components: {
+        BaseButton,
+    },
+})
 export default class CollectionList extends Vue {
     private store = useStore(sessionKey);
 
@@ -66,6 +74,14 @@ export default class CollectionList extends Vue {
         list-style: none;
     }
 
+    &__create {
+        padding: 0.5em var(--st-spacing);
+        border-radius: var(--st-border-radius);
+        background-color: var(--st-color-background-medium);
+        color: currentColor;
+        text-align: center;
+    }
+
     &__link {
         color: var(--st-color-text);
         display: block;
@@ -84,7 +100,7 @@ export default class CollectionList extends Vue {
 
     &__title {
         text-transform: uppercase;
-        opacity: 0.6;
+        // opacity: 0.6;
         display: flex;
         justify-content: space-between;
 
