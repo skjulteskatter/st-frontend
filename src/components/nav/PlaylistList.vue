@@ -89,9 +89,9 @@ export default class CollectionList extends Vue {
         display: flex;
         justify-content: space-between;
         text-decoration: none;
-        margin-bottom: 0.25em;
-        padding: 0.25em;
-        // border: 1px solid currentColor;
+        margin-bottom: 0.5em;
+        padding: 0.5em;
+        background-color: var(--st-color-background-medium);
         border: 1px solid var(--st-color-border);
         border-radius: var(--st-border-radius);
 
