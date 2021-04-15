@@ -17,7 +17,7 @@
             {{ $t("playlist.nosongs") }}
         </h2>
         <div class="playlist-view__songs" v-else>
-            <playlist-entry-card
+            <playlist-song-card
                 v-for="entry in playlist.entries"
                 :key="entry.id"
                 :entry="entry"
@@ -32,7 +32,7 @@ import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton, BaseCard } from "@/components";
-import { PlaylistEntryCard } from "@/components/playlist";
+import { PlaylistSongCard } from "@/components/playlist";
 
 @Options({
     name: "playlist-view",
@@ -40,7 +40,7 @@ import { PlaylistEntryCard } from "@/components/playlist";
         BackButton,
         BaseButton,
         BaseCard,
-        PlaylistEntryCard,
+        PlaylistSongCard,
     },
 })
 export default class PlaylistView extends Vue {

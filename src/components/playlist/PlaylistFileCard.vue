@@ -1,9 +1,9 @@
 <template>
-    <base-card class="playlist-entry-card">
-        <div class="playlist-entry-card__wrapper">
-            <div class="playlist-entry-card__info">
+    <base-card class="playlist-file-card">
+        <div class="playlist-file-card__wrapper">
+            <div class="playlist-file-card__info">
                 <router-link
-                    class="playlist-entry-card__title"
+                    class="playlist-file-card__title"
                     :to="{
                         name: 'song',
                         params: {
@@ -16,13 +16,13 @@
                         {{ getEntryName(entry) }}
                     </span>
                 </router-link>
-                <small class="playlist-entry-card__collection">
+                <small class="playlist-file-card__collection">
                     {{ collection?.getName(languageKey) }}
                     {{ entry.item.number }}
                 </small>
             </div>
             <small
-                class="playlist-entry-card__remove"
+                class="playlist-file-card__remove"
                 @click="removeFromPlaylist"
             >
                 {{ $t("playlist.remove") }}
@@ -40,7 +40,7 @@ import { BaseCard, BaseButton } from "@/components";
 import { Song } from "@/classes";
 
 @Options({
-    name: "playlist-entry-card",
+    name: "playlist-file-card",
     props: {
         entry: {
             type: Object,
@@ -80,7 +80,7 @@ export default class PlaylistEntryCard extends Vue {
 
     public getEntryName(entry: ApiPlaylistEntry) {
         if (entry.type == "song") {
-            return (new Song(entry.item as ApiSong)).getName(this.languageKey);
+            return new Song(entry.item as ApiSong).getName(this.languageKey);
         } else {
             return entry.item.name as string;
         }
@@ -91,7 +91,7 @@ export default class PlaylistEntryCard extends Vue {
 <style lang="scss" scoped>
 @import "../../style/mixins";
 
-.playlist-entry-card {
+.playlist-file-card {
     margin-bottom: var(--st-spacing);
 
     &__wrapper {
@@ -103,11 +103,11 @@ export default class PlaylistEntryCard extends Vue {
             flex-direction: column;
             align-items: flex-start;
 
-            .playlist-entry-card__info {
+            .playlist-file-card__info {
                 margin-bottom: 0.5em;
             }
 
-            .playlist-entry-card__remove {
+            .playlist-file-card__remove {
                 align-self: flex-end;
             }
         }

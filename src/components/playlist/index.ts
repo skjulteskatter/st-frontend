@@ -1,7 +1,9 @@
 import PlaylistCard from './PlaylistCard.vue';
-import PlaylistEntryCard from './PlaylistEntryCard.vue';
+import PlaylistSongCard from './PlaylistSongCard.vue';
+import PlaylistFileCard from './PlaylistFileCard.vue';
 
 export {
 	PlaylistCard,
-	PlaylistEntryCard
+	PlaylistSongCard,
+	PlaylistFileCard,
 }
