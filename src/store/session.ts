@@ -153,32 +153,33 @@ export const sessionStore = createStore<Session>({
             }, state.currentUser))
         },
         async createPlaylist({ commit }, obj: { name: string }){
-            // Create playlist
             const res = await api.playlists.createPlaylist(obj.name);
 
             commit('playlist', res);
         },
         async deletePlaylist({ commit }, id){
-            // Delete playlist
             const res = await api.playlists.deletePlaylist(id);
             console.log(res, id);
 
             commit('deletePlaylist', id);
         },
-        async addToPlaylist({ commit }, obj: {
+        async addSongToPlaylist({ commit }, obj: {
             playlist: ApiPlaylist;
-            song: ApiPlaylistEntry;
+            entry: ApiPlaylistEntry;
         }){
-            const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.song);
+            const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.entry);
             console.log(res);
+
+            commit('addToPlaylist', {playlistId: obj.playlist.id, song: obj.entry});
         },
         async removeFromPlaylist({ commit }, obj: {
             playlist: ApiPlaylist;
-            song: ApiPlaylistEntry;
+            entry: ApiPlaylistEntry;
         }){
-            // Remove entry from playlist
-            const res = await api.playlists.removeSongFromPlaylist(obj.playlist, obj.song);
+            const res = await api.playlists.removeSongFromPlaylist(obj.playlist, obj.entry);
             console.log(res);
+
+            commit('removeFromPlaylist', {playlistId: obj.playlist.id, entryId: obj.entry.id});
         }
     },
     mutations: {
@@ -223,6 +224,22 @@ export const sessionStore = createStore<Session>({
             if (!playlist) return;
 
             state.playlists.splice(state.playlists.indexOf(playlist), 1);
+        },
+        addToPlaylist(state, obj: {
+            playlistId: string;
+            entry: ApiPlaylistEntry;
+        }){
+            const playlist = state.playlists.find(p => p.id == obj.playlistId);
+            playlist?.entries.push(obj.entry);
+        },
+        removeFromPlaylist(state, obj: {
+            playlistId: string;
+            entryId: string;
+        }){
+            const playlist = state.playlists.find(p => p.id == obj.playlistId);
+            if(playlist){
+                playlist.entries = playlist.entries.filter(e => e.id !== obj.entryId);
+            }
         },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;

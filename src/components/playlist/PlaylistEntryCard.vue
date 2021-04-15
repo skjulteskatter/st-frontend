@@ -63,7 +63,7 @@ export default class PlaylistEntryCard extends Vue {
     public removeFromPlaylist() {
         this.store.dispatch("removeFromPlaylist", {
             playlist: this.playlist,
-            song: this.entry,
+            entry: this.entry,
         });
     }
 

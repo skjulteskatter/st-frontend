@@ -120,13 +120,13 @@ export const playlists = {
         return (await http.post(`api/Playlists/${playlist.id}/file/${file.id}`));
     },
     async removeFileFromPlaylist(playlist: ApiPlaylist, file: MediaFile) {
-        return (await http.delete(`api/Playlists/${playlist.id}/file/${file.id}`));
+        return (await http.delete(`api/Playlists/${playlist.id}/${file.id}`));
     },
     async addSongToPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
         return (await http.post(`api/Playlists/${playlist.id}/song/${song.id}`));
     },
     async removeSongFromPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
-        return (await http.delete(`api/Playlists/${playlist.id}/song/${song.id}`));
+        return (await http.delete(`api/Playlists/${playlist.id}/${song.id}`));
     }
 }
 
