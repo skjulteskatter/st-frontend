@@ -2,9 +2,9 @@
     <div class="playlist-list">
         <small class="playlist-list__title">
             {{ $t("common.playlists") }}
-            <router-link class="playlist-list__title__link" to="/playlists"
-                >Se alle</router-link
-            >
+            <router-link class="playlist-list__title__link" to="/playlists">
+                {{ $t("playlist.seeall") }}
+            </router-link>
         </small>
         <ul class="playlist-list__list" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
