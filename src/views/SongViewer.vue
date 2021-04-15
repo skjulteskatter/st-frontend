@@ -182,9 +182,9 @@ export default class SongViewer extends Vue {
         window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
     }
 
-    public addToPlaylist(playlist: ApiPlaylist) {
+    public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
-        this.store.dispatch("addSongToPlaylist", {
+        await this.store.dispatch("addSongToPlaylist", {
             playlistId: playlist.id,
             songId: this.song?.id,
         });
@@ -197,7 +197,7 @@ export default class SongViewer extends Vue {
     }
 
     public get playlists() {
-        return this.store.getters.playlists;
+        return this.store.state.playlists;
     }
 
     public get leadSheet() {

@@ -65,7 +65,7 @@ export default class PlaylistOverview extends Vue {
     }
 
     public get playlists(): ApiPlaylist[] {
-        return this.store.getters.playlists;
+        return this.store.state.playlists;
     }
 }
 </script>

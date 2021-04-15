@@ -117,10 +117,10 @@ export const playlists = {
         return (await http.delete(`api/Playlists/${id}`));
     },
     async addToPlaylist(playlistId: string, fileId: string, type: string) {
-        return (await http.post<ApiPlaylist>(`api/Playlists/${playlistId}/${type}/${fileId}`));
+        return (await http.post<ApiPlaylist>(`api/Playlists/${playlistId}/${type}/${fileId}?expand=entries/item/collection`));
     },
     async removeEntryFromPlaylist(playlistId: string, entryId: string) {
-        return (await http.delete(`api/Playlists/${playlistId}/${entryId}`));
+        return (await http.delete(`api/Playlists/${playlistId}/${entryId}?expand=entries/item/collection`));
     },
 }
 

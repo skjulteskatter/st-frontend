@@ -282,9 +282,6 @@ export const sessionStore = createStore<Session>({
         },
         image(): string {
             return auth.image;
-        },
-        playlists(state): ApiPlaylist[] {
-            return state.playlists;
         }
     }
 })
