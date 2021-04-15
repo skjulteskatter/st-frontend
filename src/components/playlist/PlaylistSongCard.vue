@@ -34,7 +34,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { sessionKey } from "@/store";
+import { notificationKey, sessionKey } from "@/store";
 import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
 import { BaseCard, BaseButton } from "@/components";
 import { Song } from "@/classes";
@@ -58,6 +58,7 @@ import { Song } from "@/classes";
 })
 export default class PlaylistEntryCard extends Vue {
     private store = useStore(sessionKey);
+    private notifications = useStore(notificationKey);
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
 
@@ -65,6 +66,11 @@ export default class PlaylistEntryCard extends Vue {
         this.store.dispatch("removeFromPlaylist", {
             playlistId: this.playlist.id,
             entryId: this.entry.id,
+        });
+
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: this.$t("playlist.removed"),
         });
     }
 
