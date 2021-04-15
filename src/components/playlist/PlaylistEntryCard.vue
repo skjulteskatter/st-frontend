@@ -12,7 +12,9 @@
                         },
                     }"
                 >
-                    {{ entry.item.name[languageKey] }}
+                    <span>
+                        {{ entry.item.name[languageKey] }}
+                    </span>
                 </router-link>
                 <small class="playlist-entry-card__collection">
                     {{ collection.name[languageKey] }}
@@ -92,6 +94,14 @@ export default class PlaylistEntryCard extends Vue {
         @include breakpoint("small") {
             flex-direction: column;
             align-items: flex-start;
+
+            .playlist-entry-card__info {
+                margin-bottom: 0.5em;
+            }
+
+            .playlist-entry-card__remove {
+                align-self: flex-end;
+            }
         }
     }
 
@@ -102,7 +112,8 @@ export default class PlaylistEntryCard extends Vue {
 
     &__collection {
         display: block;
-        opacity: 0.5;
+        font-weight: 100;
+        // opacity: 0.5;
         margin-top: 0.2em;
     }
 
