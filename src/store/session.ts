@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection, Song } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from 'dmb-api';
+import { ApiPlaylist } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
