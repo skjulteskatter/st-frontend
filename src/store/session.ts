@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import api from '@/services/api'
+import api, { playlists } from '@/services/api'
 import { InjectionKey } from 'vue'
 import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection, Song } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist, ApiPlaylistEntry } from 'dmb-api';
+import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -164,22 +164,34 @@ export const sessionStore = createStore<Session>({
             commit('deletePlaylist', id);
         },
         async addSongToPlaylist({ commit }, obj: {
-            playlist: ApiPlaylist;
-            entry: ApiPlaylistEntry;
-        }){
-            const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.entry);
-            console.log(res);
+            playlistId: string;
+            songId: string;
+        }) {
+            const res = await api.playlists.addToPlaylist(obj.playlistId, obj.songId, "song");
 
-            commit('addToPlaylist', {playlistId: obj.playlist.id, song: obj.entry});
+            if (res) {
+                commit('updatePlaylist', res);
+            }
+        },
+        async addFileToPlaylist({ commit }, obj: {
+            playlistId: string;
+            fileId: string;
+        }) {
+            const res = await playlists.addToPlaylist(obj.playlistId, obj.fileId, "file");
+
+            if (res) {
+                commit('updatePlaylist', res);
+            }
         },
         async removeFromPlaylist({ commit }, obj: {
-            playlist: ApiPlaylist;
-            entry: ApiPlaylistEntry;
+            playlistId: string;
+            entryId: string;
         }){
-            const res = await api.playlists.removeSongFromPlaylist(obj.playlist, obj.entry);
-            console.log(res);
+            const res = await api.playlists.removeEntryFromPlaylist(obj.playlistId, obj.entryId);
 
-            commit('removeFromPlaylist', {playlistId: obj.playlist.id, entryId: obj.entry.id});
+            if (res) {
+                commit('updatePlaylist', res);
+            }
         }
     },
     mutations: {
@@ -216,6 +228,13 @@ export const sessionStore = createStore<Session>({
         playlists(state, playlists: ApiPlaylist[]) {
             state.playlists = playlists;
         },
+        updatePlaylist(state, playlist: ApiPlaylist) {
+            const pl = state.playlists.find(p => p.id == playlist.id);
+            if (pl) {
+                pl.entries = playlist.entries;
+                pl.name = playlist.name;
+            }
+        },
         playlist(state, playlist: ApiPlaylist) {
             state.playlists.push(playlist);
         },
@@ -224,22 +243,6 @@ export const sessionStore = createStore<Session>({
             if (!playlist) return;
 
             state.playlists.splice(state.playlists.indexOf(playlist), 1);
-        },
-        addToPlaylist(state, obj: {
-            playlistId: string;
-            entry: ApiPlaylistEntry;
-        }){
-            const playlist = state.playlists.find(p => p.id == obj.playlistId);
-            playlist?.entries.push(obj.entry);
-        },
-        removeFromPlaylist(state, obj: {
-            playlistId: string;
-            entryId: string;
-        }){
-            const playlist = state.playlists.find(p => p.id == obj.playlistId);
-            if(playlist){
-                playlist.entries = playlist.entries.filter(e => e.id !== obj.entryId);
-            }
         },
         extend(state, value?: boolean) {
             state.extend = value != undefined ? value : !state.extend;

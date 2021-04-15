@@ -7,17 +7,17 @@
                     :to="{
                         name: 'song',
                         params: {
-                            collection: collection.key,
+                            collection: collection?.key,
                             number: entry.item.number,
                         },
                     }"
                 >
                     <span>
-                        {{ entry.item.name[languageKey] }}
+                        {{ getEntryName(entry) }}
                     </span>
                 </router-link>
                 <small class="playlist-entry-card__collection">
-                    {{ collection.name[languageKey] }}
+                    {{ collection?.getName(languageKey) }}
                     {{ entry.item.number }}
                 </small>
             </div>
@@ -35,8 +35,9 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
-import { ApiPlaylist, ApiPlaylistEntry } from "dmb-api";
+import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
 import { BaseCard, BaseButton } from "@/components";
+import { Song } from "@/classes";
 
 @Options({
     name: "playlist-entry-card",
@@ -62,8 +63,8 @@ export default class PlaylistEntryCard extends Vue {
 
     public removeFromPlaylist() {
         this.store.dispatch("removeFromPlaylist", {
-            playlist: this.playlist,
-            entry: this.entry,
+            playlistId: this.playlist.id,
+            entryId: this.entry.id,
         });
     }
 
@@ -72,10 +73,17 @@ export default class PlaylistEntryCard extends Vue {
     }
 
     public get collection() {
-        const collection = this.store.state.collections.find(
-            (c) => (c.id = this.entry.item.id)
+        return this.store.state.collections.find(
+            (c) => c.id === this.entry.item.collection?.id
         );
-        return collection;
+    }
+
+    public getEntryName(entry: ApiPlaylistEntry) {
+        if (entry.type == "song") {
+            return (new Song(entry.item as ApiSong)).getName(this.languageKey);
+        } else {
+            return entry.item.name as string;
+        }
     }
 }
 </script>

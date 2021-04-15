@@ -105,7 +105,7 @@ export const songs = {
 
 export const playlists = {
     async getPlaylists() {
-        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/item/colleciton'));
+        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/item/collection'));
     },
     async getPlaylist(id: string) {
         return (await http.get<ApiPlaylist>('api/Playlists/' + id + '?expand=entries/item/collection'));
@@ -116,18 +116,12 @@ export const playlists = {
     async deletePlaylist(id: string){
         return (await http.delete(`api/Playlists/${id}`));
     },
-    async addFileToPlaylist(playlist: ApiPlaylist, file: MediaFile) {
-        return (await http.post(`api/Playlists/${playlist.id}/file/${file.id}`));
+    async addToPlaylist(playlistId: string, fileId: string, type: string) {
+        return (await http.post<ApiPlaylist>(`api/Playlists/${playlistId}/${type}/${fileId}`));
     },
-    async removeFileFromPlaylist(playlist: ApiPlaylist, file: MediaFile) {
-        return (await http.delete(`api/Playlists/${playlist.id}/${file.id}`));
+    async removeEntryFromPlaylist(playlistId: string, entryId: string) {
+        return (await http.delete(`api/Playlists/${playlistId}/${entryId}`));
     },
-    async addSongToPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
-        return (await http.post(`api/Playlists/${playlist.id}/song/${song.id}`));
-    },
-    async removeSongFromPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
-        return (await http.delete(`api/Playlists/${playlist.id}/${song.id}`));
-    }
 }
 
 export const stripe = {

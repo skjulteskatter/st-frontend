@@ -185,8 +185,8 @@ export default class SongViewer extends Vue {
     public addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
         this.store.dispatch("addSongToPlaylist", {
-            playlist: playlist,
-            entry: this.song,
+            playlistId: playlist.id,
+            songId: this.song?.id,
         });
 
         // this.notifications.dispatch("addNotification", {

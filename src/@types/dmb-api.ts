@@ -117,16 +117,17 @@ declare module "dmb-api" {
 
     interface ApiPlaylistEntry {
         id: string;
+        type: string;
         addedAt: string;
         addedById: string;
-        fileId: string;
-        file: MediaFile;
+        itemId: string;
         item: ApiSong | MediaFile;
     }
 
     interface MediaFile {
         id: string;
         type: string;
+        collection?: ApiCollection;
         category: string;
         number: number;
         language: Language;
