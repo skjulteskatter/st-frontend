@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
+import { notificationKey, sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BackButton, BaseButton, BaseCard } from "@/components";
@@ -45,10 +45,16 @@ import { PlaylistSongCard } from "@/components/playlist";
 })
 export default class PlaylistView extends Vue {
     private store = useStore(sessionKey);
+    private notifications = useStore(notificationKey);
 
     public deletePlaylist() {
         this.store.dispatch("deletePlaylist", this.playlist?.id);
         this.$router.push("/playlists");
+
+        this.notifications.dispatch("addNotification", {
+            type: "success",
+            title: this.$t("playlist.deletedplaylist"),
+        });
     }
 
     public get languageKey() {
