@@ -4,7 +4,7 @@ import { CountryCollectionItem } from '@/classes/collectionItems/countryCollecti
 import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
-import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiThemeCollectionItem, MediaFile } from 'dmb-api';
+import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
 import auth from './auth';
 import http from './http';
 
