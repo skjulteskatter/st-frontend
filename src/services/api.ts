@@ -4,7 +4,7 @@ import { CountryCollectionItem } from '@/classes/collectionItems/countryCollecti
 import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
-import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem, MediaFile } from 'dmb-api';
+import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiThemeCollectionItem, MediaFile } from 'dmb-api';
 import auth from './auth';
 import http from './http';
 
@@ -122,10 +122,10 @@ export const playlists = {
     async removeFileFromPlaylist(playlist: ApiPlaylist, file: MediaFile) {
         return (await http.delete(`api/Playlists/${playlist.id}/file/${file.id}`));
     },
-    async addSongToPlaylist(playlist: ApiPlaylist, song: Song) {
+    async addSongToPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
         return (await http.post(`api/Playlists/${playlist.id}/song/${song.id}`));
     },
-    async removeSongFromPlaylist(playlist: ApiPlaylist, song: Song) {
+    async removeSongFromPlaylist(playlist: ApiPlaylist, song: ApiPlaylistEntry) {
         return (await http.delete(`api/Playlists/${playlist.id}/song/${song.id}`));
     }
 }

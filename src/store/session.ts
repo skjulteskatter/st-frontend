@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection, Song } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist } from 'dmb-api';
+import { ApiPlaylist, ApiPlaylistEntry } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -167,14 +167,14 @@ export const sessionStore = createStore<Session>({
         },
         async addToPlaylist({ commit }, obj: {
             playlist: ApiPlaylist;
-            song: Song;
+            song: ApiPlaylistEntry;
         }){
             const res = await api.playlists.addSongToPlaylist(obj.playlist, obj.song);
             console.log(res);
         },
         async removeFromPlaylist({ commit }, obj: {
             playlist: ApiPlaylist;
-            song: Song;
+            song: ApiPlaylistEntry;
         }){
             // Remove entry from playlist
             const res = await api.playlists.removeSongFromPlaylist(obj.playlist, obj.song);
