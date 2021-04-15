@@ -1,8 +1,8 @@
 <template>
     <transition name="note">
         <div class="notification" :class="`${typeClass}`" v-if="show">
+            <!-- <icon v-if="icon" :name="icon" size="18" /> -->
             <small>{{ title }}</small>
-            <!-- <icon v-if="icon" :name="icon" size="20" /> -->
             <Icon
                 name="error"
                 class="notification__close"
@@ -28,6 +28,7 @@ import { Icon } from "@/components/icon";
         },
         title: {
             type: String,
+            required: true,
         },
         icon: {
             type: String,
