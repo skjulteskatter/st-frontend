@@ -8,6 +8,7 @@ declare module "dmb-api" {
         key: string;
         image: string;
         available?: boolean;
+        details?: LocaleString;
     }
 
     interface ApiSong {

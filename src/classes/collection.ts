@@ -3,6 +3,8 @@ import { SongFilter } from "@/store/songs";
 import { ApiCollection } from "dmb-api";
 import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
+import { Converter } from 'showdown';
+const converter = new Converter();
 
 
 export class Collection extends BaseClass implements ApiCollection {
@@ -10,6 +12,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public defaultType: string;
     public id: string;
     public available?: boolean;
+    public details?: LocaleString;
 
     public image: string;
 
@@ -53,6 +56,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.name = collection.name;
         this.image = collection.image;
         this.available = collection.available;
+        this.details = collection.details;
     }
 
     private async initialize() {
@@ -85,6 +89,12 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get loading() {
         return this._loading || this._loadingAuthors || this._loadingComposers || this._loadingThemes || this._loadingCountries;
+    }
+
+    public getDetails(language: string){
+        const details = this.getTranslatedProperty(this.details, language);
+
+        return details ? converter.makeHtml(details) : undefined;
     }
 
     public getSong(number: number) {

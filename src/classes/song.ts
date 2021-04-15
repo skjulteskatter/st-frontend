@@ -1,9 +1,9 @@
-import { Converter } from 'showdown';
 import { ApiSong, MediaFile } from "dmb-api";
 import { Collection } from './collection';
 import { Contributor } from './contributor';
 import { Participant } from './participant';
 import { BaseClass } from './baseClass';
+import { Converter } from 'showdown';
 const converter = new Converter();
 
 export class Song extends BaseClass implements ApiSong {

@@ -15,4 +15,8 @@ export class Product extends BaseClass implements ApiProduct {
         this.prices = product.prices;
         this.priority = product.priority;
     }
+
+    public get collectionIds(): string[] {
+        return this.collections.map(c => c.id);
+    } 
 }

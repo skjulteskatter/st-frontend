@@ -17,13 +17,7 @@
                         formatPrices(product.prices, "month")
                     }}
                 </span>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Perferendis ratione, deleniti veritatis ea quam esse qui
-                    reiciendis. Magnam numquam dolorem, consequuntur laboriosam
-                    veritatis quasi soluta voluptate praesentium sint nihil
-                    doloremque.
-                </p>
+                <div v-html="details" class="store-item__details"></div>
                 <div class="store-item__body__footer">
                     <base-button
                         theme="secondary"
@@ -50,11 +44,12 @@ import { Product } from "@/classes/product";
         BackButton,
         BaseButton,
     },
-    name: "store-item"
+    name: "store-item",
 })
 export default class StoreItem extends Vue {
     private store = useStore(stripeKey);
     private notifications = useStore(notificationKey);
+    private sessionStore = useStore(sessionKey);
     public loading = false;
 
     public async checkout(product: Product) {
@@ -82,6 +77,16 @@ export default class StoreItem extends Vue {
         return this.product?.collections[0].image + "?w=400";
     }
 
+    public get collections() {
+        return this.sessionStore.state.collections.filter((c) =>
+            this.product?.collectionIds.includes(c.id)
+        );
+    }
+
+    public get details() {
+        return this.collections[0].getDetails(this.languageKey);
+    }
+
     public get products() {
         return this.store.state.products;
     }
@@ -91,7 +96,7 @@ export default class StoreItem extends Vue {
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
+        return this.sessionStore.getters.languageKey;
     }
 }
 </script>

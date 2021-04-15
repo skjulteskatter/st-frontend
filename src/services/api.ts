@@ -63,7 +63,7 @@ export const admin = {
 
 export const songs = {
     async getCollections() {
-        return (await http.get<ApiCollection[]>('api/Collections')).map(c => new Collection(c));
+        return (await http.get<ApiCollection[]>('api/Collections?expand=details,name')).map(c => new Collection(c));
     },
     async getAllSongs(collection: string) {
         return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`)).map(s => new Song(s));
