@@ -5,7 +5,7 @@ import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
 import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
-import { Collection, Song } from '@/classes';
+import { Collection } from '@/classes';
 import { songStore } from './songs';
 import { ApiPlaylist } from 'dmb-api';
 
