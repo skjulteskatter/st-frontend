@@ -40,13 +40,15 @@ export default class ActivityFeed extends Vue {
             numeric: "auto",
             style: "long",
         });
-        const now = new Date().getMinutes();
-        const then = new Date(date).getMinutes();
-        const minutes = then - now;
+        const now = new Date().getTime();
+        const then = new Date(date).getTime();
+        const milliseconds = Math.floor(then - now);
+        const seconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
 
-        const string = rtfl.format(minutes, "minutes");
+        const result = rtfl.format(minutes, "minutes");
 
-        return string;
+        return result;
     }
 
     public get languageKey() {
