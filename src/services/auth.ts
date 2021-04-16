@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/performance';
@@ -173,7 +174,7 @@ class Auth {
             try {
                 await user.updatePassword(password);
 
-                console.log("updated password");
+                //console.log("updated password");
             }
             catch (e) {
                 console.log(e);
