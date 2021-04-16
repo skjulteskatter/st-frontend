@@ -1,23 +1,32 @@
 <template>
     <div class="loader" v-if="osmd.loading"></div>
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
-        <!-- <open-sheet-music-display
-            :url="url"
-            :originalKey="originalKey"
-            :initialTransposition="transposition"
-            :embed="embed"
-            :initialZoom="zoom"
-        ></open-sheet-music-display> -->
-        <base-button v-if="type != pdfType" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
-        <open-sheet-music-display
-            v-if="type != pdfType && url && ['sheet-music', 'sheet-music-embed'].includes(routeName)"
-            :options="options"
-        ></open-sheet-music-display>
-        <object v-if="type == pdfType" :data="options.url" type="application/pdf" width="100%" height="100%">
-            <p>Couldn't load PDF</p>
-        </object>
-        <div id="osmd-canvas"></div>
-        <div id="pb-canvas"></div>
+        <div v-if="!embed && song">
+            <h1>
+                {{song.getName(languageKey)}}
+            </h1>
+            <h3 v-for="c in song.authors" :key="c.id">
+                {{c.name}}
+            </h3>
+            <h3 v-for="c in song.composers" :key="c.id">
+                {{c.name}}
+            </h3>
+        </div>
+
+        <div class="sheetmusic-wrapper">
+            <div class="sheetmusic-content">
+                <base-button v-if="type != pdfType" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
+                <open-sheet-music-display
+                    v-if="type != pdfType && url && ['sheet-music', 'sheet-music-embed'].includes(routeName)"
+                    :options="options"
+                ></open-sheet-music-display>
+                <object v-if="type == pdfType" :data="options.url" type="application/pdf" width="100%" height="100%">
+                    <p>Couldn't load PDF</p>
+                </object>
+                <div id="osmd-canvas"></div>
+                <div id="pb-canvas"></div>
+            </div>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -25,9 +34,11 @@ import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
 import { BaseButton } from "@/components";
 import { useStore } from "vuex";
-import { songKey } from "@/store";
+import { sessionKey, songKey } from "@/store";
 import { osmd } from "@/services/osmd";
 import { SheetMusicOptions, SheetMusicTypes } from "@/store/songs";
+import { ApiSong } from "dmb-api";
+import { Song } from "@/classes";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -42,6 +53,7 @@ export default class SheetMusic extends Vue {
     public songStore = useStore(songKey);
     public osmd = osmd;
     public pdfType = SheetMusicTypes.PDF;
+    public song?: Song;
 
     public created() {
         const o = localStorage.getItem("sheetmusic_options");
@@ -66,6 +78,11 @@ export default class SheetMusic extends Vue {
             console.log("POPOPO")
         }
 
+        const song = localStorage.getItem("song_item");
+
+        if (song) {
+            this.song = new Song(JSON.parse(song) as ApiSong);
+        }
         // const o: SheetMusicOptions = {
         //     show: true,
         //     url: this.url,
@@ -129,6 +146,10 @@ export default class SheetMusic extends Vue {
             type: this.type ?? undefined,
         }
     }
+
+    public get languageKey() {
+        return useStore(sessionKey).getters.languageKey;
+    }
 }
 </script>
 <style lang="scss">
@@ -140,6 +161,15 @@ export default class SheetMusic extends Vue {
     background-color: var(--st-color-ui-lm-medium);
     width: 350px;
     left: unset;
+}
+
+.sheetmusic-wrapper {
+    width: 100%;
+}
+
+.sheetmusic-content {
+    max-width: 1200px;
+    margin: auto;
 }
 
 #pb-canvas {

@@ -54,8 +54,11 @@ class OSMD {
                 backend: "canvas",
                 drawingParameters: "default", // try compact (instead of default)
                 drawPartNames: false, // try false
-                drawTitle: true,
-                drawSubtitle: true,
+                drawTitle: false,
+                drawSubtitle: false,
+                drawComposer: false,
+                drawLyricist: false,
+                drawCredits: false,
                 disableCursor: false,
                 // fingeringInsideStafflines: "true", // default: false. true draws fingerings directly above/below notes
                 setWantedStemDirectionByXml: false, // try false, which was previously the default behavior
@@ -74,7 +77,6 @@ class OSMD {
                 defaultFontFamily: "Inter",
 
                 drawPartAbbreviations: true,
-                drawCredits: true,
                 drawSlurs: true,
                 percussionOneLineCutoff: 4,
 
@@ -91,7 +93,7 @@ class OSMD {
                 drawHiddenNotes: true,
                 pageBackgroundColor: "#FFFFFF",
                 newSystemFromXML: true,
-                pageFormat: "A4 P"
+                //pageFormat: "A4 P"
             });
 
             this.playbackManager = new PlaybackManager(this.timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
