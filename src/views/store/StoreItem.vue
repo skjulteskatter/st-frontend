@@ -33,11 +33,12 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, sessionKey, stripeKey } from "@/store";
+import { notificationKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
 import { Product } from "@/classes/product";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -47,9 +48,9 @@ import { Product } from "@/classes/product";
     name: "store-item",
 })
 export default class StoreItem extends Vue {
-    private store = useStore(stripeKey);
-    private notifications = useStore(notificationKey);
-    private sessionStore = useStore(sessionKey);
+    private stripeStore = vStore(stripeKey);
+    private notifications = vStore(notificationKey);
+    private store = useStore();
     public loading = false;
 
     public async checkout(product: Product) {
@@ -59,7 +60,7 @@ export default class StoreItem extends Vue {
             icon: "shop",
             title: this.$t("notification.redirecting"),
         });
-        await this.store.dispatch("startSession", product.id);
+        await this.stripeStore.dispatch("startSession", product.id);
         this.loading = false;
     }
 
@@ -78,7 +79,7 @@ export default class StoreItem extends Vue {
     }
 
     public get collections() {
-        return this.sessionStore.state.collections.filter((c) =>
+        return this.store.state.session.collections.filter((c) =>
             this.product?.collectionIds.includes(c.id),
         );
     }
@@ -88,7 +89,7 @@ export default class StoreItem extends Vue {
     }
 
     public get products() {
-        return this.store.state.products;
+        return this.stripeStore.state.products;
     }
 
     public get product() {
@@ -96,7 +97,7 @@ export default class StoreItem extends Vue {
     }
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 }
 </script>

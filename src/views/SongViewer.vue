@@ -111,12 +111,15 @@ import {
     BackButton,
     Modal,
 } from "@/components";
-import { useStore } from "vuex";
-import { notificationKey, sessionKey, songKey } from "@/store";
+import { useStore as vStore} from "vuex";
+import { notificationKey, songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { SheetMusicOptions } from "@/store/songs";
 import { ApiPlaylist, MediaFile } from "dmb-api";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
 
 @Options({
     components: {
@@ -133,9 +136,9 @@ import { ApiPlaylist, MediaFile } from "dmb-api";
     name: "song-viewer",
 })
 export default class SongViewer extends Vue {
-    public store = useStore(sessionKey);
-    public songStore = useStore(songKey);
-    public notifications = useStore(notificationKey);
+    public store = useStore();
+    public songStore = vStore(songKey);
+    public notifications = vStore(notificationKey);
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
@@ -168,7 +171,7 @@ export default class SongViewer extends Vue {
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
-                this.store.dispatch("logItem", this.song);
+                this.store.dispatch(SessionActionTypes.LOG_ITEM, this.song);
             }
         };
         setTimeout(log, 5000);
@@ -193,10 +196,12 @@ export default class SongViewer extends Vue {
 
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
-        await this.store.dispatch("addSongToPlaylist", {
-            playlistId: playlist.id,
-            songId: this.song?.id,
-        });
+        if (this.song) {
+            await this.store.dispatch(SessionActionTypes.PLAYLIST_ADD_SONG, {
+                playlistId: playlist.id,
+                songId: this.song.id,
+            });
+        }
 
         // this.notifications.dispatch("addNotification", {
         //     type: "success",
@@ -206,7 +211,7 @@ export default class SongViewer extends Vue {
     }
 
     public get playlists() {
-        return this.store.state.playlists;
+        return this.store.state.session.playlists;
     }
 
     public get leadSheet() {
@@ -222,7 +227,7 @@ export default class SongViewer extends Vue {
     }
 
     public get isExtended() {
-        return this.store.state.extend;
+        return this.store.state.session.extend;
     }
 
     public get loading() {
@@ -234,7 +239,7 @@ export default class SongViewer extends Vue {
     }
 
     public extend() {
-        this.store.commit("extend");
+        this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
     }
 
     public get lyrics(): Lyrics | undefined {
@@ -250,7 +255,7 @@ export default class SongViewer extends Vue {
     }
 
     public get initialized() {
-        return this.store.state.initialized;
+        return this.store.getters.initialized;
     }
 
     public get collection(): Collection | undefined {

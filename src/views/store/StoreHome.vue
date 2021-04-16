@@ -61,9 +61,9 @@
 </template>
 
 <script lang="ts">
-import { notificationStore, sessionKey, stripeKey } from "@/store";
+import { notificationStore, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 
 import { BaseButton } from "@/components";
 import {
@@ -71,6 +71,7 @@ import {
     AllCollectionsCard,
     ProductSlider,
 } from "@/components/store";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -82,7 +83,7 @@ import {
     name: "store-home",
 })
 export default class StoreHome extends Vue {
-    private store = useStore(stripeKey);
+    private store = vStore(stripeKey);
     private notifications = notificationStore;
     public loading = false;
     public loadingSubs = false;
@@ -116,7 +117,7 @@ export default class StoreHome extends Vue {
     }
 
     public get user() {
-        return useStore(sessionKey).state.currentUser;
+        return useStore().getters.user;
     }
 
     public get productIds() {

@@ -7,15 +7,15 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
-import { sessionKey } from "@/store";
 
 import {
     StoreCard,
     AllCollectionsCard,
     ProductSlider,
 } from "@/components/store";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -27,7 +27,7 @@ import {
     name: "store",
 })
 export default class Store extends Vue {
-    private store = useStore(stripeKey);
+    private store = vStore(stripeKey);
     public loading = false;
     public loadingSubs = false;
 
@@ -75,7 +75,7 @@ export default class Store extends Vue {
     }
 
     public get user() {
-        return useStore(sessionKey).state.currentUser;
+        return useStore().getters.user;
     }
 
     public get productIds() {

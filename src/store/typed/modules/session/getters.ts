@@ -8,6 +8,9 @@ export type Getters = {
     collections(state: State): Collection[];
     user(state: State): User | undefined;
     initialized(state: State): boolean;
+    isAdmin(state: State): boolean;
+    languageKey(state: State): string;
+    extended(state: State): boolean;
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -32,5 +35,11 @@ export const getters: GetterTree<State, RootState> & Getters = {
     },
     isAdmin(state): boolean {
         return state.currentUser?.roles.includes("administrator") == true;
+    },
+    languageKey(state): string {
+        return state.currentUser?.settings?.languageKey ?? "en";
+    },
+    extended(state): boolean {
+        return state.currentUser?.roles.some(r => r == "administrator" || r == "extended") == true;
     },
 };

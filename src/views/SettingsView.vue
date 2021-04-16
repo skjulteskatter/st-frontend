@@ -22,10 +22,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { SettingsCard, BaseButton } from "@/components";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     components: {
@@ -36,7 +36,7 @@ import auth from "@/services/auth";
     name: "settings-view",
 })
 export default class SettingsView extends Vue {
-    private store = useStore(sessionKey);
+    private store = useStore();
 
     public updatePassword = false;
 
@@ -45,7 +45,7 @@ export default class SettingsView extends Vue {
     public oldPassword = "";
 
     public logout() {
-        this.store.dispatch("logout").then(() => {
+        this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
             window.location.replace("/login");
         });
     }

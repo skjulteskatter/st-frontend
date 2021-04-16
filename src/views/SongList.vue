@@ -133,8 +133,8 @@
 import { BaseCard, BaseButton } from "@/components";
 
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey, songKey } from "@/store";
+import { useStore as vStore } from "vuex";
+import { songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
 
 import {
@@ -153,6 +153,7 @@ import {
     CountryCollectionItem,
     ThemeCollectionItem,
 } from "@/classes/collectionItems";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -169,12 +170,12 @@ import {
     name: "song-list",
 })
 export default class SongList extends Vue {
-    private userStore = useStore(sessionKey);
-    private songStore = useStore(songKey);
+    private userStore = useStore();
+    private songStore = vStore(songKey);
 
     public searchQuery = "";
     public searchString = "";
-    public store = useStore(songKey);
+    public store = vStore(songKey);
 
     public cId = "";
 
