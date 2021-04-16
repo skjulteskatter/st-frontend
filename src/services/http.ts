@@ -14,7 +14,7 @@ class Http {
             } else {
                 const error = new Error(response.statusText);
                 // error.response = response;
-                notify("error", response.statusText, "alert");
+                notify("error", response.statusText + " " + response.status, "alert");
                 reject(error);
             }
         })

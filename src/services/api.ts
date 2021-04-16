@@ -4,15 +4,27 @@ import { CountryCollectionItem } from '@/classes/collectionItems/countryCollecti
 import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
 import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
 import { SessionRequest, SetupResponse } from 'checkout';
-import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
-import auth from './auth';
+import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
 import http from './http';
+
+export const activity = {
+    async getActivities() {
+        return await http.get<ApiActivity[]>('api/Activity?expand=song/collection');
+    },
+    async pushActivities(activities: ApiActivity[]) {
+        return await http.post<ApiActivity[]>('api/Activity', activities.map(a => {
+            return {
+                songId: a.songId,
+                loggedDate: a.loggedDate,
+            }
+        }));
+    }
+}
 
 export const session = {
     async getCurrentUser() {
         return await http.get<User>('api/Session')
     },
-    isAuthenticated: auth.isAuthenticated,
     saveUser(settings: UserSettings) {
         return http.patch('api/Session', settings)
     },
@@ -153,6 +165,7 @@ const api = {
     items,
     stripe,
     playlists,
+    activity
 }
 
 export default api

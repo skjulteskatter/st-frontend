@@ -1,4 +1,11 @@
 declare module "dmb-api" {
+    interface ApiActivity {
+        id?: string;
+        songId: string;
+        song?: ApiSong;
+        loggedDate: string;
+    }
+
     interface ApiCollection {
         id: string;
         defaultType: string;

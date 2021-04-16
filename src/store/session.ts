@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import api, { playlists } from '@/services/api'
+import api, { activity, playlists } from '@/services/api'
 import { InjectionKey } from 'vue'
 import { Commit, createStore, Store } from 'vuex'
 import auth from '@/services/auth'
@@ -7,7 +7,7 @@ import router from '@/router';
 import { ensureLanguageIsFetched } from '@/i18n';
 import { Collection } from '@/classes';
 import { songStore } from './songs';
-import { ApiPlaylist } from 'dmb-api';
+import { ApiActivity, ApiPlaylist, ApiSong } from 'dmb-api';
 
 const smTs: {
     [key: string]: number;
@@ -57,6 +57,16 @@ async function init(commit: Commit) {
         commit('collections', collections);
         const playlists = await api.playlists.getPlaylists();
         commit("playlists", playlists);
+
+        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+        if (items.length) {
+            await api.activity.pushActivities(items);
+            localStorage.setItem("activities", "[]");
+        }
+
+        const activites = await api.activity.getActivities();
+        commit("setLogItems", activites);
     } catch (e) {
         console.log(e);
     }
@@ -76,6 +86,7 @@ export interface Session {
     extend: boolean;
     error: string;
     playlists: ApiPlaylist[];
+    activities: ApiActivity[];
 }
 
 export const sessionKey: InjectionKey<Store<Session>> = Symbol()
@@ -87,7 +98,8 @@ export const sessionStore = createStore<Session>({
         collections: [],
         extend: false,
         error: '',
-        playlists: []
+        playlists: [],
+        activities: [],
     },
     actions: {
         async startSession({state, commit}) {
@@ -192,6 +204,24 @@ export const sessionStore = createStore<Session>({
             if (res) {
                 commit('updatePlaylist', res);
             }
+        },
+        async logItem({ commit }, song: ApiSong) {
+            const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+            items.push({
+                loggedDate: new Date().toISOString(),
+                songId: song.id,
+                song: song
+            });
+
+            if (items.length >= 2) {
+                await activity.pushActivities(items);
+                localStorage.setItem("activities", "[]");
+            } else {
+                localStorage.setItem("activities", JSON.stringify(items));
+            }
+
+            commit("setLogItems", items);
         }
     },
     mutations: {
@@ -252,6 +282,14 @@ export const sessionStore = createStore<Session>({
         },
         redirect(state, value: string) {
             redirectAfterLogin = value;
+        },
+        setLogItems(state, value: ApiActivity[]) {
+            state.activities = state.activities.slice(0, 10 - value.length); 
+            state.activities.push(...value);
+            state.activities = state.activities.sort((a, b) => new Date(b.loggedDate).getTime() - new Date(a.loggedDate).getTime());
+        },
+        clearLogs(state) {
+            state.activities = [];
         }
     },
     getters: {

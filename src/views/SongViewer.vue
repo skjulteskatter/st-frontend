@@ -164,6 +164,14 @@ export default class SongViewer extends Vue {
 
         await this.songStore.dispatch("selectSong", this.number);
         this.songStore.commit("song", this.number);
+
+        const route = this.$route.fullPath;
+        const log = () => {
+            if (route == this.$route.fullPath && this.song) {
+                this.store.dispatch("logItem", this.song);
+            }
+        }
+        setTimeout(log, 5000);
     }
 
     public sheetMusic() {

@@ -38,6 +38,11 @@
                 ></collection-card>
             </div>
         </div>
+        <div class="dashboard__activities">
+            <p v-for="(activity, i) in activities" :key="activity.id ?? i">
+                {{activity.loggedDate}} {{activity.song?.getName(languageKey)}}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -47,6 +52,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
 import { Icon } from "@/components/icon";
+import { Song } from "@/classes";
 
 @Options({
     components: {
@@ -76,6 +82,16 @@ export default class Dashboard extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get activities() {
+        return this.store.state.activities.map(a => {
+            return {
+                id: a.id,
+                song: a.song ? new Song(a.song) : undefined,
+                loggedDate: a.loggedDate
+            }
+        });
     }
 }
 </script>
