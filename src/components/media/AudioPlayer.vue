@@ -48,8 +48,9 @@ import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import Plyr from "plyr";
-import { sessionKey, songKey } from "@/store";
-import { useStore } from "vuex";
+import { songKey } from "@/store";
+import { useStore as vStore } from "vuex";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "audio-player",
@@ -60,7 +61,7 @@ import { useStore } from "vuex";
     },
 })
 export default class AudioPlayer extends Vue {
-    public store = useStore(songKey);
+    public store = vStore(songKey);
     public player: Plyr = {} as Plyr;
 
     public updated() {
@@ -82,7 +83,7 @@ export default class AudioPlayer extends Vue {
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
+        return useStore().getters.languageKey;
     }
 
     public closePlayer() {

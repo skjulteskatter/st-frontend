@@ -18,11 +18,12 @@
 
 <script lang="ts">
 import { Collection, Song } from "@/classes";
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { AudioTrack } from "@/store/songs";
+import { useStore } from "@/store/typed";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 
 @Options({
     name: "audio-playlist",
@@ -34,8 +35,8 @@ import { useStore } from "vuex";
     },
 })
 export default class AudioPlaylist extends Vue {
-    public store = useStore(songKey);
-    public sessionStore = useStore(sessionKey);
+    public store = vStore(songKey);
+    public sessionStore = useStore();
     public audiofiles: MediaFile[] = [];
 
     public selectAudio(audio: MediaFile) {

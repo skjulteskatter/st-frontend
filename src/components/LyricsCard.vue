@@ -57,11 +57,13 @@
 </template>
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
 import { BaseCard, BaseButton } from "./";
+import { useStore } from "@/store/typed";
+import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -86,8 +88,8 @@ import { BaseCard, BaseButton } from "./";
     name: "lyrics-card",
 })
 export default class LyricsCard extends Vue {
-    public store = useStore(sessionKey);
-    public songStore = useStore(songKey);
+    public store = useStore();
+    public songStore = vStore(songKey);
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
@@ -155,7 +157,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get languages() {
-        const languages = this.store.state.languages;
+        const languages = this.store.state.session.languages;
 
         return languages.filter((l) => this.song?.name[l.key]);
     }
@@ -194,7 +196,7 @@ export default class LyricsCard extends Vue {
     }
 
     public async transposeView() {
-        this.store.commit("extend", false);
+        this.store.commit(SessionMutationTypes.EXTEND, false);
         const lyrics = await this.collection?.transposeLyrics(
             this.song?.number ?? 0,
             this.selectedTransposition,

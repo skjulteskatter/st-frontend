@@ -42,8 +42,9 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseInput } from "@/components/inputs";
 import { BaseCard, BaseButton } from "@/components";
-import { notificationKey, sessionKey } from "@/store";
-import { useStore } from "vuex";
+import { notificationKey } from "@/store";
+import { useStore as vStore} from "vuex";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "feedback-form",
@@ -55,8 +56,8 @@ import { useStore } from "vuex";
     },
 })
 export default class FeedbackForm extends Vue {
-    private notificationStore = useStore(notificationKey);
-    private userStore = useStore(sessionKey);
+    private notificationStore = vStore(notificationKey);
+    private userStore = useStore();
     public showForm = false;
     public form = {
         title: "",
@@ -89,7 +90,7 @@ export default class FeedbackForm extends Vue {
     public populateUserInfo() {
         this.form.user.platform = navigator.userAgent;
         this.form.user.page = this.$route.fullPath;
-        this.form.user.email = this.userStore.state.currentUser?.email ?? "";
+        this.form.user.email = this.userStore.getters.user?.email ?? "";
     }
 
     public sendFeedback() {

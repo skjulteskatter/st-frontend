@@ -19,9 +19,10 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
+import { useStore } from "@/store/typed";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 
 @Options({
     props: {
@@ -32,8 +33,8 @@ import { useStore } from "vuex";
     name: "collection-card",
 })
 export default class CollectionCard extends Vue {
-    private songStore = useStore(songKey);
-    private sessionStore = useStore(sessionKey);
+    private songStore = vStore(songKey);
+    private sessionStore = useStore();
     public collection: Collection = {} as Collection;
 
     public selectCollection(collection: Collection) {

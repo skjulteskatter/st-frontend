@@ -33,11 +33,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { notificationKey, sessionKey } from "@/store";
+import { useStore as vStore } from "vuex";
+import { notificationKey } from "@/store";
 import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
 import { BaseCard, BaseButton } from "@/components";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     name: "playlist-song-card",
@@ -57,13 +59,13 @@ import { Song } from "@/classes";
     },
 })
 export default class PlaylistEntryCard extends Vue {
-    private store = useStore(sessionKey);
-    private notifications = useStore(notificationKey);
+    private store = useStore();
+    private notifications = vStore(notificationKey);
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
 
     public removeFromPlaylist() {
-        this.store.dispatch("removeFromPlaylist", {
+        this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
             playlistId: this.playlist.id,
             entryId: this.entry.id,
         });
@@ -79,7 +81,7 @@ export default class PlaylistEntryCard extends Vue {
     }
 
     public get collection() {
-        return this.store.state.collections.find(
+        return this.store.getters.collections.find(
             (c) => c.id === this.entry.item.collection?.id,
         );
     }

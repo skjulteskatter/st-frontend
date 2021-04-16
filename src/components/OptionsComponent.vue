@@ -1,5 +1,5 @@
 <template>
-    <div id="options" v-if="user">
+    <div id="options">
         <div class="options__footer">
             <i class="fa fa-cog options__footer__icon"></i>
             <base-button theme="secondary">{{
@@ -10,8 +10,6 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 
 import BaseButton from "@/components/BaseButton.vue";
 import { BaseDropdown } from "@/components/inputs";
@@ -23,19 +21,7 @@ import { BaseDropdown } from "@/components/inputs";
     },
     name: "options-component",
 })
-export default class OptionsComponent extends Vue {
-    private store = useStore(sessionKey);
-
-    logout() {
-        this.store.dispatch("logout").then(() => {
-            window.location.replace("/login");
-        });
-    }
-
-    public get user() {
-        return this.store.state.currentUser;
-    }
-}
+export default class OptionsComponent extends Vue {}
 </script>
 
 <style lang="scss">
