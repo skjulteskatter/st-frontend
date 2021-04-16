@@ -47,12 +47,13 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
+
+import { useStore } from "vuex";
 import { Icon } from "@/components/icon";
 import { Song } from "@/classes";
+import { sessionKey } from "@/store";
 
 @Options({
     components: {

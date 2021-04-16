@@ -25,14 +25,14 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { BaseButton, BackButton } from "@/components";
+import { SongListItemCard } from "@/components/songs";
+import { SearchInput } from "@/components/inputs";
+
 import api from "@/services/api";
 import { useStore } from "vuex";
 import { sessionKey } from "@/store";
 import { Collection, Song } from "@/classes";
-
-import { BaseButton, BackButton } from "@/components";
-import { SongListItemCard } from "@/components/songs";
-import { SearchInput } from "@/components/inputs";
 import { ApiSong } from "dmb-api";
 
 @Options({

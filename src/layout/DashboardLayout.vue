@@ -17,14 +17,15 @@
     </div>
 </template>
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
+import { BaseButton } from "@/components";
+
 import { useStore } from "vuex";
 import { sessionKey, songKey } from "../store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
-import { BaseButton } from "@/components";
 
 @Options({
     components: {

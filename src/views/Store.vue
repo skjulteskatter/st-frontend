@@ -6,11 +6,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { BaseButton } from "@/components";
 import { useStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
 import { notificationStore, sessionKey } from "@/store";
 
-import BaseButton from "@/components/BaseButton.vue";
 import {
     StoreCard,
     AllCollectionsCard,
