@@ -48,6 +48,20 @@ const ts: {
 async function init(state: State, commit: Commit): Promise<void> {
     const user = await api.session.getCurrentUser();
     user.displayName = auth.user?.displayName ?? user.displayName;
+    
+    api.playlists.getPlaylists().then(p => {
+        commit(SessionMutationTypes.SET_PLAYLISTS, p);
+    });
+    const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+    if (items.length) {
+        await api.activity.pushActivities(items);
+        localStorage.setItem("activities", "[]");
+    }
+
+    api.activity.getActivities().then(a => {
+        commit(SessionMutationTypes.SET_LOG_ITEMS, a);
+    });
 
     commit(SessionMutationTypes.SET_USER, user);
     try {
@@ -55,18 +69,8 @@ async function init(state: State, commit: Commit): Promise<void> {
         commit(SessionMutationTypes.SET_LANGUAGES, languages);
         const collections = await api.songs.getCollections();
         commit(SessionMutationTypes.COLLECTIONS, collections);
-        const playlists = await api.playlists.getPlaylists();
-        commit(SessionMutationTypes.SET_PLAYLISTS, playlists);
 
-        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
-
-        if (items.length) {
-            await api.activity.pushActivities(items);
-            localStorage.setItem("activities", "[]");
-        }
-
-        const activites = await api.activity.getActivities();
-        commit(SessionMutationTypes.SET_LOG_ITEMS, activites);
+        
     } catch (e) {
         //console.log(e);
     }
