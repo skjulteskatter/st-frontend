@@ -172,6 +172,8 @@ class Auth {
         if (user) {
             try {
                 await user.updatePassword(password);
+
+                console.log("updated password");
             }
             catch (e) {
                 console.log(e);

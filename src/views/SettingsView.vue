@@ -7,12 +7,13 @@
             </base-button>
         </div>
         <settings-card></settings-card>
-        <base-button v-if="passwordUser" @click="updatePassword = !updatePassword">Set new password</base-button>
+        <base-button @click="updatePassword = !updatePassword">Set new password</base-button>
         <div v-if="updatePassword">
             <form @submit="resetPassword">
-                <base-input type="password" v-model="oldPassword" label="Old password"/>
+                <base-input type="password" v-if="passwordUser" v-model="oldPassword" label="Old password"/>
                 <base-input type="password" v-model="newPassword" label="New password"/>
-                <base-input type="password" v-model="repeatPassword" label="Repeat password"/>
+                <base-input :style="newPassword != repeatPassword ? 'color: red' : ''" type="password" v-model="repeatPassword" label="Repeat password"/>
+                <button formaction="submit">Submit</button>
             </form>
         </div>
     </div>
@@ -50,8 +51,12 @@ export default class SettingsView extends Vue {
     }
 
     public resetPassword() {
+        console.log(this.newPassword, this.repeatPassword)
+
         if (this.newPassword == this.repeatPassword) {
             auth.resetPassword(this.oldPassword, this.newPassword);
+
+            console.log("reset password");
         }
     }
 

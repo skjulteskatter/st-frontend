@@ -36,9 +36,10 @@
                     </div>
                     <base-button
                         v-if="
-                            providers.filter((p) => p != 'password').length < 1
+                            providers.includes('password')
                         "
                         type="submit"
+                        formaction="submit"
                         class="login__form__submit"
                     >
                         Sign in
