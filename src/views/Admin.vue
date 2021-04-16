@@ -72,12 +72,13 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, sessionKey, usersKey } from "@/store";
+import { notificationKey, usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { UsersList, BaseButton, BaseCard } from "@/components";
 import api from "@/services/api";
 import auth from "@/services/auth";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -88,9 +89,9 @@ import auth from "@/services/auth";
     name: "admin",
 })
 export default class Subscriptions extends Vue {
-    public usersStore = useStore(usersKey);
-    public notificationStore = useStore(notificationKey);
-    public sessionStore = useStore(sessionKey);
+    public usersStore = vStore(usersKey);
+    public notificationStore = vStore(notificationKey);
+    public store = useStore();
     public loading = false;
     public token? = "";
     public showToken = false;
@@ -108,15 +109,15 @@ export default class Subscriptions extends Vue {
     }
 
     public get currentUser() {
-        return this.sessionStore.state.currentUser;
+        return this.store.getters.user;
     }
 
     public get collections() {
-        return this.sessionStore.state.collections;
+        return this.store.getters.collections;
     }
 
     public get isAdmin(): boolean {
-        return this.sessionStore.getters.isAdmin;
+        return this.store.getters.isAdmin;
     }
 
     public async clearCollection(collection: string) {

@@ -22,8 +22,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton, CollectionCard } from "@/components";
-import { sessionKey } from "@/store";
-import { useStore } from "vuex";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -33,10 +32,10 @@ import { useStore } from "vuex";
     name: "collections",
 })
 export default class Collections extends Vue {
-    private sessionStore = useStore(sessionKey);
+    private store = useStore();
 
     public get collections() {
-        return this.sessionStore.state.collections ?? [];
+        return this.store.getters.collections ?? [];
     }
 }
 </script>

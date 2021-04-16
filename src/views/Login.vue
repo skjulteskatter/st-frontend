@@ -93,12 +93,12 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { BaseCard, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     components: {
@@ -115,11 +115,11 @@ export default class Login extends Vue {
     };
     public noAccount = false;
     public stayLoggedIn = false;
-    private store = useStore(sessionKey);
+    private store = useStore();
     public providers: string[] = [];
 
     public mounted() {
-        if (this.store.state.currentUser) {
+        if (this.user) {
             this.$router.push({ name: "main" });
         }
     }
@@ -132,7 +132,7 @@ export default class Login extends Vue {
                 this.noAccount = true;
             }
         } else {
-            this.store.dispatch("loginWithEmailPassword", {
+            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
                 email: this.form.email,
                 password: this.form.password,
                 stayLoggedIn: this.stayLoggedIn,
@@ -145,15 +145,15 @@ export default class Login extends Vue {
     }
 
     public get user() {
-        return this.store.state.currentUser;
+        return this.store.getters.user;
     }
 
     public async login(provider: string) {
-        await this.store.dispatch("socialLogin", provider);
+        await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
     }
 
     public get initialized() {
-        return this.store.state.initialized;
+        return this.store.getters.initialized;
     }
 }
 </script>

@@ -63,17 +63,18 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import themes from "@/classes/themes";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "lyrics-viewer",
 })
 export default class LyricsViewer extends Vue {
-    public store = useStore(songKey);
+    public store = vStore(songKey);
 
     public mounted() {
         themes.load();
@@ -133,7 +134,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get lyrics() {
-        return useStore(songKey).state.verses;
+        return this.store.state.verses;
     }
 
     public get melodyOrigin() {
@@ -145,7 +146,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get languageKey(): string {
-        return useStore(sessionKey).getters.languageKey;
+        return useStore().getters.languageKey;
     }
 }
 </script>

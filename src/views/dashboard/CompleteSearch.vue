@@ -30,10 +30,9 @@ import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
 import api from "@/services/api";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -45,7 +44,7 @@ import { ApiSong } from "dmb-api";
     name: "complete-search",
 })
 export default class CompleteSearch extends Vue {
-    public sessionStore = useStore(sessionKey);
+    public sessionStore = useStore();
     public loading = false;
     public searchQuery = "";
     public songs: ApiSong[] = [];

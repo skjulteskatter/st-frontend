@@ -2,6 +2,7 @@ import { Collection } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
+import { ApiPlaylist } from "dmb-api";
 
 
 export type Getters = {
@@ -11,6 +12,7 @@ export type Getters = {
     isAdmin(state: State): boolean;
     languageKey(state: State): string;
     extended(state: State): boolean;
+    playlists(state: State): ApiPlaylist[];
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -41,5 +43,8 @@ export const getters: GetterTree<State, RootState> & Getters = {
     },
     extended(state): boolean {
         return state.currentUser?.roles.some(r => r == "administrator" || r == "extended") == true;
+    },
+    playlists(state): ApiPlaylist[] {
+        return state.playlists;
     },
 };

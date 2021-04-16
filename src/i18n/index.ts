@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { sessionStore } from "@/store";
+import { useStore } from "@/store/typed";
 import { createI18n } from "vue-i18n";
 
 const i18n = createI18n({
@@ -32,7 +32,7 @@ export async function setLocale(locale: string) {
 let englishIsFetched = false;
 
 export async function ensureLanguageIsFetched() {
-    const lan = sessionStore.getters.languageKey;
+    const lan = useStore().getters.languageKey;
     if (!englishIsFetched) {
         englishIsFetched = true;
         const result = await api.items.getTranslations(["en"]);

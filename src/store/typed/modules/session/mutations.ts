@@ -24,6 +24,7 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.INITIALIZED](state: S): void;
     [SessionMutationTypes.REDIRECT](state: S, payload: string): void;
     [SessionMutationTypes.EXTEND](state: S, payload: boolean): void;
+    [SessionMutationTypes.ERROR](state: S, payload: string): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -91,5 +92,8 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SessionMutationTypes.EXTEND](state, value) {
         state.extend = value;
+    },
+    [SessionMutationTypes.ERROR](state, value) {
+        state.error = value;
     },
 };

@@ -3,12 +3,13 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/performance";
 import { firebaseConfig } from "@/config";
-import { sessionStore } from "@/store";
 import router from "@/router";
 import api from "./api";
 import { useStore } from "@/store/typed";
 import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+
+const store = useStore();
 
 function notInitialized() {
     throw Error("FIREBASE DID NOT INITIALIZE");
@@ -35,10 +36,10 @@ if (!a) {
 
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
-        sessionStore.commit("error", "");
+        store.commit(SessionMutationTypes.ERROR, "");
         return true;
     } else {
-        sessionStore.commit("error", "EMAIL_NOT_VERIFIED");
+        store.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
         router.push({name: "verify-email"});
         return false;
     }

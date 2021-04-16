@@ -26,12 +26,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 
 import { BaseCard, BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import { Product } from "@/classes/product";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -55,7 +54,7 @@ import { Product } from "@/classes/product";
 export default class AllCollectionsCard extends Vue {
     public product?: Product;
     public action = () => undefined;
-    public userStore = useStore(sessionKey);
+    public store = useStore();
 
     public get images(): string[] {
         return (
@@ -66,7 +65,7 @@ export default class AllCollectionsCard extends Vue {
     }
 
     public get languageKey() {
-        return this.userStore.getters.languageKey ?? "en";
+        return this.store.getters.languageKey;
     }
 }
 </script>

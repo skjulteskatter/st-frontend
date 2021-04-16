@@ -55,10 +55,10 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import BaseCard from "@/components/BaseCard.vue";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     components: {
@@ -74,7 +74,7 @@ export default class Login extends Vue {
         repeatPassword: "",
     };
     public stayLoggedIn = false;
-    private store = useStore(sessionKey);
+    private store = useStore();
 
     public submitForm() {
         if (
@@ -82,15 +82,12 @@ export default class Login extends Vue {
             this.form.password != "" &&
             this.form.displayName != ""
         ) {
-            this.store.dispatch("createUser", {
+            this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
                 email: this.form.email,
                 password: this.form.password,
+                displayName: this.form.displayName,
             });
         }
-    }
-
-    public get initialized() {
-        return this.store.state.initialized;
     }
 }
 </script>
