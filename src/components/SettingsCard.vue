@@ -101,13 +101,15 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, sessionKey } from "@/store";
-import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
 import { BaseButton, BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 import auth from "@/services/auth";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -121,8 +123,7 @@ export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
     public selectedKey = "";
     public selectedTranscode = "";
-    public store = useStore(sessionKey);
-    public notificationStore = useStore(notificationKey);
+    public store = useStore();
     public themes: Themes = themes;
     public newDisplayName = "";
     public transpositions = [
@@ -173,16 +174,15 @@ export default class SettingsCard extends Vue {
 
     public async save() {
         this.loading = true;
-        await this.store.dispatch("saveSettings", this.user?.settings);
+        await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.themes.setTheme(this.theme);
         this.submitImage();
-
         if (this.newDisplayName) {
             this.setDisplayName();
         }
 
         // Fire a success notification
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("notification.saved"),
             icon: "check",
@@ -204,7 +204,7 @@ export default class SettingsCard extends Vue {
         const language = this.selectedLanguage;
         if (language) {
             settings.languageKey = language.key;
-            this.store.commit("settings", settings);
+            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
         }
     }
 
@@ -213,7 +213,7 @@ export default class SettingsCard extends Vue {
         const key = this.selectedKey;
         if (key) {
             settings.defaultTransposition = key;
-            this.store.commit("settings", settings);
+            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
         }
     }
 
@@ -222,20 +222,20 @@ export default class SettingsCard extends Vue {
         const transcode = this.selectedTranscode;
         if (transcode) {
             settings.defaultTranscode = transcode;
-            this.store.commit("settings", settings);
+            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
         }
     }
 
     public get languages(): Language[] {
-        return this.store.state.languages || [];
+        return this.store.state.session.languages || [];
     }
 
     public get user(): User | undefined {
-        return this.store.state.currentUser;
+        return this.store.getters.user;
     }
 
     public async setDisplayName() {
-        await this.store.dispatch("setDisplayName", this.newDisplayName);
+        await this.store.dispatch(SessionActionTypes.SET_DISPLAY_NAME, this.newDisplayName);
     }
 
     public async submitImage() {

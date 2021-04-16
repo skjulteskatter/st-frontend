@@ -34,9 +34,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -60,14 +59,14 @@ import { Song } from "@/classes";
     name: "song-list-card",
 })
 export default class SongListCard extends Vue {
-    private userStore = useStore(sessionKey);
+    private store = useStore();
     public songs: Song[] = [];
     public title = "";
     public count?: boolean;
     public action?: Function;
 
     public get languageKey() {
-        return this.userStore.getters.languageKey ?? "en";
+        return this.store.getters.languageKey;
     }
 
     public selectSong(song: Song) {

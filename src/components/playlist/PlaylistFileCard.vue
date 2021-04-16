@@ -33,11 +33,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { notificationKey, sessionKey } from "@/store";
 import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
 import { BaseCard, BaseButton } from "@/components";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     name: "playlist-file-card",
@@ -57,18 +58,17 @@ import { Song } from "@/classes";
     },
 })
 export default class PlaylistEntryCard extends Vue {
-    private store = useStore(sessionKey);
-    private notifications = useStore(notificationKey);
+    private store = useStore();
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
 
     public removeFromPlaylist() {
-        this.store.dispatch("removeFromPlaylist", {
+        this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
             playlistId: this.playlist.id,
             entryId: this.entry.id,
         });
 
-        this.notifications.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("playlist.removed"),
         });
@@ -79,7 +79,7 @@ export default class PlaylistEntryCard extends Vue {
     }
 
     public get collection() {
-        return this.store.state.collections.find(
+        return this.store.getters.collections.find(
             (c) => c.id === this.entry.item.collection?.id,
         );
     }

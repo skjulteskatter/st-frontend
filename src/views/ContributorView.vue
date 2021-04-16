@@ -56,13 +56,14 @@
 </template>
 
 <script lang="ts">
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -73,9 +74,12 @@ import { ApiSong } from "dmb-api";
     name: "contributor-view",
 })
 export default class ContributorView extends Vue {
-    private store = useStore(songKey);
-    private sessionStore = useStore(sessionKey);
-    public languageKey = useStore(sessionKey).getters.languageKey;
+    private store = vStore(songKey);
+    private sessionStore = useStore();
+
+    public get languageKey() {
+        return this.sessionStore.getters.languageKey;
+    }
 
     public async mounted() {
         await this.store.dispatch(

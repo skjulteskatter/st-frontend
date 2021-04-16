@@ -7,9 +7,9 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "./store";
 import { NotificationGroup } from "@/components/notification";
+import { useStore } from "./store/typed";
+import { SessionMutationTypes } from "./store/typed/modules/session/mutation-types";
 
 @Options({
     components: {
@@ -18,16 +18,16 @@ import { NotificationGroup } from "@/components/notification";
     name: "app",
 })
 export default class App extends Vue {
-    public session = useStore(sessionKey);
+    public store = useStore();
 
     public mounted() {
         if (window.location.pathname.startsWith("/store/")) {
-            this.session.commit("redirect", window.location.pathname);
+            this.store.commit(SessionMutationTypes.REDIRECT, window.location.pathname);
         }
     }
 
     public get initialized() {
-        return useStore(sessionKey).state.initialized;
+        return useStore().getters.initialized;
     }
 }
 </script>

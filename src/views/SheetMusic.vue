@@ -33,12 +33,13 @@
 import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
 import { BaseButton } from "@/components";
-import { useStore } from "vuex";
-import { sessionKey, songKey } from "@/store";
+import { useStore as vStore } from "vuex";
+import { songKey } from "@/store";
 import { osmd } from "@/services/osmd";
 import { SheetMusicOptions, SheetMusicTypes } from "@/store/songs";
 import { ApiSong } from "dmb-api";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -50,7 +51,7 @@ import { Song } from "@/classes";
 })
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
-    public songStore = useStore(songKey);
+    public songStore = vStore(songKey);
     public osmd = osmd;
     public pdfType = SheetMusicTypes.PDF;
     public song?: Song;
@@ -144,7 +145,7 @@ export default class SheetMusic extends Vue {
     }
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey;
+        return useStore().getters.languageKey;
     }
 }
 </script>

@@ -41,8 +41,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import { Song } from "@/classes";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -63,7 +62,7 @@ export default class SongListItemCard extends Vue {
     public context = "";
 
     public get languageKey() {
-        return useStore(sessionKey).getters.languageKey ?? "en";
+        return useStore().getters.languageKey;
     }
 }
 </script>

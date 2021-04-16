@@ -38,13 +38,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 import { ApiPlaylist } from "dmb-api";
 
 import { BaseButton, Modal } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     name: "playlist-overview",
@@ -56,16 +56,16 @@ import { PlaylistCard } from "@/components/playlist";
     },
 })
 export default class PlaylistOverview extends Vue {
-    private store = useStore(sessionKey);
+    private store = useStore();
     public playlistName = "";
 
     public createPlaylist() {
-        this.store.dispatch("createPlaylist", { name: this.playlistName });
+        this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, { name: this.playlistName });
         this.playlistName = "";
     }
 
     public get playlists(): ApiPlaylist[] {
-        return this.store.state.playlists;
+        return this.store.getters.playlists;
     }
 }
 </script>
