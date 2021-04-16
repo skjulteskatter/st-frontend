@@ -1,9 +1,9 @@
 <template>
-    <base-card class="activity-feed" v-if="activities.length">
+    <base-card class="activity-feed">
         <strong class="activity-feed__title">
             {{ $t("common.activity") }}
         </strong>
-        <div class="activity-feed__activities">
+        <div class="activity-feed__activities" v-if="false">
             <small
                 class="activity-feed__activity"
                 v-for="(activity, i) in activities"
@@ -15,6 +15,9 @@
                 </span>
             </small>
         </div>
+        <p class="activity-feed__fallback" v-else>
+            {{ $t("dashboard.noactivity") }}
+        </p>
     </base-card>
 </template>
 
@@ -69,6 +72,14 @@ export default class ActivityFeed extends Vue {
 
 <style lang="scss" scoped>
 .activity-feed {
+    &__fallback {
+        background-color: var(--st-color-background-dark);
+        border-radius: var(--st-border-radius);
+        padding: var(--st-spacing);
+        margin: 0;
+        text-align: center;
+    }
+
     &__title {
         display: block;
         margin-bottom: calc(var(--st-spacing) / 2);
