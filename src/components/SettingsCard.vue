@@ -101,8 +101,6 @@
 </template>
 
 <script lang="ts">
-import { notificationKey } from "@/store";
-import { useStore as vStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
 import { BaseButton, BaseCard } from "@/components";
@@ -111,6 +109,7 @@ import auth from "@/services/auth";
 import { useStore } from "@/store/typed";
 import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -125,7 +124,6 @@ export default class SettingsCard extends Vue {
     public selectedKey = "";
     public selectedTranscode = "";
     public store = useStore();
-    public notificationStore = vStore(notificationKey);
     public themes: Themes = themes;
     public newDisplayName = "";
     public transpositions = [
@@ -184,7 +182,7 @@ export default class SettingsCard extends Vue {
         }
 
         // Fire a success notification
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("notification.saved"),
             icon: "check",

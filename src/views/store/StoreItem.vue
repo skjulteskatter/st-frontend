@@ -33,13 +33,12 @@
 </template>
 
 <script lang="ts">
-import { notificationKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store/typed";
 import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -49,13 +48,12 @@ import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
     name: "store-item",
 })
 export default class StoreItem extends Vue {
-    private notifications = vStore(notificationKey);
     private store = useStore();
     public loading = false;
 
     public async checkout(product: Product) {
         this.loading = true;
-        await this.notifications?.dispatch("addNotification", {
+        await this.store?.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "primary",
             icon: "shop",
             title: this.$t("notification.redirecting"),

@@ -42,9 +42,8 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseInput } from "@/components/inputs";
 import { BaseCard, BaseButton } from "@/components";
-import { notificationKey } from "@/store";
-import { useStore as vStore} from "vuex";
 import { useStore } from "@/store/typed";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     name: "feedback-form",
@@ -56,8 +55,7 @@ import { useStore } from "@/store/typed";
     },
 })
 export default class FeedbackForm extends Vue {
-    private notificationStore = vStore(notificationKey);
-    private userStore = useStore();
+    private store = useStore();
     public showForm = false;
     public form = {
         title: "",
@@ -90,7 +88,7 @@ export default class FeedbackForm extends Vue {
     public populateUserInfo() {
         this.form.user.platform = navigator.userAgent;
         this.form.user.page = this.$route.fullPath;
-        this.form.user.email = this.userStore.getters.user?.email ?? "";
+        this.form.user.email = this.store.getters.user?.email ?? "";
     }
 
     public sendFeedback() {
@@ -98,7 +96,7 @@ export default class FeedbackForm extends Vue {
         this.populateUserInfo();
 
         //console.log(this.form);
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             title: "Report sent",
             type: "success",
             icon: "check",

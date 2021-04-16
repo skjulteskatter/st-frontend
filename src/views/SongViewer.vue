@@ -112,7 +112,7 @@ import {
     Modal,
 } from "@/components";
 import { useStore as vStore} from "vuex";
-import { notificationKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { SheetMusicOptions } from "@/store/songs";
@@ -138,7 +138,6 @@ import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-typ
 export default class SongViewer extends Vue {
     public store = useStore();
     public songStore = vStore(songKey);
-    public notifications = vStore(notificationKey);
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;

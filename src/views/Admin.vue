@@ -72,13 +72,14 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, usersKey } from "@/store";
+import { usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore as vStore } from "vuex";
 import { UsersList, BaseButton, BaseCard } from "@/components";
 import api from "@/services/api";
 import auth from "@/services/auth";
 import { useStore } from "@/store/typed";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -90,7 +91,6 @@ import { useStore } from "@/store/typed";
 })
 export default class Subscriptions extends Vue {
     public usersStore = vStore(usersKey);
-    public notificationStore = vStore(notificationKey);
     public store = useStore();
     public loading = false;
     public token? = "";
@@ -123,7 +123,7 @@ export default class Subscriptions extends Vue {
     public async clearCollection(collection: string) {
         this.loadingClearCache.push(collection);
         // Notification
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "error",
             title: await api.admin.clearCache(collection),
             icon: "trash",
@@ -135,13 +135,13 @@ export default class Subscriptions extends Vue {
 
     public async syncFiles() {
         this.loadingSync = true;
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "error",
             title: this.$t("notification.syncingfiles"),
             icon: "trash",
         });
         try {
-            this.notificationStore.dispatch("addNotification", {
+            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
                 type: "success",
                 title: (await api.admin.sync()).result,
                 icon: "refresh",

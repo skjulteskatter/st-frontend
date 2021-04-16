@@ -61,7 +61,6 @@
 </template>
 
 <script lang="ts">
-import { notificationStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
@@ -84,7 +83,6 @@ import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
 })
 export default class StoreHome extends Vue {
     private store = useStore();
-    private notifications = notificationStore;
     public loading = false;
     public loadingSubs = false;
 

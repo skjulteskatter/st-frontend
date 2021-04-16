@@ -33,13 +33,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
-import { notificationKey } from "@/store";
 import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
 import { BaseCard, BaseButton } from "@/components";
 import { Song } from "@/classes";
 import { useStore } from "@/store/typed";
 import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     name: "playlist-song-card",
@@ -60,7 +59,6 @@ import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 })
 export default class PlaylistEntryCard extends Vue {
     private store = useStore();
-    private notifications = vStore(notificationKey);
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
 
@@ -70,7 +68,7 @@ export default class PlaylistEntryCard extends Vue {
             entryId: this.entry.id,
         });
 
-        this.notifications.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("playlist.removed"),
         });
