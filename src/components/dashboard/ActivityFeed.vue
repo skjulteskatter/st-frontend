@@ -1,5 +1,5 @@
 <template>
-    <base-card class="activity-feed">
+    <base-card class="activity-feed" v-if="activities.length">
         <strong class="activity-feed__title">
             {{ $t("common.activity") }}
         </strong>
