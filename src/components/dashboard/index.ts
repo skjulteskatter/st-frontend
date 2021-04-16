@@ -1,5 +1,5 @@
 import ActivityFeed from "./ActivityFeed.vue";
 
 export {
-	ActivityFeed,
-}
+    ActivityFeed,
+};
