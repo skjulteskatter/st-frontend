@@ -18,7 +18,7 @@
     "semi": ["warn", "always"],
     "comma-dangle": ["warn", "always-multiline"],
     "quotes": ["warn", "double"],
-    "indent": ["error", 4]
+    "indent": ["warn", 4]
   },
   "overrides": [
     {

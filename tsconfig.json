@@ -13,7 +13,6 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "removeComments": true,
     "preserveConstEnums": true,
     "types": [
       "webpack-env",
