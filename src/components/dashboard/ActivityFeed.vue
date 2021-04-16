@@ -1,0 +1,102 @@
+<template>
+    <base-card class="activity-feed">
+        <strong class="activity-feed__title">
+            {{ $t("common.activity") }}
+        </strong>
+        <div class="activity-feed__activities">
+            <small
+                class="activity-feed__activity"
+                v-for="(activity, i) in activities"
+                :key="activity.id ?? i"
+            >
+                {{ activity.song?.getName(languageKey) }}
+                <span class="activity-feed__activity__timestamp">
+                    {{ timeSince(activity.loggedDate) }}
+                </span>
+            </small>
+        </div>
+    </base-card>
+</template>
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import { useStore } from "vuex";
+import { sessionKey } from "@/store";
+import { Song } from "@/classes";
+
+import { BaseCard } from "@/components";
+
+@Options({
+    name: "activity-feed",
+    components: {
+        BaseCard,
+    },
+})
+export default class ActivityFeed extends Vue {
+    private store = useStore(sessionKey);
+
+    public timeSince(date: string) {
+        const rtfl = new Intl.RelativeTimeFormat("en", {
+            localeMatcher: "best fit",
+            numeric: "auto",
+            style: "narrow",
+        });
+        const now = new Date().getMinutes();
+        const then = new Date(date).getMinutes();
+        const minutes = then - now;
+
+        const string = rtfl.format(minutes, "minutes");
+
+        return string;
+    }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
+    }
+
+    public get activities() {
+        return this.store.state.activities.map((a) => {
+            return {
+                id: a.id,
+                song: a.song ? new Song(a.song) : undefined,
+                loggedDate: a.loggedDate,
+            };
+        });
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.activity-feed {
+    &__title {
+        display: block;
+        margin-bottom: calc(var(--st-spacing) / 2);
+    }
+
+    &__activities {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+
+        max-height: 40rem;
+        overflow-y: hidden;
+    }
+
+    &__activity {
+        margin: 0;
+        display: block;
+        padding: 0.5em;
+        border-radius: var(--st-border-radius);
+        // border: 1px solid var(--st-color-border);
+        background-color: var(--st-color-background-light);
+
+        display: flex;
+        justify-content: space-between;
+
+        &__timestamp {
+            font-weight: lighter;
+            flex-shrink: 0;
+        }
+    }
+}
+</style>
