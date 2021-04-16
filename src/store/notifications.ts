@@ -21,12 +21,12 @@ export const notificationStore = createStore<Notifications>({
         notifications: [],
     },
     actions: {
-        addNotification({ commit }, notification: Notification) {
+        addNotification({ commit }, notification: Notification): void {
             commit("addNotification", notification);
         },
     },
     mutations: {
-        addNotification(state, notification: Notification) {
+        addNotification(state, notification: Notification): void {
             state.notifications.push({ ...notification, id: `${Date.now()}` });
         },
     },

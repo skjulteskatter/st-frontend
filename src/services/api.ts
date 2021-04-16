@@ -26,7 +26,7 @@ export const session = {
         return await http.get<User>('api/Session')
     },
     saveUser(settings: UserSettings) {
-        return http.patch('api/Session', settings)
+        return http.patch<User>('api/Session', settings)
     },
     createUser(displayName: string) {
         return http.put('api/Session', { displayName });
@@ -132,7 +132,7 @@ export const playlists = {
         return (await http.post<ApiPlaylist>(`api/Playlists/${playlistId}/${type}/${fileId}?expand=entries/item/collection`));
     },
     async removeEntryFromPlaylist(playlistId: string, entryId: string) {
-        return (await http.delete(`api/Playlists/${playlistId}/${entryId}?expand=entries/item/collection`));
+        return (await http.delete<ApiPlaylist>(`api/Playlists/${playlistId}/${entryId}?expand=entries/item/collection`));
     },
 }
 

@@ -6,10 +6,9 @@
   "extends": [
     "eslint:recommended",
     "plugin:vue/vue3-essential",
-    "@vue/typescript/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "@vue/typescript/recommended"
   ],
-  "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "parserOptions": {
     "ecmaVersion": 2020

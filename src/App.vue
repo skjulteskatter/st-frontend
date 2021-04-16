@@ -5,7 +5,6 @@
         <notification-group />
     </div>
 </template>
-
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
