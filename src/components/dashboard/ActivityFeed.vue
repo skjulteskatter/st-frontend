@@ -35,7 +35,7 @@ export default class ActivityFeed extends Vue {
     private store = useStore();
 
     public timeSince(date: string) {
-        const rtfl = new Intl.RelativeTimeFormat("en", {
+        const rtfl = new Intl.RelativeTimeFormat(this.languageKey, {
             localeMatcher: "best fit",
             numeric: "auto",
             style: "narrow",
