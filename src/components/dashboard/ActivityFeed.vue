@@ -3,7 +3,7 @@
         <strong class="activity-feed__title">
             {{ $t("common.activity") }}
         </strong>
-        <div class="activity-feed__activities" v-if="false">
+        <div class="activity-feed__activities" v-if="activities.length">
             <small
                 class="activity-feed__activity"
                 v-for="(activity, i) in activities"
