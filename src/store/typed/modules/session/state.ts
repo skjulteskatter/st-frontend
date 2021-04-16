@@ -10,6 +10,7 @@ export type State = {
     error: string;
     playlists: ApiPlaylist[];
     activities: ApiActivity[];
+    redirect?: string;
 };
 
 export const state: State = {

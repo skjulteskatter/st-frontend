@@ -1,11 +1,13 @@
 import { Collection } from "@/classes";
-import { RootState } from "@/store/typed";
+import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
 
 
 export type Getters = {
     collections(state: State): Collection[];
+    user(state: State): User | undefined;
+    initialized(state: State): boolean;
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -21,5 +23,14 @@ export const getters: GetterTree<State, RootState> & Getters = {
         } else {
             return [];
         }
+    },
+    user(state) {
+        return state.currentUser;
+    },
+    initialized(state) {
+        return state.initialized;
+    },
+    isAdmin(state): boolean {
+        return state.currentUser?.roles.includes("administrator") == true;
     },
 };

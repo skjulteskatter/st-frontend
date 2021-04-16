@@ -6,7 +6,7 @@ import {
 } from "vuex";
   
 // TODO: How to surpass cyclical dependency linting errors cleanly?
-import { RootState } from "@/store";
+import { RootState } from "../..";
   
 import { state } from "./state";
 import { getters, Getters } from "./getters";
@@ -21,13 +21,13 @@ export type SessionStore<S = State> = Omit<VuexStore<S>, "getters" | "commit" | 
   & {
     commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
       key: K,
-      payload: P,
+      payload?: P,
       options?: CommitOptions
     ): ReturnType<Mutations[K]>;
   } & {
     dispatch<K extends keyof Actions>(
       key: K,
-      payload: Parameters<Actions[K]>[1],
+      payload?: Parameters<Actions[K]>[1],
       options?: DispatchOptions
     ): ReturnType<Actions[K]>;
   } & {

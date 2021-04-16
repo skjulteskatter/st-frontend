@@ -21,7 +21,8 @@ import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 
 import { useStore } from "vuex";
-import { sessionKey, songKey } from "../store";
+import { useStore as store } from "@/store/typed"; 
+import { songKey } from "../store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
@@ -37,7 +38,7 @@ import { FeedbackForm } from "@/components/feedback";
     name: "dashboard-layout",
 })
 export default class DashboardLayout extends Vue {
-    public sessionStore = useStore(sessionKey);
+    public store = store();
     public songStore = useStore(songKey);
 
     async mounted() {
@@ -46,22 +47,17 @@ export default class DashboardLayout extends Vue {
             themes.default,
         );
         themes.load();
-        if (this.initialized && !this.user) {
+        if (!this.user) {
             this.$router.push({ name: "login" });
         }
-
-        // await osmd.init(null, null);
     }
 
     public get user() {
-        return this.sessionStore.state.currentUser;
+        return this.store.getters.user;
     }
-    public get isAdmin() {
-        return this.sessionStore.getters.isAdmin;
-    }
-    public get initialized() {
-        return this.sessionStore.state.initialized;
-    }
+    // public get isAdmin() {
+    //     return this.store.getters..isAdmin;
+    // }
 }
 </script>
 <style lang="scss">

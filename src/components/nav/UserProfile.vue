@@ -17,10 +17,10 @@
 </template>
 
 <script lang="ts">
-import { sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { Icon } from "@/components/icon";
+import { useStore } from "@/store/typed";
+import auth from "@/services/auth";
 
 @Options({
     name: "user-profile",
@@ -29,14 +29,14 @@ import { Icon } from "@/components/icon";
     },
 })
 export default class UserProfile extends Vue {
-    public store = useStore(sessionKey);
+    public store = useStore();
 
     public get user() {
-        return this.store.state.currentUser;
+        return this.store.getters.user;
     }
 
     public get image(): string {
-        return this.store.getters.image;
+        return auth.image;
     }
 }
 </script>

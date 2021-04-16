@@ -6,6 +6,9 @@ import { firebaseConfig } from "@/config";
 import { sessionStore } from "@/store";
 import router from "@/router";
 import api from "./api";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
 
 function notInitialized() {
     throw Error("FIREBASE DID NOT INITIALIZE");
@@ -274,9 +277,9 @@ const auth = new Auth();
 
 a().onAuthStateChanged(async s => {
     if (s) {
-        await sessionStore.dispatch("startSession");
+        await useStore().dispatch(SessionActionTypes.SESSION_START);
     }
-    sessionStore.commit("initialized", true);
+    useStore().commit(SessionMutationTypes.INITIALIZED);
 });
 
 export default auth;
