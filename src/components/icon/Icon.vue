@@ -14,9 +14,9 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                v-for="path in icons[name].paths"
-                :key="path"
-                :d="path"
+                v-for="p in paths"
+                :key="p"
+                :d="p"
             />
         </g>
         <path
@@ -45,9 +45,13 @@ import icons from "./icons";
     },
 })
 export default class Icon extends Vue {
-    public icons = icons.icons;
+    public icons = icons;
     public name = "";
     public size = "24";
+
+    public get paths() {
+        return this.icons[this.name].paths ?? [];
+    }
 }
 </script>
 
