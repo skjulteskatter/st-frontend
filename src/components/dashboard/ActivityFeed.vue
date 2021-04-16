@@ -109,7 +109,6 @@ export default class ActivityFeed extends Vue {
         justify-content: space-between;
 
         &__timestamp {
-            font-weight: lighter;
             flex-shrink: 0;
         }
     }
