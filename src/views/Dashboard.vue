@@ -87,7 +87,7 @@ export default class Dashboard extends Vue {
     }
 
     public get activities() {
-        return this.store.state.session.activities.map(a => {
+        return this.store.state.session.activities.map((a) => {
             return {
                 id: a.id,
                 song: a.song ? new Song(a.song) : undefined,
@@ -113,7 +113,7 @@ export default class Dashboard extends Vue {
 
     &__wrapper {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: var(--st-spacing);
     }
 
