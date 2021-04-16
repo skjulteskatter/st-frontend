@@ -78,8 +78,24 @@ export default class ActivityFeed extends Vue {
         flex-direction: column;
         gap: 0.5em;
 
-        max-height: 40rem;
+        max-height: 20rem;
         overflow-y: hidden;
+        position: relative;
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background-image: linear-gradient(
+                to bottom,
+                transparent 90%,
+                var(--st-color-background-medium)
+            );
+        }
     }
 
     &__activity {
