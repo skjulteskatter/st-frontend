@@ -57,7 +57,7 @@ import { Song } from "@/classes";
             type: Function,
         },
     },
-    name: "song-list-card"
+    name: "song-list-card",
 })
 export default class SongListCard extends Vue {
     private userStore = useStore(sessionKey);
@@ -89,7 +89,7 @@ export default class SongListCard extends Vue {
 
     public get anotherLanguage() {
         return this.songs.filter(
-            (s) => s.type == "lyrics" && !s.name[this.languageKey]
+            (s) => s.type == "lyrics" && !s.name[this.languageKey],
         );
     }
 }

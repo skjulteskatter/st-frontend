@@ -101,7 +101,7 @@ import Modal from "@/components/Modal.vue";
             type: Object,
         },
     },
-    name: "lyrics-settings"
+    name: "lyrics-settings",
 })
 export default class LyricsSettings extends Vue {
     public selectVerses: string[] = [];
@@ -236,7 +236,7 @@ export default class LyricsSettings extends Vue {
         return (
             lines.slice(
                 this.currentLinesNumber,
-                this.currentLinesNumber + this.lineSize
+                this.currentLinesNumber + this.lineSize,
             ) ?? []
         );
     }

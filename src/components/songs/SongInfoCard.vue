@@ -136,7 +136,7 @@ import { songKey } from "@/store";
             type: Object,
         },
     },
-    name: "song-info-card"
+    name: "song-info-card",
 })
 export default class SongInfoCard extends Vue {
     public languageKey = "";
@@ -147,7 +147,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image"
+                "song-details-image",
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -167,7 +167,7 @@ export default class SongInfoCard extends Vue {
     public get collection() {
         const id = this.store.state.collectionId;
         const collection = this.store.state.collections.find(
-            (c) => c.key == id
+            (c) => c.key == id,
         );
         return collection?.getName(this.languageKey);
     }

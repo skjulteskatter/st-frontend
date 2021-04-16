@@ -56,7 +56,7 @@ import { sessionKey } from "@/store";
             type: String,
         },
     },
-    name: "song-list-item-card"
+    name: "song-list-item-card",
 })
 export default class SongListItemCard extends Vue {
     public song?: Song;

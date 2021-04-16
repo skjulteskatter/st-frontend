@@ -65,7 +65,7 @@ import { Options, Vue } from "vue-class-component";
             type: Object,
         },
     },
-    name: "song-files-card"
+    name: "song-files-card",
 })
 export default class SongFilesCard extends Vue {
     public song?: Song;

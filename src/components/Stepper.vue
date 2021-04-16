@@ -17,17 +17,17 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-	props: {
-		steps: {
-			type: Array,
-			default: () => undefined,
-		},
-		callback: {
-			type: Function,
-			default: () => undefined,
-		},
-	},
-	name: "stepper"
+    props: {
+        steps: {
+            type: Array,
+            default: () => undefined,
+        },
+        callback: {
+            type: Function,
+            default: () => undefined,
+        },
+    },
+    name: "stepper",
 })
 export default class Stepper extends Vue {
 	public steps: Step[] = [];

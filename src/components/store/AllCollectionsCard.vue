@@ -50,7 +50,7 @@ import { Product } from "@/classes/product";
             type: Function,
         },
     },
-    name: "all-collections-card"
+    name: "all-collections-card",
 })
 export default class AllCollectionsCard extends Vue {
     public product?: Product;

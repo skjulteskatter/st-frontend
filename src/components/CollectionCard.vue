@@ -29,7 +29,7 @@ import { useStore } from "vuex";
             type: Collection,
         },
     },
-    name: "collection-card"
+    name: "collection-card",
 })
 export default class CollectionCard extends Vue {
     private songStore = useStore(songKey);

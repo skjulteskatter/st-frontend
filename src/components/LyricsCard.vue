@@ -83,7 +83,7 @@ import { BaseCard, BaseButton } from "./";
             type: Object,
         },
     },
-    name: "lyrics-card"
+    name: "lyrics-card",
 })
 export default class LyricsCard extends Vue {
     public store = useStore(sessionKey);
@@ -169,7 +169,7 @@ export default class LyricsCard extends Vue {
             this.songStore.commit("language", this.selectedLanguage);
             if (this.type === "transpose") {
                 (this.$refs.transposed as TransposedLyricsViewer).transpose(
-                    this.selectedTransposition
+                    this.selectedTransposition,
                 );
             }
         }
@@ -177,7 +177,7 @@ export default class LyricsCard extends Vue {
 
     public async transpose() {
         (this.$refs.transposed as TransposedLyricsViewer).transpose(
-            this.selectedTransposition
+            this.selectedTransposition,
         );
     }
 

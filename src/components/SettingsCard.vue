@@ -115,7 +115,7 @@ import auth from "@/services/auth";
         BaseCard,
         Icon,
     },
-    name: "settings-card"
+    name: "settings-card",
 })
 export default class SettingsCard extends Vue {
     public selectedLanguage: Language = {} as Language;
@@ -161,7 +161,7 @@ export default class SettingsCard extends Vue {
     public mounted() {
         this.selectedLanguage =
             this.languages.find(
-                (l) => l.key == this.user?.settings?.languageKey
+                (l) => l.key == this.user?.settings?.languageKey,
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);

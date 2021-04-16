@@ -80,7 +80,7 @@ export default class PlaylistEntryCard extends Vue {
 
     public get collection() {
         return this.store.state.collections.find(
-            (c) => c.id === this.entry.item.collection?.id
+            (c) => c.id === this.entry.item.collection?.id,
         );
     }
 

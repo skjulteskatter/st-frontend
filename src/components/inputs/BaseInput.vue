@@ -35,8 +35,8 @@ import { Options, Vue } from "vue-class-component";
             type: String,
         },
         disabled: {
-            type: Boolean
-        }
+            type: Boolean,
+        },
     },
     emits: ["update:modelValue"],
 })

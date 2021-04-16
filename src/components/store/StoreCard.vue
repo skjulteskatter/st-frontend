@@ -51,7 +51,7 @@ import { Product } from "@/classes/product";
             type: Function,
         },
     },
-    name: "store-card"
+    name: "store-card",
 })
 export default class StoreCard extends Vue {
     public product?: Product;

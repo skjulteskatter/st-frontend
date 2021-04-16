@@ -58,10 +58,10 @@ import { SheetMusicOptions } from "@/store/songs";
     },
     props: {
         options: {
-            type: Object
-        }
+            type: Object,
+        },
     },
-    name: "OSMD"
+    name: "OSMD",
 })
 export default class OSMD extends Vue {
     public osmd = osmd;
@@ -81,7 +81,7 @@ export default class OSMD extends Vue {
         try {
             await this.osmd.load(this.options);
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
     }
 
