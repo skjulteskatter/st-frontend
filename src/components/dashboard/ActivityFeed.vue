@@ -38,7 +38,7 @@ export default class ActivityFeed extends Vue {
         const rtfl = new Intl.RelativeTimeFormat(this.languageKey, {
             localeMatcher: "best fit",
             numeric: "auto",
-            style: "narrow",
+            style: "long",
         });
         const now = new Date().getMinutes();
         const then = new Date(date).getMinutes();
@@ -110,6 +110,8 @@ export default class ActivityFeed extends Vue {
 
         &__timestamp {
             flex-shrink: 0;
+            opacity: 0.5;
+            font-size: 0.9em;
         }
     }
 }
