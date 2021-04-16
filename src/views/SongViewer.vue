@@ -172,8 +172,6 @@ export default class SongViewer extends Vue {
             }
         }
         setTimeout(log, 5000);
-
-        localStorage.setItem("song_item", JSON.stringify(this.song));
     }
 
     public sheetMusic() {
@@ -187,6 +185,7 @@ export default class SongViewer extends Vue {
             type: this.selectedSheetMusic?.type,
         };
 
+        localStorage.setItem("song_item", JSON.stringify(this.song));
         localStorage.setItem("sheetmusic_options", JSON.stringify(options));
 
         window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
