@@ -16,7 +16,7 @@ import { NotificationGroup } from "@/components/notification";
     components: {
         NotificationGroup,
     },
-    name: "app"
+    name: "app",
 })
 export default class App extends Vue {
     public session = useStore(sessionKey);

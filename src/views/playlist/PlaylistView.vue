@@ -63,7 +63,7 @@ export default class PlaylistView extends Vue {
 
     public get playlist() {
         return this.store.state.playlists.find(
-            (p) => p.id == this.$route.params.id
+            (p) => p.id == this.$route.params.id,
         );
     }
 }

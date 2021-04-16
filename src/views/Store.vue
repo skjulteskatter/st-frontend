@@ -9,7 +9,7 @@ import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 import { useStore } from "vuex";
 import { stripeKey } from "@/store/stripe";
-import { notificationStore, sessionKey } from "@/store";
+import { sessionKey } from "@/store";
 
 import {
     StoreCard,
@@ -24,11 +24,10 @@ import {
         AllCollectionsCard,
         ProductSlider,
     },
-    name: "store"
+    name: "store",
 })
 export default class Store extends Vue {
     private store = useStore(stripeKey);
-    private notifications = notificationStore;
     public loading = false;
     public loadingSubs = false;
 

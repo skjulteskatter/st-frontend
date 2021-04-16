@@ -166,7 +166,7 @@ import {
         BackButton,
         SearchInput,
     },
-    name: "song-list"
+    name: "song-list",
 })
 export default class SongList extends Vue {
     private userStore = useStore(sessionKey);
@@ -186,7 +186,7 @@ export default class SongList extends Vue {
         this.cId = this.$route.params.collection as string;
         await this.songStore.dispatch(
             "selectCollection",
-            this.$route.params.collection
+            this.$route.params.collection,
         );
         if (!this.buttons.find((b) => b.value == this.listType)) {
             this.listType = "default";
@@ -302,7 +302,7 @@ export default class SongList extends Vue {
         } = {};
 
         for (const song of this.filteredSongs.sort((a, b) =>
-            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1
+            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1,
         )) {
             const letter = song
                 .getName(this.languageKey)
@@ -325,13 +325,13 @@ export default class SongList extends Vue {
 
     public themeSongs(theme: ThemeCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
-            theme?.songIds.includes(s.id)
+            theme?.songIds.includes(s.id),
         );
     }
 
     public countrySongs(country: CountryCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
-            country?.songIds.includes(s.id)
+            country?.songIds.includes(s.id),
         );
     }
 
@@ -390,7 +390,7 @@ export default class SongList extends Vue {
                     !this.collection?.hasComposers ? "composers" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
-                ].includes(b.value)
+                ].includes(b.value),
         );
     }
 }

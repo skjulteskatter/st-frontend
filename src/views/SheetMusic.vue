@@ -44,9 +44,9 @@ import { Song } from "@/classes";
 @Options({
     components: {
         OpenSheetMusicDisplay,
-        BaseButton
+        BaseButton,
     },
-    name: "sheet-music"
+    name: "sheet-music",
 })
 export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
@@ -70,12 +70,8 @@ export default class SheetMusic extends Vue {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
 
-        console.log(this.options);
-
         if (this.type != SheetMusicTypes.PDF) {
             await osmd.init(c, pbc);
-        } else if (this.options.url) {
-            console.log("POPOPO")
         }
 
         const song = localStorage.getItem("song_item");
@@ -102,7 +98,7 @@ export default class SheetMusic extends Vue {
     }
 
     public get routeName() {
-        return this.$route.name?.toString() ?? '';
+        return this.$route.name?.toString() ?? "";
     }
 
     public get transposeKey() {
@@ -144,7 +140,7 @@ export default class SheetMusic extends Vue {
             originalKey: this.originalKey,
             transposition: this.transposition,
             type: this.type ?? undefined,
-        }
+        };
     }
 
     public get languageKey() {

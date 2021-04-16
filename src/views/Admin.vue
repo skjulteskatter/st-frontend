@@ -85,14 +85,14 @@ import auth from "@/services/auth";
         BaseButton,
         BaseCard,
     },
-    name: "admin"
+    name: "admin",
 })
 export default class Subscriptions extends Vue {
     public usersStore = useStore(usersKey);
     public notificationStore = useStore(notificationKey);
     public sessionStore = useStore(sessionKey);
     public loading = false;
-    public token? = '';
+    public token? = "";
     public showToken = false;
 
     public loadingSync = false;
@@ -128,7 +128,7 @@ export default class Subscriptions extends Vue {
             icon: "trash",
         });
         this.loadingClearCache = this.loadingClearCache.filter(
-            (c) => c != collection
+            (c) => c != collection,
         );
     }
 
@@ -143,12 +143,11 @@ export default class Subscriptions extends Vue {
             this.notificationStore.dispatch("addNotification", {
                 type: "success",
                 title: (await api.admin.sync()).result,
-                icon: "refresh"
+                icon: "refresh",
             });
-        } catch {
-            console.log("no content");
+        } finally {
+            this.loadingSync = false;
         }
-        this.loadingSync = false;
     }
 }
 </script>

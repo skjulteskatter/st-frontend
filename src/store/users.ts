@@ -1,4 +1,3 @@
-
 import { createStore, Store } from 'vuex';
 import { InjectionKey } from 'vue';
 import api from '@/services/api';

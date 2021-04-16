@@ -14,7 +14,7 @@ import auth from "@/services/auth";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "verify-email"
+    name: "verify-email",
 })
 export default class VerifyEmail extends Vue {
     public verificationEmailSent = auth.verificationEmailSent;

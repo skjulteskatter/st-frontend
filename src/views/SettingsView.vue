@@ -31,9 +31,9 @@ import auth from "@/services/auth";
     components: {
         SettingsCard,
         BaseButton,
-        BaseInput
+        BaseInput,
     },
-    name: "settings-view"
+    name: "settings-view",
 })
 export default class SettingsView extends Vue {
     private store = useStore(sessionKey);
@@ -51,12 +51,8 @@ export default class SettingsView extends Vue {
     }
 
     public resetPassword() {
-        console.log(this.newPassword, this.repeatPassword)
-
         if (this.newPassword == this.repeatPassword) {
             auth.resetPassword(this.oldPassword, this.newPassword);
-
-            console.log("reset password");
         }
     }
 

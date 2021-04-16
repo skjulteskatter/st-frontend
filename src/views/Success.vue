@@ -13,7 +13,7 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "success"
+    name: "success",
 })
 export default class Success extends Vue {
     public mounted() {

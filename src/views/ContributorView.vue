@@ -70,7 +70,7 @@ import { ApiSong } from "dmb-api";
         SongListCard,
         BackButton,
     },
-    name: "contributor-view"
+    name: "contributor-view",
 })
 export default class ContributorView extends Vue {
     private store = useStore(songKey);
@@ -80,7 +80,7 @@ export default class ContributorView extends Vue {
     public async mounted() {
         await this.store.dispatch(
             "selectContributor",
-            this.$route.params.contributor
+            this.$route.params.contributor,
         );
     }
 
@@ -102,8 +102,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "author"
-                )
+                        p.type == "author",
+                ),
             )
             .map((s) => new Song(s));
     }
@@ -114,8 +114,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "composer"
-                )
+                        p.type == "composer",
+                ),
             )
             .map((s) => new Song(s));
     }

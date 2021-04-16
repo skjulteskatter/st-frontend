@@ -79,7 +79,7 @@ import {
         AllCollectionsCard,
         ProductSlider,
     },
-    name: "store-home"
+    name: "store-home",
 })
 export default class StoreHome extends Vue {
     private store = useStore(stripeKey);

@@ -128,7 +128,6 @@ export default class Login extends Vue {
         if (this.form.email && !this.form.password) {
             this.noAccount = false;
             this.providers = await auth.getProviders(this.form.email);
-            console.log(this.providers);
             if (!this.providers?.length) {
                 this.noAccount = true;
             }

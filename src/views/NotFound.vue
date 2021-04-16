@@ -12,7 +12,7 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "not-found"
+    name: "not-found",
 })
 export default class NotFound extends Vue {
     

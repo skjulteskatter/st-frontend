@@ -30,7 +30,7 @@ import { useStore } from "vuex";
         CollectionCard,
         BaseButton,
     },
-    name: "collections"
+    name: "collections",
 })
 export default class Collections extends Vue {
     private sessionStore = useStore(sessionKey);

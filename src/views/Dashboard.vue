@@ -62,7 +62,7 @@ import { sessionKey } from "@/store";
         CollectionCard,
         Icon,
     },
-    name: "dashboard"
+    name: "dashboard",
 })
 export default class Dashboard extends Vue {
     public store = useStore(sessionKey);
@@ -90,8 +90,8 @@ export default class Dashboard extends Vue {
             return {
                 id: a.id,
                 song: a.song ? new Song(a.song) : undefined,
-                loggedDate: a.loggedDate
-            }
+                loggedDate: a.loggedDate,
+            };
         });
     }
 }

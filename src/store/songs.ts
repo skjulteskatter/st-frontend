@@ -1,9 +1,9 @@
-import { Lyrics, Collection, Song, Contributor, ContributorCollectionItem } from '@/classes';
-import { createStore, Store } from 'vuex';
-import { InjectionKey } from 'vue';
-import { sessionStore } from './session';
-import api from '@/services/api';
-import { MediaFile } from 'dmb-api';
+import { Lyrics, Collection, Song, Contributor, ContributorCollectionItem } from "@/classes";
+import { createStore, Store } from "vuex";
+import { InjectionKey } from "vue";
+import { sessionStore } from "./session";
+import api from "@/services/api";
+import { MediaFile } from "dmb-api";
 
 export type SongFilter = {
     themes: string[];
@@ -67,7 +67,7 @@ export const songStore = createStore<Songs>({
         verses: [],
         lines: [],
         initialized: false,
-        list: 'default',
+        list: "default",
         filter: {
             themes: [],
             videoFiles: [],
@@ -80,38 +80,38 @@ export const songStore = createStore<Songs>({
             hasSheetMusic: false,
             hasVideoFiles: false,
         },
-        language: 'en',
-        view: 'default',
-        transcode: 'common',
+        language: "en",
+        view: "default",
+        transcode: "common",
         sheetMusic: {
             show: false,
-        }
+        },
     },
     actions: {
-        async selectCollection({ dispatch, state, commit, getters }, id: string) {
+        async selectCollection({ dispatch, state, commit, getters }, id: string): Promise<void> {
             if (!state.initialized) {
-                commit('collections', sessionStore.getters.collections);
+                commit("collections", sessionStore.getters.collections);
             }
 
-            commit('language', sessionStore.getters.languageKey);
-            commit('transcode', sessionStore.state.currentUser?.settings?.defaultTranscode ?? 'common');
-            commit('collection', id);
+            commit("language", sessionStore.getters.languageKey);
+            commit("transcode", sessionStore.state.currentUser?.settings?.defaultTranscode ?? "common");
+            commit("collection", id);
             const list = state.list;
-            commit('list', 'default');
+            commit("list", "default");
             const collection = getters.collection as Collection;
 
             if (collection) {
                 collection.load(state.language).then(() => {
-                    dispatch('setList', list);
+                    dispatch("setList", list);
                 });
             }
         },
-        async selectSong({ getters, commit }, number: number) {
+        async selectSong({ getters, commit }, number: number): Promise<void> {
             const collection = getters.collection as Collection | undefined;
             if (!collection) {
                 return;
             }
-            commit('song', number);
+            commit("song", number);
 
             if (!getters.lyrics) {
                 
@@ -119,23 +119,23 @@ export const songStore = createStore<Songs>({
 
                 if (song && song.type == "lyrics") {
                     const language = Object.keys(song.name)[0];
-                    commit('language', language);
+                    commit("language", language);
 
                     await collection.getLyrics(number, language);
                 }
             }
         },
-        async selectContributor({ commit }, contributorId: string) {
+        async selectContributor({ commit }, contributorId: string): Promise<void> {
             // const collection = getters.collection as Collection | undefined;
             // if (!collection) {
             //     return;
             // }
             const contributor = await api.songs.getContributor(contributorId);
             if (contributor) {
-                commit('contributor', contributor);
+                commit("contributor", contributor);
             }
         },
-        async transpose({ commit, getters }, transpose: number) {
+        async transpose({ commit, getters }, transpose: number): Promise<void> {
             const collection = getters.collection as Collection | undefined;
             if (!collection || !getters.song) {
                 return;
@@ -143,30 +143,30 @@ export const songStore = createStore<Songs>({
 
             const lyrics = await collection.transposeLyrics(getters.song.number, transpose);
 
-            commit('transposedLyrics', lyrics);
-            commit('transposition', transpose);
+            commit("transposedLyrics", lyrics);
+            commit("transposition", transpose);
         },
-        async setList({ commit, getters }, value: string) {
+        async setList({ commit, getters }, value: string): Promise<void> {
             const r = await (getters.collection as Collection).getList(value);
             if (r == 0) {
-                commit('list', 'default');
+                commit("list", "default");
             } else {
-                commit('list', value);
+                commit("list", value);
             }
         },
     },
     mutations: {
-        language(state, language: string) {
+        language(state, language: string): void {
             state.language = language;
         },
-        transcode(state, transcode: string) {
+        transcode(state, transcode: string): void {
             state.transcode = transcode;
         },
-        collections(state, collections: Collection[]) {
+        collections(state, collections: Collection[]): void {
             state.collections = collections;
             state.initialized = true;
         },
-        collection(state, collectionId: string) {
+        collection(state, collectionId: string): void {
             state.collectionId = collectionId;
             state.lyrics = undefined;
             state.songNumber = undefined;
@@ -174,61 +174,61 @@ export const songStore = createStore<Songs>({
             state.song = undefined;
             state.contributorItem = undefined;
         },
-        contributor(state, contributor: { songIds: string[]; item: Contributor; songs: Song[] }) {
+        contributor(state, contributor: { songIds: string[]; item: Contributor; songs: Song[] }): void {
             state.contributorItem = contributor;
         },
-        list(state, list: string) {
+        list(state, list: string): void {
             state.list = list;
         },
-        song(state, songNumber: number) {
+        song(state, songNumber: number): void {
             state.songNumber = songNumber;
             state.lyrics = undefined;
         },
-        lyrics(state, lyrics: Lyrics) {
+        lyrics(state, lyrics: Lyrics): void {
             state.lyrics = lyrics;
         },
-        transposedLyrics(state, lyrics: Lyrics) {
+        transposedLyrics(state, lyrics: Lyrics): void {
             state.transposedLyrics = lyrics;
         },
-        verses(state, verses: Verse[]) {
+        verses(state, verses: Verse[]): void {
             state.verses = verses;
         },
-        transposition(state, transposition: number) {
+        transposition(state, transposition: number): void {
             state.transposition = transposition;
         },
-        smTransposition(state, transposition: number) {
+        smTransposition(state, transposition: number): void {
             state.smTransposition = transposition;
         },
-        lines(state, lines: string[]) {
+        lines(state, lines: string[]): void {
             state.lines = lines;
         },
-        setSong(state, song: Song) {
+        setSong(state, song: Song): void {
             state.song = song;
         },
-        filter(state, filter: SongFilter) {
+        filter(state, filter: SongFilter): void {
             state.filter = filter;
         },
-        audio(state, audio: AudioTrack) {
+        audio(state, audio: AudioTrack): void {
             state.audio = audio;
         },
-        view(state, view: string) {
+        view(state, view: string): void {
             state.view = view;
         },
-        sheetMusic(state, o: SheetMusicOptions) {
+        sheetMusic(state, o: SheetMusicOptions): void {
             state.sheetMusic = o;
-        }
+        },
     },
     getters: {
-        songs(state, getters) {
+        songs(state, getters): Song[] {
             return getters.collection?.songs ?? [];
         },
-        collection(state) {
+        collection(state): Collection | undefined {
             return state.collections.find(c => c.id == state.collectionId || c.key == state.collectionId);
         },
-        song(state, getters) {
+        song(state, getters): Song | undefined {
             return (getters.collection as Collection | undefined)?.songs.find(s => s.number == state.songNumber);
         },
-        lyrics(state, getters) {
+        lyrics(state, getters): Lyrics | undefined {
             return (getters.collection as Collection | undefined)?.lyrics.find(l => l.number == state.songNumber && l.language.key == state.language);
         },
     },

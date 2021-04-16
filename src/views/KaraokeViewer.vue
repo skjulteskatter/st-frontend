@@ -11,7 +11,7 @@ import { useStore } from "vuex";
 import themes from "@/classes/themes";
 
 @Options({
-    name: "karaoke-viewer"
+    name: "karaoke-viewer",
 })
 export default class LyricsViewer extends Vue {
     public store = useStore(songKey);
@@ -20,13 +20,13 @@ export default class LyricsViewer extends Vue {
         themes.load();
         const lines = localStorage.getItem("lyrics_lines");
         if (lines) {
-            this.store.commit('lines', JSON.parse(lines));
+            this.store.commit("lines", JSON.parse(lines));
         }
-        window.addEventListener('storage', event => {
+        window.addEventListener("storage", event => {
             if (event.key == "lyrics_lines") {
                 const item = localStorage.getItem("lyrics_lines");
                 if (item) {
-                    this.store.commit('lines', JSON.parse(item));
+                    this.store.commit("lines", JSON.parse(item));
                 }
             }
         });

@@ -9,7 +9,7 @@ import { useStore } from "vuex";
 import { songKey, sessionKey } from "@/store";
 
 @Options({
-    name: "song-selector"
+    name: "song-selector",
 })
 export default class SongSelector extends Vue {
     private songStore = useStore(songKey);
@@ -21,7 +21,7 @@ export default class SongSelector extends Vue {
         ) {
             await this.songStore.dispatch(
                 "selectCollection",
-                this.$route.params.collection
+                this.$route.params.collection,
             );
         }
     }
