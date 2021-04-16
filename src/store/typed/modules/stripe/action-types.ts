@@ -1,0 +1,6 @@
+export enum StripeActionTypes {
+    SETUP = "SETUP",
+    START_SESSION = "START_SESSION",
+    GET_PORTAL = "GET_PORTAL",
+    REFRESH_COLLECTIONS = "REFRESH_COLLECTIONS",
+}

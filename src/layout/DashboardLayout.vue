@@ -27,6 +27,7 @@ import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
+import { ensureLanguageIsFetched } from "@/i18n";
 
 @Options({
     components: {

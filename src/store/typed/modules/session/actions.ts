@@ -77,6 +77,8 @@ async function init(state: State, commit: Commit): Promise<void> {
     if (router.currentRoute.value.name == "login") {
         router.push(state.redirect ?? "/");
     }
+    await ensureLanguageIsFetched();
+
     commit(SessionMutationTypes.INITIALIZED);
     songStore.commit("smTransposition", smTs[user.settings?.defaultTransposition ?? "C"]);
     songStore.commit("transposition", ts[user.settings?.defaultTransposition ?? "C"]);

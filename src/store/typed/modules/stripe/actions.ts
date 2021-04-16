@@ -1,0 +1,42 @@
+import { Product } from "@/classes";
+import stripeService from "@/services/stripe";
+import { ActionContext, ActionTree } from "vuex";
+import { RootState } from "../..";
+import { StripeActionTypes } from "./action-types";
+import { StripeMutationTypes } from "./mutation-types";
+import { Mutations } from "./mutations";
+import { State } from "./state";
+
+type AugmentedActionContext = {
+    commit<K extends keyof Mutations>(
+        key: K,
+        payload: Parameters<Mutations[K]>[1],
+    ): ReturnType<Mutations[K]>;
+} & Omit<ActionContext<State, RootState>, "commit">;
+
+export interface Actions {
+    [StripeActionTypes.GET_PORTAL](): Promise<string>;
+    [StripeActionTypes.SETUP]({ commit }: AugmentedActionContext): Promise<void>;
+    [StripeActionTypes.START_SESSION]({ state }: AugmentedActionContext, payload: string): Promise<void>;
+    [StripeActionTypes.REFRESH_COLLECTIONS](): Promise<void>;
+}
+
+export const actions: ActionTree<State, RootState> & Actions = {
+    async [StripeActionTypes.GET_PORTAL]() {
+        return await stripeService.portal();
+    },
+    async [StripeActionTypes.SETUP]({ commit }) {
+        const result = await stripeService.setup();
+        await stripeService.init(result.key);
+        
+        commit(StripeMutationTypes.SET_KEY, result.key);
+        commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p)));
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async [StripeActionTypes.START_SESSION]({ }, productId: string) {
+        await stripeService.checkout(productId);
+    },
+    async [StripeActionTypes.REFRESH_COLLECTIONS]() {
+        await stripeService.refreshSubscriptions();
+    },
+};

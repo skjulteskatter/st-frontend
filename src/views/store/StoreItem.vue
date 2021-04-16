@@ -33,12 +33,13 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, stripeKey } from "@/store";
+import { notificationKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { useStore as vStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store/typed";
+import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
 
 @Options({
     components: {
@@ -48,7 +49,6 @@ import { useStore } from "@/store/typed";
     name: "store-item",
 })
 export default class StoreItem extends Vue {
-    private stripeStore = vStore(stripeKey);
     private notifications = vStore(notificationKey);
     private store = useStore();
     public loading = false;
@@ -60,7 +60,7 @@ export default class StoreItem extends Vue {
             icon: "shop",
             title: this.$t("notification.redirecting"),
         });
-        await this.stripeStore.dispatch("startSession", product.id);
+        await this.store.dispatch(StripeActionTypes.START_SESSION, product.id);
         this.loading = false;
     }
 
@@ -89,7 +89,7 @@ export default class StoreItem extends Vue {
     }
 
     public get products() {
-        return this.stripeStore.state.products;
+        return this.store.getters.products;
     }
 
     public get product() {
