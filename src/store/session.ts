@@ -214,7 +214,7 @@ export const sessionStore = createStore<Session>({
                 song: song
             });
 
-            if (items.length >= 2) {
+            if (items.length >= 10) {
                 await activity.pushActivities(items);
                 localStorage.setItem("activities", "[]");
             } else {
