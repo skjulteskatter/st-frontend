@@ -3,42 +3,46 @@
         <h1 class="dashboard__title">
             {{ $t("common.welcome") }}, {{ user.displayName }}
         </h1>
-        <base-card class="user-info">
-            <div class="user-info__wrapper gap-y">
-                <div class="fields">
-                    <div class="user-info__field" v-if="user.roles.length">
-                        <span
-                            class="tag"
-                            v-for="role in user.roles"
-                            :key="'tag-' + role"
-                            >{{ role }}</span
-                        >
+        <div class="dashboard__wrapper">
+            <!-- <base-card class="user-info">
+                <div class="user-info__wrapper gap-y">
+                    <div class="fields">
+                        <div class="user-info__field" v-if="user.roles.length">
+                            <span
+                                class="tag"
+                                v-for="role in user.roles"
+                                :key="'tag-' + role"
+                                >{{ role }}</span
+                            >
+                        </div>
+                        <div class="user-info__field">
+                            <h2 class="user-info__name">
+                                {{ user.displayName }}
+                            </h2>
+                            <p class="user-info__email">{{ user.email }}</p>
+                        </div>
                     </div>
-                    <div class="user-info__field">
-                        <h2 class="user-info__name">{{ user.displayName }}</h2>
-                        <p class="user-info__email">{{ user.email }}</p>
-                    </div>
+                    <div class="loader" v-if="loading"></div>
                 </div>
-                <div class="loader" v-if="loading"></div>
-            </div>
-        </base-card>
-        <div class="dashboard__subscriptions">
-            <h3 class="dashboard__subscriptions__title">
-                <span>
-                    {{ $t("common.your") }}
-                    {{ $t("common.subscriptions").toLowerCase() }}
-                </span>
-                <Icon name="book" />
-            </h3>
-            <div class="dashboard__subscriptions__cards">
-                <collection-card
-                    v-for="sub in subscribedCollections"
-                    :key="sub"
-                    :collection="sub"
-                ></collection-card>
-            </div>
+            </base-card> -->
+            <!-- <div class="dashboard__subscriptions">
+                <h3 class="dashboard__subscriptions__title">
+                    <span>
+                        {{ $t("common.your") }}
+                        {{ $t("common.subscriptions").toLowerCase() }}
+                    </span>
+                    <Icon name="book" />
+                </h3>
+                <div class="dashboard__subscriptions__cards">
+                    <collection-card
+                        v-for="sub in subscribedCollections"
+                        :key="sub"
+                        :collection="sub"
+                    ></collection-card>
+                </div>
+            </div> -->
+            <activity-feed />
         </div>
-        <activity-feed />
     </div>
 </template>
 
@@ -95,6 +99,12 @@ export default class Dashboard extends Vue {
 
     @include breakpoint("medium") {
         padding: var(--st-spacing);
+    }
+
+    &__wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: var(--st-spacing);
     }
 
     &__title {
