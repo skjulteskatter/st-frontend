@@ -78,12 +78,12 @@
     </div>
 </template>
 <script lang="ts">
-import { usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import { BaseCard, BaseButton, Modal } from "@/components";
 import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 import { useStore } from "@/store/typed";
+import { UsersActionTypes } from "@/store/typed/modules/users/action-types";
+import { UsersMutationTypes } from "@/store/typed/modules/users/mutation-types";
 
 @Options({
     name: "users-list",
@@ -105,19 +105,18 @@ export default class UsersList extends Vue {
     public store = useStore();
     public users: User[] = [];
     public currentUser: User = {} as User;
-    private usersStore = vStore(usersKey);
     public disableButton = false;
     public loading = false;
 
     public async mounted() {
-        await this.usersStore.dispatch("getUsers");
-        await this.usersStore.dispatch("getRoles");
+        await this.store.dispatch(UsersActionTypes.GET_USERS);
+        await this.store.dispatch(UsersActionTypes.GET_ROLES);
     }
 
     public async refreshUsers() {
         this.loading = true;
         this.disableButton = true;
-        await this.usersStore.dispatch("getUsers");
+        await this.store.dispatch(UsersActionTypes.GET_USERS);
 
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
@@ -133,16 +132,16 @@ export default class UsersList extends Vue {
     }
 
     public get roles() {
-        return this.usersStore.state.roles;
+        return this.store.state.users.roles;
     }
 
     public toggleRole(user: User, role: string) {
-        this.usersStore.commit("toggleRole", { user, role });
+        this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
     }
 
     public async saveRoles(user: User) {
         this.loading = true;
-        await this.usersStore.dispatch("setRoles", user);
+        await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("notification.saved"),

@@ -72,9 +72,7 @@
 </template>
 
 <script lang="ts">
-import { usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import { UsersList, BaseButton, BaseCard } from "@/components";
 import api from "@/services/api";
 import auth from "@/services/auth";
@@ -90,7 +88,6 @@ import { NotificationActionTypes } from "@/store/typed/modules/notifications/act
     name: "admin",
 })
 export default class Subscriptions extends Vue {
-    public usersStore = vStore(usersKey);
     public store = useStore();
     public loading = false;
     public token? = "";
@@ -105,7 +102,7 @@ export default class Subscriptions extends Vue {
     }
 
     get users(): User[] {
-        return this.usersStore.state.users ?? [];
+        return this.store.state.users.users ?? [];
     }
 
     public get currentUser() {
