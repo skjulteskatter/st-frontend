@@ -34,7 +34,7 @@ import { FeedbackForm } from "@/components/feedback";
         FeedbackForm,
         BaseButton,
     },
-    name: "dashboard-layout"
+    name: "dashboard-layout",
 })
 export default class DashboardLayout extends Vue {
     public sessionStore = useStore(sessionKey);
@@ -43,7 +43,7 @@ export default class DashboardLayout extends Vue {
     async mounted() {
         document.documentElement.style.setProperty(
             "--st-color-primary",
-            themes.default
+            themes.default,
         );
         themes.load();
         if (this.initialized && !this.user) {

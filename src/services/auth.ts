@@ -1,23 +1,23 @@
 /* eslint-disable no-console */
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/performance';
-import { firebaseConfig } from '@/config';
-import { sessionStore } from '@/store';
-import router from '@/router';
-import api from './api';
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/performance";
+import { firebaseConfig } from "@/config";
+import { sessionStore } from "@/store";
+import router from "@/router";
+import api from "./api";
 
 function notInitialized() {
-    throw Error('FIREBASE DID NOT INITIALIZE');
+    throw Error("FIREBASE DID NOT INITIALIZE");
 }
 
 function invalidProvider() {
-    throw Error('INVALID PROVIDER');
+    throw Error("INVALID PROVIDER");
 }
 
 function notLoggedIn() {
-    router.push({name: 'login'});
-    throw Error('NOT LOGGED IN');
+    router.push({name: "login"});
+    throw Error("NOT LOGGED IN");
 }
 
 firebase.initializeApp(firebaseConfig);
@@ -32,11 +32,11 @@ if (!a) {
 
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
-        sessionStore.commit('error', '');
+        sessionStore.commit("error", "");
         return true;
     } else {
-        sessionStore.commit('error', 'EMAIL_NOT_VERIFIED');
-        router.push({name: 'verify-email'});
+        sessionStore.commit("error", "EMAIL_NOT_VERIFIED");
+        router.push({name: "verify-email"});
         return false;
     }
 }
@@ -47,9 +47,9 @@ const providers: {
     google: new a.GoogleAuthProvider(),
     twitter: new a.TwitterAuthProvider(),
     microsoft: (() => {
-        const p = new a.OAuthProvider('microsoft.com');
+        const p = new a.OAuthProvider("microsoft.com");
         p.setCustomParameters({
-            prompt: 'consent'
+            prompt: "consent",
         });
         return p;
     })(),
@@ -61,10 +61,10 @@ const providers: {
 
         return p;
     })(),
-}
+};
 
 class Auth {
-    private accessToken = '';
+    private accessToken = "";
     private expiresAt = 0;
     
     public get emailVerified() {
@@ -72,7 +72,7 @@ class Auth {
     }
 
     public get image() {
-        return a().currentUser?.photoURL ?? '';
+        return a().currentUser?.photoURL ?? "";
     }
 
     public verificationEmailSent = false;
@@ -108,7 +108,7 @@ class Auth {
         const user = result.user;
 
         if (user) {
-            await loginUser(this, user)
+            await loginUser(this, user);
         }
     }
 
@@ -143,13 +143,13 @@ class Auth {
             .createUserWithEmailAndPassword(email, password)
             .catch(e => {
                 switch (e.code) {
-                    case "auth/email-already-in-use": 
-                        console.log("email in use");
+                case "auth/email-already-in-use": 
+                    console.log("email in use");
 
-                        console.log(a().currentUser);
-                        break;
-                    default:
-                        console.log(e.code);
+                    console.log(a().currentUser);
+                    break;
+                default:
+                    console.log(e.code);
                 }
             });
         if (!result) return;
@@ -157,14 +157,14 @@ class Auth {
         const user = result.user;
 
         await user?.updateProfile({
-            displayName
+            displayName,
         });
 
         if (user) {
             await this.sendLinkToEmail();
-            return 'VERIFICATION_EMAIL_SENT';
+            return "VERIFICATION_EMAIL_SENT";
         }
-        return 'FAILED_SIGNIN';
+        return "FAILED_SIGNIN";
     }
 
     public async resetPassword(oldPassword: string, password: string) {
@@ -196,7 +196,7 @@ class Auth {
                 url: window.origin,
             });
             this.verificationEmailSent = true;
-            router.push({name: 'verify-email'});
+            router.push({name: "verify-email"});
         } else {
             notLoggedIn();
         }
@@ -213,9 +213,9 @@ class Auth {
         const user = a().currentUser;
 
         if (user?.emailVerified) {
-            return 'VERIFIED_EMAIL';
+            return "VERIFIED_EMAIL";
         }
-        return 'CODE_NOT_VALID';
+        return "CODE_NOT_VALID";
     }
 
     public get isAuthenticated() {
@@ -230,7 +230,7 @@ class Auth {
         const user = a().currentUser;
         if (user?.emailVerified) {
             const token = await user.getIdToken();
-            localStorage.setItem('id_token', token);
+            localStorage.setItem("id_token", token);
             return token;
         }
     }
@@ -270,13 +270,13 @@ class Auth {
     // }
 }
 
-const auth = new Auth()
+const auth = new Auth();
 
 a().onAuthStateChanged(async s => {
     if (s) {
-        await sessionStore.dispatch('startSession');
+        await sessionStore.dispatch("startSession");
     }
-    sessionStore.commit('initialized', true);
+    sessionStore.commit("initialized", true);
 });
 
 export default auth;

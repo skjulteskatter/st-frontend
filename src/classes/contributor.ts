@@ -1,5 +1,5 @@
-import { ApiContributor } from 'dmb-api';
-import { Converter } from 'showdown';
+import { ApiContributor } from "dmb-api";
+import { Converter } from "showdown";
 const converter = new Converter();
 
 export class Contributor implements ApiContributor {
@@ -7,11 +7,11 @@ export class Contributor implements ApiContributor {
         [key: string]: string;
     } = {};
     public birthYear = 0;
-    public country = '';
-    public id = '';
-    public name = '';
-    public subtitle = '';
-    public image = '';
+    public country = "";
+    public id = "";
+    public name = "";
+    public subtitle = "";
+    public image = "";
 
     constructor(contributor: ApiContributor) {
         this.biography = contributor.biography;

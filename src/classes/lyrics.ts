@@ -49,14 +49,14 @@ export class Lyrics implements ApiLyrics {
                 name: (this.content as JsonContent)[key].name,
                 content: (this.content as JsonContent)[key].content,
                 type,
-            }
+            };
 
             if (type == "chorus") {
                 if (chorus.name) {
                     number--;
                 }
                 verses[number] = verse;
-                number++
+                number++;
                 chorus = verse;
             } else {
                 verses[number] = verse;
@@ -74,7 +74,7 @@ export class Lyrics implements ApiLyrics {
         const lines = [];
 
         if (typeof(this.content) == typeof("")) {
-            throw new Error(`Number ${this.number} is bugged. Check with system admin.`)
+            throw new Error(`Number ${this.number} is bugged. Check with system admin.`);
         }
         
         const keys = Object.keys(this.content ?? {}) ?? [];
@@ -85,7 +85,7 @@ export class Lyrics implements ApiLyrics {
             }
         }
 
-        return lines.join(' ').replace(/[^A-Za-z0-9æøå ,.]/g, '').replace('  ', ' ');
+        return lines.join(" ").replace(/[^A-Za-z0-9æøå ,.]/g, "").replace("  ", " ");
     }
 
     public get transposedContent() {
@@ -95,7 +95,7 @@ export class Lyrics implements ApiLyrics {
     public get currentKey() {
         
 
-        return '';
+        return "";
     }
 
     public get lines() {

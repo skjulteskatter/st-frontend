@@ -6,12 +6,12 @@
   "extends": [
     "eslint:recommended",
     "plugin:vue/vue3-essential",
-    "plugin:@typescript-eslint/recommended",
     "@vue/typescript/recommended"
   ],
   "plugins": ["@typescript-eslint"],
+  "parser": "vue-eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2020
+    "parser": "@typescript-eslint/parser"
   },
   "rules": {
     //"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
@@ -20,7 +20,8 @@
     "semi": ["warn", "always"],
     "comma-dangle": ["warn", "always-multiline"],
     "quotes": ["warn", "double"],
-    "indent": ["warn", 4]
+    "indent": ["warn", 4],
+    "eol-last": ["warn", "always"]
   },
   "overrides": [
     {

@@ -1,11 +1,11 @@
-import { stripe as api } from '@/services/api';
-import  { loadStripe, Stripe } from '@stripe/stripe-js';
+import { stripe as api } from "@/services/api";
+import  { loadStripe, Stripe } from "@stripe/stripe-js";
 
 class StripeService {
     private service: Stripe = {} as Stripe;
 
     public async init(publicKey: string) {
-        const stripe = await loadStripe(publicKey)
+        const stripe = await loadStripe(publicKey);
         if (stripe === null) {
             throw new Error("Stripe failed to load");
         }

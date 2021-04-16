@@ -3,7 +3,7 @@ import { SongFilter } from "@/store/songs";
 import { ApiCollection } from "dmb-api";
 import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
-import { Converter } from 'showdown';
+import { Converter } from "showdown";
 const converter = new Converter();
 
 
@@ -46,7 +46,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _countries?: CountryCollectionItem[];
     private _loadingCountries = false;
 
-    private _currentLanguage = '';
+    private _currentLanguage = "";
 
     constructor(collection: ApiCollection) {
         super();
@@ -81,7 +81,7 @@ export class Collection extends BaseClass implements ApiCollection {
         await this.initialize();
 
         if (this._currentLanguage != language) {
-            this.lyrics = await api.songs.getAllLyrics(this.key, language, 'json', 0);
+            this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
             this._currentLanguage = language;
         }
         this._loading = false;
@@ -141,7 +141,7 @@ export class Collection extends BaseClass implements ApiCollection {
     
                     const start = (index - 20) > 0 ? index - 20 : 0;
     
-                    context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? '...' : '') + lyrics.rawContent.substr(start, filter.length + 40) + '...';
+                    context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? "..." : "") + lyrics.rawContent.substr(start, filter.length + 40) + "...";
     
                     continue;
                 }
@@ -166,13 +166,13 @@ export class Collection extends BaseClass implements ApiCollection {
                 && s.audioFiles.length > 0) || (contentTypes.includes("video") 
                 && s.videoFiles.length > 0) || (contentTypes.includes("sheetmusic") 
                 && s.sheetMusic.length > 0) )
-            && (sheetMusicTypes.length == 0 || s.sheetMusic.find(sm => sheetMusicTypes.includes(sm.category)))
+            && (sheetMusicTypes.length == 0 || s.sheetMusic.find(sm => sheetMusicTypes.includes(sm.category))),
         );
 
         return {
             songs,
-            context
-        }
+            context,
+        };
     }
 
     public get origins() {
@@ -188,7 +188,7 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public async getList(value: string) {
-        if (value == 'authors') {
+        if (value == "authors") {
             if (!this._authors) {
                 this._loadingAuthors = true;
                 this._authors = await api.songs.getAllAuthors(this.key);
@@ -196,7 +196,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 return this._authors.length;
             }
         }
-        if (value == 'composers') {
+        if (value == "composers") {
             if (!this._composers) {
                 this._loadingComposers = true;
                 this._composers = await api.songs.getAllComposers(this.key);
@@ -204,7 +204,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 return this._composers.length;
             }
         }
-        if (value == 'countries') {
+        if (value == "countries") {
             if (!this._countries) {
                 this._loadingCountries = true;
                 this._countries = await api.songs.getAllCountries(this.key);
@@ -219,7 +219,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            const lyrics = await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, 'html', transpose, transcode ?? 'common');
+            const lyrics = await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
             return lyrics;
         }
         finally {
@@ -233,7 +233,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
             let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
             if (!lyrics) {
-                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, 'json', 0, 'common'));
+                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
             return lyrics;
@@ -256,9 +256,9 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public getContributors(type: string) {
-        if (type == 'authors') {
+        if (type == "authors") {
             return this.authors;
-        } else if (type == 'composers') {
+        } else if (type == "composers") {
             return this.composers;
         } else {
             return [];

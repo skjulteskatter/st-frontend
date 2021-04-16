@@ -1,23 +1,23 @@
-import config from '../config'
-import auth from './auth'
-import { notify } from './notify'
+import config from "../config";
+import auth from "./auth";
+import { notify } from "./notify";
 
 class Http {
     public validateResponse(response: Response): Promise<Response> {
         return new Promise((resolve, reject) => {
             if (response.status >= 200 && response.status < 300) {
-                resolve(response)
+                resolve(response);
             } else if (response.status === 401) {
                 // auth.startLogin();
                 // resolve(null);
-                reject(401)
+                reject(401);
             } else {
                 const error = new Error(response.statusText);
                 // error.response = response;
                 notify("error", response.statusText + " " + response.status, "alert");
                 reject(error);
             }
-        })
+        });
     }
 
     public async parseJson(response: Response) {
@@ -40,10 +40,10 @@ class Http {
         return this.apifetch(
             path,
             {
-                method: 'GET'
+                method: "GET",
             }, 
-            bypassAuth
-        )
+            bypassAuth,
+        );
     }
 
     /**
@@ -57,22 +57,22 @@ class Http {
     public post<T, Y = T>(
         path: string,
         content?: Y,
-        options?: object
+        options?: object,
     ): Promise<T> {
 
         return this.apifetch(
             path,
             Object.assign(
                 {
-                    method: 'POST',
+                    method: "POST",
                     body: content ? JSON.stringify(content) : undefined,
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        "Content-Type": "application/json",
+                    },
                 },
-                options || {}
-            )
-        )
+                options || {},
+            ),
+        );
     }
 
     /**
@@ -85,18 +85,18 @@ class Http {
      */
     public patch<T>(
         path: string,
-        content: unknown
+        content: unknown,
     ): Promise<T> {
         return this.apifetch(
             path,
             {
-                method: 'PATCH',
+                method: "PATCH",
                 body: JSON.stringify(content),
                 headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        )
+                    "Content-Type": "application/json",
+                },
+            },
+        );
     }
 
     /**
@@ -107,19 +107,19 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public ['delete']<T>(
+    public ["delete"]<T>(
         path: string,
-        options?: object
+        options?: object,
     ): Promise<T> {
         return this.apifetch(
             path,
             Object.assign(
                 {
-                    method: 'DELETE'
+                    method: "DELETE",
                 },
-                options || {}
-            )
-        )
+                options || {},
+            ),
+        );
     }
 
     /**
@@ -131,38 +131,38 @@ class Http {
      */
     public put<T>(
         path: string,
-        content: T
+        content: T,
     ): Promise<T> {
         return this.apifetch(
             path,
             Object.assign(
                 {
-                    method: 'PUT',
-                    body: JSON.stringify(content)
-                }
-            )
-        )
+                    method: "PUT",
+                    body: JSON.stringify(content),
+                },
+            ),
+        );
     }
 
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
         const token = await auth.getToken();
-        if (!token && !bypassAuth) throw new Error("No Authorization token available")
+        if (!token && !bypassAuth) throw new Error("No Authorization token available");
 
         const headers = Object.assign({
-            'Authorization': `Bearer ${token}`,
-            'X-Api-Version': '2.0'
+            "Authorization": `Bearer ${token}`,
+            "X-Api-Version": "2.0",
         }, options.headers);
 
         const o = Object.assign(
-        options, {headers});
+            options, {headers});
         try {
             return await fetch(path, o)
-            .then(this.validateResponse)
-            .then(this.parseJson);
+                .then(this.validateResponse)
+                .then(this.parseJson);
         }
         catch {
-            notify("error", "Couldn't fetch from API", "warning", "Backend down?")
+            notify("error", "Couldn't fetch from API", "warning", "Backend down?");
         }
     }
 }

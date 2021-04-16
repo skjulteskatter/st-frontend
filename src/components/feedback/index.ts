@@ -1,5 +1,5 @@
-import FeedbackForm from './FeedbackForm.vue';
+import FeedbackForm from "./FeedbackForm.vue";
 
 export {
-	FeedbackForm
-}
+    FeedbackForm,
+};

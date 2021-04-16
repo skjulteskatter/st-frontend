@@ -1,63 +1,63 @@
-import { Collection, Lyrics, Song } from '@/classes';
-import { ContributorCollectionItem } from '@/classes/collectionItems/contributorCollectionItem';
-import { CountryCollectionItem } from '@/classes/collectionItems/countryCollectionItem';
-import { ThemeCollectionItem } from '@/classes/collectionItems/themeCollectionItem';
-import { RedirectToCheckoutOptions } from '@stripe/stripe-js';
-import { SessionRequest, SetupResponse } from 'checkout';
-import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from 'dmb-api';
-import http from './http';
+import { Collection, Lyrics, Song } from "@/classes";
+import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
+import { CountryCollectionItem } from "@/classes/collectionItems/countryCollectionItem";
+import { ThemeCollectionItem } from "@/classes/collectionItems/themeCollectionItem";
+import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
+import { SessionRequest, SetupResponse } from "checkout";
+import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from "dmb-api";
+import http from "./http";
 
 export const activity = {
     async getActivities() {
-        return await http.get<ApiActivity[]>('api/Activity?expand=song/collection');
+        return await http.get<ApiActivity[]>("api/Activity?expand=song/collection");
     },
     async pushActivities(activities: ApiActivity[]) {
-        return await http.post<ApiActivity[]>('api/Activity', activities.map(a => {
+        return await http.post<ApiActivity[]>("api/Activity", activities.map(a => {
             return {
                 songId: a.songId,
                 loggedDate: a.loggedDate,
-            }
+            };
         }));
-    }
-}
+    },
+};
 
 export const session = {
     async getCurrentUser() {
-        return await http.get<User>('api/Session')
+        return await http.get<User>("api/Session");
     },
     saveUser(settings: UserSettings) {
-        return http.patch<User>('api/Session', settings)
+        return http.patch<User>("api/Session", settings);
     },
     createUser(displayName: string) {
-        return http.put('api/Session', { displayName });
+        return http.put("api/Session", { displayName });
     },
     uploadImage(fileName: string, base64Image: string) {
-        return http.patch<{ image: string }>('api/Session/Image', { fileName, base64Image });
-    }
-}
+        return http.patch<{ image: string }>("api/Session/Image", { fileName, base64Image });
+    },
+};
 
 export const items = {
     getLanguages() {
-        return http.get<Language[]>('api/Languages');
+        return http.get<Language[]>("api/Languages");
     },
     getTranslations(languages: string[]) {
         return http.get<{
             [key: string]: {
                 [key: string]: string;
             };
-        }>('api/Localization?languages=' + languages.join(","), true);
-    }
-}
+        }>("api/Localization?languages=" + languages.join(","), true);
+    },
+};
 
 export const admin = {
     async getAllSubscriptions() {
-        return await http.get<Subscription[]>('api/Admin/Subscriptions');
+        return await http.get<Subscription[]>("api/Admin/Subscriptions");
     },
     getAllUsers() {
-        return http.get<User[]>('api/Admin/Users');
+        return http.get<User[]>("api/Admin/Users");
     },
     getRoles() {
-        return http.get<string[]>('api/Admin/Roles');
+        return http.get<string[]>("api/Admin/Roles");
     },
     setRoles(user: User, roles: string[]) {
         return http.patch<User>(`api/Admin/User/${user.id}/Roles`, roles);
@@ -66,16 +66,16 @@ export const admin = {
         return http.get<string>(`api/Admin/ClearCache/${collectionId}`);
     },
     clearLandaxCache() {
-        return http.get<string>(`api/Admin/ClearCache/Landax`);
+        return http.get<string>("api/Admin/ClearCache/Landax");
     },
     sync() {
-        return http.get<{ result: string }>(`api/Admin/Sync`);
-    }
-}
+        return http.get<{ result: string }>("api/Admin/Sync");
+    },
+};
 
 export const songs = {
     async getCollections() {
-        return (await http.get<ApiCollection[]>('api/Collections?expand=details,name')).map(c => new Collection(c));
+        return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
     async getAllSongs(collection: string) {
         return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright`)).map(s => new Song(s));
@@ -112,18 +112,18 @@ export const songs = {
      */
     async searchCollections(search: string, language: string) {
         return (await http.get<ApiSong[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,participants/contributor`)).map(s => new Song(s));
-    }
-}
+    },
+};
 
 export const playlists = {
     async getPlaylists() {
-        return (await http.get<ApiPlaylist[]>('api/Playlists?expand=entries/item/collection'));
+        return (await http.get<ApiPlaylist[]>("api/Playlists?expand=entries/item/collection"));
     },
     async getPlaylist(id: string) {
-        return (await http.get<ApiPlaylist>('api/Playlists/' + id + '?expand=entries/item/collection'));
+        return (await http.get<ApiPlaylist>("api/Playlists/" + id + "?expand=entries/item/collection"));
     },
     async createPlaylist(name: string) {
-        return (await http.post('api/Playlists', {name})) as ApiPlaylist;
+        return (await http.post("api/Playlists", {name})) as ApiPlaylist;
     },
     async deletePlaylist(id: string){
         return (await http.delete(`api/Playlists/${id}`));
@@ -134,29 +134,29 @@ export const playlists = {
     async removeEntryFromPlaylist(playlistId: string, entryId: string) {
         return (await http.delete<ApiPlaylist>(`api/Playlists/${playlistId}/${entryId}?expand=entries/item/collection`));
     },
-}
+};
 
 export const stripe = {
     setup() {
-        return http.get<SetupResponse>('api/Store/Setup')
+        return http.get<SetupResponse>("api/Store/Setup");
     },
     startSession(productId: string) {
-        return http.post<RedirectToCheckoutOptions, SessionRequest>(`api/Store/Session`, {
+        return http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productId,
             cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
         });
     },
     getSession(sessionId: string) {
-        return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`)
+        return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`);
     },
     getPortalSession() {
         return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
     },
     refreshSubscriptions() {
-        return http.get(`api/Store/Refresh`);
-    }
-}
+        return http.get("api/Store/Refresh");
+    },
+};
 
 const api = {
     session,
@@ -165,7 +165,7 @@ const api = {
     items,
     stripe,
     playlists,
-    activity
-}
+    activity,
+};
 
-export default api
+export default api;
