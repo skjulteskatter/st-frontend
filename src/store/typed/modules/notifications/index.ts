@@ -17,7 +17,7 @@ import type { State } from "./state";
   
 export { State };
   
-export type SessionStore<S = State> = Omit<VuexStore<S>, "getters" | "commit" | "dispatch">
+export type NotificationStore<S = State> = Omit<VuexStore<S>, "getters" | "commit" | "dispatch">
   & {
     commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
       key: K,

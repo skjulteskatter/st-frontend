@@ -78,10 +78,12 @@
     </div>
 </template>
 <script lang="ts">
-import { notificationKey, usersKey } from "@/store";
+import { usersKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import { BaseCard, BaseButton, Modal } from "@/components";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "users-list",
@@ -100,13 +102,12 @@ import { BaseCard, BaseButton, Modal } from "@/components";
     },
 })
 export default class UsersList extends Vue {
+    public store = useStore();
     public users: User[] = [];
     public currentUser: User = {} as User;
-    private usersStore = useStore(usersKey);
+    private usersStore = vStore(usersKey);
     public disableButton = false;
     public loading = false;
-
-    public notificationStore = useStore(notificationKey);
 
     public async mounted() {
         await this.usersStore.dispatch("getUsers");
@@ -118,7 +119,7 @@ export default class UsersList extends Vue {
         this.disableButton = true;
         await this.usersStore.dispatch("getUsers");
 
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("notification.fetchedusers"),
             icon: "check",
@@ -142,7 +143,7 @@ export default class UsersList extends Vue {
     public async saveRoles(user: User) {
         this.loading = true;
         await this.usersStore.dispatch("setRoles", user);
-        this.notificationStore.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("notification.saved"),
             icon: "check",

@@ -20,11 +20,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 import { Song } from "@/classes";
 
 import { BaseCard } from "@/components";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "activity-feed",
@@ -33,7 +32,7 @@ import { BaseCard } from "@/components";
     },
 })
 export default class ActivityFeed extends Vue {
-    private store = useStore(sessionKey);
+    private store = useStore();
 
     public timeSince(date: string) {
         const rtfl = new Intl.RelativeTimeFormat("en", {
@@ -55,7 +54,7 @@ export default class ActivityFeed extends Vue {
     }
 
     public get activities() {
-        return this.store.state.activities.map((a) => {
+        return this.store.state.session.activities.map((a) => {
             return {
                 id: a.id,
                 song: a.song ? new Song(a.song) : undefined,

@@ -2,7 +2,7 @@ import router from "@/router";
 import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
-import { RootState } from "@/store/typed";
+import { RootState } from "../..";
 import { songStore } from "@/store/songs";
 import { ApiActivity, ApiSong } from "dmb-api";
 import { ActionContext, ActionTree, Commit } from "vuex";
@@ -45,37 +45,41 @@ const ts: {
     "B": 1,
 };
 
-const redirectAfterLogin = "/";
-
-async function init(commit: Commit): Promise<void> {
+async function init(state: State, commit: Commit): Promise<void> {
     const user = await api.session.getCurrentUser();
     user.displayName = auth.user?.displayName ?? user.displayName;
+    
+    api.playlists.getPlaylists().then(p => {
+        commit(SessionMutationTypes.SET_PLAYLISTS, p);
+    });
+    const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
-    commit("user", user);
+    if (items.length) {
+        await api.activity.pushActivities(items);
+        localStorage.setItem("activities", "[]");
+    }
+
+    api.activity.getActivities().then(a => {
+        commit(SessionMutationTypes.SET_LOG_ITEMS, a);
+    });
+
+    commit(SessionMutationTypes.SET_USER, user);
     try {
         const languages = await api.items.getLanguages();
-        commit("languages", languages);
+        commit(SessionMutationTypes.SET_LANGUAGES, languages);
         const collections = await api.songs.getCollections();
-        commit("collections", collections);
-        const playlists = await api.playlists.getPlaylists();
-        commit("playlists", playlists);
+        commit(SessionMutationTypes.COLLECTIONS, collections);
 
-        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
-
-        if (items.length) {
-            await api.activity.pushActivities(items);
-            localStorage.setItem("activities", "[]");
-        }
-
-        const activites = await api.activity.getActivities();
-        commit("setLogItems", activites);
+        
     } catch (e) {
         //console.log(e);
     }
     if (router.currentRoute.value.name == "login") {
-        router.push(redirectAfterLogin);
+        router.push(state.redirect ?? "/");
     }
-    commit("initialized", true);
+    await ensureLanguageIsFetched();
+
+    commit(SessionMutationTypes.INITIALIZED);
     songStore.commit("smTransposition", smTs[user.settings?.defaultTransposition ?? "C"]);
     songStore.commit("transposition", ts[user.settings?.defaultTransposition ?? "C"]);
 }
@@ -94,13 +98,13 @@ export interface Actions {
      */
     [SessionActionTypes.SESSION_START]({ state, commit }: AugmentedActionContext): Promise<void>;
     [SessionActionTypes.SESSION_CLEAR]({ commit }: AugmentedActionContext): Promise<void>;
-    [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
-    [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ commit }: AugmentedActionContext, payload: {
+    [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit }: AugmentedActionContext, payload: string): Promise<void>;
+    [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ state, commit }: AugmentedActionContext, payload: {
         email: string;
         password: string;
         stayLoggedIn: boolean;
     }): Promise<void>;
-    [SessionActionTypes.SESSION_CREATE_USER]({ commit }: AugmentedActionContext, payload: { 
+    [SessionActionTypes.SESSION_CREATE_USER]({ state, commit }: AugmentedActionContext, payload: { 
         email: string; 
         password: string; 
         displayName: string;
@@ -131,7 +135,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
     async [SessionActionTypes.SESSION_START]({state, commit}): Promise<void> {
         if (auth.isAuthenticated) {
             if (!state.initialized) {
-                await init(commit);
+                await init(state, commit);
             }
         } else {
             await auth.sendLinkToEmail();
@@ -141,29 +145,29 @@ export const actions: ActionTree<State, RootState> & Actions = {
         await auth.logout();
         commit(SessionMutationTypes.CLEAR_SESSION, undefined);
     },
-    async [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ commit }, provider): Promise<void> {
+    async [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit }, provider): Promise<void> {
         await auth.login(provider);
 
         if (auth.isAuthenticated) {
-            await init(commit);
+            await init(state, commit);
         } else {
             await auth.sendLinkToEmail();
         }
     },
-    async [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ commit }, obj): Promise<void> {
+    async [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ state, commit }, obj): Promise<void> {
         await auth.loginWithEmailAndPassword(obj.email, obj.password, obj.stayLoggedIn);
 
         if (auth.isAuthenticated) {
-            await init(commit);
+            await init(state, commit);
         } else {
             await auth.sendLinkToEmail();
         }
     },
-    async [SessionActionTypes.SESSION_CREATE_USER]({commit}, object ): Promise<void> {
+    async [SessionActionTypes.SESSION_CREATE_USER]({ state, commit}, object ): Promise<void> {
         await auth.createEmailAndPasswordUser(object.email, object.password, object.displayName);
 
         if (auth.isAuthenticated) {
-            await init(commit);
+            await init(state, commit);
         } else {
             await auth.sendLinkToEmail();
         }

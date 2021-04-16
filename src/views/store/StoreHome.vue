@@ -61,9 +61,7 @@
 </template>
 
 <script lang="ts">
-import { notificationStore, sessionKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 
 import { BaseButton } from "@/components";
 import {
@@ -71,6 +69,8 @@ import {
     AllCollectionsCard,
     ProductSlider,
 } from "@/components/store";
+import { useStore } from "@/store/typed";
+import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
 
 @Options({
     components: {
@@ -82,27 +82,26 @@ import {
     name: "store-home",
 })
 export default class StoreHome extends Vue {
-    private store = useStore(stripeKey);
-    private notifications = notificationStore;
+    private store = useStore();
     public loading = false;
     public loadingSubs = false;
 
     public mounted() {
-        if (!this.store.state.initialized) {
-            this.store.dispatch("setup");
+        if (!this.store.getters.stripeInitialized) {
+            this.store.dispatch(StripeActionTypes.SETUP);
         }
     }
 
     public portal() {
         this.loading = true;
-        this.store.dispatch("getPortal").then((result) => {
-            window.location = result;
+        this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+            window.location = result as unknown as Location;
         });
         this.loading = false;
     }
 
     public get products() {
-        return this.store.state.products
+        return this.store.getters.products
             .sort((a, b) => b.priority - a.priority)
             .filter((p) => p.collections.length == 1);
     }
@@ -116,7 +115,7 @@ export default class StoreHome extends Vue {
     }
 
     public get user() {
-        return useStore(sessionKey).state.currentUser;
+        return useStore().getters.user;
     }
 
     public get productIds() {
@@ -125,12 +124,12 @@ export default class StoreHome extends Vue {
 
     public async refreshSubscriptions() {
         this.loadingSubs = true;
-        await this.store.dispatch("refreshCollections");
+        await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
     }
 
     public get allCollectionProduct() {
-        return this.store.state.products.find((p) => p.collections.length > 1);
+        return this.store.getters.products.find((p) => p.collections.length > 1);
     }
 }
 </script>

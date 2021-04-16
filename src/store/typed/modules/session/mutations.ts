@@ -4,7 +4,6 @@ import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";
 
-
 export type Mutations<S = State> = {
     [SessionMutationTypes.SET_USER](state: S, payload: User): void;
     [SessionMutationTypes.CLEAR_SESSION](state: S): void;
@@ -21,6 +20,11 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.SET_PLAYLIST](state: S, payload: ApiPlaylist): void;
     [SessionMutationTypes.DELETE_PLAYLIST](state: S, payload: string): void;
     [SessionMutationTypes.UPDATE_PLAYLIST](state: S, payload: ApiPlaylist): void;
+
+    [SessionMutationTypes.INITIALIZED](state: S): void;
+    [SessionMutationTypes.REDIRECT](state: S, payload: string): void;
+    [SessionMutationTypes.EXTEND](state: S, payload: boolean): void;
+    [SessionMutationTypes.ERROR](state: S, payload: string): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -78,5 +82,18 @@ export const mutations: MutationTree<State> & Mutations = {
             pl.entries = playlist.entries;
             pl.name = playlist.name;
         }
+    },
+
+    [SessionMutationTypes.INITIALIZED](state): void {
+        state.initialized = true;
+    },
+    [SessionMutationTypes.REDIRECT](state, redirect) {
+        state.redirect = redirect;
+    },
+    [SessionMutationTypes.EXTEND](state, value) {
+        state.extend = value;
+    },
+    [SessionMutationTypes.ERROR](state, value) {
+        state.error = value;
     },
 };

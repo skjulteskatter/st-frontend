@@ -33,11 +33,12 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, sessionKey, stripeKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { BackButton, BaseButton } from "@/components";
 import { Product } from "@/classes/product";
+import { useStore } from "@/store/typed";
+import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -47,19 +48,17 @@ import { Product } from "@/classes/product";
     name: "store-item",
 })
 export default class StoreItem extends Vue {
-    private store = useStore(stripeKey);
-    private notifications = useStore(notificationKey);
-    private sessionStore = useStore(sessionKey);
+    private store = useStore();
     public loading = false;
 
     public async checkout(product: Product) {
         this.loading = true;
-        await this.notifications?.dispatch("addNotification", {
+        await this.store?.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "primary",
             icon: "shop",
             title: this.$t("notification.redirecting"),
         });
-        await this.store.dispatch("startSession", product.id);
+        await this.store.dispatch(StripeActionTypes.START_SESSION, product.id);
         this.loading = false;
     }
 
@@ -78,7 +77,7 @@ export default class StoreItem extends Vue {
     }
 
     public get collections() {
-        return this.sessionStore.state.collections.filter((c) =>
+        return this.store.state.session.collections.filter((c) =>
             this.product?.collectionIds.includes(c.id),
         );
     }
@@ -88,7 +87,7 @@ export default class StoreItem extends Vue {
     }
 
     public get products() {
-        return this.store.state.products;
+        return this.store.getters.products;
     }
 
     public get product() {
@@ -96,7 +95,7 @@ export default class StoreItem extends Vue {
     }
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 }
 </script>

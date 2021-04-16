@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { notificationStore } from "@/store";
+import { useStore } from "@/store/typed";
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
 
@@ -22,10 +22,10 @@ import Notification from "./Notification.vue";
     },
 })
 export default class NotificationGroup extends Vue {
-    private store = notificationStore;
+    private store = useStore();
 
     public get notifications() {
-        return this.store.state.notifications;
+        return this.store.getters.notifications;
     }
 }
 </script>

@@ -1,9 +1,9 @@
 import { Lyrics, Collection, Song, Contributor, ContributorCollectionItem } from "@/classes";
 import { createStore, Store } from "vuex";
 import { InjectionKey } from "vue";
-import { sessionStore } from "./session";
 import api from "@/services/api";
 import { MediaFile } from "dmb-api";
+import { useStore } from "./typed";
 
 export type SongFilter = {
     themes: string[];
@@ -90,11 +90,11 @@ export const songStore = createStore<Songs>({
     actions: {
         async selectCollection({ dispatch, state, commit, getters }, id: string): Promise<void> {
             if (!state.initialized) {
-                commit("collections", sessionStore.getters.collections);
+                commit("collections", useStore().getters.collections);
             }
 
-            commit("language", sessionStore.getters.languageKey);
-            commit("transcode", sessionStore.state.currentUser?.settings?.defaultTranscode ?? "common");
+            commit("language", useStore().getters.languageKey);
+            commit("transcode", useStore().getters.user?.settings?.defaultTranscode ?? "common");
             commit("collection", id);
             const list = state.list;
             commit("list", "default");

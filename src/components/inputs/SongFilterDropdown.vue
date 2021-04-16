@@ -80,11 +80,12 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { sessionKey, songKey } from "@/store";
+import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
+import { useStore as vStore } from "vuex";
 import BaseDropdown from "./BaseDropdown.vue";
 import BaseButton from "@/components/BaseButton.vue";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "song-filter-dropdown",
@@ -102,8 +103,8 @@ import BaseButton from "@/components/BaseButton.vue";
     },
 })
 export default class SongFilterDropdown extends Vue {
-    private sessionStore = useStore(sessionKey);
-    private store = useStore(songKey);
+    private sessionStore = useStore();
+    private store = vStore(songKey);
     public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental", "live_performance", "demo", "playback"];
     public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];

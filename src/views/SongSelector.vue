@@ -6,7 +6,7 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import { useStore } from "vuex";
-import { songKey, sessionKey } from "@/store";
+import { songKey } from "@/store";
 
 @Options({
     name: "song-selector",
@@ -24,16 +24,6 @@ export default class SongSelector extends Vue {
                 this.$route.params.collection,
             );
         }
-    }
-
-    public get selectedCollection() {
-        return useStore(songKey).getters.collection;
-    }
-    public get selectedSong() {
-        return useStore(songKey).getters.song;
-    }
-    public get language() {
-        return useStore(sessionKey).getters.currentUser?.settings?.languageKey;
     }
 }
 </script>

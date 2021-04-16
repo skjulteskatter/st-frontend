@@ -28,11 +28,12 @@
 </template>
 
 <script lang="ts">
-import { notificationKey, sessionKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { BackButton, BaseButton, BaseCard } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
+import { useStore } from "@/store/typed";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
 
 @Options({
     name: "playlist-view",
@@ -44,14 +45,13 @@ import { PlaylistSongCard } from "@/components/playlist";
     },
 })
 export default class PlaylistView extends Vue {
-    private store = useStore(sessionKey);
-    private notifications = useStore(notificationKey);
+    private store = useStore();
 
-    public deletePlaylist() {
-        this.store.dispatch("deletePlaylist", this.playlist?.id);
+    public async deletePlaylist() {
+        await this.store.dispatch(SessionActionTypes.PLAYLIST_DELETE, this.playlist?.id);
         this.$router.push("/playlists");
 
-        this.notifications.dispatch("addNotification", {
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             title: this.$t("playlist.deletedplaylist"),
         });
@@ -62,7 +62,7 @@ export default class PlaylistView extends Vue {
     }
 
     public get playlist() {
-        return this.store.state.playlists.find(
+        return this.store.getters.playlists.find(
             (p) => p.id == this.$route.params.id,
         );
     }

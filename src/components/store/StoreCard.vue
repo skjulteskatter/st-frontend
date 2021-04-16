@@ -30,11 +30,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
 
 import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -57,7 +56,7 @@ export default class StoreCard extends Vue {
     public product?: Product;
     public isPurchaseable = false;
     public action = () => undefined;
-    public userStore = useStore(sessionKey);
+    public store = useStore();
 
     public gotoCollection(product: Product) {
         const collectionKey = product?.collections[0].key ?? "";
@@ -87,7 +86,7 @@ export default class StoreCard extends Vue {
     }
 
     public get languageKey() {
-        return this.userStore.getters.languageKey ?? "en";
+        return this.store.getters.languageKey;
     }
 }
 </script>

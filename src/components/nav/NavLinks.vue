@@ -36,8 +36,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
-import { useStore } from "vuex";
-import { sessionKey } from "@/store";
+import { useStore } from "@/store/typed";
 
 @Options({
     name: "nav-links",
@@ -47,7 +46,7 @@ import { sessionKey } from "@/store";
 })
 export default class NavLinks extends Vue {
     public get isAdmin() {
-        return useStore(sessionKey).getters.isAdmin;
+        return useStore().getters.isAdmin;
     }
 }
 </script>

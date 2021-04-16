@@ -28,11 +28,10 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { sessionKey } from "@/store";
 import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import { BaseButton } from "@/components";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -40,14 +39,14 @@ import { BaseButton } from "@/components";
     },
 })
 export default class CollectionList extends Vue {
-    private store = useStore(sessionKey);
+    private store = useStore();
 
     public get collections(): Collection[] {
         return this.store.getters.collections;
     }
 
     public get playlists(): ApiPlaylist[] {
-        return this.store.state.playlists;
+        return this.store.state.session.playlists;
     }
 
     public get languageKey() {
