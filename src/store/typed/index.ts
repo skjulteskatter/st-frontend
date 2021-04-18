@@ -2,6 +2,7 @@ import { store as session, SessionStore, State as SessionState } from "./modules
 import { store as stripe, StripeStore, State as StripeState } from "./modules/stripe";
 import { store as notifications, NotificationStore, State as NotificationState } from "./modules/notifications";
 import { store as users, UserStore, State as UsersState } from "./modules/users"; 
+import { store as songs, SongStore, State as SongState } from "./modules/songs";
 import { createLogger, createStore } from "vuex";
 
 export type RootState = {
@@ -9,15 +10,17 @@ export type RootState = {
     stripe: StripeState;
     notifications: NotificationState;
     users: UsersState;
+    songs: SongState;
 };
   
 export type Store = SessionStore<Pick<RootState, "session">>
     & StripeStore<Pick<RootState, "stripe">>
     & NotificationStore<Pick<RootState, "notifications">>
-    & UserStore<Pick<RootState, "users">>;
+    & UserStore<Pick<RootState, "users">>
+    & SongStore<Pick<RootState, "songs">>;
   
 // Plug in logger when in development environment
-const debug = process.env.NODE_ENV !== "production";
+const debug = false && process.env.NODE_ENV !== "production";
 const plugins = debug ? [createLogger({})] : [];
   
 export const store = createStore({
@@ -27,6 +30,7 @@ export const store = createStore({
         stripe,
         notifications,
         users,
+        songs,
     },
 });
   

@@ -80,12 +80,11 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import BaseDropdown from "./BaseDropdown.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 
 @Options({
     name: "song-filter-dropdown",
@@ -103,8 +102,7 @@ import { useStore } from "@/store/typed";
     },
 })
 export default class SongFilterDropdown extends Vue {
-    private sessionStore = useStore();
-    private store = vStore(songKey);
+    private store = useStore();
     public videoTypes = ["karaoke"];
     public audioTypes = ["gathering", "studio", "instrumental", "live_performance", "demo", "playback"];
     public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];
@@ -127,7 +125,7 @@ export default class SongFilterDropdown extends Vue {
     } = {};
 
     public mounted() {
-        const filter = Object.assign({}, this.store.state.filter);
+        const filter = Object.assign({}, this.store.state.songs.filter);
 
         for (const t of filter.audioFiles) {
             this.audioValues[t] = true;
@@ -161,7 +159,7 @@ export default class SongFilterDropdown extends Vue {
         );
         const types = this.contentTypes.filter((t) => this.typeValues[t] == true);
 
-        const filter = Object.assign({}, this.store.state.filter);
+        const filter = Object.assign({}, this.store.state.songs.filter);
 
         filter.videoFiles = videos;
         filter.audioFiles = audio;
@@ -169,11 +167,11 @@ export default class SongFilterDropdown extends Vue {
         filter.sheetMusicTypes = this.sheetMusicTypes.filter((t) => this.sheetMusicValues[t] == true);
         //filter.origins = origins;
 
-        this.store.commit("filter", filter);
+        this.store.commit(SongsMutationTypes.SET_FILTER, filter);
     }
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public get loading() {

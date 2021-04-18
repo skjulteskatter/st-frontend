@@ -63,40 +63,39 @@
 </template>
 
 <script lang="ts">
-import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import themes from "@/classes/themes";
 import { Song } from "@/classes";
 import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 
 @Options({
     name: "lyrics-viewer",
 })
 export default class LyricsViewer extends Vue {
-    public store = vStore(songKey);
+    public store = useStore();
 
     public mounted() {
         themes.load();
         const lyricsItem = localStorage.getItem("lyrics");
         if (lyricsItem) {
-            this.store.commit("verses", JSON.parse(lyricsItem));
+            this.store.commit(SongsMutationTypes.SET_VERSES, JSON.parse(lyricsItem));
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit("setSong", new Song(JSON.parse(songItem)));
+            this.store.commit(SongsMutationTypes.SET_SONG, new Song(JSON.parse(songItem)));
         }
         window.addEventListener("storage", (event) => {
             if (event.key == "song") {
                 const item = localStorage.getItem("song");
                 if (item) {
-                    this.store.commit("setSong", new Song(JSON.parse(item)));
+                    this.store.commit(SongsMutationTypes.SET_SONG, new Song(JSON.parse(item)));
                 }
             }
             if (event.key == "lyrics") {
                 const item = localStorage.getItem("lyrics");
                 if (item) {
-                    this.store.commit("verses", JSON.parse(item));
+                    this.store.commit(SongsMutationTypes.SET_VERSES, JSON.parse(item));
                 }
             }
             if (event.key == "theme") {
@@ -126,7 +125,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get song() {
-        return this.store.state.song;
+        return this.store.state.songs.song;
     }
 
     public get title() {
@@ -134,7 +133,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get lyrics() {
-        return this.store.state.verses;
+        return this.store.state.songs.verses;
     }
 
     public get melodyOrigin() {
@@ -146,7 +145,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get languageKey(): string {
-        return useStore().getters.languageKey;
+        return this.store.getters.languageKey;
     }
 }
 </script>

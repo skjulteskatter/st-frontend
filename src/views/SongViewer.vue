@@ -111,15 +111,14 @@ import {
     BackButton,
     Modal,
 } from "@/components";
-import { useStore as vStore} from "vuex";
-import { songKey } from "@/store";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
-import { SheetMusicOptions } from "@/store/songs";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store/typed";
 import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
+import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
 
 @Options({
     components: {
@@ -137,7 +136,6 @@ import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-typ
 })
 export default class SongViewer extends Vue {
     public store = useStore();
-    public songStore = vStore(songKey);
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
@@ -148,15 +146,15 @@ export default class SongViewer extends Vue {
     // }
 
     public async mounted() {
-        this.songStore.commit("sheetMusic", { show: false });
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, { show: false });
         this.number = parseInt(this.$route.params.number as string);
         if (
-            this.songStore.getters.collection?.key !==
+            this.store.getters.collection?.key !==
             (this.$route.params.collection as string)
         ) {
-            await this.songStore.dispatch(
-                "selectCollection",
-                this.$route.params.collection,
+            await this.store.dispatch(
+                SongsActionTypes.SELECT_COLLECTION,
+                this.$route.params.collection as string,
             );
         }
 
@@ -164,8 +162,8 @@ export default class SongViewer extends Vue {
             await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
-        await this.songStore.dispatch("selectSong", this.number);
-        this.songStore.commit("song", this.number);
+        await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
+        this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
         const route = this.$route.fullPath;
         const log = () => {
@@ -218,7 +216,7 @@ export default class SongViewer extends Vue {
     }
 
     public get transposition() {
-        return this.songStore.state.smTransposition;
+        return this.store.state.songs.smTransposition;
     }
 
     public get extended() {
@@ -230,7 +228,7 @@ export default class SongViewer extends Vue {
     }
 
     public get loading() {
-        return this.songStore.getters.collection?.loading;
+        return this.store.getters.collection?.loading;
     }
 
     public get loadingLyrics() {
@@ -242,7 +240,7 @@ export default class SongViewer extends Vue {
     }
 
     public get lyrics(): Lyrics | undefined {
-        return this.songStore.getters.lyrics;
+        return this.store.getters.lyrics;
     }
 
     public get song() {
@@ -258,7 +256,7 @@ export default class SongViewer extends Vue {
     }
 
     public get collection(): Collection | undefined {
-        return this.songStore.getters.collection;
+        return this.store.getters.collection;
     }
 }
 </script>

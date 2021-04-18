@@ -18,12 +18,10 @@
 
 <script lang="ts">
 import { Collection, Song } from "@/classes";
-import { songKey } from "@/store";
-import { AudioTrack } from "@/store/songs";
 import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 
 @Options({
     name: "audio-playlist",
@@ -35,8 +33,7 @@ import { useStore as vStore } from "vuex";
     },
 })
 export default class AudioPlaylist extends Vue {
-    public store = vStore(songKey);
-    public sessionStore = useStore();
+    public store = useStore();
     public audiofiles: MediaFile[] = [];
 
     public selectAudio(audio: MediaFile) {
@@ -45,11 +42,11 @@ export default class AudioPlaylist extends Vue {
             song: this.song,
             collection: this.collection,
         };
-        this.store.commit("audio", track);
+        this.store.commit(SongsMutationTypes.SET_AUDIO, track);
     }
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public get song(): Song | undefined {

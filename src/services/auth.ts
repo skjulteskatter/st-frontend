@@ -36,10 +36,10 @@ if (!a) {
 
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
-        store.commit(SessionMutationTypes.ERROR, "");
+        store?.commit(SessionMutationTypes.ERROR, "");
         return true;
     } else {
-        store.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
+        store?.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
         router.push({name: "verify-email"});
         return false;
     }

@@ -20,9 +20,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 
-import { useStore } from "vuex";
-import { useStore as store } from "@/store/typed"; 
-import { songKey } from "../store";
+import { useStore } from "@/store/typed"; 
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
@@ -38,8 +36,7 @@ import { FeedbackForm } from "@/components/feedback";
     name: "dashboard-layout",
 })
 export default class DashboardLayout extends Vue {
-    public store = store();
-    public songStore = useStore(songKey);
+    public store = useStore();
 
     async mounted() {
         document.documentElement.style.setProperty(

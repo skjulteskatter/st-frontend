@@ -4,24 +4,24 @@
     </div>
 </template>
 <script lang="ts">
+import { useStore } from "@/store/typed";
+import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
 import { Vue, Options } from "vue-class-component";
-import { useStore } from "vuex";
-import { songKey } from "@/store";
 
 @Options({
     name: "song-selector",
 })
 export default class SongSelector extends Vue {
-    private songStore = useStore(songKey);
+    private store = useStore();
 
     public async mounted() {
         if (
             this.$route.name != "collections" &&
             this.$route.params.collection
         ) {
-            await this.songStore.dispatch(
-                "selectCollection",
-                this.$route.params.collection,
+            await this.store.dispatch(
+                SongsActionTypes.SELECT_COLLECTION,
+                this.$route.params.collection as string,
             );
         }
     }

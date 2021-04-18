@@ -133,8 +133,6 @@
 import { BaseCard, BaseButton } from "@/components";
 
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
-import { songKey } from "@/store";
 import { Collection, Lyrics, Song } from "@/classes";
 
 import {
@@ -154,6 +152,7 @@ import {
     ThemeCollectionItem,
 } from "@/classes/collectionItems";
 import { useStore } from "@/store/typed";
+import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
 
 @Options({
     components: {
@@ -170,12 +169,10 @@ import { useStore } from "@/store/typed";
     name: "song-list",
 })
 export default class SongList extends Vue {
-    private userStore = useStore();
-    private songStore = vStore(songKey);
+    private store = useStore();
 
     public searchQuery = "";
     public searchString = "";
-    public store = vStore(songKey);
 
     public cId = "";
 
@@ -185,9 +182,9 @@ export default class SongList extends Vue {
 
     private async loadCollection() {
         this.cId = this.$route.params.collection as string;
-        await this.songStore.dispatch(
-            "selectCollection",
-            this.$route.params.collection,
+        await this.store.dispatch(
+            SongsActionTypes.SELECT_COLLECTION,
+            this.$route.params.collection as string,
         );
         if (!this.buttons.find((b) => b.value == this.listType)) {
             this.listType = "default";
@@ -209,11 +206,11 @@ export default class SongList extends Vue {
     }
 
     public set listType(value: string) {
-        this.store.dispatch("setList", value);
+        this.store.dispatch(SongsActionTypes.SET_LIST, value);
     }
 
     public get listType() {
-        return this.store.state.list;
+        return this.store.state.songs.list;
     }
 
     public get allLyrics(): Lyrics[] {
@@ -229,7 +226,7 @@ export default class SongList extends Vue {
         return (
             this.collection?.filteredSongs(
                 this.searchQuery,
-                this.store.state.filter
+                this.store.state.songs.filter
             ) ?? {
                 songs: [],
                 context: {},
@@ -242,11 +239,11 @@ export default class SongList extends Vue {
     }
 
     public get collection(): Collection | undefined {
-        return this.songStore.getters.collection;
+        return this.store.getters.collection;
     }
 
     public get languageKey() {
-        return this.userStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public get selected() {
@@ -266,7 +263,7 @@ export default class SongList extends Vue {
     }
 
     public get songs(): Song[] {
-        return this.songStore.getters.songs ?? [];
+        return this.store.getters.songs ?? [];
     }
 
     public get songsByNumber(): {

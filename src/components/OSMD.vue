@@ -49,7 +49,6 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
-import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
     components: {

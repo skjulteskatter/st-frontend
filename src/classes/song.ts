@@ -6,6 +6,11 @@ import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
 const converter = new Converter();
 
+export enum SheetMusicTypes {
+    PDF = "sheetmusic-pdf",
+    XML = "sheetmusic"
+}
+
 export class Song extends BaseClass implements ApiSong {
     public id: string;
     public number = 0;

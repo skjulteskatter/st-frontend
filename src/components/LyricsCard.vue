@@ -57,13 +57,12 @@
 </template>
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
-import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
 import { BaseCard, BaseButton } from "./";
 import { useStore } from "@/store/typed";
 import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -89,7 +88,6 @@ import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-typ
 })
 export default class LyricsCard extends Vue {
     public store = useStore();
-    public songStore = vStore(songKey);
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
@@ -102,7 +100,7 @@ export default class LyricsCard extends Vue {
             if (this.song?.hasLyrics && this.lyrics?.hasChords) {
                 this.transposeView();
             } else {
-                this.songStore.commit("view", "default");
+                this.store.commit(SongsMutationTypes.SET_VIEW, "default");
             }
         }
 
@@ -134,7 +132,7 @@ export default class LyricsCard extends Vue {
     // }
 
     public get selectedTransposition() {
-        const t = this.songStore.state.transposition ?? 0;
+        const t = this.store.state.songs.transposition ?? 0;
 
         const ts: number[] = [];
         for (const k of Object.keys(this.transpositions)) {
@@ -149,7 +147,7 @@ export default class LyricsCard extends Vue {
     }
 
     public set selectedTransposition(v) {
-        this.songStore.commit("transposition", v);
+        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
     }
 
     public get languageKey() {
@@ -168,7 +166,7 @@ export default class LyricsCard extends Vue {
                 this.song.number,
                 this.selectedLanguage
             );
-            this.songStore.commit("language", this.selectedLanguage);
+            this.store.commit(SongsMutationTypes.LANGUAGE, this.selectedLanguage);
             if (this.type === "transpose") {
                 (this.$refs.transposed as TransposedLyricsViewer).transpose(
                     this.selectedTransposition,
@@ -185,14 +183,14 @@ export default class LyricsCard extends Vue {
 
     public transposeToggle() {
         if (this.type === "transpose") {
-            this.songStore.commit("view", "default");
+            this.store.commit(SongsMutationTypes.SET_VIEW, "default");
         } else {
             this.transposeView();
         }
     }
 
     public get actualLyrics() {
-        return this.lyrics ?? this.songStore.getters.lyrics;
+        return this.lyrics ?? this.store.getters.lyrics;
     }
 
     public async transposeView() {
@@ -200,15 +198,15 @@ export default class LyricsCard extends Vue {
         const lyrics = await this.collection?.transposeLyrics(
             this.song?.number ?? 0,
             this.selectedTransposition,
-            this.songStore.state.language,
-            this.songStore.state.transcode,
+            this.store.state.songs.language,
+            this.store.state.songs.transcode,
         );
-        this.songStore.commit("transposedLyrics", lyrics);
-        this.songStore.commit("view", "transpose");
+        this.store.commit(SongsMutationTypes.SET_LYRICS_TRANSPOSED, lyrics);
+        this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
     }
 
     public get transposedLyrics() {
-        return this.songStore.state.transposedLyrics;
+        return this.store.state.songs.transposedLyrics;
     }
 
     public get transpositions() {
@@ -228,7 +226,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get type() {
-        return this.songStore.state.view;
+        return this.store.state.songs.view;
     }
 }
 </script>

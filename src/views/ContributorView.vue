@@ -56,14 +56,13 @@
 </template>
 
 <script lang="ts">
-import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore as vStore } from "vuex";
 import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
 import { useStore } from "@/store/typed";
+import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
 
 @Options({
     components: {
@@ -74,22 +73,21 @@ import { useStore } from "@/store/typed";
     name: "contributor-view",
 })
 export default class ContributorView extends Vue {
-    private store = vStore(songKey);
-    private sessionStore = useStore();
+    private store = useStore();
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public async mounted() {
         await this.store.dispatch(
-            "selectContributor",
-            this.$route.params.contributor,
+            SongsActionTypes.SELECT_CONTRIBUTOR,
+            this.$route.params.contributor as string,
         );
     }
 
     public get contributorItem() {
-        return this.store.state.contributorItem;
+        return this.store.state.songs.contributorItem;
     }
 
     public get contributor() {
@@ -126,7 +124,7 @@ export default class ContributorView extends Vue {
 
     public get collections(): Collection[] {
         return (
-            (this.sessionStore.getters.collections as
+            (this.store.getters.collections as
                 | Collection[]
                 | undefined)?.filter(
                 (c) =>

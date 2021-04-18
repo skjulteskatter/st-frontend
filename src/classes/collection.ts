@@ -1,5 +1,4 @@
 import api from "@/services/api";
-import { SongFilter } from "@/store/songs";
 import { ApiCollection } from "dmb-api";
 import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";

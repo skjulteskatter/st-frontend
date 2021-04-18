@@ -3,13 +3,13 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
-import { songStore } from "@/store/songs";
 import { ApiActivity, ApiSong } from "dmb-api";
 import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";
 import { Mutations } from "./mutations";
 import { State } from "./state";
+import { SongsMutationTypes } from "../songs/mutation-types";
 
 const smTs: {
     [key: string]: number;
@@ -80,8 +80,8 @@ async function init(state: State, commit: Commit): Promise<void> {
     await ensureLanguageIsFetched();
 
     commit(SessionMutationTypes.INITIALIZED);
-    songStore.commit("smTransposition", smTs[user.settings?.defaultTransposition ?? "C"]);
-    songStore.commit("transposition", ts[user.settings?.defaultTransposition ?? "C"]);
+    commit(SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION, smTs[user.settings?.defaultTransposition ?? "C"]);
+    commit(SongsMutationTypes.SET_TRANSPOSITION, ts[user.settings?.defaultTransposition ?? "C"]);
 }
 
 type AugmentedActionContext = {

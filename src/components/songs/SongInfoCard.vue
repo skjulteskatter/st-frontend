@@ -120,8 +120,7 @@
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal } from "@/components";
-import { useStore } from "vuex";
-import { songKey } from "@/store";
+import { useStore } from "@/store/typed";
 
 @Options({
     components: {
@@ -142,7 +141,7 @@ export default class SongInfoCard extends Vue {
     public languageKey = "";
     public song?: Song;
     public imageLoaded = false;
-    public store = useStore(songKey);
+    public store = useStore();
 
     public mounted() {
         if (this.song?.image) {
@@ -165,8 +164,8 @@ export default class SongInfoCard extends Vue {
     }
 
     public get collection() {
-        const id = this.store.state.collectionId;
-        const collection = this.store.state.collections.find(
+        const id = this.store.state.songs.collectionId;
+        const collection = this.store.state.songs.collections.find(
             (c) => c.key == id,
         );
         return collection?.getName(this.languageKey);

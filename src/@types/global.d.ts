@@ -23,3 +23,31 @@ interface Country {
     name: string;
     countryCode: string;
 }
+
+type SheetMusicOptions = {
+    show: boolean;
+    url?: string;
+    originalKey?: string;
+    transposition?: number;
+    zoom?: number;
+    type?: string;
+}
+
+type AudioTrack = {
+    file: MediaFile;
+    song?: Song;
+    collection?: Collection;
+}
+
+type SongFilter = {
+    themes: string[];
+    origins: string[];
+    videoFiles: string[];
+    audioFiles: string[];
+    contentTypes: string[];
+    sheetMusicTypes: string[];
+    hasLyrics: boolean;
+    hasAudioFiles: boolean;
+    hasVideoFiles: boolean;
+    hasSheetMusic: boolean;
+}

@@ -33,13 +33,11 @@
 import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
 import { BaseButton } from "@/components";
-import { useStore as vStore } from "vuex";
-import { songKey } from "@/store";
 import { osmd } from "@/services/osmd";
-import { SheetMusicOptions, SheetMusicTypes } from "@/store/songs";
 import { ApiSong } from "dmb-api";
-import { Song } from "@/classes";
+import { SheetMusicTypes, Song } from "@/classes";
 import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -50,8 +48,8 @@ import { useStore } from "@/store/typed";
     name: "sheet-music",
 })
 export default class SheetMusic extends Vue {
+    public store = useStore();
     public searchParams = new URLSearchParams(window.location.search);
-    public songStore = vStore(songKey);
     public osmd = osmd;
     public pdfType = SheetMusicTypes.PDF;
     public song?: Song;
@@ -61,8 +59,8 @@ export default class SheetMusic extends Vue {
 
         if (o && !this.$route.params.id) {
             const options = JSON.parse(o) as SheetMusicOptions;
-            if (!this.songStore.state.sheetMusic.url) {
-                this.songStore.commit("sheetMusic", options);
+            if (!this.store.state.songs.sheetMusic.url) {
+                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
             }
         }
     }
@@ -91,11 +89,11 @@ export default class SheetMusic extends Vue {
     }
 
     public get url() {
-        return this.songStore.state.sheetMusic.url ?? `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
+        return this.store.state.songs.sheetMusic.url ?? `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
     }
 
     public get originalKey() {
-        return this.songStore.state.sheetMusic.originalKey ?? this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+        return this.store.state.songs.sheetMusic.originalKey ?? this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
     }
 
     public get routeName() {
@@ -107,7 +105,7 @@ export default class SheetMusic extends Vue {
     }
 
     public get transposition() {
-        return this.songStore.state.sheetMusic.transposition ?? (this.transposeKey ? parseInt(this.transposeKey) : undefined);
+        return this.store.state.songs.sheetMusic.transposition ?? (this.transposeKey ? parseInt(this.transposeKey) : undefined);
     }
 
     public get embed() {
@@ -127,11 +125,11 @@ export default class SheetMusic extends Vue {
     }
 
     public get showSheetMusic() {
-        return this.songStore.state.sheetMusic.show;
+        return this.store.state.songs.sheetMusic.show;
     }
 
     public get type() {
-        return this.songStore.state.sheetMusic.type ?? this.searchParams.get("type");
+        return this.store.state.songs.sheetMusic.type ?? this.searchParams.get("type");
     }
 
     public get options(): SheetMusicOptions {

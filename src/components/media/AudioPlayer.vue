@@ -48,9 +48,8 @@ import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import Plyr from "plyr";
-import { songKey } from "@/store";
-import { useStore as vStore } from "vuex";
 import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 
 @Options({
     name: "audio-player",
@@ -61,7 +60,7 @@ import { useStore } from "@/store/typed";
     },
 })
 export default class AudioPlayer extends Vue {
-    public store = vStore(songKey);
+    public store = useStore();
     public player: Plyr = {} as Plyr;
 
     public updated() {
@@ -75,20 +74,20 @@ export default class AudioPlayer extends Vue {
     }
 
     public get audio() {
-        return this.store.state.audio?.file;
+        return this.store.state.songs.audio?.file;
     }
 
     public get song() {
-        return this.store.state.audio?.song;
+        return this.store.state.songs.audio?.song;
     }
 
     public get languageKey() {
-        return useStore().getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public closePlayer() {
         // this.player.stop();
-        this.store.commit("audio", {});
+        this.store.commit(SongsMutationTypes.SET_AUDIO, undefined);
     }
 }
 </script>

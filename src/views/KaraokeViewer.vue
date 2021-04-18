@@ -5,35 +5,35 @@
 </template>
 
 <script lang="ts">
-import { songKey } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "vuex";
 import themes from "@/classes/themes";
+import { useStore } from "@/store/typed";
+import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
 
 @Options({
     name: "karaoke-viewer",
 })
 export default class LyricsViewer extends Vue {
-    public store = useStore(songKey);
+    public store = useStore();
 
     public mounted() {
         themes.load();
         const lines = localStorage.getItem("lyrics_lines");
         if (lines) {
-            this.store.commit("lines", JSON.parse(lines));
+            this.store.commit(SongsMutationTypes.SET_LINES, JSON.parse(lines));
         }
         window.addEventListener("storage", event => {
             if (event.key == "lyrics_lines") {
                 const item = localStorage.getItem("lyrics_lines");
                 if (item) {
-                    this.store.commit("lines", JSON.parse(item));
+                    this.store.commit(SongsMutationTypes.SET_LINES, JSON.parse(item));
                 }
             }
         });
     }
 
     public get lines() {
-        return this.store.state.lines;
+        return this.store.state.songs.lines;
     }
 }
 </script>
