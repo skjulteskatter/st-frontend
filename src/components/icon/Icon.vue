@@ -57,8 +57,7 @@ export default class Icon extends Vue {
 
 <style lang="scss" >
 .icon {
-    // width: 20px;
-    // height: 20px;
     display: inline;
+    flex: none;
 }
 </style>
