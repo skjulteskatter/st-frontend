@@ -156,7 +156,7 @@ export default class StoreCard extends Vue {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin-top: 0;
+        margin: 0 0 var(--st-spacing) 0;
     }
 
     &__subtitle {
