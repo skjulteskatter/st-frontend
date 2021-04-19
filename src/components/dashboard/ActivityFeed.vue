@@ -48,7 +48,7 @@ export default class ActivityFeed extends Vue {
         const rtfl = new Intl.RelativeTimeFormat(this.languageKey, {
             localeMatcher: "best fit",
             numeric: "auto",
-            style: "short",
+            style: "long",
         });
 
         const now = new Date().getTime();
