@@ -14,15 +14,23 @@
         <base-card class="users__table">
             <table>
                 <thead>
-                    <th></th>
                     <th>{{ $t("common.name") }}</th>
                     <th>Email</th>
                     <th>{{ $t("common.role") }}</th>
                     <th>Last Login</th>
                     <th>Id</th>
+                    <th></th>
                 </thead>
                 <tbody>
                     <tr v-for="u in users" :key="u.id">
+                        <td class="user-name">
+                            <img :src="u.image" class="user-image" />
+                            {{ u.displayName }}
+                        </td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
+                        <td>{{ u.lastLogin }}</td>
+                        <td>{{ u.id }}</td>
                         <td>
                             <modal
                                 :label="$t('common.edit')"
@@ -66,11 +74,6 @@
                                 >
                             </modal>
                         </td>
-                        <td>{{ u.displayName }}</td>
-                        <td>{{ u.email }}</td>
-                        <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
-                        <td>{{ u.lastLogin }}</td>
-                        <td>{{ u.id }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -192,6 +195,20 @@ export default class UsersList extends Vue {
     table {
         width: 100%;
         border-collapse: collapse;
+
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--st-spacing) / 2);
+        }
+
+        .user-image {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 30rem;
+            object-fit: cover;
+            background-color: var(--st-color-background-dark);
+        }
 
         th {
             padding: 0.3em;
