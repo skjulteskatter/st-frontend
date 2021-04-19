@@ -4,26 +4,30 @@
             class="store-card__image"
             :src="image"
             :alt="product.getName(languageKey)"
-            @click="product ? gotoCollection(product) : undefined"
         />
         <div class="store-card__footer">
             <h4 class="store-card__title">
                 {{ product.getName(languageKey) }}
             </h4>
-            <!-- <p class="store-card__price">
-                {{ formatPrices(product.prices, "year") }}
-            </p> -->
-            <base-button
-                class="store-card__button"
-                icon="info"
-                theme="primary"
-                @click="action"
-            >
-                <span>{{ $t("store.seemore") }}</span>
-            </base-button>
-            <!-- <span class="store-card__subtitle" v-else>
-                {{ $t("store.alreadyown") }}
-            </span> -->
+            <div class="store-card__buttons">
+                <router-link :to="collectionLink">
+                    <base-button
+                        theme="secondary"
+                        class="store-card__button"
+                        icon="arrowRight"
+                    >
+                        {{ $t("common.open") }}
+                    </base-button>
+                </router-link>
+                <base-button
+                    class="store-card__button"
+                    icon="info"
+                    theme="tertiary"
+                    @click="action"
+                >
+                    {{ $t("store.seemore") }}
+                </base-button>
+            </div>
         </div>
     </div>
 </template>
@@ -58,15 +62,15 @@ export default class StoreCard extends Vue {
     public action = () => undefined;
     public store = useStore();
 
-    public gotoCollection(product: Product) {
-        const collectionKey = product?.collections[0].key ?? "";
+    public get collectionLink() {
+        const collectionKey = this.product?.collections[0].key ?? "";
 
-        this.$router.push({
+        return {
             name: "song-list",
             params: {
                 collection: collectionKey,
             },
-        });
+        };
     }
 
     public formatPrices(prices: Price[], type: string) {
@@ -108,6 +112,15 @@ export default class StoreCard extends Vue {
         }
     }
 
+    &__buttons {
+        display: flex;
+        gap: calc(var(--st-spacing) / 2);
+
+        @include breakpoint("medium") {
+            flex-direction: column;
+        }
+    }
+
     &__button {
         flex-shrink: 0;
     }
@@ -116,11 +129,11 @@ export default class StoreCard extends Vue {
         width: 100%;
         object-fit: cover;
         transition: transform 150ms;
-        cursor: pointer;
+        // cursor: pointer;
 
-        &:hover {
-            transform: scale(1.05);
-        }
+        // &:hover {
+        //     transform: scale(1.05);
+        // }
     }
 
     &__footer {
@@ -128,12 +141,9 @@ export default class StoreCard extends Vue {
         padding: var(--st-spacing);
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
         background: var(--st-color-background-light);
         flex-grow: 1;
-
-        @include breakpoint("medium") {
-            flex-direction: column;
-        }
     }
 
     &__price {
@@ -145,7 +155,7 @@ export default class StoreCard extends Vue {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin: 0;
+        margin-top: 0;
     }
 
     &__subtitle {

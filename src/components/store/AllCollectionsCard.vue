@@ -15,10 +15,10 @@
             <base-button
                 class="all-collections-card__button"
                 icon="info"
-                theme="primary"
+                theme="tertiary"
                 @click="action"
             >
-                <span>{{ $t("store.seemore") }}</span>
+                {{ $t("store.seemore") }}
             </base-button>
         </div>
     </div>
@@ -107,6 +107,7 @@ export default class AllCollectionsCard extends Vue {
     &__footer {
         width: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         padding: var(--st-spacing);
         background: var(--st-color-background-light);
@@ -122,7 +123,7 @@ export default class AllCollectionsCard extends Vue {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
-        margin: 0;
+        margin-top: 0;
     }
 
     &__subtitle {
