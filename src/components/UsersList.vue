@@ -29,7 +29,9 @@
                         </td>
                         <td>{{ u.email }}</td>
                         <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
-                        <td>{{ u.lastLogin }}</td>
+                        <td>
+                            {{ new Date(u.lastLogin).toLocaleString() }}
+                        </td>
                         <td>{{ u.id }}</td>
                         <td>
                             <modal
