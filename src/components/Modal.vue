@@ -19,12 +19,12 @@
                     @mouseleave="mouseOverCard = false"
                 >
                     <slot></slot>
-                    <base-button
+                    <!-- <base-button
                         @click="closeModal"
                         class="modal__popup__card__close-button"
                         theme="tertiary"
                         >{{ $t("common.close") }}</base-button
-                    >
+                    > -->
                 </base-card>
             </div>
         </div>
