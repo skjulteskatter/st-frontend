@@ -1,8 +1,8 @@
 <template>
     <base-card class="activity-feed">
-        <strong class="activity-feed__title">
+        <h3 class="activity-feed__title">
             {{ $t("common.activity") }}
-        </strong>
+        </h3>
         <div class="activity-feed__activities" v-if="activities.length">
             <small
                 class="activity-feed__activity"
@@ -24,9 +24,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Song } from "@/classes";
+import { useStore } from "@/store/typed";
 
 import { BaseCard } from "@/components";
-import { useStore } from "@/store/typed";
 
 @Options({
     name: "activity-feed",
@@ -41,17 +41,30 @@ export default class ActivityFeed extends Vue {
         const rtfl = new Intl.RelativeTimeFormat(this.languageKey, {
             localeMatcher: "best fit",
             numeric: "auto",
-            style: "long",
+            style: "short",
         });
+
         const now = new Date().getTime();
         const then = new Date(date).getTime();
-        const milliseconds = Math.floor(then - now);
-        const seconds = Math.floor(milliseconds / 1000);
-        const minutes = Math.floor(seconds / 60);
 
-        const result = rtfl.format(minutes, "minutes");
+        const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
+            { unit: "year", amount: 31536000000 },
+            { unit: "month", amount: 2628000000 },
+            { unit: "day", amount: 86400000 },
+            { unit: "hour", amount: 3600000 },
+            { unit: "minute", amount: 60000 },
+            { unit: "second", amount: 1000 },
+        ];
 
-        return result;
+        const relatime = (elapsed: number) => {
+            for (const { unit, amount } of units) {
+                if (Math.abs(elapsed) > amount || unit === "second") {
+                    return rtfl.format(Math.round(elapsed / amount), unit);
+                }
+            }
+        };
+
+        return relatime(then - now);
     }
 
     public get languageKey() {
@@ -82,7 +95,7 @@ export default class ActivityFeed extends Vue {
 
     &__title {
         display: block;
-        margin-bottom: calc(var(--st-spacing) / 2);
+        margin-top: 0;
     }
 
     &__activities {
@@ -115,7 +128,6 @@ export default class ActivityFeed extends Vue {
         display: block;
         padding: 0.5em;
         border-radius: var(--st-border-radius);
-        // border: 1px solid var(--st-color-border);
         background-color: var(--st-color-background-light);
 
         display: flex;
