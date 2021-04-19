@@ -1,8 +1,11 @@
 <template>
     <transition name="note">
         <div class="notification" :class="`${typeClass}`" v-if="show">
-            <!-- <icon v-if="icon" :name="icon" size="18" /> -->
-            <small>{{ title }}</small>
+            <icon v-if="icon" :name="icon" size="18" />
+            <small>
+                <strong style="display: block">{{ title }} </strong>
+                <span v-if="body">{{ body }}</span>
+            </small>
             <Icon
                 name="error"
                 class="notification__close"
@@ -28,7 +31,9 @@ import { Icon } from "@/components/icon";
         },
         title: {
             type: String,
-            required: true,
+        },
+        body: {
+            type: String,
         },
         icon: {
             type: String,
@@ -39,6 +44,7 @@ export default class Notification extends Vue {
     public type?: string;
     public icon?: string;
     public title?: string;
+    public body?: string;
 
     public show = true;
 
@@ -61,13 +67,13 @@ export default class Notification extends Vue {
     border-left: 5px solid var(--st-color-primary);
     box-shadow: 0px 10px 20px rgba(black, 0.2);
     color: var(--st-color-text);
+    max-width: 25rem;
 
     animation: slideInFromBottom 0.2s;
     position: relative;
 
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: var(--st-spacing);
 
     &--success {
