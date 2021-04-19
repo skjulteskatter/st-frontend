@@ -84,7 +84,8 @@ export const songs = {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
     },
     async getAllLyrics(collection: string, language: string, format: string, transpose: number) {
-        return (await http.get<ApiLyrics[]>(`api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`)).map(l => new Lyrics(l));
+        const uri = `api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}`;
+        return (await http.get<ApiLyrics[]>(uri)).map(l => new Lyrics(l));
     },
     async getContributor(id: string) {
         return new ContributorCollectionItem((await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`)));

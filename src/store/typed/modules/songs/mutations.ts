@@ -8,10 +8,10 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTIONS](state: S, payload: Collection[]): void;
     [SongsMutationTypes.LANGUAGE](state: S, payload: string): void;
     [SongsMutationTypes.TRANSCODE](state: S, payload: string): void;
-    [SongsMutationTypes.CONTRIBUTOR](state: S, payload: ContributorCollectionItem): void;
+    [SongsMutationTypes.CONTRIBUTOR](state: S, payload: ContributorCollectionItem | undefined): void;
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
-    [SongsMutationTypes.SET_SONG_NUMBER](state: S, payload: number): void;
+    [SongsMutationTypes.SET_SONG_NUMBER](state: S, payload: number | undefined): void;
 
     [SongsMutationTypes.SET_LYRICS](state: S, payload: Lyrics): void;
     [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state: S, payload: Lyrics): void;

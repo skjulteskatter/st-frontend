@@ -1,10 +1,11 @@
 <template>
-    <div v-if="contributor" class="contributor">
+    <div v-if="loading" class="loader"></div>
+    <div v-else-if="contributor" class="contributor">
         <back-button />
         <div class="contributor__biography">
             <img
-                :src="contributor.image || '/img/portrait-placeholder.png'"
-                v-if="contributor.image"
+                :src="'/img/portrait-placeholder.png'"
+                id="contributor-biography-image"
                 class="contributor__biography__header__portrait"
             />
             <div class="contributor__biography__header">
@@ -74,16 +75,31 @@ import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
 })
 export default class ContributorView extends Vue {
     private store = useStore();
+    public loading = false;
 
     public get languageKey() {
         return this.store.getters.languageKey;
     }
 
     public async mounted() {
+        this.loading = true;
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
             this.$route.params.contributor as string,
         );
+        if (this.contributor?.image) {
+            const image = new Image();
+            image.src = this.contributor.image;
+
+            image.onload = () => {
+                const el = document.getElementById("contributor-biography-image") as HTMLImageElement;
+
+                el.src = image.src;
+            };
+        }
+        
+
+        this.loading = false;
     }
 
     public get contributorItem() {

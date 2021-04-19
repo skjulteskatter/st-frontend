@@ -76,7 +76,7 @@ declare module "dmb-api" {
         birthYear: number;
         subtitle: string;
         country: string;
-        image: string;
+        image?: string;
         biography: {
             [languageKey: string]: string;
         };

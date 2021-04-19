@@ -65,6 +65,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
         // if (!collection) {
         //     return;
         // }
+        commit(SongsMutationTypes.CONTRIBUTOR, undefined);
+
         const contributor = await songs.getContributor(contributorId);
         if (contributor) {
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);

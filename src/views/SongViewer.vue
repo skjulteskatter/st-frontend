@@ -59,7 +59,7 @@
                 :languageKey="languageKey"
             ></song-info-card>
             <lyrics-card
-                v-if="lyrics"
+                v-if="lyrics && !lyricsLoading"
                 :song="song"
                 :lyrics="lyrics"
                 :collection="collection"
@@ -140,6 +140,7 @@ export default class SongViewer extends Vue {
     public selectedLanguage = this.languageKey;
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
+    public lyricsLoading = true;
 
     // public unmounted() {
     //     this.songStore.commit("sheetMusic", {show: false});
@@ -172,6 +173,7 @@ export default class SongViewer extends Vue {
             }
         };
         setTimeout(log, 5000);
+        this.lyricsLoading = false;
     }
 
     public sheetMusic() {

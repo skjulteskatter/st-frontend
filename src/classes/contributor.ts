@@ -11,7 +11,7 @@ export class Contributor implements ApiContributor {
     public id = "";
     public name = "";
     public subtitle = "";
-    public image = "";
+    public image? = "";
 
     constructor(contributor: ApiContributor) {
         this.biography = contributor.biography;
