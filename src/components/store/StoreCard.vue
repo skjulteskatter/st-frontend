@@ -15,6 +15,7 @@
                         theme="secondary"
                         class="store-card__button"
                         icon="arrowRight"
+                        disabled
                     >
                         {{ $t("common.open") }}
                     </base-button>
