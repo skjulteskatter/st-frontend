@@ -6,6 +6,7 @@
             :title="notification.title"
             :icon="notification.icon"
             :type="notification.type"
+            :body="notification.content"
         />
     </div>
 </template>
