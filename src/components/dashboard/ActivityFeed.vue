@@ -4,16 +4,23 @@
             {{ $t("common.activity") }}
         </h3>
         <div class="activity-feed__activities" v-if="activities.length">
-            <small
+            <router-link
                 class="activity-feed__activity"
                 v-for="(activity, i) in activities"
                 :key="activity.id ?? i"
+                :to="{
+                    name: 'song',
+                    params: {
+                        collection: activity.song?.collection?.key,
+                        number: activity.song?.number,
+                    },
+                }"
             >
                 {{ activity.song?.getName(languageKey) }}
                 <span class="activity-feed__activity__timestamp">
                     {{ timeSince(activity.loggedDate) }}
                 </span>
-            </small>
+            </router-link>
         </div>
         <p class="activity-feed__fallback" v-else>
             {{ $t("dashboard.noactivity") }}
@@ -106,21 +113,6 @@ export default class ActivityFeed extends Vue {
         max-height: 20rem;
         overflow-y: hidden;
         position: relative;
-
-        &:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-
-            background-image: linear-gradient(
-                to bottom,
-                transparent 90%,
-                var(--st-color-background-medium)
-            );
-        }
     }
 
     &__activity {
@@ -129,6 +121,9 @@ export default class ActivityFeed extends Vue {
         padding: 0.5em;
         border-radius: var(--st-border-radius);
         background-color: var(--st-color-background-light);
+        text-decoration: none;
+        color: currentColor;
+        font-size: 0.8em;
 
         display: flex;
         justify-content: space-between;
