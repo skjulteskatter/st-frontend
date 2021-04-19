@@ -39,9 +39,19 @@
                                 v-if="u.id != getCurrentUser.id"
                             >
                                 <div class="loading" v-if="loading"></div>
-                                <h4 style="margin-top: 0">
-                                    {{ u.displayName }}
-                                </h4>
+                                <div class="edit-user__user">
+                                    <img
+                                        :src="u.image"
+                                        v-if="u.image"
+                                        class="edit-user__user-image"
+                                    />
+                                    <span class="edit-user__user-name">
+                                        <h3>
+                                            {{ u.displayName }}
+                                        </h3>
+                                        <small>{{ u.email }}</small>
+                                    </span>
+                                </div>
                                 <div class="edit-user__form">
                                     <div class="edit-user__form__field">
                                         <label
@@ -162,6 +172,29 @@ export default class UsersList extends Vue {
 }
 
 .edit-user {
+    &__user {
+        display: flex;
+        align-items: center;
+        gap: var(--st-spacing);
+        margin-bottom: var(--st-spacing);
+
+        &-image {
+            border-radius: 30rem;
+            height: 3rem;
+            width: 3rem;
+            object-fit: cover;
+        }
+
+        &-name {
+            display: flex;
+            flex-direction: column;
+
+            h3 {
+                margin: 0;
+            }
+        }
+    }
+
     &__save {
         margin-right: calc(var(--st-spacing) / 2);
     }
@@ -171,6 +204,7 @@ export default class UsersList extends Vue {
         grid-template-columns: repeat(2, 1fr);
         grid-gap: var(--st-spacing);
         min-width: 300px;
+        margin-bottom: var(--st-spacing);
 
         &__field {
             width: 100%;
