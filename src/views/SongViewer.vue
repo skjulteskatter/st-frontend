@@ -55,6 +55,7 @@
                     <base-button
                         v-if="extended"
                         @click="extend"
+                        icon="settings"
                         class="song-viewer__sidebar__buttons--advanced"
                     >
                         {{ $t("song.advanced") }}
@@ -311,6 +312,9 @@ export default class SongViewer extends Vue {
 
     &__metadata {
         display: flex;
+        flex-direction: row;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-rows: auto auto;
         gap: var(--st-spacing);
     }
 

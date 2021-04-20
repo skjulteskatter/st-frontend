@@ -1,102 +1,100 @@
 <template>
-    <base-card style="margin-bottom: var(--st-spacing)">
-        <div class="user-settings" v-if="user">
-            <div class="user-settings__fields gap-y">
-                <h3 class="user-settings__title">
-                    {{ $t("settings.general") }}
-                </h3>
-                <div class="user-settings__theme field gap-x">
-                    <label for="theme-mode">{{ $t("common.theme") }}</label>
-                    <hr />
-                    <select name="theme-mode" id="theme-mode" v-model="theme">
-                        <option :value="t" v-for="t in themes.keys" :key="t">
-                            {{ t }}
-                        </option>
-                    </select>
-                </div>
-                <div class="user-settings__language field gap-x">
-                    <label for="language">{{ $t("common.language") }}</label>
-                    <hr />
-                    <select
-                        id="language"
-                        name="language"
-                        v-model="selectedLanguage"
-                        @change="setLanguage"
-                    >
-                        <option
-                            v-for="lang in languages"
-                            :value="lang"
-                            :key="lang.key"
-                        >
-                            {{ lang.name }}
-                        </option>
-                    </select>
-                </div>
-                <div class="user-settings__key field gap-x">
-                    <label for="transposition-key">{{ $t("song.key") }}</label>
-                    <hr />
-                    <select
-                        id="transposition-key"
-                        name="transposition-key"
-                        v-model="selectedKey"
-                        @change="setKey"
-                    >
-                        <option v-for="k in transpositions" :value="k" :key="k">
-                            {{ k }}
-                        </option>
-                    </select>
-                </div>
-                <!-- <div class="user-settings__key field gap-x">
-                    <label for="transcode">{{ $t("song.transcode") }}</label>
-                    <hr />
-                    <select
-                        id="transcode"
-                        name="transcode"
-                        v-model="selectedTranscode"
-                        @change="setTranscode"
-                    >
-                        <option v-for="k in transcodes" :value="k" :key="k">
-                            {{ k }}
-                        </option>
-                    </select>
-                </div> -->
+    <base-card class="user-settings" v-if="user" style="margin-bottom: var(--st-spacing)">
+        <div class="user-settings__fields gap-y">
+            <h3 class="user-settings__title">
+                {{ $t("settings.general") }}
+            </h3>
+            <div class="user-settings__theme field gap-x">
+                <label for="theme-mode">{{ $t("common.theme") }}</label>
+                <hr />
+                <select name="theme-mode" id="theme-mode" v-model="theme" @change="themes.setTheme(theme)">
+                    <option :value="t" v-for="t in themes.keys" :key="t">
+                        {{ t }}
+                    </option>
+                </select>
             </div>
-            <div class="user-settings__fields gap-y">
-                <h3 class="user-settings__title">
-                    {{ $t("common.user") }}
-                </h3>
-                <div class="user-settings__name field gap-x">
-                    <label for="display-name">{{ $t("common.name") }}</label>
-                    <hr />
-                    <input
-                        id="display-name"
-                        type="text"
-                        v-model="newDisplayName"
-                        :placeholder="user.displayName"
-                    />
-                </div>
-                <div class="user-settings__image field gap-x">
-                    <label for="image">{{ $t("common.image") }}</label>
-                    <hr />
-                    <input
-                        id="image"
-                        type="file"
-                        accept="image/*"
-                        @change="handleImage"
-                    />
-                </div>
+            <div class="user-settings__language field gap-x">
+                <label for="language">{{ $t("common.language") }}</label>
+                <hr />
+                <select
+                    id="language"
+                    name="language"
+                    v-model="selectedLanguage"
+                    @change="setLanguage"
+                >
+                    <option
+                        v-for="lang in languages"
+                        :value="lang"
+                        :key="lang.key"
+                    >
+                        {{ lang.name }}
+                    </option>
+                </select>
             </div>
-            <base-button
-                :loading="loading"
-                @click="save"
-                icon="check"
-                class="user-settings__save-button"
-            >
-                <span>
-                    <span>{{ $t("common.save") }}</span>
-                </span>
-            </base-button>
+            <div class="user-settings__key field gap-x">
+                <label for="transposition-key">{{ $t("song.key") }}</label>
+                <hr />
+                <select
+                    id="transposition-key"
+                    name="transposition-key"
+                    v-model="selectedKey"
+                    @change="setKey"
+                >
+                    <option v-for="k in transpositions" :value="k" :key="k">
+                        {{ k }}
+                    </option>
+                </select>
+            </div>
+            <!-- <div class="user-settings__key field gap-x">
+                <label for="transcode">{{ $t("song.transcode") }}</label>
+                <hr />
+                <select
+                    id="transcode"
+                    name="transcode"
+                    v-model="selectedTranscode"
+                    @change="setTranscode"
+                >
+                    <option v-for="k in transcodes" :value="k" :key="k">
+                        {{ k }}
+                    </option>
+                </select>
+            </div> -->
         </div>
+        <div class="user-settings__fields gap-y">
+            <h3 class="user-settings__title">
+                {{ $t("common.user") }}
+            </h3>
+            <div class="user-settings__name field gap-x">
+                <label for="display-name">{{ $t("common.name") }}</label>
+                <hr />
+                <input
+                    id="display-name"
+                    type="text"
+                    v-model="newDisplayName"
+                    :placeholder="user.displayName"
+                />
+            </div>
+            <div class="user-settings__image field gap-x">
+                <label for="image">{{ $t("common.image") }}</label>
+                <hr />
+                <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    @change="handleImage"
+                />
+            </div>
+        </div>
+        <base-button
+            :loading="loading"
+            @click="save"
+            icon="check"
+            class="user-settings__save-button"
+        >
+            <span>
+                <span>{{ $t("common.save") }}</span>
+            </span>
+        </base-button>
     </base-card>
 </template>
 
@@ -265,6 +263,7 @@ export default class SettingsCard extends Vue {
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
+    max-width: 1200px;
 
     &__fields {
         .field {

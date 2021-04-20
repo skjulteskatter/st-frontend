@@ -2,9 +2,7 @@
     <base-card
         class="song-details__files"
         v-if="song && (song.audioFiles.length || song.videoFiles.length)"
-        border
         header
-        toggleable
     >
         <template #header>
             <div class="song-details__files__header">
@@ -13,7 +11,7 @@
                 </h2>
             </div>
         </template>
-        <div class="files__container">
+        <div class="song-details__files__container">
             <div
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"
@@ -74,8 +72,6 @@ export default class SongFilesCard extends Vue {
 <style lang="scss">
 .song-details {
     &__files {
-        flex-shrink: 0;
-
         &__label {
             opacity: 0.7;
             margin: 0 0 0.3em 0;

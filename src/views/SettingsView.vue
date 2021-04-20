@@ -67,7 +67,7 @@ export default class SettingsView extends Vue {
 
 .settings-page {
     padding: calc(var(--st-spacing) * 2);
-
+    
     @include breakpoint("medium") {
         padding: var(--st-spacing);
     }

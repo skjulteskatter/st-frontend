@@ -5,6 +5,7 @@
         header
         toggleable
         v-cloak
+        :disableContent="!description"
     >
         <template #header>
             <p class="song-details__metadata__collection">{{ collection }}</p>
@@ -184,12 +185,7 @@ export default class SongInfoCard extends Vue {
     }
 
     public get description() {
-        return (
-            this.song?.description[this.languageKey] ??
-            this.song?.description.en ??
-            this.song?.description.no ??
-            undefined
-        );
+        return this.song?.getTranslatedProperty(this.song.description, this.languageKey);
     }
 
     public get melodyOrigin() {
