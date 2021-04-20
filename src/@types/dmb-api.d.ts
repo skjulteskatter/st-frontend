@@ -101,14 +101,6 @@ declare module "dmb-api" {
         songIds: string[];
         songs: ApiSong[];
     }
-    
-    interface ApiProduct {
-        id: string;
-        name: LocaleString;
-        collections: ApiCollection[];
-        prices: Price[];
-        priority: number;
-    }
 
     interface ApiParticipant {
         contributorId: string;

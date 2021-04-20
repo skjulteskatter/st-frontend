@@ -61,11 +61,13 @@ export default class AllCollectionsCard extends Vue {
     }
 
     public get images(): string[] {
-        return (
-            this.product?.collections.map(
-                (collection) => collection.image + "?w=300&q=50"
-            ) ?? []
-        );
+        return this.collections.map(
+            (collection) => collection.image + "?w=300&q=50",
+        ) ?? [];
+    }
+
+    public get collections() {
+        return this.store.getters.collections.filter(c => this.product?.collectionIds.includes(c.id));
     }
 
     public get languageKey() {

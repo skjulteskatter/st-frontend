@@ -1,4 +1,4 @@
-import { Product } from "@/classes";
+import { Collection, Product } from "@/classes";
 import stripeService from "@/services/stripe";
 import { ActionContext, ActionTree } from "vuex";
 import { RootState } from "../..";
@@ -16,7 +16,7 @@ type AugmentedActionContext = {
 
 export interface Actions {
     [StripeActionTypes.GET_PORTAL](): Promise<string>;
-    [StripeActionTypes.SETUP]({ commit }: AugmentedActionContext): Promise<void>;
+    [StripeActionTypes.SETUP]({ commit }: AugmentedActionContext, payload: Collection[]): Promise<void>;
     [StripeActionTypes.START_SESSION]({ state }: AugmentedActionContext, payload: string): Promise<void>;
     [StripeActionTypes.REFRESH_COLLECTIONS](): Promise<void>;
 }
@@ -25,12 +25,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
     async [StripeActionTypes.GET_PORTAL]() {
         return await stripeService.portal();
     },
-    async [StripeActionTypes.SETUP]({ commit }) {
+    async [StripeActionTypes.SETUP]({ commit }, collections: Collection[]) {
         const result = await stripeService.setup();
         await stripeService.init(result.key);
         
         commit(StripeMutationTypes.SET_KEY, result.key);
-        commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p)));
+        commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p, collections)));
     },
     // eslint-disable-next-line no-empty-pattern
     async [StripeActionTypes.START_SESSION]({ }, productId: string) {

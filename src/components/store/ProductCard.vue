@@ -55,7 +55,7 @@ export default class StoreCard extends Vue {
     public store = useStore();
 
     public goToCollection() {
-        const collectionKey = this.product?.collections[0].key ?? "";
+        const collectionKey = this.collection?.key ?? "";
 
         this.$router.push({
             name: "song-list",
@@ -77,13 +77,17 @@ export default class StoreCard extends Vue {
     }
 
     public get image() {
-        return this.product?.collections[0].image
-            ? `${this.product?.collections[0].image}?w=300&q=50`
+        return this.collection?.image
+            ? `${this.collection?.image}?w=300&q=50`
             : "/img/placeholder.png";
     }
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get collection() {
+        return this.store.getters.collections.find(c => c.id == this.product?.collectionIds[0]);
     }
 }
 </script>

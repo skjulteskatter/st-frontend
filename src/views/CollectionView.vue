@@ -34,7 +34,7 @@ export default class Store extends Vue {
     public async mounted() {
         if (!this.store.getters.stripeInitialized) {
             this.loading = true;
-            await this.store.dispatch(StripeActionTypes.SETUP);
+            await this.store.dispatch(StripeActionTypes.SETUP, this.store.getters.collections);
             this.loading = false;
         }
     }

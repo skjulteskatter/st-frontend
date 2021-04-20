@@ -21,6 +21,15 @@ declare module "checkout" {
 
     interface SetupResponse {
         key: string;
-        products: ProductInterface[];
+        products: ApiProduct[];
+    }
+    
+    interface ApiProduct {
+        id: string;
+        name: LocaleString;
+        collectionIds: string[];
+        collections?: ApiCollection[];
+        prices: Price[];
+        priority: number;
     }
 }
