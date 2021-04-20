@@ -48,16 +48,32 @@
                         </option>
                     </select>
                     <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
-                    <base-button @click="sidebar = !sidebar" icon="documents">
+                    <!-- <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
+                    </base-button> -->
+                    <base-button
+                        v-if="extended"
+                        @click="extend"
+                        class="song-viewer__sidebar__buttons--advanced"
+                    >
+                        {{ $t("song.advanced") }}
                     </base-button>
                 </div>
             </div>
-            <song-info-card
-                :song="song"
-                :languageKey="languageKey"
-            ></song-info-card>
+            <div class="song-viewer__metadata">
+                <song-info-card
+                    :song="song"
+                    :languageKey="languageKey"
+                ></song-info-card>
+                <song-files-card :song="song"></song-files-card>
+                <lyrics-settings
+                    v-if="isExtended"
+                    :languageKey="languageKey"
+                    :lyrics="lyrics"
+                    :song="song"
+                ></lyrics-settings>
+            </div>
             <lyrics-card
                 v-if="lyrics && !lyricsLoading"
                 :song="song"
@@ -77,15 +93,8 @@
             <div class="loader" v-if="loadingLyrics"></div>
         </div>
 
-        <aside class="song-viewer__sidebar" v-if="sidebar">
+        <!-- <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
-                <base-button
-                    v-if="extended"
-                    @click="extend"
-                    class="song-viewer__sidebar__buttons--advanced"
-                >
-                    {{ $t("song.advanced") }}
-                </base-button>
             </div>
             <div class="song-viewer__sidebar__content">
                 <song-files-card :song="song"></song-files-card>
@@ -96,7 +105,7 @@
                     :song="song"
                 ></lyrics-settings>
             </div>
-        </aside>
+        </aside> -->
     </div>
 </template>
 <script lang="ts">
@@ -298,6 +307,11 @@ export default class SongViewer extends Vue {
             align-items: center;
             gap: var(--st-spacing);
         }
+    }
+
+    &__metadata {
+        display: flex;
+        gap: var(--st-spacing);
     }
 
     &__content {
