@@ -68,9 +68,5 @@ export default class RecentCollections extends Vue {
         display: flex;
         gap: var(--st-spacing);
     }
-
-    // &__collection {
-    //     display: flex;
-    // }
 }
 </style>
