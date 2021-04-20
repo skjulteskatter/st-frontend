@@ -1,0 +1,76 @@
+<template>
+    <base-card class="recent-collections">
+        <h3 class="recent-collections__title">
+            {{ $t("activity.recentlyOpened") }}
+        </h3>
+        <div class="recent-collections__collections">
+            <collection-card
+                class="recent-collections__collection"
+                v-for="c in recentCollections"
+                :key="c.id"
+                :collection="c"
+            />
+        </div>
+    </base-card>
+</template>
+
+<script lang="ts">
+import { useStore } from "@/store";
+import { Options, Vue } from "vue-class-component";
+import { BaseCard, CollectionCard } from "@/components";
+import { ApiSong } from "dmb-api";
+
+@Options({
+    name: "recent-collections",
+    components: {
+        BaseCard,
+        CollectionCard,
+    },
+})
+export default class RecentCollections extends Vue {
+    private store = useStore();
+
+    public get collections() {
+        return this.store.getters.collections;
+    }
+
+    public get activities() {
+        return this.store.getters.activities;
+    }
+
+    public get recentCollections() {
+        return this.collections.filter((c) =>
+            this.activities
+                .filter((a) => a.type == "song")
+                .map((a) => (a.item as ApiSong).collectionId)
+                .includes(c.id)
+        );
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.recent-collections {
+    &__fallback {
+        background-color: var(--st-color-background-dark);
+        border-radius: var(--st-border-radius);
+        padding: var(--st-spacing);
+        margin: 0;
+        text-align: center;
+    }
+
+    &__title {
+        display: block;
+        margin-top: 0;
+    }
+
+    &__collections {
+        display: flex;
+        gap: var(--st-spacing);
+    }
+
+    // &__collection {
+    //     display: flex;
+    // }
+}
+</style>

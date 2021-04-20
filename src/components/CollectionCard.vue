@@ -65,6 +65,7 @@ export default class CollectionCard extends Vue {
     animation: slideInFromBottom 250ms;
     background-color: var(--st-color-background-medium);
     border-radius: var(--st-border-radius);
+    border: 1px solid var(--st-color-border);
     display: flex;
     flex-direction: column;
     overflow: hidden;

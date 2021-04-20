@@ -24,8 +24,8 @@
                     </div>
                     <div class="loader" v-if="loading"></div>
                 </div>
-            </base-card> -->
-            <!-- <div class="dashboard__subscriptions">
+            </base-card>
+            <div class="dashboard__subscriptions">
                 <h3 class="dashboard__subscriptions__title">
                     <span>
                         {{ $t("common.your") }}
@@ -42,6 +42,7 @@
                 </div>
             </div> -->
             <activity-feed />
+            <recent-collections />
         </div>
     </div>
 </template>
@@ -52,7 +53,7 @@ import { useStore } from "@/store";
 
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
 import { Icon } from "@/components/icon";
-import { ActivityFeed } from "@/components/dashboard";
+import { ActivityFeed, RecentCollections } from "@/components/dashboard";
 
 @Options({
     name: "dashboard",
@@ -62,6 +63,7 @@ import { ActivityFeed } from "@/components/dashboard";
         CollectionCard,
         Icon,
         ActivityFeed,
+        RecentCollections,
     },
 })
 export default class Dashboard extends Vue {
