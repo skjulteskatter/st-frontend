@@ -5,7 +5,7 @@
         :key="lyrics?.language.key + verse.name + verse.content[0] + i"
     >
         <b>{{ verse.name }}</b>
-        <p v-for="line in verse.content" :key="line">{{ line }}</p>
+        <p class="lyrics-viewer__verse">{{ verse.content.join("\n") }}</p>
     </div>
 </template>
 
@@ -77,5 +77,10 @@ export default class LyricsViewer extends Vue {
     flex-grow: 1;
     line-height: 0.9em;
     margin-bottom: calc(var(--st-spacing) * 2);
+    white-space: pre-line;
+
+    &__verse {
+        line-height: 2;
+    }
 }
 </style>
