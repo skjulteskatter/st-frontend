@@ -28,23 +28,25 @@
             </base-button>
         </div>
     </div>
-    <product-slider :products="products" v-if="products.length" />
+    <!-- <product-slider :products="products" v-if="products.length" /> -->
     <div class="collections__owned">
-        <!-- <all-collections-card
-            v-if="allCollectionProduct"
-            :product="allCollectionProduct"
-            :action="
-                () =>
-                    $router.push({
-                        name: 'collection-item',
-                        params: {
-                            id: allCollectionProduct
-                                ? allCollectionProduct.id
-                                : '',
-                        },
-                    })
-            "
-        ></all-collections-card> -->
+        <product-slider :products="products" v-if="products.length">
+            <all-collections-card
+                v-if="allCollectionProduct"
+                :product="allCollectionProduct"
+                :action="
+                    () =>
+                        $router.push({
+                            name: 'collection-item',
+                            params: {
+                                id: allCollectionProduct
+                                    ? allCollectionProduct.id
+                                    : '',
+                            },
+                        })
+                "
+            ></all-collections-card>
+        </product-slider>
     </div>
 </template>
 
@@ -113,7 +115,7 @@ export default class StoreHome extends Vue {
 
     public get allCollectionProduct() {
         return this.store.getters.products.find(
-            (p) => p.collections.length > 1
+            (p) => p.collections.length > 1,
         );
     }
 }
@@ -155,8 +157,6 @@ export default class StoreHome extends Vue {
 
     &__owned,
     &__available {
-        max-width: 1200px;
-
         margin-bottom: 2rem;
 
         & > * {

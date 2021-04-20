@@ -22,9 +22,17 @@
                     <base-button
                         theme="secondary"
                         icon="shop"
+                        v-if="collections.length == 1"
                         @click="product ? checkout(product) : undefined"
                     >
                         {{ $t("store.buy") }}
+                    </base-button>
+                    <base-button
+                        theme="primary"
+                        icon="shop"
+                        @click="checkoutAll()"
+                    >
+                        {{ $t("store.buyall")}}
                     </base-button>
                 </div>
             </div>
@@ -77,9 +85,26 @@ export default class StoreItem extends Vue {
     }
 
     public get collections() {
-        return this.store.state.session.collections.filter((c) =>
+        return this.store.getters.collections.filter((c) =>
             this.product?.collectionIds.includes(c.id),
         );
+    }
+
+    public checkoutAll() {
+        const all = this.products.find(p => p.collections.length > 1);
+
+        if (all) {
+            if (all.id == this.product?.id) {
+                this.checkout(all);
+            } else {
+                this.$router.push({
+                    name: "collection-item",
+                    params: {
+                        id: all.id,
+                    },
+                });
+            }
+        }
     }
 
     public get details() {

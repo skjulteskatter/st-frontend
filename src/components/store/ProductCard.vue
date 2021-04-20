@@ -57,12 +57,16 @@ export default class ProductCard extends Vue {
     public goToCollection() {
         const collectionKey = this.collection?.key ?? "";
 
-        this.$router.push({
-            name: "song-list",
-            params: {
-                collection: collectionKey,
-            },
-        });
+        if (this.collection?.available == true) {
+            this.$router.push({
+                name: "song-list",
+                params: {
+                    collection: collectionKey,
+                },
+            });
+        } else {
+            this.goToItem();
+        }
     }
 
     public goToItem() {
@@ -88,7 +92,7 @@ export default class ProductCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id == this.product?.collectionIds[0]
+            (c) => c.id == this.product?.collectionIds[0],
         );
     }
 }
