@@ -34,7 +34,7 @@
             >
                 Next
             </base-button>
-            <br />
+            <!-- <br />
             <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('karaoke')"
@@ -42,7 +42,7 @@
                 Open KaraokeViewer
             </base-button>
             <base-button @click="setLineSize(1)">1</base-button>
-            <base-button @click="setLineSize(2)">2</base-button>
+            <base-button @click="setLineSize(2)">2</base-button> -->
         </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
