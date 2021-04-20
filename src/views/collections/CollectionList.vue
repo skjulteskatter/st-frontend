@@ -30,22 +30,22 @@
     </div>
     <div class="collections__owned">
         <product-slider :products="products" v-if="products.length">
+            <all-collections-card
+                v-if="allCollectionProduct"
+                :product="allCollectionProduct"
+                :action="
+                    () =>
+                        $router.push({
+                            name: 'collection-item',
+                            params: {
+                                id: allCollectionProduct
+                                    ? allCollectionProduct.id
+                                    : '',
+                            },
+                        })
+                "
+            ></all-collections-card>
         </product-slider>
-        <!-- <all-collections-card
-            v-if="allCollectionProduct"
-            :product="allCollectionProduct"
-            :action="
-                () =>
-                    $router.push({
-                        name: 'collection-item',
-                        params: {
-                            id: allCollectionProduct
-                                ? allCollectionProduct.id
-                                : '',
-                        },
-                    })
-            "
-        ></all-collections-card> -->
     </div>
 </template>
 

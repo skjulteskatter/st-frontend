@@ -10,7 +10,7 @@
         </div>
         <div class="all-collections-card__footer">
             <h4 class="all-collections-card__title">
-                {{ product.name[languageKey] }}
+                {{ product.getName(languageKey) }}
             </h4>
             <base-button
                 class="all-collections-card__button"
@@ -18,7 +18,7 @@
                 theme="tertiary"
                 @click="goToItem"
             >
-                {{ $t("store.seemore") }}
+                {{ $t("store.readmore") }}
             </base-button>
         </div>
     </div>

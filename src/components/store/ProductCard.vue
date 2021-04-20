@@ -25,7 +25,7 @@
                     theme="tertiary"
                     @click="goToItem"
                 >
-                    {{ $t("store.seemore") }}
+                    {{ $t("store.readmore") }}
                 </base-button>
             </div>
         </div>
@@ -57,12 +57,16 @@ export default class ProductCard extends Vue {
     public goToCollection() {
         const collectionKey = this.collection?.key ?? "";
 
-        this.$router.push({
-            name: "song-list",
-            params: {
-                collection: collectionKey,
-            },
-        });
+        if (this.collection?.available == true) {
+            this.$router.push({
+                name: "song-list",
+                params: {
+                    collection: collectionKey,
+                },
+            });
+        } else {
+            this.goToItem();
+        }
     }
 
     public goToItem() {
