@@ -43,7 +43,7 @@ export default class RecentCollections extends Vue {
             this.activities
                 .filter((a) => a.type == "song")
                 .map((a) => (a.item as ApiSong).collectionId)
-                .includes(c.id)
+                .includes(c.id),
         );
     }
 }
