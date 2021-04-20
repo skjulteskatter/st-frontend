@@ -29,10 +29,6 @@
         </div>
     </div>
     <div class="store__owned">
-        <!-- <p class="store__owned__title">
-                {{ $t("common.your") }}
-                {{ $t("common.collections").toLowerCase() }}
-            </p> -->
         <product-slider :products="products" v-if="products.length">
             <all-collections-card
                 v-if="allCollectionProduct"
@@ -51,31 +47,19 @@
             ></all-collections-card>
         </product-slider>
     </div>
-    <!-- <div class="store__available" v-if="availableProducts.length">
-            <p class="store__available__title">
-                {{ $t("common.available") }}
-                {{ $t("common.collections").toLowerCase() }}
-            </p>
-            <product-slider :products="availableProducts"></product-slider>
-        </div> -->
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
-import {
-    StoreCard,
-    AllCollectionsCard,
-    ProductSlider,
-} from "@/components/store";
+import { AllCollectionsCard, ProductSlider } from "@/components/store";
 import { useStore } from "@/store/typed";
 import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
 
 @Options({
     components: {
         BaseButton,
-        StoreCard,
         AllCollectionsCard,
         ProductSlider,
     },
@@ -95,7 +79,7 @@ export default class StoreHome extends Vue {
     public portal() {
         this.loading = true;
         this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
-            window.location = result as unknown as Location;
+            window.location = (result as unknown) as Location;
         });
         this.loading = false;
     }
@@ -129,7 +113,9 @@ export default class StoreHome extends Vue {
     }
 
     public get allCollectionProduct() {
-        return this.store.getters.products.find((p) => p.collections.length > 1);
+        return this.store.getters.products.find(
+            (p) => p.collections.length > 1
+        );
     }
 }
 </script>

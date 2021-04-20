@@ -16,7 +16,7 @@
                 class="all-collections-card__button"
                 icon="info"
                 theme="tertiary"
-                @click="action"
+                @click="goToItem"
             >
                 {{ $t("store.seemore") }}
             </base-button>
@@ -27,16 +27,13 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { BaseCard, BaseButton } from "@/components";
-import { Icon } from "@/components/icon";
+import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store/typed";
 
 @Options({
     components: {
-        BaseCard,
         BaseButton,
-        Icon,
     },
     props: {
         product: {
@@ -45,16 +42,23 @@ import { useStore } from "@/store/typed";
         isPurchaseable: {
             type: Boolean,
         },
-        action: {
-            type: Function,
-        },
     },
     name: "all-collections-card",
 })
 export default class AllCollectionsCard extends Vue {
     public product?: Product;
-    public action = () => undefined;
     public store = useStore();
+
+    public goToItem() {
+        if (this.product) {
+            this.$router.push({
+                name: "store-item",
+                params: {
+                    id: this.product.id,
+                },
+            });
+        }
+    }
 
     public get images(): string[] {
         return (

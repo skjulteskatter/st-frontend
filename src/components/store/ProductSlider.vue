@@ -1,17 +1,10 @@
 <template>
     <div class="product-slider">
-        <store-card
+        <product-card
             v-for="product in products"
             :key="product.id"
             :product="product"
-            :action="
-                () =>
-                    $router.push({
-                        name: 'store-item',
-                        params: { id: product.id },
-                    })
-            "
-        ></store-card>
+        ></product-card>
         <slot />
     </div>
 </template>
@@ -19,7 +12,7 @@
 <script lang="ts">
 import { Product } from "@/classes/product";
 import { Options, Vue } from "vue-class-component";
-import StoreCard from "./StoreCard.vue";
+import ProductCard from "./ProductCard.vue";
 
 @Options({
     props: {
@@ -28,7 +21,7 @@ import StoreCard from "./StoreCard.vue";
         },
     },
     components: {
-        StoreCard,
+        ProductCard,
     },
     name: "product-slider",
 })
