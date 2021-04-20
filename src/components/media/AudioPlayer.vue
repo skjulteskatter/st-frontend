@@ -48,8 +48,8 @@ import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 import Plyr from "plyr";
-import { useStore } from "@/store/typed";
-import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
+import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     name: "audio-player",

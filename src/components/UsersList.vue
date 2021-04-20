@@ -95,10 +95,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton, Modal } from "@/components";
-import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
-import { useStore } from "@/store/typed";
-import { UsersActionTypes } from "@/store/typed/modules/users/action-types";
-import { UsersMutationTypes } from "@/store/typed/modules/users/mutation-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { useStore } from "@/store";
+import { UsersActionTypes } from "@/store/modules/users/action-types";
+import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 
 @Options({
     name: "users-list",

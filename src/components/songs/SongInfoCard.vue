@@ -120,7 +120,7 @@
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal } from "@/components";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 @Options({
     components: {

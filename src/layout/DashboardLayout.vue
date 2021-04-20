@@ -20,7 +20,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 
-import { useStore } from "@/store/typed"; 
+import { useStore } from "@/store"; 
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";

@@ -42,8 +42,8 @@ import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { BaseInput } from "@/components/inputs";
 import { BaseCard, BaseButton } from "@/components";
-import { useStore } from "@/store/typed";
-import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
+import { useStore } from "@/store";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     name: "feedback-form",

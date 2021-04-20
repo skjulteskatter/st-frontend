@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 import auth from "@/services/auth";
 
 @Options({

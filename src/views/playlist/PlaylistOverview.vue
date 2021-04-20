@@ -43,8 +43,8 @@ import { ApiPlaylist } from "dmb-api";
 import { BaseButton, Modal } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     name: "playlist-overview",

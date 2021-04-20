@@ -29,7 +29,7 @@ import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 @Options({
     components: {

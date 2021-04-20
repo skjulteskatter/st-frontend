@@ -5,9 +5,9 @@ import "firebase/performance";
 import { firebaseConfig } from "@/config";
 import router from "@/router";
 import api from "./api";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 
 const store = useStore();
 

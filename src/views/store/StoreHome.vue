@@ -54,8 +54,8 @@ import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
 import { AllCollectionsCard, ProductSlider } from "@/components/store";
-import { useStore } from "@/store/typed";
-import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
+import { useStore } from "@/store";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
     components: {

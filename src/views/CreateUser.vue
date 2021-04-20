@@ -57,8 +57,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {

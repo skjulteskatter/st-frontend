@@ -106,10 +106,10 @@ import themes, { Themes } from "@/classes/themes";
 import { BaseButton, BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 import auth from "@/services/auth";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
-import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {

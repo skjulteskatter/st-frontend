@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 
 @Options({

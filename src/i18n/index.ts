@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 import { createI18n } from "vue-i18n";
 
 const i18n = createI18n({

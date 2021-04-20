@@ -24,8 +24,8 @@ import { Options, Vue } from "vue-class-component";
 import { SettingsCard, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {

@@ -8,8 +8,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { NotificationGroup } from "@/components/notification";
-import { useStore } from "./store/typed";
-import { SessionMutationTypes } from "./store/typed/modules/session/mutation-types";
+import { useStore } from "@/store";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 
 @Options({
     components: {

@@ -62,9 +62,9 @@ import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
-import { useStore } from "@/store/typed";
-import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
+import { useStore } from "@/store";
+import { SongsActionTypes } from "@/store/modules/songs/action-types";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {

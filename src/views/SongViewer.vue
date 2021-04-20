@@ -114,11 +114,11 @@ import {
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/typed/modules/session/mutation-types";
-import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
-import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { SongsActionTypes } from "@/store/modules/songs/action-types";
 
 @Options({
     components: {

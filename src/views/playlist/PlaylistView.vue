@@ -31,9 +31,9 @@
 import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseButton, BaseCard } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
-import { useStore } from "@/store/typed";
-import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
-import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
+import { useStore } from "@/store";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     name: "playlist-view",

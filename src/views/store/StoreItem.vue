@@ -36,9 +36,9 @@
 import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseButton } from "@/components";
 import { Product } from "@/classes/product";
-import { useStore } from "@/store/typed";
-import { StripeActionTypes } from "@/store/typed/modules/stripe/action-types";
-import { NotificationActionTypes } from "@/store/typed/modules/notifications/action-types";
+import { useStore } from "@/store";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {

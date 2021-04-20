@@ -151,8 +151,8 @@ import {
     CountryCollectionItem,
     ThemeCollectionItem,
 } from "@/classes/collectionItems";
-import { useStore } from "@/store/typed";
-import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
+import { useStore } from "@/store";
+import { SongsActionTypes } from "@/store/modules/songs/action-types";
 
 @Options({
     components: {

@@ -36,8 +36,8 @@ import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
 import { ApiSong } from "dmb-api";
 import { SheetMusicTypes, Song } from "@/classes";
-import { useStore } from "@/store/typed";
-import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
+import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({

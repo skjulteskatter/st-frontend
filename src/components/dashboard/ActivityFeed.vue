@@ -33,7 +33,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Contributor, Song } from "@/classes";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 import { BaseCard } from "@/components";
 import { ApiActivity } from "dmb-api";

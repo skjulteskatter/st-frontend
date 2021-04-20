@@ -7,8 +7,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import themes from "@/classes/themes";
-import { useStore } from "@/store/typed";
-import { SongsMutationTypes } from "@/store/typed/modules/songs/mutation-types";
+import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     name: "karaoke-viewer",

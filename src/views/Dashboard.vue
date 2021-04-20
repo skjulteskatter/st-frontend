@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
 import { Icon } from "@/components/icon";

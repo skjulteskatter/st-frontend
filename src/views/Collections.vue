@@ -22,7 +22,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton, CollectionCard } from "@/components";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 @Options({
     components: {

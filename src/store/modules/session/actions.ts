@@ -47,7 +47,9 @@ const ts: {
 
 async function init(state: State, commit: Commit): Promise<void> {
     const user = await api.session.getCurrentUser();
-    user.displayName = auth.user?.displayName ?? user.displayName;
+    if (user) {
+        user.displayName = auth.user?.displayName ?? user.displayName;
+    }
     
     api.playlists.getPlaylists().then(p => {
         commit(SessionMutationTypes.SET_PLAYLISTS, p);

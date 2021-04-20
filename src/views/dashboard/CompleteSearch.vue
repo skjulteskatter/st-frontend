@@ -32,7 +32,7 @@ import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
-import { useStore } from "@/store/typed";
+import { useStore } from "@/store";
 
 @Options({
     components: {

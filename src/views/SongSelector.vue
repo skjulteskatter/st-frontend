@@ -4,8 +4,8 @@
     </div>
 </template>
 <script lang="ts">
-import { useStore } from "@/store/typed";
-import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
+import { useStore } from "@/store";
+import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { Vue, Options } from "vue-class-component";
 
 @Options({
