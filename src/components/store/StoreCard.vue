@@ -10,16 +10,14 @@
                 {{ product.getName(languageKey) }}
             </h4>
             <div class="store-card__buttons">
-                <router-link :to="collectionLink">
-                    <base-button
-                        theme="secondary"
-                        class="store-card__button"
-                        icon="arrowRight"
-                        disabled
-                    >
-                        {{ $t("common.open") }}
-                    </base-button>
-                </router-link>
+                <base-button
+                    theme="secondary"
+                    class="store-card__button"
+                    icon="arrowRight"
+                    @click="goToCollection"
+                >
+                    {{ $t("common.open") }}
+                </base-button>
                 <base-button
                     class="store-card__button"
                     icon="info"
@@ -63,15 +61,15 @@ export default class StoreCard extends Vue {
     public action = () => undefined;
     public store = useStore();
 
-    public get collectionLink() {
+    public goToCollection() {
         const collectionKey = this.product?.collections[0].key ?? "";
 
-        return {
+        this.$router.push({
             name: "song-list",
             params: {
                 collection: collectionKey,
             },
-        };
+        });
     }
 
     public formatPrices(prices: Price[], type: string) {
@@ -130,11 +128,6 @@ export default class StoreCard extends Vue {
         width: 100%;
         object-fit: cover;
         transition: transform 150ms;
-        // cursor: pointer;
-
-        // &:hover {
-        //     transform: scale(1.05);
-        // }
     }
 
     &__footer {
