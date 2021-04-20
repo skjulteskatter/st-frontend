@@ -114,7 +114,7 @@ export default class StoreHome extends Vue {
 
     public get allCollectionProduct() {
         return this.store.getters.products.find(
-            (p) => p.collections.length > 1
+            (p) => p.collections.length > 1,
         );
     }
 }

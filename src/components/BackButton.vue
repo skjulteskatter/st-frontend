@@ -1,7 +1,7 @@
 <template>
-    <div class="back-button" @click="$router.go(-1)">
+    <div class="back-button" @click="back">
         <Icon name="arrowLeft" size="20" />
-        <span>{{ $t("common.back") }}</span>
+        <span>{{ previous ? $t("common.back") : $t("common.dashboard") }}</span>
     </div>
 </template>
 
@@ -15,7 +15,21 @@ import { Icon } from "@/components/icon";
     },
     name: "back-button",
 })
-export default class BackButton extends Vue {}
+export default class BackButton extends Vue {
+    public previous: string | null = null;
+
+    public mounted() {
+        this.previous = this.$router.options.history.state.back as string ?? null;
+    }
+
+    public back() {
+        if (!this.previous) {
+            this.$router.push({name: "main"});
+        } else {
+            this.$router.back();
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
