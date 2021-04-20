@@ -28,7 +28,7 @@
             </base-button>
         </div>
     </div>
-    <product-slider :products="products" v-if="products.length" />
+    <!-- <product-slider :products="products" v-if="products.length" /> -->
     <div class="collections__owned">
         <product-slider :products="products" v-if="products.length">
             <all-collections-card
@@ -157,8 +157,6 @@ export default class StoreHome extends Vue {
 
     &__owned,
     &__available {
-        max-width: 1200px;
-
         margin-bottom: 2rem;
 
         & > * {
