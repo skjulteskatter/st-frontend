@@ -92,7 +92,7 @@ export default class ProductCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id == this.product?.collectionIds[0]
+            (c) => c.id == this.product?.collectionIds[0],
         );
     }
 }
