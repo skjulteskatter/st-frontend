@@ -24,8 +24,8 @@
                 <tbody>
                     <tr v-for="u in users" :key="u.id">
                         <td class="user-name">
-                            <img :src="u.image" class="user-image" />
-                            {{ u.displayName }}
+                            <img :src="u.image ?? '/img/portrait-placeholder.png'" class="user-image" />
+                            <span>{{ u.displayName }}</span>
                         </td>
                         <td>{{ u.email }}</td>
                         <td>{{ u.roles[0] ? u.roles[0] : "NOT SET" }}</td>
