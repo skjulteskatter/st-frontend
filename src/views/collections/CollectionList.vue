@@ -28,6 +28,7 @@
             </base-button>
         </div>
     </div>
+    <product-slider :products="products" v-if="products.length" />
     <div class="collections__owned">
         <product-slider :products="products" v-if="products.length">
             <all-collections-card
@@ -124,12 +125,6 @@ export default class StoreHome extends Vue {
 @import "../../style/mixins";
 
 .collections {
-    // padding: calc(var(--st-spacing) * 2);
-
-    // @include breakpoint("medium") {
-    //     padding: var(--st-spacing);
-    // }
-
     &__title {
         margin: 0;
     }
@@ -139,13 +134,6 @@ export default class StoreHome extends Vue {
         align-items: center;
         justify-content: space-between;
         margin-bottom: var(--st-spacing);
-
-        padding: calc(var(--st-spacing) * 2);
-        padding-bottom: 0;
-        @include breakpoint("medium") {
-            padding: var(--st-spacing);
-            padding-bottom: 0;
-        }
 
         &__buttons {
             display: flex;
