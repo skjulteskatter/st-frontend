@@ -1,7 +1,7 @@
 <template>
     <div class="back-button" @click="back">
         <Icon name="arrowLeft" size="20" />
-        <span>{{ previous ? $t("common.back") : $t("common.dashboard") }}</span>
+        <span>{{ previous ? $t("common.back") : $t("common.home") }}</span>
     </div>
 </template>
 

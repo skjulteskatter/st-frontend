@@ -12,7 +12,7 @@
                     :to="{
                         name: a.type == 'song' ? 'song' : 'contributor',
                         params: a.type == 'song' ? {
-                            collection: collections.find(c => c.id == getSongItem(a).collectionId)?.id,
+                            collection: collections.find(c => c.id == getSongItem(a).collectionId)?.key,
                             number: getSongItem(a).number,
                         } : {
                             contributor: a.itemId,
