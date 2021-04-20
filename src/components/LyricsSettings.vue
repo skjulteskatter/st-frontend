@@ -34,7 +34,7 @@
             >
                 Next
             </base-button>
-            <br />
+            <!-- <br />
             <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('karaoke')"
@@ -42,7 +42,7 @@
                 Open KaraokeViewer
             </base-button>
             <base-button @click="setLineSize(1)">1</base-button>
-            <base-button @click="setLineSize(2)">2</base-button>
+            <base-button @click="setLineSize(2)">2</base-button> -->
         </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
@@ -52,7 +52,22 @@
             <h2 class="lyrics-settings__verses__title">
                 {{ $t("song.verse") }}
             </h2>
-            <label
+            <div
+                class="lyrics-settings__verses__select gap-x"
+                v-for="key in Object.keys(selectVerses)"
+                :key="key"
+            >
+                <input
+                    v-model="selectVerses[key]"
+                    type="checkbox"
+                    :name="key"
+                    :id="key"
+                />
+                <label :for="key">
+                    {{ verses[key].name }}
+                </label>
+            </div>
+            <!-- <div
                 class="lyrics-settings__verses__input"
                 :class="{ selected: selected.includes(key) }"
                 v-for="key in Object.keys(verses)"
@@ -65,12 +80,12 @@
                     checked
                     @click="toggleVerse(key)"
                 />
-                <span
+                <label
                     :for="key"
                     class="lyrics-settings__verses__input__label"
-                    >{{ verses[key].name }}</span
-                >
-            </label>
+                    >{{ verses[key].name }}
+                </label>
+            </div> -->
         </base-card>
     </div>
 </template>
@@ -104,7 +119,9 @@ import Modal from "@/components/Modal.vue";
     name: "lyrics-settings",
 })
 export default class LyricsSettings extends Vue {
-    public selectVerses: string[] = [];
+    public selectVerses: {
+        [key: string]: boolean;
+    } = {};
     public currentVerseNumber = 0;
     public currentLinesNumber = 0;
     public lyrics?: Lyrics;
@@ -117,7 +134,10 @@ export default class LyricsSettings extends Vue {
     // }
 
     public async mounted() {
-        this.selectVerses = Object.assign([], Object.keys(this.verses) ?? []);
+        for (const key of Object.keys(this.verses)) {
+            this.selectVerses[key] = true;
+        }
+
         window.addEventListener("keydown", (event) => {
             if (event.key == "ArrowRight") {
                 this.next();
@@ -145,14 +165,6 @@ export default class LyricsSettings extends Vue {
     public openLyricsWindow(type: string) {
         this.updateLyrics();
         window.open("/" + type, "Lyrics Viewer", "resizeable,scrollbars");
-    }
-
-    public toggleVerse(key: string) {
-        if (this.selectVerses.includes(key)) {
-            this.selectVerses = this.selectVerses.filter((k) => k != key);
-        } else {
-            this.selectVerses.push(key);
-        }
     }
 
     public updateLyrics() {
@@ -196,7 +208,7 @@ export default class LyricsSettings extends Vue {
 
     public get selected() {
         return (
-            this.selectVerses?.sort((a, b) => parseInt(a) - parseInt(b)) ?? []
+            Object.keys(this.verses).filter(v => this.selectVerses[v])
         );
     }
 
@@ -300,6 +312,7 @@ export default class LyricsSettings extends Vue {
 
     &__verses {
         display: flex;
+        flex-direction: row;
 
         &__title {
             margin-top: 0;
@@ -311,7 +324,9 @@ export default class LyricsSettings extends Vue {
             font-size: 1.1em;
 
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            //align-items: center;
+            gap: var(--st-spacing);
 
             &__check {
                 display: none;
@@ -323,7 +338,6 @@ export default class LyricsSettings extends Vue {
             }
 
             &__label {
-                width: 100%;
                 padding: var(--half-spacing);
                 background: var(--st-color-background);
                 color: var(--st-text-color);

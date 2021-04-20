@@ -126,7 +126,7 @@ export default class PlaylistEntryCard extends Vue {
 
     &__collection {
         display: block;
-        font-weight: 100;
+        font-weight: 300;
         // opacity: 0.5;
         margin-top: 0.2em;
     }
