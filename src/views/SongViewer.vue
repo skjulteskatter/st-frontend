@@ -303,19 +303,32 @@ export default class SongViewer extends Vue {
         display: flex;
         justify-content: space-between;
 
+        @include breakpoint('small'){
+            flex-direction: column;
+        }
+
         &__buttons {
             display: flex;
             align-items: center;
-            gap: var(--st-spacing);
+            gap: calc(var(--st-spacing)/2);
+
+            @include breakpoint('small'){
+                justify-content: flex-end;
+                
+                .button__content {
+                    display: none;
+                }
+            }
         }
     }
 
     &__metadata {
         display: flex;
-        flex-direction: row;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        grid-template-rows: auto auto;
         gap: var(--st-spacing);
+
+        @include breakpoint('medium'){
+            flex-direction: column;
+        }
     }
 
     &__content {
