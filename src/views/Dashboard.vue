@@ -53,7 +53,6 @@ import { useStore } from "@/store/typed";
 import { BaseCard, BaseButton, CollectionCard } from "@/components";
 import { Icon } from "@/components/icon";
 import { ActivityFeed } from "@/components/dashboard";
-import { Song } from "@/classes";
 
 @Options({
     name: "dashboard",
@@ -67,33 +66,9 @@ import { Song } from "@/classes";
 })
 export default class Dashboard extends Vue {
     public store = useStore();
-    public token = localStorage.getItem("id_token");
-    public loading = false;
-
-    public get subscriptions(): Subscription[] {
-        return this.user?.subscriptions ?? [];
-    }
-
-    public get subscribedCollections() {
-        return this.store.getters.collections;
-    }
 
     public get user(): User | undefined {
         return this.store.getters.user;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get activities() {
-        return this.store.state.session.activities.map((a) => {
-            return {
-                id: a.id,
-                song: a.song ? new Song(a.song) : undefined,
-                loggedDate: a.loggedDate,
-            };
-        });
     }
 }
 </script>

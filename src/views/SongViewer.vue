@@ -169,7 +169,7 @@ export default class SongViewer extends Vue {
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
-                this.store.dispatch(SessionActionTypes.LOG_ITEM, this.song);
+                this.store.dispatch(SessionActionTypes.LOG_SONG_ITEM, this.song);
             }
         };
         setTimeout(log, 5000);

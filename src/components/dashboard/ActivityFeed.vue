@@ -6,19 +6,21 @@
         <div class="activity-feed__activities" v-if="activities.length">
             <router-link
                 class="activity-feed__activity"
-                v-for="(activity, i) in activities"
-                :key="activity.id ?? i"
+                v-for="(a, i) in activities"
+                :key="a.id ?? i"
                 :to="{
-                    name: 'song',
-                    params: {
-                        collection: activity.song?.collection?.key,
-                        number: activity.song?.number,
+                    name: a.type == 'song' ? 'song' : 'contributor',
+                    params: a.type == 'song' ? {
+                        collection: collections.find(c => c.id == getSongItem(a).collectionId)?.id,
+                        number: getSongItem(a).number,
+                    } : {
+                        contributor: a.itemId,
                     },
                 }"
             >
-                {{ activity.song?.getName(languageKey) }}
+                {{ a.type == 'song' ? getSongItem(a)?.getName(languageKey) : a.item?.name }}
                 <span class="activity-feed__activity__timestamp">
-                    {{ timeSince(activity.loggedDate) }}
+                    {{ timeSince(a.loggedDate) }}
                 </span>
             </router-link>
         </div>
@@ -30,10 +32,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Song } from "@/classes";
+import { Contributor, Song } from "@/classes";
 import { useStore } from "@/store/typed";
 
 import { BaseCard } from "@/components";
+import { ApiActivity } from "dmb-api";
 
 @Options({
     name: "activity-feed",
@@ -74,18 +77,24 @@ export default class ActivityFeed extends Vue {
         return relatime(then - now);
     }
 
+    public getSongItem(activity: ApiActivity) {
+        return activity.item as Song;
+    }
+    
+    public getContributor(activity: ApiActivity) {
+        return activity.item as Contributor;
+    }
+
     public get languageKey() {
         return this.store.getters.languageKey;
     }
 
+    public get collections() {
+        return this.store.getters.collections;
+    }
+
     public get activities() {
-        return this.store.state.session.activities.map((a) => {
-            return {
-                id: a.id,
-                song: a.song ? new Song(a.song) : undefined,
-                loggedDate: a.loggedDate,
-            };
-        });
+        return this.store.getters.activities;
     }
 }
 </script>

@@ -16,6 +16,7 @@ export class Song extends BaseClass implements ApiSong {
     public number = 0;
     public type: string;
     public image?: string;
+    public collectionId: string;
     public collection?: Collection;
     public copyright: {
         melody?: Copyright;
@@ -48,6 +49,7 @@ export class Song extends BaseClass implements ApiSong {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
+        this.collectionId = song.collectionId;
         this.participants = song.participants.map(c => new Participant(c)) ?? [];
         this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
         this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor ?? {} as Contributor);

@@ -9,12 +9,13 @@ import http from "./http";
 
 export const activity = {
     async getActivities() {
-        return await http.get<ApiActivity[]>("api/Activity?expand=song/collection");
+        return await http.get<ApiActivity[]>("api/Activity?expand=item");
     },
     async pushActivities(activities: ApiActivity[]) {
         return await http.post<ApiActivity[]>("api/Activity", activities.map(a => {
             return {
-                songId: a.songId,
+                type: a.type,
+                itemId: a.itemId,
                 loggedDate: a.loggedDate,
             };
         }));

@@ -1,8 +1,9 @@
 declare module "dmb-api" {
     interface ApiActivity {
         id?: string;
-        songId: string;
-        song?: ApiSong;
+        type: string;
+        itemId: string;
+        item?: ApiSong | ApiContributor;
         loggedDate: string;
     }
 
@@ -23,6 +24,7 @@ declare module "dmb-api" {
         number: number;
         type: string;
         image?: string;
+        collectionId: string;
         collection?: ApiCollection;
         name: {
             [languageKey: string]: string;

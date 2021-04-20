@@ -3,7 +3,7 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
-import { ApiActivity, ApiSong } from "dmb-api";
+import { ApiActivity, ApiContributor, ApiSong } from "dmb-api";
 import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";
@@ -128,7 +128,8 @@ export interface Actions {
         entryId: string;
     }): Promise<void>;
 
-    [SessionActionTypes.LOG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
+    [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
+    [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }: AugmentedActionContext, payload: ApiContributor): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
@@ -221,13 +222,33 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
 
     // LOG ITEMS
-    async [SessionActionTypes.LOG_ITEM]({ commit }, song: ApiSong): Promise<void> {
+    async [SessionActionTypes.LOG_SONG_ITEM]({ commit }, song: ApiSong): Promise<void> {
         const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
         items.push({
             loggedDate: new Date().toISOString(),
-            songId: song.id,
-            song: song,
+            type: "song",
+            itemId: song.id,
+            item: song,
+        });
+
+        if (items.length >= 10) {
+            await api.activity.pushActivities(items);
+            localStorage.setItem("activities", "[]");
+        } else {
+            localStorage.setItem("activities", JSON.stringify(items));
+        }
+
+        commit(SessionMutationTypes.SET_LOG_ITEMS, items);
+    },
+    async [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }, item: ApiContributor): Promise<void> {
+        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+        items.push({
+            loggedDate: new Date().toISOString(),
+            type: "contributor",
+            itemId: item.id,
+            item: item,
         });
 
         if (items.length >= 10) {

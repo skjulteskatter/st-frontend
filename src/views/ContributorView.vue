@@ -64,6 +64,7 @@ import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
 import { useStore } from "@/store/typed";
 import { SongsActionTypes } from "@/store/typed/modules/songs/action-types";
+import { SessionActionTypes } from "@/store/typed/modules/session/action-types";
 
 @Options({
     components: {
@@ -83,6 +84,7 @@ export default class ContributorView extends Vue {
 
     public async mounted() {
         this.loading = true;
+
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
             this.$route.params.contributor as string,
@@ -97,9 +99,14 @@ export default class ContributorView extends Vue {
                 el.src = image.src;
             };
         }
-        
 
         this.loading = false;
+
+        setTimeout(() => {
+            if (this.contributor) {
+                this.store.dispatch(SessionActionTypes.LOG_CONTRIBUTOR_ITEM, this.contributor);
+            }
+        }, 5000);
     }
 
     public get contributorItem() {

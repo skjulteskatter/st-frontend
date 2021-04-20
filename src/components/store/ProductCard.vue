@@ -3,6 +3,7 @@
         <img
             class="store-card__image"
             :src="image"
+            @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
         <div class="store-card__footer">
