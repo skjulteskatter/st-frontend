@@ -31,6 +31,19 @@
         </div>
         <div v-else class="loader"></div>
     </base-card>
+    <base-card class="activity-feed">
+        <h3 class="activity-feed__title">
+            {{ $t("activity.recentlyOpened") }}
+        </h3>
+        <div class="activity-feed__collections">
+            <collection-card
+                class="activity-feed__collection"
+                v-for="c in recentCollections"
+                :key="c.id"
+                :collection="c"
+            />
+        </div>
+    </base-card>
 </template>
 
 <script lang="ts">
@@ -134,7 +147,7 @@ export default class ActivityFeed extends Vue {
         flex-direction: column;
         gap: 0.5em;
 
-        max-height: 20rem;
+        //max-height: 20rem;
         overflow-y: hidden;
         position: relative;
     }
@@ -157,6 +170,15 @@ export default class ActivityFeed extends Vue {
             opacity: 0.5;
             font-size: 0.9em;
         }
+    }
+
+    &__collections {
+        display: flex;
+        gap: var(--st-spacing);
+    }
+
+    &__collection {
+        display: flex;
     }
 }
 </style>

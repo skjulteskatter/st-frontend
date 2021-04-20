@@ -168,6 +168,8 @@ export default class StoreHome extends Vue {
 
     &__owned,
     &__available {
+        max-width: 1200px;
+
         margin-bottom: 2rem;
 
         & > * {

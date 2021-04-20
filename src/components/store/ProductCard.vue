@@ -1,26 +1,26 @@
 <template>
-    <div class="store-card" v-if="product">
+    <div class="product-card" v-if="product">
         <img
-            class="store-card__image clickable"
+            class="product-card__image clickable"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
-        <div class="store-card__footer">
-            <h4 class="store-card__title">
+        <div class="product-card__footer">
+            <h4 class="product-card__title">
                 {{ product.getName(languageKey) }}
             </h4>
-            <div class="store-card__buttons">
+            <div class="product-card__buttons">
                 <base-button
                     theme="secondary"
-                    class="store-card__button"
+                    class="product-card__button"
                     icon="arrowRight"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}
                 </base-button>
                 <base-button
-                    class="store-card__button"
+                    class="product-card__button"
                     icon="info"
                     theme="tertiary"
                     @click="goToItem"
@@ -50,7 +50,7 @@ import { useStore } from "@/store";
     },
     name: "product-card",
 })
-export default class StoreCard extends Vue {
+export default class ProductCard extends Vue {
     public product?: Product;
     public store = useStore();
 
@@ -97,7 +97,7 @@ export default class StoreCard extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-.store-card {
+.product-card {
     animation: slideInFromBottom 250ms;
     background-color: var(--st-color-background-medium);
     border-radius: var(--st-border-radius);
@@ -106,7 +106,7 @@ export default class StoreCard extends Vue {
     flex-direction: column;
 
     @include breakpoint("small") {
-        .store-card__price {
+        .product-card__price {
             display: none;
         }
     }

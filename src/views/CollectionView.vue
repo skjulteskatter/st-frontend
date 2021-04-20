@@ -7,15 +7,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
-    components: {
-        BaseButton,
-    },
     name: "store",
 })
 export default class Store extends Vue {
