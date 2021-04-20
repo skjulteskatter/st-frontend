@@ -29,8 +29,7 @@
         </div>
     </div>
     <div class="collections__owned">
-        <product-slider :products="products" v-if="products.length">
-        </product-slider>
+        <product-slider :products="products" v-if="products.length" />
         <!-- <all-collections-card
             v-if="allCollectionProduct"
             :product="allCollectionProduct"
@@ -114,7 +113,7 @@ export default class StoreHome extends Vue {
 
     public get allCollectionProduct() {
         return this.store.getters.products.find(
-            (p) => p.collections.length > 1,
+            (p) => p.collections.length > 1
         );
     }
 }

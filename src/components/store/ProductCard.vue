@@ -48,7 +48,7 @@ import { useStore } from "@/store";
             type: Object,
         },
     },
-    name: "store-card",
+    name: "product-card",
 })
 export default class StoreCard extends Vue {
     public product?: Product;
@@ -87,7 +87,9 @@ export default class StoreCard extends Vue {
     }
 
     public get collection() {
-        return this.store.getters.collections.find(c => c.id == this.product?.collectionIds[0]);
+        return this.store.getters.collections.find(
+            (c) => c.id == this.product?.collectionIds[0]
+        );
     }
 }
 </script>
@@ -120,6 +122,7 @@ export default class StoreCard extends Vue {
 
     &__button {
         flex-shrink: 0;
+        flex-grow: 1;
     }
 
     &__image {
