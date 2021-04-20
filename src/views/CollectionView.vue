@@ -1,6 +1,6 @@
 <template>
     <div v-if="loading" class="loader"></div>
-    <div v-else class="store">
+    <div v-else class="collections">
         <router-view />
     </div>
 </template>
@@ -44,7 +44,7 @@ export default class Store extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
-.store {
+.collections {
     // padding: calc(var(--st-spacing) * 2);
 
     // @include breakpoint("medium") {

@@ -7,13 +7,15 @@ const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/S
 const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue");
 const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue");
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue");
-const Store = () => import(/* webpackChunkName: 'store' */ "../views/Store.vue");
-const Collections = () => import(/* webpackChunkName: 'collections' */ "../views/Collections.vue");
+//const Collections = () => import(/* webpackChunkName: 'collections' */ "../views/Collections.vue");
 const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue");
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ "../views/SongViewer.vue");
 const ContributorView = () => import(/* webpackChunkName: 'contributor' */ "../views/ContributorView.vue");
-const StoreItem = () => import(/* webpackChunkName: 'store-item' */ "../views/store/StoreItem.vue");
-const StoreHome = () => import(/* webpackChunkName: 'store-home' */ "../views/store/StoreHome.vue");
+
+const CollectionView = () => import(/* webpackChunkName: 'store' */ "../views/CollectionView.vue");
+const CollectionItem = () => import(/* webpackChunkName: 'store-item' */ "../views/collections/CollectionItem.vue");
+const CollectionList = () => import(/* webpackChunkName: 'store-home' */ "../views/collections/CollectionList.vue");
+
 const Playlist = () => import(/* webpackChunkName: 'playlist' */ "../views/playlist/Playlist.vue");
 const PlaylistView = () => import(/* webpackChunkName: 'playlist-view' */ "../views/playlist/PlaylistView.vue");
 const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ "../views/playlist/PlaylistOverview.vue");
@@ -53,11 +55,11 @@ const routes: Array<RouteRecordRaw> = [
                 name: "songs",
                 component: SongSelector,
                 children: [
-                    {
-                        path: "",
-                        name: "collections",
-                        component: Collections,
-                    },
+                    // {
+                    //     path: "",
+                    //     name: "collections",
+                    //     component: Collections,
+                    // },
                     {
                         path: ":collection",
                         name: "song-list",
@@ -87,19 +89,19 @@ const routes: Array<RouteRecordRaw> = [
                 component: ContributorView,
             },
             {
-                path: "store",
-                name: "store",
-                component: Store,
+                path: "collections",
+                name: "collections",
+                component: CollectionView,
                 children: [
                     {
                         path: "",
-                        name: "store-home",
-                        component: StoreHome,
+                        name: "collection-list",
+                        component: CollectionList,
                     },
                     {
                         path: ":id",
-                        name: "store-item",
-                        component: StoreItem,
+                        name: "collection-item",
+                        component: CollectionItem,
                     },
                 ],
             },

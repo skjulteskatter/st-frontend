@@ -1,24 +1,24 @@
 <template>
-    <div class="store-item">
+    <div class="collection-item">
         <back-button />
-        <section class="store-item__body" v-if="product">
+        <section class="collection-item__body" v-if="product">
             <img
-                class="store-item__image"
+                class="collection-item__image"
                 :src="image"
                 :alt="product.getName(languageKey)"
             />
-            <div class="store-item__body__info">
-                <h1 class="store-item__title">
+            <div class="collection-item__body__info">
+                <h1 class="collection-item__title">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <span class="store-item__price-tag">
+                <span class="collection-item__price-tag">
                     {{
                         formatPrices(product.prices, "year") ||
                         formatPrices(product.prices, "month")
                     }}
                 </span>
-                <div v-html="details" class="store-item__details"></div>
-                <div class="store-item__body__footer">
+                <div v-html="details" class="collection-item__details"></div>
+                <div class="collection-item__body__footer">
                     <base-button
                         theme="secondary"
                         icon="shop"
@@ -45,7 +45,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BackButton,
         BaseButton,
     },
-    name: "store-item",
+    name: "collection-item",
 })
 export default class StoreItem extends Vue {
     private store = useStore();
@@ -103,7 +103,7 @@ export default class StoreItem extends Vue {
 <style lang="scss" scoped>
 @import "../../style/mixins";
 
-.store-item {
+.collection-item {
     padding: calc(var(--st-spacing) * 2);
 
     @include breakpoint("medium") {

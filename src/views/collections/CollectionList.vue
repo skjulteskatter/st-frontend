@@ -1,7 +1,7 @@
 <template>
-    <div class="store__header">
-        <h1 class="store__title">{{ $t("common.collections") }}</h1>
-        <div class="store__header__buttons">
+    <div class="collections__header">
+        <h1 class="collections__title">{{ $t("common.collections") }}</h1>
+        <div class="collections__header__buttons">
             <base-button
                 theme="tertiary"
                 @click="refreshSubscriptions"
@@ -28,24 +28,24 @@
             </base-button>
         </div>
     </div>
-    <div class="store__owned">
+    <div class="collections__owned">
         <product-slider :products="products" v-if="products.length">
-            <all-collections-card
-                v-if="allCollectionProduct"
-                :product="allCollectionProduct"
-                :action="
-                    () =>
-                        $router.push({
-                            name: 'store-item',
-                            params: {
-                                id: allCollectionProduct
-                                    ? allCollectionProduct.id
-                                    : '',
-                            },
-                        })
-                "
-            ></all-collections-card>
         </product-slider>
+        <!-- <all-collections-card
+            v-if="allCollectionProduct"
+            :product="allCollectionProduct"
+            :action="
+                () =>
+                    $router.push({
+                        name: 'collection-item',
+                        params: {
+                            id: allCollectionProduct
+                                ? allCollectionProduct.id
+                                : '',
+                        },
+                    })
+            "
+        ></all-collections-card> -->
     </div>
 </template>
 
@@ -63,7 +63,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         AllCollectionsCard,
         ProductSlider,
     },
-    name: "store-home",
+    name: "collections-home",
 })
 export default class StoreHome extends Vue {
     private store = useStore();
@@ -123,7 +123,7 @@ export default class StoreHome extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-.store {
+.collections {
     // padding: calc(var(--st-spacing) * 2);
 
     // @include breakpoint("medium") {

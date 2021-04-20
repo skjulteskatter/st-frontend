@@ -68,7 +68,7 @@ export default class StoreCard extends Vue {
     public goToItem() {
         if (this.product) {
             this.$router.push({
-                name: "store-item",
+                name: "collection-item",
                 params: {
                     id: this.product.id,
                 },
