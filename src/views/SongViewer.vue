@@ -312,6 +312,9 @@ export default class SongViewer extends Vue {
 
     &__metadata {
         display: flex;
+        flex-direction: row;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-rows: auto auto;
         gap: var(--st-spacing);
     }
 
