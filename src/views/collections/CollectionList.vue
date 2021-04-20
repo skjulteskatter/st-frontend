@@ -115,7 +115,7 @@ export default class StoreHome extends Vue {
 
     public get allCollectionProduct() {
         return this.store.getters.products.find(
-            (p) => p.collections.length > 1,
+            (p) => p.collections.length > 1
         );
     }
 }
@@ -158,14 +158,6 @@ export default class StoreHome extends Vue {
     &__owned,
     &__available {
         margin-bottom: 2rem;
-
-        & > * {
-            padding: 0 calc(var(--st-spacing) * 2) calc(var(--st-spacing) * 2)
-                calc(var(--st-spacing) * 2);
-            @include breakpoint("medium") {
-                padding: 0 var(--st-spacing) var(--st-spacing) var(--st-spacing);
-            }
-        }
 
         &__title {
             margin: 0;
