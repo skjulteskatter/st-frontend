@@ -11,7 +11,7 @@ export class Product extends BaseClass implements ApiProduct {
 
     constructor(product: ApiProduct, collections: Collection[]) {
         super();
-        this._collections = collections.filter(c => product.collectionIds.includes(c.id));
+        this._collections = collections?.filter(c => product.collectionIds.includes(c.id));
         this.id = product.id;
         this.name = product.name;
         this.prices = product.prices;

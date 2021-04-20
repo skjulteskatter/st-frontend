@@ -9,7 +9,7 @@ export type State = {
     extend: boolean;
     error: string;
     playlists: ApiPlaylist[];
-    activities: ApiActivity[];
+    activities?: ApiActivity[];
     redirect?: string;
 };
 
@@ -20,5 +20,4 @@ export const state: State = {
     extend: false,
     error: "",
     playlists: [],
-    activities: [],
 };

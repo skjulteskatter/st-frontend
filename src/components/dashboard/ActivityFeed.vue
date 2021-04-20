@@ -3,30 +3,33 @@
         <h3 class="activity-feed__title">
             {{ $t("common.activity") }}
         </h3>
-        <div class="activity-feed__activities" v-if="activities.length">
-            <router-link
-                class="activity-feed__activity"
-                v-for="(a, i) in activities"
-                :key="a.id ?? i"
-                :to="{
-                    name: a.type == 'song' ? 'song' : 'contributor',
-                    params: a.type == 'song' ? {
-                        collection: collections.find(c => c.id == getSongItem(a).collectionId)?.id,
-                        number: getSongItem(a).number,
-                    } : {
-                        contributor: a.itemId,
-                    },
-                }"
-            >
-                {{ a.type == 'song' ? getSongItem(a)?.getName(languageKey) : a.item?.name }}
-                <span class="activity-feed__activity__timestamp">
-                    {{ timeSince(a.loggedDate) }}
-                </span>
-            </router-link>
+        <div v-if="activitiesInitialized">
+            <div class="activity-feed__activities" v-if="activities.length">
+                <router-link
+                    class="activity-feed__activity"
+                    v-for="(a, i) in activities"
+                    :key="a.id ?? i"
+                    :to="{
+                        name: a.type == 'song' ? 'song' : 'contributor',
+                        params: a.type == 'song' ? {
+                            collection: collections.find(c => c.id == getSongItem(a).collectionId)?.id,
+                            number: getSongItem(a).number,
+                        } : {
+                            contributor: a.itemId,
+                        },
+                    }"
+                >
+                    {{ a.type == 'song' ? getSongItem(a)?.getName(languageKey) : a.item?.name }}
+                    <span class="activity-feed__activity__timestamp">
+                        {{ timeSince(a.loggedDate) }}
+                    </span>
+                </router-link>
+            </div>
+            <p class="activity-feed__fallback" v-else>
+                {{ $t("dashboard.noactivity") }}
+            </p>
         </div>
-        <p class="activity-feed__fallback" v-else>
-            {{ $t("dashboard.noactivity") }}
-        </p>
+        <div v-else class="loader"></div>
     </base-card>
 </template>
 
@@ -35,13 +38,17 @@ import { Options, Vue } from "vue-class-component";
 import { Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
 
-import { BaseCard } from "@/components";
-import { ApiActivity } from "dmb-api";
+import { 
+    BaseCard, 
+    CollectionCard,
+} from "@/components";
+import { ApiActivity, ApiSong } from "dmb-api";
 
 @Options({
     name: "activity-feed",
     components: {
         BaseCard,
+        CollectionCard,
     },
 })
 export default class ActivityFeed extends Vue {
@@ -93,8 +100,16 @@ export default class ActivityFeed extends Vue {
         return this.store.getters.collections;
     }
 
+    public get activitiesInitialized() {
+        return this.store.state.session.activities != undefined;
+    }
+
     public get activities() {
         return this.store.getters.activities;
+    }
+
+    public get recentCollections() {
+        return this.collections.filter(c => this.activities.filter(a => a.type == "song").map(a => (a.item as ApiSong).collectionId).includes(c.id));
     }
 }
 </script>

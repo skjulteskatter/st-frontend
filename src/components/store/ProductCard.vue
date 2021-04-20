@@ -1,7 +1,7 @@
 <template>
     <div class="store-card" v-if="product">
         <img
-            class="store-card__image"
+            class="store-card__image clickable"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"

@@ -45,6 +45,7 @@ export const mutations: MutationTree<State> & Mutations = {
     },
 
     [SessionMutationTypes.SET_LOG_ITEMS](state, value: ApiActivity[]): void {
+        state.activities = state.activities ?? [];
         state.activities = state.activities.slice(0, 10 - value.length); 
         state.activities.push(...value);
         state.activities = state.activities.sort((a, b) => new Date(b.loggedDate).getTime() - new Date(a.loggedDate).getTime());

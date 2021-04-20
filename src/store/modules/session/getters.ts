@@ -49,7 +49,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
         return state.playlists;
     },
     activities(state) {
-        return state.activities.map(a => {
+        return state.activities?.map(a => {
             const item: ApiActivity = {
                 id: a.id,
                 type: a.type,
@@ -59,6 +59,6 @@ export const getters: GetterTree<State, RootState> & Getters = {
             };
 
             return item;
-        });
+        }) ?? [];
     },
 };
