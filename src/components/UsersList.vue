@@ -24,7 +24,12 @@
                 <tbody>
                     <tr v-for="u in users" :key="u.id">
                         <td class="user-name">
-                            <img :src="u.image ?? '/img/portrait-placeholder.png'" class="user-image" />
+                            <img
+                                :src="
+                                    u.image ?? '/img/portrait-placeholder.png'
+                                "
+                                class="user-image"
+                            />
                             <span>{{ u.displayName }}</span>
                         </td>
                         <td>{{ u.email }}</td>
@@ -43,8 +48,10 @@
                                 <div class="loading" v-if="loading"></div>
                                 <div class="edit-user__user">
                                     <img
-                                        :src="u.image"
-                                        v-if="u.image"
+                                        :src="
+                                            u.image ??
+                                            '/img/portrait-placeholder.png'
+                                        "
                                         class="edit-user__user-image"
                                     />
                                     <span class="edit-user__user-name">
