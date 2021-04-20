@@ -1,21 +1,21 @@
 <template>
     <div class="loader" v-if="osmd.loading"></div>
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
-        <div v-if="!embed && song">
-            <h1>
+        <div v-if="!embed && song" class="sheetmusic-viewer__info">
+            <h2 class="sheetmusic-viewer__info__title">
                 {{song.getName(languageKey)}}
-            </h1>
-            <h3 v-for="c in song.authors" :key="c.id">
-                {{c.name}}
-            </h3>
-            <h3 v-for="c in song.composers" :key="c.id">
-                {{c.name}}
-            </h3>
+            </h2>
+            <p v-for="c in song.authors" :key="c.id" class="sheetmusic-viewer__info__author">
+                {{$t('song.author')}}: {{c.name}}
+            </p>
+            <p v-for="c in song.composers" :key="c.id" class="sheetmusic-viewer__info__composer">
+                {{$t('song.composer')}}: {{c.name}}
+            </p>
         </div>
 
         <div class="sheetmusic-wrapper">
             <div class="sheetmusic-content">
-                <base-button v-if="type != pdfType" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
+                <base-button v-if="type != pdfType" icon="settings" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
                 <open-sheet-music-display
                     v-if="type != pdfType && url && ['sheet-music', 'sheet-music-embed'].includes(routeName)"
                     :options="options"
@@ -148,8 +148,31 @@ export default class SheetMusic extends Vue {
 }
 </script>
 <style lang="scss">
+@import "../style/mixins";
+
 .sheetmusic-viewer {
     height: 100vh;
+    max-width: 1200px;
+    margin: auto;
+    padding: calc(var(--st-spacing)*2);
+
+    @include breakpoint('medium'){
+        padding: var(--st-spacing);
+    }
+
+    &__info {
+        margin-bottom: var(--st-spacing);
+
+        &__author, &__composer {
+            color: var(--st-color-primary);
+            margin: 0.5em 0;
+        }
+
+        &__title {
+            margin-top: 0;
+            margin-bottom: calc(var(--st-spacing)/2);
+        }
+    }
 }
 
 #pb-canvas .control-panel {
@@ -162,10 +185,10 @@ export default class SheetMusic extends Vue {
     width: 100%;
 }
 
-.sheetmusic-content {
-    max-width: 1200px;
-    margin: auto;
-}
+// .sheetmusic-content {
+//     max-width: 1200px;
+//     margin: auto;
+// }
 
 #pb-canvas {
     width: 100%;
@@ -175,6 +198,46 @@ export default class SheetMusic extends Vue {
 .playback-buttons {
     position: fixed;
     bottom: 10px;
+
+    .reset-button {
+        position: relative;
+
+        &:after {
+            content: "Reset";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--st-color-primary);
+            border-radius: var(--st-border-radius);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .playpause-button{
+        position: relative;
+
+        &:after {
+            content: "Play";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background-color: var(--st-color-primary);
+            border-radius: var(--st-border-radius);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }
 
 .pbcontrol-toggle {
