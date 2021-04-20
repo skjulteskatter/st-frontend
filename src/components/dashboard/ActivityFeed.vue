@@ -31,19 +31,6 @@
         </div>
         <div v-else class="loader"></div>
     </base-card>
-    <base-card class="activity-feed">
-        <h3 class="activity-feed__title">
-            {{ $t("activity.recentlyOpened") }}
-        </h3>
-        <div class="activity-feed__collections">
-            <collection-card
-                class="activity-feed__collection"
-                v-for="c in recentCollections"
-                :key="c.id"
-                :collection="c"
-            />
-        </div>
-    </base-card>
 </template>
 
 <script lang="ts">
@@ -53,15 +40,13 @@ import { useStore } from "@/store";
 
 import { 
     BaseCard, 
-    CollectionCard,
 } from "@/components";
-import { ApiActivity, ApiSong } from "dmb-api";
+import { ApiActivity } from "dmb-api";
 
 @Options({
     name: "activity-feed",
     components: {
         BaseCard,
-        CollectionCard,
     },
 })
 export default class ActivityFeed extends Vue {
@@ -120,10 +105,6 @@ export default class ActivityFeed extends Vue {
     public get activities() {
         return this.store.getters.activities;
     }
-
-    public get recentCollections() {
-        return this.collections.filter(c => this.activities.filter(a => a.type == "song").map(a => (a.item as ApiSong).collectionId).includes(c.id));
-    }
 }
 </script>
 
@@ -170,15 +151,6 @@ export default class ActivityFeed extends Vue {
             opacity: 0.5;
             font-size: 0.9em;
         }
-    }
-
-    &__collections {
-        display: flex;
-        gap: var(--st-spacing);
-    }
-
-    &__collection {
-        display: flex;
     }
 }
 </style>
