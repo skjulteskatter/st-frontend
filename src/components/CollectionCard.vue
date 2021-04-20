@@ -1,6 +1,6 @@
 <template>
     <div
-        class="collection-card"
+        class="collection-card clickable"
         :class="{
             disabled: !collection.available,
         }"
