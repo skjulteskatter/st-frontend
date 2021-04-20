@@ -3,7 +3,6 @@
         <base-card
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__controls"
-            border
         >
             <h2 class="lyrics-settings__controls__title">
                 {{ $t("song.control") }}
@@ -47,7 +46,6 @@
         <base-card
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__verses"
-            border
         >
             <h2 class="lyrics-settings__verses__title">
                 {{ $t("song.verse") }}

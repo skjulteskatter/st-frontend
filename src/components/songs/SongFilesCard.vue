@@ -2,9 +2,7 @@
     <base-card
         class="song-details__files"
         v-if="song && (song.audioFiles.length || song.videoFiles.length)"
-        border
         header
-        toggleable
     >
         <template #header>
             <div class="song-details__files__header">

@@ -11,12 +11,12 @@
             </div>
             <Icon
                 class="toggle-button"
-                v-if="toggleable"
+                v-if="toggleable && !disableContent"
                 :name="isClosed ? 'arrowDown' : 'arrowUp'"
                 @click="isClosed = !isClosed"
             />
         </div>
-        <div class="card__content" v-show="!(header && isClosed)">
+        <div v-if="!disableContent" class="card__content" v-show="!(header && isClosed)">
             <slot name="default" />
         </div>
     </div>
@@ -43,6 +43,9 @@ import { Icon } from "@/components/icon";
         closed: {
             type: Boolean,
         },
+        disableContent: {
+            type: Boolean,
+        },
     },
     components: {
         Icon,
@@ -55,6 +58,7 @@ export default class Card extends Vue {
     public image = "";
     public toggleable = false;
     public closed = false;
+    public disableContent = false;
     private isClosed = this.closed;
 }
 </script>
