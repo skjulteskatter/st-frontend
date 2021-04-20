@@ -129,11 +129,6 @@ export default class StoreItem extends Vue {
 @import "../../style/mixins";
 
 .collection-item {
-    padding: calc(var(--st-spacing) * 2);
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
 
     &__price-tag {
         color: var(--st-color-primary);
@@ -173,7 +168,6 @@ export default class StoreItem extends Vue {
         }
 
         &__info {
-            margin-left: var(--st-spacing);
             padding: calc(var(--st-spacing) * 2);
             background-color: var(--st-color-background-medium);
             border-radius: 0.5rem;
