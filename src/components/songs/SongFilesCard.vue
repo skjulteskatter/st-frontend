@@ -11,7 +11,7 @@
                 </h2>
             </div>
         </template>
-        <div class="files__container">
+        <div class="song-details__files__container">
             <div
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"

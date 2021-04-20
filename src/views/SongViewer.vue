@@ -55,6 +55,7 @@
                     <base-button
                         v-if="extended"
                         @click="extend"
+                        icon="settings"
                         class="song-viewer__sidebar__buttons--advanced"
                     >
                         {{ $t("song.advanced") }}
