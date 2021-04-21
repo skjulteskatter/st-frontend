@@ -6,7 +6,7 @@
         <div v-if="activitiesInitialized">
             <div class="activity-feed__activities" v-if="activities.length">
                 <router-link
-                    class="activity-feed__activity"
+                    class="activity-feed__activity clickable"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
