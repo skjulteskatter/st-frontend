@@ -24,7 +24,7 @@ export default class App extends Vue {
         if (window.location.pathname.startsWith("/store/")) {
             this.store.commit(
                 SessionMutationTypes.REDIRECT,
-                window.location.pathname
+                window.location.pathname,
             );
         }
     }
