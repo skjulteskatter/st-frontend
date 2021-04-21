@@ -66,7 +66,7 @@ export default class Dashboard extends Vue {
 
     &__wrapper {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
         gap: var(--st-spacing);
     }
 
