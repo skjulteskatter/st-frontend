@@ -87,14 +87,16 @@ export default class ContributorView extends Vue {
 
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
-            this.$route.params.contributor as string,
+            this.$route.params.contributor as string
         );
         if (this.contributor?.image) {
             const image = new Image();
             image.src = this.contributor.image;
 
             image.onload = () => {
-                const el = document.getElementById("contributor-biography-image") as HTMLImageElement;
+                const el = document.getElementById(
+                    "contributor-biography-image"
+                ) as HTMLImageElement;
 
                 el.src = image.src;
             };
@@ -104,7 +106,10 @@ export default class ContributorView extends Vue {
 
         setTimeout(() => {
             if (this.contributor) {
-                this.store.dispatch(SessionActionTypes.LOG_CONTRIBUTOR_ITEM, this.contributor);
+                this.store.dispatch(
+                    SessionActionTypes.LOG_CONTRIBUTOR_ITEM,
+                    this.contributor
+                );
             }
         }, 5000);
     }
@@ -127,8 +132,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "author",
-                ),
+                        p.type == "author"
+                )
             )
             .map((s) => new Song(s));
     }
@@ -139,8 +144,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "composer",
-                ),
+                        p.type == "composer"
+                )
             )
             .map((s) => new Song(s));
     }
@@ -172,7 +177,7 @@ export default class ContributorView extends Vue {
     }
 
     &__biography {
-        columns: auto 300px;
+        columns: auto 325px;
 
         @include breakpoint("small") {
             flex-direction: column;
@@ -213,7 +218,7 @@ export default class ContributorView extends Vue {
     &__songs {
         margin-top: calc(var(--st-spacing) * 2);
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: var(--st-spacing);
 
         &__wrapper {
