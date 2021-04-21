@@ -11,10 +11,16 @@
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
                 >
-                    <img :src="a.getImage(collections)"
-                        height="50"
+                    <img
+                        :src="a.getImage(collections)"
+                        class="activity-feed__activity__image"
                     />
-                    {{ a.getName(languageKey) }}
+                    <span class="activity-feed__activity__title">
+                        <small>{{ $t(`song.${a.type}`) }}</small>
+                        <strong>
+                            {{ a.getName(languageKey) }}
+                        </strong>
+                    </span>
                     <span class="activity-feed__activity__timestamp">
                         {{ timeSince(a.loggedDate) }}
                     </span>
@@ -33,9 +39,7 @@ import { Options, Vue } from "vue-class-component";
 import { Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
 
-import { 
-    BaseCard, 
-} from "@/components";
+import { BaseCard } from "@/components";
 import { ApiActivity } from "dmb-api";
 
 @Options({
@@ -80,7 +84,7 @@ export default class ActivityFeed extends Vue {
     public getSongItem(activity: ApiActivity) {
         return activity.item as Song;
     }
-    
+
     public getContributor(activity: ApiActivity) {
         return activity.item as Contributor;
     }
@@ -140,11 +144,28 @@ export default class ActivityFeed extends Vue {
 
         display: flex;
         justify-content: space-between;
+        gap: calc(var(--st-spacing) / 2);
+
+        &__title {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            small {
+                color: var(--st-color-primary);
+            }
+        }
 
         &__timestamp {
             flex-shrink: 0;
             opacity: 0.5;
             font-size: 0.9em;
+        }
+
+        &__image {
+            max-height: 3em;
+            border-radius: var(--st-border-radius);
         }
     }
 }
