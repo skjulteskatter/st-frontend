@@ -48,7 +48,9 @@ export const mutations: MutationTree<State> & Mutations = {
         state.activities = state.activities ?? [];
         state.activities = state.activities.slice(0, 20 - value.length); 
         state.activities.push(...value);
-        state.activities = state.activities.sort((a, b) => new Date(b.loggedDate).getTime() - new Date(a.loggedDate).getTime()).reduce((a, b) => a.find(i => i.itemId == b.itemId) || a.length >= 10 ? a : [...a, b], [] as ApiActivity[]);
+        state.activities = state.activities
+            .sort((a, b) => new Date(b.loggedDate).getTime() - new Date(a.loggedDate).getTime())
+            .reduce((a, b) => a.find(i => i.itemId == b.itemId) || a.length >= 10 ? a : [...a, b], [] as ApiActivity[]);
     },
     [SessionMutationTypes.CLEAR_LOGS](state): void {
         state.activities = [];
