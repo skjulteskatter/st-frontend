@@ -22,7 +22,10 @@ export default class App extends Vue {
 
     public mounted() {
         if (window.location.pathname.startsWith("/store/")) {
-            this.store.commit(SessionMutationTypes.REDIRECT, window.location.pathname);
+            this.store.commit(
+                SessionMutationTypes.REDIRECT,
+                window.location.pathname
+            );
         }
     }
 
@@ -46,11 +49,16 @@ body {
     color: var(--st-color-text);
 
     &.darkmode {
+        --st-color-secondary: #ffffff;
         --st-color-background-dark: var(--st-color-ui-dm-dark);
         --st-color-background-medium: var(--st-color-ui-dm-medium);
         --st-color-background-light: var(--st-color-ui-dm-light);
         --st-color-border: var(--st-color-ui-dm-light);
         --st-color-text: var(--st-color-text-dm);
+
+        .button-secondary {
+            color: var(--st-color-text-lm);
+        }
     }
 }
 </style>
