@@ -11,6 +11,9 @@
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
                 >
+                    <img :src="a.getImage(collections)"
+                        height="50"
+                    />
                     {{ a.getName(languageKey) }}
                     <span class="activity-feed__activity__timestamp">
                         {{ timeSince(a.loggedDate) }}

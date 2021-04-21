@@ -105,7 +105,7 @@ export default class ContributorView extends Vue {
         this.loading = false;
 
         setTimeout(() => {
-            if (this.contributor) {
+            if (this.contributor && this.contributor.id == this.$route.params.contributor) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_CONTRIBUTOR_ITEM,
                     this.contributor,

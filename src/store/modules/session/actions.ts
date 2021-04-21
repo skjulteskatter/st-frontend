@@ -224,8 +224,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
 
     // LOG ITEMS
-    async [SessionActionTypes.LOG_SONG_ITEM]({ commit }, song: ApiSong): Promise<void> {
+    async [SessionActionTypes.LOG_SONG_ITEM]({ commit, state }, song: ApiSong): Promise<void> {
         const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+        if (state.activities?.find(a => a.itemId == song.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
+            return;
+        }
 
         items.push({
             loggedDate: new Date().toISOString(),
@@ -243,8 +247,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         commit(SessionMutationTypes.SET_LOG_ITEMS, items);
     },
-    async [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }, item: ApiContributor): Promise<void> {
+    async [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit, state }, item: ApiContributor): Promise<void> {
         const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+
+        if (state.activities?.find(a => a.itemId == item.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
+            return;
+        }
 
         items.push({
             loggedDate: new Date().toISOString(),

@@ -15,6 +15,25 @@ export class Activity {
         return this.activity.item ? (this.activity.type == "song" ? new Song(this.activity.item).getName(language) : this.activity.item.name) : undefined;
     }
 
+    public getRouterLink(collections: Collection[]): RouteLocationRaw {
+        return this.activity.type == "song" ? {
+            name: "song",
+            params: {
+                collection: collections.find(c => c.id == this.collectionId)?.key ?? "",
+                number: this.activity.item?.number ?? "",
+            },
+        } : {
+            name: "contributor",
+            params: {
+                contributor: this.activity.itemId,
+            },
+        };
+    }
+
+    public getImage(collections: Collection[]): string | undefined {
+        return this.type == "song" ? collections.find(c => c.id == this.collectionId)?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
+    }
+
     public get id() {
         return this.activity.id;
     }
@@ -29,20 +48,5 @@ export class Activity {
 
     public get loggedDate() {
         return this.activity.loggedDate;
-    }
-
-    public getRouterLink(collections: Collection[]): RouteLocationRaw {
-        return this.activity.type == "song" ? {
-            name: "song",
-            params: {
-                collection: collections.find(c => c.id == this.collectionId)?.key ?? "",
-                number: this.activity.item?.number ?? "",
-            },
-        } : {
-            name: "contributor",
-            params: {
-                contributor: this.activity.itemId,
-            },
-        };
     }
 }
