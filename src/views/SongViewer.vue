@@ -30,7 +30,21 @@
                             <small>{{ playlist.entries.length }}</small>
                         </base-button>
                     </modal>
-                    <select
+                    <modal
+                        theme="tertiary"
+                        icon="book"
+                        :label="$t('song.sheetmusic')"
+                    >
+                        <h3>{{$t('song.sheetmusic')}}</h3>
+                        <base-button
+                            v-for="sheet in song.sheetMusic"
+                            :key="sheet.id"
+                            @click="sheetMusic(sheet)"
+                        >
+                            {{ $t(`types.${sheet.category}`)}}
+                        </base-button>
+                    </modal>
+                    <!-- <select
                         v-if="song.sheetMusic.length"
                         id="sheetmusic"
                         name="sheetmusic"
@@ -47,7 +61,7 @@
                         >
                             {{ $t(`types.${sheet.category}`) }}
                         </option>
-                    </select>
+                    </select> -->
                     <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
                     <!-- <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
@@ -192,15 +206,15 @@ export default class SongViewer extends Vue {
         this.lyricsLoading = false;
     }
 
-    public sheetMusic() {
+    public sheetMusic(sheet: MediaFile) {
         // this.$router.push({name: "songs-sheet-music"});
         // osmd.load(this.songStore.state.sheetMusic);
         const options: SheetMusicOptions = {
             show: true,
-            url: this.selectedSheetMusic?.directUrl,
+            url: sheet?.directUrl,
             originalKey: this.song?.originalKey,
             transposition: this.transposition,
-            type: this.selectedSheetMusic?.type,
+            type: sheet?.type,
         };
 
         localStorage.setItem("song_item", JSON.stringify(this.song));
