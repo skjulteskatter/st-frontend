@@ -9,17 +9,9 @@
                     class="activity-feed__activity"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
-                    :to="{
-                        name: a.type == 'song' ? 'song' : 'contributor',
-                        params: a.type == 'song' ? {
-                            collection: collections.find(c => c.id == getSongItem(a).collectionId)?.key,
-                            number: getSongItem(a).number,
-                        } : {
-                            contributor: a.itemId,
-                        },
-                    }"
+                    :to="a.getRouterLink(collections)"
                 >
-                    {{ a.type == 'song' ? getSongItem(a)?.getName(languageKey) : a.item?.name }}
+                    {{ a.getName(languageKey) }}
                     <span class="activity-feed__activity__timestamp">
                         {{ timeSince(a.loggedDate) }}
                     </span>

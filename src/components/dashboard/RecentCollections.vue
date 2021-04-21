@@ -18,7 +18,6 @@
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, CollectionCard } from "@/components";
-import { ApiSong } from "dmb-api";
 
 @Options({
     name: "recent-collections",
@@ -41,8 +40,8 @@ export default class RecentCollections extends Vue {
     public get recentCollections() {
         return this.collections.filter((c) =>
             this.activities
-                .filter((a) => a.type == "song")
-                .map((a) => (a.item as ApiSong).collectionId)
+                .filter((a) => a.collectionId != undefined)
+                .map((a) => (a.collectionId))
                 .includes(c.id),
         );
     }

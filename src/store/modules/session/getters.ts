@@ -3,6 +3,7 @@ import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
 import { ApiActivity, ApiContributor, ApiPlaylist, ApiSong } from "dmb-api";
+import { Activity } from "@/classes/activity";
 
 
 export type Getters = {
@@ -13,7 +14,7 @@ export type Getters = {
     languageKey(state: State): string;
     extended(state: State): boolean;
     playlists(state: State): ApiPlaylist[];
-    activities(state: State): ApiActivity[];
+    activities(state: State): Activity[];
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -54,11 +55,15 @@ export const getters: GetterTree<State, RootState> & Getters = {
                 id: a.id,
                 type: a.type,
                 itemId: a.itemId,
-                item: a.type == "song" ? new Song(a.item as ApiSong) : new Contributor(a.item as ApiContributor),
                 loggedDate: a.loggedDate,
             };
+            if (a.type == "contributor") {
+                item.item = new Contributor(a.item as ApiContributor);
+            } else if (a.type == "song") {
+                item.item = new Song(a.item as ApiSong);
+            }
 
-            return item;
+            return new Activity(item);
         }) ?? [];
     },
 };

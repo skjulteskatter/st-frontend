@@ -1,9 +1,16 @@
 declare module "dmb-api" {
-    interface ApiActivity {
+
+    type ApiActivity = {
         id?: string;
-        type: string;
+        type: "contributor";
         itemId: string;
-        item?: ApiSong | ApiContributor;
+        item?: ApiContributor;
+        loggedDate: string;
+    } | {
+        id?: string;
+        type: "song";
+        itemId: string;
+        item?: ApiSong;
         loggedDate: string;
     }
 
