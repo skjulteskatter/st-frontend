@@ -26,6 +26,7 @@
                     {{ $t("common.subscriptions").toLowerCase() }}
                 </span>
             </base-button>
+            <store-cart />
         </div>
     </div>
     <!-- <product-slider :products="products" v-if="products.length" /> -->
@@ -54,7 +55,7 @@
 import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
-import { AllCollectionsCard, ProductSlider } from "@/components/store";
+import { AllCollectionsCard, ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
@@ -63,6 +64,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         BaseButton,
         AllCollectionsCard,
         ProductSlider,
+        StoreCart,
     },
     name: "collections-home",
 })
@@ -104,7 +106,15 @@ export default class StoreHome extends Vue {
     }
 
     public get productIds() {
-        return this.user?.subscriptions.map((s) => s.productId) ?? [];
+        const ids: string[] = [];
+
+        for (const s of this.user?.subscriptions ?? []) {
+            for (const id in s.productIds) {
+                if (!ids.includes(id)) ids.push(id);
+            }
+        }
+
+        return ids;
     }
 
     public async refreshSubscriptions() {

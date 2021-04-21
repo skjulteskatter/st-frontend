@@ -6,6 +6,7 @@ import { State } from "./state";
 export type Getters = {
     products(state: State): Product[];
     stripeInitialized(state: State): boolean;
+    cartItems(state: State): Product[];
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -14,5 +15,8 @@ export const getters: GetterTree<State, RootState> & Getters = {
     },
     stripeInitialized(state) {
         return state.initialized;
+    },
+    cartItems(state) {
+        return state.products.filter(p => state.cart.includes(p.id));
     },
 };

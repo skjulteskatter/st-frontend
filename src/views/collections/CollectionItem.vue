@@ -22,14 +22,14 @@
                     <base-button
                         theme="secondary"
                         icon="shop"
-                        v-if="collections.length == 1"
-                        @click="product ? checkout(product) : undefined"
+                        @click="addToCart()"
                     >
-                        {{ $t("store.buy") }}
+                        {{ $t("store.addToCart") }}
                     </base-button>
                     <base-button
                         theme="primary"
                         icon="shop"
+                        v-if="collections.length == 1"
                         @click="checkoutAll()"
                     >
                         {{ $t("store.buyall")}}
@@ -43,10 +43,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseButton } from "@/components";
-import { Product } from "@/classes/product";
 import { useStore } from "@/store";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 
 @Options({
     components: {
@@ -59,15 +57,20 @@ export default class StoreItem extends Vue {
     private store = useStore();
     public loading = false;
 
-    public async checkout(product: Product) {
-        this.loading = true;
-        await this.store?.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "primary",
-            icon: "shop",
-            title: this.$t("notification.redirecting"),
-        });
-        await this.store.dispatch(StripeActionTypes.START_SESSION, product.id);
-        this.loading = false;
+    // public async checkout(product: Product) {
+    //     this.loading = true;
+    //     await this.store?.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+    //         type: "primary",
+    //         icon: "shop",
+    //         title: this.$t("notification.redirecting"),
+    //     });
+    //     await this.store.dispatch(StripeActionTypes.START_SESSION);
+    //     this.loading = false;
+    // }
+
+    public addToCart() {
+        if (this.product)
+            this.store.commit(StripeMutationTypes.CART_ADD_PRODUCT, this.product.id);
     }
 
     public formatPrices(prices: Price[], type: string) {
@@ -95,7 +98,7 @@ export default class StoreItem extends Vue {
 
         if (all) {
             if (all.id == this.product?.id) {
-                this.checkout(all);
+                this.addToCart();
             } else {
                 this.$router.push({
                     name: "collection-item",

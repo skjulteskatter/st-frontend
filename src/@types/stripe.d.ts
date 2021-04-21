@@ -1,7 +1,7 @@
 
 declare module "checkout" {
     interface SessionRequest {
-        productId: string;
+        productIds: string[];
         successUrl: string;
         cancelUrl: string;
     }

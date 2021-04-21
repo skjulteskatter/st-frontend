@@ -8,6 +8,7 @@ import api from "./api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import { notify } from "./notify";
 
 const store = useStore();
 
@@ -127,7 +128,18 @@ class Auth {
         }
 
         const result = await a()
-            .signInWithEmailAndPassword(email, password);
+            .signInWithEmailAndPassword(email, password)
+            .catch(e => {
+                switch (e.code) {
+                case "auth/wrong-password":
+                    notify("error", "Wrong Password", "warning");
+                    store.commit(SessionMutationTypes.ERROR, "Wrong password");
+                    break;
+                default:
+                    break;
+                }
+                return;
+            }) as firebase.auth.UserCredential;
 
         const user = result.user;
 

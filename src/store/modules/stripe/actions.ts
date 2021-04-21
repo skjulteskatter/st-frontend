@@ -17,7 +17,7 @@ type AugmentedActionContext = {
 export interface Actions {
     [StripeActionTypes.GET_PORTAL](): Promise<string>;
     [StripeActionTypes.SETUP]({ commit }: AugmentedActionContext): Promise<void>;
-    [StripeActionTypes.START_SESSION]({ state }: AugmentedActionContext, payload: string): Promise<void>;
+    [StripeActionTypes.START_SESSION]({ state }: AugmentedActionContext): Promise<void>;
     [StripeActionTypes.REFRESH_COLLECTIONS](): Promise<void>;
 }
 
@@ -33,8 +33,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
         commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p, getters.collections)));
     },
     // eslint-disable-next-line no-empty-pattern
-    async [StripeActionTypes.START_SESSION]({ }, productId: string) {
-        await stripeService.checkout(productId);
+    async [StripeActionTypes.START_SESSION]({ state }) {
+        if (state.cart.length > 0) await stripeService.checkout(state.cart);
     },
     async [StripeActionTypes.REFRESH_COLLECTIONS]() {
         await stripeService.refreshSubscriptions();

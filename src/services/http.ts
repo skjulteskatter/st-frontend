@@ -10,13 +10,11 @@ class Http {
             } else if (response.status === 401) {
                 // auth.startLogin();
                 // resolve(null);
-                reject(401);
+                reject({status: response.status, value: "Unauthorized"});
             } else {
-                const error = new Error(response.statusText);
                 // error.response = response;
                 response.text().then(t =>  {
-                    notify("error", response.statusText + " " + response.status, "alert", t);
-                    reject(error);
+                    reject({status: response.status, value: t});
                 });
             }
         });
@@ -163,8 +161,8 @@ class Http {
                 .then(this.validateResponse)
                 .then(this.parseJson);
         }
-        catch {
-            notify("error", "Couldn't fetch from API", "warning", "Backend down?");
+        catch (e) {
+            notify("error", e.status, "warning", e.value);
         }
     }
 }
