@@ -1,7 +1,7 @@
 <template>
     <div class="product-card" v-if="product">
         <img
-            :class="`product-card__image ${collection?.available ? 'clickable' : ''}`"
+            :class="`product-card__image ${isAvailable ? 'clickable' : ''}`"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
@@ -15,7 +15,7 @@
                     theme="secondary"
                     class="product-card__button"
                     icon="arrowRight"
-                    v-if="collection?.available"
+                    v-if="isAvailable"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}
@@ -81,6 +81,10 @@ export default class ProductCard extends Vue {
         }
     }
 
+    public get isAvailable() {
+        return this.collection?.available;
+    }
+
     public get image() {
         return this.collection?.image
             ? `${this.collection?.image}?w=300&q=50`
@@ -93,7 +97,7 @@ export default class ProductCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id == this.product?.collectionIds[0],
+            (c) => c.id == this.product?.collectionIds[0]
         );
     }
 }
