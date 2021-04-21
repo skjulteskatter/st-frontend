@@ -1,7 +1,7 @@
 <template>
     <div class="product-card" v-if="product">
         <img
-            class="product-card__image clickable"
+            :class="`product-card__image ${collection?.available ? 'clickable' : ''}`"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
@@ -15,6 +15,7 @@
                     theme="secondary"
                     class="product-card__button"
                     icon="arrowRight"
+                    v-if="collection?.available"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}
@@ -40,15 +41,15 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 @Options({
-    components: {
-        BaseButton,
-    },
+    name: "product-card",
     props: {
         product: {
             type: Object,
         },
     },
-    name: "product-card",
+    components: {
+        BaseButton,
+    },
 })
 export default class ProductCard extends Vue {
     public product?: Product;
@@ -109,12 +110,6 @@ export default class ProductCard extends Vue {
     display: flex;
     flex-direction: column;
 
-    @include breakpoint("small") {
-        .product-card__price {
-            display: none;
-        }
-    }
-
     &__buttons {
         display: flex;
         gap: calc(var(--st-spacing) / 2);
@@ -145,20 +140,11 @@ export default class ProductCard extends Vue {
         flex-grow: 1;
     }
 
-    &__price {
-        opacity: 0.5;
-        margin: 0;
-    }
-
     &__title {
         width: 100%;
         text-overflow: ellipsis;
         overflow: hidden;
         margin: 0 0 var(--st-spacing) 0;
-    }
-
-    &__subtitle {
-        opacity: 0.7;
     }
 }
 </style>
