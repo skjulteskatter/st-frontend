@@ -206,7 +206,7 @@ export default class ContributorView extends Vue {
             }
 
             &__portrait {
-                max-width: 100%;
+                width: 100%;
                 border-radius: var(--st-border-radius);
                 border: 3px solid var(--st-color-background-medium);
                 margin-bottom: var(--st-spacing);
