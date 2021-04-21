@@ -4,28 +4,7 @@
             {{ $t("common.welcome") }}, {{ user.displayName }}
         </h1>
         <div class="dashboard__wrapper">
-            <!-- <base-card class="user-info">
-                <div class="user-info__wrapper gap-y">
-                    <div class="fields">
-                        <div class="user-info__field" v-if="user.roles.length">
-                            <span
-                                class="tag"
-                                v-for="role in user.roles"
-                                :key="'tag-' + role"
-                                >{{ role }}</span
-                            >
-                        </div>
-                        <div class="user-info__field">
-                            <h2 class="user-info__name">
-                                {{ user.displayName }}
-                            </h2>
-                            <p class="user-info__email">{{ user.email }}</p>
-                        </div>
-                    </div>
-                    <div class="loader" v-if="loading"></div>
-                </div>
-            </base-card>
-            <div class="dashboard__subscriptions">
+            <!-- <div class="dashboard__subscriptions">
                 <h3 class="dashboard__subscriptions__title">
                     <span>
                         {{ $t("common.your") }}
@@ -51,17 +30,14 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-import { BaseCard, BaseButton, CollectionCard } from "@/components";
-import { Icon } from "@/components/icon";
+import { BaseButton, CollectionCard } from "@/components";
 import { ActivityFeed, RecentCollections } from "@/components/dashboard";
 
 @Options({
     name: "dashboard",
     components: {
-        BaseCard,
         BaseButton,
         CollectionCard,
-        Icon,
         ActivityFeed,
         RecentCollections,
     },
