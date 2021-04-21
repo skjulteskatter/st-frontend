@@ -9,7 +9,7 @@ import http from "./http";
 
 export const activity = {
     async getActivities() {
-        return await http.get<ApiActivity[]>("api/Activity?expand=item");
+        return await http.get<ApiActivity[]>("api/Activity?expand=item&limit=20");
     },
     async pushActivities(activities: ApiActivity[]) {
         return await http.post<ApiActivity[]>("api/Activity", activities.map(a => {
