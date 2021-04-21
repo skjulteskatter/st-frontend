@@ -22,7 +22,7 @@
                         </strong>
                     </span>
                     <span class="activity-feed__activity__timestamp">
-                        {{ timeSince(a.loggedDate) }}
+                        {{ a.timeSince(languageKey) }}
                     </span>
                 </router-link>
             </div>
@@ -36,11 +36,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
 
 import { BaseCard } from "@/components";
-import { ApiActivity } from "dmb-api";
 
 @Options({
     name: "activity-feed",
@@ -50,44 +48,6 @@ import { ApiActivity } from "dmb-api";
 })
 export default class ActivityFeed extends Vue {
     private store = useStore();
-
-    public timeSince(date: string) {
-        const rtfl = new Intl.RelativeTimeFormat(this.languageKey, {
-            localeMatcher: "best fit",
-            numeric: "auto",
-            style: "long",
-        });
-
-        const now = new Date().getTime();
-        const then = new Date(date).getTime();
-
-        const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
-            { unit: "year", amount: 31536000000 },
-            { unit: "month", amount: 2628000000 },
-            { unit: "day", amount: 86400000 },
-            { unit: "hour", amount: 3600000 },
-            { unit: "minute", amount: 60000 },
-            { unit: "second", amount: 1000 },
-        ];
-
-        const relatime = (elapsed: number) => {
-            for (const { unit, amount } of units) {
-                if (Math.abs(elapsed) > amount || unit === "second") {
-                    return rtfl.format(Math.round(elapsed / amount), unit);
-                }
-            }
-        };
-
-        return relatime(then - now);
-    }
-
-    public getSongItem(activity: ApiActivity) {
-        return activity.item as Song;
-    }
-
-    public getContributor(activity: ApiActivity) {
-        return activity.item as Contributor;
-    }
 
     public get languageKey() {
         return this.store.getters.languageKey;

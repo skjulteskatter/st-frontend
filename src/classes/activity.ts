@@ -34,6 +34,36 @@ export class Activity {
         return this.type == "song" ? collections.find(c => c.id == this.collectionId)?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
     }
 
+    public timeSince(languageKey: string) {
+        const rtfl = new Intl.RelativeTimeFormat(languageKey, {
+            localeMatcher: "best fit",
+            numeric: "auto",
+            style: "long",
+        });
+
+        const now = new Date().getTime();
+        const then = new Date(this.activity.loggedDate).getTime();
+
+        const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
+            { unit: "year", amount: 31536000000 },
+            { unit: "month", amount: 2628000000 },
+            { unit: "day", amount: 86400000 },
+            { unit: "hour", amount: 3600000 },
+            { unit: "minute", amount: 60000 },
+            { unit: "second", amount: 1000 },
+        ];
+
+        const relatime = (elapsed: number) => {
+            for (const { unit, amount } of units) {
+                if (Math.abs(elapsed) > amount || unit === "second") {
+                    return rtfl.format(Math.round(elapsed / amount), unit);
+                }
+            }
+        };
+
+        return relatime(then - now);
+    }
+
     public get id() {
         return this.activity.id;
     }
