@@ -1,5 +1,9 @@
 <template>
-    <base-card class="user-settings" v-if="user" style="margin-bottom: var(--st-spacing)">
+    <base-card
+        class="user-settings"
+        v-if="user"
+        style="margin-bottom: var(--st-spacing)"
+    >
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
                 {{ $t("settings.general") }}
@@ -7,7 +11,12 @@
             <div class="user-settings__theme field gap-x">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
                 <hr />
-                <select name="theme-mode" id="theme-mode" v-model="theme" @change="themes.setTheme(theme)">
+                <select
+                    name="theme-mode"
+                    id="theme-mode"
+                    v-model="theme"
+                    @change="themes.setTheme(theme)"
+                >
                     <option :value="t" v-for="t in themes.keys" :key="t">
                         {{ t }}
                     </option>
@@ -160,14 +169,15 @@ export default class SettingsCard extends Vue {
     public mounted() {
         this.selectedLanguage =
             this.languages.find(
-                (l) => l.key == this.user?.settings?.languageKey,
+                (l) => l.key == this.user?.settings?.languageKey
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
 
         this.selectedKey = this.user?.settings?.defaultTransposition ?? "C";
 
-        this.selectedTranscode = this.user?.settings?.defaultTranscode ?? "common";
+        this.selectedTranscode =
+            this.user?.settings?.defaultTranscode ?? "common";
     }
 
     public async save() {
@@ -233,7 +243,10 @@ export default class SettingsCard extends Vue {
     }
 
     public async setDisplayName() {
-        await this.store.dispatch(SessionActionTypes.SET_DISPLAY_NAME, this.newDisplayName);
+        await this.store.dispatch(
+            SessionActionTypes.SET_DISPLAY_NAME,
+            this.newDisplayName
+        );
     }
 
     public async submitImage() {
@@ -263,7 +276,6 @@ export default class SettingsCard extends Vue {
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
-    max-width: 1200px;
 
     &__fields {
         .field {

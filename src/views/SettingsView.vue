@@ -7,12 +7,28 @@
             </base-button>
         </div>
         <settings-card></settings-card>
-        <base-button @click="updatePassword = !updatePassword">Set new password</base-button>
+        <base-button @click="updatePassword = !updatePassword"
+            >Set new password</base-button
+        >
         <div v-if="updatePassword">
             <form @submit="resetPassword">
-                <base-input type="password" v-if="passwordUser" v-model="oldPassword" label="Old password"/>
-                <base-input type="password" v-model="newPassword" label="New password"/>
-                <base-input :style="newPassword != repeatPassword ? 'color: red' : ''" type="password" v-model="repeatPassword" label="Repeat password"/>
+                <base-input
+                    type="password"
+                    v-if="passwordUser"
+                    v-model="oldPassword"
+                    label="Old password"
+                />
+                <base-input
+                    type="password"
+                    v-model="newPassword"
+                    label="New password"
+                />
+                <base-input
+                    :style="newPassword != repeatPassword ? 'color: red' : ''"
+                    type="password"
+                    v-model="repeatPassword"
+                    label="Repeat password"
+                />
                 <button formaction="submit">Submit</button>
             </form>
         </div>
@@ -57,7 +73,7 @@ export default class SettingsView extends Vue {
     }
 
     public get passwordUser() {
-        return auth.user?.providerData.find(p => p?.providerId == "password");
+        return auth.user?.providerData.find((p) => p?.providerId == "password");
     }
 }
 </script>
@@ -67,7 +83,8 @@ export default class SettingsView extends Vue {
 
 .settings-page {
     padding: calc(var(--st-spacing) * 2);
-    
+    max-width: 1920px;
+
     @include breakpoint("medium") {
         padding: var(--st-spacing);
     }
