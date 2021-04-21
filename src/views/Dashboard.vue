@@ -22,6 +22,7 @@
             </div> -->
             <activity-feed />
             <recent-collections />
+            <playlists />
         </div>
     </div>
 </template>
@@ -31,7 +32,11 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
 import { BaseButton, CollectionCard } from "@/components";
-import { ActivityFeed, RecentCollections } from "@/components/dashboard";
+import {
+    ActivityFeed,
+    RecentCollections,
+    Playlists,
+} from "@/components/dashboard";
 
 @Options({
     name: "dashboard",
@@ -40,6 +45,7 @@ import { ActivityFeed, RecentCollections } from "@/components/dashboard";
         CollectionCard,
         ActivityFeed,
         RecentCollections,
+        Playlists,
     },
 })
 export default class Dashboard extends Vue {
