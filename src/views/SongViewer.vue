@@ -19,15 +19,16 @@
                         icon="plus"
                         :label="$t('playlist.addtoplaylist')"
                     >
-                        <p
+                        <base-button
                             class="song-viewer__playlist"
                             v-for="playlist in playlists"
                             :key="playlist.id"
                             @click="addToPlaylist(playlist)"
+                            :loading="componentLoading[playlist.id]"
                         >
                             {{ playlist.name }}
                             <small>{{ playlist.entries.length }}</small>
-                        </p>
+                        </base-button>
                     </modal>
                     <select
                         v-if="song.sheetMusic.length"
@@ -129,6 +130,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -151,6 +153,10 @@ export default class SongViewer extends Vue {
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
+
+    public componentLoading: {
+        [key: string]: boolean;
+    } = {};
 
     // public unmounted() {
     //     this.songStore.commit("sheetMusic", {show: false});
@@ -205,18 +211,27 @@ export default class SongViewer extends Vue {
 
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
-        if (this.song) {
+        const song = this.song;
+
+        if (song) {
+            if (playlist.entries.find(e => e.type == "song" && e.itemId == song.id)) {
+                if (!confirm("Song is already in playlist. Add duplicate?")) return;
+            }
+            
+            this.componentLoading[playlist.id] = true;
             await this.store.dispatch(SessionActionTypes.PLAYLIST_ADD_SONG, {
                 playlistId: playlist.id,
-                songId: this.song.id,
+                songId: song.id,
+            });
+            this.componentLoading[playlist.id] = false;
+
+            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+                type: "success",
+                title: "Added to playlist",
+                content: `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`,
+                icon: "check",
             });
         }
-
-        // this.notifications.dispatch("addNotification", {
-        //     type: "success",
-        //     title: "Added to playlist",
-        //     icon: "check",
-        // });
     }
 
     public get playlists() {
