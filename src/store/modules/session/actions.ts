@@ -224,19 +224,21 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
 
     // LOG ITEMS
-    async [SessionActionTypes.LOG_SONG_ITEM]({ commit, state }, song: ApiSong): Promise<void> {
-        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+    async [SessionActionTypes.LOG_SONG_ITEM]({ commit, state }, item: ApiSong): Promise<void> {
+        const items = state.activities ?? JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
-        if (state.activities?.find(a => a.itemId == song.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
+        if (items?.find(a => a.itemId == item.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
             return;
         }
 
-        items.push({
+        const i: ApiActivity = {
             loggedDate: new Date().toISOString(),
             type: "song",
-            itemId: song.id,
-            item: song,
-        });
+            itemId: item.id,
+            item: item,
+        };
+
+        items.push(i);
 
         if (items.length >= 10) {
             await api.activity.pushActivities(items);
@@ -245,7 +247,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
             localStorage.setItem("activities", JSON.stringify(items));
         }
 
-        commit(SessionMutationTypes.SET_LOG_ITEMS, items);
+        commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);
     },
     async [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit, state }, item: ApiContributor): Promise<void> {
         const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
@@ -254,12 +256,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
             return;
         }
 
-        items.push({
+        const i: ApiActivity = {
             loggedDate: new Date().toISOString(),
             type: "contributor",
             itemId: item.id,
             item: item,
-        });
+        };
+
+        items.push(i);
 
         if (items.length >= 10) {
             await api.activity.pushActivities(items);
@@ -268,6 +272,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             localStorage.setItem("activities", JSON.stringify(items));
         }
 
-        commit(SessionMutationTypes.SET_LOG_ITEMS, items);
+        commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);
     },
 };
