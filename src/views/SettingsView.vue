@@ -2,11 +2,20 @@
     <div class="settings-page">
         <div class="settings-page__header">
             <h1 class="settings-page__title">{{ $t("common.settings") }}</h1>
-            <base-button theme="error" icon="logout" @click="logout">
+            <base-button
+                theme="error"
+                icon="logout"
+                @click="logout"
+                class="settings-page__logout"
+            >
                 {{ $t("common.logout") }}
             </base-button>
         </div>
-        <settings-card></settings-card>
+        <div class="settings-page__body">
+            <settings-card />
+            <user-card />
+        </div>
+
         <base-button @click="updatePassword = !updatePassword"
             >Set new password</base-button
         >
@@ -38,6 +47,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { SettingsCard, BaseButton } from "@/components";
+import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -48,6 +58,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
         SettingsCard,
         BaseButton,
         BaseInput,
+        UserCard,
     },
     name: "settings-view",
 })
@@ -87,6 +98,26 @@ export default class SettingsView extends Vue {
 
     @include breakpoint("medium") {
         padding: var(--st-spacing);
+    }
+
+    &__logout {
+        @include breakpoint("small") {
+            .button__content {
+                display: none;
+            }
+        }
+    }
+
+    &__body {
+        display: grid;
+        grid-template-areas: "settings settings settings settings user";
+        grid-gap: var(--st-spacing);
+
+        @include breakpoint("small") {
+            grid-template-areas:
+                "user"
+                "settings";
+        }
     }
 
     &__header {

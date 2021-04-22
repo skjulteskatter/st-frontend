@@ -1,9 +1,5 @@
 <template>
-    <base-card
-        class="user-settings"
-        v-if="user"
-        style="margin-bottom: var(--st-spacing)"
-    >
+    <base-card class="user-settings" v-if="user">
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
                 {{ $t("settings.general") }}
@@ -169,7 +165,7 @@ export default class SettingsCard extends Vue {
     public mounted() {
         this.selectedLanguage =
             this.languages.find(
-                (l) => l.key == this.user?.settings?.languageKey,
+                (l) => l.key == this.user?.settings?.languageKey
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
@@ -245,7 +241,7 @@ export default class SettingsCard extends Vue {
     public async setDisplayName() {
         await this.store.dispatch(
             SessionActionTypes.SET_DISPLAY_NAME,
-            this.newDisplayName,
+            this.newDisplayName
         );
     }
 
@@ -276,6 +272,7 @@ export default class SettingsCard extends Vue {
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
+    grid-area: settings;
 
     &__fields {
         .field {
