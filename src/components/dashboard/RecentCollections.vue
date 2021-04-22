@@ -41,8 +41,8 @@ export default class RecentCollections extends Vue {
         return this.collections.filter((c) =>
             this.activities
                 .filter((a) => a.collectionId != undefined)
-                .map((a) => (a.collectionId))
-                .includes(c.id),
+                .map((a) => a.collectionId)
+                .includes(c.id)
         );
     }
 }
@@ -64,8 +64,9 @@ export default class RecentCollections extends Vue {
     }
 
     &__collections {
-        display: flex;
-        gap: var(--st-spacing);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: calc(var(--st-spacing) / 2);
     }
 }
 </style>
