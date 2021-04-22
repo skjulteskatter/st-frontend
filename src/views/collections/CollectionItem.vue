@@ -22,17 +22,19 @@
                     <base-button
                         theme="secondary"
                         icon="shop"
+                        :disabled="inCart"
+                        v-if="!ownedIds.includes(product.id)"
                         @click="addToCart()"
                     >
                         {{ $t("store.addToCart") }}
                     </base-button>
                     <base-button
-                        theme="primary"
+                        theme="tertiary"
+                        v-else
                         icon="shop"
-                        v-if="collections.length == 1"
-                        @click="checkoutAll()"
+                        disabled
                     >
-                        {{ $t("store.buyall")}}
+                        {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
             </div>
@@ -92,6 +94,10 @@ export default class StoreItem extends Vue {
             this.product?.collectionIds.includes(c.id),
         );
     }
+    
+    public get inCart() {
+        return this.product? this.store.state.stripe.cart.includes(this.product.id) : false;
+    }
 
     public checkoutAll() {
         const all = this.products.find(p => p.collections.length > 1);
@@ -124,6 +130,10 @@ export default class StoreItem extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get ownedIds() {
+        return this.store.getters.user?.subscriptions.map(s => s.productIds).reduce((a, b) => [...a, ...b], [] as string[]) ?? [];
     }
 }
 </script>

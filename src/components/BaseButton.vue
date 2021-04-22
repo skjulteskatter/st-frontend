@@ -1,8 +1,8 @@
 <template>
     <button
         class="button"
-        :class="[`button-${theme}`, { 'button-loading': loading }]"
-        :disabled="loading"
+        :class="[`button-${theme}`, { 'button-loading': loading, 'button-disabled': disabled }]"
+        :disabled="loading || disabled"
         v-bind="$attrs"
     >
         <span class="button__label--loading" v-if="loading">{{
@@ -50,6 +50,9 @@ import { Icon } from "@/components/icon";
         icon: {
             type: String,
         },
+        disabled: {
+            type: Boolean,
+        },
     },
 })
 export default class BaseButton extends Vue {
@@ -57,6 +60,7 @@ export default class BaseButton extends Vue {
     public loadingLabel = "Loading...";
     public theme = "primary";
     public icon = "";
+    public disabled = false;
 
     public get isLoading() {
         return this.loading;
@@ -118,6 +122,13 @@ export default class BaseButton extends Vue {
             border-left: var(--st-loader-width) solid transparent;
 
             animation: loading 1s linear infinite;
+        }
+    }
+
+    &-disabled {
+        opacity: 0.5;
+        &:hover {
+            cursor: unset;
         }
     }
 
