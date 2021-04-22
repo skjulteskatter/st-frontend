@@ -1,23 +1,29 @@
-import { IDBPDatabase, openDB } from "idb";
-
-const store = "songtreasures";
-
-type Stores = "songs" | "contributors" | "lyrics" | "all_lyrics";
-
 export class CacheService<T> {
     private name: Stores;
-    private db?: IDBPDatabase<unknown>;
+    private _db?: IDBDatabase;
 
     constructor(name: Stores) {
         this.name = name;
-        this.init();
     }
 
     public async init() {
-        this.db ??= await openDB(store);
+        this._db ??= await new Promise(resolve => {
+            const o = indexedDB.open(this.name)
+            o.onsuccess = () => resolve(o.result);
+        });
     }
 
+    public get db() {
+        if (this._db) return this._db;
+
+        throw new Error("DB NOT PRESENT");
+    }
+
+    public g
+
     public get(key: string): Promise<T | undefined> {
+        const transaction = this.db
+
         return this.db?.get(this.name, key) as Promise<T | undefined>;
     }
 
