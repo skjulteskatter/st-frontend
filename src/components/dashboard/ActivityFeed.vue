@@ -54,7 +54,7 @@ export default class ActivityFeed extends Vue {
     }
 
     public get collections() {
-        return this.store.getters.collections;
+        return this.store.getters.allCollections;
     }
 
     public get activitiesInitialized() {

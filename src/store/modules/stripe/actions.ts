@@ -30,7 +30,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
         await stripeService.init(result.key);
         
         commit(StripeMutationTypes.SET_KEY, result.key);
-        commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p, getters.collections)));
+        commit(StripeMutationTypes.SET_PRODUCTS, result.products.map(p => new Product(p, getters.allCollections)));
     },
     // eslint-disable-next-line no-empty-pattern
     async [StripeActionTypes.START_SESSION]({ state }) {

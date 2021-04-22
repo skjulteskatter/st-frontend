@@ -90,7 +90,7 @@ export default class StoreItem extends Vue {
     }
 
     public get collections() {
-        return this.store.getters.collections.filter((c) =>
+        return this.store.state.session.collections.filter((c) =>
             this.product?.collectionIds.includes(c.id),
         );
     }

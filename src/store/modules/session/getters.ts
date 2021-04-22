@@ -7,6 +7,7 @@ import { Activity } from "@/classes/activity";
 
 
 export type Getters = {
+    allCollections(state: State): Collection[];
     collections(state: State): Collection[];
     user(state: State): User | undefined;
     initialized(state: State): boolean;
@@ -18,6 +19,9 @@ export type Getters = {
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
+    allCollections(state): Collection[] {
+        return state.collections;
+    },
     collections(state): Collection[] {
         if (state.currentUser) {
             if (state.currentUser.roles.some(r => ["administrator", "extended"].includes(r))) {

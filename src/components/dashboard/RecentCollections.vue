@@ -30,7 +30,7 @@ export default class RecentCollections extends Vue {
     private store = useStore();
 
     public get collections() {
-        return this.store.getters.collections;
+        return this.store.getters.allCollections;
     }
 
     public get activities() {
@@ -42,7 +42,7 @@ export default class RecentCollections extends Vue {
             this.activities
                 .filter((a) => a.collectionId != undefined)
                 .map((a) => a.collectionId)
-                .includes(c.id)
+                .includes(c.id),
         );
     }
 }

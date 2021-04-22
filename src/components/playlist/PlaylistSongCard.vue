@@ -80,8 +80,8 @@ export default class PlaylistSongCard extends Vue {
     }
 
     public get collection() {
-        return this.store.getters.collections.find(
-            (c) => c.id === this.entry.item.collection?.id
+        return this.store.getters.allCollections.find(
+            (c) => c.id === this.entry.item.collection?.id,
         );
     }
 

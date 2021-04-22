@@ -96,7 +96,7 @@ export default class ProductCard extends Vue {
     }
 
     public get collection() {
-        return this.store.getters.collections.find(
+        return this.store.state.session.collections.find(
             (c) => c.id == this.product?.collectionIds[0],
         );
     }

@@ -42,7 +42,7 @@ export default class CollectionList extends Vue {
     private store = useStore();
 
     public get collections(): Collection[] {
-        return this.store.getters.collections;
+        return this.store.getters.allCollections;
     }
 
     public get playlists(): ApiPlaylist[] {

@@ -32,21 +32,6 @@
     <!-- <product-slider :products="products" v-if="products.length" /> -->
     <div class="collections__owned">
         <product-slider :products="products" v-if="products.length">
-            <all-collections-card
-                v-if="allCollectionProduct"
-                :product="allCollectionProduct"
-                :action="
-                    () =>
-                        $router.push({
-                            name: 'collection-item',
-                            params: {
-                                id: allCollectionProduct
-                                    ? allCollectionProduct.id
-                                    : '',
-                            },
-                        })
-                "
-            ></all-collections-card>
         </product-slider>
     </div>
 </template>
@@ -55,14 +40,13 @@
 import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
-import { AllCollectionsCard, ProductSlider, StoreCart } from "@/components/store";
+import { ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
     components: {
         BaseButton,
-        AllCollectionsCard,
         ProductSlider,
         StoreCart,
     },
@@ -121,12 +105,6 @@ export default class StoreHome extends Vue {
         this.loadingSubs = true;
         await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
-    }
-
-    public get allCollectionProduct() {
-        return this.store.getters.products.find(
-            (p) => p.collections.length > 1,
-        );
     }
 }
 </script>
