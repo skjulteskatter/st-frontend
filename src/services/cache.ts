@@ -1,16 +1,18 @@
-export class CacheService<T> {
-    private name: Stores;
-    private _db?: IDBDatabase;
+/** eslint */
+import { IDBPDatabase, openDB } from "idb"; 
 
-    constructor(name: Stores) {
+const store = "songtreasures";
+
+export class CacheService<T> {
+    private name: string;
+    private _db?: IDBPDatabase<unknown>;
+
+    constructor(name: string) {
         this.name = name;
     }
 
     public async init() {
-        this._db ??= await new Promise(resolve => {
-            const o = indexedDB.open(this.name)
-            o.onsuccess = () => resolve(o.result);
-        });
+        this._db ??= await openDB(store);
     }
 
     public get db() {
@@ -18,8 +20,6 @@ export class CacheService<T> {
 
         throw new Error("DB NOT PRESENT");
     }
-
-    public g
 
     public get(key: string): Promise<T | undefined> {
         const transaction = this.db
@@ -100,3 +100,7 @@ export class CacheService<T> {
         }
     }
 }
+
+// export class CacheService<T> {
+
+// }

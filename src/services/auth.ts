@@ -131,12 +131,12 @@ class Auth {
             .signInWithEmailAndPassword(email, password)
             .catch(e => {
                 switch (e.code) {
-                case "auth/wrong-password":
-                    notify("error", "Wrong Password", "warning");
-                    store.commit(SessionMutationTypes.ERROR, "Wrong password");
-                    break;
-                default:
-                    break;
+                    case "auth/wrong-password":
+                        notify("error", "Wrong Password", "warning");
+                        store.commit(SessionMutationTypes.ERROR, "Wrong password");
+                        break;
+                    default:
+                        break;
                 }
                 return;
             }) as firebase.auth.UserCredential;
@@ -159,13 +159,13 @@ class Auth {
             .createUserWithEmailAndPassword(email, password)
             .catch(e => {
                 switch (e.code) {
-                case "auth/email-already-in-use": 
-                    console.log("email in use");
+                    case "auth/email-already-in-use": 
+                        console.log("email in use");
 
-                    console.log(a().currentUser);
-                    break;
-                default:
-                    console.log(e.code);
+                        console.log(a().currentUser);
+                        break;
+                    default:
+                        console.log(e.code);
                 }
             });
         if (!result) return;

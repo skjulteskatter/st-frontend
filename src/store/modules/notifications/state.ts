@@ -1,10 +1,10 @@
 export type Notification = {
-	id?: string;
-	type: string;
-	title: string;
-	content?: string;
-	icon?: string;
-	hidden?: boolean;
+    id?: string;
+    type: string;
+    title: string;
+    content?: string;
+    icon?: string;
+    hidden?: boolean;
 }
 
 export type State = {

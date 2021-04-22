@@ -14,10 +14,10 @@ export type RootState = {
 };
   
 export type Store = SessionStore<Pick<RootState, "session">>
-    & StripeStore<Pick<RootState, "stripe">>
-    & NotificationStore<Pick<RootState, "notifications">>
-    & UserStore<Pick<RootState, "users">>
-    & SongStore<Pick<RootState, "songs">>;
+& StripeStore<Pick<RootState, "stripe">>
+& NotificationStore<Pick<RootState, "notifications">>
+& UserStore<Pick<RootState, "users">>
+& SongStore<Pick<RootState, "songs">>;
   
 // Plug in logger when in development environment
 const debug = false && process.env.NODE_ENV !== "production";

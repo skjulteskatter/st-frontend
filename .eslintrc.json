@@ -15,13 +15,14 @@
   },
   "rules": {
     //"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "template-curly-spacing": "off",
     "no-console": "warn",
     "no-debugger": "warn",
     "semi": ["warn", "always"],
     "comma-dangle": ["warn", "always-multiline"],
     "quotes": ["warn", "double"],
-    "indent": ["warn", 4],
-    "eol-last": ["warn", "always"]
+    "eol-last": ["warn", "always"],
+    "@typescript-eslint/indent": ["warn", 4]
   },
   "overrides": [
     {
