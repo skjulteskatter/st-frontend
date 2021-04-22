@@ -2,9 +2,11 @@
     <modal
         theme="primary"
         :label="$t('store.checkout')"
-        v-if="cartItems.length"
+        v-if="cartItems.length" 
+        icon="buy"
     >
         <h3>{{ $t('store.inCart')}}</h3>
+        <span @click="clearCart">{{ $t('store.clearCart') }}</span>
         <p v-for="i in cartItems" :key="i.id">
             {{i.getName(languageKey)}}
         </p>
@@ -19,6 +21,7 @@
 import { Modal, BaseButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -41,6 +44,10 @@ export default class StoreCart extends Vue {
 
     public async checkout() {
         await this.store.dispatch(StripeActionTypes.START_SESSION);
+    }
+
+    public clearCart() {
+        this.store.commit(StripeMutationTypes.CART_CLEAR);
     }
 }
 </script>

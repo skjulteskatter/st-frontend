@@ -165,7 +165,7 @@ export default class SettingsCard extends Vue {
     public mounted() {
         this.selectedLanguage =
             this.languages.find(
-                (l) => l.key == this.user?.settings?.languageKey
+                (l) => l.key == this.user?.settings?.languageKey,
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
@@ -241,7 +241,7 @@ export default class SettingsCard extends Vue {
     public async setDisplayName() {
         await this.store.dispatch(
             SessionActionTypes.SET_DISPLAY_NAME,
-            this.newDisplayName
+            this.newDisplayName,
         );
     }
 

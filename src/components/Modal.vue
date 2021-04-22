@@ -1,7 +1,7 @@
 <template>
     <div class="modal">
         <base-button
-            @click="openModal"
+            @click="() => {openModal(); callback()}"
             class="modal__open-button"
             :theme="theme"
             :icon="icon"
@@ -53,6 +53,9 @@ import BaseButton from "@/components/BaseButton.vue";
         theme: {
             type: String,
         },
+        callback: {
+            type: Function,
+        },
     },
     components: {
         BaseCard,
@@ -67,6 +70,7 @@ export default class Modal extends Vue {
     public label = "";
     public icon = "";
     public theme = "";
+    public callback: Function = () => undefined;
 
     public closeIfOutside() {
         if (!this.mouseOverCard) this.closeModal();
