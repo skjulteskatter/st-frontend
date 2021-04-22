@@ -57,7 +57,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BaseButton,
     },
 })
-export default class PlaylistEntryCard extends Vue {
+export default class PlaylistFileCard extends Vue {
     private store = useStore();
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
@@ -80,7 +80,7 @@ export default class PlaylistEntryCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id === this.entry.item.collection?.id,
+            (c) => c.id === this.entry.item.collection?.id
         );
     }
 

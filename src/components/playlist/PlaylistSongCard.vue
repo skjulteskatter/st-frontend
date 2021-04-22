@@ -1,26 +1,26 @@
 <template>
-    <base-card class="playlist-song-card">
+    <base-card class="playlist-song-card clickable">
         <div class="playlist-song-card__wrapper">
-            <div class="playlist-song-card__info">
-                <router-link
-                    class="playlist-song-card__title"
-                    :to="{
-                        name: 'song',
-                        params: {
-                            collection: collection?.key,
-                            number: entry.item.number,
-                        },
-                    }"
-                >
+            <router-link
+                class="playlist-song-card__link"
+                :to="{
+                    name: 'song',
+                    params: {
+                        collection: collection?.key,
+                        number: entry.item.number,
+                    },
+                }"
+            >
+                <div class="playlist-song-card__info">
                     <span>
                         {{ getEntryName(entry) }}
                     </span>
-                </router-link>
-                <small class="playlist-song-card__collection">
-                    {{ collection?.getName(languageKey) }}
-                    {{ entry.item.number }}
-                </small>
-            </div>
+                    <small class="playlist-song-card__collection">
+                        {{ collection?.getName(languageKey) }}
+                        {{ entry.item.number }}
+                    </small>
+                </div>
+            </router-link>
             <small
                 class="playlist-song-card__remove"
                 @click="removeFromPlaylist"
@@ -57,7 +57,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BaseButton,
     },
 })
-export default class PlaylistEntryCard extends Vue {
+export default class PlaylistSongCard extends Vue {
     private store = useStore();
     public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
     public playlist: ApiPlaylist = {} as ApiPlaylist;
@@ -70,7 +70,9 @@ export default class PlaylistEntryCard extends Vue {
 
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
+            icon: "trash",
             title: this.$t("playlist.removed"),
+            content: this.$t("notification.removedsong"),
         });
     }
 
@@ -80,7 +82,7 @@ export default class PlaylistEntryCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id === this.entry.item.collection?.id,
+            (c) => c.id === this.entry.item.collection?.id
         );
     }
 
@@ -122,6 +124,10 @@ export default class PlaylistEntryCard extends Vue {
     &__remove {
         color: var(--st-color-error);
         cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &__collection {
@@ -131,9 +137,10 @@ export default class PlaylistEntryCard extends Vue {
         margin-top: 0.2em;
     }
 
-    &__title {
+    &__link {
         text-decoration: none;
         color: var(--st-color-text-dark);
+        flex-grow: 1;
 
         &:hover {
             color: var(--st-color-primary);
