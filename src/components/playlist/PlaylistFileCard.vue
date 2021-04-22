@@ -78,7 +78,7 @@ export default class PlaylistFileCard extends Vue {
     }
 
     public get collection() {
-        return this.store.getters.allCollections.find(
+        return this.store.state.session.collections.find(
             (c) => c.id === this.entry.item.collection?.id,
         );
     }

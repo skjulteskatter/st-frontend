@@ -110,7 +110,7 @@ export default class Subscriptions extends Vue {
     }
 
     public get collections() {
-        return this.store.getters.allCollections;
+        return this.store.state.session.collections;
     }
 
     public get isAdmin(): boolean {

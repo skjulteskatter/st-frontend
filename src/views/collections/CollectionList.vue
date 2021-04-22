@@ -57,12 +57,6 @@ export default class StoreHome extends Vue {
     public loading = false;
     public loadingSubs = false;
 
-    public mounted() {
-        if (!this.store.getters.stripeInitialized) {
-            this.store.dispatch(StripeActionTypes.SETUP);
-        }
-    }
-
     public portal() {
         this.loading = true;
         this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {

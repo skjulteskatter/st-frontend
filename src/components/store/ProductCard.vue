@@ -1,7 +1,7 @@
 <template>
     <div class="product-card" v-if="product">
         <img
-            :class="`product-card__image ${isAvailable ? 'clickable' : ''}`"
+            :class="`product-card__image clickable`"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"

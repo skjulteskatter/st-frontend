@@ -30,7 +30,7 @@ export default class RecentCollections extends Vue {
     private store = useStore();
 
     public get collections() {
-        return this.store.getters.allCollections;
+        return this.store.state.session.collections;
     }
 
     public get activities() {

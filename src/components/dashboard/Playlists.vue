@@ -5,24 +5,20 @@
                 {{ $t("common.playlists") }}
             </h3>
             <div class="dashboard-playlists__playlists" v-if="playlists.length">
-                <div
+                <router-link
                     class="dashboard-playlists__playlist clickable"
                     v-for="p in playlists"
                     :key="p.id"
+                    :to="playlistLink(p)"
                 >
-                    <router-link
-                        class="dashboard-playlists__playlist__link"
-                        :to="playlistLink(p)"
-                    >
-                        <span class="dashboard-playlists__playlist__name">
-                            {{ p.name }}
-                        </span>
-                        <small class="dashboard-playlists__playlist__entries">
-                            {{ p.entries.length }}
-                            {{ $t("common.songs").toLowerCase() }}
-                        </small>
-                    </router-link>
-                </div>
+                    <span class="dashboard-playlists__playlist__name">
+                        {{ p.name }}
+                    </span>
+                    <small class="dashboard-playlists__playlist__entries">
+                        {{ p.entries.length }}
+                        {{ $t("common.songs").toLowerCase() }}
+                    </small>
+                </router-link>
             </div>
             <p class="dashboard-playlists__fallback" v-else>
                 {{ $t("playlist.noplaylists") }}
@@ -88,12 +84,9 @@ export default class Playlists extends Vue {
         padding: calc(var(--st-spacing) / 2);
         background: var(--st-color-background-light);
         border-radius: var(--st-border-radius);
-
-        &__link {
-            width: 100%;
-            color: currentColor;
-            text-decoration: none;
-        }
+        width: 100%;
+        color: currentColor;
+        text-decoration: none;
 
         &__name {
             display: block;
