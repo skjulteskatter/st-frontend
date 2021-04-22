@@ -3,24 +3,49 @@
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
         <div v-if="!embed && song" class="sheetmusic-viewer__info">
             <h2 class="sheetmusic-viewer__info__title">
-                {{song.getName(languageKey)}}
+                {{ song.getName(languageKey) }}
             </h2>
-            <p v-for="c in song.authors" :key="c.id" class="sheetmusic-viewer__info__author">
-                {{$t('song.author')}}: {{c.name}}
+            <p
+                v-for="c in song.authors"
+                :key="c.id"
+                class="sheetmusic-viewer__info__author"
+            >
+                {{ $t("song.author") }}: {{ c.name }}
             </p>
-            <p v-for="c in song.composers" :key="c.id" class="sheetmusic-viewer__info__composer">
-                {{$t('song.composer')}}: {{c.name}}
+            <p
+                v-for="c in song.composers"
+                :key="c.id"
+                class="sheetmusic-viewer__info__composer"
+            >
+                {{ $t("song.composer") }}: {{ c.name }}
             </p>
         </div>
 
         <div class="sheetmusic-wrapper">
             <div class="sheetmusic-content">
-                <base-button v-if="type != pdfType" icon="settings" class="pbcontrol-toggle" style="position:fixed;" @click="osmd.toggleControls()">Controls</base-button>
+                <base-button
+                    v-if="type != pdfType"
+                    icon="settings"
+                    class="pbcontrol-toggle"
+                    style="position: fixed"
+                    @click="osmd.toggleControls()"
+                    >Controls</base-button
+                >
                 <open-sheet-music-display
-                    v-if="type != pdfType && url && ['sheet-music', 'sheet-music-embed'].includes(routeName)"
+                    v-if="
+                        type != pdfType &&
+                        url &&
+                        ['sheet-music', 'sheet-music-embed'].includes(routeName)
+                    "
                     :options="options"
                 ></open-sheet-music-display>
-                <object v-if="type == pdfType" :data="options.url" type="application/pdf" width="100%" height="100%">
+                <object
+                    v-if="type == pdfType"
+                    :data="options.url"
+                    type="application/pdf"
+                    width="100%"
+                    height="100%"
+                >
                     <p>Couldn't load PDF</p>
                 </object>
                 <div id="osmd-canvas"></div>
@@ -31,7 +56,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import OpenSheetMusicDisplay from "@/components/OSMD.vue"; 
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
 import { ApiSong } from "dmb-api";
@@ -60,7 +85,10 @@ export default class SheetMusic extends Vue {
         if (o && !this.$route.params.id) {
             const options = JSON.parse(o) as SheetMusicOptions;
             if (!this.store.state.songs.sheetMusic.url) {
-                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+                this.store.commit(
+                    SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
+                    options
+                );
             }
         }
     }
@@ -89,11 +117,20 @@ export default class SheetMusic extends Vue {
     }
 
     public get url() {
-        return this.store.state.songs.sheetMusic.url ?? `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`;
+        return (
+            this.store.state.songs.sheetMusic.url ??
+            `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`
+        );
     }
 
     public get originalKey() {
-        return this.store.state.songs.sheetMusic.originalKey ?? this.searchParams.get("originalKey")?.replace("sharp", "#").replace("flat", "b");
+        return (
+            this.store.state.songs.sheetMusic.originalKey ??
+            this.searchParams
+                .get("originalKey")
+                ?.replace("sharp", "#")
+                .replace("flat", "b")
+        );
     }
 
     public get routeName() {
@@ -105,7 +142,10 @@ export default class SheetMusic extends Vue {
     }
 
     public get transposition() {
-        return this.store.state.songs.sheetMusic.transposition ?? (this.transposeKey ? parseInt(this.transposeKey) : undefined);
+        return (
+            this.store.state.songs.sheetMusic.transposition ??
+            (this.transposeKey ? parseInt(this.transposeKey) : undefined)
+        );
     }
 
     public get embed() {
@@ -129,7 +169,10 @@ export default class SheetMusic extends Vue {
     }
 
     public get type() {
-        return this.store.state.songs.sheetMusic.type ?? this.searchParams.get("type");
+        return (
+            this.store.state.songs.sheetMusic.type ??
+            this.searchParams.get("type")
+        );
     }
 
     public get options(): SheetMusicOptions {
@@ -154,29 +197,31 @@ export default class SheetMusic extends Vue {
     height: 100vh;
     max-width: 1200px;
     margin: auto;
-    padding: calc(var(--st-spacing)*2);
+    padding: calc(var(--st-spacing) * 2);
 
-    @include breakpoint('medium'){
+    @include breakpoint("medium") {
         padding: var(--st-spacing);
     }
 
     &__info {
         margin-bottom: var(--st-spacing);
 
-        &__author, &__composer {
+        &__author,
+        &__composer {
             color: var(--st-color-primary);
             margin: 0.5em 0;
         }
 
         &__title {
             margin-top: 0;
-            margin-bottom: calc(var(--st-spacing)/2);
+            margin-bottom: calc(var(--st-spacing) / 2);
         }
     }
 }
 
 #pb-canvas .control-panel {
-    background-color: var(--st-color-ui-lm-medium);
+    background-color: var(--st-color-background-medium);
+    border-radius: var(--st-border-radius);
     width: 350px;
     left: unset;
 }
@@ -202,8 +247,8 @@ export default class SheetMusic extends Vue {
     .reset-button {
         position: relative;
 
-        &:after {
-            content: "Reset";
+        &:before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -212,18 +257,24 @@ export default class SheetMusic extends Vue {
 
             background-color: var(--st-color-primary);
             border-radius: var(--st-border-radius);
+        }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        &:after {
+            content: url("./sheetmusic/reset.svg");
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            transform: translate(-50%, -50%);
         }
     }
 
-    .playpause-button{
+    .playpause-button {
         position: relative;
 
-        &:after {
-            content: "Play";
+        &:before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -232,10 +283,16 @@ export default class SheetMusic extends Vue {
 
             background-color: var(--st-color-primary);
             border-radius: var(--st-border-radius);
+        }
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        &:after {
+            content: url("./sheetmusic/play.svg");
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            transform: translate(-50%, -50%);
         }
     }
 }
@@ -244,5 +301,11 @@ export default class SheetMusic extends Vue {
     position: fixed;
     z-index: 50;
     bottom: 10px;
+
+    @include breakpoint("small") {
+        .button__content {
+            display: none;
+        }
+    }
 }
 </style>
