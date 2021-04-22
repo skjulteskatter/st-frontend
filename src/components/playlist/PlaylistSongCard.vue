@@ -34,7 +34,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
-import { BaseCard, BaseButton } from "@/components";
+import { BaseCard } from "@/components";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -54,7 +54,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     },
     components: {
         BaseCard,
-        BaseButton,
     },
 })
 export default class PlaylistSongCard extends Vue {
@@ -82,7 +81,7 @@ export default class PlaylistSongCard extends Vue {
 
     public get collection() {
         return this.store.getters.collections.find(
-            (c) => c.id === this.entry.item.collection?.id,
+            (c) => c.id === this.entry.item.collection?.id
         );
     }
 
