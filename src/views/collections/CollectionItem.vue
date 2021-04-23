@@ -28,12 +28,7 @@
                     >
                         {{ $t("store.addToCart") }}
                     </base-button>
-                    <base-button
-                        theme="tertiary"
-                        v-else
-                        icon="shop"
-                        disabled
-                    >
+                    <base-button theme="tertiary" v-else icon="shop" disabled>
                         {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
@@ -47,6 +42,7 @@ import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -72,7 +68,16 @@ export default class StoreItem extends Vue {
 
     public addToCart() {
         if (this.product)
-            this.store.commit(StripeMutationTypes.CART_ADD_PRODUCT, this.product.id);
+            this.store.commit(
+                StripeMutationTypes.CART_ADD_PRODUCT,
+                this.product.id
+            );
+
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+            type: "success",
+            icon: "shop",
+            title: this.$t("store.addedToCart"),
+        });
     }
 
     public formatPrices(prices: Price[], type: string) {
@@ -91,16 +96,18 @@ export default class StoreItem extends Vue {
 
     public get collections() {
         return this.store.state.session.collections.filter((c) =>
-            this.product?.collectionIds.includes(c.id),
+            this.product?.collectionIds.includes(c.id)
         );
     }
-    
+
     public get inCart() {
-        return this.product? this.store.state.stripe.cart.includes(this.product.id) : false;
+        return this.product
+            ? this.store.state.stripe.cart.includes(this.product.id)
+            : false;
     }
 
     public checkoutAll() {
-        const all = this.products.find(p => p.collections.length > 1);
+        const all = this.products.find((p) => p.collections.length > 1);
 
         if (all) {
             if (all.id == this.product?.id) {
@@ -133,7 +140,11 @@ export default class StoreItem extends Vue {
     }
 
     public get ownedIds() {
-        return this.store.getters.user?.subscriptions.map(s => s.productIds).reduce((a, b) => [...a, ...b], [] as string[]) ?? [];
+        return (
+            this.store.getters.user?.subscriptions
+                .map((s) => s.productIds)
+                .reduce((a, b) => [...a, ...b], [] as string[]) ?? []
+        );
     }
 }
 </script>
@@ -142,7 +153,6 @@ export default class StoreItem extends Vue {
 @import "../../style/mixins";
 
 .collection-item {
-
     &__price-tag {
         color: var(--st-color-primary);
     }
