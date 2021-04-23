@@ -7,7 +7,7 @@ type StoreTypes = {
     lyrics: Lyrics;
     config: {
         id: string;
-        value: string | number | boolean;
+        value: string | number | boolean | undefined;
     };
 }
 
@@ -21,8 +21,9 @@ class CacheService {
         "songs",
         "contributors",
         "lyrics",
+        "config",
     ];
-    private version = 1;
+    private version = 2;
     private _db?: IDBPDatabase;
 
     public async init() {
@@ -31,7 +32,9 @@ class CacheService {
         const db = await openDB(this.dbName, v, {
             upgrade(db) {
                 for (const store of stores) {
-                    db.createObjectStore(store);
+                    if (!db.objectStoreNames.contains(store)) {
+                        db.createObjectStore(store);
+                    }
                 }
             },
         });
