@@ -4,7 +4,7 @@ import { Contributor } from "./contributor";
 export class Participant implements ApiParticipant {
     public contributorId: string;
     public contributor?: Contributor;
-    public type: string;
+    public type;
 
     constructor(p: ApiParticipant) {
         this.contributorId = p.contributorId;

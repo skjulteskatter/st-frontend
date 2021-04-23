@@ -73,8 +73,9 @@ class CacheService {
             return result.map(s => new Song(s)) as Entry<S>[];
         } else if (store == "lyrics") {
             return result.map(l => new Lyrics(l)) as Entry<S>[];
+        } else if (store == "contributors") {
+            return result.map(c => new ContributorCollectionItem(c)) as Entry<S>[];
         }
-
         return result;
     }
 

@@ -92,8 +92,8 @@ export const songs = {
     async getContributor(id: string) {
         return new ContributorCollectionItem((await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`)));
     },
-    async getAllContributors(collection: string) {
-        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection}`)).map(c => new ContributorCollectionItem(c));
+    async getAllContributors(collection: string, lastUpdated?: string) {
+        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection}?expand=contributor/biography,songs/collection` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(c => new ContributorCollectionItem(c));
     },
     async getAllAuthors(collection: string) {
         return (await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection}`)).map(c => new ContributorCollectionItem(c));
