@@ -1,12 +1,12 @@
 <template>
-    <base-card class="user-card">
+    <base-card class="user-card" v-if="user">
         <img class="user-card__image" :src="user.image" alt="user portrait" />
         <div class="user-card__details">
             <h2 class="user-card__name">{{ user.displayName }}</h2>
             <p class="user-card__email">{{ user.email }}</p>
         </div>
         <div class="user-card__roles">
-            <span class="tag" v-for="role in user.roles" :key="user.id + role">
+            <span class="tag" v-for="role in user.roles" :key="user?.id + role">
                 {{ role }}
             </span>
         </div>
