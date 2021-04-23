@@ -26,10 +26,10 @@ class CacheService {
     private version = 2;
     private _db?: IDBPDatabase;
 
-    public async init() {
+    public db() {
         const v = this.version;
         const stores = this.stores;
-        const db = await openDB(this.dbName, v, {
+        return openDB(this.dbName, v, {
             upgrade(db) {
                 for (const store of stores) {
                     if (!db.objectStoreNames.contains(store)) {
@@ -38,12 +38,6 @@ class CacheService {
                 }
             },
         });
-        this._db = db;
-        return this._db;
-    }
-
-    private async db() {
-        return this._db ?? await this.init();
     }
 
     private async tx(store: Store, write = false) {
@@ -51,11 +45,21 @@ class CacheService {
     }
 
     public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
-        await this._db?.put(store, value, key);
+        const tx = await this.tx(store, true);
+
+        await tx.objectStore(store).put?.(value, key);
+
+        await tx.done;
     }
 
     public async get<S extends Store>(store: S, key: string): Promise<Entry<S>> {
-        return (await this._db?.get(store, key)) as Entry<S>;
+        const tx = await this.tx(store);
+
+        const result = await tx.objectStore(store).get(key);
+        
+        await tx.done;
+
+        return result as Entry<S>;
     }
 
     public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {

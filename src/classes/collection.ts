@@ -7,7 +7,6 @@ import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 const converter = new Converter();
 
-
 export class Collection extends BaseClass implements ApiCollection {
     public key: string;
     public defaultType: string;
@@ -79,7 +78,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 await cache.set("config", key, {id: key, value: new Date().toISOString()});
 
-                this.songs = await cache.getAll("songs");
+                this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
             }
             catch (e) {
                 notify("error", "Error occured", "warning", e);
