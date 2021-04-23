@@ -13,5 +13,6 @@ export class ContributorCollectionItem extends BaseCollectionItem<Contributor> {
         this.item = new Contributor(c.contributor);
         this.songs = c.songs?.map(s => new Song(s));
         this.songIds = c.songIds;
+        this.id = this.item.id;
     }
 }
