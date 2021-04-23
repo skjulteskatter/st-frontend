@@ -1,13 +1,18 @@
+import { ContributorCollectionItem, Song } from "@/classes";
 import { IDBPDatabase, openDB } from "idb";
 
+type StoreTypes = {
+    songs: Song;
+    contributors: ContributorCollectionItem;
+}
 
 type Store = "songs" | "contributors";
-type Stores = Store[];
 
+type Entry<S extends Store> = StoreTypes[S];
 
 class CacheService {
     private dbName = "songtreasures";
-    private stores: Stores = [
+    private stores: Store[] = [
         "songs",
         "contributors",
     ];
@@ -36,7 +41,7 @@ class CacheService {
         return (await this.db()).transaction(store, write ? "readwrite" : "readonly");
     }
 
-    public async set<T>(store: Store, key: string, value: T): Promise<void> {
+    public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
         const tx = await this.tx(store, true);
 
         await tx.objectStore(store).put?.(value, key);
@@ -44,14 +49,46 @@ class CacheService {
         await tx.done;
     }
 
-    public async get<T>(store: Store, key: string): Promise<T> {
+    public async get<S extends Store>(store: S, key: string): Promise<Entry<S>> {
         const tx = await this.tx(store);
 
         const result = await tx.objectStore(store).get(key);
         
         await tx.done;
 
-        return result as T;
+        return result as Entry<S>;
+    }
+
+    public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {
+        const tx = await this.tx(store);
+
+        const result = await tx.objectStore(store).getAll();
+
+        await tx.done;
+
+        return result;
+    }
+
+    public async setAll<S extends Store>(store: S, entries: Entry<S>[]): Promise<void> {
+        const tx = await this.tx(store);
+
+        for (const e of entries) {
+            await tx.objectStore(store).add?.(e, e.id);
+        }
+
+        await tx.done;
+    }
+
+    public async replaceEntries<S extends Store>(store: S, entries: {
+        [id: string]: Entry<S>;
+    }) {
+        const tx = await this.tx(store);
+
+        for (const id of Object.keys(entries)) {
+            await tx.objectStore(store).put?.(entries[id], id);
+        }
+
+        await tx.done;
     }
 }
 
