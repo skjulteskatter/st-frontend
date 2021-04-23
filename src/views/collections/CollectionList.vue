@@ -31,8 +31,7 @@
     </div>
     <!-- <product-slider :products="products" v-if="products.length" /> -->
     <div class="collections__owned">
-        <product-slider :products="products" v-if="products.length">
-        </product-slider>
+        <product-slider :products="products" v-if="products.length" />
     </div>
 </template>
 
