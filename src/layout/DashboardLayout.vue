@@ -4,23 +4,26 @@
             <the-navbar></the-navbar>
             <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
-                    <router-view v-slot="{ Component }" v-if="$route.name != 'songs-sheet-music'">
+                    <router-view
+                        v-slot="{ Component }"
+                        v-if="$route.name != 'songs-sheet-music'"
+                    >
                         <transition name="view" mode="out-in">
                             <component :is="Component" />
                         </transition>
                     </router-view>
                 </div>
+                <audio-player></audio-player>
             </main>
             <!-- <feedback-form></feedback-form> -->
         </div>
-        <audio-player></audio-player>
     </div>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 
-import { useStore } from "@/store"; 
+import { useStore } from "@/store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
@@ -41,7 +44,7 @@ export default class DashboardLayout extends Vue {
     async mounted() {
         document.documentElement.style.setProperty(
             "--st-color-primary",
-            themes.default,
+            themes.default
         );
         themes.load();
         if (!this.user) {
@@ -80,6 +83,7 @@ export default class DashboardLayout extends Vue {
         width: 100%;
         display: flex;
         flex-direction: column;
+        position: relative;
 
         &__container {
             flex-grow: 1;

@@ -118,7 +118,9 @@ export default class AudioPlayer extends Vue {
     align-items: center;
     gap: var(--st-spacing);
 
-    position: relative;
+    position: sticky;
+    left: 0;
+    bottom: 0;
 
     @include breakpoint("medium") {
         flex-direction: column;
