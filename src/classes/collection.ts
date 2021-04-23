@@ -4,6 +4,7 @@ import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionIt
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
 import { cache } from "@/services/cache";
+import { notify } from "@/services/notify";
 const converter = new Converter();
 
 
@@ -63,11 +64,10 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
 
-            const key = "songs_lastUpdated_" + this.key;
-
-            const lastUpdated = localStorage.getItem(key) as string | undefined;
-
             try {
+                const key = "songs_lastUpdated_" + this.key;
+                const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+                
                 const updateSongs = await api.songs.getAllSongs(this.key, lastUpdated);
 
                 await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
@@ -77,13 +77,14 @@ export class Collection extends BaseClass implements ApiCollection {
                     [id: string]: Song;
                 }));
 
-                localStorage.setItem(key, new Date().toISOString());
-            }
-            catch {
-                // no catching here
-            }
+                await cache.set("config", key, {id: key, value: new Date().toISOString()});
 
-            this.songs = await cache.getAll("songs");
+                this.songs = await cache.getAll("songs");
+            }
+            catch (e) {
+                notify("error", "Error occured", "warning", e);
+                this.songs = await api.songs.getAllSongs(this.key);
+            }
 
             for (const song of this.songs) {
                 this.hasAuthors = this.hasAuthors || song.participants.find(p => p.type == "author") !== undefined;
@@ -102,12 +103,9 @@ export class Collection extends BaseClass implements ApiCollection {
         await this.initialize();
 
         if (this._currentLanguage != language) {
-
-            const key = "lyrics_lastUpdated_" + this.key + "_" + language;
-
-            const lastUpdated = localStorage.getItem(key) as string | undefined;
-
             try {
+                const key = "lyrics_lastUpdated_" + this.key + "_" + language;
+                const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
                 const updateLyrics = await api.songs.getAllLyrics(this.key, language, "json", 0, lastUpdated);
 
                 await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
@@ -117,16 +115,18 @@ export class Collection extends BaseClass implements ApiCollection {
                     [id: string]: Lyrics;
                 }));
 
-                localStorage.setItem(key, new Date().toISOString());
+                await cache.set("config", key, {id: key, value: new Date().toISOString()});
+
+                this.lyrics = await cache.getAll("lyrics");
             }
             catch (e) {
-                //error
+                notify("error", "Error occured", "warning", e);
+                this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
             }
 
             //this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
             this._currentLanguage = language;
         }
-        this.lyrics = await cache.getAll("lyrics");
 
         this._loading = false;
     }

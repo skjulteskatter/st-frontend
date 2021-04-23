@@ -51,21 +51,11 @@ class CacheService {
     }
 
     public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
-        const tx = await this.tx(store, true);
-
-        await tx.objectStore(store).put?.(value, key);
-
-        await tx.done;
+        await this._db?.put(store, value, key);
     }
 
     public async get<S extends Store>(store: S, key: string): Promise<Entry<S>> {
-        const tx = await this.tx(store);
-
-        const result = await tx.objectStore(store).get(key);
-        
-        await tx.done;
-
-        return result as Entry<S>;
+        return (await this._db?.get(store, key)) as Entry<S>;
     }
 
     public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {
