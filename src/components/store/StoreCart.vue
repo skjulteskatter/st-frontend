@@ -1,20 +1,31 @@
 <template>
     <modal
         theme="primary"
-        :label="$t('store.checkout')"
-        v-if="cartItems.length" 
+        :label="$t('store.inCart')"
+        v-if="cartItems.length"
         icon="buy"
     >
-        <h3>{{ $t('store.inCart')}}</h3>
-        <span @click="clearCart">{{ $t('store.clearCart') }}</span>
-        <p v-for="i in cartItems" :key="i.id">
-            {{i.getName(languageKey)}}
-        </p>
-        <base-button
-            @click="checkout"
-        >
-            {{ $t('store.checkout') }}
-        </base-button>
+        <div class="store-cart">
+            <div class="store-cart__header">
+                <h3 class="store-cart__title">{{ $t("store.inCart") }}</h3>
+                <small @click="clearCart" class="store-cart__clearcart">
+                    {{ $t("store.clearCart") }}
+                </small>
+            </div>
+            <div class="store-cart__items">
+                <div
+                    v-for="i in cartItems"
+                    :key="i.id"
+                    class="store-cart__item"
+                >
+                    {{ i.getName(languageKey) }}
+                    <small>{{ formatPrices(i.prices, "year") }}</small>
+                </div>
+            </div>
+            <base-button @click="checkout" icon="arrowRight">
+                {{ $t("store.checkout") }}
+            </base-button>
+        </div>
     </modal>
 </template>
 <script lang="ts">
@@ -34,6 +45,16 @@ import { Options, Vue } from "vue-class-component";
 export default class StoreCart extends Vue {
     private store = useStore();
 
+    public formatPrices(prices: Price[], type: string) {
+        const unformattedPrice = prices.find((price) => price.type == type)
+            ?.value;
+        const formattedPrice = unformattedPrice?.slice(
+            0,
+            unformattedPrice.length - 2
+        );
+        return `${formattedPrice} /${type}`;
+    }
+
     public get cartItems() {
         return this.store.getters.cartItems;
     }
@@ -51,3 +72,41 @@ export default class StoreCart extends Vue {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.store-cart {
+    min-width: 30vw;
+    min-height: 30vh;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__title {
+        margin-top: 0;
+    }
+
+    &__clearcart {
+        color: var(--st-color-error);
+        cursor: pointer;
+    }
+
+    &__items {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--st-spacing) / 2);
+    }
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        padding: calc(var(--st-spacing) / 2);
+        border-radius: var(--st-border-radius);
+        background-color: var(--st-color-background-light);
+    }
+}
+</style>
