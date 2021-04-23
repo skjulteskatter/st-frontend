@@ -3,6 +3,7 @@ import { ApiCollection } from "dmb-api";
 import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
+import { cache } from "@/services/cache";
 const converter = new Converter();
 
 
@@ -61,7 +62,28 @@ export class Collection extends BaseClass implements ApiCollection {
     private async initialize() {
         if (!this._initialized) {
             this._initialized = true;
-            this.songs = await api.songs.getAllSongs(this.key);
+
+            const key = "songs_lastUpdated_" + this.key;
+
+            const lastUpdated = localStorage.getItem(key) as string | undefined;
+
+            try {
+                const updateSongs = await api.songs.getAllSongs(this.key, lastUpdated);
+
+                await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: Song;
+                }));
+
+                localStorage.setItem(key, new Date().toISOString());
+            }
+            catch {
+                // no catching here
+            }
+
+            this.songs = await cache.getAll("songs");
 
             for (const song of this.songs) {
                 this.hasAuthors = this.hasAuthors || song.participants.find(p => p.type == "author") !== undefined;
@@ -80,9 +102,32 @@ export class Collection extends BaseClass implements ApiCollection {
         await this.initialize();
 
         if (this._currentLanguage != language) {
-            this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
+
+            const key = "lyrics_lastUpdated_" + this.key + "_" + language;
+
+            const lastUpdated = localStorage.getItem(key) as string | undefined;
+
+            try {
+                const updateLyrics = await api.songs.getAllLyrics(this.key, language, "json", 0, lastUpdated);
+
+                await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
+                    a[b.id + "_" + b.language.key] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: Lyrics;
+                }));
+
+                localStorage.setItem(key, new Date().toISOString());
+            }
+            catch (e) {
+                //error
+            }
+
+            //this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
             this._currentLanguage = language;
         }
+        this.lyrics = await cache.getAll("lyrics");
+
         this._loading = false;
     }
 

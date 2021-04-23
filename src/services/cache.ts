@@ -1,12 +1,17 @@
-import { ContributorCollectionItem, Song } from "@/classes";
+import { ContributorCollectionItem, Lyrics, Song } from "@/classes";
 import { IDBPDatabase, openDB } from "idb";
 
 type StoreTypes = {
     songs: Song;
     contributors: ContributorCollectionItem;
+    lyrics: Lyrics;
+    config: {
+        id: string;
+        value: string | number | boolean;
+    };
 }
 
-type Store = "songs" | "contributors";
+type Store = "songs" | "contributors" | "lyrics" | "config";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -15,6 +20,7 @@ class CacheService {
     private stores: Store[] = [
         "songs",
         "contributors",
+        "lyrics",
     ];
     private version = 1;
     private _db?: IDBPDatabase;
@@ -66,6 +72,12 @@ class CacheService {
 
         await tx.done;
 
+        if (store == "songs") {
+            return result.map(s => new Song(s)) as Entry<S>[];
+        } else if (store == "lyrics") {
+            return result.map(l => new Lyrics(l)) as Entry<S>[];
+        }
+
         return result;
     }
 
@@ -73,7 +85,13 @@ class CacheService {
         const tx = await this.tx(store);
 
         for (const e of entries) {
-            await tx.objectStore(store).add?.(e, e.id);
+            let key = e.id;
+
+            if (e instanceof Lyrics) {
+                key = e.id + "_" + e.language.key;
+            }
+
+            await tx.objectStore(store).add?.(e, key);
         }
 
         await tx.done;
@@ -82,7 +100,7 @@ class CacheService {
     public async replaceEntries<S extends Store>(store: S, entries: {
         [id: string]: Entry<S>;
     }) {
-        const tx = await this.tx(store);
+        const tx = await this.tx(store, true);
 
         for (const id of Object.keys(entries)) {
             await tx.objectStore(store).put?.(entries[id], id);

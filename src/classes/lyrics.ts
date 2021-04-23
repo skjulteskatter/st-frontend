@@ -8,6 +8,7 @@ type Content = {
 }
 
 export class Lyrics implements ApiLyrics {
+    songId: string;
     number: number;
     title: string;
     collectionKey: string;
@@ -20,8 +21,13 @@ export class Lyrics implements ApiLyrics {
     transpositions: {
         [key: string]: number;
     };
+    
+    public get id() {
+        return this.songId;
+    }
 
     constructor(lyrics: ApiLyrics) {
+        this.songId = lyrics.songId;
         this.number = lyrics.number;
         this.title = lyrics.title;
         this.collectionKey = lyrics.collectionKey;
