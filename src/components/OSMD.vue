@@ -1,7 +1,6 @@
 <template>
     <div class="osmd-wrapper">
         <div class="osmd-controls">
-            <h4 class="osmd-controls__title">{{ $t("song.sheetmusic") }}</h4>
             <div class="osmd-controls__transpose">
                 <Icon
                     name="arrowLeft"
