@@ -15,14 +15,16 @@
   },
   "rules": {
     //"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "template-curly-spacing": "off",
     "no-console": "warn",
     "no-debugger": "warn",
     "semi": ["warn", "always"],
     "comma-dangle": ["warn", "always-multiline"],
     "quotes": ["warn", "double"],
     "eol-last": ["warn", "always"],
-    "@typescript-eslint/indent": ["warn", 4]
+    "indent": "off"
+    // "@typescript-eslint/indent": ["error", 4, {
+    //   "ignoredNodes": ["TemplateLiteral"]
+    // }]
   },
   "overrides": [
     {
