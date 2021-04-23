@@ -11,10 +11,7 @@
                             : undefined
                     "
                 />
-                <span 
-                    class="osmd-controls__key"
-                    @click="transpose(0)"
-                >
+                <span class="osmd-controls__key" @click="transpose(0)">
                     {{ options.originalKey ?? "Key" }} ({{
                         transposition > 0 ? "+" + transposition : transposition
                     }})
@@ -70,7 +67,7 @@ export default class OSMD extends Vue {
     public zoom = 1;
     public createdDone = false;
     public loading: string[] = [];
-    public options: SheetMusicOptions = {show: false};
+    public options: SheetMusicOptions = { show: false };
 
     public async mounted() {
         this.transposition = this.options.transposition ?? 0;
@@ -100,9 +97,9 @@ export default class OSMD extends Vue {
 
 .osmd-controls {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: var(--st-spacing);
+    position: relative;
 
     @include breakpoint("small") {
         flex-direction: column;
@@ -119,6 +116,16 @@ export default class OSMD extends Vue {
         border-radius: var(--st-border-radius);
         display: flex;
         align-items: center;
+
+        position: absolute;
+        right: 0;
+        top: -4rem;
+
+        @include breakpoint("small") {
+            position: initial;
+            top: initial;
+            left: initial;
+        }
     }
 
     &__zoom {
