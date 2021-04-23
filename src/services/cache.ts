@@ -1,111 +1,62 @@
-/** eslint-ignore */
-import { IDBPDatabase, openDB } from "idb"; 
+import { IDBPDatabase, openDB } from "idb";
 
-class CacheService<T> {
-    private name: string;
-    private _db?: IDBPDatabase<unknown>;
 
-    constructor(name: string) {
-        this.name = name;
-    }
+type Store = "songs" | "contributors";
+type Stores = Store[];
+
+
+class CacheService {
+    private dbName = "songtreasures";
+    private stores: Stores = [
+        "songs",
+        "contributors",
+    ];
+    private version = 1;
+    private _db?: IDBPDatabase;
 
     public async init() {
-        const name = this.name;
-        this._db ??= await openDB("songtreasures", 2, {
-            upgrade(db, odb, version, tx) {
-                if (!db.objectStoreNames.contains(name)) {
-                    db.createObjectStore(name);
+        const v = this.version;
+        const stores = this.stores;
+        const db = await openDB(this.dbName, v, {
+            upgrade(db) {
+                for (const store of stores) {
+                    db.createObjectStore(store);
                 }
             },
         });
+        this._db = db;
         return this._db;
     }
 
-    public async db() {
-        if (this._db) return this._db;
-        return await this.init();
+    private async db() {
+        return this._db ?? await this.init();
     }
 
-    public async get(key: string): Promise<T | undefined> {
-        return (await this.db()).get(this.name, key) as Promise<T | undefined>;
+    private async tx(store: Store, write = false) {
+        return (await this.db()).transaction(store, write ? "readwrite" : "readonly");
     }
 
-    public async getAll(): Promise<T[]> {
-        const transaction = (await this.db()).transaction(this.name);
+    public async set<T>(store: Store, key: string, value: T): Promise<void> {
+        const tx = await this.tx(store, true);
 
-        const result = await transaction?.objectStore(this.name).getAll() ?? [];
+        await tx.objectStore(store).put?.(value, key);
 
-        await transaction.done;
-
-        return result as T[];
+        await tx.done;
     }
 
-    public async set(key: string, value: T): Promise<void> {
-        await (await this.db())?.put(this.name, value, key);
-    }
+    public async get<T>(store: Store, key: string): Promise<T> {
+        const tx = await this.tx(store);
 
-    public async setAll(value: {
-        [key: string]: T;
-    }) {
-        const tx = (await this.db()).transaction(this.name, "readwrite");
+        const result = await tx.objectStore(store).get(key);
+        
+        await tx.done;
 
-        for (const key of Object.keys(value)) {
-            await tx?.objectStore(this.name).add(value[key], key);
-        }
-
-        await tx?.done;
-    }
-
-    public async getAndStoreOrRetrieve(key: string, task: Promise<T>): Promise<T> {
-        try {
-            const result = await task;
-
-            if (result) {
-                await this.set(key, result);
-                return result;
-            } else {
-                throw new Error("Couldn't fetch from task.");
-            }
-        }
-        catch {
-            const result = await this.get(key);
-
-            if (result) {
-                return result;
-            }
-            throw new Error("Couldn't fetch from cache either.");
-        }
-    }
-
-    public async getAndStoreOrRetrieveAll(task: Promise<{
-        [key: string]: T;
-    }>) {
-        try {
-            const result = await task;
-
-            if (result) {
-                await this.setAll(result);
-                return result;
-            } else {
-                throw new Error("Couldn't fetch from task.");
-            }
-        }
-        catch {
-            const result = await this.getAll();
-
-            if (result) {
-                return result;
-            }
-            throw new Error("Couldn't fetch from cache either.");
-        }
+        return result as T;
     }
 }
 
-// export class CacheService<T> {
-
-// }
-
+const cache = new CacheService();
 
 export {
-    CacheService,
+    cache,
 };
