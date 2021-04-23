@@ -1,6 +1,6 @@
 import api from "@/services/api";
 import { ApiCollection } from "dmb-api";
-import { Contributor, Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
+import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
 import { cache } from "@/services/cache";
@@ -19,7 +19,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _initialized = false;
     private _loading = false;
 
-    public contributors: Contributor[] = [];
+    public contributors?: ContributorCollectionItem[];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
     public themes: ThemeCollectionItem[] = [];
@@ -230,7 +230,33 @@ export class Collection extends BaseClass implements ApiCollection {
         return origins;
     }
 
+    // private async fetchContributors() {
+    //     try {
+    //         const key = "contributors_" + this.key;
+    //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+    //         const contributors = await api.songs.getAllContributors(this.key, lastUpdated);
+
+    //         await cache.replaceEntries("contributors", contributors.reduce((a, b) => {
+    //             a[b.id] = b;
+    //             return a;
+    //         }, {} as {
+    //             [id: string]: ContributorCollectionItem;
+    //         }));
+
+    //         await cache.set("config", key, {id: key, value: new Date().toISOString()});
+
+    //         this.contributors = await cache.getAll("contributors");
+    //     }
+    //     catch (e) {
+    //         notify("error", "Error occured", "warning", e);
+    //         this.contributors = await api.songs.getAllContributors(this.key);
+    //     }
+    // }
+
     public async getList(value: string) {
+        // if (!this.contributors) {
+        //     await this.fetchContributors();
+        // }
         if (value == "authors") {
             if (!this._authors) {
                 this._loadingAuthors = true;
