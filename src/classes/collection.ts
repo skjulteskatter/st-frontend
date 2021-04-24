@@ -116,7 +116,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 await cache.set("config", key, {id: key, value: new Date().toISOString()});
 
-                this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionKey == this.key);
+                this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionId == this.id);
             }
             catch (e) {
                 notify("error", "Error occured", "warning", e);

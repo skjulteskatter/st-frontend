@@ -9,6 +9,7 @@ type Content = {
 
 export class Lyrics implements ApiLyrics {
     songId: string;
+    collectionId;
     number: number;
     title: string;
     collectionKey: string;
@@ -30,6 +31,7 @@ export class Lyrics implements ApiLyrics {
         this.songId = lyrics.songId;
         this.number = lyrics.number;
         this.title = lyrics.title;
+        this.collectionId = lyrics.collectionId;
         this.collectionKey = lyrics.collectionKey;
         this.content = lyrics.content;
         this.format = lyrics.format;
