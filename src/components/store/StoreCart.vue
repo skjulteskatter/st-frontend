@@ -1,9 +1,10 @@
 <template>
     <modal
         theme="primary"
-        :label="$t('store.inCart')"
+        :label="`${$t('store.inCart')} (${cartItems.length})`"
         v-if="cartItems.length"
         icon="buy"
+        class="store-cart__modal"
     >
         <div class="store-cart">
             <div class="store-cart__header">
@@ -73,7 +74,19 @@ export default class StoreCart extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+@import "../../style/mixins";
+
+.store-cart__modal {
+    .modal__open-button {
+        .button__content {
+            @include breakpoint("small") {
+                display: none;
+            }
+        }
+    }
+}
+
 .store-cart {
     min-width: 30vw;
     min-height: 30vh;
