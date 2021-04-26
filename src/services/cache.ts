@@ -37,7 +37,7 @@ class CacheService {
         return openDB(this.dbName, v, {
             upgrade(db) {
                 for (const store of stores) {
-                    if (store == "config") {
+                    if (store == "config" && db.objectStoreNames.contains(store)) {
                         db.deleteObjectStore(store);
                         db.createObjectStore(store);
                     }
