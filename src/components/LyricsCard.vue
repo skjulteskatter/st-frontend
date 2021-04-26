@@ -12,11 +12,12 @@
                         @change="transpose"
                     >
                         <option
-                            v-for="t in Object.keys(this.transpositions)"
-                            :value="this.transpositions[t]"
+                            v-for="t in Object.keys(this.transpositions).map(t => transpositionString(t))"
+                            :value="this.transpositions[t[0]]"
                             :key="t"
                         >
-                            {{ t }}
+                            {{ t[0] }}
+                            <span v-if="t[1]">({{t[1]}})</span>
                         </option>
                     </select>
                     <base-button
@@ -63,6 +64,7 @@ import { BaseCard, BaseButton } from "./";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { transposer } from "@/classes/transposer";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -227,6 +229,21 @@ export default class LyricsCard extends Vue {
 
     public get type() {
         return this.store.state.songs.view;
+    }
+
+    public get defaultTransposition() {
+        return this.store.getters.user?.settings?.defaultTransposition ?? "C";
+    }
+
+    public transpositionString(key: string): string[] {
+        if (this.defaultTransposition !== "C") {
+            return [key,
+                transposer.getTransposedString(this.lyrics?.originalKey ?? "C", 
+                transposer.getRelativeTransposition(key)) ?? "C"];
+        }
+        else {
+            return [key];
+        }
     }
 }
 </script>

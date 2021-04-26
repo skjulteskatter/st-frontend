@@ -114,4 +114,17 @@ export class Song extends BaseClass implements ApiSong {
 
         return names;
     }
+
+    // public getRelativeTranspositions(t: string) {
+    //     const ts = transposer.getTranspositions(this.originalKey) ?? {};
+
+    //     const transpositions: {
+    //         key: string;
+    //         value: string;
+    //     }[][] = [];
+
+    //     for (const k of Object.keys(ts)) {
+            
+    //     } 
+    // }
 }
