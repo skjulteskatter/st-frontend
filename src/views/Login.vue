@@ -35,9 +35,6 @@
                         </label>
                     </div>
                     <base-button
-                        v-if="
-                            providers.includes('password')
-                        "
                         type="submit"
                         formaction="submit"
                         class="login__form__submit"
