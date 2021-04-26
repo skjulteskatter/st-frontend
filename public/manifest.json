@@ -1,6 +1,7 @@
 {
 	"name": "SongTreasures",
 	"short_name": "SongTreasures",
+	"start_url": "/",
 	"display": "standalone",
 	"theme_color": "#CAA970",
 	"background_color": "#FFFFFF",
