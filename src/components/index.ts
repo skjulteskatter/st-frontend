@@ -1,6 +1,7 @@
 import BaseCard from "./BaseCard.vue";
 import BaseButton from "./BaseButton.vue";
 import Modal from "./Modal.vue";
+import Loader from "./Loader.vue";
 
 import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
@@ -15,6 +16,7 @@ export {
     BaseCard,
     BaseButton,
     Modal,
+    Loader,
     LyricsSettings,
     OptionsComponent,
     SettingsCard,

@@ -1,64 +1,69 @@
 <template>
-    <div v-if="loading" class="loader"></div>
-    <div v-else-if="contributor" class="contributor">
-        <back-button />
-        <div class="contributor__biography">
-            <img
-                :src="'/img/portrait-placeholder.png'"
-                id="contributor-biography-image"
-                class="contributor__biography__header__portrait"
-            />
-            <div class="contributor__biography__header">
-                <p class="contributor__biography__header__title">
-                    {{ $t("song.contributor") }}
-                </p>
-                <h1 class="contributor__biography__header__name">
-                    {{ contributor.name }}
-                </h1>
-                <small
-                    class="contributor__biography__header__subtitle"
-                    v-if="contributor.subtitle"
-                >
-                    {{ contributor.subtitle }}
-                </small>
-            </div>
-            <div
-                v-html="contributor.getBiography(languageKey)"
-                class="contributor__biography__bio"
-            ></div>
-        </div>
-
-        <div class="contributor__songs">
-            <base-card v-for="c in collections" :key="c.id">
-                <h2>{{ c.getName(languageKey) }}</h2>
-                <div class="contributor__songs__wrapper">
-                    <song-list-card
-                        :title="$t('song.author')"
-                        :songs="
-                            authorSongs.filter((s) =>
-                                s.collection ? s.collection.id == c.id : false
-                            )
-                        "
-                        border
-                    ></song-list-card>
-                    <song-list-card
-                        :title="$t('song.composer')"
-                        :songs="
-                            composerSongs.filter((s) =>
-                                s.collection ? s.collection.id == c.id : false
-                            )
-                        "
-                        border
-                    ></song-list-card>
+    <loader :loading="loading">
+        <div v-if="contributor" class="contributor">
+            <back-button />
+            <div class="contributor__biography">
+                <img
+                    :src="'/img/portrait-placeholder.png'"
+                    id="contributor-biography-image"
+                    class="contributor__biography__header__portrait"
+                />
+                <div class="contributor__biography__header">
+                    <p class="contributor__biography__header__title">
+                        {{ $t("song.contributor") }}
+                    </p>
+                    <h1 class="contributor__biography__header__name">
+                        {{ contributor.name }}
+                    </h1>
+                    <small
+                        class="contributor__biography__header__subtitle"
+                        v-if="contributor.subtitle"
+                    >
+                        {{ contributor.subtitle }}
+                    </small>
                 </div>
-            </base-card>
+                <div
+                    v-html="contributor.getBiography(languageKey)"
+                    class="contributor__biography__bio"
+                ></div>
+            </div>
+
+            <div class="contributor__songs">
+                <base-card v-for="c in collections" :key="c.id">
+                    <h2>{{ c.getName(languageKey) }}</h2>
+                    <div class="contributor__songs__wrapper">
+                        <song-list-card
+                            :title="$t('song.author')"
+                            :songs="
+                                authorSongs.filter((s) =>
+                                    s.collection
+                                        ? s.collection.id == c.id
+                                        : false
+                                )
+                            "
+                            border
+                        ></song-list-card>
+                        <song-list-card
+                            :title="$t('song.composer')"
+                            :songs="
+                                composerSongs.filter((s) =>
+                                    s.collection
+                                        ? s.collection.id == c.id
+                                        : false
+                                )
+                            "
+                            border
+                        ></song-list-card>
+                    </div>
+                </base-card>
+            </div>
         </div>
-    </div>
+    </loader>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BackButton } from "@/components";
+import { BaseCard, BackButton, Loader } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
@@ -71,6 +76,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
         BaseCard,
         SongListCard,
         BackButton,
+        Loader,
     },
     name: "contributor-view",
 })
@@ -87,7 +93,7 @@ export default class ContributorView extends Vue {
 
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
-            this.$route.params.contributor as string,
+            this.$route.params.contributor as string
         );
         if (this.contributor?.image) {
             const image = new Image();
@@ -95,7 +101,7 @@ export default class ContributorView extends Vue {
 
             image.onload = () => {
                 const el = document.getElementById(
-                    "contributor-biography-image",
+                    "contributor-biography-image"
                 ) as HTMLImageElement;
 
                 el.src = image.src;
@@ -105,10 +111,13 @@ export default class ContributorView extends Vue {
         this.loading = false;
 
         setTimeout(() => {
-            if (this.contributor && this.contributor.id == this.$route.params.contributor) {
+            if (
+                this.contributor &&
+                this.contributor.id == this.$route.params.contributor
+            ) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_CONTRIBUTOR_ITEM,
-                    this.contributor,
+                    this.contributor
                 );
             }
         }, 5000);
@@ -132,8 +141,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "author",
-                ),
+                        p.type == "author"
+                )
             )
             .map((s) => new Song(s));
     }
@@ -144,8 +153,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "composer",
-                ),
+                        p.type == "composer"
+                )
             )
             .map((s) => new Song(s));
     }

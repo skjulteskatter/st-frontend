@@ -1,136 +1,155 @@
 <template>
-    <div class="loader" v-if="loading"></div>
-    <div class="song-list" v-if="collection">
-        <back-button />
-        <div class="song-list__header">
-            <h1 class="song-list__title">{{ collection.name[languageKey] }}</h1>
-            <div class="song-list__filters" v-if="!loading">
-                <div class="song-list__filters__wrapper gap-x">
-                    <div class="song-list__filters__field">
-                        <label for="song-category">
-                            {{ $t("song.category") }}
-                        </label>
-                        <button-group
-                            :buttons="buttons"
-                            :action="setListType"
-                            class="song-list__filters__category__buttons"
-                        ></button-group>
-                        <select
-                            class="song-list__filters__category__dropdown"
-                            @input="setListType($event.target.value)"
-                        >
-                            <option
-                                v-for="category in buttons"
-                                :key="category.value"
-                                :value="category.value"
-                                :selected="category.value == listType"
+    <Loader :loading="loading">
+        <div class="song-list" v-if="collection">
+            <back-button />
+            <div class="song-list__header">
+                <h1 class="song-list__title">
+                    {{ collection.name[languageKey] }}
+                </h1>
+                <div class="song-list__filters" v-if="!loading">
+                    <div class="song-list__filters__wrapper gap-x">
+                        <div class="song-list__filters__field">
+                            <label for="song-category">
+                                {{ $t("song.category") }}
+                            </label>
+                            <button-group
+                                :buttons="buttons"
+                                :action="setListType"
+                                class="song-list__filters__category__buttons"
+                            ></button-group>
+                            <select
+                                class="song-list__filters__category__dropdown"
+                                @input="setListType($event.target.value)"
                             >
-                                {{ category.label }}
-                            </option>
-                        </select>
-                    </div>
+                                <option
+                                    v-for="category in buttons"
+                                    :key="category.value"
+                                    :value="category.value"
+                                    :selected="category.value == listType"
+                                >
+                                    {{ category.label }}
+                                </option>
+                            </select>
+                        </div>
 
-                    <div class="song-list__filters__field">
-                        <label for="song-filters">
-                            {{ $t("song.filters") }}
-                        </label>
-                        <song-filter-dropdown
-                            :themes="collection.themeTypes"
-                            :origins="collection.origins"
-                        ></song-filter-dropdown>
+                        <div class="song-list__filters__field">
+                            <label for="song-filters">
+                                {{ $t("song.filters") }}
+                            </label>
+                            <song-filter-dropdown
+                                :themes="collection.themeTypes"
+                                :origins="collection.origins"
+                            ></song-filter-dropdown>
+                        </div>
                     </div>
+                    <search-input
+                        type="text"
+                        class="song-list__search"
+                        :placeholder="$t('common.search')"
+                        v-model="searchString"
+                        @search="search"
+                    />
                 </div>
-                <search-input
-                    type="text"
-                    class="song-list__search"
-                    :placeholder="$t('common.search')"
-                    v-model="searchString"
-                    @search="search"
-                />
             </div>
-        </div>
-        <div v-if="searchQuery == '' && !loading">
+            <div v-if="searchQuery == '' && !loading">
+                <div
+                    class="song-list__contributors"
+                    v-if="['composers', 'authors'].includes(listType)"
+                >
+                    <song-list-card
+                        v-for="ci in collection.getContributors(listType)"
+                        :key="ci.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                ci.songIds.includes(s.id)
+                            )
+                        "
+                        :title="ci.item.name"
+                        :action="() => gotoContributor(ci.item)"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'themes'"
+                >
+                    <song-list-card
+                        v-for="theme in collection.themes"
+                        :key="theme.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                theme?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="theme?.item.name[languageKey] ?? ''"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'countries'"
+                >
+                    <song-list-card
+                        v-for="country in collection.countries"
+                        :key="country?.item.countryCode ?? Math.random()"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                country?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="country?.item.name ?? ''"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'default' && songsByNumber.length"
+                >
+                    <song-list-card
+                        v-for="s in songsByNumber"
+                        :key="s?.title ?? Math.random()"
+                        :songs="s?.songs ?? []"
+                        :title="s?.title ?? ''"
+                        :count="false"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'title' && songsByTitle.length"
+                >
+                    <song-list-card
+                        v-for="s in songsByTitle"
+                        :key="s?.title ?? Math.random()"
+                        :songs="s?.songs ?? []"
+                        :title="s?.title ?? ''"
+                    ></song-list-card>
+                </div>
+            </div>
+
             <div
-                class="song-list__contributors"
-                v-if="['composers', 'authors'].includes(listType)"
+                class="song-list__list song-list__list-cards"
+                v-if="searchQuery != ''"
             >
-                <song-list-card
-                    v-for="ci in collection.getContributors(listType)"
-                    :key="ci.item.id"
-                    :songs="
-                        filteredSongs.filter((s) => ci.songIds.includes(s.id))
-                    "
-                    :title="ci.item.name"
-                    :action="() => gotoContributor(ci.item)"
-                ></song-list-card>
+                <song-list-item-card
+                    v-for="song in filteredSongs.slice(0, 24)"
+                    :key="song.id"
+                    :song="song"
+                    :context="context[song.number]"
+                    @click="selectSong(song.number)"
+                >
+                </song-list-item-card>
             </div>
 
-            <div class="song-list__contributors" v-if="listType == 'themes'">
-                <song-list-card
-                    v-for="theme in collection.themes"
-                    :key="theme.item.id"
-                    :songs="filteredSongs.filter(s => theme?.songIds.includes(s.id))"
-                    :title="theme?.item.name[languageKey] ?? ''"
-                ></song-list-card>
-            </div>
-
-            <div class="song-list__contributors" v-if="listType == 'countries'">
-                <song-list-card
-                    v-for="country in collection.countries"
-                    :key="country?.item.countryCode ?? Math.random()"
-                    :songs="filteredSongs.filter(s => country?.songIds.includes(s.id))"
-                    :title="country?.item.name ?? ''"
-                ></song-list-card>
-            </div>
-
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'default' && songsByNumber.length"
-            >
-                <song-list-card
-                    v-for="s in songsByNumber"
-                    :key="s?.title ?? Math.random()"
-                    :songs="s?.songs ?? []"
-                    :title="s?.title ?? ''"
-                    :count="false"
-                ></song-list-card>
-            </div>
-
-            <div
-                class="song-list__contributors"
-                v-if="listType == 'title' && songsByTitle.length"
-            >
-                <song-list-card
-                    v-for="s in songsByTitle"
-                    :key="s?.title ?? Math.random()"
-                    :songs="s?.songs ?? []"
-                    :title="s?.title ?? ''"
-                ></song-list-card>
-            </div>
+            <h1 class="warning" v-if="!filteredSongs.length && !loading">
+                No results
+            </h1>
         </div>
-
-        <div
-            class="song-list__list song-list__list-cards"
-            v-if="searchQuery != ''"
-        >
-            <song-list-item-card
-                v-for="song in filteredSongs.slice(0, 24)"
-                :key="song.id"
-                :song="song"
-                :context="context[song.number]"
-                @click="selectSong(song.number)"
-            >
-            </song-list-item-card>
-        </div>
-
-        <h1 class="warning" v-if="!filteredSongs.length && !loading">
-            No results
-        </h1>
-    </div>
+    </Loader>
 </template>
 
 <script lang="ts">
-import { BaseCard, BaseButton } from "@/components";
+import { BaseCard, BaseButton, Loader } from "@/components";
 
 import { Options, Vue } from "vue-class-component";
 import { Collection, Lyrics, Song } from "@/classes";
@@ -158,6 +177,7 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
     components: {
         BaseCard,
         BaseButton,
+        Loader,
         SongListItemNumber,
         SongListItemCard,
         SongListCard,
@@ -184,7 +204,7 @@ export default class SongList extends Vue {
         this.cId = this.$route.params.collection as string;
         await this.store.dispatch(
             SongsActionTypes.SELECT_COLLECTION,
-            this.$route.params.collection as string,
+            this.$route.params.collection as string
         );
         if (!this.buttons.find((b) => b.value == this.listType)) {
             this.listType = "default";
@@ -300,7 +320,7 @@ export default class SongList extends Vue {
         } = {};
 
         for (const song of this.filteredSongs.sort((a, b) =>
-            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1,
+            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1
         )) {
             const letter = song
                 .getName(this.languageKey)
@@ -323,13 +343,13 @@ export default class SongList extends Vue {
 
     public themeSongs(theme: ThemeCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
-            theme?.songIds.includes(s.id),
+            theme?.songIds.includes(s.id)
         );
     }
 
     public countrySongs(country: CountryCollectionItem) {
         return this.filteredSongs.filter((s: Song) =>
-            country?.songIds.includes(s.id),
+            country?.songIds.includes(s.id)
         );
     }
 
@@ -388,7 +408,7 @@ export default class SongList extends Vue {
                     !this.collection?.hasComposers ? "composers" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
-                ].includes(b.value),
+                ].includes(b.value)
         );
     }
 }

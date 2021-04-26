@@ -1,5 +1,5 @@
 <template>
-    <div class="loader" v-if="osmd.loading"></div>
+    <!-- <loader :loading="osmd.loading"> -->
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
         <div v-if="!embed && song" class="sheetmusic-viewer__info">
             <h2 class="sheetmusic-viewer__info__title">
@@ -53,11 +53,13 @@
             </div>
         </div>
     </div>
+    <!-- </loader> -->
 </template>
+
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
-import { BaseButton } from "@/components";
+import { BaseButton, Loader } from "@/components";
 import { osmd } from "@/services/osmd";
 import { ApiSong } from "dmb-api";
 import { SheetMusicTypes, Song } from "@/classes";
@@ -69,6 +71,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
     components: {
         OpenSheetMusicDisplay,
         BaseButton,
+        Loader,
     },
     name: "sheet-music",
 })
@@ -87,7 +90,7 @@ export default class SheetMusic extends Vue {
             if (!this.store.state.songs.sheetMusic.url) {
                 this.store.commit(
                     SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
-                    options,
+                    options
                 );
             }
         }

@@ -4,14 +4,15 @@
             <the-navbar></the-navbar>
             <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
-                    <router-view
+                    <!-- <router-view
                         v-slot="{ Component }"
                         v-if="$route.name != 'songs-sheet-music'"
                     >
                         <transition name="view" mode="out-in">
                             <component :is="Component" />
                         </transition>
-                    </router-view>
+                    </router-view> -->
+                    <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
                 <audio-player></audio-player>
             </main>

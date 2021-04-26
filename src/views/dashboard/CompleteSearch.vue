@@ -1,31 +1,34 @@
 <template>
     <div class="complete-search">
-        <div class="loader" v-if="loading"></div>
-        <back-button />
-        <h1>{{ $t("common.search") }}</h1>
-        <search-input v-model="searchQuery" @search="search" />
-        <div
-            v-for="collection in songsByCollection"
-            :key="collection.collection.id"
-            class="complete-search__collection"
-        >
-            <h2>{{ collection.collection.getName(languageKey) }}</h2>
-            <div class="complete-search__list complete-search__list-cards">
-                <song-list-item-card
-                    v-for="song in collection.songs.slice(0, 24)"
-                    :key="song.id"
-                    :song="song"
-                    @click="selectSong(collection.collection.key, song.number)"
-                >
-                </song-list-item-card>
+        <loader :loading="loading">
+            <back-button />
+            <h1>{{ $t("common.search") }}</h1>
+            <search-input v-model="searchQuery" @search="search" />
+            <div
+                v-for="collection in songsByCollection"
+                :key="collection.collection.id"
+                class="complete-search__collection"
+            >
+                <h2>{{ collection.collection.getName(languageKey) }}</h2>
+                <div class="complete-search__list complete-search__list-cards">
+                    <song-list-item-card
+                        v-for="song in collection.songs.slice(0, 24)"
+                        :key="song.id"
+                        :song="song"
+                        @click="
+                            selectSong(collection.collection.key, song.number)
+                        "
+                    >
+                    </song-list-item-card>
+                </div>
             </div>
-        </div>
+        </loader>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton, BackButton } from "@/components";
+import { BaseButton, BackButton, Loader } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
@@ -40,6 +43,7 @@ import { useStore } from "@/store";
         SearchInput,
         BaseButton,
         BackButton,
+        Loader,
     },
     name: "complete-search",
 })
@@ -61,7 +65,7 @@ export default class CompleteSearch extends Vue {
         if (this.searchQuery.length > 4) {
             this.songs = await api.songs.searchCollections(
                 this.searchQuery,
-                this.languageKey,
+                this.languageKey
             );
         }
         this.loading = false;
@@ -76,11 +80,11 @@ export default class CompleteSearch extends Vue {
         for (const song of this.songs) {
             if (song.collection) {
                 let col = collections.find(
-                    (c) => c.collection.id == song.collection?.id,
+                    (c) => c.collection.id == song.collection?.id
                 );
                 if (!col) {
                     const collection = this.collections.find(
-                        (c) => c.id == song.collection?.id,
+                        (c) => c.id == song.collection?.id
                     );
                     if (collection) {
                         col = {

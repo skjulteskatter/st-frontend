@@ -1,11 +1,11 @@
 <template>
-    <div class="loader" v-if="loading"></div>
-    <div v-if="!loading && initialized && song" class="song-viewer">
-        <div class="song-viewer__content">
-            <div class="song-viewer__header">
-                <back-button />
-                <div class="song-viewer__header__buttons">
-                    <!-- <router-link
+    <loader :loading="loading">
+        <div v-if="!loading && initialized && song" class="song-viewer">
+            <div class="song-viewer__content">
+                <div class="song-viewer__header">
+                    <back-button />
+                    <div class="song-viewer__header__buttons">
+                        <!-- <router-link
                         v-if="sheetMusicUrl"
                         :to="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`"
                     >
@@ -14,37 +14,37 @@
                             {{ $t("song.sheetmusic").toLowerCase() }}
                         </base-button>
                     </router-link> -->
-                    <modal
-                        theme="secondary"
-                        icon="plus"
-                        :label="$t('playlist.addtoplaylist')"
-                    >
-                        <base-button
-                            class="song-viewer__playlist"
-                            v-for="playlist in playlists"
-                            :key="playlist.id"
-                            @click="addToPlaylist(playlist)"
-                            :loading="componentLoading[playlist.id]"
+                        <modal
+                            theme="secondary"
+                            icon="plus"
+                            :label="$t('playlist.addtoplaylist')"
                         >
-                            {{ playlist.name }}
-                            <small>{{ playlist.entries.length }}</small>
-                        </base-button>
-                    </modal>
-                    <modal
-                        theme="tertiary"
-                        icon="book"
-                        :label="$t('song.sheetmusic')"
-                    >
-                        <h3>{{$t('song.sheetmusic')}}</h3>
-                        <base-button
-                            v-for="sheet in song.sheetMusic"
-                            :key="sheet.id"
-                            @click="sheetMusic(sheet)"
+                            <base-button
+                                class="song-viewer__playlist"
+                                v-for="playlist in playlists"
+                                :key="playlist.id"
+                                @click="addToPlaylist(playlist)"
+                                :loading="componentLoading[playlist.id]"
+                            >
+                                {{ playlist.name }}
+                                <small>{{ playlist.entries.length }}</small>
+                            </base-button>
+                        </modal>
+                        <modal
+                            theme="tertiary"
+                            icon="book"
+                            :label="$t('song.sheetmusic')"
                         >
-                            {{ $t(`types.${sheet.category}`)}}
-                        </base-button>
-                    </modal>
-                    <!-- <select
+                            <h3>{{ $t("song.sheetmusic") }}</h3>
+                            <base-button
+                                v-for="sheet in song.sheetMusic"
+                                :key="sheet.id"
+                                @click="sheetMusic(sheet)"
+                            >
+                                {{ $t(`types.${sheet.category}`) }}
+                            </base-button>
+                        </modal>
+                        <!-- <select
                         v-if="song.sheetMusic.length"
                         id="sheetmusic"
                         name="sheetmusic"
@@ -62,54 +62,55 @@
                             {{ $t(`types.${sheet.category}`) }}
                         </option>
                     </select> -->
-                    <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
-                    <!-- <base-button @click="sidebar = !sidebar" icon="documents">
+                        <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
+                        <!-- <base-button @click="sidebar = !sidebar" icon="documents">
                         {{ $t(`common.${sidebar ? "close" : "show"}`) }}
                         {{ $t("song.files").toLowerCase() }}
                     </base-button> -->
-                    <base-button
-                        v-if="extended"
-                        @click="extend"
-                        icon="settings"
-                        class="song-viewer__sidebar__buttons--advanced"
-                    >
-                        {{ $t("song.advanced") }}
-                    </base-button>
+                        <base-button
+                            v-if="extended"
+                            @click="extend"
+                            icon="settings"
+                            class="song-viewer__sidebar__buttons--advanced"
+                        >
+                            {{ $t("song.advanced") }}
+                        </base-button>
+                    </div>
                 </div>
-            </div>
-            <div class="song-viewer__metadata">
-                <song-info-card
-                    :song="song"
-                    :languageKey="languageKey"
-                ></song-info-card>
-                <song-files-card :song="song"></song-files-card>
-                <lyrics-settings
-                    v-if="isExtended"
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
-                    :song="song"
-                ></lyrics-settings>
-            </div>
-            <lyrics-card
-                v-if="lyrics && !lyricsLoading"
-                :song="song"
-                :lyrics="lyrics"
-                :collection="collection"
-            >
-            </lyrics-card>
-            <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
+                <div class="song-viewer__metadata">
+                    <song-info-card
+                        :song="song"
+                        :languageKey="languageKey"
+                    ></song-info-card>
+                    <song-files-card :song="song"></song-files-card>
+                    <lyrics-settings
+                        v-if="isExtended"
+                        :languageKey="languageKey"
+                        :lyrics="lyrics"
+                        :song="song"
+                    ></lyrics-settings>
+                </div>
+                <loader :loading="loadingLyrics">
+                    <lyrics-card
+                        v-if="lyrics && !lyricsLoading"
+                        :song="song"
+                        :lyrics="lyrics"
+                        :collection="collection"
+                    >
+                    </lyrics-card>
+                </loader>
+                <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
             </iframe> -->
-            <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
-            <!-- <open-sheet-music-display
+                <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
+                <!-- <open-sheet-music-display
                 :url="'https://dmb-cdn.azureedge.net/files/' + sheetMusicUrl"
                 :initialTransposition="transposition"
                 v-if="sheetMusicUrl"
             >
             </open-sheet-music-display> -->
-            <div class="loader" v-if="loadingLyrics"></div>
-        </div>
+            </div>
 
-        <!-- <aside class="song-viewer__sidebar" v-if="sidebar">
+            <!-- <aside class="song-viewer__sidebar" v-if="sidebar">
             <div class="song-viewer__sidebar__buttons">
             </div>
             <div class="song-viewer__sidebar__content">
@@ -122,7 +123,8 @@
                 ></lyrics-settings>
             </div>
         </aside> -->
-    </div>
+        </div>
+    </loader>
 </template>
 <script lang="ts">
 import { SongInfoCard, SongFilesCard } from "@/components/songs";
@@ -135,6 +137,7 @@ import {
     BaseCard,
     BackButton,
     Modal,
+    Loader,
 } from "@/components";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
@@ -157,6 +160,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BackButton,
         OpenSheetMusicDisplay,
         Modal,
+        Loader,
     },
     name: "song-viewer",
 })
@@ -177,7 +181,9 @@ export default class SongViewer extends Vue {
     // }
 
     public async mounted() {
-        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, { show: false });
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
+            show: false,
+        });
         this.number = parseInt(this.$route.params.number as string);
         if (
             this.store.getters.collection?.key !==
@@ -185,7 +191,7 @@ export default class SongViewer extends Vue {
         ) {
             await this.store.dispatch(
                 SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
+                this.$route.params.collection as string
             );
         }
 
@@ -199,7 +205,10 @@ export default class SongViewer extends Vue {
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
-                this.store.dispatch(SessionActionTypes.LOG_SONG_ITEM, this.song);
+                this.store.dispatch(
+                    SessionActionTypes.LOG_SONG_ITEM,
+                    this.song
+                );
             }
         };
         setTimeout(log, 5000);
@@ -228,10 +237,15 @@ export default class SongViewer extends Vue {
         const song = this.song;
 
         if (song) {
-            if (playlist.entries.find(e => e.type == "song" && e.itemId == song.id)) {
-                if (!confirm("Song is already in playlist. Add duplicate?")) return;
+            if (
+                playlist.entries.find(
+                    (e) => e.type == "song" && e.itemId == song.id
+                )
+            ) {
+                if (!confirm("Song is already in playlist. Add duplicate?"))
+                    return;
             }
-            
+
             this.componentLoading[playlist.id] = true;
             await this.store.dispatch(SessionActionTypes.PLAYLIST_ADD_SONG, {
                 playlistId: playlist.id,
@@ -242,7 +256,9 @@ export default class SongViewer extends Vue {
             this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
                 type: "success",
                 title: "Added to playlist",
-                content: `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`,
+                content: `Added "${song.getName(
+                    this.languageKey
+                )}" to playlist ${playlist.name}`,
                 icon: "check",
             });
         }
@@ -332,18 +348,18 @@ export default class SongViewer extends Vue {
         display: flex;
         justify-content: space-between;
 
-        @include breakpoint('small'){
+        @include breakpoint("small") {
             flex-direction: column;
         }
 
         &__buttons {
             display: flex;
             align-items: center;
-            gap: calc(var(--st-spacing)/2);
+            gap: calc(var(--st-spacing) / 2);
 
-            @include breakpoint('small'){
+            @include breakpoint("small") {
                 justify-content: flex-end;
-                
+
                 .button__content {
                     display: none;
                 }
@@ -355,7 +371,7 @@ export default class SongViewer extends Vue {
         display: flex;
         gap: var(--st-spacing);
 
-        @include breakpoint('medium'){
+        @include breakpoint("medium") {
             flex-direction: column;
         }
     }

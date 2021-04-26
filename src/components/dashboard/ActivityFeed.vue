@@ -3,7 +3,7 @@
         <h3 class="activity-feed__title">
             {{ $t("common.activity") }}
         </h3>
-        <div v-if="activitiesInitialized">
+        <loader :loading="activitiesInitialized === false">
             <div class="activity-feed__activities" v-if="activities.length">
                 <router-link
                     class="activity-feed__activity clickable"
@@ -29,8 +29,7 @@
             <p class="activity-feed__fallback" v-else>
                 {{ $t("dashboard.noactivity") }}
             </p>
-        </div>
-        <div v-else class="loader"></div>
+        </loader>
     </base-card>
 </template>
 
@@ -38,12 +37,13 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-import { BaseCard } from "@/components";
+import { BaseCard, Loader } from "@/components";
 
 @Options({
     name: "activity-feed",
     components: {
         BaseCard,
+        Loader,
     },
 })
 export default class ActivityFeed extends Vue {

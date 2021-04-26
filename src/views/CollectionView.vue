@@ -1,7 +1,8 @@
 <template>
-    <div v-if="loading" class="loader"></div>
-    <div v-else class="collections">
-        <router-view />
+    <div class="collections">
+        <loader :loading="loading">
+            <router-view />
+        </loader>
     </div>
 </template>
 
@@ -10,19 +11,25 @@ import { Options, Vue } from "vue-class-component";
 
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { Loader } from "@/components";
 
 @Options({
     name: "store",
+    components: {
+        Loader,
+    },
 })
 export default class Store extends Vue {
     private store = useStore();
     public loading = false;
-    public loadingSubs = false;
 
     public async mounted() {
         if (!this.store.getters.stripeInitialized) {
             this.loading = true;
-            await this.store.dispatch(StripeActionTypes.SETUP, this.store.state.session.collections);
+            await this.store.dispatch(
+                StripeActionTypes.SETUP,
+                this.store.state.session.collections
+            );
             this.loading = false;
         }
     }

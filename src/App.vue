@@ -1,19 +1,22 @@
 <template>
     <div id="songtreasures">
-        <div class="loader" v-if="!initialized"></div>
-        <router-view v-else />
+        <loader :loading="initialized === false">
+            <router-view />
+        </loader>
         <notification-group />
     </div>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { NotificationGroup } from "@/components/notification";
+import { Loader } from "@/components";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 
 @Options({
     components: {
         NotificationGroup,
+        Loader,
     },
     name: "app",
 })
@@ -24,7 +27,7 @@ export default class App extends Vue {
         if (window.location.pathname.startsWith("/store/")) {
             this.store.commit(
                 SessionMutationTypes.REDIRECT,
-                window.location.pathname,
+                window.location.pathname
             );
         }
     }
