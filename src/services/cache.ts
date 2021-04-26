@@ -9,9 +9,13 @@ type StoreTypes = {
         id: string;
         value: string | number | boolean | undefined;
     };
+    items: {
+        id: string;
+        value: unknown;
+    };
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -22,8 +26,9 @@ class CacheService {
         "contributors",
         "lyrics",
         "config",
+        "items",
     ];
-    private version = 4;
+    private version = 5;
     private _db?: IDBPDatabase;
 
     public db() {
@@ -32,7 +37,7 @@ class CacheService {
         return openDB(this.dbName, v, {
             upgrade(db) {
                 for (const store of stores) {
-                    if (store == "lyrics" || store == "config") {
+                    if (store == "config") {
                         db.deleteObjectStore(store);
                         db.createObjectStore(store);
                     }

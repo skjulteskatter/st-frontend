@@ -160,6 +160,7 @@ class Auth {
             .catch(e => {
                 switch (e.code) {
                     case "auth/email-already-in-use": 
+                        notify("error", "Email already in use", "warning");
                         console.log("email in use");
 
                         console.log(a().currentUser);

@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection } from "dmb-api";
+import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiThemeCollectionItem } from "dmb-api";
 import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
@@ -22,7 +22,6 @@ export class Collection extends BaseClass implements ApiCollection {
     public contributors?: ContributorCollectionItem[];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
-    public themes: ThemeCollectionItem[] = [];
     
     public hasAuthors = false;
 
@@ -36,12 +35,14 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public loadingLyrics = false;
 
+    private _themes?: ThemeCollectionItem[];
+    private _loadingThemes = false;
+
     private _authors?: ContributorCollectionItem[];
     private _loadingAuthors = false;
 
     private _composers?: ContributorCollectionItem[];
     private _loadingComposers = false;
-    private _loadingThemes = false;
 
     private _countries?: CountryCollectionItem[];
     private _loadingCountries = false;
@@ -64,35 +65,40 @@ export class Collection extends BaseClass implements ApiCollection {
             this._initialized = true;
 
             try {
-                const key = "songs_lastUpdated_" + this.key;
-                const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-                
-                const updateSongs = await api.songs.getAllSongs(this.key, lastUpdated);
+                try {
+                    const key = "songs_lastUpdated_" + this.key;
+                    const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+                    
+                    const updateSongs = await api.songs.getAllSongs(this.key, lastUpdated);
+    
+                    await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: Song;
+                    }));
+    
+                    await cache.set("config", key, {id: key, value: new Date().toISOString()});
 
-                await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: Song;
-                }));
+                    this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
+                }
+                catch (e) {
+                    this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
 
-                await cache.set("config", key, {id: key, value: new Date().toISOString()});
-
-                this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
+                    if (this.songs.length < 10) {
+                        throw e;
+                    }
+                }
             }
             catch (e) {
                 notify("error", "Error occured", "warning", e);
                 this.songs = await api.songs.getAllSongs(this.key);
             }
 
-            for (const song of this.songs) {
-                this.hasAuthors = this.hasAuthors || song.participants.find(p => p.type == "author") !== undefined;
-                this.hasComposers = this.hasComposers || song.participants.find(p => p.type == "composer") !== undefined;
-                this.hasThemes = this.hasThemes || song.themes.length > 0;
-                this.hasCountries = this.hasCountries || song.originCountry !== undefined;
-            }
-
-            this.themes = await api.songs.getAllThemes(this.key);
+            this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
+            this.hasComposers = this.hasComposers || this.songs.some(s => s.participants.some(p => p.type == "composer"));
+            this.hasThemes = this.hasThemes || this.songs.some(s => s.themes.length > 0);
+            this.hasCountries = this.hasCountries || this.songs.some(s => s.originCountry !== undefined);
         }
     }
 
@@ -260,7 +266,28 @@ export class Collection extends BaseClass implements ApiCollection {
         if (value == "authors") {
             if (!this._authors) {
                 this._loadingAuthors = true;
-                this._authors = await api.songs.getAllAuthors(this.key);
+
+                const key = "authors_" + this.key;
+
+                const getAuthors = async () => (await cache.get("items", key))?.value as ApiContributorCollectionItem[] ?? [];
+
+                try {
+                    const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
+                    const authors = [...await getAuthors(), ...await api.songs.getAllAuthors(this.key, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
+                    this._authors = authors.map(c => new ContributorCollectionItem(c));
+
+                    await cache.set("items", key, {
+                        id: key,
+                        value: authors,
+                    });
+                    await cache.set("config", "last_updated_" + key, {
+                        id: "last_updated_" + key,
+                        value: new Date().toISOString(),
+                    });
+                } 
+                catch {
+                    this._authors = (await getAuthors()).map(c => new ContributorCollectionItem(c));
+                }
                 this._loadingAuthors = false;
                 return this._authors.length;
             }
@@ -268,7 +295,29 @@ export class Collection extends BaseClass implements ApiCollection {
         if (value == "composers") {
             if (!this._composers) {
                 this._loadingComposers = true;
-                this._composers = await api.songs.getAllComposers(this.key);
+
+                const key = "composers_" + this.key;
+
+                const getComposers = async () => ((await cache.get("items", key))?.value as ApiContributorCollectionItem[] ?? []);
+
+                try {
+                    const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
+                    const composers = [...await getComposers(), ...await api.songs.getAllComposers(this.key, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
+                    this._composers = composers.map(c => new ContributorCollectionItem(c));
+
+                    await cache.set("items", key, {
+                        id: key,
+                        value: composers,
+                    });
+                    await cache.set("config", "last_updated_" + key, {
+                        id: "last_updated_" + key,
+                        value: new Date().toISOString(),
+                    });
+                } 
+                catch {
+                    this._composers = (await getComposers()).map(c => new ContributorCollectionItem(c));
+                }
+
                 this._loadingComposers = false;
                 return this._composers.length;
             }
@@ -276,9 +325,49 @@ export class Collection extends BaseClass implements ApiCollection {
         if (value == "countries") {
             if (!this._countries) {
                 this._loadingCountries = true;
-                this._countries = await api.songs.getAllCountries(this.key);
+
+                const key = "countries_" + this.key;
+
+                try {
+                    const countries = await api.songs.getAllCountries(this.key);
+
+                    this._countries = countries.map(c => new CountryCollectionItem(c));
+
+                    await cache.set("items", key, {
+                        id: key,
+                        value: countries,
+                    });
+                }
+                catch {
+                    this._countries = ((await cache.get("items", key))?.value as ApiCountryCollectionItem[] ?? []).map(c => new CountryCollectionItem(c));
+                }
+
                 this._loadingCountries = false;
                 return this._countries.length;
+            }
+        }
+        if (value == "themes") {
+            if (!this._themes) {
+                this._loadingThemes = true;
+
+                const key = "themes_" + this.key;
+                
+                try {
+                    const themes = await api.songs.getAllThemes(this.key);
+
+                    this._themes = themes.map(t => new ThemeCollectionItem(t));
+
+                    await cache.set("items", key, {
+                        id: key,
+                        value: themes,
+                    });
+                }
+                catch {
+                    this._themes = ((await cache.get("items", key))?.value as ApiThemeCollectionItem[] ?? []).map(t => new ThemeCollectionItem(t));
+                }
+
+                this._loadingThemes = false;
+                return this._themes.length;
             }
         }
 
@@ -313,15 +402,19 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public get authors(): ContributorCollectionItem[] {
-        return this._authors ? this._authors : [];
+        return this._authors ?? [];
     }
 
     public get composers(): ContributorCollectionItem[] {
-        return this._composers ? this._composers : [];
+        return this._composers ?? [];
     }
 
     public get countries(): CountryCollectionItem[] {
-        return this._countries ? this._countries : [];
+        return this._countries ?? [];
+    }
+
+    public get themes(): ThemeCollectionItem[] {
+        return this._themes ?? [];
     }
 
     public getContributors(type: string) {

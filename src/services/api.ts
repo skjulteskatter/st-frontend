@@ -1,8 +1,6 @@
 import { Collection, Lyrics, Song } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
-import { CountryCollectionItem } from "@/classes/collectionItems/countryCollectionItem";
-import { ThemeCollectionItem } from "@/classes/collectionItems/themeCollectionItem";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from "dmb-api";
@@ -95,17 +93,17 @@ export const songs = {
     async getAllContributors(collection: string, lastUpdated?: string) {
         return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection}?expand=contributor/biography,songs/collection` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(c => new ContributorCollectionItem(c));
     },
-    async getAllAuthors(collection: string) {
-        return (await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection}`)).map(c => new ContributorCollectionItem(c));
+    async getAllAuthors(collection: string, lastUpdated?: string) {
+        return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
     },
-    async getAllComposers(collection: string) {
-        return (await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection}`)).map(c => new ContributorCollectionItem(c));
+    async getAllComposers(collection: string, lastUpdated?: string) {
+        return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
     },
     async getAllThemes(collection: string) {
-        return (await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`)).map(ci => new ThemeCollectionItem(ci));
+        return await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`); //).map(ci => new ThemeCollectionItem(ci));
     },
     async getAllCountries(collection: string) {
-        return (await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`)).map(ci => new CountryCollectionItem(ci));
+        return await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`); //).map(ci => new CountryCollectionItem(ci));
     },
     /**
      * Search accross collections.
