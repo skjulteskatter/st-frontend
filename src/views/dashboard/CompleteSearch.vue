@@ -65,7 +65,7 @@ export default class CompleteSearch extends Vue {
         if (this.searchQuery.length > 4) {
             this.songs = await api.songs.searchCollections(
                 this.searchQuery,
-                this.languageKey
+                this.languageKey,
             );
         }
         this.loading = false;
@@ -80,11 +80,11 @@ export default class CompleteSearch extends Vue {
         for (const song of this.songs) {
             if (song.collection) {
                 let col = collections.find(
-                    (c) => c.collection.id == song.collection?.id
+                    (c) => c.collection.id == song.collection?.id,
                 );
                 if (!col) {
                     const collection = this.collections.find(
-                        (c) => c.id == song.collection?.id
+                        (c) => c.id == song.collection?.id,
                     );
                     if (collection) {
                         col = {
