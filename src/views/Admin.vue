@@ -102,7 +102,13 @@ export default class Subscriptions extends Vue {
     }
 
     get users(): User[] {
-        return this.store.state.users.users ?? [];
+        const maxUsers = 50;
+        const users = this.store.state.users.users;
+
+        if (users.length > maxUsers)
+            return users.splice(maxUsers, users.length);
+
+        return users ?? [];
     }
 
     public get currentUser() {
@@ -126,7 +132,7 @@ export default class Subscriptions extends Vue {
             icon: "trash",
         });
         this.loadingClearCache = this.loadingClearCache.filter(
-            (c) => c != collection,
+            (c) => c != collection
         );
     }
 
