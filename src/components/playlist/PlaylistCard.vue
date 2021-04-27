@@ -6,10 +6,10 @@
                 {{ playlist.entries.length }}
                 {{ $t("common.songs").toLowerCase() }}
             </small>
-            <small class="playlist-card__shared">
+            <!-- <small class="playlist-card__shared">
                 {{ $t("playlist.sharedwith") }}
                 {{ playlist.sharedWithIds.length }}
-            </small>
+            </small> -->
         </div>
     </base-card>
 </template>
