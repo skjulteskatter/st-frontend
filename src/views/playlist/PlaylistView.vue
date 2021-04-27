@@ -48,12 +48,19 @@ export default class PlaylistView extends Vue {
     private store = useStore();
 
     public async deletePlaylist() {
-        await this.store.dispatch(SessionActionTypes.PLAYLIST_DELETE, this.playlist?.id);
+        const name = this.playlist?.name;
+
+        await this.store.dispatch(
+            SessionActionTypes.PLAYLIST_DELETE,
+            this.playlist?.id
+        );
         this.$router.push("/playlists");
 
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
+            icon: "trash",
             title: this.$t("playlist.deletedplaylist"),
+            content: `${this.$t("playlist.deletedplaylist")} "${name}"`,
         });
     }
 
@@ -63,7 +70,7 @@ export default class PlaylistView extends Vue {
 
     public get playlist() {
         return this.store.getters.playlists.find(
-            (p) => p.id == this.$route.params.id,
+            (p) => p.id == this.$route.params.id
         );
     }
 }
