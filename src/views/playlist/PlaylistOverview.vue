@@ -45,6 +45,7 @@ import { BaseInput } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     name: "playlist-overview",
@@ -60,7 +61,19 @@ export default class PlaylistOverview extends Vue {
     public playlistName = "";
 
     public createPlaylist() {
-        this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, { name: this.playlistName });
+        this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
+            name: this.playlistName,
+        });
+
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+            type: "success",
+            icon: "check",
+            title: this.$t("playlist.newplaylist"),
+            content: `${this.$t("playlist.newplaylist")} "${
+                this.playlistName
+            }"`,
+        });
+
         this.playlistName = "";
     }
 
