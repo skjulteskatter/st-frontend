@@ -132,7 +132,7 @@ export default class Subscriptions extends Vue {
             icon: "trash",
         });
         this.loadingClearCache = this.loadingClearCache.filter(
-            (c) => c != collection
+            (c) => c != collection,
         );
     }
 
