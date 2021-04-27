@@ -1,10 +1,8 @@
 <template>
-    <div id="songtreasures">
-        <loader :loading="initialized === false">
-            <router-view />
-        </loader>
-        <notification-group />
-    </div>
+    <loader :loading="initialized === false">
+        <router-view />
+    </loader>
+    <notification-group />
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
@@ -40,6 +38,10 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import "@/style/main";
+
+#app {
+    height: 100vh;
+}
 
 body {
     --st-color-background-dark: var(--st-color-ui-lm-medium);

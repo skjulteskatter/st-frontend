@@ -41,6 +41,7 @@ export default class Store extends Vue {
 
 .collections {
     padding: calc(var(--st-spacing) * 2);
+    height: 100%;
 
     @include breakpoint("medium") {
         padding: var(--st-spacing);
