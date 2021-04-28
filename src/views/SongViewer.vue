@@ -90,7 +90,7 @@
                         :song="song"
                     ></lyrics-settings>
                 </div>
-                <loader :loading="loadingLyrics">
+                <loader :loading="lyricsLoading">
                     <lyrics-card
                         v-if="lyrics && !lyricsLoading"
                         :song="song"
@@ -285,11 +285,11 @@ export default class SongViewer extends Vue {
     }
 
     public get loading() {
-        return this.store.getters.collection?.loading;
+        return this.store.getters.collection?.loading === true;
     }
 
     public get loadingLyrics() {
-        return this.collection?.loadingLyrics || false;
+        return this.collection?.loadingLyrics === true;
     }
 
     public extend() {
