@@ -15,7 +15,7 @@
                 v-for="song in songs"
                 :key="song.id"
                 @click="selectSong(song)"
-                class="theme-card__list__item gap-x selectable"
+                class="theme-card__list__item gap-x"
                 :class="{
                     'wrong-language': anotherLanguage.includes(song),
                 }"
@@ -88,7 +88,7 @@ export default class SongListCard extends Vue {
 
     public get anotherLanguage() {
         return this.songs.filter(
-            (s) => s.type == "lyrics" && !s.name[this.languageKey],
+            (s) => s.type == "lyrics" && !s.name[this.languageKey]
         );
     }
 }
@@ -134,23 +134,18 @@ export default class SongListCard extends Vue {
         padding: 0;
         font-size: 0.8rem;
         color: var(--st-text-color);
-        // opacity: 0.8;
 
         &__item {
             display: flex;
             margin-bottom: 0.2rem;
             text-decoration: none;
-            cursor: unset;
+            cursor: pointer;
 
-            &.selectable {
-                cursor: pointer;
+            &:hover {
+                color: var(--st-color-primary);
 
-                &:hover {
-                    color: var(--st-color-primary);
-
-                    .theme-card__list__item__title {
-                        text-decoration: underline;
-                    }
+                .theme-card__list__item__title {
+                    text-decoration: underline;
                 }
             }
 
