@@ -69,7 +69,7 @@ export class Collection extends BaseClass implements ApiCollection {
                     const key = "songs_lastUpdated_" + this.key;
                     const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
                     
-                    const updateSongs = await api.songs.getAllSongs(this.key, lastUpdated);
+                    const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
     
                     await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
                         a[b.id] = b;
@@ -92,7 +92,7 @@ export class Collection extends BaseClass implements ApiCollection {
             }
             catch (e) {
                 notify("error", "Error occured", "warning", e);
-                this.songs = await api.songs.getAllSongs(this.key);
+                this.songs = await api.songs.getAllSongs(this);
             }
 
             this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
@@ -111,10 +111,10 @@ export class Collection extends BaseClass implements ApiCollection {
             try {
                 const key = "lyrics_lastUpdated_" + this.key + "_" + language;
                 const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-                const updateLyrics = await api.songs.getAllLyrics(this.key, language, "json", 0, lastUpdated);
+                const updateLyrics = await api.songs.getAllLyrics(this, language, "json", 0, lastUpdated);
 
                 await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
-                    a[b.id + "_" + b.language.key] = b;
+                    a[b.id] = b;
                     return a;
                 }, {} as {
                     [id: string]: Lyrics;
@@ -126,7 +126,7 @@ export class Collection extends BaseClass implements ApiCollection {
             }
             catch (e) {
                 notify("error", "Error occured", "warning", e);
-                this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
+                this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
             }
 
             //this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
@@ -273,7 +273,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 try {
                     const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
-                    const authors = [...await getAuthors(), ...await api.songs.getAllAuthors(this.key, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
+                    const authors = [...await getAuthors(), ...await api.songs.getAllAuthors(this, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
                     this._authors = authors.map(c => new ContributorCollectionItem(c));
 
                     await cache.set("items", key, {
@@ -302,7 +302,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 try {
                     const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
-                    const composers = [...await getComposers(), ...await api.songs.getAllComposers(this.key, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
+                    const composers = [...await getComposers(), ...await api.songs.getAllComposers(this, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
                     this._composers = composers.map(c => new ContributorCollectionItem(c));
 
                     await cache.set("items", key, {
@@ -329,7 +329,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 const key = "countries_" + this.key;
 
                 try {
-                    const countries = await api.songs.getAllCountries(this.key);
+                    const countries = await api.songs.getAllCountries(this);
 
                     this._countries = countries.map(c => new CountryCollectionItem(c));
 
@@ -353,7 +353,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 const key = "themes_" + this.key;
                 
                 try {
-                    const themes = await api.songs.getAllThemes(this.key);
+                    const themes = await api.songs.getAllThemes(this);
 
                     this._themes = themes.map(t => new ThemeCollectionItem(t));
 
@@ -377,7 +377,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            const lyrics = await api.songs.getLyrics(this.key, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
+            const lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
             return lyrics;
         }
         finally {
@@ -391,7 +391,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
             let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
             if (!lyrics) {
-                lyrics = new Lyrics(await api.songs.getLyrics(this.key, number, language, "json", 0, "common"));
+                lyrics = new Lyrics(await api.songs.getLyrics(this, number, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
             return lyrics;
