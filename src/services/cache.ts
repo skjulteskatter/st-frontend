@@ -28,7 +28,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 6;
+    private version = 7;
     private _db?: IDBPDatabase;
 
     public db() {
@@ -37,7 +37,11 @@ class CacheService {
         return openDB(this.dbName, v, {
             upgrade(db) {
                 for (const store of stores) {
-                    if (["config", "lyrics"].includes(store) && db.objectStoreNames.contains(store)) {
+                    // if (["config", "lyrics"].includes(store) && db.objectStoreNames.contains(store)) {
+                    //     db.deleteObjectStore(store);
+                    //     db.createObjectStore(store);
+                    // }
+                    if (db.objectStoreNames.contains(store)) {
                         db.deleteObjectStore(store);
                         db.createObjectStore(store);
                     }
