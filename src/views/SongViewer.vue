@@ -34,6 +34,7 @@
                             theme="tertiary"
                             icon="book"
                             :label="$t('song.sheetmusic')"
+                            v-if="song.sheetMusic.length"
                         >
                             <h3>{{ $t("song.sheetmusic") }}</h3>
                             <base-button
