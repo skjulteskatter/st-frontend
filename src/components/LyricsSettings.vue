@@ -4,9 +4,9 @@
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__controls"
         >
-            <h2 class="lyrics-settings__controls__title">
+            <h3 class="lyrics-settings__controls__title">
                 {{ $t("song.control") }}
-            </h2>
+            </h3>
             <base-button
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('lyrics')"
@@ -43,13 +43,10 @@
             <base-button @click="setLineSize(1)">1</base-button>
             <base-button @click="setLineSize(2)">2</base-button> -->
         </base-card>
-        <base-card
-            v-if="song.type == 'lyrics'"
-            class="lyrics-settings__verses"
-        >
-            <h2 class="lyrics-settings__verses__title">
+        <base-card v-if="song.type == 'lyrics'" class="lyrics-settings__verses">
+            <h3 class="lyrics-settings__verses__title">
                 {{ $t("song.verse") }}
-            </h2>
+            </h3>
             <div
                 class="lyrics-settings__verses__select gap-x"
                 v-for="key in Object.keys(selectVerses)"
@@ -205,9 +202,7 @@ export default class LyricsSettings extends Vue {
     }
 
     public get selected() {
-        return (
-            Object.keys(this.verses).filter(v => this.selectVerses[v])
-        );
+        return Object.keys(this.verses).filter((v) => this.selectVerses[v]);
     }
 
     public get verses() {
@@ -246,7 +241,7 @@ export default class LyricsSettings extends Vue {
         return (
             lines.slice(
                 this.currentLinesNumber,
-                this.currentLinesNumber + this.lineSize,
+                this.currentLinesNumber + this.lineSize
             ) ?? []
         );
     }
