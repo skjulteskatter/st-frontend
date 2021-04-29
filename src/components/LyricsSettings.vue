@@ -11,27 +11,27 @@
                 class="lyrics-settings__controls__open"
                 @click="openLyricsWindow('lyrics')"
             >
-                Open viewer
+                {{ $t("song.openviewer") }}
             </base-button>
             <base-button
                 class="lyrics-settings__controls__update"
                 @click="updateLyrics"
             >
-                Update viewer
+                {{ $t("song.updateviewer") }}
             </base-button>
             <base-button
                 class="lyrcis-settings__controls__previous"
                 @click="previous"
                 theme="secondary"
             >
-                Previous
+                {{ $t("common.previous") }}
             </base-button>
             <base-button
                 class="lyrcis-settings__controls__next"
                 @click="next"
                 theme="secondary"
             >
-                Next
+                {{ $t("common.next") }}
             </base-button>
             <!-- <br />
             <base-button
@@ -304,8 +304,18 @@ export default class LyricsSettings extends Vue {
     }
 
     &__verses {
-        display: flex;
-        flex-direction: row;
+        .card__content {
+            width: 100%;
+        }
+
+        &__select {
+            width: 100%;
+            display: flex;
+
+            label {
+                flex-grow: 1;
+            }
+        }
 
         &__title {
             margin-top: 0;
