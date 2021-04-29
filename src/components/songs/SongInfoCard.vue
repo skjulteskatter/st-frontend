@@ -8,9 +8,11 @@
         :disableContent="!description"
     >
         <template #header>
-            <p class="song-details__metadata__collection">{{ collection }}</p>
-            <h2 class="song-details__metadata__title">
-                <span style="opacity: 0.5; padding-right: 0.5em">
+            <p class="song-details__metadata__collection" v-if="collection">
+                {{ collection.getName(languageKey) }}
+            </p>
+            <h2 class="song-details__metadata__title" v-if="collection">
+                <span class="song-details__metadata__number">
                     {{ song.number }}
                 </span>
                 <span>
@@ -101,11 +103,13 @@
                     >
                         {{ melodyOrigin }}
                     </small>
-                    <small
-                        class="song-details__metadata__credits"
-                        v-if="song.yearWritten"
-                    >
-                        {{ song.originCountry.name }} | {{ song.yearWritten }}
+                    <small class="song-details__metadata__credits gap-x">
+                        <span v-if="song.originCountry">
+                            {{ song.originCountry.name }}
+                        </span>
+                        <span v-if="song.yearWritten">
+                            {{ song.yearWritten }}
+                        </span>
                     </small>
                 </div>
             </div>
@@ -118,7 +122,7 @@
     </base-card>
 </template>
 <script lang="ts">
-import { Song } from "@/classes";
+import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal } from "@/components";
 import { useStore } from "@/store";
@@ -147,7 +151,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image",
+                "song-details-image"
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -164,12 +168,12 @@ export default class SongInfoCard extends Vue {
         }
     }
 
-    public get collection() {
+    public get collection(): Collection | undefined {
         const id = this.store.state.songs.collectionId;
         const collection = this.store.state.songs.collections.find(
-            (c) => c.key == id,
+            (c) => c.key == id
         );
-        return collection?.getName(this.languageKey);
+        return collection;
     }
 
     public get title() {
@@ -228,6 +232,13 @@ export default class SongInfoCard extends Vue {
 .song-details__metadata {
     width: 100%;
 
+    &__number {
+        color: var(--st-color-text);
+        text-decoration: none;
+        opacity: 0.5;
+        padding-right: 0.5em;
+    }
+
     &__collection {
         opacity: 0.5;
         margin-top: 0;
@@ -247,6 +258,10 @@ export default class SongInfoCard extends Vue {
         color: var(--st-color-primary);
         display: block;
         margin-bottom: 0.2rem;
+
+        a {
+            color: var(--st-color-primary);
+        }
     }
 
     &__description {
@@ -257,10 +272,6 @@ export default class SongInfoCard extends Vue {
         & > * {
             margin: 0;
         }
-    }
-
-    a {
-        color: var(--st-color-primary);
     }
 }
 </style>

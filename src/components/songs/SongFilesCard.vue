@@ -6,9 +6,9 @@
     >
         <template #header>
             <div class="song-details__files__header">
-                <h2 class="song-details__files__title">
+                <h3 class="song-details__files__title">
                     {{ $t("song.files") }}
-                </h2>
+                </h3>
             </div>
         </template>
         <div class="song-details__files__container">

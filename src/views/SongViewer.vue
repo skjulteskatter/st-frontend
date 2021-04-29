@@ -70,10 +70,10 @@
                         <base-button
                             v-if="extended"
                             @click="extend"
-                            icon="settings"
+                            icon="expand"
                             class="song-viewer__sidebar__buttons--advanced"
                         >
-                            {{ $t("song.advanced") }}
+                            {{ $t("song.viewer") }}
                         </base-button>
                     </div>
                 </div>
@@ -191,7 +191,7 @@ export default class SongViewer extends Vue {
         ) {
             await this.store.dispatch(
                 SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
+                this.$route.params.collection as string
             );
         }
 
@@ -207,7 +207,7 @@ export default class SongViewer extends Vue {
             if (route == this.$route.fullPath && this.song) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_SONG_ITEM,
-                    this.song,
+                    this.song
                 );
             }
         };
@@ -239,7 +239,7 @@ export default class SongViewer extends Vue {
         if (song) {
             if (
                 playlist.entries.find(
-                    (e) => e.type == "song" && e.itemId == song.id,
+                    (e) => e.type == "song" && e.itemId == song.id
                 )
             ) {
                 if (!confirm("Song is already in playlist. Add duplicate?"))
@@ -257,7 +257,7 @@ export default class SongViewer extends Vue {
                 type: "success",
                 title: "Added to playlist",
                 content: `Added "${song.getName(
-                    this.languageKey,
+                    this.languageKey
                 )}" to playlist ${playlist.name}`,
                 icon: "check",
             });
