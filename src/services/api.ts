@@ -77,33 +77,33 @@ export const songs = {
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
-    async getAllSongs(collection: string, lastUpdated?: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/${collection}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(s => new Song(s));
+    async getAllSongs(collection: ApiCollection, lastUpdated?: string) {
+        return (await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(s => new Song(s));
     },
-    async getLyrics(collection: string, number: number, language: string, format: string, transpose: number, transcode: string) {
-        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
+    async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string) {
+        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
     },
-    async getAllLyrics(collection: string, language: string, format: string, transpose: number, lastUpdated?: string) {
-        const uri = `api/Lyrics/${collection}?language=${language}&format=${format}&transpose=${transpose}` + (lastUpdated ? `&updatedAt=${lastUpdated}` : "");
+    async getAllLyrics(collection: ApiCollection, language: string, format: string, transpose: number, lastUpdated?: string) {
+        const uri = `api/Lyrics/${collection.id}?language=${language}&format=${format}&transpose=${transpose}` + (lastUpdated ? `&updatedAt=${lastUpdated}` : "");
         return (await http.get<ApiLyrics[]>(uri)).map(l => new Lyrics(l));
     },
     async getContributor(id: string) {
         return new ContributorCollectionItem((await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`)));
     },
-    async getAllContributors(collection: string, lastUpdated?: string) {
-        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection}?expand=contributor/biography,songs/collection` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(c => new ContributorCollectionItem(c));
+    async getAllContributors(collection: ApiCollection, lastUpdated?: string) {
+        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection.id}?expand=contributor/biography,songs/collection` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(c => new ContributorCollectionItem(c));
     },
-    async getAllAuthors(collection: string, lastUpdated?: string) {
-        return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
+    async getAllAuthors(collection: ApiCollection, lastUpdated?: string) {
+        return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
     },
-    async getAllComposers(collection: string, lastUpdated?: string) {
-        return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
+    async getAllComposers(collection: ApiCollection, lastUpdated?: string) {
+        return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
     },
-    async getAllThemes(collection: string) {
-        return await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection}`); //).map(ci => new ThemeCollectionItem(ci));
+    async getAllThemes(collection: ApiCollection) {
+        return await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection.id}`); //).map(ci => new ThemeCollectionItem(ci));
     },
-    async getAllCountries(collection: string) {
-        return await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection}`); //).map(ci => new CountryCollectionItem(ci));
+    async getAllCountries(collection: ApiCollection) {
+        return await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection.id}`); //).map(ci => new CountryCollectionItem(ci));
     },
     /**
      * Search accross collections.
@@ -152,7 +152,9 @@ export const stripe = {
         return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`);
     },
     getPortalSession() {
-        return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
+        return http.post("api/Store/Portal", {
+            returnUrl: `${window.location.origin}/collections`,
+        });
     },
     refreshSubscriptions() {
         return http.get("api/Store/Refresh");

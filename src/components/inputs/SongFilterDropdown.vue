@@ -1,19 +1,37 @@
 <template>
-    <base-dropdown :label="$t('common.open')">
+    <base-dropdown :label="$t('common.select')">
         <div class="filter__header gap-x">
-            <b>{{ $t("song.filters") }}</b>
+            <b>{{ $t("song.showsongswith") }}...</b>
             <base-button theme="primary" @click="apply">
                 {{ $t("common.save") }}
             </base-button>
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
             <div class="grouping">
-                <input v-model="typeValues.lyrics" type="checkbox" name="lyrics" id="lyrics"><label for="lyrics">{{ $t("types.lyrics") }}</label>
+                <input
+                    v-model="typeValues.lyrics"
+                    type="checkbox"
+                    name="lyrics"
+                    id="lyrics"
+                /><label for="lyrics">
+                    <strong>
+                        {{ $t("types.lyrics") }}
+                    </strong>
+                </label>
             </div>
             <div class="grouping">
-                <input v-model="typeValues.video" type="checkbox" name="video" id="video"><label for="video">{{ $t("types.video") }}</label>
+                <input
+                    v-model="typeValues.video"
+                    type="checkbox"
+                    name="video"
+                    id="video"
+                /><label for="video">
+                    <strong>
+                        {{ $t("types.video") }}
+                    </strong>
+                </label>
                 <div
-                    class="filter gap-x"
+                    class="grouping__child"
                     v-for="type in videoTypes"
                     :key="type"
                 >
@@ -29,9 +47,45 @@
                 </div>
             </div>
             <div class="grouping">
-                <input v-model="typeValues.audio" type="checkbox" name="audio" id="audio"><label for="audio">{{ $t("types.audio") }}</label>
+                <input
+                    v-model="typeValues.sheetmusic"
+                    type="checkbox"
+                    name="sheetmusic"
+                    id="sheetmusic"
+                /><label for="sheetmusic">
+                    <strong>
+                        {{ $t("types.sheetmusic") }}
+                    </strong>
+                </label>
                 <div
-                    class="filter gap-x"
+                    class="grouping__child"
+                    v-for="type in sheetMusicTypes"
+                    :key="type"
+                >
+                    <input
+                        v-model="sheetMusicValues[type]"
+                        type="checkbox"
+                        :name="type"
+                        :id="`sm-${type}`"
+                    />
+                    <label :for="`sm-${type}`">
+                        {{ $t(`types.${type}`) }}
+                    </label>
+                </div>
+            </div>
+            <div class="grouping">
+                <input
+                    v-model="typeValues.audio"
+                    type="checkbox"
+                    name="audio"
+                    id="audio"
+                /><label for="audio">
+                    <strong>
+                        {{ $t("types.audio") }}
+                    </strong>
+                </label>
+                <div
+                    class="grouping__child"
                     v-for="type in audioTypes"
                     :key="type"
                 >
@@ -60,20 +114,6 @@
                     </label>
                 </div>
             </div> -->
-            <div class="grouping">
-                <input v-model="typeValues.sheetmusic" type="checkbox" name="sheetmusic" id="sheetmusic"><label for="sheetmusic">{{ $t("types.sheetmusic") }}</label>
-                <div class="filter gap-x" v-for="type in sheetMusicTypes" :key="type">
-                    <input
-                        v-model="sheetMusicValues[type]"
-                        type="checkbox"
-                        :name="type"
-                        :id="`sm-${type}`"
-                    />
-                    <label :for="`sm-${type}`">
-                        {{ $t(`types.${type}`) }}
-                    </label>
-                </div>
-            </div>
         </div>
     </base-dropdown>
 </template>
@@ -104,7 +144,14 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 export default class SongFilterDropdown extends Vue {
     private store = useStore();
     public videoTypes = ["karaoke"];
-    public audioTypes = ["gathering", "studio", "instrumental", "live_performance", "demo", "playback"];
+    public audioTypes = [
+        "gathering",
+        "studio",
+        "instrumental",
+        "live_performance",
+        "demo",
+        "playback",
+    ];
     public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];
     public sheetMusicTypes = ["leadsheet", "5part"];
     public themes?: Theme[];
@@ -152,19 +199,23 @@ export default class SongFilterDropdown extends Vue {
         //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
 
         const videos = this.videoTypes.filter(
-            (t) => this.videoValues[t] == true,
+            (t) => this.videoValues[t] == true
         );
         const audio = this.audioTypes.filter(
-            (t) => this.audioValues[t] == true,
+            (t) => this.audioValues[t] == true
         );
-        const types = this.contentTypes.filter((t) => this.typeValues[t] == true);
+        const types = this.contentTypes.filter(
+            (t) => this.typeValues[t] == true
+        );
 
         const filter = Object.assign({}, this.store.state.songs.filter);
 
         filter.videoFiles = videos;
         filter.audioFiles = audio;
         filter.contentTypes = types;
-        filter.sheetMusicTypes = this.sheetMusicTypes.filter((t) => this.sheetMusicValues[t] == true);
+        filter.sheetMusicTypes = this.sheetMusicTypes.filter(
+            (t) => this.sheetMusicValues[t] == true
+        );
         //filter.origins = origins;
 
         this.store.commit(SongsMutationTypes.SET_FILTER, filter);
@@ -186,9 +237,14 @@ export default class SongFilterDropdown extends Vue {
 
 <style lang="scss">
 .grouping {
-    border: 1px dashed var(--st-color-border);
     border-radius: var(--st-border-radius);
-    padding: calc(var(--st-spacing) * 0.5);
+    padding: calc(var(--st-spacing) * 0.5) 0;
+    min-width: 130px;
+
+    &__child {
+        margin-left: calc(var(--st-spacing) / 2);
+        font-size: 0.9em;
+    }
 }
 
 .filter__header {
@@ -198,8 +254,7 @@ export default class SongFilterDropdown extends Vue {
 }
 
 .filter__wrapper {
-    display: flex;
-    margin-top: calc(var(--st-spacing) * 0.5);
+    columns: 2;
 
     .filter {
         display: flex;

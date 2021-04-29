@@ -23,14 +23,14 @@
 
         <div class="sheetmusic-wrapper">
             <div class="sheetmusic-content">
-                <base-button
+                <!-- <base-button
                     v-if="type != pdfType"
                     icon="settings"
                     class="pbcontrol-toggle"
                     style="position: fixed"
                     @click="osmd.toggleControls()"
                     >Controls</base-button
-                >
+                > -->
                 <open-sheet-music-display
                     v-if="
                         type != pdfType &&

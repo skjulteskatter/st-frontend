@@ -90,6 +90,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 path: "collections",
+                alias: "store",
                 name: "collections",
                 component: CollectionView,
                 children: [

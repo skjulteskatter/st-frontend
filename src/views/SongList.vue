@@ -10,7 +10,7 @@
                     <div class="song-list__filters__wrapper gap-x">
                         <div class="song-list__filters__field">
                             <label for="song-category">
-                                {{ $t("song.category") }}
+                                {{ $t("song.sortby") }}
                             </label>
                             <button-group
                                 :buttons="buttons"

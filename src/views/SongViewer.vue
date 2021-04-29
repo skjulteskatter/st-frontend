@@ -34,6 +34,7 @@
                             theme="tertiary"
                             icon="book"
                             :label="$t('song.sheetmusic')"
+                            v-if="song.sheetMusic.length"
                         >
                             <h3>{{ $t("song.sheetmusic") }}</h3>
                             <base-button
@@ -70,10 +71,10 @@
                         <base-button
                             v-if="extended"
                             @click="extend"
-                            icon="settings"
+                            icon="expand"
                             class="song-viewer__sidebar__buttons--advanced"
                         >
-                            {{ $t("song.advanced") }}
+                            {{ $t("song.viewer") }}
                         </base-button>
                     </div>
                 </div>
@@ -90,7 +91,7 @@
                         :song="song"
                     ></lyrics-settings>
                 </div>
-                <loader :loading="loadingLyrics">
+                <loader :loading="lyricsLoading">
                     <lyrics-card
                         v-if="lyrics && !lyricsLoading"
                         :song="song"
@@ -285,11 +286,11 @@ export default class SongViewer extends Vue {
     }
 
     public get loading() {
-        return this.store.getters.collection?.loading;
+        return this.store.getters.collection?.loading === true;
     }
 
     public get loadingLyrics() {
-        return this.collection?.loadingLyrics || false;
+        return this.collection?.loadingLyrics === true;
     }
 
     public extend() {
