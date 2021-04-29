@@ -153,7 +153,7 @@ export const stripe = {
     },
     getPortalSession() {
         return http.post("api/Store/Portal", {
-            returnUrl: `${window.location.origin}/store`,
+            returnUrl: `${window.location.origin}/collections`,
         });
     },
     refreshSubscriptions() {
