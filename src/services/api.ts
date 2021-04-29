@@ -152,7 +152,9 @@ export const stripe = {
         return http.get<RedirectToCheckoutOptions>(`api/Store/Session/${sessionId}`);
     },
     getPortalSession() {
-        return http.get(`api/Store/Portal?returnUrl=${window.location.origin}/store`);
+        return http.post("api/Store/Portal", {
+            returnUrl: `${window.location.origin}/store`,
+        });
     },
     refreshSubscriptions() {
         return http.get("api/Store/Refresh");
