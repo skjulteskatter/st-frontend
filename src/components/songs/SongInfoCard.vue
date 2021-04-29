@@ -103,11 +103,13 @@
                     >
                         {{ melodyOrigin }}
                     </small>
-                    <small
-                        class="song-details__metadata__credits"
-                        v-if="song.yearWritten"
-                    >
-                        {{ song.originCountry.name }} | {{ song.yearWritten }}
+                    <small class="song-details__metadata__credits gap-x">
+                        <span v-if="song.originCountry">
+                            {{ song.originCountry.name }}
+                        </span>
+                        <span v-if="song.yearWritten">
+                            {{ song.yearWritten }}
+                        </span>
                     </small>
                 </div>
             </div>
