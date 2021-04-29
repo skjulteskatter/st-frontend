@@ -255,7 +255,7 @@ export default class SongList extends Vue {
     }
 
     public get filteredSongs() {
-        return this.filteredObjects.songs;
+        return this.filteredObjects.songs.sort((a, b) => a.number - b.number);
     }
 
     public get collection(): Collection | undefined {
@@ -319,7 +319,7 @@ export default class SongList extends Vue {
             };
         } = {};
 
-        for (const song of this.filteredSongs.sort((a, b) =>
+        for (const song of Object.assign([] as Song[], this.filteredSongs).sort((a, b) =>
             a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1,
         )) {
             const letter = song
