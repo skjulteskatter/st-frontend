@@ -46,15 +46,13 @@
                 </div>
             </div>
         </template>
-        <loader :loading="collection?.loadingLyrics == true" position="local">
-            <transposed-lyrics-viewer
-                v-if="lyrics?.format == 'html'"
-                :lyrics="lyrics"
-                ref="transposed"
-            >
-            </transposed-lyrics-viewer>
-            <lyrics-viewer v-else :lyrics="lyrics"></lyrics-viewer>
-        </loader>
+        <transposed-lyrics-viewer
+            v-if="lyrics?.format == 'html'"
+            :lyrics="lyrics"
+            ref="transposed"
+        >
+        </transposed-lyrics-viewer>
+        <lyrics-viewer v-else :lyrics="lyrics"></lyrics-viewer>
     </base-card>
 </template>
 <script lang="ts">

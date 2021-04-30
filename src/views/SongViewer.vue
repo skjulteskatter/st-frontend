@@ -98,30 +98,7 @@
                     :collection="collection"
                 >
                 </lyrics-card>
-                <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
-            </iframe> -->
-                <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->
-                <!-- <open-sheet-music-display
-                :url="'https://dmb-cdn.azureedge.net/files/' + sheetMusicUrl"
-                :initialTransposition="transposition"
-                v-if="sheetMusicUrl"
-            >
-            </open-sheet-music-display> -->
             </div>
-
-            <!-- <aside class="song-viewer__sidebar" v-if="sidebar">
-            <div class="song-viewer__sidebar__buttons">
-            </div>
-            <div class="song-viewer__sidebar__content">
-                <song-files-card :song="song"></song-files-card>
-                <lyrics-settings
-                    v-if="isExtended"
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
-                    :song="song"
-                ></lyrics-settings>
-            </div>
-        </aside> -->
         </div>
     </loader>
 </template>
