@@ -1,3 +1,4 @@
+import { useStore } from "@/store";
 import { ApiActivity } from "dmb-api";
 import { RouteLocationRaw } from "vue-router";
 import { Collection } from "./collection";
@@ -6,6 +7,7 @@ import { Song } from "./song";
 
 export class Activity {
     private activity: ApiActivity;
+    private store = useStore();
 
     constructor(activity: ApiActivity) {
         this.activity = activity;
@@ -19,7 +21,7 @@ export class Activity {
         return this.activity.type == "song" ? {
             name: "song",
             params: {
-                collection: collections.find(c => c.id == this.collectionId)?.key ?? "",
+                collection: collections.find(c => c.id == this.collectionId)?.getKey(this.store.getters.languageKey) ?? "",
                 number: this.activity.item?.number ?? "",
             },
         } : {

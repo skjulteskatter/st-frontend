@@ -46,20 +46,22 @@
                 </div>
             </div>
         </template>
-        <transposed-lyrics-viewer
-            v-if="lyrics?.format == 'html'"
-            :lyrics="lyrics"
-            ref="transposed"
-        >
-        </transposed-lyrics-viewer>
-        <lyrics-viewer v-else-if="lyrics" :lyrics="lyrics"></lyrics-viewer>
+        <div v-if="lyrics">
+            <transposed-lyrics-viewer
+                v-if="lyrics.format == 'html'"
+            >
+            </transposed-lyrics-viewer>
+            <lyrics-viewer v-if="lyrics.format == 'json'"
+            >
+            </lyrics-viewer>
+        </div>
     </base-card>
 </template>
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
-import { BaseCard, BaseButton, Loader } from "./";
+import { BaseCard, BaseButton } from "./";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -73,7 +75,6 @@ import { transposer } from "@/classes/transposer";
         LyricsViewer,
         BaseCard,
         BaseButton,
-        Loader,
     },
     props: {
         lyrics: {
@@ -135,9 +136,15 @@ export default class LyricsCard extends Vue {
 
     public get selectedTransposition() {
         const t = this.store.state.songs.transposition ?? 0;
-        // console.log(this.transpositions, Object.entries(this.transpositions))
 
-        return Object.entries(this.transpositions).map(e => e[1]).includes(t) ? t : t + 12;
+        const ts: number[] = [];
+        for (const e of Object.keys(this.transpositions)) {
+            if (!ts.includes(this.transpositions[e])) {
+                ts.push(this.transpositions[e]);
+            }
+        }
+
+        return ts.includes(t) ? t : t + 12;
     }
 
     public set selectedTransposition(v) {
@@ -173,9 +180,9 @@ export default class LyricsCard extends Vue {
                 this.song.number,
                 this.selectedTransposition,
                 this.store.state.songs.language,
-                this.store.state.songs.transcode,
             );
-            this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
+            if (lyrics?.transposition !== undefined)
+                this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
         }
     }
 
@@ -195,14 +202,6 @@ export default class LyricsCard extends Vue {
 
     public get transpositions() {
         return this.song?.transpositions ?? {};
-    }
-
-    public get transposition() {
-        return (
-            this.lyrics?.transposedToKey ??
-            this.lyrics?.originalKey ??
-            ""
-        );
     }
 
     public get type() {

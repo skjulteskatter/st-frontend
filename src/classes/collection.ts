@@ -388,8 +388,11 @@ export class Collection extends BaseClass implements ApiCollection {
     public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            const lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
-            this.lyrics.push(lyrics);
+            let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language && l.format == "html" && l.transposition == transpose);
+            if (!lyrics) {
+                lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
+                this.lyrics.push(lyrics);
+            }
             return lyrics;
         }
         finally {
