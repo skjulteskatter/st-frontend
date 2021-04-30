@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal, BaseButton } from "@/components";
-import { Lyrics, Song } from "@/classes";
+import { Lyrics } from "@/classes";
 
 @Options({
     name: "lyrics-viewer",
@@ -25,16 +25,12 @@ import { Lyrics, Song } from "@/classes";
         lyrics: {
             type: Object,
         },
-        song: {
-            type: Object,
-        },
     },
 })
 export default class LyricsViewer extends Vue {
     public selectVerses: string[] = [];
     public currentVerseNumber = 0;
     public lyrics?: Lyrics;
-    public song?: Song;
 
     public get text() {
         const verses: { name: string; content: string[] }[] = [];

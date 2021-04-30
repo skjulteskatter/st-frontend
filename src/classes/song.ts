@@ -43,6 +43,7 @@ export class Song extends BaseClass implements ApiSong {
     } = {};
     public melodyOrigin = {} as Origin;
     public hasLyrics: boolean;
+    public hasChords;
 
     constructor(song: ApiSong) {
         super();
@@ -65,6 +66,7 @@ export class Song extends BaseClass implements ApiSong {
         this.type = song.type;
         this.themes = song.themes;
         this.hasLyrics = song.hasLyrics;
+        this.hasChords = song.hasChords;
         this.originalKey = song.originalKey;
         this.transpositions = song.transpositions;
         this.copyright = song.copyright;

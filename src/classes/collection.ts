@@ -389,6 +389,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.loadingLyrics = true;
         try {
             const lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
+            this.lyrics.push(lyrics);
             return lyrics;
         }
         finally {

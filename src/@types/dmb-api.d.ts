@@ -51,6 +51,7 @@ declare module "dmb-api" {
         videoFiles: MediaFile[];
         sheetMusic: MediaFile[];
         hasLyrics: boolean;
+        hasChords: boolean;
         copyright: {
             text?: Copyright;
             melody?: Copyright;
@@ -74,7 +75,7 @@ declare module "dmb-api" {
         collectionKey: string;
         language: Language;
         content: JsonContent | string;
-        format: string;
+        format: "json" | "html";
         hasChords: boolean;
         originalKey: string;
         transposedToKey: string;

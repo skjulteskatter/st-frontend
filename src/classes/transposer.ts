@@ -48,22 +48,22 @@ const commonTranspositions: {
     [key: string]: number;
 } = {
     "C": 0,
-    "C#": 1,
-    "Db": 1,
-    "D": 2,
-    "D#": 3,
-    "Eb": 3,
-    "E": 4,
-    "F": 5,
+    "C#": 11,
+    "Db": 11,
+    "D": 10,
+    "D#": 9,
+    "Eb": 9,
+    "E": 8,
+    "F": 7,
     "F#": 6,
     "Gb": 6,
-    "G": 7,
-    "G#": 8,
-    "Ab": 8,
-    "A": 9,
-    "A#": 10,
-    "Bb": 10,
-    "B": -1,
+    "G": 5,
+    "G#": 4,
+    "Ab": 4,
+    "A": 3,
+    "A#": 2,
+    "Bb": 2,
+    "B": 1,
 };
 
 type Transpositions = {
@@ -93,6 +93,11 @@ class Transposer {
     
     public getRelativeTransposition(relativeKey: string) {
         return commonTranspositions[relativeKey];
+    }
+
+    public getTransposition(originalKey: string, relativeKey: string) {
+        const diff = commonTranspositions[originalKey] - commonTranspositions[relativeKey];
+        return diff > 0 ? diff : diff + 12;
     }
 
     public getTransposedString(originalKey: string, transposition: number) {

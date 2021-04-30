@@ -1,4 +1,4 @@
-import { Collection, ContributorCollectionItem, Lyrics, Song } from "@/classes";
+import { Collection, ContributorCollectionItem, Song } from "@/classes";
 
 export type State = {
     collectionId?: string;
@@ -6,8 +6,6 @@ export type State = {
     transcode: string;
     song?: Song;
     songNumber?: number;
-    lyrics?: Lyrics;
-    transposedLyrics?: Lyrics;
     transposition?: number;
     smTransposition?: number;
     verses: Verse[];
@@ -18,7 +16,7 @@ export type State = {
     contributorItem?: ContributorCollectionItem;
     filter: SongFilter;
     audio?: AudioTrack;
-    view: string;
+    view: "transpose" | "default";
     sheetMusic: SheetMusicOptions;
 }
 

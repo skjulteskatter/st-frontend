@@ -91,15 +91,13 @@
                         :song="song"
                     ></lyrics-settings>
                 </div>
-                <loader :loading="lyricsLoading">
-                    <lyrics-card
-                        v-if="lyrics && !lyricsLoading"
-                        :song="song"
-                        :lyrics="lyrics"
-                        :collection="collection"
-                    >
-                    </lyrics-card>
-                </loader>
+                <lyrics-card
+                    v-if="song.hasLyrics"
+                    :song="song"
+                    :lyrics="lyrics"
+                    :collection="collection"
+                >
+                </lyrics-card>
                 <!-- <iframe v-if="sheetMusicUrl && showSheetMusic" :src="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`" style="width:100%; height:80%">
             </iframe> -->
                 <!-- <iframe src="http://localhost:8000" style="width:100%; height:80%"></iframe> -->

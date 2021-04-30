@@ -1,4 +1,5 @@
 import { ApiLyrics } from "dmb-api";
+import { transposer } from "./transposer";
 
 type Content = {
     [key: string]: {
@@ -15,7 +16,7 @@ export class Lyrics implements ApiLyrics {
     title: string;
     collectionKey: string;
     content: Content | string;
-    format: string;
+    format;
     hasChords: boolean;
     language: Language;
     originalKey: string;
@@ -38,6 +39,10 @@ export class Lyrics implements ApiLyrics {
         this.language = lyrics.language;
         this.transposedToKey = lyrics.transposedToKey;
         this.transpositions = lyrics.transpositions;
+    }
+
+    public get transposition() {
+        return this.transposedToKey ? transposer.getTransposition(this.originalKey, this.transposedToKey) : 0;
     }
 
     public get verses() {

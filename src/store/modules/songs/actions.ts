@@ -80,8 +80,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         const lyrics = await collection.transposeLyrics(getters.song.number, transpose);
 
-        commit(SongsMutationTypes.SET_LYRICS_TRANSPOSED, lyrics);
-        commit(SongsMutationTypes.SET_TRANSPOSITION, transpose);
+        // commit(SongsMutationTypes.SET_LYRICS_TRANSPOSED, lyrics);
+        commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics.transposition);
     },
     async [SongsActionTypes.SET_LIST]({ commit, getters }, value: string): Promise<void> {
         const r = await (getters.collection as Collection).getList(value);

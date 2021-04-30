@@ -22,6 +22,21 @@ export const getters: GetterTree<State, RootState> & Getters = {
         return (getters as {collection: Collection | undefined}).collection?.songs.find(s => s.number == state.songNumber);
     },
     lyrics(state, getters): Lyrics | undefined {
-        return (getters as {collection: Collection | undefined}).collection?.lyrics.find(l => l.number == state.songNumber && l.language.key == state.language);
+        const format = state.view == "transpose" ? "html" : "json";
+        const transposition = format == "html" ? state.transposition : null;
+
+        for (const l of (getters as {collection: Collection | undefined}).collection?.lyrics ?? []) {
+            if (l.number == state.songNumber && l.language.key == state.language) {
+                if (l.format != format)
+                    continue;
+                if (transposition !== null) {
+                    if (l.transposition == transposition) {
+                        return l;
+                    }
+                } else {
+                    return l;
+                }
+            }
+        }
     },
 };

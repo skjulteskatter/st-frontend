@@ -48,7 +48,7 @@ export default class TransposedLyricsViewer extends Vue {
                 this.transcode,
             );
             this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
-            this.store.commit(SongsMutationTypes.SET_LYRICS_TRANSPOSED, lyrics);
+            this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
         }
     }
 
