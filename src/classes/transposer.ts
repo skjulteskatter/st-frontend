@@ -119,8 +119,16 @@ class Transposer {
 
     public getRelativeTranspositions(originalKey: string, relativeKey: string, transpositions: {
         [key: string]: number;
-    }) {
-        const result: (string | number)[][] = [];
+    }): {
+        key: string;
+        value: number;
+        view: string;
+    }[] {
+        const result: {
+            key: string;
+            value: number;
+            view: string;
+        }[] = [];
 
         for (const e of Object.entries(transpositions)) {
             let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
@@ -134,7 +142,11 @@ class Transposer {
 
             const ss = Object.entries(commonTranspositions).find(en => en[1] == t)?.[0] ?? "C";
 
-            result.push([e[0], e[1], ss]);
+            result.push({
+                key: e[0],
+                value: e[1],
+                view: "C" != relativeKey ? `${e[0]} (${ss})` : e[0],
+            });
         }
 
         return result;
