@@ -21,6 +21,7 @@ declare module "dmb-api" {
             [lang: string]: string;
         };
         key: string;
+        keys: LocaleString;
         image: string;
         available?: boolean;
         details?: LocaleString;

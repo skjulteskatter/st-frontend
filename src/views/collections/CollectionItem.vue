@@ -70,7 +70,7 @@ export default class StoreItem extends Vue {
         if (this.product)
             this.store.commit(
                 StripeMutationTypes.CART_ADD_PRODUCT,
-                this.product.id
+                this.product.id,
             );
 
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
@@ -96,7 +96,7 @@ export default class StoreItem extends Vue {
 
     public get collections() {
         return this.store.state.session.collections.filter((c) =>
-            this.product?.collectionIds.includes(c.id)
+            this.product?.collectionIds.includes(c.id),
         );
     }
 

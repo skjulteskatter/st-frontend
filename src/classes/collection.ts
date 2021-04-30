@@ -8,9 +8,10 @@ import { notify } from "@/services/notify";
 const converter = new Converter();
 
 export class Collection extends BaseClass implements ApiCollection {
-    public key: string;
-    public defaultType: string;
-    public id: string;
+    public key;
+    public keys: LocaleString;
+    public defaultType;
+    public id;
     public available?: boolean;
     public details?: LocaleString;
 
@@ -52,12 +53,22 @@ export class Collection extends BaseClass implements ApiCollection {
     constructor(collection: ApiCollection) {
         super();
         this.key = collection.key;
+        this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
         this.available = collection.available;
         this.details = collection.details;
+    }
+
+    public getKey(language: string) {
+        return this.keys[language] ?? this.key;
+    }
+
+    public getKeys() {
+        const keys = Object.entries(this.keys).map(e => e[1]);
+        return keys.length ? keys : [this.key];
     }
 
     private async initialize() {

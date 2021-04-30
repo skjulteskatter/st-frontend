@@ -16,7 +16,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
         return (getters as {collection: Collection | undefined}).collection?.songs ?? [];
     },
     collection(state): Collection | undefined {
-        return state.collections.find(c => c.id == state.collectionId || c.key == state.collectionId);
+        return state.collectionId ? state.collections.find(c => c.id == state.collectionId || c.getKeys().includes(state.collectionId as string)) : undefined;
     },
     song(state, getters): Song | undefined {
         return (getters as {collection: Collection | undefined}).collection?.songs.find(s => s.number == state.songNumber);
