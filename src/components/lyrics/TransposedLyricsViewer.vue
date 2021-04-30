@@ -12,7 +12,6 @@ import { BaseButton, Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     name: "transposed-lyrics-viewer",
@@ -39,18 +38,18 @@ export default class TransposedLyricsViewer extends Vue {
         return this.store.state.songs.transcode;
     }
 
-    public async transpose(t: number) {
-        if (this.lyrics) {
-            const lyrics = await this.collection?.transposeLyrics(
-                this.lyrics.number,
-                t,
-                this.languageKey,
-                this.transcode,
-            );
-            this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
-            this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
-        }
-    }
+    // public async transpose(t: number) {
+    //     if (this.lyrics) {
+    //         const lyrics = await this.collection?.transposeLyrics(
+    //             this.lyrics.number,
+    //             t,
+    //             this.languageKey,
+    //             this.transcode,
+    //         );
+    //         this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
+    //         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
+    //     }
+    // }
 
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
