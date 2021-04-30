@@ -44,25 +44,42 @@ const negativeKeyToInt: {
     "B": -1,
 };
 
+// const trueTranspositions: {
+//     [key: string]: number;
+// } = {
+//     "C": 0,
+//     "C#": 1,
+//     "D": 2,
+//     "Eb": 3,
+//     "E": 4,
+//     "F": 5,
+//     "F#": 6,
+//     "G": 7,
+//     "Ab": 8,
+//     "A": 9,
+//     "Bb": 10,
+//     "B": 11,
+// };
+
 const commonTranspositions: {
     [key: string]: number;
 } = {
     "C": 0,
-    "C#": 11,
     "Db": 11,
+    "C#": 11,
     "D": 10,
-    "D#": 9,
     "Eb": 9,
+    "D#": 9,
     "E": 8,
     "F": 7,
     "F#": 6,
     "Gb": 6,
     "G": 5,
-    "G#": 4,
     "Ab": 4,
+    "G#": 4,
     "A": 3,
-    "A#": 2,
     "Bb": 2,
+    "A#": 2,
     "B": 1,
 };
 
@@ -98,6 +115,29 @@ class Transposer {
     public getTransposition(originalKey: string, relativeKey: string) {
         const diff = commonTranspositions[originalKey] - commonTranspositions[relativeKey];
         return diff > 0 ? diff : diff + 12;
+    }
+
+    public getRelativeTranspositions(originalKey: string, relativeKey: string, transpositions: {
+        [key: string]: number;
+    }) {
+        const result: (string | number)[][] = [];
+
+        for (const e of Object.entries(transpositions)) {
+            let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
+
+            while(t % 12 > 0) {
+                t = t - 12;
+            }
+            
+            if (t < 0)
+                t = t + 12;
+
+            const ss = Object.entries(commonTranspositions).find(en => en[1] == t)?.[0] ?? "C";
+
+            result.push([e[0], e[1], ss]);
+        }
+
+        return result;
     }
 
     public getTransposedString(originalKey: string, transposition: number) {

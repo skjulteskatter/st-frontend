@@ -13,16 +13,16 @@
                     >
                         <option
                             v-for="t in transpositionStrings()"
-                            :value="transpositions[t[0]]"
+                            :value="t[1]"
                             :key="t"
                         >
                             {{ t[0] }}
-                            <span v-if="t[1]">({{t[1]}})</span>
+                            <span v-if="t[2]">({{t[2]}})</span>
                         </option>
                     </select>
                     <base-button
                         v-if="song.hasChords"
-                        @click="transposeToggle"
+                        @click="transposeToggle()"
                         icon="music"
                         theme="tertiary"
                     >
@@ -32,7 +32,7 @@
                         id="language"
                         name="language"
                         v-model="selectedLanguage"
-                        @change="translateTo"
+                        @change="translateTo()"
                     >
                         <option
                             v-for="l in languages"
@@ -46,22 +46,23 @@
                 </div>
             </div>
         </template>
-        <div v-if="lyrics">
+        <loader :loading="collection?.loadingLyrics" position="local">
             <transposed-lyrics-viewer
-                v-if="lyrics.format == 'html'"
+                v-if="type == 'transpose' && transposedLyrics"
+                :lyrics="transposedLyrics"
             >
             </transposed-lyrics-viewer>
-            <lyrics-viewer v-if="lyrics.format == 'json'"
+            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'"
             >
             </lyrics-viewer>
-        </div>
+        </loader>
     </base-card>
 </template>
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
-import { BaseCard, BaseButton } from "./";
+import { BaseCard, BaseButton, Loader } from "./";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -75,6 +76,7 @@ import { transposer } from "@/classes/transposer";
         LyricsViewer,
         BaseCard,
         BaseButton,
+        Loader,
     },
     props: {
         lyrics: {
@@ -95,7 +97,6 @@ export default class LyricsCard extends Vue {
     public lyrics?: Lyrics;
     public collection?: Collection;
     public selectedLanguage = "";
-    //public selectedTransposition = 0;
     public loaded = false;
 
     public mounted() {
@@ -111,40 +112,16 @@ export default class LyricsCard extends Vue {
             (this.languages.find((l) => l.key == this.languageKey)
                 ? this.languageKey
                 : this.languages[0]?.key) ?? this.languageKey;
-        
-        // if (this.sheetMusicUrl) {
-        //     const o: SheetMusicOptions = {
-        //         show: true,
-        //         url: 'https://dmb-cdn.azureedge.net/files/' + this.sheetMusicUrl,
-        //         originalKey: this.song?.originalKey,
-        //         transposition: this.songStore.state.smTransposition,
-        //     }
-
-        //     this.songStore.commit("sheetMusic", o);
-        // }
     }
 
-    // public sheetMusic() {
-    //     this.$router.push({name: "songs-sheet-music"});
-    //     osmd.load(this.songStore.state.sheetMusic);
-    // }
-
-    // public get sheetMusicUrl() {
-    //     return this.song?.sheetMusic?.find((s) => s.category === "leadsheet")
-    //         ?.id;
-    // }
+    public get transposedLyrics() {
+        return this.collection?.lyrics.find(l => l.number == this.song?.number && l.language.key == this.selectedLanguage && l.format == "html" && l.transposition == this.selectedTransposition);
+    }
 
     public get selectedTransposition() {
         const t = this.store.state.songs.transposition ?? 0;
 
-        const ts: number[] = [];
-        for (const e of Object.keys(this.transpositions)) {
-            if (!ts.includes(this.transpositions[e])) {
-                ts.push(this.transpositions[e]);
-            }
-        }
-
-        return ts.includes(t) ? t : t + 12;
+        return Object.values(this.transpositions).includes(t) ? t : t + 12;
     }
 
     public set selectedTransposition(v) {
@@ -195,6 +172,7 @@ export default class LyricsCard extends Vue {
     }
 
     public async transposeView() {
+        this.store.commit(SongsMutationTypes.SET_VIEW, "loading");
         this.store.commit(SessionMutationTypes.EXTEND, false);
         await this.transpose();
         this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
@@ -212,20 +190,19 @@ export default class LyricsCard extends Vue {
         return this.store.getters.user?.settings?.defaultTransposition ?? "C";
     }
 
-    public transpositionString(key: string): string[] {
-        if (this.defaultTransposition !== "C") {
-            const transposed = transposer.getTransposedString(key, 12 - transposer.getRelativeTransposition(this.defaultTransposition));
+    // public transpositionString(key: string, value: number): (string | number)[] {
+    //     if (this.defaultTransposition !== "C") {
+    //         const transposed = transposer.getTransposedString(key, 12 - transposer.getRelativeTransposition(this.defaultTransposition));
 
-            return [key, transposed ?? "C"];
-        }
-        else {
-            return [key];
-        }
-    }
+    //         return [key, value, transposed ?? "C"];
+    //     }
+    //     else {
+    //         return [key, value];
+    //     }
+    // }
 
     public transpositionStrings() {
-        const strings = Object.keys(this.transpositions).map(t => this.transpositionString(t));
-        return strings;
+        return transposer.getRelativeTranspositions(this.lyrics?.originalKey ?? "C", this.defaultTransposition, this.transpositions);
     }
 }
 </script>

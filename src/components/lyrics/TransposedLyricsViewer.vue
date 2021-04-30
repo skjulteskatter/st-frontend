@@ -10,7 +10,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseButton, Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
-import { Collection } from "@/classes";
+import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
 
 @Options({
@@ -20,9 +20,15 @@ import { useStore } from "@/store";
         Modal,
         ButtonGroup,
     },
+    props: {
+        lyrics: {
+            type: Object,
+        },
+    },
 })
 export default class TransposedLyricsViewer extends Vue {
     private store = useStore();
+    public lyrics?: Lyrics;
 
     public get languageKey() {
         return this.store.state.songs.language;
@@ -32,25 +38,8 @@ export default class TransposedLyricsViewer extends Vue {
         return this.store.state.songs.transcode;
     }
 
-    // public async transpose(t: number) {
-    //     if (this.lyrics) {
-    //         const lyrics = await this.collection?.transposeLyrics(
-    //             this.lyrics.number,
-    //             t,
-    //             this.languageKey,
-    //             this.transcode,
-    //         );
-    //         this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
-    //         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
-    //     }
-    // }
-
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
-    }
-
-    public get lyrics() {
-        return this.store.getters.lyrics;
     }
 }
 </script>

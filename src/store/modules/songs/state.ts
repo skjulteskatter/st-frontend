@@ -16,7 +16,7 @@ export type State = {
     contributorItem?: ContributorCollectionItem;
     filter: SongFilter;
     audio?: AudioTrack;
-    view: "transpose" | "default";
+    view: "transpose" | "default" | "loading";
     sheetMusic: SheetMusicOptions;
 }
 
