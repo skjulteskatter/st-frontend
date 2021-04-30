@@ -59,12 +59,11 @@
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
-import { BaseCard, BaseButton } from "./";
+import { BaseCard, BaseButton, Loader } from "./";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
-import { Loader } from "@/components";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
