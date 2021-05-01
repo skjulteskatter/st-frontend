@@ -8,7 +8,7 @@
             <slot name="button" v-else></slot>
             <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
         </div>
-        <base-card v-if="isOpen" class="dropdown__content" border>
+        <base-card v-if="show" class="dropdown__content" border>
             <slot name="default"></slot>
         </base-card>
     </div>
@@ -37,10 +37,24 @@ import { Icon } from "@/components/icon";
 export default class BaseDropdown extends Vue {
     public label = "";
     public icon = "";
-    public isOpen = false;
+    public show = false;
+
+    public close(e: Event) {
+        if (!this.$el.contains(e.target)) {
+            this.show = false;
+        }
+    }
+    
+    public mounted () {
+        document.addEventListener("click", this.close);
+    }
+
+    public beforeDestroy () {
+        document.removeEventListener("click", this.close);
+    }
 
     public openDropdown() {
-        this.isOpen = !this.isOpen;
+        this.show = !this.show;
     }
 }
 </script>

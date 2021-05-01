@@ -123,11 +123,13 @@ class Transposer {
         key: string;
         value: number;
         view: string;
+        original: string;
     }[] {
         const result: {
             key: string;
             value: number;
             view: string;
+            original: string;
         }[] = [];
 
         for (const e of Object.entries(transpositions)) {
@@ -146,6 +148,7 @@ class Transposer {
                 key: e[0],
                 value: e[1],
                 view: "C" != relativeKey ? `${e[0]} (${ss})` : e[0],
+                original: ss,
             });
         }
 

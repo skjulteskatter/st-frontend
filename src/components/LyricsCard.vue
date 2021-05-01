@@ -4,21 +4,20 @@
             <h4 class="lyrics-card__title">{{ $t("song.lyrics") }}</h4>
             <div class="lyrics-card__header">
                 <div class="lyrics-card__header__settings">
-                    <!-- <select
-                        v-if="type == 'transpose' && lyrics?.format == 'html'"
-                        id="transposition"
-                        name="transposition"
-                        v-model="selectedTransposition"
-                        @change="transpose"
+                    <base-dropdown
+                        v-if="type == 'transpose'"
+                        :label="$t('song.transpose')"
                     >
-                        <option
+                        <base-button
+                            style="margin: 10px 0; width: 100%"
                             v-for="t in relativeTranspositions"
-                            :value="t.value"
+                            :disabled="selectedTransposition == t.value"
                             :key="t.key"
+                            @click="transpose(t.value)"
                         >
                             {{ t.view }}
-                        </option>
-                    </select> -->
+                        </base-button>
+                    </base-dropdown>
                     <base-button
                         v-if="song.hasChords"
                         @click="transposeToggle()"
@@ -62,6 +61,7 @@ import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
 import { BaseCard, BaseButton, Loader } from "./";
+import { BaseDropdown } from "./inputs";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -76,6 +76,7 @@ import { transposer } from "@/classes/transposer";
         BaseCard,
         BaseButton,
         Loader,
+        BaseDropdown,
     },
     props: {
         lyrics: {
@@ -97,12 +98,12 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
-    public selectedTransposition = 0;
 
     public relativeTranspositions: {
         value: number;
         view: string;
         key: string;
+        original: string;
     }[] = [];
 
     public mounted() {
@@ -113,8 +114,6 @@ export default class LyricsCard extends Vue {
                 this.store.commit(SongsMutationTypes.SET_VIEW, "default");
             }
         }
-
-        this.selectedTransposition = this.store.state.songs.transposition ?? 0;
 
         this.selectedLanguage =
             (this.languages.find((l) => l.key == this.languageKey)
@@ -137,6 +136,25 @@ export default class LyricsCard extends Vue {
         //console.log(lyrics);
 
         return lyrics;
+    }
+    
+    public get selectedTransposition() {
+        const t = this.store.state.songs.transposition ?? 0;
+
+        const ts: number[] = [];
+        for (const k of Object.keys(this.transpositions)) {
+            ts.push(this.transpositions[k]);
+        }
+
+        if (ts.includes(t)) {
+            return t;
+        } else {
+            return t + 12;
+        }
+    }
+
+    public set selectedTransposition(v) {
+        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
     }
 
     // public get selectedTransposition() {
@@ -172,7 +190,11 @@ export default class LyricsCard extends Vue {
         }
     }
 
-    public async transpose() {
+    public async transpose(n?: number) {
+        if (n !== undefined) {
+            this.selectedTransposition = n;
+        }
+
         if (this.song) {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
