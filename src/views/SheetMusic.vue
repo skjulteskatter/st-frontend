@@ -1,5 +1,5 @@
 <template>
-    <!-- <loader :loading="osmd.loading"> -->
+    <loader :loading="osmd.loading" />
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
         <div v-if="!embed && song" class="sheetmusic-viewer__info">
             <h2 class="sheetmusic-viewer__info__title">
