@@ -42,6 +42,7 @@ import { BaseButton } from "@/components";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -98,6 +99,12 @@ export default class StoreHome extends Vue {
         this.loadingSubs = true;
         await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
+
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+            type: "success",
+            icon: "check",
+            title: this.$t("common.subscriptionsRefreshed"),
+        });
     }
 }
 </script>
