@@ -151,7 +151,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image"
+                "song-details-image",
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -170,8 +170,9 @@ export default class SongInfoCard extends Vue {
 
     public get collection(): Collection | undefined {
         const id = this.store.state.songs.collectionId;
+        if (!id) return undefined;
         const collection = this.store.state.songs.collections.find(
-            (c) => c.key == id
+            (c) => Object.values(c.keys).includes(id),
         );
         return collection;
     }
