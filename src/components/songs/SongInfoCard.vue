@@ -8,9 +8,13 @@
         :disableContent="!description"
     >
         <template #header>
-            <p class="song-details__metadata__collection" v-if="collection">
+            <router-link
+                :to="`/songs/${collection.key}`"
+                class="song-details__metadata__collection"
+                v-if="collection"
+            >
                 {{ collection.getName(languageKey) }}
-            </p>
+            </router-link>
             <h2 class="song-details__metadata__title">
                 <span class="song-details__metadata__number">
                     {{ song.number }}
@@ -151,7 +155,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image",
+                "song-details-image"
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -171,8 +175,8 @@ export default class SongInfoCard extends Vue {
     public get collection(): Collection | undefined {
         const id = this.store.state.songs.collectionId;
         if (!id) return undefined;
-        const collection = this.store.state.songs.collections.find(
-            (c) => Object.values(c.keys).includes(id),
+        const collection = this.store.state.songs.collections.find((c) =>
+            Object.values(c.keys).includes(id)
         );
         return collection;
     }
@@ -233,6 +237,10 @@ export default class SongInfoCard extends Vue {
 .song-details__metadata {
     width: 100%;
 
+    &__title {
+        margin-top: calc(var(--st-spacing) / 2) !important;
+    }
+
     &__number {
         color: var(--st-color-text);
         text-decoration: none;
@@ -242,7 +250,9 @@ export default class SongInfoCard extends Vue {
 
     &__collection {
         opacity: 0.5;
-        margin-top: 0;
+        color: inherit;
+        font-size: 0.9em;
+        text-decoration: none;
     }
 
     &__info {
