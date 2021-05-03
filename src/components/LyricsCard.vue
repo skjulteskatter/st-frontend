@@ -4,8 +4,8 @@
             <h4 class="lyrics-card__title">{{ $t("song.lyrics") }}</h4>
             <div class="lyrics-card__header">
                 <div class="lyrics-card__header__settings">
-                    <!-- <base-dropdown
-                        v-if="type == 'transpose'"
+                    <base-dropdown
+                        :style="type == 'transpose' ? '' : 'display: none;'"
                         :label="$t('song.transpose')"
                     >
                         <div
@@ -20,7 +20,11 @@
                                 {{ t.view }}
                             </base-button>
                         </div>
-                    </base-dropdown> -->
+                    </base-dropdown>
+                    <!-- <transpose-dropdown
+                        :transpositions="song.transpositions"
+                        :transpose="transpose"
+                    ></transpose-dropdown> -->
                     <base-button
                         v-if="song.hasChords"
                         @click="transposeToggle()"
@@ -29,11 +33,6 @@
                     >
                         {{ $t("song.chords") }}
                     </base-button>
-                    <!-- <transpose-dropdown 
-                        v-if="type == 'transpose'"
-                        :transpositions="song.transpositions"
-                        :transpose="transpose"
-                    ></transpose-dropdown> -->
                     <select
                         id="language"
                         name="language"
@@ -116,7 +115,6 @@ export default class LyricsCard extends Vue {
     }[] = [];
 
     public mounted() {
-        console.log("MOUNTED LYRICS CARD");
         if (this.type == "transpose") {
             if (this.song?.hasLyrics && this.song?.hasChords) {
                 this.transposeView();
