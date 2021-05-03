@@ -12,16 +12,21 @@
                                 (r) => r.value == selectedTransposition
                             )?.view
                         "
+                        class="lyrics-card__header__transpose"
                     >
-                        <div v-for="t in relativeTranspositions" :key="t.key">
-                            <base-button
-                                style="margin: 10px 0; width: 100%"
-                                :disabled="selectedTransposition == t.value"
-                                @click="transpose(t.value)"
-                            >
-                                {{ t.view }}
-                            </base-button>
-                        </div>
+                        <button
+                            :class="[
+                                selectedTransposition == t.value
+                                    ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
+                                    : 'lyrics-card__header__transpose-button',
+                            ]"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="selectedTransposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            {{ t.view }}
+                        </button>
                     </base-dropdown>
                     <!-- <transpose-dropdown
                         :transpositions="song.transpositions"
@@ -281,6 +286,39 @@ export default class LyricsCard extends Vue {
             display: block;
             opacity: 0.5;
             margin-bottom: 0.2em;
+        }
+
+        &__transpose {
+            .card__content {
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+            }
+
+            &-button {
+                position: relative;
+                background-color: transparent;
+                color: var(--st-color-text);
+                padding: calc(var(--st-spacing) / 2) calc(var(--st-spacing) * 2);
+                border-radius: 0;
+
+                &--active {
+                    background-color: var(--st-color-primary);
+                    color: var(--st-color-text-dm);
+                }
+
+                &:hover {
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(black, 0.1);
+                    }
+                }
+            }
         }
 
         &__settings {
