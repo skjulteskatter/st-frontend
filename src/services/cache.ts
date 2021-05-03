@@ -1,5 +1,5 @@
 import { ContributorCollectionItem, Lyrics, Song } from "@/classes";
-import { IDBPDatabase, openDB } from "idb";
+import { openDB } from "idb";
 
 type StoreTypes = {
     songs: Song;
@@ -28,8 +28,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 9;
-    private _db?: IDBPDatabase;
+    private version = 10;
 
     public db() {
         const v = this.version;

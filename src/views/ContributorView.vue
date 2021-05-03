@@ -93,7 +93,7 @@ export default class ContributorView extends Vue {
 
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
-            this.$route.params.contributor as string
+            this.$route.params.contributor as string,
         );
         if (this.contributor?.image) {
             const image = new Image();
@@ -101,7 +101,7 @@ export default class ContributorView extends Vue {
 
             image.onload = () => {
                 const el = document.getElementById(
-                    "contributor-biography-image"
+                    "contributor-biography-image",
                 ) as HTMLImageElement;
 
                 el.src = image.src;
@@ -117,7 +117,7 @@ export default class ContributorView extends Vue {
             ) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_CONTRIBUTOR_ITEM,
-                    this.contributor
+                    this.contributor,
                 );
             }
         }, 5000);
@@ -141,8 +141,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "author"
-                )
+                        p.type == "author",
+                ),
             )
             .map((s) => new Song(s));
     }
@@ -153,8 +153,8 @@ export default class ContributorView extends Vue {
                 s.participants.find(
                     (p) =>
                         p.contributorId == this.contributor?.id &&
-                        p.type == "composer"
-                )
+                        p.type == "composer",
+                ),
             )
             .map((s) => new Song(s));
     }

@@ -1,5 +1,5 @@
 import { Collection } from "@/classes";
-import { ApiActivity, ApiPlaylist } from "dmb-api";
+import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 
 export type State = {
     currentUser?: User;
@@ -11,6 +11,7 @@ export type State = {
     playlists: ApiPlaylist[];
     activities?: ApiActivity[];
     redirect?: string;
+    tags: ApiTag[];
 };
 
 export const state: State = {
@@ -20,4 +21,5 @@ export const state: State = {
     extend: false,
     error: "",
     playlists: [],
+    tags: [],
 };

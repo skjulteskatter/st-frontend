@@ -3,7 +3,7 @@ import { Collection, Lyrics, Song } from "@/classes";
 import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiThemeCollectionItem } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiTag, ApiThemeCollectionItem } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -137,6 +137,33 @@ export const playlists = {
     },
 };
 
+export const tags = {
+    async getAll(expand = false) {
+        return (await http.get<ApiTag[]>("api/Tags" + (expand ? "?expand=songs" : "")));
+    },
+    async get(id: string, expand = false) {
+        return (await http.get<ApiTag>("api/Tags/" + id + (expand ? "?expand=songs" : "")));
+    },
+    async create(name: string, color: string, songId: string) {
+        return (await http.post("api/Tags", {name, color, songId})) as ApiTag;
+    },
+    async update(id: string, name?: string, color?: string) {
+        return (await http.patch("api/Tags/" + id, {
+            name,
+            color,
+        }));
+    },
+    async delete(id: string){
+        return (await http.delete(`api/Tags/${id}`));
+    },
+    async addToTag(id: string, songId: string) {
+        return (await http.post<ApiTag>(`api/Tags/${id}/${songId}`));
+    },
+    async removeFromTag(id: string, songId: string) {
+        return (await http.delete<ApiTag>(`api/Tags/${id}/${songId}`));
+    },
+};
+
 export const stripe = {
     setup() {
         return http.get<SetupResponse>("api/Store/Setup");
@@ -169,6 +196,7 @@ const api = {
     stripe,
     playlists,
     activity,
+    tags,
 };
 
 export default api;

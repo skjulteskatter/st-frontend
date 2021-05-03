@@ -25,6 +25,9 @@ declare module "dmb-api" {
         image: string;
         available?: boolean;
         details?: LocaleString;
+        hasChords: {
+            [lang: string]: boolean;
+        };
     }
 
     interface ApiSong {
@@ -127,6 +130,16 @@ declare module "dmb-api" {
         entries: ApiPlaylistEntry[];
         sharedWithIds: string[];
         shareKey: string;
+    }
+
+    interface ApiTag {
+        id: string;
+        name: string;
+        color: string;
+        userId: string;
+        songIds: string[];
+        songs?: ApiSong[];
+        canEdit: boolean;
     }
 
     interface ApiPlaylistEntry {

@@ -1,5 +1,5 @@
 import { Collection } from "@/classes";
-import { ApiActivity, ApiPlaylist } from "dmb-api";
+import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";
@@ -25,6 +25,18 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.REDIRECT](state: S, payload: string): void;
     [SessionMutationTypes.EXTEND](state: S, payload: boolean): void;
     [SessionMutationTypes.ERROR](state: S, payload: string): void;
+    
+    [SessionMutationTypes.SET_TAGS](state: S, payload: ApiTag[]): void;
+    [SessionMutationTypes.SET_TAG](state: S, payload: ApiTag): void;
+    [SessionMutationTypes.DELETE_TAG](state: S, payload: string): void;
+    // [SessionMutationTypes.TAG_ADD_SONG](state: S, payload: {
+    //     tagId: string;
+    //     songId: string;
+    // }): void;
+    // [SessionMutationTypes.TAG_REMOVE_SONG](state: S, payload: {
+    //     tagId: string;
+    //     songId: string;
+    // }): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -98,5 +110,18 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SessionMutationTypes.ERROR](state, value) {
         state.error = value;
+    },
+
+    
+    [SessionMutationTypes.SET_TAGS](state, tags) {
+        state.tags = tags;
+    },
+    [SessionMutationTypes.SET_TAG](state, p) {
+        state.tags = state.tags.filter(t => t.id != p.id);
+
+        state.tags.push(p);
+    },
+    [SessionMutationTypes.DELETE_TAG](state, tagId) {
+        state.tags = state.tags.filter(t => t.id != tagId);
     },
 };

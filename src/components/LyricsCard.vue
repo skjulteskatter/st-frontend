@@ -33,7 +33,7 @@
                         :transpose="transpose"
                     ></transpose-dropdown> -->
                     <base-button
-                        v-if="song.hasChords"
+                        v-if="song.hasChords && lyrics?.hasChords"
                         @click="transposeToggle()"
                         icon="music"
                         theme="tertiary"
@@ -47,7 +47,7 @@
                         @change="translateTo()"
                     >
                         <option
-                            v-for="l in languages"
+                            v-for="l in (type == 'transpose' ? transposeLanguages : languages)"
                             :value="l.key"
                             :key="l.key"
                         >
@@ -259,6 +259,10 @@ export default class LyricsCard extends Vue {
     //         return [key, value];
     //     }
     // }
+
+    public get transposeLanguages() {
+        return this.languages.filter(l => this.collection?.hasChords[l.key]);
+    }
 
     public transpositionStrings() {
         return transposer.getRelativeTranspositions(
