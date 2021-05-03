@@ -44,10 +44,6 @@ export default class TransposeDropdown extends Vue {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public transpose = (n: number) => undefined;
 
-    public mounted() {
-        console.log("MOUNTED TRANSPOSE CARD");
-    }
-
     public get currentTransposition() {
         return Object.entries(this.transpositions).find(e => e[1] == this.transposition)?.[0];
     }
