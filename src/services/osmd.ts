@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "@/assets/js/osmd";
+import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "dmb-osmd";
 const timingSource = new LinearTimingSource();
 const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
 playbackManager.DoPlayback = true;

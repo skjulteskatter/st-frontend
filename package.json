@@ -1,17 +1,18 @@
 {
   "name": "dmb",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "dev": "vue-cli-service build --watch --dest ../BACKEND/wwwroot"
+    "dev": "vue-cli-service build --watch --dest ../BACKEND/wwwroot",
+    "auth": "vsts-npm-auth -config .npmrc"
   },
   "dependencies": {
     "@stripe/stripe-js": "^1.13.2",
     "core-js": "^3.11.0",
+    "dmb-osmd": "^0.9.5",
     "firebase": "^8.4.1",
     "idb": "^6.0.0",
     "isomorphic-fetch": "^3.0.0",
