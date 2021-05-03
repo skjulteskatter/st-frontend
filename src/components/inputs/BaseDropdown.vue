@@ -3,10 +3,10 @@
         <div class="dropdown__button" @click="openDropdown">
             <button class="dropdown__button__button" v-if="label">
                 <span>{{ label }}</span>
-                <Icon name="arrowDown" size="18" />
+                <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
+                <Icon v-else name="arrowDown" size="18" />
             </button>
             <slot name="button" v-else></slot>
-            <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
         </div>
         <base-card v-if="show" class="dropdown__content" border>
             <slot name="default"></slot>

@@ -30,7 +30,7 @@
                                 <small>{{ playlist.entries.length }}</small>
                             </base-button>
                         </modal>
-                        <modal
+                        <base-dropdown
                             theme="tertiary"
                             icon="book"
                             :label="$t('song.sheetmusic')"
@@ -44,7 +44,7 @@
                             >
                                 {{ $t(`types.${sheet.category}`) }}
                             </base-button>
-                        </modal>
+                        </base-dropdown>
                         <!-- <select
                         v-if="song.sheetMusic.length"
                         id="sheetmusic"
@@ -115,6 +115,7 @@ import {
     Modal,
     Loader,
 } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
@@ -133,6 +134,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         SongInfoCard,
         SongFilesCard,
         BaseCard,
+        BaseDropdown,
         BackButton,
         OpenSheetMusicDisplay,
         Modal,
