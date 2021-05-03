@@ -320,9 +320,12 @@ export class Collection extends BaseClass implements ApiCollection {
                         id: key,
                         value: composers,
                     });
+
+                    const now = new Date();
+
                     await cache.set("config", "last_updated_" + key, {
                         id: "last_updated_" + key,
-                        value: new Date().toISOString(),
+                        value: new Date(now.getTime() - 172800).toISOString(),
                     });
                 } 
                 catch {

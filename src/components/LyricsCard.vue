@@ -29,11 +29,11 @@
                     >
                         {{ $t("song.chords") }}
                     </base-button>
-                    <transpose-dropdown 
+                    <!-- <transpose-dropdown 
                         v-if="type == 'transpose'"
                         :transpositions="song.transpositions"
                         :transpose="transpose"
-                    ></transpose-dropdown>
+                    ></transpose-dropdown> -->
                     <select
                         id="language"
                         name="language"
