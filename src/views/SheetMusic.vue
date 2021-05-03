@@ -51,11 +51,17 @@
             <div id="pb-canvas"></div>
             <div class="sheetmusic-controlpanel">
                 <base-button
+                    icon="refresh"
+                    theme="tertiary"
                     @click="osmd.reset()"
-                >RESET</base-button>
+                    >RESET</base-button
+                >
                 <base-button
+                    :icon="osmd.playing ? 'pause' : 'play'"
+                    :theme="osmd.playing ? 'error' : 'secondary'"
                     @click="osmd.playing ? osmd.pause() : osmd.play()"
-                >{{ osmd.playing ? "PAUSE" : "PLAY" }}</base-button>
+                    >{{ osmd.playing ? "PAUSE" : "PLAY" }}</base-button
+                >
             </div>
         </div>
     </div>
@@ -96,7 +102,7 @@ export default class SheetMusic extends Vue {
             if (!this.store.state.songs.sheetMusic.url) {
                 this.store.commit(
                     SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
-                    options,
+                    options
                 );
             }
         }
@@ -233,6 +239,22 @@ export default class SheetMusic extends Vue {
     border-radius: var(--st-border-radius);
     width: 350px;
     left: unset;
+}
+
+.sheetmusic-controlpanel {
+    position: fixed;
+    bottom: calc(var(--st-spacing) * 2);
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: var(--st-spacing);
+
+    @include breakpoint("small") {
+        bottom: var(--st-spacing);
+    }
 }
 
 .sheetmusic-wrapper {
