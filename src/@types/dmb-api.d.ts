@@ -129,6 +129,16 @@ declare module "dmb-api" {
         shareKey: string;
     }
 
+    interface ApiTag {
+        id: string;
+        name: string;
+        color: string;
+        userId: string;
+        songIds: string[];
+        songs?: ApiSong[];
+        canEdit: boolean;
+    }
+
     interface ApiPlaylistEntry {
         id: string;
         type: string;

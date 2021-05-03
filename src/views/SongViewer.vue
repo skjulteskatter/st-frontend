@@ -5,15 +5,6 @@
                 <div class="song-viewer__header">
                     <back-button />
                     <div class="song-viewer__header__buttons">
-                        <!-- <router-link
-                        v-if="sheetMusicUrl"
-                        :to="`/sheetmusic/${sheetMusicUrl}?originalKey=${song.originalKey}&transposition=${transposition}`"
-                    >
-                        <base-button icon="music">
-                            {{ $t("common.show") }}
-                            {{ $t("song.sheetmusic").toLowerCase() }}
-                        </base-button>
-                    </router-link> -->
                         <modal
                             theme="secondary"
                             icon="plus"
@@ -30,6 +21,23 @@
                                 <small>{{ playlist.entries.length }}</small>
                             </base-button>
                         </modal>
+                        <!-- <div
+                            v-for="tag in tags"
+                            :key="tag.id"
+                        >
+                            {{tag.name}}
+                        </div>
+                        <base-dropdown
+                            label="tags"
+                        >
+                            <base-button
+                                v-for="tag in allTags"
+                                :key="tag.id"
+                                @click="addToTag(tag)"
+                            >
+                                {{ tag.name }}
+                            </base-button>
+                        </base-dropdown> -->
                         <base-dropdown
                             theme="tertiary"
                             icon="book"
@@ -47,29 +55,6 @@
                                 {{ $t(`types.${sheet.category}`) }}
                             </base-button>
                         </base-dropdown>
-                        <!-- <select
-                        v-if="song.sheetMusic.length"
-                        id="sheetmusic"
-                        name="sheetmusic"
-                        v-model="selectedSheetMusic"
-                        @change="sheetMusic"
-                    >
-                        <option value="undefined" selected disabled hidden>
-                            {{ $t("song.sheetmusic") }}
-                        </option>
-                        <option
-                            v-for="sheet in song.sheetMusic"
-                            :value="sheet"
-                            :key="sheet.id"
-                        >
-                            {{ $t(`types.${sheet.category}`) }}
-                        </option>
-                    </select> -->
-                        <!-- <base-button v-if="leadSheet" @click="sheetMusic">{{ $t("song.sheetmusic") }}</base-button> -->
-                        <!-- <base-button @click="sidebar = !sidebar" icon="documents">
-                        {{ $t(`common.${sidebar ? "close" : "show"}`) }}
-                        {{ $t("song.files").toLowerCase() }}
-                    </base-button> -->
                         <base-button
                             v-if="extended"
                             @click="extend"
@@ -120,7 +105,7 @@ import {
 import { BaseDropdown } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
-import { ApiPlaylist, MediaFile } from "dmb-api";
+import { ApiPlaylist, ApiTag, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -245,6 +230,43 @@ export default class SongViewer extends Vue {
         }
     }
 
+    public async addToTag(tag: ApiTag) {
+        const song = this.song;
+        if (song) {
+            if (tag.songIds.includes(song.id)) {
+                return;
+            }
+
+            this.componentLoading[tag.id] = true;
+            await this.store.dispatch(SessionActionTypes.TAGS_ADD_SONG, {
+                tagId: tag.id,
+                songId: song.id,
+            });
+            this.componentLoading[tag.id] = false;
+
+            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+                type: "success",
+                title: "Tagged song",
+                content: `Tagged "${song.getName(
+                    this.languageKey,
+                )}" with ${tag.name}`,
+                icon: "check",
+            });
+        }
+    }
+
+    public async createTag(name: string) {
+        const song = this.song;
+
+        if (song) {
+            await this.store.dispatch(SessionActionTypes.TAGS_CREATE, {
+                name,
+                songId: song.id,
+                color: "#cccccc",
+            });
+        }
+    }
+
     public get playlists() {
         return this.store.state.session.playlists;
     }
@@ -282,7 +304,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song() {
-        return this.collection?.songs.find((s) => s.number == this.number);
+        return this.store.getters.song;
     }
 
     public get languageKey() {
@@ -295,6 +317,14 @@ export default class SongViewer extends Vue {
 
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
+    }
+
+    public get tags() {
+        return this.store.state.session.tags.filter(t => t.songIds.includes(this.song?.id ?? ""));
+    }
+
+    public get allTags() {
+        return this.store.state.session.tags.filter(t => !t.songIds.includes(this.song?.id ?? ""));
     }
 }
 </script>

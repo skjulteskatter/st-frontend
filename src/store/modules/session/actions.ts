@@ -3,7 +3,7 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
-import { ApiActivity, ApiContributor, ApiSong } from "dmb-api";
+import { ApiActivity, ApiContributor, ApiSong, ApiTag } from "dmb-api";
 import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";
@@ -54,6 +54,11 @@ async function init(state: State, commit: Commit): Promise<void> {
     api.playlists.getPlaylists().then(p => {
         commit(SessionMutationTypes.SET_PLAYLISTS, p);
     });
+
+    api.tags.getAll().then(t => {
+        commit(SessionMutationTypes.SET_TAGS, t);
+    });
+
     const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
     if (items.length) {
@@ -132,6 +137,21 @@ export interface Actions {
 
     [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
     [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }: AugmentedActionContext, payload: ApiContributor): Promise<void>;
+
+    [SessionActionTypes.TAGS_CREATE]({ commit }: AugmentedActionContext, payload: {
+        name: string;
+        color: string;
+        songId: string;
+    }): Promise<ApiTag>;
+    [SessionActionTypes.TAGS_DELETE]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
+    [SessionActionTypes.TAGS_ADD_SONG]({ commit }: AugmentedActionContext, payload: {
+        tagId: string;
+        songId: string;
+    }): Promise<void>;
+    [SessionActionTypes.TAGS_REMOVE_SONG]({ commit }: AugmentedActionContext, payload: {
+        tagId: string;
+        songId: string;
+    }): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
@@ -273,5 +293,28 @@ export const actions: ActionTree<State, RootState> & Actions = {
         }
 
         commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);
+    },
+
+    async [SessionActionTypes.TAGS_CREATE]({ commit }, options) {
+        const tag = await api.tags.create(options.name, options.color, options.songId);
+
+        commit(SessionMutationTypes.SET_TAG, tag);
+
+        return tag;
+    },
+    async [SessionActionTypes.TAGS_DELETE]({ commit }, id) {
+        await api.tags.delete(id);
+
+        commit(SessionMutationTypes.DELETE_TAG, id);
+    },
+    async [SessionActionTypes.TAGS_ADD_SONG]({ commit }, options) {
+        const tag = await api.tags.addToTag(options.tagId, options.songId);
+
+        commit(SessionMutationTypes.SET_TAG, tag);
+    },
+    async [SessionActionTypes.TAGS_REMOVE_SONG]({ commit }, options) {
+        const tag = await api.tags.removeFromTag(options.tagId, options.songId);
+
+        commit(SessionMutationTypes.SET_TAG, tag);
     },
 };
