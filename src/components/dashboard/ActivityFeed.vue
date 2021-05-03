@@ -126,6 +126,7 @@ export default class ActivityFeed extends Vue {
         &__image {
             max-height: 3em;
             border-radius: var(--st-border-radius);
+            filter: grayscale(1);
         }
     }
 }
