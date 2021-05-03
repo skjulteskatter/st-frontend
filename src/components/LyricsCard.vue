@@ -6,7 +6,7 @@
                 <div class="lyrics-card__header__settings">
                     <base-dropdown
                         :style="type == 'transpose' ? '' : 'display: none;'"
-                        :label="$t('song.transpose')"
+                        :label="relativeTranspositions.find(r => r.value == selectedTransposition)?.view"
                     >
                         <div
                             v-for="t in relativeTranspositions"
