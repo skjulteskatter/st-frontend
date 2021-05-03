@@ -25,6 +25,9 @@ declare module "dmb-api" {
         image: string;
         available?: boolean;
         details?: LocaleString;
+        hasChords: {
+            [lang: string]: boolean;
+        };
     }
 
     interface ApiSong {

@@ -14,6 +14,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public id;
     public available?: boolean;
     public details?: LocaleString;
+    public hasChords;
 
     public image: string;
 
@@ -60,6 +61,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.image = collection.image;
         this.available = collection.available;
         this.details = collection.details;
+        this.hasChords = collection.hasChords;
     }
 
     public getKey(language: string) {
