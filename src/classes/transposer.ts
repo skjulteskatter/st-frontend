@@ -156,6 +156,7 @@ class Transposer {
     }
 
     public getTransposedString(originalKey: string, transposition: number) {
+        console.log("GETTING TRANSPOSED STRING");
         if (transposition == 0) {
             return originalKey;
         }

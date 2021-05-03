@@ -28,7 +28,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 8;
+    private version = 9;
     private _db?: IDBPDatabase;
 
     public db() {
