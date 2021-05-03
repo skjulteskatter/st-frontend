@@ -3,7 +3,12 @@
         <div class="dropdown__button" @click="openDropdown">
             <button class="dropdown__button__button" v-if="label">
                 <span>{{ label }}</span>
-                <icon :name="icon" size="18" v-if="icon" class="dropdown__icon" />
+                <icon
+                    :name="icon"
+                    size="18"
+                    v-if="icon"
+                    class="dropdown__icon"
+                />
                 <Icon v-else name="arrowDown" size="18" />
             </button>
             <slot name="button" v-else></slot>
@@ -44,12 +49,12 @@ export default class BaseDropdown extends Vue {
             this.show = false;
         }
     }
-    
-    public mounted () {
+
+    public mounted() {
         document.addEventListener("click", this.close);
     }
 
-    public beforeDestroy () {
+    public beforeDestroy() {
         document.removeEventListener("click", this.close);
     }
 
@@ -64,7 +69,7 @@ export default class BaseDropdown extends Vue {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     position: relative;
     z-index: 999;
-    
+
     &__icon {
         cursor: pointer;
     }
@@ -91,6 +96,13 @@ export default class BaseDropdown extends Vue {
         top: calc(100% + var(--st-half-spacing));
         right: 0;
         box-shadow: 0px 10px 15px rgba(black, 0.1);
+    }
+
+    &[origin="left"] {
+        .dropdown__content {
+            right: auto;
+            left: 0;
+        }
     }
 }
 </style>

@@ -5,13 +5,15 @@
             <div class="lyrics-card__header">
                 <div class="lyrics-card__header__settings">
                     <base-dropdown
+                        origin="left"
                         :style="type == 'transpose' ? '' : 'display: none;'"
-                        :label="relativeTranspositions.find(r => r.value == selectedTransposition)?.view"
+                        :label="
+                            relativeTranspositions.find(
+                                (r) => r.value == selectedTransposition
+                            )?.view
+                        "
                     >
-                        <div
-                            v-for="t in relativeTranspositions"
-                            :key="t.key"
-                        >
+                        <div v-for="t in relativeTranspositions" :key="t.key">
                             <base-button
                                 style="margin: 10px 0; width: 100%"
                                 :disabled="selectedTransposition == t.value"
@@ -57,8 +59,7 @@
                 :lyrics="lyrics"
             >
             </transposed-lyrics-viewer>
-            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'"
-            >
+            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
             </lyrics-viewer>
         </loader>
     </base-card>
@@ -68,7 +69,11 @@ import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BaseButton, Loader } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
-import { TransposedLyricsViewer, LyricsViewer, TransposeDropdown } from "./lyrics";
+import {
+    TransposedLyricsViewer,
+    LyricsViewer,
+    TransposeDropdown,
+} from "./lyrics";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -130,14 +135,17 @@ export default class LyricsCard extends Vue {
 
         if (this.song) {
             try {
-                this.relativeTranspositions = transposer.getRelativeTranspositions(this.song.originalKey, this.defaultTransposition, this.song.transpositions);
-            }
-            catch {
+                this.relativeTranspositions = transposer.getRelativeTranspositions(
+                    this.song.originalKey,
+                    this.defaultTransposition,
+                    this.song.transpositions
+                );
+            } catch {
                 // ss
             }
         }
     }
-    
+
     public get selectedTransposition() {
         const t = this.store.state.songs.transposition ?? 0;
 
@@ -184,7 +192,10 @@ export default class LyricsCard extends Vue {
                 this.song.number,
                 this.selectedLanguage
             );
-            this.store.commit(SongsMutationTypes.LANGUAGE, this.selectedLanguage);
+            this.store.commit(
+                SongsMutationTypes.LANGUAGE,
+                this.selectedLanguage
+            );
             if (this.type === "transpose") {
                 await this.transpose();
             }
@@ -200,10 +211,13 @@ export default class LyricsCard extends Vue {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
                 this.selectedTransposition,
-                this.store.state.songs.language,
+                this.store.state.songs.language
             );
             if (lyrics?.transposition !== undefined)
-                this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics?.transposition);
+                this.store.commit(
+                    SongsMutationTypes.SET_TRANSPOSITION,
+                    lyrics?.transposition
+                );
         }
     }
 
@@ -242,7 +256,11 @@ export default class LyricsCard extends Vue {
     // }
 
     public transpositionStrings() {
-        return transposer.getRelativeTranspositions(this.song?.originalKey ?? "C", this.defaultTransposition, this.song?.transpositions ?? {});
+        return transposer.getRelativeTranspositions(
+            this.song?.originalKey ?? "C",
+            this.defaultTransposition,
+            this.song?.transpositions ?? {}
+        );
     }
 }
 </script>
