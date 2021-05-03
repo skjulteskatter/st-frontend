@@ -64,7 +64,7 @@ export default class BaseDropdown extends Vue {
     --st-half-spacing: calc(var(--st-spacing) * 0.5);
     position: relative;
     z-index: 999;
-
+    
     &__icon {
         cursor: pointer;
     }

@@ -22,34 +22,40 @@
         </div>
 
         <div class="sheetmusic-wrapper">
-            <div class="sheetmusic-content">
-                <!-- <base-button
-                    v-if="type != pdfType"
-                    icon="settings"
-                    class="pbcontrol-toggle"
-                    style="position: fixed"
-                    @click="osmd.toggleControls()"
-                    >Controls</base-button
-                > -->
-                <open-sheet-music-display
-                    v-if="
-                        type != pdfType &&
-                        url &&
-                        ['sheet-music', 'sheet-music-embed'].includes(routeName)
-                    "
-                    :options="options"
-                ></open-sheet-music-display>
-                <object
-                    v-if="type == pdfType"
-                    :data="options.url"
-                    type="application/pdf"
-                    width="100%"
-                    height="100%"
-                >
-                    <p>Couldn't load PDF</p>
-                </object>
-                <div id="osmd-canvas"></div>
-                <div id="pb-canvas"></div>
+            <!-- <base-button
+                v-if="type != pdfType"
+                icon="settings"
+                class="pbcontrol-toggle"
+                style="position: fixed"
+                @click="osmd.toggleControls()"
+                >Controls</base-button
+            > -->
+            <open-sheet-music-display
+                v-if="
+                    type != pdfType &&
+                    url &&
+                    ['sheet-music', 'sheet-music-embed'].includes(routeName)
+                "
+                :options="options"
+            ></open-sheet-music-display>
+            <object
+                v-if="type == pdfType"
+                :data="options.url"
+                type="application/pdf"
+                width="100%"
+                height="100%"
+            >
+                <p>Couldn't load PDF</p>
+            </object>
+            <div id="osmd-canvas"></div>
+            <div id="pb-canvas"></div>
+            <div class="sheetmusic-controlpanel">
+                <base-button
+                    @click="osmd.reset()"
+                >RESET</base-button>
+                <base-button
+                    @click="osmd.playing ? osmd.pause() : osmd.play()"
+                >{{ osmd.playing ? "PAUSE" : "PLAY" }}</base-button>
             </div>
         </div>
     </div>
@@ -198,7 +204,7 @@ export default class SheetMusic extends Vue {
 
 .sheetmusic-viewer {
     height: 100vh;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: auto;
     padding: calc(var(--st-spacing) * 2);
 
@@ -244,60 +250,63 @@ export default class SheetMusic extends Vue {
 }
 
 .playback-buttons {
-    position: fixed;
-    bottom: 10px;
+    display: none;
+    // position: fixed;
+    // bottom: 10px;
+    // width: 100%;
+    // left: 0;
 
-    .reset-button {
-        position: relative;
+    // .reset-button {
+    //     position: relative;
 
-        &:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+    //     &:before {
+    //         content: "";
+    //         position: absolute;
+    //         top: 0;
+    //         left: 0;
+    //         width: 100%;
+    //         height: 100%;
 
-            background-color: var(--st-color-primary);
-            border-radius: var(--st-border-radius);
-        }
+    //         background-color: var(--st-color-primary);
+    //         border-radius: var(--st-border-radius);
+    //     }
 
-        &:after {
-            content: url("./sheetmusic/reset.svg");
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 1.5em;
-            height: 1.5em;
-            transform: translate(-50%, -50%);
-        }
-    }
+    //     &:after {
+    //         content: url("./sheetmusic/reset.svg");
+    //         position: absolute;
+    //         top: 50%;
+    //         left: 50%;
+    //         width: 1.5em;
+    //         height: 1.5em;
+    //         transform: translate(-50%, -50%);
+    //     }
+    // }
 
-    .playpause-button {
-        position: relative;
+    // .playpause-button {
+    //     position: relative;
 
-        &:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+    //     &:before {
+    //         content: "";
+    //         position: absolute;
+    //         top: 0;
+    //         left: 0;
+    //         width: 100%;
+    //         height: 100%;
 
-            background-color: var(--st-color-primary);
-            border-radius: var(--st-border-radius);
-        }
+    //         background-color: var(--st-color-primary);
+    //         border-radius: var(--st-border-radius);
+    //     }
 
-        &:after {
-            content: url("./sheetmusic/play.svg");
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 1.5em;
-            height: 1.5em;
-            transform: translate(-50%, -50%);
-        }
-    }
+    //     &:after {
+    //         content: url("./sheetmusic/play.svg");
+    //         position: absolute;
+    //         top: 50%;
+    //         left: 50%;
+    //         width: 1.5em;
+    //         height: 1.5em;
+    //         transform: translate(-50%, -50%);
+    //     }
+    // }
 }
 
 .pbcontrol-toggle {

@@ -8,15 +8,18 @@
                         v-if="type == 'transpose'"
                         :label="$t('song.transpose')"
                     >
-                        <base-button
-                            style="margin: 10px 0; width: 100%"
+                        <div
                             v-for="t in relativeTranspositions"
-                            :disabled="selectedTransposition == t.value"
                             :key="t.key"
-                            @click="transpose(t.value)"
                         >
-                            {{ t.view }}
-                        </base-button>
+                            <base-button
+                                style="margin: 10px 0; width: 100%"
+                                :disabled="selectedTransposition == t.value"
+                                @click="transpose(t.value)"
+                            >
+                                {{ t.view }}
+                            </base-button>
+                        </div>
                     </base-dropdown>
                     <base-button
                         v-if="song.hasChords"
@@ -60,8 +63,8 @@
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { TransposedLyricsViewer, LyricsViewer } from "./lyrics";
-import { BaseCard, BaseButton, Loader } from "./";
-import { BaseDropdown } from "./inputs";
+import { BaseCard, BaseButton, Loader } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -251,6 +254,8 @@ export default class LyricsCard extends Vue {
 </script>
 <style lang="scss">
 .lyrics-card {
+    bottom: 0;
+
     &__title {
         margin: 0 0 0.5em 0;
     }

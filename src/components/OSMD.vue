@@ -90,9 +90,14 @@ export default class OSMD extends Vue {
     }
 
     public setZoom() {
-        this.osmd.zoom = this.zoom;
+        const n = this.zoom;
 
-        this.osmd.rerender();
+        setTimeout(() => {
+            if (this.zoom == n) {
+                this.osmd.zoom = this.zoom;
+                this.osmd.rerender();
+            }
+        }, 500);
     }
 }
 </script>

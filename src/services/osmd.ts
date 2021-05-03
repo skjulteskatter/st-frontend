@@ -16,6 +16,7 @@ class OSMD {
     public zoom = 1;
     public createdDone = false;
     public loading = false;
+    public playing = false;
 
     private controlPanel: ControlPanel = {} as ControlPanel;
     private timingSource = timingSource;
@@ -244,7 +245,6 @@ class OSMD {
 
         // this.playbackManager = this.playbackManagerCreator();
 
-        console.log(this.osmd.Sheet.MusicPartManager.MusicSheet.Instruments);
         playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
         playbackManager.addListener(this.osmd.cursor);
         playbackManager.reset();
@@ -262,6 +262,22 @@ class OSMD {
         }
         this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
         this.loading = false;
+    }
+
+    public play() {
+        playbackManager.play();
+        this.playing = true;
+        this.osmd.FollowCursor = true;
+        this.osmd.cursor.cursorElement.style.zIndex = "100";
+    }
+
+    public pause() {
+        playbackManager.pause();
+        this.playing = false;
+    }
+
+    public reset() {
+        playbackManager.reset();
     }
 }
 
