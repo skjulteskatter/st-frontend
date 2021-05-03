@@ -36,7 +36,9 @@
                             :label="$t('song.sheetmusic')"
                             v-if="song.sheetMusic.length"
                         >
-                            <h3>{{ $t("song.sheetmusic") }}</h3>
+                            <h3 style="margin-top: 0">
+                                {{ $t("song.sheetmusic") }}
+                            </h3>
                             <base-button
                                 v-for="sheet in song.sheetMusic"
                                 :key="sheet.id"
@@ -163,10 +165,14 @@ export default class SongViewer extends Vue {
             show: false,
         });
         this.number = parseInt(this.$route.params.number as string);
-        if (!this.store.getters.collection?.getKeys().includes((this.$route.params.collection as string))) {
+        if (
+            !this.store.getters.collection
+                ?.getKeys()
+                .includes(this.$route.params.collection as string)
+        ) {
             await this.store.dispatch(
                 SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
+                this.$route.params.collection as string
             );
         }
 
@@ -182,7 +188,7 @@ export default class SongViewer extends Vue {
             if (route == this.$route.fullPath && this.song) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_SONG_ITEM,
-                    this.song,
+                    this.song
                 );
             }
         };
@@ -214,7 +220,7 @@ export default class SongViewer extends Vue {
         if (song) {
             if (
                 playlist.entries.find(
-                    (e) => e.type == "song" && e.itemId == song.id,
+                    (e) => e.type == "song" && e.itemId == song.id
                 )
             ) {
                 if (!confirm("Song is already in playlist. Add duplicate?"))
@@ -232,7 +238,7 @@ export default class SongViewer extends Vue {
                 type: "success",
                 title: "Added to playlist",
                 content: `Added "${song.getName(
-                    this.languageKey,
+                    this.languageKey
                 )}" to playlist ${playlist.name}`,
                 icon: "check",
             });
@@ -335,7 +341,11 @@ export default class SongViewer extends Vue {
             @include breakpoint("small") {
                 justify-content: flex-end;
 
-                .button__content {
+                > button .button__content {
+                    display: none;
+                }
+
+                .modal > button .button__content {
                     display: none;
                 }
             }
