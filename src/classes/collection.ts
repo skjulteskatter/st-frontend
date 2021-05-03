@@ -89,7 +89,13 @@ export class Collection extends BaseClass implements ApiCollection {
                         [id: string]: Song;
                     }));
     
-                    await cache.set("config", key, {id: key, value: new Date().toISOString()});
+
+                    const now = new Date();
+
+                    await cache.set("config", "last_updated_" + key, {
+                        id: "last_updated_" + key,
+                        value: new Date(now.getTime() - 172800).toISOString(),
+                    });
 
                     this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
                 }
@@ -131,7 +137,13 @@ export class Collection extends BaseClass implements ApiCollection {
                     [id: string]: Lyrics;
                 }));
 
-                await cache.set("config", key, {id: key, value: new Date().toISOString()});
+
+                const now = new Date();
+
+                await cache.set("config", "last_updated_" + key, {
+                    id: "last_updated_" + key,
+                    value: new Date(now.getTime() - 172800).toISOString(),
+                });
 
                 this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionId == this.id);
             }
@@ -291,9 +303,12 @@ export class Collection extends BaseClass implements ApiCollection {
                         id: key,
                         value: authors,
                     });
+
+                    const now = new Date();
+
                     await cache.set("config", "last_updated_" + key, {
                         id: "last_updated_" + key,
-                        value: new Date().toISOString(),
+                        value: new Date(now.getTime() - 172800).toISOString(),
                     });
                 } 
                 catch {
