@@ -88,7 +88,7 @@ export default class ActivityFeed extends Vue {
         gap: 0.5em;
 
         //max-height: 20rem;
-        overflow-y: hidden;
+        // overflow-y: hidden;
         position: relative;
     }
 
