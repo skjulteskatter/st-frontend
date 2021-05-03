@@ -11,7 +11,7 @@
             <p class="song-details__metadata__collection" v-if="collection">
                 {{ collection.getName(languageKey) }}
             </p>
-            <h2 class="song-details__metadata__title" v-if="collection">
+            <h2 class="song-details__metadata__title">
                 <span class="song-details__metadata__number">
                     {{ song.number }}
                 </span>
@@ -151,7 +151,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image",
+                "song-details-image"
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -171,7 +171,7 @@ export default class SongInfoCard extends Vue {
     public get collection(): Collection | undefined {
         const id = this.store.state.songs.collectionId;
         const collection = this.store.state.songs.collections.find(
-            (c) => c.key == id,
+            (c) => c.key == id
         );
         return collection;
     }
