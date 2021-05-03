@@ -138,7 +138,7 @@ export default class LyricsCard extends Vue {
                 this.relativeTranspositions = transposer.getRelativeTranspositions(
                     this.song.originalKey,
                     this.defaultTransposition,
-                    this.song.transpositions
+                    this.song.transpositions,
                 );
             } catch {
                 // ss
@@ -194,7 +194,7 @@ export default class LyricsCard extends Vue {
             );
             this.store.commit(
                 SongsMutationTypes.LANGUAGE,
-                this.selectedLanguage
+                this.selectedLanguage,
             );
             if (this.type === "transpose") {
                 await this.transpose();
@@ -216,7 +216,7 @@ export default class LyricsCard extends Vue {
             if (lyrics?.transposition !== undefined)
                 this.store.commit(
                     SongsMutationTypes.SET_TRANSPOSITION,
-                    lyrics?.transposition
+                    lyrics?.transposition,
                 );
         }
     }
@@ -259,7 +259,7 @@ export default class LyricsCard extends Vue {
         return transposer.getRelativeTranspositions(
             this.song?.originalKey ?? "C",
             this.defaultTransposition,
-            this.song?.transpositions ?? {}
+            this.song?.transpositions ?? {},
         );
     }
 }
