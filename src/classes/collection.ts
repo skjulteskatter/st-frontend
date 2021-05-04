@@ -5,10 +5,12 @@ import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
+import { useStore } from "@/store";
 const converter = new Converter();
 
 export class Collection extends BaseClass implements ApiCollection {
-    public key;
+    private store = useStore();
+    private _key;
     public keys: LocaleString;
     public defaultType;
     public id;
@@ -55,7 +57,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
     constructor(collection: ApiCollection) {
         super();
-        this.key = collection.key;
+        this._key = collection.key;
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
         this.id = collection.id;
@@ -66,8 +68,8 @@ export class Collection extends BaseClass implements ApiCollection {
         this.hasChords = collection.hasChords ?? {};
     }
 
-    public getKey(language: string) {
-        return this.keys[language] ?? this.key;
+    public get key() {
+        return this.keys[this.store.getters.languageKey] ?? this._key;
     }
 
     public getKeys() {

@@ -275,7 +275,7 @@ export default class SongList extends Vue {
             this.$router.push({
                 name: "song",
                 params: {
-                    collection: this.collection?.getKey(this.languageKey),
+                    collection: this.collection?.key,
                     number: number,
                 },
             });

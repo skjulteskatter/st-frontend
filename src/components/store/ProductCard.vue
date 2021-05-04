@@ -56,7 +56,7 @@ export default class ProductCard extends Vue {
     public store = useStore();
 
     public goToCollection() {
-        const collectionKey = this.collection?.getKey(this.languageKey);
+        const collectionKey = this.collection?.key;
 
         if (this.collection?.available == true && collectionKey) {
             this.$router.push({

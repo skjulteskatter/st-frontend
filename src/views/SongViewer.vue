@@ -174,7 +174,7 @@ export default class SongViewer extends Vue {
             show: true,
             url: sheet?.directUrl,
             originalKey: this.song?.originalKey,
-            transposition: this.transposition,
+            transposition: transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C", true),
             type: sheet?.type,
         };
 
@@ -218,14 +218,6 @@ export default class SongViewer extends Vue {
 
     public get playlists() {
         return this.store.state.session.playlists;
-    }
-
-    public get leadSheet() {
-        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet");
-    }
-
-    public get transposition() {
-        return transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C", true);
     }
 
     public get extended() {

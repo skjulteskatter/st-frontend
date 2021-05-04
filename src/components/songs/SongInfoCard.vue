@@ -9,7 +9,7 @@
     >
         <template #header>
             <router-link
-                :to="`/songs/${collection.getKey(languageKey)}`"
+                :to="`/songs/${collection.key}`"
                 class="song-details__metadata__collection"
                 v-if="collection"
             >
