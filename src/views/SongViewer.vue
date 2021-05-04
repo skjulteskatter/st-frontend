@@ -7,10 +7,13 @@
                     <div class="song-viewer__header__buttons">
                         <modal
                             theme="secondary"
-                            icon="plus"
+                            icon="folder"
                             :label="$t('playlist.addtoplaylist')"
                             v-if="playlists.length"
                         >
+                            <h3 style="margin-top: 0">
+                                {{ $t("common.playlists") }}
+                            </h3>
                             <base-button
                                 class="song-viewer__playlist"
                                 v-for="playlist in playlists"
@@ -22,7 +25,24 @@
                                 <small>{{ playlist.entries?.length }}</small>
                             </base-button>
                         </modal>
+                        <!-- <div
+                            v-for="tag in tags"
+                            :key="tag.id"
+                        >
+                            {{tag.name}}
+                        </div>
                         <base-dropdown
+                            label="tags"
+                        >
+                            <base-button
+                                v-for="tag in allTags"
+                                :key="tag.id"
+                                @click="addToTag(tag)"
+                            >
+                                {{ tag.name }}
+                            </base-button>
+                        </base-dropdown> -->
+                        <!-- <base-dropdown
                             theme="tertiary"
                             icon="book"
                             :label="$t('song.sheetmusic')"
@@ -38,11 +58,11 @@
                             >
                                 {{ $t(`types.${sheet.category}`) }}
                             </base-button>
-                        </base-dropdown>
+                        </base-dropdown> -->
                         <base-button
                             v-if="extended"
                             @click="extend"
-                            icon="expand"
+                            icon="screen"
                             class="song-viewer__sidebar__buttons--advanced"
                         >
                             {{ $t("song.viewer") }}
@@ -54,10 +74,7 @@
                         :song="song"
                         :languageKey="languageKey"
                     ></song-info-card>
-                    <song-files-card 
-                        :song="song"
-                    >
-                    </song-files-card>
+                    <song-files-card :song="song"> </song-files-card>
                     <lyrics-settings
                         v-if="isExtended"
                         :languageKey="languageKey"
@@ -90,7 +107,7 @@ import {
     Loader,
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
-import { Collection, Lyrics, transposer } from "@/classes";
+import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -168,22 +185,25 @@ export default class SongViewer extends Vue {
         this.lyricsLoading = false;
     }
 
-    public sheetMusic(sheet: MediaFile) {
-        // this.$router.push({name: "songs-sheet-music"});
-        // osmd.load(this.songStore.state.sheetMusic);
-        const options: SheetMusicOptions = {
-            show: true,
-            url: sheet?.directUrl,
-            originalKey: this.song?.originalKey,
-            transposition: transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C", true),
-            type: sheet?.type,
-        };
+    // public sheetMusic(sheet: MediaFile) {
+    //     // this.$router.push({name: "songs-sheet-music"});
+    //     // osmd.load(this.songStore.state.sheetMusic);
+    //     const options: SheetMusicOptions = {
+    //         show: true,
+    //         url: sheet?.directUrl,
+    //         originalKey: this.song?.originalKey,
+    //         transposition: transposer.getRelativeTransposition(
+    //             this.store.getters.user?.settings?.defaultTransposition ?? "C",
+    //             true
+    //         ),
+    //         type: sheet?.type,
+    //     };
 
-        localStorage.setItem("song_item", JSON.stringify(this.song));
-        localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+    //     localStorage.setItem("song_item", JSON.stringify(this.song));
+    //     localStorage.setItem("sheetmusic_options", JSON.stringify(options));
 
-        window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
-    }
+    //     window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    // }
 
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID

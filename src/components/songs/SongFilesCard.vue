@@ -7,23 +7,39 @@
         <template #header>
             <div class="song-details__files__header">
                 <h3 class="song-details__files__title">
-                    {{ $t("song.files") }}
+                    {{ $t("song.media") }}
                 </h3>
             </div>
         </template>
         <div class="song-details__files__container">
             <div
+                class="song-details__files__sheetmusic"
+                v-if="song.sheetMusic.length"
+            >
+                <p class="song-details__files__label">
+                    <icon name="book" size="16" />
+                    {{ $t("song.sheetmusic") }}
+                </p>
+                <sheetmusic-playlist :sheetmusic="song.sheetMusic" />
+            </div>
+            <div
                 class="song-details__files__audio"
                 v-if="song.audioFiles.length"
             >
-                <p class="song-details__files__label">Audio</p>
-                <audio-playlist :audiofiles="song.audioFiles"></audio-playlist>
+                <p class="song-details__files__label">
+                    <icon name="music" size="16" />
+                    Audio
+                </p>
+                <audio-playlist :audiofiles="song.audioFiles" />
             </div>
             <div
                 class="song-details__files__video"
                 v-if="song.videoFiles.length"
             >
-                <p class="song-details__files__label">Video</p>
+                <p class="song-details__files__label">
+                    <icon name="play" size="16" />
+                    Video
+                </p>
                 <modal
                     v-for="video in song.videoFiles"
                     theme="tertiary"
@@ -47,7 +63,8 @@
 
 <script lang="ts">
 import { BaseCard, Modal, BaseButton } from "@/components";
-import { AudioPlaylist } from "@/components/media";
+import { AudioPlaylist, SheetmusicPlaylist } from "@/components/media";
+import { Icon } from "@/components/icon";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 
@@ -57,6 +74,8 @@ import { Options, Vue } from "vue-class-component";
         Modal,
         BaseButton,
         AudioPlaylist,
+        SheetmusicPlaylist,
+        Icon,
     },
     props: {
         song: {
@@ -75,6 +94,9 @@ export default class SongFilesCard extends Vue {
         &__label {
             opacity: 0.7;
             margin: 0 0 0.3em 0;
+            display: flex;
+            align-items: center;
+            gap: calc(var(--st-spacing) / 2);
         }
 
         &__title {
@@ -87,17 +109,10 @@ export default class SongFilesCard extends Vue {
             align-items: center;
         }
 
-        .card__content {
-            .files__container {
-                display: flex;
-                flex-direction: column;
-                gap: var(--st-spacing);
-                margin-top: var(--st-spacing);
-            }
-        }
-
-        figure {
-            margin: 0 0 0.5em 0;
+        &__container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--st-spacing);
         }
     }
 }

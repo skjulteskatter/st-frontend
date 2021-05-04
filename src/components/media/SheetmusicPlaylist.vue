@@ -1,13 +1,13 @@
 <template>
-    <div class="audio-playlist">
+    <div class="sheetmusic-playlist">
         <div
-            class="audio-playlist__file"
-            v-for="audio in audiofiles"
-            :key="audio.id"
-            @click="selectAudio(audio)"
+            class="sheetmusic-playlist__file"
+            v-for="sheet in sheetmusic"
+            :key="sheet.id"
+            @click="sheetMusic(sheet)"
         >
-            <small class="audio-playlist__file__name">
-                {{ audio.name }}
+            <small class="sheetmusic-playlist__file__name">
+                {{ $t(`types.${sheet.category}`) }}
             </small>
         </div>
     </div>
@@ -16,30 +16,41 @@
 <script lang="ts">
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "audio-playlist",
+    name: "sheetmusic-playlist",
     props: {
-        audiofiles: {
+        sheetmusic: {
             type: Array,
             required: true,
         },
     },
 })
-export default class AudioPlaylist extends Vue {
+export default class SheetmusicPlaylist extends Vue {
     public store = useStore();
-    public audiofiles: MediaFile[] = [];
+    public sheetmusic: MediaFile[] = [];
 
-    public selectAudio(audio: MediaFile) {
-        const track: AudioTrack = {
-            file: audio,
-            song: this.song,
-            collection: this.collection,
+    public sheetMusic(sheet: MediaFile) {
+        // this.$router.push({name: "songs-sheet-music"});
+        // osmd.load(this.songStore.state.sheetMusic);
+        const options: SheetMusicOptions = {
+            show: true,
+            url: sheet?.directUrl,
+            originalKey: this.song?.originalKey,
+            transposition: this.transposition,
+            type: sheet?.type,
         };
-        this.store.commit(SongsMutationTypes.SET_AUDIO, track);
+
+        localStorage.setItem("song_item", JSON.stringify(this.song));
+        localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+
+        window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    }
+
+    public get transposition() {
+        return this.store.state.songs.transposition;
     }
 
     public get languageKey() {
@@ -57,7 +68,7 @@ export default class AudioPlaylist extends Vue {
 </script>
 
 <style lang="scss">
-.audio-playlist {
+.sheetmusic-playlist {
     &__file {
         display: flex;
         justify-content: space-between;
@@ -80,7 +91,7 @@ export default class AudioPlaylist extends Vue {
         &:hover {
             border-color: var(--st-color-primary);
 
-            .audio-playlist__file__name {
+            .sheetmusic-playlist__file__name {
                 color: var(--st-color-primary);
             }
         }
