@@ -36,9 +36,7 @@
                             :title="$t('song.author')"
                             :songs="
                                 authorSongs.filter((s) =>
-                                    s.collection
-                                        ? s.collection.id == c.id
-                                        : false
+                                    s.collectionId == c.id
                                 )
                             "
                             border
@@ -47,9 +45,7 @@
                             :title="$t('song.composer')"
                             :songs="
                                 composerSongs.filter((s) =>
-                                    s.collection
-                                        ? s.collection.id == c.id
-                                        : false
+                                    s.collectionId == c.id
                                 )
                             "
                             border
@@ -66,10 +62,10 @@ import { Options, Vue } from "vue-class-component";
 import { BaseCard, BackButton, Loader } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
-import { ApiSong } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { cache } from "@/services/cache";
 
 @Options({
     components: {
@@ -84,17 +80,24 @@ export default class ContributorView extends Vue {
     private store = useStore();
     public loading = false;
 
+    public songs: Song[] = [];
+
     public get languageKey() {
         return this.store.getters.languageKey;
     }
 
-    public async mounted() {
+    public async beforeMount() {
         this.loading = true;
 
         await this.store.dispatch(
             SongsActionTypes.SELECT_CONTRIBUTOR,
             this.$route.params.contributor as string,
         );
+
+        const allSongs = (await cache.getAll("songs"));
+
+        this.songs = allSongs.filter(s => s.participants.some(p => p.contributorId == this.contributor?.id));
+
         if (this.contributor?.image) {
             const image = new Image();
             image.src = this.contributor.image;
@@ -131,10 +134,6 @@ export default class ContributorView extends Vue {
         return this.contributorItem?.item;
     }
 
-    public get songs(): ApiSong[] {
-        return this.contributorItem?.songs ?? [];
-    }
-
     public get authorSongs(): Song[] {
         return this.songs
             .filter((s) =>
@@ -155,22 +154,11 @@ export default class ContributorView extends Vue {
                         p.contributorId == this.contributor?.id &&
                         p.type == "composer",
                 ),
-            )
-            .map((s) => new Song(s));
+            );
     }
 
     public get collections(): Collection[] {
-        return (
-            (this.store.getters.collections as
-                | Collection[]
-                | undefined)?.filter(
-                (c) =>
-                    this.authorSongs.filter((s) => s.collection?.id == c.id)
-                        .length ||
-                    this.composerSongs.filter((s) => s.collection?.id == c.id)
-                        .length
-            ) ?? []
-        );
+        return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionId == c.id));
     }
 }
 </script>

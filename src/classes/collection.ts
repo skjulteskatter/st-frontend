@@ -10,7 +10,7 @@ const converter = new Converter();
 
 let contributors: ContributorCollectionItem[];
 
-async function getContributors() {
+export const getContributors = async () => {
     if (contributors) {
         return contributors;
     }
@@ -63,7 +63,7 @@ async function getContributors() {
     contributors = result.sort((a, b) => a.item.name > b.item.name ? 1 : -1);
 
     return contributors;
-}
+};
 
 export class Collection extends BaseClass implements ApiCollection {
     private store = useStore();

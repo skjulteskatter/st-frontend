@@ -1,4 +1,4 @@
-import { Collection } from "@/classes";
+import { Collection, getContributors } from "@/classes";
 import { songs } from "@/services/api";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
@@ -67,7 +67,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
         // }
         commit(SongsMutationTypes.CONTRIBUTOR, undefined);
 
-        const contributor = await songs.getContributor(contributorId);
+        const contributor = (await getContributors()).find(c => c.id == contributorId) ?? await songs.getContributor(contributorId);
         if (contributor) {
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
         }

@@ -70,12 +70,13 @@ export default class SongListCard extends Vue {
     }
 
     public selectSong(song: Song) {
-        if (song.collection) {
+        const collection = this.store.getters.collections.find(c => c.id == song.collectionId);
+        if (collection) {
             this.$router.push({
                 name: "song",
                 params: {
                     number: song.number,
-                    collection: song.collection.key,
+                    collection: collection.key,
                 },
             });
         } else {
