@@ -184,25 +184,25 @@ export default class SongViewer extends Vue {
         this.lyricsLoading = false;
     }
 
-    public sheetMusic(sheet: MediaFile) {
-        // this.$router.push({name: "songs-sheet-music"});
-        // osmd.load(this.songStore.state.sheetMusic);
-        const options: SheetMusicOptions = {
-            show: true,
-            url: sheet?.directUrl,
-            originalKey: this.song?.originalKey,
-            transposition: transposer.getRelativeTransposition(
-                this.store.getters.user?.settings?.defaultTransposition ?? "C",
-                true
-            ),
-            type: sheet?.type,
-        };
+    // public sheetMusic(sheet: MediaFile) {
+    //     // this.$router.push({name: "songs-sheet-music"});
+    //     // osmd.load(this.songStore.state.sheetMusic);
+    //     const options: SheetMusicOptions = {
+    //         show: true,
+    //         url: sheet?.directUrl,
+    //         originalKey: this.song?.originalKey,
+    //         transposition: transposer.getRelativeTransposition(
+    //             this.store.getters.user?.settings?.defaultTransposition ?? "C",
+    //             true
+    //         ),
+    //         type: sheet?.type,
+    //     };
 
-        localStorage.setItem("song_item", JSON.stringify(this.song));
-        localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+    //     localStorage.setItem("song_item", JSON.stringify(this.song));
+    //     localStorage.setItem("sheetmusic_options", JSON.stringify(options));
 
-        window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
-    }
+    //     window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    // }
 
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
@@ -232,43 +232,6 @@ export default class SongViewer extends Vue {
                     this.languageKey
                 )}" to playlist ${playlist.name}`,
                 icon: "check",
-            });
-        }
-    }
-
-    public async addToTag(tag: ApiTag) {
-        const song = this.song;
-        if (song) {
-            if (tag.songIds.includes(song.id)) {
-                return;
-            }
-
-            this.componentLoading[tag.id] = true;
-            await this.store.dispatch(SessionActionTypes.TAGS_ADD_SONG, {
-                tagId: tag.id,
-                songId: song.id,
-            });
-            this.componentLoading[tag.id] = false;
-
-            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-                type: "success",
-                title: "Tagged song",
-                content: `Tagged "${song.getName(this.languageKey)}" with ${
-                    tag.name
-                }`,
-                icon: "check",
-            });
-        }
-    }
-
-    public async createTag(name: string) {
-        const song = this.song;
-
-        if (song) {
-            await this.store.dispatch(SessionActionTypes.TAGS_CREATE, {
-                name,
-                songId: song.id,
-                color: "#cccccc",
             });
         }
     }

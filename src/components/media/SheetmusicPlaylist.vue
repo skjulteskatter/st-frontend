@@ -50,7 +50,7 @@ export default class SheetmusicPlaylist extends Vue {
     }
 
     public get transposition() {
-        return this.store.state.songs.smTransposition;
+        return this.store.state.songs.transposition;
     }
 
     public get languageKey() {
