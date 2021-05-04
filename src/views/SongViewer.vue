@@ -1,6 +1,6 @@
 <template>
     <loader :loading="loading">
-        <div v-if="!loading && initialized && song" class="song-viewer">
+        <div v-if="song" class="song-viewer">
             <div class="song-viewer__content">
                 <div class="song-viewer__header">
                     <back-button />
@@ -73,7 +73,7 @@
                         :song="song"
                         :languageKey="languageKey"
                     ></song-info-card>
-                    <song-files-card :song="song"></song-files-card>
+                    <song-files-card :song="song"> </song-files-card>
                     <lyrics-settings
                         v-if="isExtended"
                         :languageKey="languageKey"
@@ -106,9 +106,9 @@ import {
     Loader,
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
-import { Collection, Lyrics } from "@/classes";
+import { Collection, Lyrics, transposer } from "@/classes";
 // import { osmd } from "@/services/osmd";
-import { ApiPlaylist, ApiTag, MediaFile } from "dmb-api";
+import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -133,7 +133,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     name: "song-viewer",
 })
 export default class SongViewer extends Vue {
-    public store = useStore();
+    private store = useStore();
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
@@ -148,7 +148,7 @@ export default class SongViewer extends Vue {
     //     this.songStore.commit("sheetMusic", {show: false});
     // }
 
-    public async mounted() {
+    public async beforeMount() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
         });
@@ -191,7 +191,10 @@ export default class SongViewer extends Vue {
             show: true,
             url: sheet?.directUrl,
             originalKey: this.song?.originalKey,
-            transposition: this.transposition,
+            transposition: transposer.getRelativeTransposition(
+                this.store.getters.user?.settings?.defaultTransposition ?? "C",
+                true
+            ),
             type: sheet?.type,
         };
 
@@ -274,14 +277,6 @@ export default class SongViewer extends Vue {
         return this.store.state.session.playlists;
     }
 
-    public get leadSheet() {
-        return this.song?.sheetMusic?.find((s) => s.category === "leadsheet");
-    }
-
-    public get transposition() {
-        return this.store.state.songs.smTransposition;
-    }
-
     public get extended() {
         return this.store.getters.extended;
     }
@@ -291,7 +286,7 @@ export default class SongViewer extends Vue {
     }
 
     public get loading() {
-        return this.store.getters.collection?.loading === true;
+        return this.collection?.loading === true;
     }
 
     public get loadingLyrics() {
@@ -314,24 +309,8 @@ export default class SongViewer extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get initialized() {
-        return this.store.getters.initialized;
-    }
-
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
-    }
-
-    public get tags() {
-        return this.store.state.session.tags.filter((t) =>
-            t.songIds.includes(this.song?.id ?? "")
-        );
-    }
-
-    public get allTags() {
-        return this.store.state.session.tags.filter(
-            (t) => !t.songIds.includes(this.song?.id ?? "")
-        );
     }
 }
 </script>

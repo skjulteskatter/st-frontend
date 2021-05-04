@@ -7,7 +7,6 @@ export type State = {
     song?: Song;
     songNumber?: number;
     transposition?: number;
-    smTransposition?: number;
     verses: Verse[];
     lines: string[];
     collections: Collection[];

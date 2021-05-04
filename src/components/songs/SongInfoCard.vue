@@ -108,12 +108,9 @@
                         {{ melodyOrigin }}
                     </small>
                     <small class="song-details__metadata__credits gap-x">
-                        <span v-if="song.originCountry">
-                            {{ song.originCountry.name }}
-                        </span>
-                        <span v-if="song.yearWritten">
-                            {{ song.yearWritten }}
-                        </span>
+                        <span v-if="song.originCountry">{{ song.originCountry.name }}</span>
+                        <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
+                        <span v-if="song.originalKey">{{ song.originalKey }}</span>
                     </small>
                 </div>
             </div>
@@ -155,7 +152,7 @@ export default class SongInfoCard extends Vue {
     public mounted() {
         if (this.song?.image) {
             const image = document.getElementById(
-                "song-details-image"
+                "song-details-image",
             ) as HTMLImageElement;
 
             image.style.display = "none";
@@ -176,7 +173,7 @@ export default class SongInfoCard extends Vue {
         const id = this.store.state.songs.collectionId;
         if (!id) return undefined;
         const collection = this.store.state.songs.collections.find((c) =>
-            Object.values(c.keys).includes(id)
+            Object.values(c.keys).includes(id),
         );
         return collection;
     }

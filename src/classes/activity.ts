@@ -21,7 +21,7 @@ export class Activity {
         return this.activity.type == "song" ? {
             name: "song",
             params: {
-                collection: collections.find(c => c.id == this.collectionId)?.getKey(this.store.getters.languageKey) ?? "",
+                collection: collections.find(c => c.id == this.collectionId)?.key ?? "",
                 number: this.activity.item?.number ?? "",
             },
         } : {
