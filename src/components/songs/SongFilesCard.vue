@@ -91,6 +91,8 @@ export default class SongFilesCard extends Vue {
 <style lang="scss">
 .song-details {
     &__files {
+        min-width: 150px;
+
         &__label {
             opacity: 0.7;
             margin: 0 0 0.3em 0;

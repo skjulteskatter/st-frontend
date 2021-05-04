@@ -7,7 +7,8 @@
             @click="sheetMusic(sheet)"
         >
             <small class="sheetmusic-playlist__file__name">
-                {{ $t(`types.${sheet.category}`) }}
+                {{sheet.name}}
+                <span style="opacity: 0.5">{{ $t(`types.${sheet.category}`).toLowerCase() }}</span>
             </small>
         </div>
     </div>
