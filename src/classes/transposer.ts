@@ -61,6 +61,23 @@ const negativeKeyToInt: {
 //     "B": 11,
 // };
 
+const smTs: {
+    [key: string]: number;
+} = {
+    "C": 0,
+    "Db": -1,
+    "D": -2,
+    "Eb": 9,
+    "E": 8,
+    "F": 7,
+    "F#": 6,
+    "G": 5,
+    "Ab": 4,
+    "A": 3,
+    "Bb": 2,
+    "B": 1,
+};
+
 const commonTranspositions: {
     [key: string]: number;
 } = {
@@ -108,8 +125,8 @@ class Transposer {
         return ts;
     }
     
-    public getRelativeTransposition(relativeKey: string) {
-        return commonTranspositions[relativeKey];
+    public getRelativeTransposition(relativeKey: string, sheetMusic = false) {
+        return sheetMusic ? smTs[relativeKey] : commonTranspositions[relativeKey];
     }
 
     public getTransposition(originalKey: string, relativeKey: string) {

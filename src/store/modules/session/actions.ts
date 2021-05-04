@@ -11,22 +11,7 @@ import { Mutations } from "./mutations";
 import { State } from "./state";
 import { SongsMutationTypes } from "../songs/mutation-types";
 
-const smTs: {
-    [key: string]: number;
-} = {
-    "C": 0,
-    "Db": -1,
-    "D": -2,
-    "Eb": 9,
-    "E": 8,
-    "F": 7,
-    "F#": 6,
-    "G": 5,
-    "Ab": 4,
-    "A": 3,
-    "Bb": 2,
-    "B": 1,
-};
+
 
 const ts: {
     [key: string]: number;
@@ -87,7 +72,7 @@ async function init(state: State, commit: Commit): Promise<void> {
     await ensureLanguageIsFetched();
 
     commit(SessionMutationTypes.INITIALIZED);
-    commit(SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION, smTs[user.settings?.defaultTransposition ?? "C"]);
+    // commit(SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION, smTs[user.settings?.defaultTransposition ?? "C"]);
     commit(SongsMutationTypes.SET_TRANSPOSITION, ts[user.settings?.defaultTransposition ?? "C"]);
 }
 

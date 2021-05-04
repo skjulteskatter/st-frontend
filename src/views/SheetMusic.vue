@@ -102,7 +102,7 @@ export default class SheetMusic extends Vue {
             if (!this.store.state.songs.sheetMusic.url) {
                 this.store.commit(
                     SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
-                    options
+                    options,
                 );
             }
         }

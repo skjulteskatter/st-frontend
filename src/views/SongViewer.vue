@@ -1,6 +1,6 @@
 <template>
     <loader :loading="loading">
-        <div v-if="!loading && initialized && song" class="song-viewer">
+        <div v-if="song" class="song-viewer">
             <div class="song-viewer__content">
                 <div class="song-viewer__header">
                     <back-button />
@@ -53,7 +53,10 @@
                         :song="song"
                         :languageKey="languageKey"
                     ></song-info-card>
-                    <song-files-card :song="song"></song-files-card>
+                    <song-files-card 
+                        :song="song"
+                    >
+                    </song-files-card>
                     <lyrics-settings
                         v-if="isExtended"
                         :languageKey="languageKey"
@@ -86,7 +89,7 @@ import {
     Loader,
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
-import { Collection, Lyrics } from "@/classes";
+import { Collection, Lyrics, transposer } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -222,9 +225,7 @@ export default class SongViewer extends Vue {
     }
 
     public get transposition() {
-        const t = this.store.state.songs.transposition ?? 0;
-
-        return t < 0 ? t + 12 : t;
+        return transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C", true);
     }
 
     public get extended() {
@@ -236,7 +237,7 @@ export default class SongViewer extends Vue {
     }
 
     public get loading() {
-        return this.store.getters.collection?.loading === true;
+        return this.collection?.loading === true;
     }
 
     public get loadingLyrics() {
@@ -257,10 +258,6 @@ export default class SongViewer extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
-    }
-
-    public get initialized() {
-        return this.store.getters.initialized;
     }
 
     public get collection(): Collection | undefined {
