@@ -7,9 +7,12 @@
                     <div class="song-viewer__header__buttons">
                         <modal
                             theme="secondary"
-                            icon="plus"
+                            icon="folder"
                             :label="$t('playlist.addtoplaylist')"
                         >
+                            <h3 style="margin-top: 0">
+                                {{ $t("common.playlists") }}
+                            </h3>
                             <base-button
                                 class="song-viewer__playlist"
                                 v-for="playlist in playlists"
@@ -38,7 +41,7 @@
                                 {{ tag.name }}
                             </base-button>
                         </base-dropdown> -->
-                        <base-dropdown
+                        <!-- <base-dropdown
                             theme="tertiary"
                             icon="book"
                             :label="$t('song.sheetmusic')"
@@ -54,11 +57,11 @@
                             >
                                 {{ $t(`types.${sheet.category}`) }}
                             </base-button>
-                        </base-dropdown>
+                        </base-dropdown> -->
                         <base-button
                             v-if="extended"
                             @click="extend"
-                            icon="expand"
+                            icon="screen"
                             class="song-viewer__sidebar__buttons--advanced"
                         >
                             {{ $t("song.viewer") }}
@@ -157,7 +160,7 @@ export default class SongViewer extends Vue {
         ) {
             await this.store.dispatch(
                 SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
+                this.$route.params.collection as string
             );
         }
 
@@ -173,7 +176,7 @@ export default class SongViewer extends Vue {
             if (route == this.$route.fullPath && this.song) {
                 this.store.dispatch(
                     SessionActionTypes.LOG_SONG_ITEM,
-                    this.song,
+                    this.song
                 );
             }
         };
@@ -205,7 +208,7 @@ export default class SongViewer extends Vue {
         if (song) {
             if (
                 playlist.entries.find(
-                    (e) => e.type == "song" && e.itemId == song.id,
+                    (e) => e.type == "song" && e.itemId == song.id
                 )
             ) {
                 if (!confirm("Song is already in playlist. Add duplicate?"))
@@ -223,7 +226,7 @@ export default class SongViewer extends Vue {
                 type: "success",
                 title: "Added to playlist",
                 content: `Added "${song.getName(
-                    this.languageKey,
+                    this.languageKey
                 )}" to playlist ${playlist.name}`,
                 icon: "check",
             });
@@ -247,9 +250,9 @@ export default class SongViewer extends Vue {
             this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
                 type: "success",
                 title: "Tagged song",
-                content: `Tagged "${song.getName(
-                    this.languageKey,
-                )}" with ${tag.name}`,
+                content: `Tagged "${song.getName(this.languageKey)}" with ${
+                    tag.name
+                }`,
                 icon: "check",
             });
         }
@@ -320,11 +323,15 @@ export default class SongViewer extends Vue {
     }
 
     public get tags() {
-        return this.store.state.session.tags.filter(t => t.songIds.includes(this.song?.id ?? ""));
+        return this.store.state.session.tags.filter((t) =>
+            t.songIds.includes(this.song?.id ?? "")
+        );
     }
 
     public get allTags() {
-        return this.store.state.session.tags.filter(t => !t.songIds.includes(this.song?.id ?? ""));
+        return this.store.state.session.tags.filter(
+            (t) => !t.songIds.includes(this.song?.id ?? "")
+        );
     }
 }
 </script>
