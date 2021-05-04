@@ -25,7 +25,7 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.SET_VIEW](state: S, payload: "transpose" | "default" | "loading"): void;
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state: S, payload: SheetMusicOptions): void;
-    [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
+    // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -85,7 +85,7 @@ export const mutations: MutationTree<State> & Mutations = {
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state, o: SheetMusicOptions): void {
         state.sheetMusic = o;
     },
-    [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state, transposition: number): void {
-        state.smTransposition = transposition;
-    },
+    // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state, transposition: number): void {
+    //     state.smTransposition = transposition;
+    // },
 };

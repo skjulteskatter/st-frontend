@@ -125,6 +125,10 @@ export default class LyricsCard extends Vue {
     }[] = [];
 
     public mounted() {
+        const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");
+
+        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, t);
+
         if (this.type == "transpose") {
             if (this.song?.hasLyrics && this.song?.hasChords) {
                 this.transposeView();

@@ -21,23 +21,6 @@
                                 <small>{{ playlist.entries.length }}</small>
                             </base-button>
                         </modal>
-                        <!-- <div
-                            v-for="tag in tags"
-                            :key="tag.id"
-                        >
-                            {{tag.name}}
-                        </div>
-                        <base-dropdown
-                            label="tags"
-                        >
-                            <base-button
-                                v-for="tag in allTags"
-                                :key="tag.id"
-                                @click="addToTag(tag)"
-                            >
-                                {{ tag.name }}
-                            </base-button>
-                        </base-dropdown> -->
                         <base-dropdown
                             theme="tertiary"
                             icon="book"
@@ -105,7 +88,7 @@ import {
 import { BaseDropdown } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
-import { ApiPlaylist, ApiTag, MediaFile } from "dmb-api";
+import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -130,7 +113,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     name: "song-viewer",
 })
 export default class SongViewer extends Vue {
-    public store = useStore();
+    private store = useStore();
     public number = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
@@ -145,7 +128,7 @@ export default class SongViewer extends Vue {
     //     this.songStore.commit("sheetMusic", {show: false});
     // }
 
-    public async mounted() {
+    public async beforeMount() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
         });
@@ -230,43 +213,6 @@ export default class SongViewer extends Vue {
         }
     }
 
-    public async addToTag(tag: ApiTag) {
-        const song = this.song;
-        if (song) {
-            if (tag.songIds.includes(song.id)) {
-                return;
-            }
-
-            this.componentLoading[tag.id] = true;
-            await this.store.dispatch(SessionActionTypes.TAGS_ADD_SONG, {
-                tagId: tag.id,
-                songId: song.id,
-            });
-            this.componentLoading[tag.id] = false;
-
-            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-                type: "success",
-                title: "Tagged song",
-                content: `Tagged "${song.getName(
-                    this.languageKey,
-                )}" with ${tag.name}`,
-                icon: "check",
-            });
-        }
-    }
-
-    public async createTag(name: string) {
-        const song = this.song;
-
-        if (song) {
-            await this.store.dispatch(SessionActionTypes.TAGS_CREATE, {
-                name,
-                songId: song.id,
-                color: "#cccccc",
-            });
-        }
-    }
-
     public get playlists() {
         return this.store.state.session.playlists;
     }
@@ -276,7 +222,9 @@ export default class SongViewer extends Vue {
     }
 
     public get transposition() {
-        return this.store.state.songs.smTransposition;
+        const t = this.store.state.songs.transposition ?? 0;
+
+        return t < 0 ? t + 12 : t;
     }
 
     public get extended() {
@@ -317,14 +265,6 @@ export default class SongViewer extends Vue {
 
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
-    }
-
-    public get tags() {
-        return this.store.state.session.tags.filter(t => t.songIds.includes(this.song?.id ?? ""));
-    }
-
-    public get allTags() {
-        return this.store.state.session.tags.filter(t => !t.songIds.includes(this.song?.id ?? ""));
     }
 }
 </script>
