@@ -20,7 +20,7 @@ import { Options, Vue } from "vue-class-component";
         position: {
             type: String,
             validator(value: string) {
-                return ["global", "local"].contains(value);
+                return ["global", "local"].includes(value);
             },
         },
     },
