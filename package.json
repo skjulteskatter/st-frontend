@@ -10,10 +10,10 @@
     "auth": "vsts-npm-auth -config .npmrc"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^1.13.2",
-    "core-js": "^3.11.0",
+    "@stripe/stripe-js": "^1.14.0",
+    "core-js": "^3.11.2",
     "dmb-osmd": "^0.9.5",
-    "firebase": "^8.4.1",
+    "firebase": "^8.4.3",
     "idb": "^6.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jszip": "^3.6.0",
@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.7",
-    "@types/chai": "^4.2.16",
+    "@types/chai": "^4.2.17",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/mocha": "^5.2.4",
-    "@types/node": "^14.14.41",
+    "@types/node": "^14.14.43",
     "@types/showdown": "^1.9.3",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
