@@ -9,6 +9,7 @@
                             theme="secondary"
                             icon="plus"
                             :label="$t('playlist.addtoplaylist')"
+                            v-if="playlists.length"
                         >
                             <base-button
                                 class="song-viewer__playlist"
@@ -18,7 +19,7 @@
                                 :loading="componentLoading[playlist.id]"
                             >
                                 {{ playlist.name }}
-                                <small>{{ playlist.entries.length }}</small>
+                                <small>{{ playlist.entries?.length }}</small>
                             </base-button>
                         </modal>
                         <base-dropdown
@@ -191,7 +192,7 @@ export default class SongViewer extends Vue {
         if (song) {
             if (
                 playlist.entries.find(
-                    (e) => e.type == "song" && e.itemId == song.id,
+                    (e) => e.type == "song" && e.songId == song.id,
                 )
             ) {
                 if (!confirm("Song is already in playlist. Add duplicate?"))

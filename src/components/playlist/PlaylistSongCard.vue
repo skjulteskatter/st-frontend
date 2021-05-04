@@ -7,7 +7,7 @@
                     name: 'song',
                     params: {
                         collection: collection?.key,
-                        number: entry.item.number,
+                        number: entry.song.number,
                     },
                 }"
             >
@@ -17,7 +17,7 @@
                     </span>
                     <small class="playlist-song-card__collection">
                         {{ collection?.getName(languageKey) }}
-                        {{ entry.item.number }}
+                        {{ entry.song.number }}
                     </small>
                 </div>
             </router-link>
@@ -81,16 +81,12 @@ export default class PlaylistSongCard extends Vue {
 
     public get collection() {
         return this.store.state.session.collections.find(
-            (c) => c.id === this.entry.item.collection?.id,
+            (c) => c.id === this.entry.song.collection?.id,
         );
     }
 
     public getEntryName(entry: ApiPlaylistEntry) {
-        if (entry.type == "song") {
-            return new Song(entry.item as ApiSong).getName(this.languageKey);
-        } else {
-            return entry.item.name as string;
-        }
+        return new Song(entry.song as ApiSong).getName(this.languageKey);
     }
 }
 </script>

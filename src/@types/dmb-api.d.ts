@@ -147,8 +147,8 @@ declare module "dmb-api" {
         type: string;
         addedAt: string;
         addedById: string;
-        itemId: string;
-        item: ApiSong | MediaFile;
+        songId: string;
+        song: ApiSong;
     }
 
     interface MediaFile {

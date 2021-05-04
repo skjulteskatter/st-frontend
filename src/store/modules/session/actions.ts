@@ -107,13 +107,14 @@ export interface Actions {
     
     [SessionActionTypes.PLAYLIST_CREATE]({ commit }: AugmentedActionContext, payload: { name: string }): Promise<void>;
     [SessionActionTypes.PLAYLIST_DELETE]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
-    [SessionActionTypes.PLAYLIST_ADD_FILE]({ commit }: AugmentedActionContext, payload: {
-        playlistId: string;
-        fileId: string;
-    }): Promise<void>;
+    // [SessionActionTypes.PLAYLIST_ADD_FILE]({ commit }: AugmentedActionContext, payload: {
+    //     playlistId: string;
+    //     fileId: string;
+    // }): Promise<void>;
     [SessionActionTypes.PLAYLIST_ADD_SONG]({ commit }: AugmentedActionContext, payload: {
         playlistId: string;
         songId: string;
+        transposition?: number;
     }): Promise<void>;
     [SessionActionTypes.PLAYLIST_REMOVE_ENTRY]({ commit }: AugmentedActionContext, payload: {
         playlistId: string;
@@ -206,15 +207,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
         await api.playlists.deletePlaylist(id);
         commit(SessionMutationTypes.DELETE_PLAYLIST, id);
     },
-    async [SessionActionTypes.PLAYLIST_ADD_FILE]({ commit }, obj): Promise<void> {
-        const res = await api.playlists.addToPlaylist(obj.playlistId, obj.fileId, "file");
-
-        if (res) {
-            commit(SessionMutationTypes.UPDATE_PLAYLIST, res);
-        }
-    },
     async [SessionActionTypes.PLAYLIST_ADD_SONG]({ commit }, obj): Promise<void> {
-        const res = await api.playlists.addToPlaylist(obj.playlistId, obj.songId, "song");
+        const res = await api.playlists.addToPlaylist(obj.playlistId, obj.songId, obj.transposition);
 
         if (res) {
             commit(SessionMutationTypes.UPDATE_PLAYLIST, res);
