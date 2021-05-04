@@ -54,15 +54,20 @@
                     <h3 class="api-token__title">API token</h3>
                     <base-button
                         class="api-token__button"
+                        theme="secondary"
+                        @click="copyToken()"
+                    >
+                        Copy to clipboard
+                    </base-button>
+                    <!-- <base-button
+                        class="api-token__button"
                         theme="primary"
                         @click="showToken = !showToken"
                     >
                         Toggle API token
-                    </base-button>
+                    </base-button> -->
                 </div>
-                <p v-if="showToken" class="api-token__token">
-                    {{ token }}
-                </p>
+                <input type="text" :value="token" class="api-token__token" id="apiToken" />
             </base-card>
         </div>
     </div>
@@ -152,6 +157,15 @@ export default class Subscriptions extends Vue {
         } finally {
             this.loadingSync = false;
         }
+    }
+
+    public copyToken() {
+        const el = document.getElementById("apiToken") as HTMLTextAreaElement;
+
+        el.select();
+        el.setSelectionRange(0, 99999);
+
+        document.execCommand("copy");
     }
 }
 </script>
