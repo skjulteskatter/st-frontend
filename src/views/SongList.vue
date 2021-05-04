@@ -365,8 +365,8 @@ export default class SongList extends Vue {
         }
     }
 
-    public setListType(value: string) {
-        this.listType = value;
+    public async setListType(value: string) {
+        await this.store.dispatch(SongsActionTypes.SET_LIST, value);
     }
 
     public get buttons() {

@@ -90,15 +90,15 @@ export const songs = {
     async getContributor(id: string) {
         return new ContributorCollectionItem((await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`)));
     },
-    async getAllContributors(collection: ApiCollection, lastUpdated?: string) {
-        return (await http.get<ApiContributorCollectionItem[]>(`api/Contributors/${collection.id}?expand=contributor/biography,songs/collection` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(c => new ContributorCollectionItem(c));
+    async getAllContributors(lastUpdated?: string) {
+        return await http.get<ApiContributorCollectionItem[]>("api/Contributors?expand=contributor/biography" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
-    async getAllAuthors(collection: ApiCollection, lastUpdated?: string) {
-        return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
-    },
-    async getAllComposers(collection: ApiCollection, lastUpdated?: string) {
-        return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
-    },
+    // async getAllAuthors(collection: ApiCollection, lastUpdated?: string) {
+    //     return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
+    // },
+    // async getAllComposers(collection: ApiCollection, lastUpdated?: string) {
+    //     return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
+    // },
     async getAllThemes(collection: ApiCollection) {
         return await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection.id}`); //).map(ci => new ThemeCollectionItem(ci));
     },

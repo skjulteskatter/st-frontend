@@ -1,9 +1,10 @@
-import { ContributorCollectionItem, Lyrics, Song } from "@/classes";
+import { Lyrics, Song } from "@/classes";
+import { ApiContributorCollectionItem } from "dmb-api";
 import { openDB } from "idb";
 
 type StoreTypes = {
     songs: Song;
-    contributors: ContributorCollectionItem;
+    contributors: ApiContributorCollectionItem;
     lyrics: Lyrics;
     config: {
         id: string;
@@ -28,7 +29,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 10;
+    private version = 11;
 
     public db() {
         const v = this.version;
@@ -86,7 +87,7 @@ class CacheService {
         } else if (store == "lyrics") {
             return result.map(l => new Lyrics(l)) as Entry<S>[];
         } else if (store == "contributors") {
-            return result.map(c => new ContributorCollectionItem(c)) as Entry<S>[];
+            return result as Entry<S>[];
         }
         return result;
     }
@@ -112,8 +113,8 @@ class CacheService {
     }) {
         const tx = await this.tx(store, true);
 
-        for (const id of Object.keys(entries)) {
-            await tx.objectStore(store).put?.(entries[id], id);
+        for (const [key, value] of Object.entries(entries)) {
+            await tx.objectStore(store).put?.(value, key);
         }
 
         await tx.done;

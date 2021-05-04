@@ -28,11 +28,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton, BackButton, Loader } from "@/components";
+import { BackButton, Loader } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
-import api from "@/services/api";
+import { songs } from "@/services/api";
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
 import { useStore } from "@/store";
@@ -41,7 +41,6 @@ import { useStore } from "@/store";
     components: {
         SongListItemCard,
         SearchInput,
-        BaseButton,
         BackButton,
         Loader,
     },
@@ -63,7 +62,7 @@ export default class CompleteSearch extends Vue {
     public async search() {
         this.loading = true;
         if (this.searchQuery.length > 4) {
-            this.songs = await api.songs.searchCollections(
+            this.songs = await songs.searchCollections(
                 this.searchQuery,
                 this.languageKey,
             );

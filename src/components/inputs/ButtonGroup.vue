@@ -4,7 +4,8 @@
             class="button-group__button"
             v-for="button in buttons"
             :key="button.label"
-            @click="action ? action(button.value) : undefined"
+            @click="action ? clickButton(button.value) : undefined"
+            :style="loading[button.value] ? 'opacity: 0.5' : ''"
             :class="{
                 'button-group__button--selected': button.selected,
             }"
@@ -35,6 +36,18 @@ export default class ButtonGroup extends Vue {
         selected: boolean;
     }[] = [];
     public action?: Function;
+
+    public loading: {
+        [value: string]: boolean;
+    } = {};
+
+    public async clickButton(value: string) {
+        if (this.action) {
+            this.loading[value] = true;
+            await this.action(value);
+            this.loading[value] = false;
+        }
+    }
 }
 </script>
 

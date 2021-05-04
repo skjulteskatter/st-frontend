@@ -40,10 +40,6 @@ declare module "dmb-api" {
         name: {
             [languageKey: string]: string;
         };
-        authors: ApiContributor[];
-        authorIds?: string[];
-        composers: ApiContributor[];
-        composerIds?: string[];
         participants: ApiParticipant[];
         melodyOrigin: Origin;
         leadSheetUrl: string;
@@ -100,9 +96,12 @@ declare module "dmb-api" {
     }
     
     interface ApiContributorCollectionItem {
+        id: string;
         contributor: ApiContributor;
-        songs: ApiSong[];
         songIds: string[];
+        songs?: ApiSong[];
+        fileIds: string[];
+        files?: MediaFile[];
     }
 
     interface ApiThemeCollectionItem {

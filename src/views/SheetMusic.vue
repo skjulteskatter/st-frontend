@@ -70,13 +70,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { BaseButton, Loader } from "@/components";
 import { osmd } from "@/services/osmd";
 import { ApiSong } from "dmb-api";
 import { SheetMusicTypes, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({

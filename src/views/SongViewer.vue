@@ -25,40 +25,6 @@
                                 <small>{{ playlist.entries?.length }}</small>
                             </base-button>
                         </modal>
-                        <!-- <div
-                            v-for="tag in tags"
-                            :key="tag.id"
-                        >
-                            {{tag.name}}
-                        </div>
-                        <base-dropdown
-                            label="tags"
-                        >
-                            <base-button
-                                v-for="tag in allTags"
-                                :key="tag.id"
-                                @click="addToTag(tag)"
-                            >
-                                {{ tag.name }}
-                            </base-button>
-                        </base-dropdown> -->
-                        <!-- <base-dropdown
-                            theme="tertiary"
-                            icon="book"
-                            :label="$t('song.sheetmusic')"
-                            v-if="song.sheetMusic.length"
-                        >
-                            <h3 style="margin-top: 0">
-                                {{ $t("song.sheetmusic") }}
-                            </h3>
-                            <base-button
-                                v-for="sheet in song.sheetMusic"
-                                :key="sheet.id"
-                                @click="sheetMusic(sheet)"
-                            >
-                                {{ $t(`types.${sheet.category}`) }}
-                            </base-button>
-                        </base-dropdown> -->
                         <base-button
                             v-if="extended"
                             @click="extend"
@@ -96,7 +62,6 @@
 </template>
 <script lang="ts">
 import { SongInfoCard, SongMediaCard } from "@/components/songs";
-import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
@@ -128,7 +93,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BaseCard,
         BaseDropdown,
         BackButton,
-        OpenSheetMusicDisplay,
         Modal,
         Loader,
     },

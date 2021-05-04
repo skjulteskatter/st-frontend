@@ -8,6 +8,63 @@ import { notify } from "@/services/notify";
 import { useStore } from "@/store";
 const converter = new Converter();
 
+let contributors: ContributorCollectionItem[];
+
+async function getContributors() {
+    if (contributors) {
+        return contributors;
+    }
+
+    let result: ContributorCollectionItem[] = [];
+
+    try {
+        try {
+            const key = "contributors_last_updated";
+            const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+            const updateContributors = await api.songs.getAllContributors(lastUpdated);
+
+            await cache.replaceEntries("contributors", updateContributors.reduce((a, b) => {
+                a[b.id] = b;
+                return a;
+            }, {} as {
+                [id: string]: ApiContributorCollectionItem;
+            }));
+
+            const now = new Date();
+
+            await cache.set("config", key, {
+                id: key,
+                value: new Date(now.getTime() - 172800).toISOString(),
+            });
+
+            const cs = await cache.getAll("contributors");
+
+            result = cs.map(c => new ContributorCollectionItem(c));
+        }
+        catch (e) {
+            if (result.length < 10) {
+                throw e;
+            }
+        }
+    }
+    catch (e) {
+        notify("error", "Error occured", "warning", e);
+        result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
+
+        try {
+            await cache.setAll("contributors", result);
+        }
+        catch {
+            // eslint-disable-next-line no-console
+            console.log("Tried caching all contributors");
+        }
+    }
+
+    contributors = result.sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+
+    return contributors;
+}
+
 export class Collection extends BaseClass implements ApiCollection {
     private store = useStore();
     private _key;
@@ -83,7 +140,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
             try {
                 try {
-                    const key = "songs_lastUpdated_" + this.key;
+                    const key = "songs_lastUpdated_" + this.id;
                     const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
                     
                     const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
@@ -98,8 +155,8 @@ export class Collection extends BaseClass implements ApiCollection {
 
                     const now = new Date();
 
-                    await cache.set("config", "last_updated_" + key, {
-                        id: "last_updated_" + key,
+                    await cache.set("config", key, {
+                        id: key,
                         value: new Date(now.getTime() - 172800).toISOString(),
                     });
 
@@ -124,7 +181,7 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasCountries = this.hasCountries || this.songs.some(s => s.originCountry !== undefined);
         }
     }
-
+    
     public async load(language: string) {
         if (this._loading) return;
         this._loading = true;
@@ -146,8 +203,8 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 const now = new Date();
 
-                await cache.set("config", "last_updated_" + key, {
-                    id: "last_updated_" + key,
+                await cache.set("config", key, {
+                    id: key,
                     value: new Date(now.getTime() - 172800).toISOString(),
                 });
 
@@ -165,8 +222,12 @@ export class Collection extends BaseClass implements ApiCollection {
         this._loading = false;
     }
 
+    private async loadContributors() {
+        this.contributors = (await getContributors()).filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.id)));
+    }
+
     public get loading() {
-        return this._loading || this._loadingAuthors || this._loadingComposers || this._loadingThemes || this._loadingCountries;
+        return this._loading || this._loadingThemes || this._loadingCountries;
     }
 
     public getDetails(language: string){
@@ -181,7 +242,6 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public filteredSongs(filter: string, songFilter: SongFilter) {
         filter = filter.toLowerCase();
-
 
         const context: {
             [key: string]: string;
@@ -265,61 +325,13 @@ export class Collection extends BaseClass implements ApiCollection {
         return origins;
     }
 
-    // private async fetchContributors() {
-    //     try {
-    //         const key = "contributors_" + this.key;
-    //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-    //         const contributors = await api.songs.getAllContributors(this.key, lastUpdated);
-
-    //         await cache.replaceEntries("contributors", contributors.reduce((a, b) => {
-    //             a[b.id] = b;
-    //             return a;
-    //         }, {} as {
-    //             [id: string]: ContributorCollectionItem;
-    //         }));
-
-    //         await cache.set("config", key, {id: key, value: new Date().toISOString()});
-
-    //         this.contributors = await cache.getAll("contributors");
-    //     }
-    //     catch (e) {
-    //         notify("error", "Error occured", "warning", e);
-    //         this.contributors = await api.songs.getAllContributors(this.key);
-    //     }
-    // }
-
     public async getList(value: string) {
-        // if (!this.contributors) {
-        //     await this.fetchContributors();
-        // }
         if (value == "authors") {
             if (!this._authors) {
                 this._loadingAuthors = true;
-
-                const key = "authors_" + this.key;
-
-                const getAuthors = async () => (await cache.get("items", key))?.value as ApiContributorCollectionItem[] ?? [];
-
-                try {
-                    const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
-                    const authors = [...await getAuthors(), ...await api.songs.getAllAuthors(this, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
-                    this._authors = authors.map(c => new ContributorCollectionItem(c));
-
-                    await cache.set("items", key, {
-                        id: key,
-                        value: authors,
-                    });
-
-                    const now = new Date();
-
-                    await cache.set("config", "last_updated_" + key, {
-                        id: "last_updated_" + key,
-                        value: new Date(now.getTime() - 172800).toISOString(),
-                    });
-                } 
-                catch {
-                    this._authors = (await getAuthors()).map(c => new ContributorCollectionItem(c));
-                }
+                if (!this.contributors)
+                    await this.loadContributors();
+                this._authors = this.contributors?.filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.item.id && p.type == "author"))) ?? [];
                 this._loadingAuthors = false;
                 return this._authors.length;
             }
@@ -327,32 +339,9 @@ export class Collection extends BaseClass implements ApiCollection {
         if (value == "composers") {
             if (!this._composers) {
                 this._loadingComposers = true;
-
-                const key = "composers_" + this.key;
-
-                const getComposers = async () => ((await cache.get("items", key))?.value as ApiContributorCollectionItem[] ?? []);
-
-                try {
-                    const lastUpdated = (await cache.get("config", "last_updated_" + key))?.value as string | undefined;
-                    const composers = [...await getComposers(), ...await api.songs.getAllComposers(this, lastUpdated)].reduce((a, b) => a.some(c => c.contributor.id == b.contributor.id) ? a : [...a, b], [] as ApiContributorCollectionItem[]);
-                    this._composers = composers.map(c => new ContributorCollectionItem(c));
-
-                    await cache.set("items", key, {
-                        id: key,
-                        value: composers,
-                    });
-
-                    const now = new Date();
-
-                    await cache.set("config", "last_updated_" + key, {
-                        id: "last_updated_" + key,
-                        value: new Date(now.getTime() - 172800).toISOString(),
-                    });
-                } 
-                catch {
-                    this._composers = (await getComposers()).map(c => new ContributorCollectionItem(c));
-                }
-
+                if (!this.contributors)
+                    await this.loadContributors();
+                this._composers = this.contributors?.filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.item.id && p.type == "composer"))) ?? [];
                 this._loadingComposers = false;
                 return this._composers.length;
             }
