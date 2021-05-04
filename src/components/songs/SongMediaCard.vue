@@ -82,9 +82,9 @@ import { Options, Vue } from "vue-class-component";
             type: Object,
         },
     },
-    name: "song-files-card",
+    name: "song-media-card",
 })
-export default class SongFilesCard extends Vue {
+export default class SongMediaCard extends Vue {
     public song?: Song;
 }
 </script>

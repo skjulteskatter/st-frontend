@@ -73,28 +73,29 @@
                     <song-info-card
                         :song="song"
                         :languageKey="languageKey"
-                    ></song-info-card>
-                    <song-files-card :song="song"> </song-files-card>
+                    />
+                    <song-media-card 
+                        :song="song" 
+                    />
                     <lyrics-settings
                         v-if="isExtended"
                         :languageKey="languageKey"
                         :lyrics="lyrics"
                         :song="song"
-                    ></lyrics-settings>
+                    />
                 </div>
                 <lyrics-card
                     v-if="song.hasLyrics"
                     :song="song"
                     :lyrics="lyrics"
                     :collection="collection"
-                >
-                </lyrics-card>
+                />
             </div>
         </div>
     </loader>
 </template>
 <script lang="ts">
-import { SongInfoCard, SongFilesCard } from "@/components/songs";
+import { SongInfoCard, SongMediaCard } from "@/components/songs";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { Options, Vue } from "vue-class-component";
 import {
@@ -123,7 +124,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         LyricsCard,
         BaseButton,
         SongInfoCard,
-        SongFilesCard,
+        SongMediaCard,
         BaseCard,
         BaseDropdown,
         BackButton,
