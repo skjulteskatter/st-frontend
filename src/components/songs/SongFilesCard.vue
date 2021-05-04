@@ -1,7 +1,7 @@
 <template>
     <base-card
         class="song-details__files"
-        v-if="song && (song.audioFiles.length || song.videoFiles.length)"
+        v-if="song && (song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)"
         header
     >
         <template #header>

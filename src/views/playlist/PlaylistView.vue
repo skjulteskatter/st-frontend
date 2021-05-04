@@ -17,7 +17,7 @@
             {{ $t("playlist.nosongs") }}
         </h2>
         <div class="playlist-view__songs" v-else>
-            <playlist-song-card
+            <playlist-card
                 v-for="entry in playlist.entries"
                 :key="entry.id"
                 :entry="entry"
@@ -30,7 +30,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseButton, BaseCard } from "@/components";
-import { PlaylistSongCard } from "@/components/playlist";
+import { PlaylistCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
@@ -41,7 +41,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BackButton,
         BaseButton,
         BaseCard,
-        PlaylistSongCard,
+        PlaylistCard,
     },
 })
 export default class PlaylistView extends Vue {
@@ -52,7 +52,7 @@ export default class PlaylistView extends Vue {
 
         await this.store.dispatch(
             SessionActionTypes.PLAYLIST_DELETE,
-            this.playlist?.id
+            this.playlist?.id,
         );
         this.$router.push("/playlists");
 
@@ -70,7 +70,7 @@ export default class PlaylistView extends Vue {
 
     public get playlist() {
         return this.store.getters.playlists.find(
-            (p) => p.id == this.$route.params.id
+            (p) => p.id == this.$route.params.id,
         );
     }
 }
