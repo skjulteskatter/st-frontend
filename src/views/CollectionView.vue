@@ -19,7 +19,7 @@ import { StoreCart } from "@/components/store";
     name: "store",
     components: {
         Loader,
-        StoreCart
+        StoreCart,
     },
 })
 export default class Store extends Vue {
