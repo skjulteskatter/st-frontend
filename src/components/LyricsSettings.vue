@@ -1,42 +1,72 @@
 <template>
     <div class="lyrics-settings" v-if="song">
+        <base-card class="lyrics-settings__viewer">
+            <h4 class="lyrics-settings__viewer__title">
+                {{ $t("song.viewer") }}
+            </h4>
+            <div class="lyrics-settings__viewer__buttons">
+                <base-button
+                    class="lyrics-settings__controls__open"
+                    theme="tertiary"
+                    @click="openLyricsWindow('lyrics')"
+                >
+                    {{ $t("song.openviewer") }}
+                </base-button>
+                <base-button
+                    class="lyrics-settings__controls__update"
+                    theme="tertiary"
+                    icon="refresh"
+                    @click="updateLyrics"
+                >
+                    {{ $t("song.updateviewer") }}
+                </base-button>
+            </div>
+        </base-card>
         <base-card
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__controls"
         >
-            <h3 class="lyrics-settings__controls__title">
-                {{ $t("song.control") }}
-            </h3>
-            <base-button
-                class="lyrics-settings__controls__open"
-                icon="screen"
-                @click="openLyricsWindow('lyrics')"
-            >
-                {{ $t("song.openviewer") }}
-            </base-button>
-            <base-button
-                class="lyrics-settings__controls__update"
-                icon="refresh"
-                @click="updateLyrics"
-            >
-                {{ $t("song.updateviewer") }}
-            </base-button>
-            <base-button
-                class="lyrcis-settings__controls__previous"
-                icon="arrowLeft"
-                @click="previous"
-                theme="secondary"
-            >
-                {{ $t("common.previous") }}
-            </base-button>
-            <base-button
-                class="lyrcis-settings__controls__next"
-                @click="next"
-                theme="secondary"
-                icon="arrowRight"
-            >
-                {{ $t("common.next") }}
-            </base-button>
+            <h4 class="lyrics-settings__controls__title">
+                {{ $t("song.controlpanel") }}
+            </h4>
+            <div class="lyrics-settings__controls__buttons">
+                <base-button
+                    class="lyrcis-settings__controls__previous"
+                    icon="arrowLeft"
+                    @click="previous"
+                    theme="secondary"
+                >
+                    {{ $t("common.previous") }}
+                </base-button>
+                <base-button
+                    class="lyrcis-settings__controls__next"
+                    @click="next"
+                    theme="secondary"
+                    icon="arrowRight"
+                >
+                    {{ $t("common.next") }}
+                </base-button>
+            </div>
+            <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
+                <h5 class="lyrics-settings__verses__title">
+                    {{ $t("common.show") }} / {{ $t('common.hide') }}
+                </h5>
+                <div
+                    class="lyrics-settings__verses__select gap-x"
+                    v-for="key in Object.keys(selectVerses)"
+                    :key="key"
+                >
+                    <input
+                        v-model="selectVerses[key]"
+                        type="checkbox"
+                        :name="key"
+                        :id="key"
+                    />
+                    <label :for="key">
+                        {{ verses[key].name }}
+                    </label>
+                </div>
+            </div>
             <!-- <br />
             <base-button
                 class="lyrics-settings__controls__open"
@@ -47,7 +77,7 @@
             <base-button @click="setLineSize(1)">1</base-button>
             <base-button @click="setLineSize(2)">2</base-button> -->
         </base-card>
-        <base-card v-if="song.type == 'lyrics'" class="lyrics-settings__verses">
+        <!-- <base-card v-if="song.type == 'lyrics'" class="lyrics-settings__verses">
             <h3 class="lyrics-settings__verses__title">
                 {{ $t("song.verse") }}
             </h3>
@@ -66,26 +96,7 @@
                     {{ verses[key].name }}
                 </label>
             </div>
-            <!-- <div
-                class="lyrics-settings__verses__input"
-                :class="{ selected: selected.includes(key) }"
-                v-for="key in Object.keys(verses)"
-                :key="key"
-            >
-                <input
-                    :id="key"
-                    type="checkbox"
-                    class="lyrics-settings__verses__input__check"
-                    checked
-                    @click="toggleVerse(key)"
-                />
-                <label
-                    :for="key"
-                    class="lyrics-settings__verses__input__label"
-                    >{{ verses[key].name }}
-                </label>
-            </div> -->
-        </base-card>
+        </base-card> -->
     </div>
 </template>
 
@@ -283,27 +294,37 @@ export default class LyricsSettings extends Vue {
     flex-direction: column;
     gap: var(--st-spacing);
 
-    &__controls {
-        grid-column: span 2;
+    &__viewer {
+        &__title {
+            margin-top: 0;
+        }
 
+        &__buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--st-spacing)/2);
+        }
+    }
+
+    &__controls {
         .card__content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: var(--st-spacing);
+            display: flex;
+            flex-direction: column;
+            gap: var(--st-spacing);
+        }
+
+        &__verses {
+            margin-top: var(--st-spacing);
+        }
+
+        &__buttons {
+            display: flex;
+            gap: calc(var(--st-spacing)/2);
         }
 
         &__title {
             margin: 0;
-            grid-column: span 2;
-        }
-
-        &__update {
-            font-size: 1em;
-            padding: var(--st-spacing);
-        }
-
-        &__open {
-            font-size: 1em;
         }
     }
 
@@ -322,7 +343,7 @@ export default class LyricsSettings extends Vue {
         }
 
         &__title {
-            margin-top: 0;
+            margin: 0 0 calc(var(--st-spacing)/2) 0;
         }
 
         &__input {
