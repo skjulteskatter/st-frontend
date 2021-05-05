@@ -26,7 +26,7 @@
                     {{ $t("common.subscriptions").toLowerCase() }}
                 </span>
             </base-button>
-            <store-cart />
+            <!-- <store-cart /> -->
         </div>
     </div>
     <!-- <product-slider :products="products" v-if="products.length" /> -->
