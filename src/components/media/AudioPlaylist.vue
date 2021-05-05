@@ -76,6 +76,9 @@ export default class AudioPlaylist extends Vue {
 
         &__name {
             padding: calc(var(--st-spacing) * 0.5);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         &:hover {

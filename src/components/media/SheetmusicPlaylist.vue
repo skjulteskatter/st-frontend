@@ -87,6 +87,9 @@ export default class SheetmusicPlaylist extends Vue {
 
         &__name {
             padding: calc(var(--st-spacing) * 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &:hover {

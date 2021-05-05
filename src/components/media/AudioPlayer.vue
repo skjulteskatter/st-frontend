@@ -95,7 +95,7 @@ export default class AudioPlayer extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-#songtreasures {
+#app {
     // Plyr styling
     --plyr-color-main: var(--st-color-primary);
     --plyr-audio-controls-background: var(--st-color-background-light);

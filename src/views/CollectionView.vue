@@ -1,5 +1,6 @@
 <template>
     <div class="collections">
+        <store-cart class="cart" />
         <loader :loading="loading">
             <router-view />
         </loader>
@@ -12,11 +13,13 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { Loader } from "@/components";
+import { StoreCart } from "@/components/store";
 
 @Options({
     name: "store",
     components: {
         Loader,
+        StoreCart
     },
 })
 export default class Store extends Vue {
@@ -45,6 +48,11 @@ export default class Store extends Vue {
 
     @include breakpoint("medium") {
         padding: var(--st-spacing);
+    }
+
+    .cart {
+        float: right;
+        margin-left: calc(var(--st-spacing)/2);
     }
 }
 </style>
