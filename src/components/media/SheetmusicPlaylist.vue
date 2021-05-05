@@ -8,7 +8,9 @@
         >
             <small class="sheetmusic-playlist__file__name">
                 {{sheet.name}}
-                <span style="opacity: 0.5">{{ $t(`types.${sheet.category}`).toLowerCase() }}</span>
+            </small>
+            <small class="sheetmusic-playlist__file__category">
+                {{ $t(`types.${sheet.category}`).toLowerCase() }}
             </small>
         </div>
     </div>
@@ -87,6 +89,9 @@ export default class SheetmusicPlaylist extends Vue {
 
         &__name {
             padding: calc(var(--st-spacing) * 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &:hover {

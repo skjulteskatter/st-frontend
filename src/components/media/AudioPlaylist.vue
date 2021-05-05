@@ -8,7 +8,9 @@
         >
             <small class="audio-playlist__file__name">
                 {{ audio.name }}
-                <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span>
+            </small>
+            <small class="audio-playlist__file__category">
+                {{ $t(`types.${audio.category}`).toLowerCase() }}
             </small>
         </div>
     </div>
@@ -76,6 +78,9 @@ export default class AudioPlaylist extends Vue {
 
         &__name {
             padding: calc(var(--st-spacing) * 0.5);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         &:hover {
