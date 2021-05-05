@@ -96,7 +96,7 @@ export default class ContributorView extends Vue {
 
         const allSongs = (await cache.getAll("songs"));
 
-        this.songs = allSongs.filter(s => s.participants.some(p => p.contributorId == this.contributor?.id));
+        this.songs = allSongs.filter(s => s.participants.some(p => p.contributorId == this.contributor?.id)).sort((a, b) => a.number - b.number);
 
         if (this.contributor?.image) {
             const image = new Image();
