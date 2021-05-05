@@ -14,16 +14,15 @@
                             <h3 style="margin-top: 0">
                                 {{ $t("common.playlists") }}
                             </h3>
-                            <base-button
-                                class="song-viewer__playlist"
-                                v-for="playlist in playlists"
-                                :key="playlist.id"
-                                @click="addToPlaylist(playlist)"
-                                :loading="componentLoading[playlist.id]"
-                            >
-                                {{ playlist.name }}
-                                <small>{{ playlist.entries?.length }}</small>
-                            </base-button>
+                            <div class="song-viewer__playlists">
+                                <playlist-card
+                                    class="song-viewer__playlist"
+                                    v-for="playlist in playlists"
+                                    :key="playlist.id"
+                                    :playlist="playlist"
+                                    @click="addToPlaylist(playlist)"
+                                />
+                            </div>
                         </modal>
                         <base-button
                             v-if="extended"
@@ -73,6 +72,7 @@ import {
     Loader,
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
+import { PlaylistCard } from "@/components/playlist";
 import { Collection, Lyrics } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
@@ -95,6 +95,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BackButton,
         Modal,
         Loader,
+        PlaylistCard,
     },
     name: "song-viewer",
 })
@@ -261,13 +262,15 @@ export default class SongViewer extends Vue {
         border: none;
     }
 
+    &__playlists {
+        min-width: 30vw;
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--st-spacing)/2);
+    }
+
     &__playlist {
-        width: 100%;
-        margin-top: 0;
-        padding: 0.5em;
-        border: 1px solid var(--st-color-border);
-        border-radius: var(--st-border-radius);
-        cursor: pointer;
+        border: 1px solid var(--st-color-border)
     }
 
     &__header {
