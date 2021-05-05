@@ -3,7 +3,7 @@
         <div class="filter__header gap-x">
             <b>{{ $t("song.showsongswith") }}...</b>
             <base-button theme="primary" @click="apply">
-                {{ $t("common.save") }}
+                {{ $t("song.apply") }}
             </base-button>
         </div>
         <div class="filter__wrapper gap-x" v-if="collection && !loading">
@@ -243,7 +243,10 @@ export default class SongFilterDropdown extends Vue {
 
     &__child {
         margin-left: calc(var(--st-spacing) / 2);
+        padding-top: .2em;
         font-size: 0.9em;
+        display: flex;
+        align-items: flex-end;
     }
 }
 

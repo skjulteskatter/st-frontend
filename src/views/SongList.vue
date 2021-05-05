@@ -34,7 +34,7 @@
 
                         <div class="song-list__filters__field">
                             <label for="song-filters">
-                                {{ $t("song.filters") }}
+                                {{ $t("song.filter") }}
                             </label>
                             <song-filter-dropdown
                                 :themes="collection.themeTypes"
