@@ -7,8 +7,8 @@
             @click="selectAudio(audio)"
         >
             <small class="audio-playlist__file__name">
-                {{ audio.name }}
-                <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span>
+                {{$t(`types.${audio.category}`)}}
+                <!-- <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span> -->
             </small>
         </div>
     </div>
