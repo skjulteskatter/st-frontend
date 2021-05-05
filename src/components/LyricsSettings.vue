@@ -9,18 +9,21 @@
             </h3>
             <base-button
                 class="lyrics-settings__controls__open"
+                icon="screen"
                 @click="openLyricsWindow('lyrics')"
             >
                 {{ $t("song.openviewer") }}
             </base-button>
             <base-button
                 class="lyrics-settings__controls__update"
+                icon="refresh"
                 @click="updateLyrics"
             >
                 {{ $t("song.updateviewer") }}
             </base-button>
             <base-button
                 class="lyrcis-settings__controls__previous"
+                icon="arrowLeft"
                 @click="previous"
                 theme="secondary"
             >
@@ -30,6 +33,7 @@
                 class="lyrcis-settings__controls__next"
                 @click="next"
                 theme="secondary"
+                icon="arrowRight"
             >
                 {{ $t("common.next") }}
             </base-button>
