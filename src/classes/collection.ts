@@ -2,11 +2,11 @@ import api from "@/services/api";
 import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiThemeCollectionItem } from "dmb-api";
 import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
-import { Converter } from "showdown";
+// import { Converter } from "showdown";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 import { useStore } from "@/store";
-const converter = new Converter();
+// const converter = new Converter();
 
 let contributors: ContributorCollectionItem[];
 
@@ -231,9 +231,7 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public getDetails(language: string){
-        const details = this.getTranslatedProperty(this.details, language);
-
-        return details ? converter.makeHtml(details) : undefined;
+        return this.getTranslatedProperty(this.details, language);
     }
 
     public getSong(number: number) {
