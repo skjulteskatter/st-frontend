@@ -1,37 +1,85 @@
 import { RouteRecordRaw } from "vue-router";
 
-const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ "../layout/DashboardLayout.vue");
-const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue");
-const Admin = () => import(/* webpackChunkName: 'users' */ "../views/Admin.vue");
-const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/SettingsView.vue");
-const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue");
-const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue");
-const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue");
-//const Collections = () => import(/* webpackChunkName: 'collections' */ "../views/Collections.vue");
-const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue");
-const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ "../views/SongViewer.vue");
-const ContributorView = () => import(/* webpackChunkName: 'contributor' */ "../views/ContributorView.vue");
+const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ "../layout/DashboardLayout.vue").catch(() => {
+    window.location.reload();
+});
+const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue").catch(() => {
+    window.location.reload();
+});
+const Admin = () => import(/* webpackChunkName: 'users' */ "../views/Admin.vue").catch(() => {
+    window.location.reload();
+});
+const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/SettingsView.vue").catch(() => {
+    window.location.reload();
+});
+const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue").catch(() => {
+    window.location.reload();
+});
+const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue").catch(() => {
+    window.location.reload();
+});
+const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
+    window.location.reload();
+});
+//const Collections = () => import(/* webpackChunkName: 'collections' */ "../views/Collections.vue").catch(() => {
+//     window.location.reload();
+// });
+const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
+    window.location.reload();
+});
+const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ "../views/SongViewer.vue").catch(() => {
+    window.location.reload();
+});
+const ContributorView = () => import(/* webpackChunkName: 'contributor' */ "../views/ContributorView.vue").catch(() => {
+    window.location.reload();
+});
 
-const CollectionView = () => import(/* webpackChunkName: 'store' */ "../views/CollectionView.vue");
-const CollectionItem = () => import(/* webpackChunkName: 'store-item' */ "../views/collections/CollectionItem.vue");
-const CollectionList = () => import(/* webpackChunkName: 'store-home' */ "../views/collections/CollectionList.vue");
+const CollectionView = () => import(/* webpackChunkName: 'store' */ "../views/CollectionView.vue").catch(() => {
+    window.location.reload();
+});
+const CollectionItem = () => import(/* webpackChunkName: 'store-item' */ "../views/collections/CollectionItem.vue").catch(() => {
+    window.location.reload();
+});
+const CollectionList = () => import(/* webpackChunkName: 'store-home' */ "../views/collections/CollectionList.vue").catch(() => {
+    window.location.reload();
+});
 
-const Playlist = () => import(/* webpackChunkName: 'playlist' */ "../views/playlist/Playlist.vue");
-const PlaylistView = () => import(/* webpackChunkName: 'playlist-view' */ "../views/playlist/PlaylistView.vue");
-const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ "../views/playlist/PlaylistOverview.vue");
+const Playlist = () => import(/* webpackChunkName: 'playlist' */ "../views/playlist/Playlist.vue").catch(() => {
+    window.location.reload();
+});
+const PlaylistView = () => import(/* webpackChunkName: 'playlist-view' */ "../views/playlist/PlaylistView.vue").catch(() => {
+    window.location.reload();
+});
+const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ "../views/playlist/PlaylistOverview.vue").catch(() => {
+    window.location.reload();
+});
 
 
-const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ "../views/dashboard/CompleteSearch.vue");
+const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ "../views/dashboard/CompleteSearch.vue").catch(() => {
+    window.location.reload();
+});
 
-const Login = () => import(/* webpackChunkName: 'login' */ "../views/Login.vue");
-const CreateUser = () => import(/* webpackChunkName: 'createUser' */ "../views/CreateUser.vue");
+const Login = () => import(/* webpackChunkName: 'login' */ "../views/Login.vue").catch(() => {
+    window.location.reload();
+});
+const CreateUser = () => import(/* webpackChunkName: 'createUser' */ "../views/CreateUser.vue").catch(() => {
+    window.location.reload();
+});
 
-const Success = () => import(/* webpackChunkName: 'success' */ "../views/Success.vue");
+const Success = () => import(/* webpackChunkName: 'success' */ "../views/Success.vue").catch(() => {
+    window.location.reload();
+});
 
-const NotFound = () => import(/* webpackChunkName: 'notFound' */ "../views/NotFound.vue");
-const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/VerifyEmail.vue");
+const NotFound = () => import(/* webpackChunkName: 'notFound' */ "../views/NotFound.vue").catch(() => {
+    window.location.reload();
+});
+const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/VerifyEmail.vue").catch(() => {
+    window.location.reload();
+});
 
-const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue");
+const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
