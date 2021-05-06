@@ -22,7 +22,6 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 
 import { useStore } from "@/store";
 import themes from "@/classes/themes";
@@ -35,7 +34,6 @@ import { FeedbackForm } from "@/components/feedback";
         TheNavbar,
         AudioPlayer,
         FeedbackForm,
-        BaseButton,
     },
     name: "dashboard-layout",
 })

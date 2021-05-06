@@ -16,13 +16,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseDropdown } from "@/components/inputs";
-import { BaseButton } from "@/components";
 import { useStore } from "@/store";
 
 @Options({
     components: {
         BaseDropdown,
-        BaseButton,
     },
     props: {
         transpositions: {

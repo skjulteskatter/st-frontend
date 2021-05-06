@@ -27,14 +27,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 @Options({
-    components: {
-        BaseButton,
-    },
     props: {
         product: {
             type: Object,

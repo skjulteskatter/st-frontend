@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { BaseCard, Modal, BaseButton } from "@/components";
+import { BaseCard, Modal } from "@/components";
 import { AudioPlaylist, SheetmusicPlaylist } from "@/components/media";
 import { Icon } from "@/components/icon";
 import { Song } from "@/classes";
@@ -72,7 +72,6 @@ import { Options, Vue } from "vue-class-component";
     components: {
         BaseCard,
         Modal,
-        BaseButton,
         AudioPlaylist,
         SheetmusicPlaylist,
         Icon,

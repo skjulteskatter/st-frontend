@@ -36,7 +36,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { BaseButton } from "@/components";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
@@ -46,9 +45,6 @@ import { useStore } from "@/store";
         product: {
             type: Object,
         },
-    },
-    components: {
-        BaseButton,
     },
 })
 export default class ProductCard extends Vue {

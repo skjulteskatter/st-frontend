@@ -19,13 +19,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 import { Icon } from "@/components/icon";
 
 @Options({
     name: "search-input",
     components: {
-        BaseButton,
         Icon,
     },
     props: {

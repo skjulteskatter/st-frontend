@@ -65,7 +65,6 @@ import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
     LyricsCard,
-    BaseButton,
     BaseCard,
     BackButton,
     Modal,
@@ -86,7 +85,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     components: {
         LyricsSettings,
         LyricsCard,
-        BaseButton,
         SongInfoCard,
         SongMediaCard,
         BaseCard,

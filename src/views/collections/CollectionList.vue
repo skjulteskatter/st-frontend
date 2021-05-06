@@ -38,7 +38,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { BaseButton } from "@/components";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
@@ -46,7 +45,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
 
 @Options({
     components: {
-        BaseButton,
         ProductSlider,
         StoreCart,
     },

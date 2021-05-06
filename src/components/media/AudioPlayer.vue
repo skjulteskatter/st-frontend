@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton } from "@/components";
+import { BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 import Plyr from "plyr";
 import { useStore } from "@/store";
@@ -55,7 +55,6 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
     name: "audio-player",
     components: {
         BaseCard,
-        BaseButton,
         Icon,
     },
 })

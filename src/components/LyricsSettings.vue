@@ -104,13 +104,11 @@
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
 import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import Modal from "@/components/Modal.vue";
 
 @Options({
     components: {
         BaseCard,
-        BaseButton,
         Modal,
     },
     props: {

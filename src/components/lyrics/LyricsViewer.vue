@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, Modal, BaseButton } from "@/components";
+import { BaseCard, Modal } from "@/components";
 import { useStore } from "@/store";
 
 @Options({
@@ -19,7 +19,6 @@ import { useStore } from "@/store";
     components: {
         BaseCard,
         Modal,
-        BaseButton,
     },
 })
 export default class LyricsViewer extends Vue {

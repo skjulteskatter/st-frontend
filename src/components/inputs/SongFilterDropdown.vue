@@ -122,7 +122,6 @@
 import { Collection } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import BaseDropdown from "./BaseDropdown.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
@@ -130,7 +129,6 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
     name: "song-filter-dropdown",
     components: {
         BaseDropdown,
-        BaseButton,
     },
     props: {
         themes: {

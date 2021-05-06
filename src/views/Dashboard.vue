@@ -31,7 +31,7 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-import { BaseButton, CollectionCard } from "@/components";
+import { CollectionCard } from "@/components";
 import {
     ActivityFeed,
     RecentCollections,
@@ -41,7 +41,6 @@ import {
 @Options({
     name: "dashboard",
     components: {
-        BaseButton,
         CollectionCard,
         ActivityFeed,
         RecentCollections,

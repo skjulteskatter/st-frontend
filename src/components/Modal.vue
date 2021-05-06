@@ -34,7 +34,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
-import BaseButton from "@/components/BaseButton.vue";
 
 @Options({
     props: {
@@ -59,7 +58,6 @@ import BaseButton from "@/components/BaseButton.vue";
     },
     components: {
         BaseCard,
-        BaseButton,
     },
     name: "modal",
 })

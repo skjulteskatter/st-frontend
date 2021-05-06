@@ -101,7 +101,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton, Modal } from "@/components";
+import { BaseCard, Modal } from "@/components";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { useStore } from "@/store";
 import { UsersActionTypes } from "@/store/modules/users/action-types";
@@ -111,7 +111,6 @@ import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
     name: "users-list",
     components: {
         BaseCard,
-        BaseButton,
         Modal,
     },
     props: {

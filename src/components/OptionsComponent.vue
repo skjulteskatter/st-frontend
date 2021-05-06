@@ -11,12 +11,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import BaseButton from "@/components/BaseButton.vue";
 import { BaseDropdown } from "@/components/inputs";
 
 @Options({
     components: {
-        BaseButton,
         BaseDropdown,
     },
     name: "options-component",

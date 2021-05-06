@@ -30,14 +30,9 @@
 import { Collection } from "@/classes";
 import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 import { useStore } from "@/store";
 
-@Options({
-    components: {
-        BaseButton,
-    },
-})
+@Options({})
 export default class CollectionList extends Vue {
     private store = useStore();
 

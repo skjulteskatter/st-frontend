@@ -43,13 +43,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
-import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
         Icon,
-        BaseButton,
     },
     props: {
         options: {

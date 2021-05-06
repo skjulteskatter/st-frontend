@@ -70,7 +70,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton } from "@/components";
 import { osmd } from "@/services/osmd";
 import { ApiSong } from "dmb-api";
 import { SheetMusicTypes, Song } from "@/classes";
@@ -82,7 +81,6 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 @Options({
     components: {
         OpenSheetMusicDisplay,
-        BaseButton,
     },
     name: "sheet-music",
 })

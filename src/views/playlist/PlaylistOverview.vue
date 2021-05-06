@@ -40,7 +40,7 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 
-import { BaseButton, Modal } from "@/components";
+import { Modal } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
 import { useStore } from "@/store";
@@ -50,7 +50,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
 @Options({
     name: "playlist-overview",
     components: {
-        BaseButton,
         PlaylistCard,
         Modal,
         BaseInput,

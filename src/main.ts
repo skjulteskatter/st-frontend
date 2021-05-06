@@ -5,11 +5,15 @@ import router from "./router";
 import { store } from "@/store";
 
 // GLOBAL COMPONENTS
-import { Loader } from "@/components";
+import { 
+    Loader,
+    BaseButton,
+} from "@/components";
 
 createApp(App)
     .use(store)
     .use(router)
     .use(i18n)
     .component("loader", Loader)
+    .component("base-button", BaseButton)
     .mount("#app");

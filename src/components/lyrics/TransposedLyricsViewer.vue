@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton, Modal } from "@/components";
+import { Modal } from "@/components";
 import { ButtonGroup } from "@/components/inputs";
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
@@ -16,7 +16,6 @@ import { useStore } from "@/store";
 @Options({
     name: "transposed-lyrics-viewer",
     components: {
-        BaseButton,
         Modal,
         ButtonGroup,
     },

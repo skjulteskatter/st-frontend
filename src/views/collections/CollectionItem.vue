@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton, BaseButton } from "@/components";
+import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
@@ -47,7 +47,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
 @Options({
     components: {
         BackButton,
-        BaseButton,
     },
     name: "collection-item",
 })

@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { SettingsCard, BaseButton } from "@/components";
+import { SettingsCard } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
@@ -56,7 +56,6 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 @Options({
     components: {
         SettingsCard,
-        BaseButton,
         BaseInput,
         UserCard,
     },

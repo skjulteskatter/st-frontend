@@ -109,7 +109,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
-import { BaseButton, BaseCard } from "@/components";
+import { BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -120,7 +120,6 @@ import { cache } from "@/services/cache";
 
 @Options({
     components: {
-        BaseButton,
         BaseCard,
         Icon,
     },
