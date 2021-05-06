@@ -33,7 +33,8 @@
                         :transpose="transpose"
                     ></transpose-dropdown> -->
                     <base-button
-                        v-if="song.hasChords && lyrics?.hasChords"
+                        v-if="song.hasChords"
+                        :style="{display: lyrics?.hasChords ? '' : 'none'}"
                         @click="transposeToggle()"
                         icon="music"
                         theme="tertiary"
@@ -72,7 +73,7 @@
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton } from "@/components";
+import { BaseCard } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import {
     TransposedLyricsViewer,
@@ -92,7 +93,6 @@ import { transposer } from "@/classes/transposer";
         TransposeDropdown,
         LyricsViewer,
         BaseCard,
-        BaseButton,
         BaseDropdown,
     },
     props: {
