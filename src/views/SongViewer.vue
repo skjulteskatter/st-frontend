@@ -69,7 +69,6 @@ import {
     BaseCard,
     BackButton,
     Modal,
-    Loader,
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
@@ -94,7 +93,6 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
         BaseDropdown,
         BackButton,
         Modal,
-        Loader,
         PlaylistCard,
     },
     name: "song-viewer",

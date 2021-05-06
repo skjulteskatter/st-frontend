@@ -7,14 +7,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { NotificationGroup } from "@/components/notification";
-import { Loader } from "@/components";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 
 @Options({
     components: {
         NotificationGroup,
-        Loader,
     },
     name: "app",
 })

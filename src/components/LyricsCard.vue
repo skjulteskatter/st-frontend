@@ -72,7 +72,7 @@
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton, Loader } from "@/components";
+import { BaseCard, BaseButton } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import {
     TransposedLyricsViewer,
@@ -93,7 +93,6 @@ import { transposer } from "@/classes/transposer";
         LyricsViewer,
         BaseCard,
         BaseButton,
-        Loader,
         BaseDropdown,
     },
     props: {

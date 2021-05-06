@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BackButton, Loader } from "@/components";
+import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
@@ -72,7 +72,6 @@ import { cache } from "@/services/cache";
         BaseCard,
         SongListCard,
         BackButton,
-        Loader,
     },
     name: "contributor-view",
 })

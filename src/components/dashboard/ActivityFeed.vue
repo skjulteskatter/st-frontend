@@ -37,13 +37,12 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-import { BaseCard, Loader } from "@/components";
+import { BaseCard } from "@/components";
 
 @Options({
     name: "activity-feed",
     components: {
         BaseCard,
-        Loader,
     },
 })
 export default class ActivityFeed extends Vue {

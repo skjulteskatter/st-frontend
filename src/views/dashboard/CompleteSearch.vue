@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton, Loader } from "@/components";
+import { BackButton } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
@@ -42,7 +42,6 @@ import { useStore } from "@/store";
         SongListItemCard,
         SearchInput,
         BackButton,
-        Loader,
     },
     name: "complete-search",
 })

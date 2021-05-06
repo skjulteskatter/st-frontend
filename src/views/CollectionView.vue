@@ -12,13 +12,11 @@ import { Options, Vue } from "vue-class-component";
 
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { Loader } from "@/components";
 import { StoreCart } from "@/components/store";
 
 @Options({
     name: "store",
     components: {
-        Loader,
         StoreCart,
     },
 })

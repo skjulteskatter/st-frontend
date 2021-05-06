@@ -149,7 +149,7 @@
 </template>
 
 <script lang="ts">
-import { BaseCard, BaseButton, Loader } from "@/components";
+import { BaseCard, BaseButton } from "@/components";
 
 import { Options, Vue } from "vue-class-component";
 import { Collection, Lyrics, Song } from "@/classes";
@@ -177,7 +177,6 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
     components: {
         BaseCard,
         BaseButton,
-        Loader,
         SongListItemNumber,
         SongListItemCard,
         SongListCard,
