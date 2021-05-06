@@ -53,6 +53,14 @@ class CacheService {
         });
     }
 
+    public clearCache() {
+        this.tx("config", true).then(db => {
+            db.objectStore("config").clear?.().then(() => {
+                window.location.reload();
+            });
+        });
+    }
+
     private async tx(store: Store, write = false) {
         return (await this.db()).transaction(store, write ? "readwrite" : "readonly");
     }

@@ -64,6 +64,9 @@
                     </option>
                 </select>
             </div> -->
+            <base-button
+                @click="cache.clearCache()"
+            >Clear cache</base-button>
         </div>
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
@@ -113,6 +116,7 @@ import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { cache } from "@/services/cache";
 
 @Options({
     components: {
@@ -123,6 +127,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     name: "settings-card",
 })
 export default class SettingsCard extends Vue {
+    public cache = cache;
     public selectedLanguage: Language = {} as Language;
     public selectedKey = "";
     public selectedTranscode = "";
