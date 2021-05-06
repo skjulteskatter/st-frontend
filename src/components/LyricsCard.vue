@@ -280,6 +280,7 @@ export default class LyricsCard extends Vue {
 <style lang="scss">
 .lyrics-card {
     bottom: 0;
+    overflow: visible;
 
     &__title {
         margin: 0 0 0.5em 0;
