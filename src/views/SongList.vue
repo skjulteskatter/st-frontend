@@ -1,5 +1,5 @@
 <template>
-    <Loader :loading="loading">
+    <loader :loading="loading">
         <div class="song-list" v-if="collection">
             <back-button />
             <div class="song-list__header">
@@ -145,7 +145,7 @@
                 No results
             </h1>
         </div>
-    </Loader>
+    </loader>
 </template>
 
 <script lang="ts">
