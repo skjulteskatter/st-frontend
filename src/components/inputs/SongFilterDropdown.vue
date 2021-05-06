@@ -197,13 +197,13 @@ export default class SongFilterDropdown extends Vue {
         //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
 
         const videos = this.videoTypes.filter(
-            (t) => this.videoValues[t] == true
+            (t) => this.videoValues[t] == true,
         );
         const audio = this.audioTypes.filter(
-            (t) => this.audioValues[t] == true
+            (t) => this.audioValues[t] == true,
         );
         const types = this.contentTypes.filter(
-            (t) => this.typeValues[t] == true
+            (t) => this.typeValues[t] == true,
         );
 
         const filter = Object.assign({}, this.store.state.songs.filter);
@@ -212,7 +212,7 @@ export default class SongFilterDropdown extends Vue {
         filter.audioFiles = audio;
         filter.contentTypes = types;
         filter.sheetMusicTypes = this.sheetMusicTypes.filter(
-            (t) => this.sheetMusicValues[t] == true
+            (t) => this.sheetMusicValues[t] == true,
         );
         //filter.origins = origins;
 
