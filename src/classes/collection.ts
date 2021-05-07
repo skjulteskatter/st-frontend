@@ -1,4 +1,4 @@
-import api from "@/services/api";
+import api, { songs } from "@/services/api";
 import { ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiThemeCollectionItem } from "dmb-api";
 import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
@@ -15,52 +15,55 @@ export const getContributors = async () => {
         return contributors;
     }
 
-    let result: ContributorCollectionItem[] = [];
+    // let result: ContributorCollectionItem[] = [];
 
-    try {
-        try {
-            const key = "contributors_last_updated";
-            const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-            const updateContributors = await api.songs.getAllContributors(lastUpdated);
+    // try {
+    //     try {
+    //         const key = "contributors_last_updated";
+    //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+    //         const updateContributors = await api.songs.getAllContributors(lastUpdated);
 
-            await cache.replaceEntries("contributors", updateContributors.reduce((a, b) => {
-                a[b.id] = b;
-                return a;
-            }, {} as {
-                [id: string]: ApiContributorCollectionItem;
-            }));
+    //         await cache.replaceEntries("contributors", updateContributors.reduce((a, b) => {
+    //             a[b.id] = b;
+    //             return a;
+    //         }, {} as {
+    //             [id: string]: ApiContributorCollectionItem;
+    //         }));
 
-            const now = new Date();
+    //         const now = new Date();
 
-            await cache.set("config", key, {
-                id: key,
-                value: new Date(now.getTime() - 172800).toISOString(),
-            });
+    //         await cache.set("config", key, {
+    //             id: key,
+    //             value: new Date(now.getTime() - 172800).toISOString(),
+    //         });
 
-            const cs = await cache.getAll("contributors");
+    //         const cs = await cache.getAll("contributors");
 
-            result = cs.map(c => new ContributorCollectionItem(c));
-        }
-        catch (e) {
-            if (result.length < 10) {
-                throw e;
-            }
-        }
-    }
-    catch (e) {
-        notify("error", "Error occured", "warning", e);
-        result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
+    //         result = cs.map(c => new ContributorCollectionItem(c));
+    //     }
+    //     catch (e) {
+    //         if (result.length < 10) {
+    //             throw e;
+    //         }
+    //     }
+    // }
+    // catch (e) {
+    //     notify("error", "Error occured", "warning", e);
+    //     result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
 
-        try {
-            await cache.setAll("contributors", result);
-        }
-        catch {
-            // eslint-disable-next-line no-console
-            console.log("Tried caching all contributors");
-        }
-    }
+    //     try {
+    //         await cache.setAll("contributors", result);
+    //     }
+    //     catch {
+    //         // eslint-disable-next-line no-console
+    //         console.log("Tried caching all contributors");
+    //     }
+    // }
 
-    contributors = result.sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+    contributors = 
+        (await songs.getAllContributors()).map(c => new ContributorCollectionItem(c))
+        //result
+        .sort((a, b) => a.item.name > b.item.name ? 1 : -1);
 
     return contributors;
 };
@@ -138,42 +141,42 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
 
-            try {
-                try {
-                    const key = "songs_lastUpdated_" + this.id;
-                    const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+            // try {
+            //     try {
+            //         const key = "songs_lastUpdated_" + this.id;
+            //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
                     
-                    const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
+            //         const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
     
-                    await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: Song;
-                    }));
+            //         await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+            //             a[b.id] = b;
+            //             return a;
+            //         }, {} as {
+            //             [id: string]: Song;
+            //         }));
     
 
-                    const now = new Date();
+            //         const now = new Date();
 
-                    await cache.set("config", key, {
-                        id: key,
-                        value: new Date(now.getTime() - 172800).toISOString(),
-                    });
+            //         await cache.set("config", key, {
+            //             id: key,
+            //             value: new Date(now.getTime() - 172800).toISOString(),
+            //         });
 
-                    this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
-                }
-                catch (e) {
-                    this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
+            //         this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
+            //     }
+            //     catch (e) {
+            //         this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
 
-                    if (this.songs.length < 10) {
-                        throw e;
-                    }
-                }
-            }
-            catch (e) {
-                notify("error", "Error occured", "warning", e);
+            //         if (this.songs.length < 10) {
+            //             throw e;
+            //         }
+            //     }
+            // }
+            // catch (e) {
+            //     notify("error", "Error occured", "warning", e);
                 this.songs = await api.songs.getAllSongs(this);
-            }
+            //}
 
             this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
             this.hasComposers = this.hasComposers || this.songs.some(s => s.participants.some(p => p.type == "composer"));
@@ -188,32 +191,32 @@ export class Collection extends BaseClass implements ApiCollection {
         await this.initialize();
 
         if (this._currentLanguage != language) {
-            try {
-                const key = "lyrics_lastUpdated_" + this.key + "_" + language;
-                const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-                const updateLyrics = await api.songs.getAllLyrics(this, language, "json", 0, lastUpdated);
+            // try {
+            //     const key = "lyrics_lastUpdated_" + this.key + "_" + language;
+            //     const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
+            //     const updateLyrics = await api.songs.getAllLyrics(this, language, "json", 0, lastUpdated);
 
-                await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: Lyrics;
-                }));
+            //     await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
+            //         a[b.id] = b;
+            //         return a;
+            //     }, {} as {
+            //         [id: string]: Lyrics;
+            //     }));
 
 
-                const now = new Date();
+            //     const now = new Date();
 
-                await cache.set("config", key, {
-                    id: key,
-                    value: new Date(now.getTime() - 172800).toISOString(),
-                });
+            //     await cache.set("config", key, {
+            //         id: key,
+            //         value: new Date(now.getTime() - 172800).toISOString(),
+            //     });
 
-                this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionId == this.id);
-            }
-            catch (e) {
-                notify("error", "Error occured", "warning", e);
+            //     this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionId == this.id);
+            // }
+            // catch (e) {
+            //     notify("error", "Error occured", "warning", e);
                 this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
-            }
+            //}
 
             //this.lyrics = await api.songs.getAllLyrics(this.key, language, "json", 0);
             this._currentLanguage = language;
