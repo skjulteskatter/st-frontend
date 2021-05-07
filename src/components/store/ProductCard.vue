@@ -1,7 +1,7 @@
 <template>
     <div class="product-card" v-if="product">
         <img
-            :class="`product-card__image clickable`"
+            class="product-card__image"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
@@ -93,7 +93,7 @@ export default class ProductCard extends Vue {
 
     public get collection() {
         return this.store.state.session.collections.find(
-            (c) => c.id == this.product?.collectionIds[0],
+            (c) => c.id == this.product?.collectionIds[0]
         );
     }
 }
@@ -128,6 +128,11 @@ export default class ProductCard extends Vue {
         width: 100%;
         object-fit: cover;
         transition: transform 150ms;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.02);
+        }
     }
 
     &__footer {
