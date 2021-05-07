@@ -29,7 +29,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 11;
+    private version = 12;
 
     public db() {
         const v = this.version;
