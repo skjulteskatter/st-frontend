@@ -11,13 +11,12 @@
                 <h1 class="collection-item__title">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <span class="collection-item__price-tag">
+                <p class="collection-item__price-tag">
                     {{
                         formatPrices(product.prices, "year") ||
                         formatPrices(product.prices, "month")
                     }}
-                </span>
-                <div v-html="details" class="collection-item__details"></div>
+                </p>
                 <div class="collection-item__body__footer">
                     <base-button
                         theme="secondary"
@@ -32,6 +31,8 @@
                         {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
+                <h4 class="collection-item__about" v-if="details">{{ $t('store.about') }}</h4>
+                <div v-html="details" class="collection-item__details"></div>
             </div>
         </section>
     </div>
@@ -152,12 +153,17 @@ export default class StoreItem extends Vue {
 @import "../../style/mixins";
 
 .collection-item {
+    &__about {
+        margin: calc(var(--st-spacing)*2) 0 0 0;
+    }
+
     &__price-tag {
         color: var(--st-color-primary);
+        margin-bottom: var(--st-spacing);
     }
 
     &__title {
-        margin-top: 0;
+        margin: 0 0 calc(var(--st-spacing)/2) 0;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -165,10 +171,13 @@ export default class StoreItem extends Vue {
 
     &__image {
         border-radius: 0.5rem;
+        object-fit: cover;
+        object-position: center;
     }
 
     &__body {
         display: flex;
+        gap: var(--st-spacing);
         padding: 0;
         animation: slideInFromBottom 250ms;
 
