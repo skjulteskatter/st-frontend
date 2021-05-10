@@ -169,7 +169,7 @@ class OSMD {
 
         this.osmd.render();
         
-        this.osmd.enableOrDisableCursor(true);
+        this.osmd.enableOrDisableCursors(true);
         
         this.osmd.cursor.reset();
 
@@ -185,7 +185,7 @@ class OSMD {
         if (this.osmd?.IsReadyToRender()) {
             this.osmd.zoom = this.zoom;
             this.osmd.render();
-            this.osmd.enableOrDisableCursor(true);
+            this.osmd.enableOrDisableCursors(true);
             this.osmd.cursor.cursorElement.style.zIndex = "100";
         }
         this.enable();
@@ -206,7 +206,7 @@ class OSMD {
 
         this.osmd.updateGraphic();
 
-        this.osmd.enableOrDisableCursor(true);
+        this.osmd.enableOrDisableCursors(true);
 
         this.osmd.cursor.cursorElement.style.zIndex = "100";
         

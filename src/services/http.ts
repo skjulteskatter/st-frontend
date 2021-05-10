@@ -151,7 +151,7 @@ class Http {
 
         const headers = Object.assign({
             "Authorization": `Bearer ${token}`,
-            "X-Api-Version": "3.0",
+            "X-Api-Version": "2.0",
         }, options.headers);
 
         const o = Object.assign(
