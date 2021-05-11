@@ -136,10 +136,12 @@ export default class LyricsCard extends Vue {
             }
         }
 
+        const fallbackLanguage = this.languages.find(l => l.key == "en")?.key ?? this.languages[0]?.key;
+
         this.selectedLanguage =
             (this.languages.find((l) => l.key == this.languageKey)
                 ? this.languageKey
-                : this.languages[0]?.key) ?? this.languageKey;
+                : fallbackLanguage) ?? this.languageKey;
 
         if (this.song) {
             try {
