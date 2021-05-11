@@ -126,6 +126,8 @@ export default class AudioPlayer extends Vue {
     left: 0;
     bottom: 0;
 
+    z-index: 99999;
+
     @include breakpoint("medium") {
         flex-direction: column;
 
@@ -142,6 +144,11 @@ export default class AudioPlayer extends Vue {
                 top: var(--st-spacing);
                 right: var(--st-spacing);
             }
+        }
+
+        .plyr__controls,
+        .plyr__control {
+            padding: 0 !important;
         }
     }
 
@@ -173,7 +180,7 @@ export default class AudioPlayer extends Vue {
 
     .plyr__controls,
     .plyr__control {
-        padding: 0;
+        padding: calc(var(--st-spacing)/2);
     }
 }
 </style>
