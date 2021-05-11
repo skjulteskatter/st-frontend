@@ -53,7 +53,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
             const song = collection?.songs.find(s => s.number == number);
 
             if (song && song.type == "lyrics") {
-                const language = Object.keys(song.name)[0];
+                const lans = Object.keys(song.name);
+                const language = lans.includes("en") ? "en" : lans[0];
                 commit(SongsMutationTypes.LANGUAGE, language);
 
                 await collection.getLyrics(number, language);
