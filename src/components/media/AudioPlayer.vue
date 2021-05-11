@@ -22,7 +22,7 @@
                 >
                     {{ song.composers[0].name }}
                 </router-link>
-                <router-link v-else to="">
+                <router-link v-else :to="{name: 'song', params: {collection: collection, number: song.number}}">
                     <b class="audio-player__title__number">
                         {{ song.number }}
                     </b>
@@ -50,6 +50,7 @@ import { Icon } from "@/components/icon";
 import Plyr from "plyr";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { Collection } from "@/classes";
 
 @Options({
     name: "audio-player",
@@ -78,6 +79,10 @@ export default class AudioPlayer extends Vue {
 
     public get song() {
         return this.store.state.songs.audio?.song;
+    }
+
+    public get collection(): string | undefined {
+        return this.store.getters.collection?.key;
     }
 
     public get languageKey() {
