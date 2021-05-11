@@ -25,7 +25,7 @@
                             </div>
                         </modal>
                         <base-button
-                            v-if="extended"
+                            v-if="extended && song.hasLyrics"
                             @click="extend"
                             icon="screen"
                             class="song-viewer__sidebar__buttons--advanced"
