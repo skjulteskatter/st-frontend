@@ -38,7 +38,7 @@
                     {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
                 </span>
                 <div class="song-details__metadata__info" v-if="imageLoaded">
-                    <small class="song-details__metadata__credits gap-x">
+                    <small class="song-details__metadata__credits gap-x" v-if="song.hasLyrics">
                         <span>{{ $t("song.author") }}: </span>
                         <span v-for="author in song.authors" :key="author.id">
                             <router-link
