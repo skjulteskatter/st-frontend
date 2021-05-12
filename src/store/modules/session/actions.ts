@@ -177,8 +177,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         if (auth.isAuthenticated) {
             await init(state, commit);
-        } else {
-            await auth.sendLinkToEmail();
         }
     },
     async [SessionActionTypes.SESSION_SAVE_SETTINGS]({ state, commit }): Promise<void> {
