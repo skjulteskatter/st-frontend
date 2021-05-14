@@ -61,14 +61,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
             }
         }
     },
-    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit }, contributorId: string): Promise<void> {
+    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit, getters }, contributorId: string): Promise<void> {
         // const collection = getters.collection as Collection | undefined;
         // if (!collection) {
         //     return;
         // }
         commit(SongsMutationTypes.CONTRIBUTOR, undefined);
 
-        const contributor = (await getContributors()).find(c => c.id == contributorId) ?? await songs.getContributor(contributorId);
+        const contributor = getters.collection?.settings.offline ? (await getContributors(true)).find(c => c.id == contributorId) : await songs.getContributor(contributorId);
         if (contributor) {
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
         }

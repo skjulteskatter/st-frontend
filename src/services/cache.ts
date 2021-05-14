@@ -6,10 +6,7 @@ type StoreTypes = {
     songs: Song;
     contributors: ApiContributorCollectionItem;
     lyrics: Lyrics;
-    config: {
-        id: string;
-        value: string | number | boolean | undefined;
-    };
+    config: string | number | boolean | undefined;
     items: {
         id: string;
         value: unknown;
@@ -29,7 +26,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 12;
+    private version = 13;
 
     public db() {
         const v = this.version;
@@ -104,7 +101,9 @@ class CacheService {
         const tx = await this.tx(store);
 
         for (const e of entries) {
-            let key = e.id;
+            let key = (e as {
+                id: string;
+            }).id;
 
             if (e instanceof Lyrics) {
                 key = e.id + "_" + e.language.key;
