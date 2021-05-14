@@ -1,11 +1,12 @@
 <template>
-    <modal
+    <!-- <modal
         theme="primary"
         :label="`${$t('store.inCart')} (${cartItems.length})`"
         v-if="cartItems.length"
         icon="buy"
         class="store-cart__modal"
-    >
+    > -->
+    <base-dropdown :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
         <div class="store-cart">
             <div class="store-cart__header">
                 <h3 class="store-cart__title">{{ $t("store.inCart") }}</h3>
@@ -27,10 +28,12 @@
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
-    </modal>
+    </base-dropdown>
+    <!-- </modal> -->
 </template>
 <script lang="ts">
 import { Modal } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
@@ -39,6 +42,7 @@ import { Options, Vue } from "vue-class-component";
 @Options({
     components: {
         Modal,
+        BaseDropdown,
     },
     name: "store-cart",
 })
@@ -91,6 +95,10 @@ export default class StoreCart extends Vue {
     min-height: 30vh;
     display: flex;
     flex-direction: column;
+
+    @include breakpoint("small"){
+        min-width: 80vw;
+    }
 
     &__header {
         display: flex;
