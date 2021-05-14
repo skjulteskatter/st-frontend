@@ -77,9 +77,9 @@
                         </button> -->
                     </div>
                 </div>
-                <router-link :to="{ name: 'create-user' }"
-                    >Or Create account</router-link
-                >
+                <router-link class="login__create-account" :to="{ name: 'create-user' }">
+                    Or Create account
+                </router-link>
             </div>
         </base-card>
     </div>
@@ -228,6 +228,11 @@ export default class Login extends Vue {
     align-items: center;
     flex-direction: column;
     gap: var(--st-spacing);
+
+    &__create-account {
+        font-size: .9em;
+        color: var(--st-color-primary);
+    }
 
     .logo {
         max-height: 4em;
