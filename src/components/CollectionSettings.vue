@@ -1,8 +1,8 @@
 <template>
     <base-dropdown 
         class="collection-settings"
-        label="Settings"
         theme="primary"
+        :label="$t('common.settings')"
     >
         <input v-model="offline" id="collection-settings-offline" type="checkbox"/>
         <label for="collection-settings-offline">Offline</label>
@@ -11,7 +11,7 @@
             icon="refresh"
             :disabled="saving" 
             @click="saveSettings()"
-        >Settings</base-button>
+        >{{$t('common.save')}}</base-button>
     </base-dropdown>
 </template>
 <script lang="ts">
