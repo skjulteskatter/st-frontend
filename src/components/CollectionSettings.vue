@@ -1,29 +1,34 @@
 <template>
     <base-dropdown 
         class="collection-settings"
-        label="Settings"
-        theme="primary"
     >
-        <input v-model="offline" id="collection-settings-offline" type="checkbox"/>
-        <label for="collection-settings-offline">Offline</label>
-        <base-button 
-            theme="primary"
-            icon="refresh"
-            :disabled="saving" 
-            @click="saveSettings()"
-        >Settings</base-button>
+        <template #button>
+            <icon name="settings" style="opacity: .5" />
+        </template>
+        <template #default>
+            <input v-model="offline" id="collection-settings-offline" type="checkbox"/>
+            <label for="collection-settings-offline">Offline</label>
+            <base-button 
+                theme="primary"
+                icon="check"
+                :disabled="saving" 
+                @click="saveSettings()"
+            >{{ $t('common.save') }}</base-button>
+        </template>
     </base-dropdown>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
+import { Icon } from "@/components/icon";
 import { Collection } from "@/classes";
 
 @Options({
     components: {
         BaseButton,
         BaseDropdown,
+        Icon,
     },
     props: {
         collection: {

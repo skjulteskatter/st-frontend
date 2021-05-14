@@ -6,11 +6,13 @@
             @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
-        <collection-settings :collection="product.collections[0]"></collection-settings>
         <div class="product-card__footer">
-            <h4 class="product-card__title">
-                {{ product.getName(languageKey) }}
-            </h4>
+            <div class="product-card__title">
+                <h4 class="product-card__title__text">
+                    {{ product.getName(languageKey) }}
+                </h4>
+                <collection-settings :collection="product.collections[0]"></collection-settings>
+            </div>
             <div class="product-card__buttons">
                 <base-button
                     theme="secondary"
@@ -112,7 +114,7 @@ export default class ProductCard extends Vue {
     animation: slideInFromBottom 250ms;
     background-color: var(--st-color-background-medium);
     border-radius: var(--st-border-radius);
-    overflow: hidden;
+    // overflow: hidden;
     display: flex;
     flex-direction: column;
 
@@ -136,9 +138,9 @@ export default class ProductCard extends Vue {
         transition: transform 150ms;
         cursor: pointer;
 
-        &:hover {
-            transform: scale(1.02);
-        }
+        // &:hover {
+        //     transform: scale(1.02);
+        // }
     }
 
     &__footer {
@@ -152,10 +154,16 @@ export default class ProductCard extends Vue {
     }
 
     &__title {
+        &__text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            margin: 0;
+        }
+
         width: 100%;
-        text-overflow: ellipsis;
-        overflow: hidden;
         margin: 0 0 var(--st-spacing) 0;
+        display: flex;
+        justify-content: space-between;
     }
 }
 </style>

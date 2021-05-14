@@ -75,6 +75,8 @@ export default class BaseDropdown extends Vue {
     }
 
     &__button {
+        cursor: pointer;
+
         &__button {
             background: var(--st-color-background-light);
             color: var(--st-color-text);
