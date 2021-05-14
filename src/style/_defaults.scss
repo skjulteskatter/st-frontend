@@ -19,7 +19,7 @@ select {
     padding: calc(var(--st-spacing)*.5);
 }
 
-input[type=text], input[type=email] {
+input[type=text], input[type=email], input[type=password] {
     padding: calc(var(--st-spacing)*.5);
     background: var(--st-color-background-light);
     border: 1px solid var(--st-color-border);

@@ -1,38 +1,41 @@
 <template>
     <div class="wrapper">
-        <base-card id="login-card" border>
-            <div class="login gap-y">
-                <h1 class="login__title">Create account</h1>
-                <form @submit.prevent="submitForm" class="login__form gap-y">
-                    <div class="login__form__email">
-                        <label for="email">Display Name</label>
+        <base-card id="create-user-card" border>
+            <div class="create-user">
+                <h2 class="create-user__title">Create account</h2>
+                <form @submit.prevent="submitForm" class="create-user__form gap-y">
+                    <div class="create-user__form__email">
+                        <!-- <label for="email">Display Name</label>
                         <input
                             type="text"
                             id="name"
                             autocomplete="name"
                             v-model="form.displayName"
-                        />
+                        /> -->
+                        <base-input label="Display name" v-model="form.displayName" autocomplete="name" type="text" />
                     </div>
-                    <div class="login__form__email">
-                        <label for="email">Email</label>
+                    <div class="create-user__form__email">
+                        <!-- <label for="email">Email</label>
                         <input
                             type="email"
                             id="email"
                             autocomplete="email"
                             v-model="form.email"
-                        />
+                        /> -->
+                        <base-input label="Email" v-model="form.email" autocomplete="email" type="email" />
                     </div>
-                    <div class="login__form__password">
-                        <label for="password">Password</label>
+                    <div class="create-user__form__password">
+                        <!-- <label for="password">Password</label>
                         <input
                             type="password"
                             id="password"
                             autocomplete="new-password"
                             v-model="form.password"
-                        />
+                        /> -->
+                        <base-input label="Password" v-model="form.password" autocomplete="new-password" type="password" />
                     </div>
-                    <div class="login__form__password">
-                        <label for="password">Repeat password</label>
+                    <div class="create-user__form__password">
+                        <!-- <label for="password">Repeat password</label>
                         <input
                             :style="
                                 form.repeatPassword != form.password
@@ -43,11 +46,12 @@
                             id="repeat-password"
                             autocomplete="new-password"
                             v-model="form.repeatPassword"
-                        />
+                        /> -->
+                        <base-input label="Repeat password" v-model="form.repeatPassword" autocomplete="new-password" type="password" :style="form.repeatPassword != form.password ? 'color: red' : ''" />
                     </div>
-                    <button type="submit" class="login__form__submit">
+                    <base-button theme="primary" icon="check" type="submit" class="create-user__form__submit">
                         Sign Up
-                    </button>
+                    </base-button>
                 </form>
             </div>
         </base-card>
@@ -56,13 +60,16 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
+import { BaseCard, BaseButton } from "@/components";
+import { BaseInput } from "@/components/inputs";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {
         BaseCard,
+        BaseButton,
+        BaseInput,
     },
     name: "create-user",
 })
@@ -105,62 +112,34 @@ export default class Login extends Vue {
     background: var(--st-color-background-card);
 }
 
-#login-card {
+#create-user-card {
     max-width: 500px;
     width: 100%;
-
-    background: var(--st-color-background);
+    background: var(--st-color-background-light);
 }
 
-.social {
-    &-button {
-        width: 50px;
-        height: 50px;
-        background: var(--st-color-background-card);
-        padding: 0.5em;
-        border-radius: 100%;
-        outline: 0;
-        border: 1px solid var(--st-color-border);
-
-        & img {
-            width: 100%;
-        }
-    }
-}
-
-.login {
+.create-user {
     display: flex;
     align-items: center;
     flex-direction: column;
-    // gap: var(--st-spacing);
 
     &__title {
-        margin: 0;
+        margin-top: 0;
     }
 
     &__form {
         width: 100%;
         display: flex;
         flex-direction: column;
-        // gap: var(--st-spacing);
 
         &__submit {
             font-size: inherit;
-            padding: var(--st-spacing);
+            margin-top: var(--st-spacing);
         }
 
         input {
-            padding: var(--st-spacing);
-            background: var(--st-color-background-card);
-            border: 1px solid var(--st-color-border);
-            border-radius: var(--st-border-radius);
+            background: var(--st-color-background-medium);
         }
-
-        // &__stay {
-        //     input {
-
-        //     }
-        // }
 
         &__email,
         &__password {
