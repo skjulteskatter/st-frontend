@@ -1,5 +1,6 @@
 <template>
-    <modal class="collection-settings"
+    <base-dropdown 
+        class="collection-settings"
         label="Settings"
         theme="primary"
     >
@@ -11,17 +12,18 @@
             :disabled="saving" 
             @click="saveSettings()"
         >Settings</base-button>
-    </modal>
+    </base-dropdown>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseButton, Modal } from "@/components";
+import { BaseButton } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { Collection } from "@/classes";
 
 @Options({
     components: {
         BaseButton,
-        Modal,
+        BaseDropdown,
     },
     props: {
         collection: {
