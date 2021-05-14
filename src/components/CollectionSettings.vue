@@ -1,19 +1,22 @@
 <template>
-    <base-dropdown 
-        class="collection-settings"
-    >
+    <base-dropdown class="collection-settings">
         <template #button>
-            <icon name="settings" style="opacity: .5" />
+            <icon name="settings" style="opacity: 0.5" />
         </template>
         <template #default>
-            <input v-model="offline" id="collection-settings-offline" type="checkbox"/>
+            <input
+                v-model="offline"
+                id="collection-settings-offline"
+                type="checkbox"
+            />
             <label for="collection-settings-offline">Offline</label>
-            <base-button 
+            <base-button
                 theme="primary"
                 icon="check"
-                :disabled="saving" 
+                :disabled="saving"
                 @click="saveSettings()"
-            >{{ $t('common.save') }}</base-button>
+                >{{ $t("common.save") }}</base-button
+            >
         </template>
     </base-dropdown>
 </template>
