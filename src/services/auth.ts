@@ -10,8 +10,6 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { notify } from "./notify";
 
-const store = useStore();
-
 function notInitialized() {
     throw Error("FIREBASE DID NOT INITIALIZE");
 }
@@ -37,10 +35,10 @@ if (!a) {
 
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
-        store?.commit(SessionMutationTypes.ERROR, "");
+        useStore()?.commit(SessionMutationTypes.ERROR, "");
         return true;
     } else {
-        store?.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
+        useStore()?.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
         router.push({name: "verify-email"});
         return false;
     }
@@ -133,7 +131,7 @@ class Auth {
                 switch (e.code) {
                     case "auth/wrong-password":
                         notify("error", "Wrong Password", "warning");
-                        store.commit(SessionMutationTypes.ERROR, "Wrong password");
+                        useStore().commit(SessionMutationTypes.ERROR, "Wrong password");
                         break;
                     default:
                         break;

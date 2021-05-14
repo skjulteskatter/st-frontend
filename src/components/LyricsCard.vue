@@ -34,7 +34,7 @@
                     ></transpose-dropdown> -->
                     <base-button
                         v-if="song.hasChords"
-                        :style="{display: lyrics?.hasChords ? '' : 'none'}"
+                        :style="{display: Lyrics?.hasChords ? '' : 'none'}"
                         @click="transposeToggle()"
                         icon="music"
                         theme="tertiary"
@@ -122,6 +122,10 @@ export default class LyricsCard extends Vue {
         key: string;
         original: string;
     }[] = [];
+
+    public get Lyrics() {
+        return this.lyrics;
+    }
 
     public mounted() {
         const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");

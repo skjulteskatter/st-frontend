@@ -6,6 +6,7 @@
             @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
+        <collection-settings :collection="product.collections[0]"></collection-settings>
         <div class="product-card__footer">
             <h4 class="product-card__title">
                 {{ product.getName(languageKey) }}
@@ -39,7 +40,12 @@ import { Options, Vue } from "vue-class-component";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
+import CollectionSettings from "../CollectionSettings.vue";
+
 @Options({
+    components: {
+        CollectionSettings,
+    },
     name: "product-card",
     props: {
         product: {
@@ -93,7 +99,7 @@ export default class ProductCard extends Vue {
 
     public get collection() {
         return this.store.state.session.collections.find(
-            (c) => c.id == this.product?.collectionIds[0]
+            (c) => c.id == this.product?.collectionIds[0],
         );
     }
 }
