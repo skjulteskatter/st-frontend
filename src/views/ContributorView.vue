@@ -65,7 +65,7 @@ import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { cache } from "@/services/cache";
+import api from "@/services/api";
 
 @Options({
     components: {
@@ -93,9 +93,9 @@ export default class ContributorView extends Vue {
             this.$route.params.contributor as string,
         );
 
-        const allSongs = (await cache.getAll("songs"));
+        const allSongs = this.contributor ? (await api.songs.getContributor(this.contributor.id)).songs ?? [] : [];
 
-        this.songs = allSongs.filter(s => s.participants.some(p => p.contributorId == this.contributor?.id)).sort((a, b) => a.number - b.number);
+        this.songs = allSongs.map(s => new Song(s));
 
         if (this.contributor?.image) {
             const image = new Image();
