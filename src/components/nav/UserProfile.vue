@@ -36,7 +36,7 @@ export default class UserProfile extends Vue {
     }
 
     public get image(): string {
-        return auth.image;
+        return auth.image || "/img/portrait-placeholder.png";
     }
 }
 </script>
