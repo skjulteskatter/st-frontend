@@ -10,6 +10,7 @@
             <div class="product-card__title">
                 <h4 class="product-card__title__text">
                     {{ product.getName(languageKey) }}
+                    <icon name="lock" size="18" v-if="!isAvailable" />
                 </h4>
                 <collection-settings :collection="product.collections[0]"></collection-settings>
             </div>
@@ -43,10 +44,12 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 import CollectionSettings from "../CollectionSettings.vue";
+import { Icon } from "@/components/icon";
 
 @Options({
     components: {
         CollectionSettings,
+        Icon,
     },
     name: "product-card",
     props: {
@@ -113,8 +116,6 @@ export default class ProductCard extends Vue {
 .product-card {
     animation: slideInFromBottom 250ms;
     background-color: var(--st-color-background-medium);
-    border-radius: var(--st-border-radius);
-    // overflow: hidden;
     display: flex;
     flex-direction: column;
 
@@ -155,8 +156,6 @@ export default class ProductCard extends Vue {
 
     &__title {
         &__text {
-            text-overflow: ellipsis;
-            overflow: hidden;
             margin: 0;
         }
 
