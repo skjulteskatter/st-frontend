@@ -15,32 +15,6 @@
             <settings-card />
             <user-card />
         </div>
-
-        <base-button @click="updatePassword = !updatePassword"
-            >Set new password</base-button
-        >
-        <div v-if="updatePassword">
-            <form @submit="resetPassword">
-                <base-input
-                    type="password"
-                    v-if="passwordUser"
-                    v-model="oldPassword"
-                    label="Old password"
-                />
-                <base-input
-                    type="password"
-                    v-model="newPassword"
-                    label="New password"
-                />
-                <base-input
-                    :style="newPassword != repeatPassword ? 'color: red' : ''"
-                    type="password"
-                    v-model="repeatPassword"
-                    label="Repeat password"
-                />
-                <button formaction="submit">Submit</button>
-            </form>
-        </div>
     </div>
 </template>
 
@@ -49,7 +23,6 @@ import { Options, Vue } from "vue-class-component";
 import { SettingsCard } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
-import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
@@ -64,26 +37,10 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 export default class SettingsView extends Vue {
     private store = useStore();
 
-    public updatePassword = false;
-
-    public newPassword = "";
-    public repeatPassword = "";
-    public oldPassword = "";
-
     public logout() {
         this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
             window.location.replace("/login");
         });
-    }
-
-    public resetPassword() {
-        if (this.newPassword == this.repeatPassword) {
-            auth.resetPassword(this.oldPassword, this.newPassword);
-        }
-    }
-
-    public get passwordUser() {
-        return auth.user?.providerData.find((p) => p?.providerId == "password");
     }
 }
 </script>

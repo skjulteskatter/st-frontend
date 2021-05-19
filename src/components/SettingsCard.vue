@@ -3,6 +3,10 @@
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
                 {{ $t("settings.general") }}
+                <base-button
+                    @click="cache.clearCache()"
+                    theme="tertiary"
+                >Clear cache</base-button>
             </h3>
             <div class="user-settings__theme field gap-x">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
@@ -64,9 +68,6 @@
                     </option>
                 </select>
             </div> -->
-            <base-button
-                @click="cache.clearCache()"
-            >Clear cache</base-button>
         </div>
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
@@ -92,16 +93,20 @@
                     @change="handleImage"
                 />
             </div>
+            <div class="user-settings__password field gap-x">
+                <label>{{ $t("common.password") }}</label>
+                <hr />
+                <change-password />
+            </div>
         </div>
         <base-button
             :loading="loading"
             @click="save"
+            theme="secondary"
             icon="check"
             class="user-settings__save-button"
         >
-            <span>
-                <span>{{ $t("common.save") }}</span>
-            </span>
+            {{ $t("common.save") }}
         </base-button>
     </base-card>
 </template>
@@ -117,11 +122,13 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { cache } from "@/services/cache";
+import { ChangePassword } from "@/components/settings";
 
 @Options({
     components: {
         BaseCard,
         Icon,
+        ChangePassword,
     },
     name: "settings-card",
 })
@@ -279,6 +286,8 @@ export default class SettingsCard extends Vue {
     grid-area: settings;
 
     &__fields {
+        margin-bottom: var(--st-spacing);
+        
         .field {
             display: flex;
             align-items: center;
@@ -314,10 +323,12 @@ export default class SettingsCard extends Vue {
 
     &__title {
         margin: 0 0 var(--st-spacing) 0;
+        display: flex;
+        justify-content: space-between;
     }
 
     &__save-button {
-        align-self: flex-end;
+        margin-left: auto;
         margin-top: var(--st-spacing);
 
         @include breakpoint("small") {
