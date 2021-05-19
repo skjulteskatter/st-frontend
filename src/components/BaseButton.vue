@@ -9,7 +9,7 @@
             loadingLabel
         }}</span>
         <span class="spinner" v-if="loading"></span>
-        <span class="button__content" v-else>
+        <span class="button__content" v-else-if="content">
             <slot></slot>
         </span>
         <icon size="18" v-if="icon" :name="icon" class="button__icon" />
@@ -53,6 +53,10 @@ import { Icon } from "@/components/icon";
         disabled: {
             type: Boolean,
         },
+        content: {
+            type: Boolean,
+            default: true,
+        },
     },
 })
 export default class BaseButton extends Vue {
@@ -61,6 +65,7 @@ export default class BaseButton extends Vue {
     public theme = "primary";
     public icon = "";
     public disabled = false;
+    public content = true;
 
     public get isLoading() {
         return this.loading;

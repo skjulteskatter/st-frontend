@@ -10,9 +10,17 @@
             <div class="product-card__title">
                 <h4 class="product-card__title__text">
                     {{ product.getName(languageKey) }}
-                    <icon name="lock" size="18" v-if="!isOwned" />
                 </h4>
-                <collection-settings v-if="isOwned" :collection="product.collections[0]"></collection-settings>
+                    <base-button
+                        theme="tertiary"
+                        icon="shop"
+                        :disabled="inCart"
+                        v-if="!isOwned"
+                        @click="addToCart()"
+                        :content="false"
+                    >
+                    </base-button>
+                <collection-settings v-else :collection="product.collections[0]"></collection-settings>
             </div>
             <div class="product-card__buttons">
                 <base-button
@@ -44,6 +52,8 @@ import { useStore } from "@/store";
 
 import CollectionSettings from "../CollectionSettings.vue";
 import { Icon } from "@/components/icon";
+import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
+import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     components: {
@@ -60,6 +70,27 @@ import { Icon } from "@/components/icon";
 export default class ProductCard extends Vue {
     public product?: Product;
     public store = useStore();
+    
+    public addToCart() {
+        if (this.product)
+            this.store.commit(
+                StripeMutationTypes.CART_ADD_PRODUCT,
+                this.product.id,
+            );
+
+        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
+            type: "success",
+            icon: "shop",
+            title: this.$t("store.addedToCart"),
+        });
+    }
+
+    public get inCart() {
+        return this.product
+            ? this.store.state.stripe.cart.includes(this.product.id)
+            : false;
+    }
+
 
     public goToCollection() {
         const collectionKey = this.collection?.key;
