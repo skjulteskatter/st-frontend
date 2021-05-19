@@ -64,7 +64,7 @@ export class Song extends BaseClass implements ApiSong {
         this.details = song.details;
         this.melodyOrigin = song.melodyOrigin;
         this.type = song.type;
-        this.themes = song.themes;
+        this.themes = song.themes ?? [];
         this.hasLyrics = song.hasLyrics;
         this.hasChords = song.hasChords;
         this.originalKey = song.originalKey;

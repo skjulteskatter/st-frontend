@@ -10,16 +10,15 @@
             <div class="product-card__title">
                 <h4 class="product-card__title__text">
                     {{ product.getName(languageKey) }}
-                    <icon name="lock" size="18" v-if="!isAvailable" />
+                    <icon name="lock" size="18" v-if="!isOwned" />
                 </h4>
-                <collection-settings :collection="product.collections[0]"></collection-settings>
+                <collection-settings v-if="isOwned" :collection="product.collections[0]"></collection-settings>
             </div>
             <div class="product-card__buttons">
                 <base-button
                     theme="secondary"
                     class="product-card__button"
                     icon="arrowRight"
-                    v-if="isAvailable"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}
@@ -65,7 +64,7 @@ export default class ProductCard extends Vue {
     public goToCollection() {
         const collectionKey = this.collection?.key;
 
-        if (this.collection?.available == true && collectionKey) {
+        if (collectionKey) {
             this.$router.push({
                 name: "song-list",
                 params: {
@@ -90,6 +89,10 @@ export default class ProductCard extends Vue {
 
     public get isAvailable() {
         return this.collection?.available;
+    }
+
+    public get isOwned() {
+        return this.store.getters.user?.subscriptions.some(s => s.collectionIds.includes(this.collection?.id as string));
     }
 
     public get image() {

@@ -14,10 +14,11 @@
             <li
                 v-for="song in songs"
                 :key="song.id"
-                @click="selectSong(song)"
+                @click="available(song.number) ? selectSong(song) : undefined"
                 class="theme-card__list__item gap-x"
                 :class="{
                     'wrong-language': anotherLanguage.includes(song),
+                    'available': available(song.number),
                 }"
             >
                 <div class="theme-card__list__item__number">
@@ -65,6 +66,10 @@ export default class SongListCard extends Vue {
     public count?: boolean;
     public action?: Function;
 
+    public get collection() {
+        return this.store.getters.collection;
+    }
+
     public get languageKey() {
         return this.store.getters.languageKey;
     }
@@ -91,6 +96,10 @@ export default class SongListCard extends Vue {
         return this.songs.filter(
             (s) => s.type == "lyrics" && !s.name[this.languageKey],
         );
+    }
+
+    public available(n: number) {
+        return this.collection?.available || n <= 5;
     }
 }
 </script>
@@ -140,13 +149,18 @@ export default class SongListCard extends Vue {
             display: flex;
             margin-bottom: 0.2rem;
             text-decoration: none;
-            cursor: pointer;
+            opacity: 0.5;
 
-            &:hover {
-                color: var(--st-color-primary);
+            &.available {
+                opacity: 1;
+                cursor: pointer;
 
-                .theme-card__list__item__title {
-                    text-decoration: underline;
+                &:hover {
+                    color: var(--st-color-primary);
+
+                    .theme-card__list__item__title {
+                        text-decoration: underline;
+                    }
                 }
             }
 
