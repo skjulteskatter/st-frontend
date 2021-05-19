@@ -172,7 +172,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
             await auth.sendLinkToEmail();
         }
     },
-    async [SessionActionTypes.SESSION_CREATE_USER]({ state, commit}, object ): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async [SessionActionTypes.SESSION_CREATE_USER]({ state, commit }, object ): Promise<void> {
         await auth.createEmailAndPasswordUser(object.email, object.password, object.displayName);
 
         // if (auth.isAuthenticated) {
