@@ -49,7 +49,9 @@
             </object>
             <div id="osmd-canvas"></div>
             <div id="pb-canvas"></div>
-            <div class="sheetmusic-controlpanel">
+            <div class="sheetmusic-controlpanel"
+                v-if="type != pdfType"
+            >
                 <base-button
                     icon="refresh"
                     theme="tertiary"
@@ -256,6 +258,7 @@ export default class SheetMusic extends Vue {
 
 .sheetmusic-wrapper {
     width: 100%;
+    height: 90%;
 }
 
 // .sheetmusic-content {
