@@ -97,7 +97,7 @@
                                 country?.songIds.includes(s.id)
                             )
                         "
-                        :title="country?.item.name ?? ''"
+                        :title="country?.item.name[languageKey] ?? country?.item.name.en ?? Object.values(country?.item.name ?? {})?.[0] ?? ''"
                     ></song-list-card>
                 </div>
 
