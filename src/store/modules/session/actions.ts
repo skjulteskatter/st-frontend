@@ -175,9 +175,9 @@ export const actions: ActionTree<State, RootState> & Actions = {
     async [SessionActionTypes.SESSION_CREATE_USER]({ state, commit}, object ): Promise<void> {
         await auth.createEmailAndPasswordUser(object.email, object.password, object.displayName);
 
-        if (auth.isAuthenticated) {
-            await init(state, commit);
-        }
+        // if (auth.isAuthenticated) {
+        //     await init(state, commit);
+        // }
     },
     async [SessionActionTypes.SESSION_SAVE_SETTINGS]({ state, commit }): Promise<void> {
         if (state.currentUser?.settings) {

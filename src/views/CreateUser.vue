@@ -49,7 +49,7 @@
                         /> -->
                         <base-input label="Repeat password" v-model="form.repeatPassword" autocomplete="new-password" type="password" :style="form.repeatPassword != form.password ? 'color: red' : ''" />
                     </div>
-                    <base-button theme="primary" icon="check" type="submit" class="create-user__form__submit">
+                    <base-button :loading="creatingAccount" theme="primary" icon="check" type="submit" class="create-user__form__submit">
                         Sign Up
                     </base-button>
                 </form>
@@ -82,6 +82,8 @@ export default class Login extends Vue {
     };
     public stayLoggedIn = false;
     private store = useStore();
+    public creatingAccount = false;
+
 
     public submitForm() {
         if (
@@ -89,6 +91,7 @@ export default class Login extends Vue {
             this.form.password != "" &&
             this.form.displayName != ""
         ) {
+            this.creatingAccount = true;
             this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
                 email: this.form.email,
                 password: this.form.password,
