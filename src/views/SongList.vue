@@ -51,6 +51,7 @@
                     />
                 </div>
             </div>
+            <p class="explanation">{{$t("common.notAvailableInThisLanguage")}}</p>
             <div v-if="searchQuery == '' && !loading">
                 <div
                     class="song-list__contributors"
@@ -417,6 +418,21 @@ export default class SongList extends Vue {
 
 .warning {
     opacity: 0.4;
+}
+
+.explanation {
+    color: var(--st-color-error);
+    text-align: end;
+    
+    &:before {
+        content: "";
+        width: .5em;
+        height: .5em;
+        border-radius: 30rem;
+        background-color: var(--st-color-error);
+        display: inline-block;
+        margin-right: .5em;
+    }
 }
 
 .search__container {
