@@ -2,6 +2,7 @@
     <base-card class="activity-feed">
         <h3 class="activity-feed__title">
             {{ $t("common.activity") }}
+            <tooltip text="Her ser du all din nylige aktivitet" />
         </h3>
         <loader :loading="activitiesInitialized === false">
             <div class="activity-feed__activities" v-if="activities.length">
@@ -79,6 +80,9 @@ export default class ActivityFeed extends Vue {
     &__title {
         display: block;
         margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: calc(var(--st-spacing)/2);
     }
 
     &__activities {

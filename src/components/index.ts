@@ -11,6 +11,7 @@ import CollectionCard from "./CollectionCard.vue";
 import BackButton from "./BackButton.vue";
 
 import UsersList from "./UsersList.vue";
+import Tooltip from "./Tooltip.vue";
 
 export {
     BaseCard,
@@ -24,4 +25,5 @@ export {
     LyricsCard,
     BackButton,
     UsersList,
+    Tooltip,
 };

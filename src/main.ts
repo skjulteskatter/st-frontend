@@ -8,6 +8,7 @@ import { store } from "@/store";
 import { 
     Loader,
     BaseButton,
+    Tooltip,
 } from "@/components";
 
 createApp(App)
@@ -16,4 +17,5 @@ createApp(App)
     .use(i18n)
     .component("loader", Loader)
     .component("base-button", BaseButton)
+    .component("tooltip", Tooltip)
     .mount("#app");
