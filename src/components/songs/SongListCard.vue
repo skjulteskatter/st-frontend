@@ -28,6 +28,7 @@
                 <div class="theme-card__list__item__title">
                     <span>{{ song.getName(languageKey) }}</span>
                 </div>
+                <icon style="color: var(--st-color-primary)" name="star" size="12" v-if="song.newMelody" />
             </li>
         </ul>
     </base-card>
@@ -36,12 +37,14 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
+import { Icon } from "@/components/icon";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 
 @Options({
     components: {
         BaseCard,
+        Icon,
     },
     props: {
         title: {

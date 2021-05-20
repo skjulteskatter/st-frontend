@@ -40,6 +40,7 @@ export class Song extends BaseClass implements ApiSong {
     public details: LocaleString;
     public hasLyrics: boolean;
     public hasChords;
+    public newMelody: boolean;
 
     constructor(song: ApiSong) {
         super();
@@ -70,6 +71,7 @@ export class Song extends BaseClass implements ApiSong {
         this.themeIds = song.themeIds;
 
         this.collections = song.collections ? song.collections.map(c => new Collection(c)) : [];
+        this.newMelody = song.newMelody;
     }
 
     public language(code: string): boolean {

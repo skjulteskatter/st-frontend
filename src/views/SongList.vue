@@ -52,6 +52,7 @@
                 </div>
             </div>
             <div class="explanations">
+                <p class="explanation explanation--star"><icon name="star" size="12" />{{$t("common.newMelody")}}</p>
                 <p class="explanation explanation--green">{{$t("common.noSheetMusic")}}</p>
                 <p class="explanation explanation--red">{{$t("common.notAvailableInThisLanguage")}}</p>
             </div>
@@ -154,6 +155,7 @@
 
 <script lang="ts">
 import { BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 import { Options, Vue } from "vue-class-component";
 import { Collection, Lyrics, Song } from "@/classes";
@@ -187,6 +189,7 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
         SongFilterDropdown,
         BackButton,
         SearchInput,
+        Icon,
     },
     name: "song-list",
 })
@@ -449,6 +452,17 @@ export default class SongList extends Vue {
         color: var(--st-color-success);
         &:before {
             background-color: var(--st-color-success);
+        }
+    }
+
+    &--star {
+        color: var(--st-color-primary);
+        display: flex;
+        align-items: center;
+        gap: var(--st-half-spacing);
+
+        &:before {
+            display: none !important;
         }
     }
     
