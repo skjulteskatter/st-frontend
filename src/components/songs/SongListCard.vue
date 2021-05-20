@@ -19,6 +19,7 @@
                 :class="{
                     'wrong-language': anotherLanguage.includes(song),
                     'available': available(song.number),
+                    'missing-sheetmusic': !song.sheetMusic.length,
                 }"
             >
                 <div class="theme-card__list__item__number">
@@ -166,6 +167,10 @@ export default class SongListCard extends Vue {
 
             &.wrong-language {
                 color: var(--st-color-error);
+            }
+
+            &.missing-sheetmusic {
+                color: var(--st-color-success);
             }
 
             &__number {

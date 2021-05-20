@@ -51,7 +51,10 @@
                     />
                 </div>
             </div>
-            <p class="explanation">{{$t("common.notAvailableInThisLanguage")}}</p>
+            <div class="explanations">
+                <p class="explanation explanation--green">{{$t("common.noSheetMusic")}}</p>
+                <p class="explanation explanation--red">{{$t("common.notAvailableInThisLanguage")}}</p>
+            </div>
             <div v-if="searchQuery == '' && !loading">
                 <div
                     class="song-list__contributors"
@@ -420,16 +423,40 @@ export default class SongList extends Vue {
     opacity: 0.4;
 }
 
+.explanations {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--st-spacing);
+    margin-bottom: var(--st-spacing);
+
+    @include breakpoint("small"){
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
 .explanation {
-    color: var(--st-color-error);
-    text-align: end;
+    margin: 0;
+    
+    &--red {
+        color: var(--st-color-error);
+        &:before {
+            background-color: var(--st-color-error);
+        }
+    }
+
+    &--green {
+        color: var(--st-color-success);
+        &:before {
+            background-color: var(--st-color-success);
+        }
+    }
     
     &:before {
         content: "";
         width: .5em;
         height: .5em;
         border-radius: 30rem;
-        background-color: var(--st-color-error);
         display: inline-block;
         margin-right: .5em;
     }
