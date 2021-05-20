@@ -20,7 +20,7 @@
                 <div class="collection-item__body__footer">
                     <base-button
                         theme="secondary"
-                        icon="shop"
+                        icon="buy"
                         :disabled="inCart"
                         v-if="!ownedIds.includes(product.id)"
                         @click="addToCart()"
