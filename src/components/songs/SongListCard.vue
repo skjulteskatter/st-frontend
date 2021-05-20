@@ -165,8 +165,7 @@ export default class SongListCard extends Vue {
             }
 
             &.wrong-language {
-                color: red;
-                opacity: 0.8;
+                color: var(--st-color-error);
             }
 
             &__number {
