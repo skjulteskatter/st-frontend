@@ -26,7 +26,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
         const transposition = format == "html" ? state.transposition : null;
 
         for (const l of (getters as {collection: Collection | undefined}).collection?.lyrics ?? []) {
-            if (l.number == state.songNumber && l.language.key == state.language) {
+            if (l.number == state.songNumber && l.languageKey == state.language) {
                 if (l.format != format)
                     continue;
                 if (transposition !== null) {

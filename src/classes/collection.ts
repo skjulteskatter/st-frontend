@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributorCollectionItem } from "dmb-api";
+import { ApiCollection, ApiCollectionItem, ApiContributor } from "dmb-api";
 import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
 import { BaseClass } from "./baseClass";
 // import { Converter } from "showdown";
@@ -32,7 +32,7 @@ export const getContributors = async (offline: boolean) => {
                 a[b.id] = b;
                 return a;
             }, {} as {
-                [id: string]: ApiContributorCollectionItem;
+                [id: string]: ApiCollectionItem<ApiContributor>;
             }));
 
             const now = new Date();
@@ -198,7 +198,7 @@ export class Collection extends BaseClass implements ApiCollection {
                     }
                 }
                 
-                this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
+                this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).filter(s => s.collectionIds.some(col => col == this.id)).sort((a, b) => a.number - b.number);
             } else {
                 this.songs = await api.songs.getAllSongs(this);
             }
@@ -278,7 +278,7 @@ export class Collection extends BaseClass implements ApiCollection {
                     }
                 }
 
-                this.lyrics = this.lyrics.length > 0 ? this.lyrics : this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionId == this.id);
+                this.lyrics = this.lyrics.length > 0 ? this.lyrics : this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionIds.some(col => col == this.id));
             } else {
                 this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
             }
@@ -360,7 +360,7 @@ export class Collection extends BaseClass implements ApiCollection {
         const songs = this.songs.filter(s => 
             (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
             && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
-            && (origins.length == 0 || origins.includes(s.melodyOrigin?.id))
+            && (origins.length == 0 || (s.melodyOrigin != null && origins.includes(s.melodyOrigin.country)))
             && (audioFiles.length == 0 || s.audioFiles.filter(a => audioFiles.includes(a.category)).length)
             && (videoFiles.length == 0 || s.videoFiles.filter(v => videoFiles.includes(v.category)).length)
             && (contentTypes.length == 0 || (contentTypes.includes("lyrics") 
@@ -381,7 +381,7 @@ export class Collection extends BaseClass implements ApiCollection {
         const origins: Origin[] = [];
 
         for (const song of this.songs) {
-            if (song.melodyOrigin != undefined && !origins.find(o => o.id == song.melodyOrigin.id)) {
+            if (song.melodyOrigin != undefined && !origins.find(o => o.country == song.melodyOrigin?.country)) {
                 origins.push(song.melodyOrigin);
             }
         }
@@ -436,7 +436,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language && l.format == "html" && l.transposition == transpose);
+            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose);
             if (!lyrics) {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
                 this.lyrics.push(lyrics);
@@ -452,7 +452,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.loadingLyrics = true;
         try {
 
-            let lyrics = this.lyrics.find(l => l.number == number && l.language.key == language);
+            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language);
             if (!lyrics) {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, number, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);

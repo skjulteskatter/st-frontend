@@ -75,7 +75,7 @@ export default class SongListCard extends Vue {
     }
 
     public selectSong(song: Song) {
-        const collection = this.store.getters.collections.find(c => c.id == song.collectionId);
+        const collection = this.store.getters.collections.find(c => song.collectionIds.some(col => col == c.id));
         if (collection) {
             this.$router.push({
                 name: "song",

@@ -36,7 +36,7 @@
                             :title="$t('song.author')"
                             :songs="
                                 authorSongs.filter((s) =>
-                                    s.collectionId == c.id
+                                    s.collectionIds.some(col => col == c.id)
                                 )
                             "
                             border
@@ -45,7 +45,7 @@
                             :title="$t('song.composer')"
                             :songs="
                                 composerSongs.filter((s) =>
-                                    s.collectionId == c.id
+                                    s.collectionIds.some(col => col == c.id)
                                 )
                             "
                             border
@@ -157,7 +157,7 @@ export default class ContributorView extends Vue {
     }
 
     public get collections(): Collection[] {
-        return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionId == c.id));
+        return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id)));
     }
 }
 </script>

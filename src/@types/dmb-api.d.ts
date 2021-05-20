@@ -32,37 +32,35 @@ declare module "dmb-api" {
 
     interface ApiSong {
         id: string;
+        collectionIds: string[];
+        collections?: ApiCollection[];
         number: number;
         type: string;
         image?: string;
-        collectionId: string;
-        collection?: ApiCollection;
-        name: {
-            [languageKey: string]: string;
-        };
+        name: LocaleString;
         participants: ApiParticipant[];
-        melodyOrigin: Origin;
-        leadSheetUrl: string;
         yearWritten: number;
-        themes: Theme[];
-        originCountry: Country;
-        audioFiles: MediaFile[];
-        videoFiles: MediaFile[];
-        sheetMusic: MediaFile[];
+        originalKey: string;
         hasLyrics: boolean;
         hasChords: boolean;
-        copyright: {
-            text?: Copyright;
-            melody?: Copyright;
-        };
-        transpositions: {
+        themeIds: string[];
+        copyrights: {
+            type: string;
+            copyrightId?: string;
+            copyright?: ApiCopyright;
+        }[];
+        origins: {
+            type: string;
+            country: string;
+            description: LocaleString;
+        }[];
+        transpositions?: {
             [key: string]: number;
         };
-        originalKey: string;
         verses: number;
-        details: {
-            [languageKey: string]: string;
-        };
+        details?: LocaleString;
+        themes?: Theme[];
+        files?: MediaFile[];
     }
 
     interface ApiLyrics {
@@ -70,9 +68,8 @@ declare module "dmb-api" {
         songId: string;
         number: number;
         title: string;
-        collectionId: string;
-        collectionKey: string;
-        language: Language;
+        collectionIds: string[];
+        languageKey: string;
         content: JsonContent | string;
         format: "json" | "html";
         hasChords: boolean;
@@ -90,36 +87,24 @@ declare module "dmb-api" {
         subtitle: string;
         country: string;
         image?: string;
-        biography: {
+        biography?: {
             [languageKey: string]: string;
         };
     }
     
-    interface ApiContributorCollectionItem {
+    interface ApiCollectionItem<T> {
         id: string;
-        contributor: ApiContributor;
+        item: T;
         songIds: string[];
         songs?: ApiSong[];
         fileIds: string[];
         files?: MediaFile[];
     }
 
-    interface ApiThemeCollectionItem {
-        theme: Theme;
-        songIds: string[];
-        songs: ApiSong[];
-    }
-    
-    interface ApiCountryCollectionItem {
-        country: Country;
-        songIds: string[];
-        songs: ApiSong[];
-    }
-
     interface ApiParticipant {
         contributorId: string;
         contributor?: ApiContributor;
-        type: "composer" | "author" | "arranger";
+        type: "composer" | "author" | "arranger" | "artist";
     }
 
     interface ApiPlaylist {
@@ -129,6 +114,15 @@ declare module "dmb-api" {
         entries: ApiPlaylistEntry[];
         sharedWithIds: string[];
         shareKey: string;
+    }
+
+    interface ApiPlaylistEntry {
+        id: string;
+        type: string;
+        addedAt: string;
+        addedById: string;
+        songId: string;
+        song?: ApiSong;
     }
 
     interface ApiTag {
@@ -141,25 +135,25 @@ declare module "dmb-api" {
         canEdit: boolean;
     }
 
-    interface ApiPlaylistEntry {
-        id: string;
-        type: string;
-        addedAt: string;
-        addedById: string;
-        songId: string;
-        song: ApiSong;
-    }
-
     interface MediaFile {
         id: string;
+        songId: string;
+        name: string;
         type: string;
-        collection?: ApiCollection;
+        collectionIds: string[];
         category: string;
         number: number;
-        language: Language;
-        name: string;
+        languageKey: string;
+        transposition: string;
+        information: string;
         directUrl: string;
-        contributors: ApiContributor[];
+        participants: ApiParticipant[];
+        song?: ApiSong;
+    }
+
+    interface ApiCopyright {
+        id: string;
+        name: LocaleString;
     }
 }
 

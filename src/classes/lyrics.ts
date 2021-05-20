@@ -11,32 +11,28 @@ type Content = {
 export class Lyrics implements ApiLyrics {
     id: string;
     songId: string;
-    collectionId;
+    collectionIds;
     number: number;
     title: string;
-    collectionKey: string;
     content: Content | string;
     format;
-    hasChords: boolean;
-    language: Language;
-    originalKey: string;
-    transposedToKey: string;
-    transpositions: {
-        [key: string]: number;
-    };
+    hasChords;
+    languageKey;
+    originalKey;
+    transposedToKey;
+    transpositions;
 
     constructor(lyrics: ApiLyrics) {
         this.id = lyrics.id;
         this.songId = lyrics.songId;
         this.number = lyrics.number;
         this.title = lyrics.title;
-        this.collectionId = lyrics.collectionId;
-        this.collectionKey = lyrics.collectionKey;
+        this.collectionIds = lyrics.collectionIds;
         this.content = lyrics.content;
         this.format = lyrics.format;
         this.hasChords = lyrics.hasChords;
         this.originalKey = lyrics.originalKey;
-        this.language = lyrics.language;
+        this.languageKey = lyrics.languageKey;
         this.transposedToKey = lyrics.transposedToKey;
         this.transpositions = lyrics.transpositions;
     }

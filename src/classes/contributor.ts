@@ -3,9 +3,7 @@ import { Converter } from "showdown";
 const converter = new Converter();
 
 export class Contributor implements ApiContributor {
-    public biography: {
-        [key: string]: string;
-    } = {};
+    public biography;
     public birthYear = 0;
     public country = "";
     public id = "";
@@ -24,7 +22,7 @@ export class Contributor implements ApiContributor {
     }
 
     public getBiography(language: string) {
-        const content = this.biography[language] ?? this.biography.no ?? undefined;
+        const content = this.biography?.[language] ?? this.biography?.no ?? undefined;
 
         if (content) {
             return converter.makeHtml(content);

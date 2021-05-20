@@ -1,8 +1,8 @@
-import { ApiContributorCollectionItem, ApiSong } from "dmb-api";
+import { ApiCollectionItem, ApiContributor, ApiSong } from "dmb-api";
 import { Contributor } from "../contributor";
 import { BaseCollectionItem } from "./baseCollectionItem";
 
-export class ContributorCollectionItem extends BaseCollectionItem<Contributor> implements ApiContributorCollectionItem {
+export class ContributorCollectionItem extends BaseCollectionItem<Contributor> implements ApiCollectionItem<Contributor> {
     public songIds: string[];
     public songs?: ApiSong[];
     
@@ -10,9 +10,9 @@ export class ContributorCollectionItem extends BaseCollectionItem<Contributor> i
         return this.item;
     }
 
-    constructor(c: ApiContributorCollectionItem) {
+    constructor(c: ApiCollectionItem<ApiContributor>) {
         super();
-        this.item = new Contributor(c.contributor);
+        this.item = new Contributor(c.item);
         this.songs = c.songs;
         this.songIds = c.songIds;
         this.id = this.item.id;

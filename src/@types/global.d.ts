@@ -15,8 +15,8 @@ interface Language {
 }
 
 interface Origin {
-    id: string;
-    name: LocaleString;
+    country: string;
+    description: LocaleString;
 }
 
 interface Country {

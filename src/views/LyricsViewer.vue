@@ -140,7 +140,7 @@ export default class LyricsViewer extends Vue {
         const melodyOrigin = this.store.getters.song?.melodyOrigin;
 
         return melodyOrigin
-            ? melodyOrigin.name[this.languageKey] ?? melodyOrigin.name.no
+            ? melodyOrigin.description[this.languageKey] ?? melodyOrigin.description.no
             : undefined;
     }
 

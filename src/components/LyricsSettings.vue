@@ -53,7 +53,7 @@
                 </h5>
                 <div
                     class="lyrics-settings__verses__select gap-x"
-                    v-for="key in Object.keys(selectVerses)"
+                    v-for="key in verseSelect"
                     :key="key"
                 >
                     <input
@@ -67,36 +67,7 @@
                     </label>
                 </div>
             </div>
-            <!-- <br />
-            <base-button
-                class="lyrics-settings__controls__open"
-                @click="openLyricsWindow('karaoke')"
-            >
-                Open KaraokeViewer
-            </base-button>
-            <base-button @click="setLineSize(1)">1</base-button>
-            <base-button @click="setLineSize(2)">2</base-button> -->
         </base-card>
-        <!-- <base-card v-if="song.type == 'lyrics'" class="lyrics-settings__verses">
-            <h3 class="lyrics-settings__verses__title">
-                {{ $t("song.verse") }}
-            </h3>
-            <div
-                class="lyrics-settings__verses__select gap-x"
-                v-for="key in Object.keys(selectVerses)"
-                :key="key"
-            >
-                <input
-                    v-model="selectVerses[key]"
-                    type="checkbox"
-                    :name="key"
-                    :id="key"
-                />
-                <label :for="key">
-                    {{ verses[key].name }}
-                </label>
-            </div>
-        </base-card> -->
     </div>
 </template>
 
@@ -228,8 +199,8 @@ export default class LyricsSettings extends Vue {
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.name[this.languageKey] ??
-            this.song?.melodyOrigin?.name.no ??
+            this.song?.melodyOrigin?.description[this.languageKey] ??
+            this.song?.melodyOrigin?.description.no ??
             undefined
         );
     }
@@ -267,6 +238,10 @@ export default class LyricsSettings extends Vue {
         }
 
         return verses;
+    }
+
+    public get verseSelect() {
+        return Object.keys(this.selectVerses).reduce((a, b) => a.length < 20 ? [...a, b] : a, [] as string[]);
     }
 }
 </script>

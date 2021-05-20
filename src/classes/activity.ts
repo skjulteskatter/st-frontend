@@ -21,7 +21,7 @@ export class Activity {
         return this.activity.type == "song" ? {
             name: "song",
             params: {
-                collection: collections.find(c => c.id == this.collectionId)?.key ?? "",
+                collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "",
                 number: this.activity.item?.number ?? "",
             },
         } : {
@@ -33,7 +33,7 @@ export class Activity {
     }
 
     public getImage(collections: Collection[]): string | undefined {
-        return this.type == "song" ? collections.find(c => c.id == this.collectionId)?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
+        return this.type == "song" ? collections.find(c => this.collectionIds.some(col => col == c.id))?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
     }
 
     public timeSince(languageKey: string) {
@@ -70,8 +70,8 @@ export class Activity {
         return this.activity.id;
     }
 
-    public get collectionId() {
-        return this.activity.type == "song" ? this.activity.item?.collectionId : undefined;
+    public get collectionIds(): string[] {
+        return this.activity.type == "song" ? this.activity.item?.collectionIds ?? [] : [];
     }
 
     public get type() {

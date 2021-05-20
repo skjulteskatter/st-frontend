@@ -1,10 +1,10 @@
 import { Lyrics, Song } from "@/classes";
-import { ApiContributorCollectionItem } from "dmb-api";
+import { ApiCollectionItem, ApiContributor } from "dmb-api";
 import { openDB } from "idb";
 
 type StoreTypes = {
     songs: Song;
-    contributors: ApiContributorCollectionItem;
+    contributors: ApiCollectionItem<ApiContributor>;
     lyrics: Lyrics;
     config: string | number | boolean | undefined;
     items: {
@@ -106,7 +106,7 @@ class CacheService {
             }).id;
 
             if (e instanceof Lyrics) {
-                key = e.id + "_" + e.language.key;
+                key = e.id + "_" + e.languageKey;
             }
 
             await tx.objectStore(store).add?.(e, key);

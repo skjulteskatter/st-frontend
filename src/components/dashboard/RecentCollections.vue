@@ -40,9 +40,9 @@ export default class RecentCollections extends Vue {
     public get recentCollections() {
         return this.collections.filter((c) =>
             this.activities
-                .filter((a) => a.collectionId != undefined)
-                .map((a) => a.collectionId)
-                .includes(c.id),
+                .filter((a) => a.collectionIds.length)
+                .map((a) => a.collectionIds)
+                .some(cols => cols.includes(c.id)),
         );
     }
 }

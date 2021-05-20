@@ -28,7 +28,6 @@ declare module "checkout" {
         id: string;
         name: LocaleString;
         collectionIds: string[];
-        collections?: ApiCollection[];
         prices: Price[];
         priority: number;
     }

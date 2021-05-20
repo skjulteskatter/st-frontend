@@ -3,7 +3,7 @@ import { Collection, Lyrics, Song } from "@/classes";
 import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiContributorCollectionItem, ApiCountryCollectionItem, ApiLyrics, ApiPlaylist, ApiSong, ApiTag, ApiThemeCollectionItem } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiSong, ApiTag } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -78,7 +78,7 @@ export const songs = {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
     async getAllSongs(collection: ApiCollection, lastUpdated?: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,videoFiles/contributors,audioFiles/contributors,sheetMusic,themes,transpositions,copyright` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(s => new Song(s));
+        return (await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(s => new Song(s));
     },
     async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
@@ -88,10 +88,10 @@ export const songs = {
         return (await http.get<ApiLyrics[]>(uri)).map(l => new Lyrics(l));
     },
     async getContributor(id: string) {
-        return new ContributorCollectionItem((await http.get<ApiContributorCollectionItem>(`api/Contributor/${id}?expand=contributor/biography,songs/collection`)));
+        return new ContributorCollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
     },
     async getAllContributors(lastUpdated?: string) {
-        return await http.get<ApiContributorCollectionItem[]>("api/Contributors?expand=contributor/biography" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return await http.get<ApiCollectionItem<ApiContributor>[]>("api/Contributors?expand=item/biography" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     // async getAllAuthors(collection: ApiCollection, lastUpdated?: string) {
     //     return await http.get<ApiContributorCollectionItem[]>(`api/Authors/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
@@ -100,10 +100,10 @@ export const songs = {
     //     return await http.get<ApiContributorCollectionItem[]>(`api/Composers/${collection.id}` + (lastUpdated ? "?updatedAt=" + lastUpdated : "")); //).map(c => new ContributorCollectionItem(c));
     // },
     async getAllThemes(collection: ApiCollection) {
-        return await http.get<ApiThemeCollectionItem[]>(`api/Themes/${collection.id}`); //).map(ci => new ThemeCollectionItem(ci));
+        return await http.get<ApiCollectionItem<Theme>[]>(`api/Themes/${collection.id}?expand=item`); //).map(ci => new ThemeCollectionItem(ci));
     },
     async getAllCountries(collection: ApiCollection) {
-        return await http.get<ApiCountryCollectionItem[]>(`api/Countries/${collection.id}`); //).map(ci => new CountryCollectionItem(ci));
+        return await http.get<ApiCollectionItem<Country>[]>(`api/Countries/${collection.id}?expand=item`); //).map(ci => new CountryCollectionItem(ci));
     },
     /**
      * Search accross collections.

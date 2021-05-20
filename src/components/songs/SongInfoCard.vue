@@ -108,7 +108,7 @@
                         {{ melodyOrigin }}
                     </small>
                     <small class="song-details__metadata__credits gap-x">
-                        <span v-if="song.originCountry">{{ getLocaleString(song.originCountry.name) }}</span>
+                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
                         <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
                     </small>
@@ -199,8 +199,8 @@ export default class SongInfoCard extends Vue {
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.name[this.languageKey] ??
-            this.song?.melodyOrigin?.name.no ??
+            this.song?.melodyOrigin?.description[this.languageKey] ??
+            this.song?.melodyOrigin?.description.no ??
             undefined
         );
     }

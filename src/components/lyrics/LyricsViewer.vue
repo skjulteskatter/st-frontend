@@ -2,7 +2,7 @@
     <div
         class="lyrics-viewer"
         v-for="(verse, i) in text"
-        :key="lyrics?.language.key + verse.name + verse.content[0] + i"
+        :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
     >
         <b>{{ verse.name }}</b>
         <p class="lyrics-viewer__verse">{{ verse.content.join("\n") }}</p>
