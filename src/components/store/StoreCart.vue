@@ -6,7 +6,7 @@
         icon="buy"
         class="store-cart__modal"
     > -->
-    <base-dropdown :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
+    <base-dropdown icon="buy" :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
         <div class="store-cart">
             <div class="store-cart__header">
                 <h3 class="store-cart__title">{{ $t("store.inCart") }}</h3>

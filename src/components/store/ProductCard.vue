@@ -11,15 +11,14 @@
                 <h4 class="product-card__title__text">
                     {{ product.getName(languageKey) }}
                 </h4>
-                    <base-button
-                        theme="tertiary"
-                        icon="shop"
-                        :disabled="inCart"
-                        v-if="!isOwned"
-                        @click="addToCart()"
-                        :content="false"
-                    >
-                    </base-button>
+                <base-button
+                    theme="tertiary"
+                    icon="buy"
+                    :disabled="inCart"
+                    v-if="!isOwned"
+                    @click="addToCart()"
+                    :content="false"
+                ></base-button>
                 <collection-settings v-else :collection="product.collections[0]"></collection-settings>
             </div>
             <div class="product-card__buttons">
@@ -80,7 +79,7 @@ export default class ProductCard extends Vue {
 
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
-            icon: "shop",
+            icon: "buy",
             title: this.$t("store.addedToCart"),
         });
     }
