@@ -28,6 +28,7 @@
                             v-if="extended && song.hasLyrics"
                             @click="extend"
                             icon="screen"
+                            :disabled="lyrics?.format != 'json'"
                             class="song-viewer__sidebar__buttons--advanced"
                         >
                             {{ $t("song.viewer") }}
