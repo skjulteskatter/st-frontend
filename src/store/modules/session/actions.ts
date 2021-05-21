@@ -146,8 +146,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             if (!state.initialized) {
                 await init(state, commit);
             }
-        } else {
-            await auth.sendLinkToEmail();
         }
     },
     async [SessionActionTypes.SESSION_CLEAR]({ commit }): Promise<void> {

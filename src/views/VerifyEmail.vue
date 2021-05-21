@@ -4,7 +4,8 @@
             <h1 class="not-found__title">
                 A verification link has been sent to your email.
             </h1>
-            <button @click="sendVerificationEmail" :loading="sentEmail || verificationEmailSent">Resend</button>
+            <base-button @click="sendVerificationEmail" :disabled="sentEmail || verificationEmailSent">Resend</base-button>
+            <base-button @click="$router.push({name: 'login'})">Login</base-button>
         </div>
     </div>
 </template>
@@ -13,15 +14,22 @@
 import auth from "@/services/auth";
 import { Options, Vue } from "vue-class-component";
 
+import { BaseButton } from "@/components";
+
 @Options({
     name: "verify-email",
+    components: {
+        BaseButton,
+    },
 })
 export default class VerifyEmail extends Vue {
-    public verificationEmailSent = auth.verificationEmailSent;
+    public verificationEmailSent = false;
 
     public sentEmail = false;
 
     public mounted() {
+        this.verificationEmailSent = auth.verificationEmailSent;
+
         if (auth.emailVerified) {
             this.$router.push({ name: "main" });
         }

@@ -69,6 +69,10 @@ const providers: {
 class Auth {
     private accessToken = "";
     private expiresAt = 0;
+
+    public errors = {
+        createAccount: "",
+    };
     
     public get emailVerified() {
         return a().currentUser?.emailVerified == true;
@@ -78,7 +82,22 @@ class Auth {
         return a().currentUser?.photoURL ?? "";
     }
 
-    public verificationEmailSent = false;
+
+    public get verificationEmailSent() {
+        const storage = localStorage.getItem("verified_email_at");
+        const verifiedAt = storage ? parseInt(storage) : undefined;
+
+        const diff = new Date().getTime() - (verifiedAt ?? 0);
+        if (verifiedAt && diff < 60000) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public set verificationEmailSent(value: boolean) {
+        localStorage.setItem("verified_email_at", new Date().getTime().toString());
+    }
 
     public async getProviders(email: string) {
         return await a().fetchSignInMethodsForEmail(email);
@@ -115,6 +134,23 @@ class Auth {
         }
     }
 
+    private switchCode(code: string) {
+        switch (code) {
+            case "auth/wrong-password":
+                notify("error", "Wrong Password", "warning");
+                useStore().commit(SessionMutationTypes.ERROR, "Wrong password");
+                break;
+            case "auth/too-many-requests":
+                notify("error", "Too many requests. Wait a few minutes", "warning");
+                return;
+            case "auth/email-already-in-use": 
+                notify("error", "Email already in use", "warning");
+                alert("Email already in use");
+                useStore().commit(SessionMutationTypes.ERROR, "Email already in use");
+                return;
+        }
+    }
+
     public async loginWithEmailAndPassword(email: string, password: string, stayLoggedIn: boolean) {
         if (!a) {
             notInitialized();
@@ -128,14 +164,7 @@ class Auth {
         const result = await a()
             .signInWithEmailAndPassword(email, password)
             .catch(e => {
-                switch (e.code) {
-                    case "auth/wrong-password":
-                        notify("error", "Wrong Password", "warning");
-                        useStore().commit(SessionMutationTypes.ERROR, "Wrong password");
-                        break;
-                    default:
-                        break;
-                }
+                this.switchCode(e.code);
                 return;
             }) as firebase.auth.UserCredential;
 
@@ -156,16 +185,7 @@ class Auth {
         const result = await a()
             .createUserWithEmailAndPassword(email, password)
             .catch(e => {
-                switch (e.code) {
-                    case "auth/email-already-in-use": 
-                        notify("error", "Email already in use", "warning");
-                        console.log("email in use");
-
-                        console.log(a().currentUser);
-                        break;
-                    default:
-                        console.log(e.code);
-                }
+                this.switchCode(e.code);
             });
         if (!result) return;
 
@@ -173,6 +193,12 @@ class Auth {
 
         await user?.updateProfile({
             displayName,
+        }).catch(e => {
+            switch (e.code) {
+                case "auth/too-many-requests":
+                    notify("error", "Too many requests. Wait a few minutes", "warning");
+                    return;
+            }
         });
 
         if (user) {
@@ -205,15 +231,13 @@ class Auth {
     public async sendLinkToEmail() {
         const user = a().currentUser;
 
-        if (user) {
+        if (user && !this.verificationEmailSent) {
             await user.sendEmailVerification({
                 handleCodeInApp: true,
                 url: window.origin,
             });
             this.verificationEmailSent = true;
             router.push({name: "verify-email"});
-        } else {
-            notLoggedIn();
         }
     }
 

@@ -3,6 +3,7 @@
         <base-card id="create-user-card" border>
             <div class="create-user">
                 <h2 class="create-user__title">Create account</h2>
+                <h3 v-if="error">{{error}}</h3>
                 <form @submit.prevent="submitForm" class="create-user__form gap-y">
                     <div class="create-user__form__email">
                         <!-- <label for="email">Display Name</label>
@@ -84,15 +85,18 @@ export default class Login extends Vue {
     private store = useStore();
     public creatingAccount = false;
 
+    public get error() {
+        return this.store.state.session.error;
+    }
 
-    public submitForm() {
+    public async submitForm() {
         if (
             this.form.password == this.form.repeatPassword &&
             this.form.password != "" &&
             this.form.displayName != ""
         ) {
             this.creatingAccount = true;
-            this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
+            await this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
                 email: this.form.email,
                 password: this.form.password,
                 displayName: this.form.displayName,
