@@ -4,7 +4,7 @@
             <h1 class="not-found__title">
                 A verification link has been sent to your email.
             </h1>
-            <button @click="sendVerificationEmail">Resend</button>
+            <button @click="sendVerificationEmail" :loading="sentEmail || verificationEmailSent">Resend</button>
         </div>
     </div>
 </template>
@@ -19,6 +19,8 @@ import { Options, Vue } from "vue-class-component";
 export default class VerifyEmail extends Vue {
     public verificationEmailSent = auth.verificationEmailSent;
 
+    public sentEmail = false;
+
     public mounted() {
         if (auth.emailVerified) {
             this.$router.push({ name: "main" });
@@ -26,6 +28,7 @@ export default class VerifyEmail extends Vue {
     }
 
     public async sendVerificationEmail() {
+        this.sentEmail = true;
         await auth.sendLinkToEmail();
     }
 }
