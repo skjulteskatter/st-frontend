@@ -18,10 +18,10 @@ function invalidProvider() {
     throw Error("INVALID PROVIDER");
 }
 
-function notLoggedIn() {
-    router.push({name: "login"});
-    throw Error("NOT LOGGED IN");
-}
+// function notLoggedIn() {
+//     router.push({name: "login"});
+//     throw Error("NOT LOGGED IN");
+// }
 
 firebase.initializeApp(firebaseConfig);
 
