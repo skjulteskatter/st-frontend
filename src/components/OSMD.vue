@@ -80,22 +80,22 @@ export default class OSMD extends Vue {
 
     public transpose(n: number) {
         this.transposition = n;
-        setTimeout(() => {
+        // setTimeout(() => {
             if (this.transposition == n) {
                 this.osmd.transpose(n);
             }
-        }, 500);
+        // }, 500);
     }
 
     public setZoom() {
         const n = this.zoom;
 
-        setTimeout(() => {
+        // setTimeout(() => {
             if (this.zoom == n) {
                 this.osmd.zoom = this.zoom;
                 this.osmd.rerender();
             }
-        }, 500);
+        // }, 500);
     }
 }
 </script>
