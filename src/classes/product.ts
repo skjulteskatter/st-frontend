@@ -3,8 +3,8 @@ import { BaseClass } from "./baseClass";
 import { Collection } from "./collection";
 
 export class Product extends BaseClass implements ApiProduct {
-    private _collections?: Collection[];
     public id;
+    private _collections?: Collection[];
     public prices;
     public priority;
     public collectionIds;

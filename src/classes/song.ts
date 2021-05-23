@@ -25,7 +25,11 @@ export class Song extends BaseClass implements ApiSong {
     public originalKey: string;
     public verses: number;
 
-    public origins;
+    public origins: {
+        type: "text" | "melody";
+        country: string;
+        description: LocaleString;
+    }[];
 
     public themeIds;
 
@@ -47,7 +51,7 @@ export class Song extends BaseClass implements ApiSong {
         this.id = song.id;
         this.number = song.number;
         this.name = song.name;
-        this.participants = song.participants.map(c => new Participant(c)) ?? [];
+        this.participants = song.participants?.map(c => new Participant(c)) ?? [];
         this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
         this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor ?? {} as Contributor);
         this.yearWritten = song.yearWritten;
@@ -65,7 +69,7 @@ export class Song extends BaseClass implements ApiSong {
         this.verses = song.verses;
         this.image = song.image;
 
-        this.origins = song.origins;
+        this.origins = song.origins ?? [];
 
         this.collectionIds = song.collectionIds;
         this.themeIds = song.themeIds;

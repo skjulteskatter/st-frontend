@@ -1,4 +1,5 @@
-import { Collection, getContributors } from "@/classes";
+import { Collection } from "@/classes";
+import { getContributors } from "@/functions/helpers";
 import { songs } from "@/services/api";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";

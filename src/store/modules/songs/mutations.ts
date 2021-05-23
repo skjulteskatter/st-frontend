@@ -1,4 +1,5 @@
-import { Collection, ContributorCollectionItem, Song } from "@/classes";
+import { Collection, CollectionItem, Song } from "@/classes";
+import { ApiContributor } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
@@ -8,7 +9,7 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTIONS](state: S, payload: Collection[]): void;
     [SongsMutationTypes.LANGUAGE](state: S, payload: string): void;
     [SongsMutationTypes.TRANSCODE](state: S, payload: string): void;
-    [SongsMutationTypes.CONTRIBUTOR](state: S, payload: ContributorCollectionItem | undefined): void;
+    [SongsMutationTypes.CONTRIBUTOR](state: S, payload: CollectionItem<ApiContributor> | undefined): void;
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
     [SongsMutationTypes.SET_SONG_NUMBER](state: S, payload: number | undefined): void;

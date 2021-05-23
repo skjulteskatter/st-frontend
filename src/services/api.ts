@@ -1,6 +1,5 @@
-import { Collection, Lyrics, Song } from "@/classes";
+import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 //import { CacheService } from "./cacheservice";
-import { ContributorCollectionItem } from "@/classes/collectionItems/contributorCollectionItem";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiSong, ApiTag } from "dmb-api";
@@ -88,7 +87,7 @@ export const songs = {
         return (await http.get<ApiLyrics[]>(uri)).map(l => new Lyrics(l));
     },
     async getContributor(id: string) {
-        return new ContributorCollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
+        return new CollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
     },
     async getAllContributors(lastUpdated?: string) {
         return await http.get<ApiCollectionItem<ApiContributor>[]>("api/Contributors?expand=item/biography" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));

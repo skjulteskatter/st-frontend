@@ -61,7 +61,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
-import { Collection, Song } from "@/classes";
+import { Collection, Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -130,7 +130,8 @@ export default class ContributorView extends Vue {
     }
 
     public get contributor() {
-        return this.contributorItem?.item;
+        const item = this.contributorItem?.item;
+        return item ? new Contributor(item) : undefined;
     }
 
     public get authorSongs(): Song[] {

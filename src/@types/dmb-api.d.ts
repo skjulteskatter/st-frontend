@@ -50,7 +50,7 @@ declare module "dmb-api" {
             copyright?: ApiCopyright;
         }[];
         origins: {
-            type: string;
+            type: "text" | "melody";
             country: string;
             description: LocaleString;
         }[];

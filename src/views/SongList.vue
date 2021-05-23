@@ -158,7 +158,7 @@ import { BaseCard } from "@/components";
 import { Icon } from "@/components/icon";
 
 import { Options, Vue } from "vue-class-component";
-import { Collection, Lyrics, Song } from "@/classes";
+import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 
 import {
     SongListItemNumber,
@@ -172,10 +172,6 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ApiContributor } from "dmb-api";
-import {
-    CountryCollectionItem,
-    ThemeCollectionItem,
-} from "@/classes/collectionItems";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 
@@ -346,13 +342,13 @@ export default class SongList extends Vue {
             .sort((a, b) => (a.title > b.title ? 1 : -1));
     }
 
-    public themeSongs(theme: ThemeCollectionItem) {
+    public themeSongs(theme: CollectionItem<Theme>) {
         return this.filteredSongs.filter((s: Song) =>
             theme?.songIds.includes(s.id),
         );
     }
 
-    public countrySongs(country: CountryCollectionItem) {
+    public countrySongs(country: CollectionItem<Country>) {
         return this.filteredSongs.filter((s: Song) =>
             country?.songIds.includes(s.id),
         );

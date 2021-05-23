@@ -20,6 +20,7 @@ interface Origin {
 }
 
 interface Country {
+    id: string;
     name: {
         [key: string]: string;
     };

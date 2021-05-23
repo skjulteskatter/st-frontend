@@ -1,106 +1,25 @@
 import api from "@/services/api";
-import { ApiCollection, ApiCollectionItem, ApiContributor } from "dmb-api";
-import { Lyrics, Song, ContributorCollectionItem, ThemeCollectionItem, CountryCollectionItem } from ".";
+import { ApiCollection, ApiContributor } from "dmb-api";
+import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
-// import { Converter } from "showdown";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 import { useStore } from "@/store";
-// const converter = new Converter();
-
-let contributors: ContributorCollectionItem[];
+import { CollectionItem } from "./collectionItem";
+import { getContributors } from "@/functions/helpers";
 
 type CollectionSettings = {
     offline: boolean;
     lastSynced?: string;
 }
 
-export const getContributors = async (offline: boolean) => {
-    if (contributors) {
-        return contributors;
-    }
-
-    let result: ContributorCollectionItem[] = [];
-
-    if (offline) {
-        try {
-            const key = "contributors_last_updated";
-            const lastUpdated = await cache.get("config", key) as string | undefined;
-            const updateContributors = await api.songs.getAllContributors(lastUpdated);
-
-            await cache.replaceEntries("contributors", updateContributors.reduce((a, b) => {
-                a[b.id] = b;
-                return a;
-            }, {} as {
-                [id: string]: ApiCollectionItem<ApiContributor>;
-            }));
-
-            const now = new Date();
-
-            await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
-        }
-        catch (e) {
-            notify("error", "Error occured", "warning", e);
-            result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
-        }
-        result = result.length > 0 ? result : (await cache.getAll("contributors")).map(c => new ContributorCollectionItem(c));
-    } else {
-        result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
-    }
-    // try {
-    //     try {
-    //         const key = "contributors_last_updated";
-    //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-    //         const updateContributors = await api.songs.getAllContributors(lastUpdated);
-
-    //         await cache.replaceEntries("contributors", updateContributors.reduce((a, b) => {
-    //             a[b.id] = b;
-    //             return a;
-    //         }, {} as {
-    //             [id: string]: ApiContributorCollectionItem;
-    //         }));
-
-    //         const now = new Date();
-
-    //         await cache.set("config", key, {
-    //             id: key,
-    //             value: new Date(now.getTime() - 172800).toISOString(),
-    //         });
-
-    //         const cs = await cache.getAll("contributors");
-
-    //         result = cs.map(c => new ContributorCollectionItem(c));
-    //     }
-    //     catch (e) {
-    //         if (result.length < 10) {
-    //             throw e;
-    //         }
-    //     }
-    // }
-    // catch (e) {
-    //     notify("error", "Error occured", "warning", e);
-    //     result = (await api.songs.getAllContributors()).map(c => new ContributorCollectionItem(c));
-
-    //     try {
-    //         await cache.setAll("contributors", result);
-    //     }
-    //     catch {
-    //         // eslint-disable-next-line no-console
-    //         console.log("Tried caching all contributors");
-    //     }
-    // }
-
-    contributors = result.sort((a, b) => a.item.name > b.item.name ? 1 : -1);
-
-    return contributors;
-};
-
 export class Collection extends BaseClass implements ApiCollection {
+    public id;
+
     private store = useStore();
     private _key;
     public keys: LocaleString;
     public defaultType;
-    public id;
     public available?: boolean;
     public details?: LocaleString;
     public hasChords: {
@@ -114,7 +33,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _initialized = false;
     private _loading = false;
 
-    public contributors?: ContributorCollectionItem[];
+    public contributors?: CollectionItem<ApiContributor>[];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
     
@@ -130,12 +49,13 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public loadingLyrics = false;
 
-    private _themes?: ThemeCollectionItem[];
+    private _themes?: CollectionItem<Theme>[];
     private _loadingThemes = false;
 
-    private _authors?: ContributorCollectionItem[];
-    private _composers?: ContributorCollectionItem[];
-    private _countries?: CountryCollectionItem[];
+    private _authors?: CollectionItem<ApiContributor>[];
+    private _composers?: CollectionItem<ApiContributor>[];
+
+    private _countries?: CollectionItem<Country>[];
     private _loadingCountries = false;
 
     private _currentLanguage = "";
@@ -243,7 +163,7 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
             this.hasComposers = this.hasComposers || this.songs.some(s => s.participants.some(p => p.type == "composer"));
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themes.length > 0);
-            this.hasCountries = this.hasCountries || this.songs.some(s => s.originCountry !== undefined);
+            this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
         }
     }
     
@@ -411,7 +331,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 this._loadingCountries = true;
                 const countries = await api.songs.getAllCountries(this);
 
-                this._countries = countries.map(c => new CountryCollectionItem(c));
+                this._countries = countries.map(c => new CollectionItem(c));
 
                 this._loadingCountries = false;
                 return this._countries?.length;
@@ -423,7 +343,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
                 const themes = await api.songs.getAllThemes(this);
 
-                this._themes = themes.map(t => new ThemeCollectionItem(t));
+                this._themes = themes.map(t => new CollectionItem(t));
 
                 this._loadingThemes = false;
                 return this._themes.length;
@@ -464,19 +384,19 @@ export class Collection extends BaseClass implements ApiCollection {
         }
     }
 
-    public get authors(): ContributorCollectionItem[] {
+    public get authors(): CollectionItem<ApiContributor>[] {
         return this._authors ?? [];
     }
 
-    public get composers(): ContributorCollectionItem[] {
+    public get composers(): CollectionItem<ApiContributor>[] {
         return this._composers ?? [];
     }
 
-    public get countries(): CountryCollectionItem[] {
+    public get countries(): CollectionItem<Country>[] {
         return this._countries ?? [];
     }
 
-    public get themes(): ThemeCollectionItem[] {
+    public get themes(): CollectionItem<Theme>[] {
         return this._themes ?? [];
     }
 

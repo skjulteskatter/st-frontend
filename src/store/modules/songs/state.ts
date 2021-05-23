@@ -1,4 +1,5 @@
-import { Collection, ContributorCollectionItem, Song } from "@/classes";
+import { Collection, CollectionItem, Song } from "@/classes";
+import { ApiContributor } from "dmb-api";
 
 export type State = {
     collectionId?: string;
@@ -12,7 +13,7 @@ export type State = {
     collections: Collection[];
     initialized: boolean;
     list: string;
-    contributorItem?: ContributorCollectionItem;
+    contributorItem?: CollectionItem<ApiContributor>;
     filter: SongFilter;
     audio?: AudioTrack;
     view: "transpose" | "default" | "loading";

@@ -3,13 +3,13 @@ import { Converter } from "showdown";
 const converter = new Converter();
 
 export class Contributor implements ApiContributor {
+    public id;
     public biography;
     public birthYear = 0;
-    public country = "";
-    public id = "";
-    public name = "";
-    public subtitle = "";
-    public image? = "";
+    public country;
+    public name;
+    public subtitle;
+    public image;
 
     constructor(contributor: ApiContributor) {
         this.biography = contributor.biography;
