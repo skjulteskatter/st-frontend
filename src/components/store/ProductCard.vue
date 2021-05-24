@@ -1,5 +1,5 @@
 <template>
-    <div class="product-card" v-if="product">
+    <div class="product-card" :class="{'not-bought': isAvailable}" v-if="product">
         <img
             class="product-card__image"
             :src="image"
@@ -151,6 +151,13 @@ export default class ProductCard extends Vue {
     background-color: var(--st-color-background-medium);
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid var(--st-color-secondary);
+    overflow: hidden;
+
+    &.not-bought {
+        border: 1px solid var(--st-color-error);
+    }
 
     &__buttons {
         display: flex;
