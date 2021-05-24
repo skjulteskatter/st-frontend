@@ -1,6 +1,6 @@
-import { ApiCollectionItem } from "dmb-api";
+import { ApiCollectionItem, ApiContributor } from "dmb-api";
 
-export class CollectionItem<T> implements ApiCollectionItem<T> {
+export class CollectionItem<T extends (ApiContributor | Country | Theme)> implements ApiCollectionItem<T> {
     public id;
     public item;
     public songIds;

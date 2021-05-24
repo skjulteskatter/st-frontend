@@ -88,7 +88,7 @@ class Auth {
         const verifiedAt = storage ? parseInt(storage) : undefined;
 
         const diff = new Date().getTime() - (verifiedAt ?? 0);
-        if (verifiedAt && diff < 60000) {
+        if (verifiedAt && diff < 120000) {
             return true;
         }
 
@@ -232,11 +232,11 @@ class Auth {
         const user = a().currentUser;
 
         if (user && !this.verificationEmailSent) {
+            this.verificationEmailSent = true;
             await user.sendEmailVerification({
                 handleCodeInApp: true,
                 url: window.origin,
             });
-            this.verificationEmailSent = true;
             router.push({name: "verify-email"});
         }
     }
