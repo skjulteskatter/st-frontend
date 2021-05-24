@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiSong, ApiTag } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiSong, ApiTag, IndexedSong } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -110,8 +110,8 @@ export const songs = {
      * @param language 
      * @returns 
      */
-    async searchCollections(search: string, language: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/Search/${search}?language=${language}&expand=collection,participants/contributor`)).map(s => new Song(s));
+    async searchCollections(query: string) {
+        return (await http.post<IndexedSong[], unknown>("api/Songs/Search", {query}));
     },
 };
 

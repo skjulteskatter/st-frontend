@@ -11,15 +11,9 @@
             >
                 <h2>{{ collection.collection.getName(languageKey) }}</h2>
                 <div class="complete-search__list complete-search__list-cards">
-                    <song-list-item-card
-                        v-for="song in collection.songs.slice(0, 24)"
-                        :key="song.id"
-                        :song="song"
-                        @click="
-                            selectSong(collection.collection.key, song.number)
-                        "
-                    >
-                    </song-list-item-card>
+                    <div v-for="song in songs" :key="song.id">
+                        <h3>{{localeString(song.name)}}</h3>
+                    </div>
                 </div>
             </div>
         </loader>
@@ -34,7 +28,7 @@ import { SearchInput } from "@/components/inputs";
 
 import { songs } from "@/services/api";
 import { Collection, Song } from "@/classes";
-import { ApiSong } from "dmb-api";
+import { IndexedSong } from "dmb-api";
 import { useStore } from "@/store";
 
 @Options({
@@ -49,7 +43,7 @@ export default class CompleteSearch extends Vue {
     public sessionStore = useStore();
     public loading = false;
     public searchQuery = "";
-    public songs: ApiSong[] = [];
+    public songs: IndexedSong[] = [];
 
     public mounted() {
         if (this.$route.query.q) {
@@ -63,10 +57,13 @@ export default class CompleteSearch extends Vue {
         if (this.searchQuery.length > 4) {
             this.songs = await songs.searchCollections(
                 this.searchQuery,
-                this.languageKey,
             );
         }
         this.loading = false;
+    }
+    
+    public localeString(name: LocaleString) {
+        return name[this.languageKey] ?? name.en ?? Object.values(name)[0];
     }
 
     public get songsByCollection() {
@@ -76,13 +73,13 @@ export default class CompleteSearch extends Vue {
         }[] = [];
 
         for (const song of this.songs) {
-            for (const co of song.collections ?? []) {
+            for (const co of song.collectionIds ?? []) {
                 let col = collections.find(
-                    (c) => c.collection.id == co.id,
+                    (c) => c.collection.id == co,
                 );
                 if (!col) {
                     const collection = this.collections.find(
-                        (c) => c.id == co.id,
+                        (c) => c.id == co,
                     );
                     if (collection) {
                         col = {
@@ -92,7 +89,6 @@ export default class CompleteSearch extends Vue {
                         collections.push(col);
                     }
                 }
-                col?.songs.push(new Song(song));
             }
         }
         return collections;

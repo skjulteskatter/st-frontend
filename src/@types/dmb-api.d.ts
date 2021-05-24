@@ -156,6 +156,15 @@ declare module "dmb-api" {
         id: string;
         name: LocaleString;
     }
+
+    interface IndexedSong {
+        id: string;
+        collectionIds: string[];
+        name: LocaleString;
+        yearWritten: number;
+        lyrics: LocaleString;
+        contributors: string[];
+    }
 }
 
 interface Copyright {
