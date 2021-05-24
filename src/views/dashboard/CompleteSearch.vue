@@ -28,7 +28,7 @@ import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
 import { songs } from "@/services/api";
-import { Collection, Song } from "@/classes";
+import { Collection } from "@/classes";
 import { IndexedSong } from "dmb-api";
 import { useStore } from "@/store";
 
