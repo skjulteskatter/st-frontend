@@ -4,18 +4,19 @@
             <back-button />
             <h1>{{ $t("common.search") }}</h1>
             <search-input v-model="searchQuery" @search="search" />
-            <div
+            <div class="complete-search__list complete-search__list-cards">
+                <div v-for="song in songs" :key="song.id">
+                    <small v-for="col in getCollections(song.collectionIds)" :key="col.id">{{col.getName(languageKey)}}</small>
+                    <h3>{{song.number}} {{localeString(song.name)}}</h3>
+                </div>
+            </div>
+            <!-- <div
                 v-for="collection in songsByCollection"
                 :key="collection.collection.id"
                 class="complete-search__collection"
             >
                 <h2>{{ collection.collection.getName(languageKey) }}</h2>
-                <div class="complete-search__list complete-search__list-cards">
-                    <div v-for="song in songs" :key="song.id">
-                        <h3>{{localeString(song.name)}}</h3>
-                    </div>
-                </div>
-            </div>
+            </div> -->
         </loader>
     </div>
 </template>
@@ -66,33 +67,37 @@ export default class CompleteSearch extends Vue {
         return name[this.languageKey] ?? name.en ?? Object.values(name)[0];
     }
 
-    public get songsByCollection() {
-        const collections: {
-            collection: Collection;
-            songs: Song[];
-        }[] = [];
-
-        for (const song of this.songs) {
-            for (const co of song.collectionIds ?? []) {
-                let col = collections.find(
-                    (c) => c.collection.id == co,
-                );
-                if (!col) {
-                    const collection = this.collections.find(
-                        (c) => c.id == co,
-                    );
-                    if (collection) {
-                        col = {
-                            collection: collection,
-                            songs: [],
-                        };
-                        collections.push(col);
-                    }
-                }
-            }
-        }
-        return collections;
+    public getCollections(ids: string[]) {
+        return this.collections.filter(c => ids.includes(c.id));
     }
+
+    // public get songsByCollection() {
+    //     const collections: {
+    //         collection: Collection;
+    //         songs: Song[];
+    //     }[] = [];
+
+    //     for (const song of this.songs) {
+    //         for (const co of song.collectionIds ?? []) {
+    //             let col = collections.find(
+    //                 (c) => c.collection.id == co,
+    //             );
+    //             if (!col) {
+    //                 const collection = this.collections.find(
+    //                     (c) => c.id == co,
+    //                 );
+    //                 if (collection) {
+    //                     col = {
+    //                         collection: collection,
+    //                         songs: [],
+    //                     };
+    //                     collections.push(col);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return collections;
+    // }
 
     public get collections(): Collection[] {
         return this.sessionStore.getters.collections;

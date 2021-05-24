@@ -159,6 +159,7 @@ declare module "dmb-api" {
 
     interface IndexedSong {
         id: string;
+        number: number;
         collectionIds: string[];
         name: LocaleString;
         yearWritten: number;
