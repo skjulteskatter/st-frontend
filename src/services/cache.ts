@@ -97,7 +97,7 @@ class CacheService {
     }
 
     public async setAll<S extends Store>(store: S, entries: Entry<S>[]): Promise<void> {
-        const tx = await this.tx(store);
+        const tx = await this.tx(store, true);
 
         for (const e of entries) {
             let key = (e as {

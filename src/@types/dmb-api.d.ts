@@ -123,7 +123,6 @@ declare module "dmb-api" {
         addedAt: string;
         addedById: string;
         songId: string;
-        song?: ApiSong;
     }
 
     interface ApiTag {

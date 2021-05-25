@@ -7,17 +7,17 @@
                     name: 'song',
                     params: {
                         collection: collection?.key,
-                        number: entry.song?.number,
+                        number: song?.number,
                     },
                 }"
             >
                 <div class="playlist-song-card__info">
                     <span>
-                        {{ getEntryName(entry) }}
+                        {{ entryName }}
                     </span>
                     <small class="playlist-song-card__collection">
                         {{ collection?.getName(languageKey) }}
-                        {{ entry.song?.number }}
+                        {{ song?.number }}
                     </small>
                 </div>
             </router-link>
@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { ApiPlaylist, ApiPlaylistEntry, ApiSong } from "dmb-api";
+import { ApiPlaylist, ApiPlaylistEntry } from "dmb-api";
 import { BaseCard } from "@/components";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
@@ -62,6 +62,9 @@ export default class PlaylistSongCard extends Vue {
     public playlist: ApiPlaylist = {} as ApiPlaylist;
 
     public async removeFromPlaylist() {
+        const title = this.$t("playlist.removed");
+        const content = this.$t("playlist.removedsong");
+
         await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
             playlistId: this.playlist.id,
             entryId: this.entry.id,
@@ -70,8 +73,8 @@ export default class PlaylistSongCard extends Vue {
         this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
             type: "success",
             icon: "trash",
-            title: this.$t("playlist.removed"),
-            content: this.$t("notification.removedsong"),
+            title,
+            content,
         });
     }
 
@@ -79,14 +82,16 @@ export default class PlaylistSongCard extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get collection() {
-        return this.store.state.session.collections.find(
-            (c) => this.entry.song?.collectionIds.some(col => col == c.id),
-        );
+    public get song() {
+        return this.store.state.songs.songs.find(s => s.id == this.entry.songId);
     }
 
-    public getEntryName(entry: ApiPlaylistEntry) {
-        return new Song(entry.song as ApiSong).getName(this.languageKey);
+    public get collection() {
+        return this.store.state.session.collections.find(c => this.song?.collectionIds.includes(c.id));
+    }
+
+    public get entryName() {
+        return this.song ? new Song(this.song).getName(this.languageKey) : "";
     }
 }
 </script>
