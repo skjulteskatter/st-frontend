@@ -1,14 +1,14 @@
 <template>
     <base-card class="song-list__item-card clickable">
         <div class="song-list__item-card__wrapper gap-x" v-if="song">
-            <small v-for="c in collections" :key="c.id">{{c.getName(languageKey)}}</small>
             <b class="song-list__item-card__number">{{ song.number }}</b>
             <div class="song-list__item-card__body">
                 <b class="song-list__item-card__title">{{
                     getName(song.name)
                 }}</b>
+                <small class="song-list__item-card__collection" v-for="c in collections" :key="c.id">{{c.getName(languageKey)}}</small>
                 <small class="song-list__item-card__info">
-                    <span class="tag">{{ song.yearWritten }}</span>
+                    <span class="tag" v-if="song.yearWritten">{{ song.yearWritten }}</span>
                     <!-- <span>{{ song.originalKey }}</span> -->
                 </small>
                 <div class="song-list__item-card__contributors">
@@ -64,6 +64,12 @@ export default class SongListItemCard extends Vue {
 
 <style lang="scss">
 .song-list__item-card {
+    &__collection {
+        color: var(--st-color-primary);
+        font-size: .7em;
+        display: block;
+    }
+
     &__wrapper {
         display: flex;
     }

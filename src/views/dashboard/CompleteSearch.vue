@@ -3,7 +3,7 @@
         <loader :loading="loading">
             <back-button />
             <h1>{{ $t("common.search") }}</h1>
-            <search-input v-model="searchQuery" @search="search" />
+            <search-input v-model="searchQuery" @search="search" class="complete-search__input" />
             <div class="complete-search__list complete-search__list-cards">
                 <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
             </div>
@@ -147,13 +147,15 @@ export default class CompleteSearch extends Vue {
         padding: var(--st-spacing);
     }
 
+    &__input {
+        margin-bottom: var(--st-spacing);
+    }
+
     &__collection {
         margin-top: 2rem;
     }
 
     &__list {
-        display: flex;
-        flex-direction: column;
 
         &-cards {
             display: grid;
