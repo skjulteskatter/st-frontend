@@ -19,6 +19,7 @@
     "isomorphic-fetch": "^3.0.0",
     "jszip": "^3.6.0",
     "less-loader": "^7.3.0",
+    "opensheetmusicdisplay": "^1.0.0",
     "plyr": "^3.6.7",
     "showdown": "^1.9.1",
     "vue": "^3.0.11",
