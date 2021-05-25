@@ -1,4 +1,3 @@
-import { Collection } from "@/classes";
 import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
@@ -12,9 +11,6 @@ export type Mutations<S = State> = {
 
     [SessionMutationTypes.SET_LOG_ITEMS](state: S, payload: ApiActivity[]): void;
     [SessionMutationTypes.CLEAR_LOGS](state: S): void;
-
-    [SessionMutationTypes.COLLECTION](state: S, payload: Collection): void;
-    [SessionMutationTypes.COLLECTIONS](state: S, payload: Collection[]): void;
 
     [SessionMutationTypes.SET_PLAYLISTS](state: S, payload: ApiPlaylist[]): void;
     [SessionMutationTypes.SET_PLAYLIST](state: S, payload: ApiPlaylist): void;
@@ -66,18 +62,6 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SessionMutationTypes.CLEAR_LOGS](state): void {
         state.activities = [];
-    },
-    [SessionMutationTypes.COLLECTION](state, collection: Collection): void {
-        const c = state.collections.find(c => c.id == collection.id);
-
-        if (c) {
-            state.collections[state.collections.indexOf(c)] = collection;
-        } else {
-            state.collections.push(collection);
-        }
-    },
-    [SessionMutationTypes.COLLECTIONS](state, collections: Collection[]): void {
-        state.collections = collections;
     },
     [SessionMutationTypes.SET_PLAYLISTS](state, playlists: ApiPlaylist[]): void {
         state.playlists = playlists;

@@ -83,6 +83,7 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -120,7 +121,7 @@ export default class Subscriptions extends Vue {
     }
 
     public get collections() {
-        return this.store.state.session.collections;
+        return appSession.collections;
     }
 
     public get isAdmin(): boolean {

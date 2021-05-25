@@ -44,6 +44,7 @@ import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -95,7 +96,7 @@ export default class StoreItem extends Vue {
     }
 
     public get collections() {
-        return this.store.state.session.collections.filter((c) =>
+        return appSession.collections.filter((c) =>
             this.product?.collectionIds.includes(c.id),
         );
     }

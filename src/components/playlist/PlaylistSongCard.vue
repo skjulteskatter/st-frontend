@@ -39,6 +39,7 @@ import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { appSession } from "@/services/session";
 
 @Options({
     name: "playlist-song-card",
@@ -83,11 +84,11 @@ export default class PlaylistSongCard extends Vue {
     }
 
     public get song() {
-        return this.store.state.songs.songs.find(s => s.id == this.entry.songId);
+        return appSession.songs.find(s => s.id == this.entry.songId);
     }
 
     public get collection() {
-        return this.store.state.session.collections.find(c => this.song?.collectionIds.includes(c.id));
+        return appSession.collections.find(c => this.song?.collectionIds.includes(c.id));
     }
 
     public get entryName() {

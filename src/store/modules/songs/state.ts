@@ -5,7 +5,6 @@ export type State = {
     collectionId?: string;
     language: string;
     transcode: string;
-    songs: Song[];
     song?: Song;
     songNumber?: number;
     transposition?: number;
@@ -25,7 +24,6 @@ export type State = {
 
 export const state: State = {
     collections: [],
-    songs: [],
     verses: [],
     lines: [],
     initialized: false,

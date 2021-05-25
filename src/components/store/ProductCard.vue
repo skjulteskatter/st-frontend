@@ -53,6 +53,7 @@ import CollectionSettings from "../CollectionSettings.vue";
 import { Icon } from "@/components/icon";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -136,7 +137,7 @@ export default class ProductCard extends Vue {
     }
 
     public get collection() {
-        return this.store.state.session.collections.find(
+        return appSession.collections.find(
             (c) => c.id == this.product?.collectionIds[0],
         );
     }

@@ -18,6 +18,7 @@
             </main>
             <!-- <feedback-form></feedback-form> -->
         </div>
+        <!-- <loader :loading="!(user && initialized)" position="global"></loader> -->
     </div>
 </template>
 <script lang="ts">
@@ -28,12 +29,15 @@ import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
+import { appSession } from "@/services/session";
+import { Loader } from "@/components";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
         FeedbackForm,
+        Loader,
     },
     name: "dashboard-layout",
 })
@@ -41,6 +45,8 @@ export default class DashboardLayout extends Vue {
     public store = useStore();
 
     async mounted() {
+        await appSession.init();
+
         document.documentElement.style.setProperty(
             "--st-color-primary",
             themes.default,
@@ -53,6 +59,10 @@ export default class DashboardLayout extends Vue {
 
     public get user() {
         return this.store.getters.user;
+    }
+
+    public get initialized() {
+        return appSession.initialized;
     }
     // public get isAdmin() {
     //     return this.store.getters..isAdmin;

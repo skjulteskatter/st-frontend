@@ -4,6 +4,7 @@ import { GetterTree } from "vuex";
 import { State } from "./state";
 import { ApiActivity, ApiContributor, ApiPlaylist, ApiSong } from "dmb-api";
 import { Activity } from "@/classes/activity";
+import { appSession } from "@/services/session";
 
 
 export type Getters = {
@@ -19,12 +20,12 @@ export type Getters = {
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
-    allCollections(state): Collection[] {
-        return state.collections;
+    allCollections(): Collection[] {
+        return appSession.collections;
     },
     collections(state): Collection[] {
         if (state.currentUser) {
-            return state.collections;
+            return appSession.collections;
             // if (state.currentUser.roles.some(r => ["administrator", "extended"].includes(r))) {
             //     return state.collections;
             // }

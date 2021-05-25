@@ -18,6 +18,7 @@
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, CollectionCard } from "@/components";
+import { appSession } from "@/services/session";
 
 @Options({
     name: "recent-collections",
@@ -30,7 +31,7 @@ export default class RecentCollections extends Vue {
     private store = useStore();
 
     public get collections() {
-        return this.store.state.session.collections;
+        return appSession.collections;
     }
 
     public get activities() {

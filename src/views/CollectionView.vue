@@ -29,7 +29,6 @@ export default class Store extends Vue {
             this.loading = true;
             await this.store.dispatch(
                 StripeActionTypes.SETUP,
-                this.store.state.session.collections,
             );
             this.loading = false;
         }

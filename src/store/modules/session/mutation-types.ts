@@ -7,8 +7,8 @@ export enum SessionMutationTypes {
 
     INITIALIZED = "INITIALIZED",
 
-    COLLECTIONS = "COLLECTIONS",
-    COLLECTION = "COLLECTION",
+    // COLLECTIONS = "COLLECTIONS",
+    // COLLECTION = "COLLECTION",
 
     SET_TAGS = "SET_TAGS",
     SET_TAG = "SET_TAG",

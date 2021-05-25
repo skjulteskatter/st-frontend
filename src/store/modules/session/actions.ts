@@ -4,13 +4,13 @@ import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
 import { ApiActivity, ApiContributor, ApiSong, ApiTag } from "dmb-api";
-import { ActionContext, ActionTree, Commit, Dispatch } from "vuex";
+import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";
 import { Mutations } from "./mutations";
 import { State } from "./state";
 import { SongsMutationTypes } from "../songs/mutation-types";
-import { SongsActionTypes } from "../songs/action-types";
+import { appSession } from "@/services/session";
 
 
 
@@ -31,7 +31,7 @@ const ts: {
     "B": 1,
 };
 
-async function init(state: State, commit: Commit, dispatch: Dispatch): Promise<void> {
+async function init(state: State, commit: Commit): Promise<void> {
     const user = await api.session.getCurrentUser();
     if (user) {
         user.displayName = auth.user?.displayName ?? user.displayName;
@@ -60,10 +60,7 @@ async function init(state: State, commit: Commit, dispatch: Dispatch): Promise<v
     try {
         const languages = await api.items.getLanguages();
         commit(SessionMutationTypes.SET_LANGUAGES, languages);
-        const collections = await api.songs.getCollections();
-        commit(SessionMutationTypes.COLLECTIONS, collections);
-
-        
+        await appSession.init();
     } catch (e) {
         //console.log(e);
     }
@@ -71,8 +68,6 @@ async function init(state: State, commit: Commit, dispatch: Dispatch): Promise<v
         router.push(state.redirect ?? "/");
     }
     await ensureLanguageIsFetched();
-
-    await dispatch(SongsActionTypes.INIT);
 
     commit(SessionMutationTypes.INITIALIZED);
     // commit(SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION, smTs[user.settings?.defaultTransposition ?? "C"]);
@@ -144,10 +139,10 @@ export interface Actions {
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
-    async [SessionActionTypes.SESSION_START]({state, commit, dispatch}): Promise<void> {
+    async [SessionActionTypes.SESSION_START]({state, commit}): Promise<void> {
         if (auth.isAuthenticated) {
             if (!state.initialized) {
-                await init(state, commit, dispatch);
+                await init(state, commit);
             }
         }
     },
@@ -155,20 +150,20 @@ export const actions: ActionTree<State, RootState> & Actions = {
         await auth.logout();
         commit(SessionMutationTypes.CLEAR_SESSION, undefined);
     },
-    async [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit, dispatch }, provider): Promise<void> {
+    async [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit }, provider): Promise<void> {
         await auth.login(provider);
 
         if (auth.isAuthenticated) {
-            await init(state, commit, dispatch);
+            await init(state, commit);
         } else {
             await auth.sendLinkToEmail();
         }
     },
-    async [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ state, commit, dispatch }, obj): Promise<void> {
+    async [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ state, commit }, obj): Promise<void> {
         await auth.loginWithEmailAndPassword(obj.email, obj.password, obj.stayLoggedIn);
 
         if (auth.isAuthenticated) {
-            await init(state, commit, dispatch);
+            await init(state, commit);
         } else {
             await auth.sendLinkToEmail();
         }

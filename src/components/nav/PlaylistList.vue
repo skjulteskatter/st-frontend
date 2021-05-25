@@ -31,6 +31,7 @@ import { Collection } from "@/classes";
 import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 
 @Options({
     name: "playlist-list",
@@ -39,7 +40,7 @@ export default class CollectionList extends Vue {
     private store = useStore();
 
     public get collections(): Collection[] {
-        return this.store.state.session.collections;
+        return appSession.collections;
     }
 
     public get playlists(): ApiPlaylist[] {

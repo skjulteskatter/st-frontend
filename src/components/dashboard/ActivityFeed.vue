@@ -39,6 +39,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
 import { BaseCard } from "@/components";
+import { appSession } from "@/services/session";
 
 @Options({
     name: "activity-feed",
@@ -54,7 +55,7 @@ export default class ActivityFeed extends Vue {
     }
 
     public get collections() {
-        return this.store.state.session.collections;
+        return appSession.collections;
     }
 
     public get activitiesInitialized() {

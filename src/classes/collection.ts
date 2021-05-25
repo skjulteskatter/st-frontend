@@ -7,6 +7,7 @@ import { notify } from "@/services/notify";
 import { useStore } from "@/store";
 import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
+import { appSession } from "@/services/session";
 
 type CollectionSettings = {
     offline: boolean;
@@ -38,11 +39,8 @@ export class Collection extends BaseClass implements ApiCollection {
     public lyrics: Lyrics[] = [];
     
     public hasAuthors = false;
-
     public hasComposers = false;
-
     public hasCountries = false;
-
     public hasThemes = false;
 
     public themeTypes: Theme[] = [];
@@ -94,7 +92,9 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
 
-            this.songs = this.store.state.songs.songs.filter(s => s.collectionIds.includes(this.id));
+            await appSession.init();
+
+            this.songs = appSession.songs.filter(s => s.collectionIds.some(c => this.id == c));
 
             // if (this.settings?.offline) {
             //     if (navigator.onLine) {
