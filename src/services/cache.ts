@@ -1,9 +1,9 @@
-import { Lyrics, Song } from "@/classes";
-import { ApiCollectionItem, ApiContributor } from "dmb-api";
+import { Lyrics } from "@/classes";
+import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile } from "dmb-api";
 import { openDB } from "idb";
 
 type StoreTypes = {
-    songs: Song;
+    songs: ApiSong;
     contributors: ApiCollectionItem<ApiContributor>;
     lyrics: Lyrics;
     config: string | number | boolean | undefined;
@@ -11,9 +11,10 @@ type StoreTypes = {
         id: string;
         value: unknown;
     };
+    files: MediaFile;
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -26,7 +27,7 @@ class CacheService {
         "config",
         "items",
     ];
-    private version = 13;
+    private version = 14;
 
     public db() {
         const v = this.version;
@@ -87,9 +88,7 @@ class CacheService {
 
         await tx.done;
 
-        if (store == "songs") {
-            return result.map(s => new Song(s)) as Entry<S>[];
-        } else if (store == "lyrics") {
+        if (store == "lyrics") {
             return result.map(l => new Lyrics(l)) as Entry<S>[];
         } else if (store == "contributors") {
             return result as Entry<S>[];

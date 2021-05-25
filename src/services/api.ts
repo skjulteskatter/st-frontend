@@ -1,4 +1,4 @@
-import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
+import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
@@ -76,8 +76,11 @@ export const songs = {
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
-    async getAllSongs(collection: ApiCollection, lastUpdated?: string) {
-        return (await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""))).map(s => new Song(s));
+    async getAllSongs(lastUpdated?: string) {
+        return await http.get<ApiSong[]>("api/Songs?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+    },
+    async getSongs(collection: ApiCollection, lastUpdated?: string) {
+        return await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
@@ -110,8 +113,8 @@ export const songs = {
      * @param language 
      * @returns 
      */
-    async searchCollections(query: string) {
-        return (await http.post<IndexedSong[], unknown>("api/Songs/Search", {query}));
+    async searchCollections(query: string, collectionId?: string) {
+        return (await http.post<IndexedSong[], unknown>("api/Songs/Search", {query, collectionId}));
     },
 };
 
