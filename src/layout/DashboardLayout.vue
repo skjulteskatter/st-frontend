@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-layout">
-        <div class="dashboard-layout__wrapper" v-if="user">
+        <div class="dashboard-layout__wrapper" v-if="user && initialized">
             <the-navbar></the-navbar>
             <main class="dashboard-layout__body">
                 <div class="dashboard-layout__body__container">
@@ -44,6 +44,10 @@ import { Loader } from "@/components";
 export default class DashboardLayout extends Vue {
     public store = useStore();
 
+    public get initialized() {
+        return appSession.initialized;
+    }
+
     async mounted() {
         await appSession.init();
 
@@ -61,9 +65,6 @@ export default class DashboardLayout extends Vue {
         return this.store.getters.user;
     }
 
-    public get initialized() {
-        return appSession.initialized;
-    }
     // public get isAdmin() {
     //     return this.store.getters..isAdmin;
     // }

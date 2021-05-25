@@ -1,30 +1,27 @@
 import { Collection, Song } from "@/classes";
 import { ApiSong } from "dmb-api";
-import { ref } from "vue";
 import { songs } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
-let initialized: boolean | undefined;
-
 export class Session {
-    private _initialized = ref(initialized);
+    private _initialized?: boolean;
     public songs: Song[] = [];
     public collections: Collection[] = [];
 
     public get initialized() {
-        return this._initialized.value == true;
+        return this._initialized == true;
     }
 
     public async init() {
-        if (this._initialized.value == false) {
-            while(this._initialized.value == false) {
+        if (this._initialized == false) {
+            while(this._initialized == false) {
                 await new Promise(r => setTimeout(r, 100));
             }
             return;
         }
 
-        this._initialized.value = false;
+        this._initialized = false;
         this.collections = (await songs.getCollections()).map(c => new Collection(c));
         
         const offline = (await cache.get("config", "offline")) == true;
@@ -60,7 +57,7 @@ export class Session {
         } else {
             this.songs = (await songs.getAllSongs()).map(s => new Song(s));
         }
-        this._initialized.value = true;
+        this._initialized = true;
     }
 }
 
