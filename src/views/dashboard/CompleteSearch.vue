@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton, BaseCard } from "@/components";
+import { BackButton } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput, SearchResultItem } from "@/components/inputs";
 
@@ -29,7 +29,6 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
         SearchInput,
         SearchResultItem,
         BackButton,
-        BaseCard,
     },
     name: "complete-search",
 })
