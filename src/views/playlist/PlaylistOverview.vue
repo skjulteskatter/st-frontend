@@ -29,8 +29,6 @@ import { ApiPlaylist } from "dmb-api";
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 
 @Options({
     name: "playlist-overview",

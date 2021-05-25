@@ -30,25 +30,28 @@ export interface Actions {
 export const actions: ActionTree<State, RootState> & Actions = {
     async [SongsActionTypes.INIT]({commit}) {
         let s: Song[] = [];
-        const offline = (await cache.get("config", "offline")) == "true";
+        const offline = (await cache.get("config", "offline")) == true;
         
         if (offline) {
             if (navigator.onLine) {
                 try {
                     const key = "last_updated_songs";
                     const lastUpdated = await cache.get("config", key) as string | undefined;
-                    const updateSongs = await songs.getAllSongs(lastUpdated);
-    
-                    await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: ApiSong;
-                    }));
-    
+
                     const now = new Date();
+
+                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
+                        const updateSongs = await songs.getAllSongs(lastUpdated);
     
-                    await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
+                        await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                            a[b.id] = b;
+                            return a;
+                        }, {} as {
+                            [id: string]: ApiSong;
+                        }));
+        
+                        await cache.set("config", key, now.toISOString());
+                    }
                 }
                 catch(e) {
                     notify("error", "Error occured", "warning", e);

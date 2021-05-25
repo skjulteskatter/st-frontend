@@ -22,6 +22,17 @@
                     </option>
                 </select>
             </div>
+            <div class="user-settings__offline field gap-x">
+                <label for="offline-mode">{{ $t("common.offline") }}</label>
+                <hr />
+                <input
+                    type="checkbox"
+                    name="offline-mode"
+                    id="offline-mode"
+                    v-model="offline"
+                    @change="setOffline()"
+                />
+            </div>
             <div class="user-settings__language field gap-x">
                 <label for="language">{{ $t("common.language") }}</label>
                 <hr />
@@ -140,6 +151,7 @@ export default class SettingsCard extends Vue {
     public store = useStore();
     public themes: Themes = themes;
     public newDisplayName = "";
+    public offline = false;
     public transpositions = [
         "Ab",
         "A",
@@ -173,7 +185,7 @@ export default class SettingsCard extends Vue {
 
     public loading = false;
 
-    public mounted() {
+    public async mounted() {
         this.selectedLanguage =
             this.languages.find(
                 (l) => l.key == this.user?.settings?.languageKey,
@@ -185,6 +197,8 @@ export default class SettingsCard extends Vue {
 
         this.selectedTranscode =
             this.user?.settings?.defaultTranscode ?? "common";
+        
+        this.offline = await cache.get("config", "offline") == true;
     }
 
     public async save() {
@@ -203,6 +217,10 @@ export default class SettingsCard extends Vue {
             icon: "check",
         });
         this.loading = false;
+    }
+
+    public setOffline() {
+        cache.set("config", "offline", this.offline);
     }
 
     public handleImage(e: InputEvent) {
