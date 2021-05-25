@@ -62,6 +62,7 @@
                     v-if="['composers', 'authors'].includes(listType)"
                 >
                     <song-list-card
+                        :collection="collection"
                         v-for="ci in collection.getContributors(listType)"
                         :key="ci.item.id"
                         :songs="
@@ -80,6 +81,7 @@
                 >
                     <song-list-card
                         v-for="theme in collection.themes"
+                        :collection="collection"
                         :key="theme.item.id"
                         :songs="
                             filteredSongs.filter((s) =>
@@ -96,6 +98,7 @@
                 >
                     <song-list-card
                         v-for="country in collection.countries"
+                        :collection="collection"
                         :key="country?.item.countryCode ?? Math.random()"
                         :songs="
                             filteredSongs.filter((s) =>
@@ -112,6 +115,7 @@
                 >
                     <song-list-card
                         v-for="s in songsByNumber"
+                        :collection="collection"
                         :key="s?.title ?? Math.random()"
                         :songs="s?.songs ?? []"
                         :title="s?.title ?? ''"
@@ -125,6 +129,7 @@
                 >
                     <song-list-card
                         v-for="s in songsByTitle"
+                        :collection="collection"
                         :key="s?.title ?? Math.random()"
                         :songs="s?.songs ?? []"
                         :title="s?.title ?? ''"

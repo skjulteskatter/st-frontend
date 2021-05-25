@@ -38,7 +38,7 @@
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
 import { Icon } from "@/components/icon";
-import { Song } from "@/classes";
+import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 
 @Options({
@@ -60,6 +60,9 @@ import { useStore } from "@/store";
         action: {
             type: Function,
         },
+        collection: {
+            type: Object,
+        },
     },
     name: "song-list-card",
 })
@@ -69,10 +72,7 @@ export default class SongListCard extends Vue {
     public title = "";
     public count?: boolean;
     public action?: Function;
-
-    public get collection() {
-        return this.store.getters.collection;
-    }
+    public collection?: Collection;
 
     public get languageKey() {
         return this.store.getters.languageKey;
