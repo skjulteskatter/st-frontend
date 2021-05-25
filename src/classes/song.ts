@@ -4,6 +4,7 @@ import { Contributor } from "./contributor";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
+import i18n from "@/i18n";
 const converter = new Converter();
 
 export enum SheetMusicTypes {
@@ -129,7 +130,8 @@ export class Song extends BaseClass implements ApiSong {
     }
 
     public get originCountry() {
-        return this.origins.find(o => o.type == "text")?.country;
+        const country = this.origins.find(o => o.type == "text")?.country;
+        return country ? i18n.global.t(country.toUpperCase()) : undefined;
     }
 
     public get melodyOrigin() {
