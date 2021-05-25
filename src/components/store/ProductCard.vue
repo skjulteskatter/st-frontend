@@ -32,8 +32,8 @@
                 </base-button>
                 <base-button
                     class="product-card__button"
-                    icon="info"
                     theme="tertiary"
+                    style="border: none"
                     @click="goToItem"
                 >
                     {{ $t("store.readmore") }}
@@ -178,10 +178,6 @@ export default class ProductCard extends Vue {
         object-fit: cover;
         transition: transform 150ms;
         cursor: pointer;
-
-        // &:hover {
-        //     transform: scale(1.02);
-        // }
     }
 
     &__footer {
@@ -192,6 +188,7 @@ export default class ProductCard extends Vue {
         flex-direction: column;
         background: var(--st-color-background-light);
         flex-grow: 1;
+        box-shadow: 0 -5px 20px rgba(black, .1);
     }
 
     &__title {
