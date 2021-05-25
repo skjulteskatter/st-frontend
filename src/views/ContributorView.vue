@@ -85,10 +85,6 @@ export default class ContributorView extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public created() {
-        console.log(this.portrait);
-    }
-
     public async beforeMount() {
         this.loading = true;
 
