@@ -33,6 +33,7 @@
                     <h2>{{ c.getName(languageKey) }}</h2>
                     <div class="contributor__songs__wrapper">
                         <song-list-card
+                            :collection="c"
                             :title="$t('song.author')"
                             :songs="
                                 authorSongs.filter((s) =>
@@ -42,6 +43,7 @@
                             border
                         ></song-list-card>
                         <song-list-card
+                            :collection="c"
                             :title="$t('song.composer')"
                             :songs="
                                 composerSongs.filter((s) =>
@@ -65,7 +67,7 @@ import { Collection, Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import api from "@/services/api";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -93,9 +95,7 @@ export default class ContributorView extends Vue {
             this.$route.params.contributor as string,
         );
 
-        const allSongs = this.contributor ? (await api.songs.getContributor(this.contributor.id)).songs ?? [] : [];
-
-        this.songs = allSongs.map(s => new Song(s));
+        this.songs = appSession.songs.filter(s => s.participants.some(c => c.contributorId == this.contributor?.id));
 
         if (this.contributor?.image) {
             const image = new Image();

@@ -30,7 +30,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
 		Modal,
 		BaseButton,
 		BaseInput,
-	}
+	},
 })
 export default class CreatePlaylistModal extends Vue {
 	private store = useStore();

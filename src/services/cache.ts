@@ -1,6 +1,7 @@
 import { Lyrics } from "@/classes";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile } from "dmb-api";
 import { openDB } from "idb";
+import { Notification } from "./notifications";
 
 type StoreTypes = {
     songs: ApiSong;
@@ -12,9 +13,10 @@ type StoreTypes = {
         value: unknown;
     };
     files: MediaFile;
+    notifications: Notification;
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -26,8 +28,9 @@ class CacheService {
         "lyrics",
         "config",
         "items",
+        "notifications",
     ];
-    private version = 14;
+    private version = 15;
 
     public db() {
         const v = this.version;
