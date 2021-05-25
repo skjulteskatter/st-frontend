@@ -14,7 +14,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BackButton } from "@/components";
-import { SongListItemCard } from "@/components/songs";
 import { SearchInput, SearchResultItem } from "@/components/inputs";
 
 import { songs } from "@/services/api";
@@ -25,7 +24,6 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     components: {
-        SongListItemCard,
         SearchInput,
         SearchResultItem,
         BackButton,
