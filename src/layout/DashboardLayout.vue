@@ -49,8 +49,6 @@ export default class DashboardLayout extends Vue {
     }
 
     async mounted() {
-        await appSession.init();
-
         document.documentElement.style.setProperty(
             "--st-color-primary",
             themes.default,
@@ -59,6 +57,7 @@ export default class DashboardLayout extends Vue {
         if (!this.user) {
             this.$router.push({ name: "login" });
         }
+        await appSession.init();
     }
 
     public get user() {

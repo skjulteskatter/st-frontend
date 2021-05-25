@@ -1,9 +1,18 @@
 /* eslint-disable */
-import { BasicAudioPlayer, ControlPanel, IAudioMetronomePlayer, IMessageViewer, LinearTimingSource, OpenSheetMusicDisplay, PlaybackManager, TransposeCalculator } from "dmb-osmd";
-const timingSource = new LinearTimingSource();
-const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
-playbackManager.DoPlayback = true;
-playbackManager.DoPreCount = false;
+import { 
+    BasicAudioPlayer, 
+    ControlPanel, 
+    // IAudioMetronomePlayer, 
+    // IMessageViewer, 
+    // LinearTimingSource, 
+    OpenSheetMusicDisplay, 
+    // PlaybackManager, 
+    TransposeCalculator 
+} from "dmb-osmd";
+// const timingSource = new LinearTimingSource();
+// const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
+// playbackManager.DoPlayback = true;
+// playbackManager.DoPreCount = false;
 
 class OSMD {
     private initialized = false;
@@ -16,12 +25,12 @@ class OSMD {
     public zoom = 1;
     public createdDone = false;
     public loading = false;
-    public playing = false;
+    // public playing = false;
 
-    private controlPanel: ControlPanel = {} as ControlPanel;
-    private timingSource = timingSource;
+    // private controlPanel: ControlPanel = {} as ControlPanel;
+    // private timingSource = timingSource;
     // private playbackManagerCreator = () => new PlaybackManager(this.timingSource, undefined as unknown as IAudioMetronomePlayer, this.audioPlayer, undefined as unknown as IMessageViewer);
-    private playbackManager = {} as PlaybackManager;
+    // private playbackManager = {} as PlaybackManager;
 
     constructor() {
         this.zoom = this.initialZoom != undefined ? this.initialZoom : window.innerWidth < 900 ? 0.4 : this.zoom;
@@ -96,44 +105,44 @@ class OSMD {
                 //pageFormat: "A4 P"
             });
 
-            this.playbackManager = new PlaybackManager(this.timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
+            // this.playbackManager = new PlaybackManager(this.timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
 
-            this.playbackManager.DoPlayback = true;
-            this.playbackManager.DoPreCount = false;
+            // this.playbackManager.DoPlayback = true;
+            // this.playbackManager.DoPreCount = false;
 
-            this.controlPanel = new ControlPanel(this.pbcanvas);
-            const o = this.osmd;
+            // this.controlPanel = new ControlPanel(this.pbcanvas);
+            // const o = this.osmd;
 
-            const playbackListener = {
-                async play() {
-                    console.log("PLAY");
-                    o.FollowCursor = true;
-                    o.cursor.cursorElement.style.zIndex = "100";
-                },
-                async pause() {
-                    console.log("pause");
-                },
-                async reset() {
-                    console.log("reset");
-                },
-                async bpmChanged() {
-                    console.log("bpm");
-                },
-                async volumeChanged() {
-                    console.log("volume");
-                },
-                async volumeMute() {
-                    console.log("volume");
-                },
-                async volumeUnmute() {
-                    console.log("volume");
-                }
-            }
+            // const playbackListener = {
+            //     async play() {
+            //         console.log("PLAY");
+            //         o.FollowCursor = true;
+            //         o.cursor.cursorElement.style.zIndex = "100";
+            //     },
+            //     async pause() {
+            //         console.log("pause");
+            //     },
+            //     async reset() {
+            //         console.log("reset");
+            //     },
+            //     async bpmChanged() {
+            //         console.log("bpm");
+            //     },
+            //     async volumeChanged() {
+            //         console.log("volume");
+            //     },
+            //     async volumeMute() {
+            //         console.log("volume");
+            //     },
+            //     async volumeUnmute() {
+            //         console.log("volume");
+            //     }
+            // }
 
-            this.controlPanel.addListener(playbackListener);
-            this.controlPanel.addListener(this.playbackManager);
+            // this.controlPanel.addListener(playbackListener);
+            // this.controlPanel.addListener(this.playbackManager);
 
-            console.log("INITIALIZED OSMD");
+            // console.log("INITIALIZED OSMD");
 
             this.initialized = true;
 
@@ -169,15 +178,17 @@ class OSMD {
 
         this.osmd.render();
         
-        this.osmd.enableOrDisableCursors(true);
+        // this.osmd.enableOrDisableCursors(true);
         
-        this.osmd.cursor.reset();
+        // this.osmd.cursor.reset();
 
         (window as any).osmd = this.osmd;
 
-        await this.loadPlaybackManager();
+        // await this.loadPlaybackManager();
 
         // this.playbackControl.initialize();
+        
+        this.loading = false;
     }
 
     public rerender() {
@@ -213,72 +224,72 @@ class OSMD {
         this.rerender();
     }
 
-    public showControls() {
-        this.controlPanel.show();
-    }
+    // public showControls() {
+    //     this.controlPanel.show();
+    // }
 
-    public hideControls() {
-        this.controlPanel.hideAndClear();
-    }
+    // public hideControls() {
+    //     this.controlPanel.hideAndClear();
+    // }
 
-    public toggleControls() {
-        if (this.controlPanel.IsClosed) {
-            this.showControls();
-        } else {
-            this.hideControls();
-        }
-    }
+    // public toggleControls() {
+    //     if (this.controlPanel.IsClosed) {
+    //         this.showControls();
+    //     } else {
+    //         this.hideControls();
+    //     }
+    // }
 
-    public clear() {
-        this.hideControls();
-        this.controlPanel.clearVolumeTracks();
-        this.timingSource.pause();
-        this.timingSource.reset();
-    }
+    // public clear() {
+    //     this.hideControls();
+    //     this.controlPanel.clearVolumeTracks();
+    //     this.timingSource.pause();
+    //     this.timingSource.reset();
+    // }
 
-    private async loadPlaybackManager() {
-        this.osmd.FollowCursor = true;
-        this.timingSource.reset();
-        this.timingSource.pause();
-        this.timingSource.Settings = this.osmd.Sheet.SheetPlaybackSetting;
-        // this.playbackManager.Dispose();
+    // private async loadPlaybackManager() {
+    //     this.osmd.FollowCursor = true;
+    //     this.timingSource.reset();
+    //     this.timingSource.pause();
+    //     this.timingSource.Settings = this.osmd.Sheet.SheetPlaybackSetting;
+    //     // this.playbackManager.Dispose();
 
-        // this.playbackManager = this.playbackManagerCreator();
+    //     // this.playbackManager = this.playbackManagerCreator();
 
-        playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
-        playbackManager.addListener(this.osmd.cursor);
-        playbackManager.reset();
-        this.osmd.PlaybackManager = playbackManager;
+    //     playbackManager.initialize(this.osmd.Sheet.MusicPartManager);
+    //     playbackManager.addListener(this.osmd.cursor);
+    //     playbackManager.reset();
+    //     this.osmd.PlaybackManager = playbackManager;
 
-        this.playbackManager = playbackManager;
+    //     this.playbackManager = playbackManager;
 
-        this.controlPanel.addListener(playbackManager);
-        this.controlPanel.clearVolumeTracks();
-        this.controlPanel.addVolumeTrack(this.playbackManager.Metronome.Name, this.playbackManager.Metronome.Id, this.playbackManager.Metronome.Volume*100);
-        for(const instrId of this.playbackManager.InstrumentIdMapping.keys()) {
-            const instr = this.playbackManager.InstrumentIdMapping.getValue(instrId);
-            if (!instr) continue;
-            this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
-        }
-        this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
-        this.loading = false;
-    }
+    //     this.controlPanel.addListener(playbackManager);
+    //     this.controlPanel.clearVolumeTracks();
+    //     this.controlPanel.addVolumeTrack(this.playbackManager.Metronome.Name, this.playbackManager.Metronome.Id, this.playbackManager.Metronome.Volume*100);
+    //     for(const instrId of this.playbackManager.InstrumentIdMapping.keys()) {
+    //         const instr = this.playbackManager.InstrumentIdMapping.getValue(instrId);
+    //         if (!instr) continue;
+    //         this.controlPanel.addVolumeTrack(instr.Name, instrId, instr.Volume * 100);
+    //     }
+    //     this.controlPanel.bpmChanged(this.osmd.Sheet.DefaultStartTempoInBpm);
+    //     this.loading = false;
+    // }
 
-    public play() {
-        playbackManager.play();
-        this.playing = true;
-        this.osmd.FollowCursor = true;
-        this.osmd.cursor.cursorElement.style.zIndex = "100";
-    }
+    // public play() {
+    //     playbackManager.play();
+    //     this.playing = true;
+    //     this.osmd.FollowCursor = true;
+    //     this.osmd.cursor.cursorElement.style.zIndex = "100";
+    // }
 
-    public pause() {
-        playbackManager.pause();
-        this.playing = false;
-    }
+    // public pause() {
+    //     playbackManager.pause();
+    //     this.playing = false;
+    // }
 
-    public reset() {
-        playbackManager.reset();
-    }
+    // public reset() {
+    //     playbackManager.reset();
+    // }
 }
 
 export const osmd = new OSMD();
