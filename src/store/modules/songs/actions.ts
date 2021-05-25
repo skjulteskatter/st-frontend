@@ -1,6 +1,9 @@
-import { Collection } from "@/classes";
+import { Collection, Song } from "@/classes";
 import { getContributors } from "@/functions/helpers";
 import { songs } from "@/services/api";
+import { cache } from "@/services/cache";
+import { notify } from "@/services/notify";
+import { ApiSong } from "dmb-api";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
 import { RootState } from "../..";
@@ -21,9 +24,40 @@ export interface Actions {
     [SongsActionTypes.SELECT_CONTRIBUTOR](context: AugmentedActionContext, payload: string): Promise<void>;
     [SongsActionTypes.TRANSPOSE](context: AugmentedActionContext, payload: number): Promise<void>;
     [SongsActionTypes.SET_LIST](context: AugmentedActionContext, payload: string): Promise<void>;
+    [SongsActionTypes.INIT](context: AugmentedActionContext): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
+    async [SongsActionTypes.INIT]({commit}) {
+        let s: Song[] = [];
+
+        if (navigator.onLine) {
+            try {
+                const key = "last_updated_songs";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+                const updateSongs = await songs.getAllSongs(lastUpdated);
+
+                await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: ApiSong;
+                }));
+
+                const now = new Date();
+
+                await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
+            }
+            catch(e) {
+                notify("error", "Error occured", "warning", e);
+                s = (await songs.getAllSongs()).map(s => new Song(s));
+            }
+        }
+        
+        s = s.length > 0 ? s : (await cache.getAll("songs")).map(s => new Song(s));
+
+        commit(SongsMutationTypes.SET_SONGS, s);
+    },
     async [SongsActionTypes.SELECT_COLLECTION]({ dispatch, state, commit, getters }, id: string): Promise<void> {
         if (!state.initialized) {
             commit(SongsMutationTypes.COLLECTIONS, getters.collections);

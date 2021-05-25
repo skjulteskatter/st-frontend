@@ -94,34 +94,36 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
 
-            if (this.settings?.offline) {
-                if (navigator.onLine) {
-                    try {
-                        const key = "songs_lastUpdated_" + this.id;
-                        const lastUpdated = await cache.get("config", key) as string | undefined;
-                        const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
+            this.songs = this.store.state.songs.songs.filter(s => s.collectionIds.includes(this.id));
+
+            // if (this.settings?.offline) {
+            //     if (navigator.onLine) {
+            //         try {
+            //             const key = "songs_lastUpdated_" + this.id;
+            //             const lastUpdated = await cache.get("config", key) as string | undefined;
+            //             const updateSongs = await api.songs.getAllSongs(lastUpdated);
     
-                        await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: Song;
-                        }));
+            //             await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+            //                 a[b.id] = b;
+            //                 return a;
+            //             }, {} as {
+            //                 [id: string]: Song;
+            //             }));
 
-                        const now = new Date();
+            //             const now = new Date();
 
-                        await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
-                    }
-                    catch(e) {
-                        notify("error", "Error occured", "warning", e);
-                        this.songs = await api.songs.getAllSongs(this);
-                    }
-                }
+            //             await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
+            //         }
+            //         catch(e) {
+            //             notify("error", "Error occured", "warning", e);
+            //             this.songs = await api.songs.getSongs(this);
+            //         }
+            //     }
                 
-                this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).filter(s => s.collectionIds.some(col => col == this.id)).sort((a, b) => a.number - b.number);
-            } else {
-                this.songs = await api.songs.getAllSongs(this);
-            }
+            //     this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).filter(s => s.collectionIds.some(col => col == this.id)).sort((a, b) => a.number - b.number);
+            // } else {
+            //     this.songs = await api.songs.getSongs(this);
+            // }
 
             // try {
             //     try {
