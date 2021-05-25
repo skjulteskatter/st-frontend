@@ -14,6 +14,7 @@
     "core-js": "^3.12.1",
     "dmb-osmd": "^1.0.0",
     "firebase": "^8.5.0",
+    "i18n-iso-countries": "^6.7.0",
     "idb": "^6.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jszip": "^3.6.0",

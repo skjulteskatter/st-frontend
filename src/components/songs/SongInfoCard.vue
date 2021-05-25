@@ -108,7 +108,7 @@
                         {{ melodyOrigin }}
                     </small>
                     <small class="song-details__metadata__credits gap-x">
-                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
+                        <span v-if="song.originCountry">{{ $t(song.originCountry.toUpperCase()) }}</span>
                         <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
                     </small>
