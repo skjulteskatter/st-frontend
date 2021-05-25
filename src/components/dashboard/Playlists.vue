@@ -1,9 +1,12 @@
 <template>
     <base-card>
         <div class="dashboard-playlists">
-            <h3 class="dashboard-playlists__title">
-                {{ $t("common.playlists") }}
-            </h3>
+            <div class="dashboard-playlists__header">
+                <h3 class="dashboard-playlists__title">
+                    {{ $t("common.playlists") }}
+                </h3>
+                <create-playlist-modal />
+            </div>
             <div class="dashboard-playlists__playlists" v-if="playlists.length">
                 <router-link
                     class="dashboard-playlists__playlist clickable"
@@ -31,6 +34,7 @@
 import { Options, Vue } from "vue-class-component";
 
 import { BaseCard } from "@/components";
+import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
 
@@ -38,6 +42,7 @@ import { ApiPlaylist } from "dmb-api";
     name: "dashboard-playlists",
     components: {
         BaseCard,
+        CreatePlaylistModal,
     },
 })
 export default class Playlists extends Vue {
@@ -68,8 +73,15 @@ export default class Playlists extends Vue {
         margin: 0;
     }
 
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--st-spacing);
+    }
+
     &__title {
-        margin-top: 0;
+        margin: 0;
         display: flex;
         justify-content: space-between;
     }

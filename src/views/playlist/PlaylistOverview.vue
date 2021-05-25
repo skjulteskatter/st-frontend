@@ -6,21 +6,7 @@
                 {{ $t("common.playlists").toLowerCase() }}
             </h1>
             <div class="playlists__actions">
-                <modal
-                    theme="primary"
-                    :label="$t('playlist.createnew')"
-                    icon="plus"
-                >
-                    <form @submit.prevent="createPlaylist">
-                        <base-input
-                            :label="$t('common.name')"
-                            v-model="playlistName"
-                        />
-                        <base-button theme="secondary" type="submit">
-                            {{ $t("playlist.createnew") }}
-                        </base-button>
-                    </form>
-                </modal>
+                <create-playlist-modal />
             </div>
         </header>
         <div class="playlists__wrapper" v-if="playlists.length">
@@ -40,9 +26,8 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 
-import { Modal } from "@/components";
 import { BaseInput } from "@/components/inputs";
-import { PlaylistCard } from "@/components/playlist";
+import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
@@ -51,30 +36,12 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
     name: "playlist-overview",
     components: {
         PlaylistCard,
-        Modal,
+        CreatePlaylistModal,
         BaseInput,
     },
 })
 export default class PlaylistOverview extends Vue {
     private store = useStore();
-    public playlistName = "";
-
-    public createPlaylist() {
-        this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
-            name: this.playlistName,
-        });
-
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "check",
-            title: this.$t("playlist.newplaylist"),
-            content: `${this.$t("playlist.newplaylist")} "${
-                this.playlistName
-            }"`,
-        });
-
-        this.playlistName = "";
-    }
 
     public get playlists(): ApiPlaylist[] {
         return this.store.getters.playlists;
