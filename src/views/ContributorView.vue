@@ -4,7 +4,7 @@
             <back-button />
             <div class="contributor__biography">
                 <img
-                    :src="'/img/portrait-placeholder.png'"
+                    :src="portrait"
                     id="contributor-biography-image"
                     class="contributor__biography__header__portrait"
                 />
@@ -85,6 +85,10 @@ export default class ContributorView extends Vue {
         return this.store.getters.languageKey;
     }
 
+    public created() {
+        console.log(this.portrait);
+    }
+
     public async beforeMount() {
         this.loading = true;
 
@@ -132,6 +136,11 @@ export default class ContributorView extends Vue {
     public get contributor() {
         const item = this.contributorItem?.item;
         return item ? new Contributor(item) : undefined;
+    }
+
+    public get portrait() {
+        const isString = typeof this.contributor?.image === "string";
+        return isString ? this.contributor?.image : "/img/portrait-placeholder.png";
     }
 
     public get authorSongs(): Song[] {
