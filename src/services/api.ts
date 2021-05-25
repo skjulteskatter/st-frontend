@@ -110,8 +110,8 @@ export const songs = {
      * @param language 
      * @returns 
      */
-    async searchCollections(query: string) {
-        return (await http.post<IndexedSong[], unknown>("api/Songs/Search", {query}));
+    async searchCollections(query: string, collectionId?: string) {
+        return (await http.post<IndexedSong[], unknown>("api/Songs/Search", {query, collectionId}));
     },
 };
 

@@ -1,5 +1,5 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor } from "dmb-api";
+import { ApiContributor, IndexedSong } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
@@ -27,6 +27,9 @@ export type Mutations<S = State> = {
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state: S, payload: SheetMusicOptions): void;
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
+
+    [SongsMutationTypes.SEARCH](state: S, payload?: string): void;
+    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: IndexedSong[]): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -89,4 +92,11 @@ export const mutations: MutationTree<State> & Mutations = {
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state, transposition: number): void {
     //     state.smTransposition = transposition;
     // },
+
+    [SongsMutationTypes.SEARCH](state, payload) {
+        state.search = payload;
+    },
+    [SongsMutationTypes.SEARCH_RESULT](state, payload) {
+        state.searchResult = payload;
+    },
 };

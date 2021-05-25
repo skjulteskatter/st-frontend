@@ -5,10 +5,11 @@
             <h1>{{ $t("common.search") }}</h1>
             <search-input v-model="searchQuery" @search="search" />
             <div class="complete-search__list complete-search__list-cards">
-                <div v-for="song in songs" :key="song.id">
+                <base-card class="clickable" v-for="song in searchResult" :key="song.id" @click="goToSong(song)">
                     <small v-for="col in getCollections(song.collectionIds)" :key="col.id">{{col.getName(languageKey)}}</small>
                     <h3>{{song.number}} {{localeString(song.name)}}</h3>
-                </div>
+                    <small v-for="(con, i) in song.contributors" :key="i">{{con}}</small>
+                </base-card>
             </div>
             <!-- <div
                 v-for="collection in songsByCollection"
@@ -23,7 +24,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton } from "@/components";
+import { BackButton, BaseCard } from "@/components";
 import { SongListItemCard } from "@/components/songs";
 import { SearchInput } from "@/components/inputs";
 
@@ -31,44 +32,75 @@ import { songs } from "@/services/api";
 import { Collection } from "@/classes";
 import { IndexedSong } from "dmb-api";
 import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     components: {
         SongListItemCard,
         SearchInput,
         BackButton,
+        BaseCard,
     },
     name: "complete-search",
 })
 export default class CompleteSearch extends Vue {
-    public sessionStore = useStore();
+    public store = useStore();
     public loading = false;
-    public searchQuery = "";
     public songs: IndexedSong[] = [];
 
-    public mounted() {
-        if (this.$route.query.q) {
-            this.searchQuery = this.$route.query.q?.toString() ?? "";
-            this.search();
+    public async mounted() {
+        if (!this.searchResult.length) {
+            await this.search();
         }
     }
 
     public async search() {
         this.loading = true;
-        if (this.searchQuery.length > 4) {
-            this.songs = await songs.searchCollections(
+        if (this.searchQuery) {
+            const result = await songs.searchCollections(
                 this.searchQuery,
             );
+
+            this.searchResult = result;
         }
         this.loading = false;
     }
     
-    public localeString(name: LocaleString) {
-        return name[this.languageKey] ?? name.en ?? Object.values(name)[0];
+    public localeString(s: LocaleString) {
+        return s[this.languageKey] ?? s.en ?? Object.values(s)[0];
     }
 
     public getCollections(ids: string[]) {
         return this.collections.filter(c => ids.includes(c.id));
+    }
+
+    public goToSong(song: IndexedSong) {
+        const collections = this.collections.filter(c => song.collectionIds.includes(c.id));
+
+        const cId = collections[0].key;
+        this.$router.push({
+            name: "song",
+            params: {
+                collection: cId,
+                number: song.number,
+            },
+        });
+    }
+
+    public get searchQuery() {
+        return this.store.state.songs.search;
+    }
+
+    public set searchQuery(value) {
+        this.store.commit(SongsMutationTypes.SEARCH, value);
+    }
+
+    public set searchResult(value) {
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, value);
+    }
+
+    public get searchResult() {
+        return this.store.state.songs.searchResult;
     }
 
     // public get songsByCollection() {
@@ -100,11 +132,11 @@ export default class CompleteSearch extends Vue {
     // }
 
     public get collections(): Collection[] {
-        return this.sessionStore.getters.collections;
+        return this.store.getters.collections;
     }
 
     public get languageKey() {
-        return this.sessionStore.getters.languageKey;
+        return this.store.getters.languageKey;
     }
 
     public selectSong(collection: string, number: number) {
