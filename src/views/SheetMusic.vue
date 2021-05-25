@@ -48,7 +48,7 @@
                 <p>Couldn't load PDF</p>
             </object>
             <div id="osmd-canvas"></div>
-            <div id="pb-canvas"></div>
+            <!-- <div id="pb-canvas"></div>
             <div class="sheetmusic-controlpanel"
                 v-if="type != pdfType"
             >
@@ -64,7 +64,7 @@
                     @click="osmd.playing ? osmd.pause() : osmd.play()"
                     >{{ osmd.playing ? "PAUSE" : "PLAY" }}</base-button
                 >
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- </loader> -->

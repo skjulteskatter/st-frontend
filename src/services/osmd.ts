@@ -18,7 +18,7 @@ class OSMD {
     private initialized = false;
     private osmd: OpenSheetMusicDisplay = {} as OpenSheetMusicDisplay;
     public canvas: HTMLElement = {} as HTMLElement;
-    public pbcanvas: HTMLElement = {} as HTMLElement;
+    // public pbcanvas: HTMLElement = {} as HTMLElement;
     public originalKey?: string;
     public transposition = 0;
     private initialZoom?: number;
@@ -43,20 +43,20 @@ class OSMD {
             return;
         }
         let canvas = c;
-        let pbcanvas = pbc;
+        // let pbcanvas = pbc;
 
-        while(!canvas || !pbcanvas) {
+        while(!canvas) {
             canvas = document.getElementById("osmd-canvas");
-            pbcanvas = document.getElementById("pb-canvas");
+            // pbcanvas = document.getElementById("pb-canvas");
 
             console.log("COULDN'T FIND ELEMENTS")
 
             await new Promise(resolve => setTimeout(resolve, 100));
         }
 
-        if (canvas && pbcanvas) {
+        if (canvas) {
             this.canvas = canvas;
-            this.pbcanvas = pbcanvas;
+            // this.pbcanvas = pbcanvas;
             
             this.osmd = new OpenSheetMusicDisplay(this.canvas, {
                 autoResize: true,
@@ -187,7 +187,7 @@ class OSMD {
         // await this.loadPlaybackManager();
 
         // this.playbackControl.initialize();
-        
+
         this.loading = false;
     }
 
