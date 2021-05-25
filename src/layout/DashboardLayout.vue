@@ -1,17 +1,9 @@
 <template>
-    <div class="dashboard-layout">
-        <div class="dashboard-layout__wrapper" v-if="user && initialized">
+    <div class="flex flex-col h-screen relative">
+        <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
             <the-navbar></the-navbar>
-            <main class="dashboard-layout__body">
-                <div class="dashboard-layout__body__container">
-                    <!-- <router-view
-                        v-slot="{ Component }"
-                        v-if="$route.name != 'songs-sheet-music'"
-                    >
-                        <transition name="view" mode="out-in">
-                            <component :is="Component" />
-                        </transition>
-                    </router-view> -->
+            <main class="w-full flex flex-col relative">
+                <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
                 <audio-player></audio-player>
@@ -69,58 +61,3 @@ export default class DashboardLayout extends Vue {
     // }
 }
 </script>
-<style lang="scss">
-@import "../style/mixins";
-
-.dashboard-layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-
-    &__wrapper {
-        display: flex;
-        height: 100%;
-
-        position: relative;
-
-        @include breakpoint("small") {
-            flex-direction: column;
-        }
-    }
-
-    &__body {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-
-        &__container {
-            flex-grow: 1;
-            overflow-y: auto;
-
-            @include breakpoint("small") {
-                overflow-y: scroll;
-            }
-        }
-    }
-}
-
-// Animation
-.view-enter-active,
-.view-leave-active {
-    transition: opacity 150ms;
-}
-
-.view-enter {
-    opacity: 0;
-}
-
-.view-leave-to {
-    opacity: 0;
-}
-
-.view-enter-to,
-.view-leave {
-    opacity: 1;
-}
-</style>

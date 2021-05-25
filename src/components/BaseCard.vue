@@ -1,5 +1,5 @@
 <template>
-    <div class="card" :class="{ 'card-border': border }">
+    <div class="bg-gray-100 rounded-md" :class="{ 'card-border': border }">
         <div
             v-if="image"
             class="card__image"

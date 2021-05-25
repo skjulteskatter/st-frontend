@@ -1,73 +1,66 @@
 <template>
-    <div class="admin-panel" v-if="isAdmin">
-        <div class="admin-panel__header">
-            <h1 class="admin-panel__title">Admin</h1>
+    <div class="p-4 md:p-8" v-if="isAdmin">
+        <div class="mb-4">
+            <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
         </div>
-        <div class="admin-panel__body">
-            <base-card class="admin-panel__collections">
-                <base-card
-                    v-for="collection in collections"
-                    :key="collection.id"
-                    class="admin-panel__collections__item gap-y"
-                    border
-                    secondary
-                >
-                    <b>{{ collection.key }}</b>
-                    <base-button
-                        :loading="loadingClearCache.includes(collection.id)"
-                        @click="clearCollection(collection.id)"
-                        theme="error"
-                        icon="trash"
+        <div class="flex flex-col gap-4">
+            <base-card>
+                <div class="flex flex-wrap gap-2">
+                    <base-card
+                        v-for="collection in collections"
+                        :key="collection.id"
+                        border
+                        secondary
                     >
-                        {{ $t("admin.clearcache") }}
+                        <b class="block">{{ collection.key }}</b>
+                        <base-button
+                            :loading="loadingClearCache.includes(collection.id)"
+                            @click="clearCollection(collection.id)"
+                            theme="error"
+                            icon="trash"
+                        >
+                            {{ $t("admin.clearcache") }}
+                        </base-button>
+                    </base-card>
+                    <base-button
+                        @click="clearCollection('Landax')"
+                        icon="trash"
+                        theme="error"
+                        :loading="loadingClearCache.includes('Landax')"
+                    >
+                        Clear Landax
                     </base-button>
-                </base-card>
-                <base-button
-                    @click="clearCollection('Landax')"
-                    icon="trash"
-                    theme="error"
-                    :loading="loadingClearCache.includes('Landax')"
-                >
-                    Clear Landax
-                </base-button>
-                <base-button
-                    @click="clearCollection('Index')"
-                    icon="refresh"
-                    theme="secondary"
-                    :loading="loadingClearCache.includes('Index')"
-                >
-                    Index Songs
-                </base-button>
-                <base-button
-                    @click="syncFiles()"
-                    icon="refresh"
-                    theme="secondary"
-                    :loading="loadingSync"
-                >
-                    Files
-                </base-button>
+                    <base-button
+                        @click="clearCollection('Index')"
+                        icon="refresh"
+                        theme="secondary"
+                        :loading="loadingClearCache.includes('Index')"
+                    >
+                        Index Songs
+                    </base-button>
+                    <base-button
+                        @click="syncFiles()"
+                        icon="refresh"
+                        theme="secondary"
+                        :loading="loadingSync"
+                    >
+                        Files
+                    </base-button>
+                </div>
             </base-card>
             <users-list :users="users" :currentUser="currentUser"></users-list>
 
-            <base-card class="api-token">
-                <div class="api-token__header gap-x">
-                    <h3 class="api-token__title">API token</h3>
+            <base-card>
+                <div class="flex justify-between">
+                    <h3 class="font-bold text-lg">API token</h3>
                     <base-button
-                        class="api-token__button"
                         theme="secondary"
                         @click="copyToken()"
                     >
                         Copy to clipboard
                     </base-button>
-                    <!-- <base-button
-                        class="api-token__button"
-                        theme="primary"
-                        @click="showToken = !showToken"
-                    >
-                        Toggle API token
-                    </base-button> -->
                 </div>
-                <input type="text" :value="token" class="api-token__token" id="apiToken" />
+                <input type="text" :value="token" id="apiToken" />
             </base-card>
         </div>
     </div>
@@ -169,60 +162,3 @@ export default class Subscriptions extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-.api-token {
-    &__token {
-        word-wrap: break-word;
-        font-size: 0.7em;
-        max-width: 100%;
-    }
-
-    &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    &__title {
-        margin: 0;
-    }
-}
-.admin-panel {
-    padding: calc(var(--st-spacing) * 2);
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
-    &__header {
-        margin-bottom: var(--st-spacing);
-    }
-
-    &__body {
-        display: flex;
-        flex-direction: column;
-        gap: var(--st-spacing);
-    }
-
-    &__collections {
-        .card__content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            grid-gap: var(--st-spacing);
-        }
-
-        &__item {
-            .card__content {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-    }
-    &__title {
-        margin: 0;
-    }
-}
-</style>

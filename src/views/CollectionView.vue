@@ -1,6 +1,6 @@
 <template>
-    <div class="collections">
-        <store-cart class="cart" />
+    <div class="h-full p-4 md:p-8">
+        <store-cart class="cart ml-2" />
         <loader :loading="loading">
             <router-view />
         </loader>
@@ -37,19 +37,7 @@ export default class Store extends Vue {
 </script>
 
 <style lang="scss">
-@import "../style/mixins";
-
-.collections {
-    padding: calc(var(--st-spacing) * 2);
-    height: 100%;
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
-    .cart {
-        float: right;
-        margin-left: calc(var(--st-spacing)/2);
-    }
+.cart {
+    float: right;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <div class="collections__header">
-        <h1 class="collections__title">{{ $t("common.collections") }}</h1>
-        <div class="collections__header__buttons">
+    <div class="mb-4 flex justify-between items-center">
+        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+        <div class="flex gap-2">
             <base-button
                 theme="tertiary"
                 @click="refreshSubscriptions"
@@ -26,13 +26,9 @@
                     {{ $t("common.subscriptions").toLowerCase() }}
                 </span>
             </base-button>
-            <!-- <store-cart /> -->
         </div>
     </div>
-    <!-- <product-slider :products="products" v-if="products.length" /> -->
-    <div class="collections__owned">
-        <product-slider :products="products" v-if="products.length" />
-    </div>
+    <product-slider :products="products" v-if="products.length" />
 </template>
 
 <script lang="ts">
@@ -110,54 +106,12 @@ export default class StoreHome extends Vue {
 <style lang="scss">
 @import "../../style/mixins";
 
-.collections {
-    &__title {
-        margin: 0;
-    }
-
-    &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: var(--st-spacing);
-
-        &__buttons {
-            display: flex;
-            gap: calc(var(--st-spacing) / 2);
+@include breakpoint("small") {
+    .refresh-button,
+    .manage-button {
+        .button__content {
+            display: none;
         }
-
-        @include breakpoint("small") {
-            .refresh-button,
-            .manage-button {
-                .button__content {
-                    display: none;
-                }
-            }
-        }
-    }
-
-    hr {
-        border: 1px solid var(--st-color-border);
-        margin: var(--st-spacing) 0;
-    }
-
-    &__owned,
-    &__available {
-        margin-bottom: 2rem;
-
-        &__title {
-            margin: 0;
-            padding-bottom: 0;
-            margin-bottom: 0.5em;
-            font-size: 1em;
-        }
-    }
-
-    &__items {
-        display: grid;
-        grid-template-columns: repeat(8, minmax(130px, 1fr));
-        grid-gap: var(--st-spacing);
-        overflow-x: auto;
     }
 }
 </style>
