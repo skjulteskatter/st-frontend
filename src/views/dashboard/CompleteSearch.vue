@@ -4,6 +4,7 @@
             <back-button />
             <h1>{{ $t("common.search") }}</h1>
             <search-input v-model="searchQuery" @search="search" class="complete-search__input" />
+            <p class="complete-search__result-count">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
             <div class="complete-search__list complete-search__list-cards">
                 <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
             </div>
@@ -149,6 +150,10 @@ export default class CompleteSearch extends Vue {
 
     &__input {
         margin-bottom: var(--st-spacing);
+    }
+
+    &__result-count {
+        opacity: .5;
     }
 
     &__collection {
