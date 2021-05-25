@@ -30,31 +30,36 @@ export interface Actions {
 export const actions: ActionTree<State, RootState> & Actions = {
     async [SongsActionTypes.INIT]({commit}) {
         let s: Song[] = [];
-
-        if (navigator.onLine) {
-            try {
-                const key = "last_updated_songs";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
-                const updateSongs = await songs.getAllSongs(lastUpdated);
-
-                await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: ApiSong;
-                }));
-
-                const now = new Date();
-
-                await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
-            }
-            catch(e) {
-                notify("error", "Error occured", "warning", e);
-                s = (await songs.getAllSongs()).map(s => new Song(s));
-            }
-        }
+        const offline = (await cache.get("config", "offline")) == "true";
         
-        s = s.length > 0 ? s : (await cache.getAll("songs")).map(s => new Song(s));
+        if (offline) {
+            if (navigator.onLine) {
+                try {
+                    const key = "last_updated_songs";
+                    const lastUpdated = await cache.get("config", key) as string | undefined;
+                    const updateSongs = await songs.getAllSongs(lastUpdated);
+    
+                    await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiSong;
+                    }));
+    
+                    const now = new Date();
+    
+                    await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
+                }
+                catch(e) {
+                    notify("error", "Error occured", "warning", e);
+                    s = (await songs.getAllSongs()).map(s => new Song(s));
+                }
+            }
+            
+            s = s.length > 0 ? s : (await cache.getAll("songs")).map(s => new Song(s));
+        } else {
+            s = (await songs.getAllSongs()).map(s => new Song(s));
+        }
 
         commit(SongsMutationTypes.SET_SONGS, s);
     },

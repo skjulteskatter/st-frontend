@@ -5,19 +5,8 @@
             <h1>{{ $t("common.search") }}</h1>
             <search-input v-model="searchQuery" @search="search" />
             <div class="complete-search__list complete-search__list-cards">
-                <base-card class="clickable" v-for="song in searchResult" :key="song.id" @click="goToSong(song)">
-                    <small v-for="col in getCollections(song.collectionIds)" :key="col.id">{{col.getName(languageKey)}}</small>
-                    <h3>{{song.number}} {{localeString(song.name)}}</h3>
-                    <small v-for="(con, i) in song.contributors" :key="i">{{con}}</small>
-                </base-card>
+                <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
             </div>
-            <!-- <div
-                v-for="collection in songsByCollection"
-                :key="collection.collection.id"
-                class="complete-search__collection"
-            >
-                <h2>{{ collection.collection.getName(languageKey) }}</h2>
-            </div> -->
         </loader>
     </div>
 </template>
@@ -26,7 +15,7 @@
 import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseCard } from "@/components";
 import { SongListItemCard } from "@/components/songs";
-import { SearchInput } from "@/components/inputs";
+import { SearchInput, SearchResultItem } from "@/components/inputs";
 
 import { songs } from "@/services/api";
 import { Collection } from "@/classes";
@@ -38,6 +27,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
     components: {
         SongListItemCard,
         SearchInput,
+        SearchResultItem,
         BackButton,
         BaseCard,
     },
