@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 rounded-md shadow" :class="{ 'border border-gray-500': border, 'bg-transparent': secondary }">
+    <div class="bg-white rounded-md shadow-md" :class="{ 'border border-gray-300': border, 'bg-transparent': secondary }">
         <div
             v-if="image"
             class="cover"

@@ -1,14 +1,14 @@
 <template>
-    <div class="product-card" :class="{'not-bought': isAvailable}" v-if="product">
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md" :class="{'border border-red-700': isAvailable}" v-if="product">
         <img
-            class="product-card__image"
+            class="w-full object-cover cursor-pointer"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
-        <div class="product-card__footer">
-            <div class="product-card__title">
-                <h4 class="product-card__title__text">
+        <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300">
+            <div class="flex justify-between mb-4">
+                <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
                 <base-button
@@ -21,17 +21,17 @@
                 ></base-button>
                 <collection-settings v-else :collection="product.collections[0]"></collection-settings>
             </div>
-            <div class="product-card__buttons">
+            <div class="flex flex-col gap-2 md:flex-row">
                 <base-button
                     theme="secondary"
-                    class="product-card__button"
+                    class="flex-1"
                     icon="arrowRight"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}
                 </base-button>
                 <base-button
-                    class="product-card__button"
+                    class="flex-1"
                     theme="tertiary"
                     style="border: none"
                     @click="goToItem"
@@ -143,64 +143,3 @@ export default class ProductCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../../style/mixins";
-
-.product-card {
-    animation: slideInFromBottom 250ms;
-    background-color: var(--st-color-background-medium);
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    border: 1px solid var(--st-color-secondary);
-    overflow: hidden;
-
-    &.not-bought {
-        border: 1px solid var(--st-color-error);
-    }
-
-    &__buttons {
-        display: flex;
-        gap: calc(var(--st-spacing) / 2);
-
-        @include breakpoint("medium") {
-            flex-direction: column;
-        }
-    }
-
-    &__button {
-        flex-shrink: 0;
-        flex-grow: 1;
-    }
-
-    &__image {
-        width: 100%;
-        object-fit: cover;
-        transition: transform 150ms;
-        cursor: pointer;
-    }
-
-    &__footer {
-        width: 100%;
-        padding: var(--st-spacing);
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        background: var(--st-color-background-light);
-        flex-grow: 1;
-        box-shadow: 0 -5px 20px rgba(black, .1);
-    }
-
-    &__title {
-        &__text {
-            margin: 0;
-        }
-
-        width: 100%;
-        margin: 0 0 var(--st-spacing) 0;
-        display: flex;
-        justify-content: space-between;
-    }
-}
-</style>

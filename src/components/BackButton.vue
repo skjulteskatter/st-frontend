@@ -1,5 +1,5 @@
 <template>
-    <div class="back-button" @click="back">
+    <div class="flex items-center mb-4 cursor-pointer" @click="back">
         <Icon name="arrowLeft" size="20" />
         <span>{{ previous ? $t("common.back") : $t("common.home") }}</span>
     </div>
@@ -31,14 +31,3 @@ export default class BackButton extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.back-button {
-    display: flex;
-    align-items: center;
-
-    width: min-content;
-    margin-bottom: var(--st-spacing);
-    cursor: pointer;
-}
-</style>

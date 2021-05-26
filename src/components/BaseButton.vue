@@ -1,18 +1,18 @@
 <template>
     <button
-        class="button"
+        class="py-2 px-4 text-white cursor-pointer flex justify-center items-center gap-2 rounded relative"
         :class="[`button-${theme}`, { 'button-loading': loading, 'button-disabled': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <span class="button__label--loading" v-if="loading">{{
+        <span class="button__label--loading flex items-center" v-if="loading">{{
             loadingLabel
         }}</span>
         <span class="spinner" v-if="loading"></span>
-        <span class="button__content" v-else-if="content">
+        <span class="button__content text-sm" v-else-if="content">
             <slot></slot>
         </span>
-        <icon size="18" v-if="icon" :name="icon" class="button__icon" />
+        <icon size="18" v-if="icon" :name="icon" class="inline-block" />
     </button>
 </template>
 
@@ -75,18 +75,6 @@ export default class BaseButton extends Vue {
 
 <style lang="scss" scoped>
 .button {
-    padding: calc(var(--st-spacing) * 0.5) var(--st-spacing);
-    border-radius: var(--st-border-radius);
-    color: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    overflow: hidden;
-    // display: inline-block;
-
     &:hover {
         &:after {
             content: "";
@@ -100,18 +88,8 @@ export default class BaseButton extends Vue {
         }
     }
 
-    &__content {
-        z-index: 2;
-    }
-
-    &__icon {
-        display: inline-block;
-    }
-
     &--loading {
         animation: buttonLoading 0.5s ease infinite alternate;
-        display: flex;
-        align-items: center;
 
         .spinner {
             --st-loader-width: 2px;

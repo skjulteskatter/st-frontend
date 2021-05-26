@@ -1,17 +1,16 @@
 <template>
     <div
-        class="collection-card clickable"
+        class="relative rounded overflow-hidden cursor-pointer border hover:border-gray-400"
         :class="{
             disabled: !collection.available,
         }"
         @click="selectCollection(collection)"
     >
         <img
-            class="collection-card__image"
             :src="image"
             :alt="collection.getName(languageKey)"
         />
-        <p class="collection-card__title">
+        <p class="p-2 bg-white">
             {{ collection.getName(languageKey) }}
         </p>
     </div>
@@ -57,36 +56,3 @@ export default class CollectionCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.collection-card {
-    position: relative;
-    cursor: pointer;
-    animation: slideInFromBottom 250ms;
-    background-color: var(--st-color-background-medium);
-    border-radius: var(--st-border-radius);
-    border: 1px solid var(--st-color-border);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    &__image {
-        border-radius: var(--st-border-radius);
-        max-width: 400px;
-        width: 100%;
-    }
-
-    &__title {
-        margin: 0;
-        padding: calc(var(--st-spacing) / 2);
-        color: var(--st-color-text-dark);
-        background: var(--st-color-background-light);
-        flex-grow: 1;
-    }
-
-    &.disabled {
-        color: var(--st-color-border);
-        cursor: not-allowed;
-    }
-}
-</style>
