@@ -2,7 +2,7 @@
     <div class="osmd-wrapper">
         <div class="osmd-controls">
             <div class="osmd-controls__transpose">
-                <loader :loading="osmd.loading" :position="'local'"/>
+                <loader :loading="osmdLoading" :position="'local'"/>
                 <Icon
                     name="arrowLeft"
                     class="osmd-controls__button"
@@ -82,6 +82,10 @@ export default class OSMD extends Vue {
         } catch (e) {
             //console.log(e);
         }
+    }
+
+    public get osmdLoading() {
+        return this.osmd.loading;
     }
 
     public transpose(n: number) {
