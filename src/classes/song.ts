@@ -1,5 +1,4 @@
-import { ApiSong, MediaFile } from "dmb-api";
-import { Collection } from "./collection";
+import { ApiCollection, ApiSong, MediaFile } from "dmb-api";
 import { Contributor } from "./contributor";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
@@ -14,11 +13,19 @@ export enum SheetMusicTypes {
 
 export class Song extends BaseClass implements ApiSong {
     public id: string;
-    public number = 0;
     public type: string;
     public image?: string;
-    public collectionIds;
-    public collections: Collection[];
+    public get number() {
+        return this.collections[0]?.number ?? 0;
+    }
+    public getNumber(cId: string) {
+        return this.collections.find(c => c.id == cId)?.number;
+    }
+    public collections: {
+        id: string;
+        collection?: ApiCollection;
+        number?: number;
+    }[];
     public copyrights;
     public transpositions: {
         [key: string]: number;
@@ -47,10 +54,15 @@ export class Song extends BaseClass implements ApiSong {
     public hasChords;
     public newMelody: boolean;
 
+    public get collectionIds() {
+        return this.collections.map(c => c.id);
+    }
+
     constructor(song: ApiSong) {
         super();
+
+        this.collections = song.collections;
         this.id = song.id;
-        this.number = song.number;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
         this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
@@ -71,11 +83,9 @@ export class Song extends BaseClass implements ApiSong {
         this.image = song.image;
 
         this.origins = song.origins ?? [];
-
-        this.collectionIds = song.collectionIds;
         this.themeIds = song.themeIds;
 
-        this.collections = song.collections ? song.collections.map(c => new Collection(c)) : [];
+        this.collections = song.collections;
         this.newMelody = song.newMelody;
     }
 

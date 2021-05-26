@@ -22,7 +22,7 @@ export class Activity {
             name: "song",
             params: {
                 collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "",
-                number: this.activity.item?.number ?? "",
+                number: this.activity.item?.collections[0].number ?? "",
             },
         } : {
             name: "contributor",
@@ -71,7 +71,7 @@ export class Activity {
     }
 
     public get collectionIds(): string[] {
-        return this.activity.type == "song" ? this.activity.item?.collectionIds ?? [] : [];
+        return this.activity.type == "song" ? this.activity.item?.collections.map(c => c.id) ?? [] : [];
     }
 
     public get type() {

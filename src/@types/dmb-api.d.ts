@@ -32,9 +32,11 @@ declare module "dmb-api" {
 
     interface ApiSong {
         id: string;
-        collectionIds: string[];
-        collections?: ApiCollection[];
-        number: number;
+        collections: {
+            id: string;
+            collection?: ApiCollection;
+            number?: number;
+        }[];
         type: string;
         image?: string;
         name: LocaleString;
