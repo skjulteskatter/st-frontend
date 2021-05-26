@@ -17,6 +17,7 @@
 <script lang="ts">
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 
@@ -44,10 +45,12 @@ export default class SheetmusicPlaylist extends Vue {
             type: sheet?.type,
         };
 
-        localStorage.setItem("song_item", JSON.stringify(this.song));
-        localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
 
-        window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+        // localStorage.setItem("song_item", JSON.stringify(this.song));
+        // localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+
+        // window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
     }
 
     public get transposition() {

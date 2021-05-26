@@ -17,7 +17,7 @@ export type State = {
     filter: SongFilter;
     audio?: AudioTrack;
     view: "transpose" | "default" | "loading";
-    sheetMusic: SheetMusicOptions;
+    sheetMusic?: SheetMusicOptions;
     search?: string;
     searchResult: IndexedSong[];
 }
@@ -43,8 +43,5 @@ export const state: State = {
     language: "en",
     view: "default",
     transcode: "common",
-    sheetMusic: {
-        show: false,
-    },
     searchResult: [],
 };

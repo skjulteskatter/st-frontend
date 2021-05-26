@@ -51,6 +51,7 @@
                     />
                 </div>
                 <lyrics-card
+                    :style="sheetMusicOptions?.show ? 'display: none;' : ''"
                     v-if="song.hasLyrics"
                     :song="song"
                     :lyrics="lyrics"
@@ -115,7 +116,9 @@ export default class SongViewer extends Vue {
     public async beforeMount() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
+            loaded: false,
         });
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
         this.number = parseInt(this.$route.params.number as string);
         if (
             !this.store.getters.collection
@@ -146,6 +149,10 @@ export default class SongViewer extends Vue {
         };
         setTimeout(log, 5000);
         this.lyricsLoading = false;
+    }
+
+    public get sheetMusicOptions(): SheetMusicOptions | undefined {
+        return this.store.state.songs.sheetMusic;
     }
 
     // public sheetMusic(sheet: MediaFile) {

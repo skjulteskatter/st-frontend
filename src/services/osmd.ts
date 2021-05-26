@@ -185,9 +185,6 @@ class OSMD {
         (window as any).osmd = this.osmd;
 
         // await this.loadPlaybackManager();
-
-        // this.playbackControl.initialize();
-
         this.loading = false;
     }
 
