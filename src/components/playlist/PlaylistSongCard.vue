@@ -1,8 +1,8 @@
 <template>
-    <base-card class="playlist-song-card clickable">
-        <div class="playlist-song-card__wrapper">
+    <base-card class="border hover:border-gray-400">
+        <div class="flex">
             <router-link
-                class="playlist-song-card__link"
+                class="flex-grow"
                 :to="{
                     name: 'song',
                     params: {
@@ -11,18 +11,18 @@
                     },
                 }"
             >
-                <div class="playlist-song-card__info">
-                    <span>
+                <div class="flex flex-col">
+                    <span class="font-semibold">
                         {{ entryName }}
                     </span>
-                    <small class="playlist-song-card__collection">
+                    <small class="text-gray-500">
                         {{ collection?.getName(languageKey) }}
                         {{ song?.number }}
                     </small>
                 </div>
             </router-link>
             <small
-                class="playlist-song-card__remove"
+                class="text-red-700 cursor-pointer hover:underline"
                 @click="removeFromPlaylist"
             >
                 {{ $t("playlist.remove") }}
@@ -96,56 +96,3 @@ export default class PlaylistSongCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "../../style/mixins";
-
-.playlist-song-card {
-    margin-bottom: var(--st-spacing);
-
-    &__wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        @include breakpoint("small") {
-            flex-direction: column;
-            align-items: flex-start;
-
-            .playlist-song-card__info {
-                margin-bottom: 0.5em;
-            }
-
-            .playlist-song-card__remove {
-                align-self: flex-end;
-            }
-        }
-    }
-
-    &__remove {
-        color: var(--st-color-error);
-        cursor: pointer;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    &__collection {
-        display: block;
-        font-weight: 300;
-        // opacity: 0.5;
-        margin-top: 0.2em;
-    }
-
-    &__link {
-        text-decoration: none;
-        color: var(--st-color-text-dark);
-        flex-grow: 1;
-
-        &:hover {
-            color: var(--st-color-primary);
-        }
-    }
-}
-</style>

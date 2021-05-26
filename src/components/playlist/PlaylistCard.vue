@@ -1,8 +1,8 @@
 <template>
-    <base-card class="playlist-card clickable" @click="goToPlaylist">
-        <strong class="playlist-card__title">{{ playlist.name }}</strong>
-        <div class="playlist-card__info">
-            <small class="playlist-card__entries">
+    <base-card class="cursor-pointer border hover:border-gray-400" @click="goToPlaylist">
+        <strong class="font-bold">{{ playlist.name }}</strong>
+        <div class="text-gray-500">
+            <small>
                 {{ playlist.entries.length }}
                 {{ $t("common.songs").toLowerCase() }}
             </small>
@@ -43,23 +43,3 @@ export default class PlaylistCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.playlist-card {
-    &__info {
-        margin-top: calc(var(--st-spacing) / 2);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--st-spacing);
-    }
-
-    &__entries {
-        margin: 0;
-    }
-
-    &__shared {
-        opacity: 0.6;
-    }
-}
-</style>

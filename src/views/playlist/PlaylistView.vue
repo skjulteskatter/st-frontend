@@ -1,10 +1,10 @@
 <template>
-    <div class="playlist-view" v-if="playlist">
+    <div v-if="playlist">
         <back-button />
-        <header class="playlist-view__header">
+        <header class="flex justify-between items-start mb-4">
             <span>
-                <h1 class="playlist-view__title">{{ playlist.name }}</h1>
-                <span class="playlist-view__count">
+                <h1 class="font-bold text-xl">{{ playlist.name }}</h1>
+                <span class="text-gray-500">
                     {{ playlist.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
@@ -13,10 +13,10 @@
                 {{ $t("playlist.delete") }}
             </base-button>
         </header>
-        <h2 v-if="!playlist.entries.length" class="playlist-view__nosongs">
+        <h2 v-if="!playlist.entries.length" class="opacity-50">
             {{ $t("playlist.nosongs") }}
         </h2>
-        <div class="playlist-view__songs" v-else>
+        <div class="flex flex-col gap-4" v-else>
             <playlist-song-card
                 v-for="entry in playlist.entries"
                 :key="entry.id"
@@ -74,26 +74,3 @@ export default class PlaylistView extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.playlist-view {
-    &__title {
-        margin: 0 0 0.2em 0;
-    }
-
-    &__count {
-        opacity: 0.6;
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: var(--st-spacing);
-    }
-
-    &__nosongs {
-        opacity: 0.5;
-    }
-}
-</style>

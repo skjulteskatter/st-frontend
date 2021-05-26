@@ -1,25 +1,21 @@
 <template>
-    <div class="playlists">
-        <header class="playlists__header">
-            <h1 class="playlists__title">
-                {{ $t("common.your") }}
-                {{ $t("common.playlists").toLowerCase() }}
-            </h1>
-            <div class="playlists__actions">
-                <create-playlist-modal />
-            </div>
-        </header>
-        <div class="playlists__wrapper" v-if="playlists.length">
-            <playlist-card
-                v-for="playlist in playlists"
-                :key="playlist.id"
-                :playlist="playlist"
-            />
-        </div>
-        <h3 class="playlists__noplaylists" v-else>
-            {{ $t("playlist.noplaylists") }}
-        </h3>
+    <header class="flex justify-between items-center mb-4">
+        <h1 class="font-bold text-xl md:text-2xl">
+            {{ $t("common.your") }}
+            {{ $t("common.playlists").toLowerCase() }}
+        </h1>
+        <create-playlist-modal />
+    </header>
+    <div class="flex flex-col gap-4" v-if="playlists.length">
+        <playlist-card
+            v-for="playlist in playlists"
+            :key="playlist.id"
+            :playlist="playlist"
+        />
     </div>
+    <h3 class="bg-gray-300 p-4 rounded text-center" v-else>
+        {{ $t("playlist.noplaylists") }}
+    </h3>
 </template>
 
 <script lang="ts">
@@ -46,30 +42,3 @@ export default class PlaylistOverview extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.playlists {
-    &__wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: var(--st-spacing);
-    }
-
-    &__title {
-        margin-top: 0;
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__noplaylists {
-        opacity: 0.5;
-        background-color: var(--st-color-background-medium);
-        padding: var(--st-spacing);
-        border-radius: var(--st-border-radius);
-        text-align: center;
-    }
-}
-</style>
