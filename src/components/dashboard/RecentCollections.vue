@@ -1,9 +1,9 @@
 <template>
-    <base-card class="recent-collections">
-        <h3 class="recent-collections__title">
+    <base-card>
+        <h3 class="font-bold mb-4">
             {{ $t("activity.recentlyOpened") }}
         </h3>
-        <div class="recent-collections__collections">
+        <div class="grid grid-cols-2 gap-2" v-if="recentCollections.length">
             <collection-card
                 class="recent-collections__collection"
                 v-for="c in recentCollections"
@@ -11,6 +11,7 @@
                 :collection="c"
             />
         </div>
+        <p class="p-4 rounded bg-gray-500 text-center" v-else>{{ $t('dashboard.noactivity') }}</p>
     </base-card>
 </template>
 
@@ -48,26 +49,3 @@ export default class RecentCollections extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.recent-collections {
-    &__fallback {
-        background-color: var(--st-color-background-dark);
-        border-radius: var(--st-border-radius);
-        padding: var(--st-spacing);
-        margin: 0;
-        text-align: center;
-    }
-
-    &__title {
-        display: block;
-        margin-top: 0;
-    }
-
-    &__collections {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: calc(var(--st-spacing) / 2);
-    }
-}
-</style>

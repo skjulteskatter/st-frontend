@@ -1,6 +1,6 @@
 <template>
     <loader :loading="loading">
-        <div class="song-list" v-if="collection">
+        <div class="p-4 md:p-8" v-if="collection">
             <back-button />
             <div class="song-list__header">
                 <h1 class="song-list__title">

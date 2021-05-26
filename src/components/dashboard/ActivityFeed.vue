@@ -1,33 +1,33 @@
 <template>
-    <base-card class="activity-feed">
-        <h3 class="activity-feed__title">
+    <base-card>
+        <h3 class="font-bold flex gap-2 items-center mb-4">
             {{ $t("common.activity") }}
             <tooltip text="Her ser du all din nylige aktivitet" />
         </h3>
         <loader :loading="activitiesInitialized === false">
-            <div class="activity-feed__activities" v-if="activities.length">
+            <div class="flex flex-col gap-2 relative" v-if="activities.length">
                 <router-link
-                    class="activity-feed__activity clickable"
+                    class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
                 >
                     <img
                         :src="a.getImage(collections)"
-                        class="activity-feed__activity__image"
+                        class="max-h-10 grayscale rounded"
                     />
-                    <span class="activity-feed__activity__title">
-                        <small>{{ $t(`song.${a.type}`) }}</small>
+                    <span class="flex flex-col justify-center flex-1">
+                        <small class="text-gray-400">{{ $t(`song.${a.type}`) }}</small>
                         <strong>
                             {{ a.getName(languageKey) }}
                         </strong>
                     </span>
-                    <span class="activity-feed__activity__timestamp">
+                    <small class="opacity-50 absolute top-2 right-2">
                         {{ a.timeSince(languageKey) }}
-                    </span>
+                    </small>
                 </router-link>
             </div>
-            <p class="activity-feed__fallback" v-else>
+            <p class="p-4 bg-gray-500 rounded text-center" v-else>
                 {{ $t("dashboard.noactivity") }}
             </p>
         </loader>
@@ -67,71 +67,3 @@ export default class ActivityFeed extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.activity-feed {
-    &__fallback {
-        background-color: var(--st-color-background-dark);
-        border-radius: var(--st-border-radius);
-        padding: var(--st-spacing);
-        margin: 0;
-        text-align: center;
-    }
-
-    &__title {
-        display: block;
-        margin-top: 0;
-        display: flex;
-        align-items: center;
-        gap: calc(var(--st-spacing)/2);
-    }
-
-    &__activities {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5em;
-
-        //max-height: 20rem;
-        // overflow-y: hidden;
-        position: relative;
-    }
-
-    &__activity {
-        margin: 0;
-        display: block;
-        padding: 0.5em;
-        border-radius: var(--st-border-radius);
-        background-color: var(--st-color-background-light);
-        text-decoration: none;
-        color: currentColor;
-        font-size: 0.8em;
-
-        display: flex;
-        justify-content: space-between;
-        gap: calc(var(--st-spacing) / 2);
-
-        &__title {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            small {
-                color: var(--st-color-primary);
-            }
-        }
-
-        &__timestamp {
-            flex-shrink: 0;
-            opacity: 0.5;
-            font-size: 0.9em;
-        }
-
-        &__image {
-            max-height: 3em;
-            border-radius: var(--st-border-radius);
-            filter: grayscale(1);
-        }
-    }
-}
-</style>
