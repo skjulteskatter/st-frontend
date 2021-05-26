@@ -19,21 +19,25 @@
                     @mouseleave="mouseOverCard = false"
                 >
                     <slot></slot>
-                    <!-- <base-button
-                        @click="closeModal"
-                        class="modal__popup__card__close-button"
-                        theme="tertiary"
-                        >{{ $t("common.close") }}</base-button
-                    > -->
                 </base-card>
             </div>
         </div>
     </div>
+    <!-- <base-button @click="() => { openModal(); callback(); }" :theme="theme" :icon="icon">{{label}}</base-button>
+    <Dialog :open="modalIsOpen" class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen">
+            <DialogOverlay class="fixed inset-0 bg-black opacity-20" />
+            <base-card class="max-w-sm mx-auto">
+                <slot></slot>
+            </base-card>
+        </div>
+    </Dialog> -->
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
+import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@headlessui/vue";
 
 @Options({
     props: {
@@ -58,6 +62,8 @@ import BaseCard from "@/components/BaseCard.vue";
     },
     components: {
         BaseCard,
+        Dialog,
+        DialogOverlay,
     },
     name: "modal",
 })
