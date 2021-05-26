@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiSong, ApiTag, IndexedSong } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedSong } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -128,11 +128,11 @@ export const playlists = {
     async createPlaylist(name: string) {
         return await http.post<ApiPlaylist, unknown>("api/Playlists", {name});
     },
-    async deletePlaylist(id: string){
-        return (await http.delete(`api/Playlists/${id}`));
+    deletePlaylist(id: string): Promise<void> {
+        return http.delete(`api/Playlists/${id}`);
     },
     async addToPlaylist(playlistId: string, songId: string, transposition?: number) {
-        return await http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
+        return await http.post<ApiPlaylistEntry, unknown>(`api/Playlists/${playlistId}`, {
             songId,
             transposition,
         });

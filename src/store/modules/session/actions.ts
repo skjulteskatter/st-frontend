@@ -202,11 +202,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
         await api.playlists.deletePlaylist(id);
         commit(SessionMutationTypes.DELETE_PLAYLIST, id);
     },
-    async [SessionActionTypes.PLAYLIST_ADD_SONG]({ commit }, obj): Promise<void> {
+    async [SessionActionTypes.PLAYLIST_ADD_SONG]({ state, commit }, obj): Promise<void> {
+        const playlist = Object.assign({}, state.playlists.find(p => p.id == obj.playlistId));
+
         const res = await api.playlists.addToPlaylist(obj.playlistId, obj.songId, obj.transposition);
 
         if (res) {
-            commit(SessionMutationTypes.UPDATE_PLAYLIST, res);
+            playlist.entries.push(res);
+            commit(SessionMutationTypes.UPDATE_PLAYLIST, playlist);
         }
     },
     async [SessionActionTypes.PLAYLIST_REMOVE_ENTRY]({ commit }, obj): Promise<void> {
