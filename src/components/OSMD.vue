@@ -26,7 +26,7 @@
                             : undefined
                     "
                 />
-                <base-dropdown
+                <!-- <base-dropdown
                         origin="left"
                         :label="
                             relativeTranspositions.find(
@@ -48,7 +48,7 @@
                         >
                             {{ t.view }}
                         </button>
-                    </base-dropdown>
+                    </base-dropdown> -->
                 <div class="osmd-controls__zoom">
                     <small>{{ Math.floor(zoom * 100) }}%</small>
                     <input
