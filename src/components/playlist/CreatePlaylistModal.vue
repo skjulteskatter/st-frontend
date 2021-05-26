@@ -4,10 +4,11 @@
 		:label="$t('playlist.createnew')"
 		icon="plus"
 	>
-		<form @submit.prevent="createPlaylist">
+		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 			<base-input
 				:label="$t('common.name')"
 				v-model="playlistName"
+				required
 			/>
 			<base-button theme="secondary" type="submit">
 				{{ $t("playlist.createnew") }}
@@ -54,7 +55,3 @@ export default class CreatePlaylistModal extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-
-</style>
