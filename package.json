@@ -10,6 +10,7 @@
     "auth": "vsts-npm-auth -config .npmrc"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.2.0",
     "@stripe/stripe-js": "^1.14.0",
     "core-js": "^3.12.1",
     "dmb-osmd": "^1.0.0",
