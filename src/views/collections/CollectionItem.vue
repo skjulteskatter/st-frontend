@@ -1,23 +1,23 @@
 <template>
-    <div class="collection-item">
+    <div class="">
         <back-button />
-        <section class="collection-item__body" v-if="product">
+        <div class="flex flex-col gap-4 md:flex-row" v-if="product">
             <img
-                class="collection-item__image"
+                class="rounded-md shadow-md object-cover"
                 :src="image"
                 :alt="product.getName(languageKey)"
             />
-            <div class="collection-item__body__info">
-                <h1 class="collection-item__title">
+            <base-card>
+                <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <p class="collection-item__price-tag">
+                <p class="text-gray-500 text-sm mb-4">
                     {{
                         formatPrices(product.prices, "year") ||
                         formatPrices(product.prices, "month")
                     }}
                 </p>
-                <div class="collection-item__body__footer">
+                <div class="mb-8">
                     <base-button
                         theme="secondary"
                         icon="buy"
@@ -31,16 +31,16 @@
                         {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
-                <h4 class="collection-item__about" v-if="details">{{ $t('store.about') }}</h4>
-                <div v-html="details" class="collection-item__details"></div>
-            </div>
-        </section>
+                <h3 class="font-bold text-lg" v-if="details">{{ $t('store.about') }}</h3>
+                <div v-html="details" class="flex flex-col gap-2"></div>
+            </base-card>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton } from "@/components";
+import { BackButton, BaseCard } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
@@ -49,6 +49,7 @@ import { appSession } from "@/services/session";
 @Options({
     components: {
         BackButton,
+        BaseCard,
     },
     name: "collection-item",
 })
@@ -149,61 +150,3 @@ export default class StoreItem extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "../../style/mixins";
-
-.collection-item {
-    &__about {
-        margin: calc(var(--st-spacing)*2) 0 0 0;
-    }
-
-    &__price-tag {
-        color: var(--st-color-primary);
-        margin-bottom: var(--st-spacing);
-    }
-
-    &__title {
-        margin: 0 0 calc(var(--st-spacing)/2) 0;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    &__image {
-        border-radius: 0.5rem;
-        object-fit: cover;
-        object-position: center;
-    }
-
-    &__body {
-        display: flex;
-        gap: var(--st-spacing);
-        padding: 0;
-        animation: slideInFromBottom 250ms;
-
-        @include breakpoint("small") {
-            flex-direction: column;
-
-            .store-item__body__info {
-                margin: var(--st-spacing) 0 0 0;
-            }
-
-            .store-item__body__footer {
-                flex-direction: column;
-            }
-        }
-
-        &__footer {
-            display: flex;
-            gap: var(--st-spacing);
-        }
-
-        &__info {
-            padding: calc(var(--st-spacing) * 2);
-            background-color: var(--st-color-background-medium);
-            border-radius: 0.5rem;
-        }
-    }
-}
-</style>

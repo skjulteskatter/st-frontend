@@ -3,10 +3,10 @@
         <div class="p-4 md:p-8" v-if="collection">
             <back-button />
             <div class="song-list__header">
-                <h1 class="song-list__title">
+                <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <div class="song-list__filters" v-if="!loading">
+                <div class="song-list__filters text-sm" v-if="!loading">
                     <div class="song-list__filters__wrapper gap-x">
                         <div class="song-list__filters__field">
                             <label for="song-category">
@@ -51,7 +51,7 @@
                     />
                 </div>
             </div>
-            <div class="explanations">
+            <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4">
                 <p class="explanation explanation--star"><icon name="star" size="12" />{{$t("common.newMelody")}}</p>
                 <p class="explanation explanation--green">{{$t("common.noSheetMusic")}}</p>
                 <p class="explanation explanation--red">{{$t("common.notAvailableInThisLanguage")}}</p>
@@ -72,6 +72,7 @@
                         "
                         :title="ci.item.name"
                         :action="() => gotoContributor(ci.item)"
+                        class="mb-4"
                     ></song-list-card>
                 </div>
 
@@ -89,6 +90,7 @@
                             )
                         "
                         :title="theme?.item.name[languageKey] ?? ''"
+                        class="mb-4"
                     ></song-list-card>
                 </div>
 
@@ -106,6 +108,7 @@
                             )
                         "
                         :title="country?.item.name[languageKey] ?? country?.item.name.en ?? Object.values(country?.item.name ?? {})?.[0] ?? ''"
+                        class="mb-4"
                     ></song-list-card>
                 </div>
 
@@ -120,6 +123,7 @@
                         :songs="s?.songs ?? []"
                         :title="s?.title ?? ''"
                         :count="false"
+                        class="mb-4"
                     ></song-list-card>
                 </div>
 
@@ -151,7 +155,7 @@
                 </song-list-item-card>
             </div>
 
-            <h1 class="warning" v-if="!filteredSongs.length && !loading">
+            <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
                 No results
             </h1>
         </div>
@@ -423,22 +427,6 @@ export default class SongList extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
-.warning {
-    opacity: 0.4;
-}
-
-.explanations {
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--st-spacing);
-    margin-bottom: var(--st-spacing);
-
-    @include breakpoint("small"){
-        flex-direction: column;
-        gap: 0;
-    }
-}
-
 .explanation {
     margin: 0;
     
@@ -544,10 +532,6 @@ export default class SongList extends Vue {
     &__contributors {
         columns: 325px;
         column-gap: var(--st-spacing);
-
-        & > .card {
-            margin-bottom: var(--st-spacing);
-        }
     }
 
     &__list {
