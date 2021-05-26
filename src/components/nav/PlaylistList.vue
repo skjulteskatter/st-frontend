@@ -1,15 +1,15 @@
 <template>
-    <div class="playlist-list">
-        <small class="playlist-list__title">
+    <div class="p-4 mt-8 flex-grow text-sm hidden lg:block">
+        <small class="uppercase flex justify-between mb-2">
             {{ $t("common.playlists") }}
-            <router-link class="playlist-list__title__link" to="/playlists">
+            <router-link class="font-bold hover:underline" to="/playlists">
                 {{ $t("playlist.seeall") }}
             </router-link>
         </small>
-        <ul class="playlist-list__list" v-if="playlists.length > 0">
+        <ul class="flex flex-col gap-2" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="playlist-list__link"
+                    class="p-2 border hover:border-gray-400 flex justify-between rounded"
                     :to="{
                         name: 'playlist-view',
                         params: { id: playlist.id },
@@ -20,7 +20,7 @@
                 </router-link>
             </li>
         </ul>
-        <p class="playlist-list__create" v-else>
+        <p class="p-2 bg-gray-200 text-center rounded" v-else>
             {{ $t("playlist.noplaylists") }}
         </p>
     </div>
@@ -52,66 +52,3 @@ export default class CollectionList extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "../../style/mixins";
-
-.playlist-list {
-    margin-top: 1rem;
-    padding: var(--st-spacing);
-    font-size: 0.9em;
-    flex-grow: 1;
-
-    @include breakpoint("medium") {
-        display: none;
-    }
-
-    &__list {
-        font-weight: 300;
-        padding: 0;
-        margin-top: 0.5em;
-        list-style: none;
-    }
-
-    &__create {
-        padding: 0.5em var(--st-spacing);
-        border-radius: var(--st-border-radius);
-        background-color: var(--st-color-background-medium);
-        color: currentColor;
-        text-align: center;
-    }
-
-    &__link {
-        color: var(--st-color-text);
-        display: flex;
-        justify-content: space-between;
-        text-decoration: none;
-        margin-bottom: 0.5em;
-        padding: 0.5em;
-        background-color: var(--st-color-background-medium);
-        border: 1px solid var(--st-color-border);
-        border-radius: var(--st-border-radius);
-
-        &:hover {
-            color: var(--st-color-primary);
-            border: 1px solid var(--st-color-primary);
-        }
-    }
-
-    &__title {
-        text-transform: uppercase;
-        // opacity: 0.6;
-        display: flex;
-        justify-content: space-between;
-
-        &__link {
-            color: inherit;
-            font-weight: bold;
-
-            &:hover {
-                color: var(--st-color-primary);
-            }
-        }
-    }
-}
-</style>
