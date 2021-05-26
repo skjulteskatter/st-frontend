@@ -2,6 +2,7 @@
     <div class="osmd-wrapper">
         <div class="osmd-controls">
             <div class="osmd-controls__transpose">
+                <loader :loading="osmdLoading" :position="'local'"/>
                 <Icon
                     name="arrowLeft"
                     class="osmd-controls__button"
@@ -43,11 +44,13 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
+import { Loader } from "@/components";
 import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
         Icon,
+        Loader,
     },
     props: {
         options: {
@@ -70,6 +73,9 @@ export default class OSMD extends Vue {
     public async mounted() {
         this.transposition = this.options.transposition ?? 0;
         this.zoom = this.osmd.zoom;
+        const c = document.getElementById("osmd-canvas");
+
+        await this.osmd.init(c, null);
 
         try {
             await this.osmd.load(this.options);
@@ -78,13 +84,19 @@ export default class OSMD extends Vue {
         }
     }
 
+    public get osmdLoading() {
+        return this.osmd.loading;
+    }
+
     public transpose(n: number) {
+        this.osmd.loading = true;
         this.transposition = n;
         // setTimeout(() => {
             if (this.transposition == n) {
                 this.osmd.transpose(n);
             }
         // }, 500);
+        this.osmd.loading = false;
     }
 
     public setZoom() {

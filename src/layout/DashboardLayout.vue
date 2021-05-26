@@ -6,6 +6,13 @@
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
+                <div :style="!sheetMusicOptions?.show || $route.name != 'song' ? 'display: none;' : ''">
+                    <open-sheet-music-display
+                        v-if="sheetMusicOptions?.show"
+                        :options="sheetMusicOptions"
+                    />
+                    <div id="osmd-canvas"></div>
+                </div>
                 <audio-player></audio-player>
             </main>
             <!-- <feedback-form></feedback-form> -->
@@ -23,6 +30,7 @@ import { AudioPlayer } from "@/components/media";
 import { FeedbackForm } from "@/components/feedback";
 import { appSession } from "@/services/session";
 import { Loader } from "@/components";
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 
 @Options({
     components: {
@@ -30,6 +38,7 @@ import { Loader } from "@/components";
         AudioPlayer,
         FeedbackForm,
         Loader,
+        OpenSheetMusicDisplay,
     },
     name: "dashboard-layout",
 })
@@ -50,6 +59,10 @@ export default class DashboardLayout extends Vue {
             this.$router.push({ name: "login" });
         }
         await appSession.init();
+    }
+
+    public get sheetMusicOptions() {
+        return this.store.state.songs.sheetMusic;
     }
 
     public get user() {

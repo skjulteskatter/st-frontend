@@ -98,7 +98,7 @@ export default class SheetMusic extends Vue {
 
         if (o && !this.$route.params.id) {
             const options = JSON.parse(o) as SheetMusicOptions;
-            if (!this.store.state.songs.sheetMusic.url) {
+            if (!this.sheetMusic.url) {
                 this.store.commit(
                     SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
                     options,
@@ -130,16 +130,20 @@ export default class SheetMusic extends Vue {
         // this.songStore.commit("sheetMusic", o)
     }
 
+    public get sheetMusic() {
+        return this.store.state.songs.sheetMusic ?? {} as SheetMusicOptions;
+    }
+
     public get url() {
         return (
-            this.store.state.songs.sheetMusic.url ??
+            this.sheetMusic.url ??
             `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`
         );
     }
 
     public get originalKey() {
         return (
-            this.store.state.songs.sheetMusic.originalKey ??
+            this.sheetMusic.originalKey ??
             this.searchParams
                 .get("originalKey")
                 ?.replace("sharp", "#")
@@ -157,7 +161,7 @@ export default class SheetMusic extends Vue {
 
     public get transposition() {
         return (
-            this.store.state.songs.sheetMusic.transposition ??
+            this.sheetMusic.transposition ??
             (this.transposeKey ? parseInt(this.transposeKey) : undefined)
         );
     }
@@ -179,12 +183,12 @@ export default class SheetMusic extends Vue {
     }
 
     public get showSheetMusic() {
-        return this.store.state.songs.sheetMusic.show;
+        return this.sheetMusic.show;
     }
 
     public get type() {
         return (
-            this.store.state.songs.sheetMusic.type ??
+            this.sheetMusic.type ??
             this.searchParams.get("type")
         );
     }
