@@ -1,7 +1,7 @@
 <template>
     <div class="osmd-wrapper">
-        <div class="osmd-controls">
-            <div class="osmd-controls__transpose">
+        <div class="flex">
+            <div class="p-2 bg-white border border-gray-400 flex items-center gap-2 w-full">
                 <loader :loading="osmdLoading" :position="'local'"/>
                 <Icon
                     name="arrowLeft"
@@ -26,6 +26,29 @@
                             : undefined
                     "
                 />
+                <base-dropdown
+                        origin="left"
+                        :label="
+                            relativeTranspositions.find(
+                                (r) => r.value == transposition
+                            )?.view
+                        "
+                        class="lyrics-card__header__transpose"
+                    >
+                        <button
+                            :class="[
+                                transposition == t.value
+                                    ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
+                                    : 'lyrics-card__header__transpose-button',
+                            ]"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="transposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            {{ t.view }}
+                        </button>
+                    </base-dropdown>
                 <div class="osmd-controls__zoom">
                     <small>{{ Math.floor(zoom * 100) }}%</small>
                     <input
@@ -45,12 +68,15 @@
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
 import { Loader } from "@/components";
+import { BaseDropdown } from "@/components/inputs";
 import { osmd } from "@/services/osmd";
+import { transposer } from "@/classes/transposer";
 
 @Options({
     components: {
         Icon,
         Loader,
+        BaseDropdown,
     },
     props: {
         options: {
@@ -69,6 +95,13 @@ export default class OSMD extends Vue {
     public createdDone = false;
     public loading: string[] = [];
     public options: SheetMusicOptions = { show: false };
+
+    public relativeTranspositions: {
+        value: number;
+        view: string;
+        key: string;
+        original: string;
+    }[] = [];
 
     public async mounted() {
         this.transposition = this.options.transposition ?? 0;
@@ -115,16 +148,6 @@ export default class OSMD extends Vue {
 @import "../style/mixins";
 
 .osmd-controls {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: var(--st-spacing);
-    position: relative;
-
-    @include breakpoint("small") {
-        flex-direction: column;
-        align-items: initial;
-    }
-
     &__title {
         margin: 0;
     }

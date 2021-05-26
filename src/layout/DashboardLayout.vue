@@ -6,7 +6,7 @@
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
-                <div :style="!sheetMusicOptions?.show || $route.name != 'song' ? 'display: none;' : ''">
+                <div :class="{'hidden': !sheetMusicOptions?.show || $route.name != 'song' }">
                     <open-sheet-music-display
                         v-if="sheetMusicOptions?.show"
                         :options="sheetMusicOptions"
