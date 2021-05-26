@@ -16,7 +16,7 @@
                 @click="isClosed = !isClosed"
             />
         </div>
-        <div v-if="!disableContent" class="p-4" v-show="!(header && isClosed)">
+        <div v-if="!disableContent" class="p-4 h-full" v-show="!(header && isClosed)">
             <slot name="default" />
         </div>
     </div>

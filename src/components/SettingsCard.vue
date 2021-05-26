@@ -1,5 +1,5 @@
 <template>
-    <base-card class="user-settings" v-if="user">
+    <base-card class="md:col-span-3" v-if="user">
         <div class="user-settings__fields gap-y">
             <h3 class="user-settings__title">
                 {{ $t("settings.general") }}
@@ -301,7 +301,6 @@ export default class SettingsCard extends Vue {
     display: flex;
     flex-direction: column;
     gap: var(--st-spacing);
-    grid-area: settings;
 
     &__fields {
         margin-bottom: var(--st-spacing);

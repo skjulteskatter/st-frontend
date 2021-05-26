@@ -1,14 +1,16 @@
 <template>
-    <base-card class="user-card" v-if="user">
-        <img class="user-card__image" :src="user.image" alt="user portrait" />
-        <div class="user-card__details">
-            <h2 class="user-card__name">{{ user.displayName }}</h2>
-            <p class="user-card__email">{{ user.email }}</p>
-        </div>
-        <div class="user-card__roles">
-            <span class="tag" v-for="role in user.roles" :key="user?.id + role">
-                {{ role }}
-            </span>
+    <base-card class="order-1" v-if="user">
+        <div class="h-full flex gap-4 items-center justify-start md:flex-col md:justify-center">
+            <img class="w-16 h-16 md:h-32 md:w-32 rounded-full" :src="user.image" alt="user portrait" />
+            <div class="md:text-center">
+                <h2 class="font-bold text-lg">{{ user.displayName }}</h2>
+                <p class="text-gray-500">{{ user.email }}</p>
+            </div>
+            <div class="hidden md:flex gap-2">
+                <span class="tag" v-for="role in user.roles" :key="user?.id + role">
+                    {{ role }}
+                </span>
+            </div>
         </div>
     </base-card>
 </template>
@@ -36,34 +38,6 @@ export default class UserCard extends Vue {
 @import "../../style/mixins";
 
 .user-card {
-    grid-area: user;
-
-    .card__content {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: var(--st-spacing);
-
-        @include breakpoint("small") {
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-    }
-
-    &__image {
-        --size: 10rem;
-        width: var(--size);
-        height: var(--size);
-        margin: 0;
-        object-fit: cover;
-        border-radius: 30rem;
-
-        @include breakpoint("small") {
-            --size: 5rem;
-        }
-    }
 
     &__roles {
         display: flex;
@@ -82,14 +56,6 @@ export default class UserCard extends Vue {
         @include breakpoint("small") {
             text-align: initial;
         }
-    }
-
-    &__name {
-        margin: 0;
-    }
-
-    &__email {
-        margin: 0;
     }
 }
 </style>

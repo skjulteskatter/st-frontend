@@ -1,7 +1,7 @@
 <template>
-    <div class="settings-page">
-        <div class="settings-page__header">
-            <h1 class="settings-page__title">{{ $t("common.settings") }}</h1>
+    <div class="p-4 md:p-8">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
             <base-button
                 theme="error"
                 icon="logout"
@@ -11,7 +11,7 @@
                 {{ $t("common.logout") }}
             </base-button>
         </div>
-        <div class="settings-page__body">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <settings-card />
             <user-card />
         </div>
@@ -49,41 +49,12 @@ export default class SettingsView extends Vue {
 @import "../style/mixins";
 
 .settings-page {
-    padding: calc(var(--st-spacing) * 2);
-    max-width: 1920px;
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
     &__logout {
         @include breakpoint("small") {
             .button__content {
                 display: none;
             }
         }
-    }
-
-    &__body {
-        display: grid;
-        grid-template-areas: "settings settings settings settings user";
-        grid-gap: var(--st-spacing);
-
-        @include breakpoint("small") {
-            grid-template-areas:
-                "user"
-                "settings";
-        }
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    &__title {
-        margin-top: 0;
     }
 }
 </style>
