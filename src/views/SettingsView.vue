@@ -1,5 +1,6 @@
 <template>
     <div class="p-4 md:p-8">
+        <back-button />
         <div class="flex justify-between items-center mb-4">
             <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
             <base-button
@@ -20,7 +21,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { SettingsCard } from "@/components";
+import { SettingsCard, BackButton } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import { useStore } from "@/store";
@@ -31,6 +32,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
         SettingsCard,
         BaseInput,
         UserCard,
+        BackButton,
     },
     name: "settings-view",
 })
