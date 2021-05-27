@@ -9,14 +9,15 @@
         <ul class="flex flex-col gap-2" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="p-2 border hover:border-gray-400 flex justify-between rounded"
+                    class="p-2 border hover:border-gray-400 flex gap-2 rounded"
                     :to="{
                         name: 'playlist-view',
                         params: { id: playlist.id },
                     }"
                 >
+                    <icon name="playlist" size="18" class="text-gray-500" />
                     {{ playlist.name }}
-                    <small>{{ playlist.entries.length }}</small>
+                    <small class="ml-auto">{{ playlist.entries.length }}</small>
                 </router-link>
             </li>
         </ul>
@@ -32,9 +33,13 @@ import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
+import { Icon } from "@/components/icon";
 
 @Options({
     name: "playlist-list",
+    components: {
+        Icon,
+    }
 })
 export default class CollectionList extends Vue {
     private store = useStore();

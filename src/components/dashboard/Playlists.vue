@@ -8,18 +8,21 @@
         </div>
         <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
-                class="rounded bg-white p-2 text-xs border hover:border-gray-400"
+                class="rounded bg-white p-2 text-xs border hover:border-gray-400 flex gap-2 items-center"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"
             >
-                <strong>
-                    {{ p.name }}
-                </strong>
-                <small class="text-gray-400 block">
-                    {{ p.entries.length }}
-                    {{ $t("common.songs").toLowerCase() }}
-                </small>
+                <icon name="playlist" class="text-gray-500" />
+                <div>
+                    <strong>
+                        {{ p.name }}
+                    </strong>
+                    <small class="text-gray-400 block">
+                        {{ p.entries.length }}
+                        {{ $t("common.songs").toLowerCase() }}
+                    </small>
+                </div>
             </router-link>
         </div>
         <p class="p-4 bg-gray-500 rounded text-center" v-else>
@@ -32,6 +35,7 @@
 import { Options, Vue } from "vue-class-component";
 
 import { BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
@@ -41,6 +45,7 @@ import { ApiPlaylist } from "dmb-api";
     components: {
         BaseCard,
         CreatePlaylistModal,
+        Icon,
     },
 })
 export default class Playlists extends Vue {
