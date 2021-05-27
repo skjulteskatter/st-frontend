@@ -50,3 +50,9 @@ export default class NavLinks extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+.router-link-exact-active {
+    background-color: rgb(243, 244, 246);
+}
+</style>
