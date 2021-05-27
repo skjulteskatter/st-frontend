@@ -6,7 +6,7 @@
         :width="size"
         :height="size"
         stroke="currentColor"
-        class="icon"
+        class="inline flex-none"
         v-if="name"
     >
         <g v-if="icons[name].paths">
@@ -54,10 +54,3 @@ export default class Icon extends Vue {
     }
 }
 </script>
-
-<style lang="scss" >
-.icon {
-    display: inline;
-    flex: none;
-}
-</style>
