@@ -3,13 +3,12 @@
         :label="'Transpose ' + currentTransposition"
     >
         <base-button
-            style="margin: 10px 0; width: 100%"
             v-for="(key, i) in keys"
             :key="i"
             :disabled="currentTransposition == key"
             @click="transpose(transpositions[key])"
         >
-        {{key}}
+            {{key}}
         </base-button>
     </base-dropdown>
 </template>
