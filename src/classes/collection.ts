@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor } from "dmb-api";
+import { ApiCollection, ApiContributor, ApiSong } from "dmb-api";
 import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
@@ -174,37 +174,31 @@ export class Collection extends BaseClass implements ApiCollection {
         this._loading = true;
         await this.initialize();
 
-        if (this._currentLanguage != language) {
+        if (this.settings?.offline) {
+            if (navigator.onLine) {
+                try {
+                    const key = "lyrics_lastUpdated_" + this.id + "_" + language;
+                    const lastUpdated = await cache.get("config", key) as string | undefined;
+                    const updateLyrics = await api.songs.getAllLyrics(this, language, "json", 0, lastUpdated);
 
-            if (this.settings?.offline) {
-                if (navigator.onLine) {
-                    try {
-                        const key = "lyrics_lastUpdated_" + this.id + "_" + language;
-                        const lastUpdated = await cache.get("config", key) as string | undefined;
-                        const updateLyrics = await api.songs.getAllLyrics(this, language, "json", 0, lastUpdated);
-    
-                        await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: Lyrics;
-                        }));
-    
-                        const now = new Date();
-    
-                        await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
-                    }
-                    catch(e) {
-                        notify("error", "Error occured", "warning", e);
-                        this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
-                    }
+                    await cache.replaceEntries("lyrics", updateLyrics.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: Lyrics;
+                    }));
+
+                    const now = new Date();
+
+                    await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
                 }
-
-                this.lyrics = this.lyrics.length > 0 ? this.lyrics : this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionIds.some(col => col == this.id));
-            } else {
-                this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
+                catch(e) {
+                    notify("error", "Error occured", "warning", e);
+                    this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
+                }
             }
-            this._currentLanguage = language;
+
+            this.lyrics = this.lyrics.length > 0 ? this.lyrics : this.lyrics = (await cache.getAll("lyrics")).filter(l => l.collectionIds.some(col => col == this.id));
         }
 
         this._loading = false;
@@ -365,13 +359,12 @@ export class Collection extends BaseClass implements ApiCollection {
         }
     }
 
-    public async getLyrics(number: number, language: string): Promise<Lyrics> {
+    public async getLyrics(song: ApiSong, language: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-
-            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language);
+            let lyrics = this.lyrics.find(l => l.songId == song.id && l.languageKey == language);
             if (!lyrics) {
-                lyrics = new Lyrics(await api.songs.getLyrics(this, number, language, "json", 0, "common"));
+                lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
             return lyrics;

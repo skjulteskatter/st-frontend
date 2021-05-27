@@ -42,7 +42,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
             });
         }
     },
-    async [SongsActionTypes.SELECT_SONG]({ getters, commit }, number: number): Promise<void> {
+    async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number: number): Promise<void> {
         const collection = getters.collection as Collection | undefined;
         if (!collection) {
             return;
@@ -55,10 +55,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
             if (song && song.type == "lyrics") {
                 const lans = Object.keys(song.name);
-                const language = lans.includes("en") ? "en" : lans[0];
+                const language = lans.includes(state.language) ? state.language : lans.includes("en") ? "en" : lans[0];
                 commit(SongsMutationTypes.LANGUAGE, language);
-
-                await collection.getLyrics(number, language);
             }
         }
     },
