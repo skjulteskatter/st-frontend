@@ -1,5 +1,5 @@
 <template>
-    <div class="notification-group">
+    <div class="fixed bottom-0 right-0 p-4 md:p-8 flex flex-col gap-4 items-end z-20">
         <notification
             v-for="notification in notifications"
             :key="notification.title"
@@ -30,18 +30,3 @@ export default class NotificationGroup extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.notification-group {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    padding: var(--st-spacing);
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-    gap: var(--st-spacing);
-
-    z-index: 99999;
-}
-</style>

@@ -1,14 +1,18 @@
 <template>
     <transition name="note">
-        <div class="notification" :class="`${typeClass}`" v-if="show">
+        <div 
+            class="p-4 rounded bg-white shadow-md max-w-sm relative flex justify-between gap-4 border-l-4 border-primary"
+            :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error' }" 
+            v-if="show"
+        >
             <icon v-if="icon" :name="icon" size="18" />
             <small>
-                <strong style="display: block">{{ title }} </strong>
+                <strong class="block">{{ title }} </strong>
                 <span v-if="body">{{ body }}</span>
             </small>
             <Icon
                 name="error"
-                class="notification__close"
+                class="float-right"
                 size="18"
                 @click="show = false"
             />
@@ -61,20 +65,7 @@ export default class Notification extends Vue {
 
 <style lang="scss">
 .notification {
-    padding: var(--st-spacing);
-    background-color: var(--st-color-background-light);
-    border-radius: var(--st-border-radius);
-    border-left: 5px solid var(--st-color-primary);
-    box-shadow: 0px 10px 20px rgba(black, 0.2);
-    color: var(--st-color-text);
-    max-width: 25rem;
-
     animation: slideInFromBottom 0.2s;
-    position: relative;
-
-    display: flex;
-    justify-content: space-between;
-    gap: var(--st-spacing);
 
     &--success {
         border-color: var(--st-color-success);
@@ -86,10 +77,6 @@ export default class Notification extends Vue {
 
     &--warning {
         border-color: var(--st-warning-color);
-    }
-
-    &__close {
-        float: right;
     }
 }
 

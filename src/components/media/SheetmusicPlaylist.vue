@@ -1,12 +1,13 @@
 <template>
-    <div class="sheetmusic-playlist">
+    <div class="flex flex-col gap-2">
         <div
-            class="sheetmusic-playlist__file"
+            class="p-2 rounded cursor-pointer border border-gray-300 hover:border-gray-500 flex items-center gap-2"
             v-for="sheet in sheetmusic"
             :key="sheet.id"
             @click="sheetMusic(sheet)"
         >
-            <small class="sheetmusic-playlist__file__name">
+            <icon name="book" size="14" class="text-gray-500" />
+            <small>
                 {{$t(`types.${sheet.category}`)}}
                 <!-- <span style="opacity: 0.5">{{ $t(`types.${sheet.category}`).toLowerCase() }}</span> -->
             </small>
@@ -20,6 +21,7 @@ import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
+import { Icon } from "@/components/icon";
 
 @Options({
     name: "sheetmusic-playlist",
@@ -29,6 +31,9 @@ import { Options, Vue } from "vue-class-component";
             required: true,
         },
     },
+    components: {
+        Icon,
+    }
 })
 export default class SheetmusicPlaylist extends Vue {
     public store = useStore();
@@ -70,42 +75,3 @@ export default class SheetmusicPlaylist extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.sheetmusic-playlist {
-    &__file {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        width: auto;
-        border: 1px solid var(--st-color-border);
-        border-radius: var(--st-border-radius);
-
-        &__category {
-            padding: calc(var(--st-spacing) * 0.5);
-            opacity: 0.5;
-            border-left: 1px solid var(--st-color-border);
-        }
-
-        &__name {
-            padding: calc(var(--st-spacing) * 0.5);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        &:hover {
-            border-color: var(--st-color-primary);
-
-            .sheetmusic-playlist__file__name {
-                color: var(--st-color-primary);
-            }
-        }
-
-        &:not(:last-child) {
-            margin-bottom: calc(var(--st-spacing) / 2);
-        }
-    }
-}
-</style>

@@ -10,35 +10,35 @@
         <template #header>
             <router-link
                 :to="`/songs/${collection.key}`"
-                class="song-details__metadata__collection"
+                class="text-sm text-primary hover:underline"
                 v-if="collection"
             >
                 {{ collection.getName(languageKey) }}
             </router-link>
-            <h2 class="song-details__metadata__title">
-                <span class="song-details__metadata__number">
+            <h2 class="flex gap-4 text-xl font-bold mb-2">
+                <span class="text-gray-400">
                     {{ song.number }}
                 </span>
                 <span>
                     {{ title }}
                 </span>
             </h2>
-            <div class="song-details__metadata__content">
+            <div class="flex items-start gap-2">
                 <img
                     id="song-details-image"
-                    class="song-details__metadata__image"
+                    class="rounded"
                     v-if="song.image"
                     height="100"
                 />
                 <span
                     v-if="song.verses && imageLoaded"
-                    class="song-details__metadata__verse-count tag song-details-transition"
+                    class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition"
                 >
                     {{ song.verses }}
-                    {{ song.verses > 1 ? $t("song.verses") : $t("song.verse") }}
+                    {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
                 </span>
-                <div class="song-details__metadata__info" v-if="imageLoaded">
-                    <small class="song-details__metadata__credits gap-x" v-if="song.hasLyrics">
+                <div class="text-gray-500 text-base" v-if="imageLoaded">
+                    <small class="flex gap-2" v-if="song.hasLyrics">
                         <span>{{ $t("song.author") }}: </span>
                         <span v-for="author in song.authors" :key="author.id">
                             <router-link
@@ -55,7 +55,7 @@
                     </small>
                     <small
                         v-if="song.composers.length > 0"
-                        class="song-details__metadata__credits gap-x"
+                        class="flex gap-2"
                     >
                         <span>{{ $t("song.composer") }}: </span>
                         <span
@@ -76,7 +76,7 @@
                         </span>
                     </small>
                     <small
-                        class="song-details__metadata__credits"
+                        class="flex gap-2"
                         v-if="
                             song.copyright.melody &&
                             song.copyright.text &&
@@ -87,14 +87,14 @@
                     </small>
                     <div v-else>
                         <small
-                            class="song-details__metadata__credits"
+                            class="flex gap-2"
                             v-if="song.copyright.text"
                         >
                             {{ $t("song.text") }} ©:
                             {{ getLocaleString(song.copyright.text.name) }}
                         </small>
                         <small
-                            class="song-details__metadata__credits"
+                            class="flex gap-2"
                             v-if="song.copyright.melody"
                         >
                             {{ $t("song.melody") }} ©:
@@ -102,22 +102,22 @@
                         </small>
                     </div>
                     <small
-                        class="song-details__metadata__credits"
+                        class="flex gap-2"
                         v-if="melodyOrigin"
                     >
                         {{ melodyOrigin }}
                     </small>
-                    <small class="song-details__metadata__credits gap-x">
+                    <small class="flex gap-2">
                         <span v-if="song.originCountry">{{ song.originCountry }}</span>
                         <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
-                        <span v-if="song.originalKey">{{ song.originalKey }}</span>
+                        <span v-if="song.originalKey">({{ song.originalKey }})</span>
                     </small>
                 </div>
             </div>
         </template>
         <div
             v-if="description"
-            class="song-details__metadata__description"
+            class="text-sm"
             v-html="description"
         ></div>
     </base-card>
@@ -232,54 +232,8 @@ export default class SongInfoCard extends Vue {
 }
 
 .song-details__metadata {
-    width: 100%;
-
-    &__title {
-        margin-top: calc(var(--st-spacing) / 2) !important;
-    }
-
-    &__number {
-        color: var(--st-color-text);
-        text-decoration: none;
-        opacity: 0.5;
-        padding-right: 0.5em;
-    }
-
-    &__collection {
-        opacity: 0.5;
-        color: inherit;
-        font-size: 0.9em;
-        text-decoration: none;
-    }
-
     &__info {
         animation: 0.5s ease-out 0s 1 slideInFromLeft;
-    }
-
-    &__content {
-        display: flex;
-        align-items: flex-start;
-        gap: calc(var(--st-spacing) / 2);
-    }
-
-    &__credits {
-        color: var(--st-color-primary);
-        display: block;
-        margin-bottom: 0.2rem;
-
-        a {
-            color: var(--st-color-primary);
-        }
-    }
-
-    &__description {
-        display: flex;
-        flex-direction: column;
-        gap: var(--st-spacing);
-
-        & > * {
-            margin: 0;
-        }
     }
 }
 </style>

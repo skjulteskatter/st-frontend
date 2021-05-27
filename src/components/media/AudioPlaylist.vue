@@ -1,17 +1,18 @@
 <template>
-    <div class="audio-playlist">
-        <div
-            class="audio-playlist__file"
+    <ul class="flex flex-col gap-2">
+        <li
+            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center"
             v-for="audio in audiofiles"
             :key="audio.id"
             @click="selectAudio(audio)"
         >
-            <small class="audio-playlist__file__name">
+            <icon name="music" size="14" class="text-gray-500" />
+            <small>
                 {{$t(`types.${audio.category}`) + (audio.languageKey ? ' (' + audio.languageKey + ')' : '')}}
                 <!-- <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span> -->
             </small>
-        </div>
-    </div>
+        </li>
+    </ul>
 </template>
 
 <script lang="ts">
@@ -20,6 +21,7 @@ import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
+import { Icon } from "@/components/icon";
 
 @Options({
     name: "audio-playlist",
@@ -29,6 +31,9 @@ import { Options, Vue } from "vue-class-component";
             required: true,
         },
     },
+    components: {
+        Icon,
+    }
 })
 export default class AudioPlaylist extends Vue {
     public store = useStore();
@@ -56,42 +61,3 @@ export default class AudioPlaylist extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.audio-playlist {
-    &__file {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        width: auto;
-        border: 1px solid var(--st-color-border);
-        border-radius: var(--st-border-radius);
-
-        &__category {
-            padding: calc(var(--st-spacing) * 0.5);
-            opacity: 0.5;
-            border-left: 1px solid var(--st-color-border);
-        }
-
-        &__name {
-            padding: calc(var(--st-spacing) * 0.5);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        &:hover {
-            border-color: var(--st-color-primary);
-
-            .audio-playlist__file__name {
-                color: var(--st-color-primary);
-            }
-        }
-
-        &:not(:last-child) {
-            margin-bottom: calc(var(--st-spacing) / 2);
-        }
-    }
-}
-</style>
