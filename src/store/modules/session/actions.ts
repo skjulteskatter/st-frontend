@@ -48,8 +48,9 @@ async function init(state: State, commit: Commit): Promise<void> {
     const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
     if (items.length) {
-        await api.activity.pushActivities(items);
-        localStorage.setItem("activities", "[]");
+        api.activity.pushActivities(items).then(() => {
+            localStorage.setItem("activities", "[]");
+        });
     }
 
     api.activity.getActivities().then(a => {
@@ -64,6 +65,7 @@ async function init(state: State, commit: Commit): Promise<void> {
     } catch (e) {
         //console.log(e);
     }
+
     if (router.currentRoute.value.name == "login") {
         router.push(state.redirect ?? "/");
     }

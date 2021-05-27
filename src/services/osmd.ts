@@ -160,6 +160,8 @@ class OSMD {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
 
+        this.canvas.style.opacity = "0.6";
+
         this.transposition = sheetMusic.transposition ?? 0;
 
         this.osmd.setLogLevel("debug");
@@ -185,6 +187,7 @@ class OSMD {
         (window as any).osmd = this.osmd;
 
         // await this.loadPlaybackManager();
+        this.canvas.style.opacity = "1";
         this.loading = false;
     }
 

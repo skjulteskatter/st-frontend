@@ -61,7 +61,7 @@ export class Song extends BaseClass implements ApiSong {
     constructor(song: ApiSong) {
         super();
 
-        this.collections = song.collections;
+        this.collections = song.collections ;
         this.id = song.id;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];

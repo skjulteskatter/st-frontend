@@ -57,8 +57,9 @@ export default class DashboardLayout extends Vue {
         themes.load();
         if (!this.user) {
             this.$router.push({ name: "login" });
+        } else {
+            await appSession.init();
         }
-        await appSession.init();
     }
 
     public get sheetMusicOptions() {
