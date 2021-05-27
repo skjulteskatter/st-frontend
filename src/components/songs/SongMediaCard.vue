@@ -37,7 +37,7 @@
                     v-for="video in song.videoFiles"
                     theme="tertiary"
                     :key="video"
-                    :label="$t(`types.${video.category}`)"
+                    :label="$t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '')"
                 >
                     <video
                         :src="video.directUrl"

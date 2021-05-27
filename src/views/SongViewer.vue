@@ -52,7 +52,7 @@
                 </div>
                 <lyrics-card
                     :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                    v-if="song.hasLyrics"
+                    v-if="song.hasLyrics && lyrics"
                     :song="song"
                     :lyrics="lyrics"
                     :collection="collection"
@@ -139,6 +139,9 @@ export default class SongViewer extends Vue {
         await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
         this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
+        if (this.song)
+            await this.collection?.getLyrics(this.song, this.store.state.songs.language);
+
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
@@ -150,6 +153,10 @@ export default class SongViewer extends Vue {
         };
         setTimeout(log, 5000);
         this.lyricsLoading = false;
+    }
+
+    public get lyrics() {
+        return this.store.getters.lyrics;
     }
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
@@ -230,10 +237,6 @@ export default class SongViewer extends Vue {
 
     public extend() {
         this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
-    }
-
-    public get lyrics(): Lyrics | undefined {
-        return this.store.getters.lyrics;
     }
 
     public get song() {

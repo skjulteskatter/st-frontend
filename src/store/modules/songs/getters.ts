@@ -27,7 +27,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
 
         for (const l of getters.collection?.lyrics ?? []) {
             if (l.songId == getters.song?.id && l.languageKey == state.language) {
-                if (l.format != format)
+                if (l.format != format) 
                     continue;
                 if (transposition !== null) {
                     if (l.transposition == transposition) {

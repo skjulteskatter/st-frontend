@@ -202,7 +202,7 @@ export default class LyricsCard extends Vue {
     public async translateTo() {
         if (this.song) {
             await this.collection?.getLyrics(
-                this.song.number,
+                this.song,
                 this.selectedLanguage
             );
             this.store.commit(
