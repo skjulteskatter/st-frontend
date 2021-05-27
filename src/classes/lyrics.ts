@@ -13,7 +13,6 @@ export class Lyrics implements ApiLyrics {
     songId: string;
     collectionIds;
     number: number;
-    title: string;
     content: Content | string;
     format;
     hasChords;
@@ -26,7 +25,6 @@ export class Lyrics implements ApiLyrics {
         this.id = lyrics.id;
         this.songId = lyrics.songId;
         this.number = lyrics.number;
-        this.title = lyrics.title;
         this.collectionIds = lyrics.collectionIds;
         this.content = lyrics.content;
         this.format = lyrics.format;

@@ -21,12 +21,12 @@ export const getters: GetterTree<State, RootState> & Getters = {
     song(state, getters): Song | undefined {
         return (getters as {collection: Collection | undefined}).collection?.songs.find(s => s.number == state.songNumber);
     },
-    lyrics(state, getters): Lyrics | undefined {
+    lyrics(state, getters: {collection: Collection | undefined; song: Song | undefined}): Lyrics | undefined {
         const format = state.view == "transpose" ? "html" : "json";
         const transposition = format == "html" ? state.transposition : null;
 
-        for (const l of (getters as {collection: Collection | undefined}).collection?.lyrics ?? []) {
-            if (l.number == state.songNumber && l.languageKey == state.language) {
+        for (const l of getters.collection?.lyrics ?? []) {
+            if (l.songId == getters.song?.id && l.languageKey == state.language) {
                 if (l.format != format)
                     continue;
                 if (transposition !== null) {

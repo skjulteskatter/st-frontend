@@ -269,11 +269,6 @@ export class Collection extends BaseClass implements ApiCollection {
     
                     continue;
                 }
-    
-                if (lyrics.title?.includes(filter)) {
-                    numbers.push(lyrics.number);
-                    continue;
-                }
             }
         }
 

@@ -70,7 +70,6 @@ declare module "dmb-api" {
         id: string;
         songId: string;
         number: number;
-        title: string;
         collectionIds: string[];
         languageKey: string;
         content: JsonContent | string;

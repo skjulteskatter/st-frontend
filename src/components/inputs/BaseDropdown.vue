@@ -38,16 +38,13 @@ import { Icon } from "@/components/icon";
         },
         origin: {
             type: String,
-            validator(value: string){
-                ["right", "left"].contains(value);
-            },
-        }
+        },
     },
 })
 export default class BaseDropdown extends Vue {
     public label = "";
     public icon = "";
-    public origin = "";
+    public origin = "left";
     public show = false;
 
     public close(e: Event) {
