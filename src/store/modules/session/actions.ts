@@ -50,7 +50,7 @@ async function init(state: State, commit: Commit): Promise<void> {
     if (items.length) {
         api.activity.pushActivities(items).then(() => {
             localStorage.setItem("activities", "[]");
-        })
+        });
     }
 
     api.activity.getActivities().then(a => {
@@ -65,8 +65,6 @@ async function init(state: State, commit: Commit): Promise<void> {
     } catch (e) {
         //console.log(e);
     }
-
-    console.log(router.currentRoute.value);
 
     if (router.currentRoute.value.name == "login") {
         router.push(state.redirect ?? "/");
