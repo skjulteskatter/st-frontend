@@ -70,7 +70,6 @@ import { Icon } from "@/components/icon";
 import { Loader } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import { osmd } from "@/services/osmd";
-import { transposer } from "@/classes/transposer";
 
 @Options({
     components: {
