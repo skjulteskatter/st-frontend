@@ -60,6 +60,12 @@
                         step="0.1"
                     />
                 </div>
+                <Icon
+                    v-if="$route.name == 'song'"
+                    name="arrowDown"
+                    class="osmd-controls__button"
+                    @click="close()"
+                />
             </div>
         </div>
     </div>
@@ -123,6 +129,10 @@ export default class OSMD extends Vue {
         } catch (e) {
             //console.log(e);
         }
+    }
+
+    public close() {
+        this.options.show = false;
     }
 
     public get osmdLoading() {

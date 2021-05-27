@@ -59,7 +59,7 @@ const keyToInt: {
     "A": 9,
     "Bb": 10,
     "B": 11,
-}
+};
 
 // const trueTranspositions: {
 //     [key: string]: number;
