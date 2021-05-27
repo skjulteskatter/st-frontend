@@ -1,15 +1,20 @@
 <template>
     <base-card class="cursor-pointer border hover:border-gray-400" @click="goToPlaylist">
-        <strong class="font-bold">{{ playlist.name }}</strong>
-        <div class="text-gray-500">
-            <small>
-                {{ playlist.entries.length }}
-                {{ $t("common.songs").toLowerCase() }}
-            </small>
-            <!-- <small class="playlist-card__shared">
-                {{ $t("playlist.sharedwith") }}
-                {{ playlist.sharedWithIds.length }}
-            </small> -->
+        <div class="flex gap-2">
+            <icon name="playlist" class="text-gray-500" />
+            <div>
+                <strong class="font-bold">{{ playlist.name }}</strong>
+                <div class="text-gray-500">
+                    <small>
+                        {{ playlist.entries.length }}
+                        {{ $t("common.songs").toLowerCase() }}
+                    </small>
+                    <!-- <small class="playlist-card__shared">
+                        {{ $t("playlist.sharedwith") }}
+                        {{ playlist.sharedWithIds.length }}
+                    </small> -->
+                </div>
+            </div>
         </div>
     </base-card>
 </template>
@@ -18,6 +23,7 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { BaseCard } from "@/components";
+import { Icon } from "@/components/icon";
 
 @Options({
     props: {
@@ -28,6 +34,7 @@ import { BaseCard } from "@/components";
     },
     components: {
         BaseCard,
+        Icon,
     },
 })
 export default class PlaylistCard extends Vue {
