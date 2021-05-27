@@ -3,7 +3,7 @@
         <div class="flex">
             <div class="p-2 bg-white border border-gray-400 flex items-center gap-2 w-full">
                 <loader :loading="osmdLoading" :position="'local'"/>
-                <Icon
+                <!-- <Icon
                     name="arrowLeft"
                     class="osmd-controls__button"
                     @click="
@@ -25,30 +25,30 @@
                             ? transpose(transposition + 1)
                             : undefined
                     "
-                />
-                <!-- <base-dropdown
+                /> -->
+                <base-dropdown
                         origin="left"
                         :label="
                             relativeTranspositions.find(
                                 (r) => r.value == transposition
-                            )?.view
+                            )?.view ?? 'Transpose'
                         "
                         class="lyrics-card__header__transpose"
+                >
+                    <button
+                        :class="[
+                            transposition == t.value
+                                ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
+                                : 'lyrics-card__header__transpose-button',
+                        ]"
+                        v-for="t in relativeTranspositions"
+                        :key="t.key"
+                        :disabled="transposition == t.value"
+                        @click="transpose(t.value)"
                     >
-                        <button
-                            :class="[
-                                transposition == t.value
-                                    ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
-                                    : 'lyrics-card__header__transpose-button',
-                            ]"
-                            v-for="t in relativeTranspositions"
-                            :key="t.key"
-                            :disabled="transposition == t.value"
-                            @click="transpose(t.value)"
-                        >
-                            {{ t.view }}
-                        </button>
-                    </base-dropdown> -->
+                        {{ t.view }}
+                    </button>
+                </base-dropdown>
                 <div class="osmd-controls__zoom">
                     <small>{{ Math.floor(zoom * 100) }}%</small>
                     <input
@@ -67,19 +67,21 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
-import { Loader } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import { osmd } from "@/services/osmd";
+import { transposer } from "@/classes";
 
 @Options({
     components: {
         Icon,
-        Loader,
         BaseDropdown,
     },
     props: {
         options: {
             type: Object,
+        },
+        relativeKey: {
+            type: String,
         },
     },
     name: "OSMD",
@@ -88,12 +90,13 @@ export default class OSMD extends Vue {
     public osmd = osmd;
     public originalKey?: string;
     public transposition = 0;
+    public relativeKey = "C";
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public playbackControl: any;
     public zoom = 1;
     public createdDone = false;
     public loading: string[] = [];
-    public options: SheetMusicOptions = { show: false };
+    public options: SheetMusicOptions = { show: false, originalKey: "C" };
 
     public relativeTranspositions: {
         value: number;
@@ -106,6 +109,12 @@ export default class OSMD extends Vue {
         this.transposition = this.options.transposition ?? 0;
         this.zoom = this.osmd.zoom;
         const c = document.getElementById("osmd-canvas");
+
+        const originalKey = this.options.originalKey;
+
+        const transpositions = transposer.getTranspositions(originalKey, true);
+
+        this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey, transpositions);
 
         await this.osmd.init(c, null);
 

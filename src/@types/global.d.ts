@@ -30,7 +30,7 @@ interface Country {
 type SheetMusicOptions = {
     show: boolean;
     url?: string;
-    originalKey?: string;
+    originalKey: string;
     transposition?: number;
     zoom?: number;
     type?: string;

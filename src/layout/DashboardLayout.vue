@@ -10,6 +10,7 @@
                     <open-sheet-music-display
                         v-if="sheetMusicOptions?.show"
                         :options="sheetMusicOptions"
+                        :relativeKey="user.settings?.defaultTransposition"
                     />
                     <div id="osmd-canvas"></div>
                 </div>
