@@ -2,23 +2,23 @@
     <loader :loading="loading">
         <div class="p-4 md:p-8" v-if="collection">
             <back-button />
-            <div class="song-list__header">
+            <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <div class="song-list__filters text-sm" v-if="!loading">
-                    <div class="song-list__filters__wrapper gap-x">
-                        <div class="song-list__filters__field">
-                            <label for="song-category">
+                <div class="flex flex-col md:flex-row items-end gap-4 text-sm" v-if="!loading">
+                    <div class="flex gap-2">
+                        <div class="flex flex-col gap-1">
+                            <label for="song-category" class="text-gray-400 text-xs">
                                 {{ $t("song.sortby") }}
                             </label>
                             <button-group
                                 :buttons="buttons"
                                 :action="setListType"
-                                class="song-list__filters__category__buttons"
+                                class="hidden md:flex"
                             ></button-group>
                             <select
-                                class="song-list__filters__category__dropdown"
+                                class="p-2 bg-white border border-gray-300 rounded block md:hidden"
                                 @input="setListType($event.target.value)"
                             >
                                 <option
@@ -32,8 +32,8 @@
                             </select>
                         </div>
 
-                        <div class="song-list__filters__field">
-                            <label for="song-filters">
+                        <div class="flex flex-col gap-1">
+                            <label for="song-filters" class="text-xs text-gray-400">
                                 {{ $t("song.filter") }}
                             </label>
                             <song-filter-dropdown
@@ -44,7 +44,7 @@
                     </div>
                     <search-input
                         type="text"
-                        class="song-list__search"
+                        class="w-full"
                         :placeholder="$t('common.search')"
                         v-model="searchString"
                         @search="search"
@@ -142,7 +142,7 @@
             </div>
 
             <div
-                class="song-list__list song-list__list-cards"
+                class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
                 v-if="searchQuery != ''"
             >
                 <song-list-item-card
@@ -465,131 +465,10 @@ export default class SongList extends Vue {
     }
 }
 
-.search__container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: var(--st-spacing);
-}
-
 .song-list {
-    --st-half-spacing: calc(var(--st-spacing) * 0.5);
-    animation: slideInFromBottom 0.3s ease;
-    padding: calc(var(--st-spacing) * 2);
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
-    &__filters {
-        display: flex;
-        align-items: flex-end;
-        gap: calc(var(--st-spacing) / 2);
-
-        @include breakpoint("small") {
-            flex-direction: column;
-            width: 100%;
-        }
-
-        &__wrapper {
-            display: flex;
-        }
-
-        &__category {
-            &__buttons {
-                @include breakpoint("medium") {
-                    display: none;
-                }
-            }
-            &__dropdown {
-                display: none;
-
-                @include breakpoint("medium") {
-                    display: block;
-                }
-            }
-        }
-
-        &__field {
-            display: flex;
-            flex-direction: column;
-
-            label {
-                opacity: 0.5;
-                font-size: 0.8em;
-                margin-bottom: 0.2em;
-            }
-        }
-
-        .selected {
-            background: transparent;
-        }
-    }
-
-    &__title {
-        margin: 0;
-    }
-
     &__contributors {
         columns: 325px;
         column-gap: var(--st-spacing);
-    }
-
-    &__list {
-        display: flex;
-        flex-direction: column;
-
-        &-numbers {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            grid-gap: var(--st-half-spacing);
-        }
-
-        &-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            grid-gap: var(--st-spacing);
-        }
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: var(--st-spacing);
-
-        @include breakpoint("small") {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--st-spacing);
-        }
-    }
-
-    &__search {
-        width: 100%;
-    }
-
-    &__item {
-        max-width: 52px;
-        min-height: 40px;
-        width: 100%;
-        background-color: var(--st-color-background-card);
-        border: 1px solid var(--st-color-border);
-        border-radius: var(--st-border-radius);
-
-        cursor: pointer;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        &.selected {
-            border: 2px solid var(--st-color-primary);
-        }
-
-        &.disabled {
-            color: var(--st-color-border);
-            cursor: not-allowed;
-        }
     }
 }
 </style>
