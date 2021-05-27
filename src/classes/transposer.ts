@@ -44,6 +44,23 @@ const negativeKeyToInt: {
     "B": -1,
 };
 
+const keyToInt: {
+    [key: string]: number;
+} = {
+    "C": 0,
+    "Db": 1,
+    "D": 2,
+    "Eb": 3,
+    "E": 4,
+    "F": 5,
+    "F#": 6,
+    "G": 7,
+    "Ab": 8,
+    "A": 9,
+    "Bb": 10,
+    "B": 11,
+}
+
 // const trueTranspositions: {
 //     [key: string]: number;
 // } = {
@@ -78,6 +95,8 @@ const smTs: {
     "B": 1,
 };
 
+const sort = ["Ab", "A", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"];
+
 const commonTranspositions: {
     [key: string]: number;
 } = {
@@ -105,21 +124,32 @@ type Transpositions = {
 }
 
 class Transposer {
-    public getTranspositions(originalKey: string) {
+    public getTranspositions(originalKey: string, sheetMusic = false) {
         if (!originalKey) {
-            return null;
+            return {};
         }
 
         const ts: Transpositions = {};
 
-        for (let i = -12; i < 13; i++) {
-            if ((i == 12 || i == -12) && !originalKey.includes("b")) {
-                continue;
+        if (sheetMusic) {
+            const relative = this.getRelativeTransposition(originalKey);
+            for (const e of Object.entries(commonTranspositions)) {
+                const r = e[1] - relative;
+                const rel = r < 0 ? r + 12 : r;
+                if (!Object.values(ts).includes(rel)) {
+                    ts[this.getTransposedString(originalKey, rel, sheetMusic) ?? "C"] = rel;
+                }
             }
-
-            const transposition = this.getTransposedString(originalKey, i) ?? originalKey;
-
-            ts[transposition] = i;
+        } else {
+            for (let i = -12; i < 13; i++) {
+                if ((i == 12 || i == -12) && !originalKey.includes("b")) {
+                    continue;
+                }
+    
+                const transposition = this.getTransposedString(originalKey, i) ?? originalKey;
+    
+                ts[transposition] = i;
+            }
         }
 
         return ts;
@@ -148,7 +178,6 @@ class Transposer {
             view: string;
             original: string;
         }[] = [];
-
         for (const e of Object.entries(transpositions)) {
             let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
 
@@ -169,12 +198,22 @@ class Transposer {
             });
         }
 
-        return result;
+        return result.sort((a, b) => sort.indexOf(a.key) - sort.indexOf(b.key));
     }
 
-    public getTransposedString(originalKey: string, transposition: number) {
+    public getTransposedString(originalKey: string, transposition: number, sheetmusic = false) {
         if (transposition == 0) {
             return originalKey;
+        }
+
+        if (sheetmusic) {
+            const t = keyToInt[originalKey] + transposition;
+
+            if (Object.values(keyToInt).includes(t)) {
+                return Object.entries(keyToInt).find(e => e[1] == t)?.[0];
+            } else {
+                return Object.entries(keyToInt).find(e => e[1] == t - 12)?.[0];
+            }
         }
 
         if (transposition < 0) {

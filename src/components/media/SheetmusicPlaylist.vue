@@ -40,7 +40,7 @@ export default class SheetmusicPlaylist extends Vue {
         const options: SheetMusicOptions = {
             show: true,
             url: sheet?.directUrl,
-            originalKey: this.song?.originalKey,
+            originalKey: this.song?.originalKey ?? "C",
             transposition: this.transposition,
             type: sheet?.type,
         };

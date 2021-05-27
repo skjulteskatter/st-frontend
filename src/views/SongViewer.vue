@@ -117,6 +117,7 @@ export default class SongViewer extends Vue {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
             loaded: false,
+            originalKey: "C",
         });
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
         this.number = parseInt(this.$route.params.number as string);
