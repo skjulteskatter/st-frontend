@@ -1,11 +1,11 @@
 <template>
     <div
-        class="lyrics-viewer"
+        class="w-full whitespace-pre-line mb-4"
         v-for="(verse, i) in text"
         :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
     >
         <b>{{ verse.name }}</b>
-        <p class="lyrics-viewer__verse">{{ verse.content.join("\n") }}</p>
+        <p class="leading-7">{{ verse.content.join("\n") }}</p>
     </div>
 </template>
 
@@ -63,17 +63,3 @@ export default class LyricsViewer extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.lyrics-viewer {
-    width: 100%;
-    flex-grow: 1;
-    line-height: 0.9em;
-    margin-bottom: calc(var(--st-spacing) * 2);
-    white-space: pre-line;
-
-    &__verse {
-        line-height: 2;
-    }
-}
-</style>

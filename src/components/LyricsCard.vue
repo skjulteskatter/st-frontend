@@ -1,62 +1,61 @@
 <template>
-    <base-card v-if="song" class="lyrics-card" header toggleable>
+    <base-card v-if="song" class="overflow-visible" header toggleable>
         <template #header>
-            <h4 class="lyrics-card__title">{{ $t("song.lyrics") }}</h4>
-            <div class="lyrics-card__header">
-                <div class="lyrics-card__header__settings">
-                    <base-dropdown
-                        origin="left"
-                        :style="type == 'transpose' ? '' : 'display: none;'"
-                        :label="
-                            relativeTranspositions.find(
-                                (r) => r.value == selectedTransposition
-                            )?.view
-                        "
-                        class="lyrics-card__header__transpose"
+            <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
+            <div class="flex gap-2">
+                <base-dropdown
+                    origin="left"
+                    :style="type == 'transpose' ? '' : 'display: none;'"
+                    :label="
+                        relativeTranspositions.find(
+                            (r) => r.value == selectedTransposition
+                        )?.view
+                    "
+                    class="lyrics-card__header__transpose"
+                >
+                    <button
+                        :class="[
+                            selectedTransposition == t.value
+                                ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
+                                : 'lyrics-card__header__transpose-button',
+                        ]"
+                        v-for="t in relativeTranspositions"
+                        :key="t.key"
+                        :disabled="selectedTransposition == t.value"
+                        @click="transpose(t.value)"
                     >
-                        <button
-                            :class="[
-                                selectedTransposition == t.value
-                                    ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
-                                    : 'lyrics-card__header__transpose-button',
-                            ]"
-                            v-for="t in relativeTranspositions"
-                            :key="t.key"
-                            :disabled="selectedTransposition == t.value"
-                            @click="transpose(t.value)"
-                        >
-                            {{ t.view }}
-                        </button>
-                    </base-dropdown>
-                    <!-- <transpose-dropdown
-                        :transpositions="song.transpositions"
-                        :transpose="transpose"
-                    ></transpose-dropdown> -->
-                    <base-button
-                        v-if="song.hasChords"
-                        :style="{display: Lyrics?.hasChords ? '' : 'none'}"
-                        @click="transposeToggle()"
-                        icon="music"
-                        theme="tertiary"
+                        {{ t.view }}
+                    </button>
+                </base-dropdown>
+                <!-- <transpose-dropdown
+                    :transpositions="song.transpositions"
+                    :transpose="transpose"
+                ></transpose-dropdown> -->
+                <base-button
+                    v-if="song.hasChords"
+                    :style="{display: Lyrics?.hasChords ? '' : 'none'}"
+                    @click="transposeToggle()"
+                    icon="music"
+                    theme="tertiary"
+                >
+                    {{ $t("song.chords") }}
+                </base-button>
+                <select
+                    id="language"
+                    name="language"
+                    v-model="selectedLanguage"
+                    @change="translateTo()"
+                    class="p-2 border border-gray-300 rounded"
+                >
+                    <option
+                        v-for="l in (type == 'transpose' ? transposeLanguages : languages)"
+                        :value="l.key"
+                        :key="l.key"
                     >
-                        {{ $t("song.chords") }}
-                    </base-button>
-                    <select
-                        id="language"
-                        name="language"
-                        v-model="selectedLanguage"
-                        @change="translateTo()"
-                    >
-                        <option
-                            v-for="l in (type == 'transpose' ? transposeLanguages : languages)"
-                            :value="l.key"
-                            :key="l.key"
-                        >
-                            {{ l.name }}
-                        </option>
-                    </select>
-                    <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
-                </div>
+                        {{ l.name }}
+                    </option>
+                </select>
+                <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics" position="local">
@@ -282,65 +281,3 @@ export default class LyricsCard extends Vue {
     }
 }
 </script>
-<style lang="scss">
-.lyrics-card {
-    bottom: 0;
-    overflow: visible;
-
-    &__title {
-        margin: 0 0 0.5em 0;
-    }
-
-    &__header {
-        width: 100%;
-        display: flex;
-        gap: calc(var(--st-spacing) / 2);
-
-        &__label {
-            display: block;
-            opacity: 0.5;
-            margin-bottom: 0.2em;
-        }
-
-        &__transpose {
-            .card__content {
-                display: flex;
-                flex-direction: column;
-                padding: 0;
-            }
-
-            &-button {
-                position: relative;
-                background-color: transparent;
-                color: var(--st-color-text);
-                padding: calc(var(--st-spacing) / 2) calc(var(--st-spacing) * 2);
-                border-radius: 0;
-
-                &--active {
-                    background-color: var(--st-color-primary);
-                    color: var(--st-color-text-dm);
-                }
-
-                &:hover {
-                    &:after {
-                        content: "";
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(black, 0.1);
-                    }
-                }
-            }
-        }
-
-        &__settings {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            gap: calc(var(--st-spacing) / 2);
-        }
-    }
-}
-</style>
