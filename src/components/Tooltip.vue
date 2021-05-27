@@ -1,8 +1,8 @@
 <template>
-	<div class="tooltip" @mouseenter="showTooltip" @mouseleave="hideTooltip">
-		<span class="tooltip__button">?</span>
-		<div class="tooltip__box" v-if="open">
-			<small class="tootip__text">{{ text }}</small>
+	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip">
+		<span class="w-4 h-4 rounded-full bg-secondary text-white text-sm font-bold flex justify-center items-center">?</span>
+		<div class="absolute top-auto p-2 bg-secondary rounded shadow z-10" v-if="open">
+			<small class="text-white font-normal leading-tight">{{ text }}</small>
 		</div>
 	</div>
 </template>
@@ -35,35 +35,8 @@ export default class Tooltip extends Vue {
 
 <style lang="scss">
 .tooltip {
-	color: var(--st-color-text-inverted);
-	position: relative;
-	font-weight: 400;
-	font-size: 1rem;
-	cursor: default;
-
-	&__button {
-		--tooltip-size: 1.2em;
-		width: var(--tooltip-size);
-		height: var(--tooltip-size);
-		border-radius: 30em;
-		background-color: var(--st-color-secondary);
-		font-size: .9em;
-		font-weight: bold;
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
 	&__box {
-		position: absolute;
-		top: calc(100% + .2em);
-		padding: .5em;
-		background-color: var(--st-color-secondary);
-		border-radius: var(--st-border-radius);
 		animation: tooltip 1000ms;
-		z-index: 9;
-		box-shadow: 0 5px 10px rgba(black, .1);
 	}	
 }
 

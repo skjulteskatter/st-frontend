@@ -7,7 +7,7 @@
                 <p class="text-gray-500">{{ user.email }}</p>
             </div>
             <div class="hidden md:flex gap-2">
-                <span class="tag" v-for="role in user.roles" :key="user?.id + role">
+                <span class="p-1 uppercase rounded border border-gray-500 text-gray-500 text-xs" v-for="role in user.roles" :key="user?.id + role">
                     {{ role }}
                 </span>
             </div>

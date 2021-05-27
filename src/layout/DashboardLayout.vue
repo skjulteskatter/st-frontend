@@ -6,13 +6,13 @@
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
-                <div :class="{'hidden': !sheetMusicOptions?.show || $route.name != 'song' }">
+                <div :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' || $route.name != 'song' }">
                     <open-sheet-music-display
-                        v-if="sheetMusicOptions?.show"
+                        v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic'"
                         :options="sheetMusicOptions"
                         :relativeKey="user.settings?.defaultTransposition"
                     />
-                    <div id="osmd-canvas"></div>
+                    <div id="osmd-canvas" class="bg-white"></div>
                 </div>
                 <audio-player></audio-player>
             </main>
