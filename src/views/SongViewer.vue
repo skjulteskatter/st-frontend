@@ -1,63 +1,63 @@
 <template>
     <loader :loading="loading">
-        <div v-if="song" class="song-viewer">
-            <div class="song-viewer__content">
-                <div class="song-viewer__header">
-                    <back-button />
-                    <div class="song-viewer__header__buttons">
-                        <modal
-                            theme="secondary"
-                            icon="folder"
-                            :label="$t('playlist.addtoplaylist')"
-                            v-if="playlists.length"
-                        >
-                            <h3 style="margin-top: 0">
-                                {{ $t("common.playlists") }}
-                            </h3>
-                            <div class="song-viewer__playlists">
-                                <playlist-card
-                                    class="song-viewer__playlist"
-                                    v-for="playlist in playlists"
-                                    :key="playlist.id"
-                                    :playlist="playlist"
-                                    @click="addToPlaylist(playlist)"
-                                />
-                            </div>
-                        </modal>
-                        <base-button
-                            v-if="extended && song.hasLyrics"
-                            @click="extend"
-                            icon="screen"
-                            :disabled="lyrics?.format != 'json'"
-                            class="song-viewer__sidebar__buttons--advanced"
-                        >
-                            {{ $t("song.viewer") }}
-                        </base-button>
-                    </div>
+        <div v-if="song" class="flex flex-col gap-4 p-4 md:p-8">
+            <div class="flex justify-between">
+                <back-button />
+                <div class="flex gap-2">
+                    <modal
+                        class="playlist-adder"
+                        theme="secondary"
+                        icon="folder"
+                        :label="$t('playlist.addtoplaylist')"
+                        v-if="playlists.length"
+                    >
+                        <h3 class="mt-0">
+                            {{ $t("common.playlists") }}
+                        </h3>
+                        <div class="flex flex-col gap-2">
+                            <playlist-card
+                                class="song-viewer__playlist"
+                                v-for="playlist in playlists"
+                                :key="playlist.id"
+                                :playlist="playlist"
+                                @click="addToPlaylist(playlist)"
+                            />
+                        </div>
+                    </modal>
+                    <base-button
+                        v-if="extended && song.hasLyrics"
+                        @click="extend"
+                        icon="screen"
+                        :disabled="lyrics?.format != 'json'"
+                        class="viewer-button"
+                    >
+                        {{ $t("song.viewer") }}
+                    </base-button>
                 </div>
-                <div class="song-viewer__metadata">
-                    <song-info-card
-                        :song="song"
-                        :languageKey="languageKey"
-                    />
-                    <song-media-card 
-                        :song="song" 
-                    />
-                    <lyrics-settings
-                        v-if="isExtended"
-                        :languageKey="languageKey"
-                        :lyrics="lyrics"
-                        :song="song"
-                    />
-                </div>
-                <lyrics-card
-                    :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                    v-if="song.hasLyrics && lyrics"
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <song-info-card
                     :song="song"
+                    :languageKey="languageKey"
+                    class="md:col-span-2"
+                />
+                <song-media-card 
+                    :song="song" 
+                />
+                <lyrics-settings
+                    v-if="isExtended"
+                    :languageKey="languageKey"
                     :lyrics="lyrics"
-                    :collection="collection"
+                    :song="song"
                 />
             </div>
+            <lyrics-card
+                :style="sheetMusicOptions?.show ? 'display: none;' : ''"
+                v-if="song.hasLyrics && lyrics"
+                :song="song"
+                :lyrics="lyrics"
+                :collection="collection"
+            />
         </div>
     </loader>
 </template>
@@ -256,139 +256,11 @@ export default class SongViewer extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
-// ::-webkit-scrollbar {
-//     display: none;
-// }
-
-.song-viewer {
-    display: flex;
-    height: 100%;
-
-    .sheetmusic {
-        width: 100%;
-        height: 80%;
-        border: none;
-    }
-
-    &__playlists {
-        min-width: 30vw;
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--st-spacing)/2);
-    }
-
-    &__playlist {
-        border: 1px solid var(--st-color-border)
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-
-        @include breakpoint("small") {
-            flex-direction: column;
-        }
-
-        &__buttons {
-            display: flex;
-            align-items: center;
-            gap: calc(var(--st-spacing) / 2);
-
-            @include breakpoint("small") {
-                justify-content: flex-end;
-
-                > button .button__content {
-                    display: none;
-                }
-
-                .modal > button .button__content {
-                    display: none;
-                }
-            }
-        }
-    }
-
-    &__metadata {
-        display: flex;
-        gap: var(--st-spacing);
-
-        @include breakpoint("medium") {
-            flex-direction: column;
-        }
-    }
-
-    &__content {
-        flex-grow: 1;
-        flex-wrap: wrap;
-        gap: var(--st-spacing);
-        padding: calc(var(--st-spacing) * 2);
-        //overflow-y: auto;
-
-        @include breakpoint("medium") {
-            padding: var(--st-spacing);
-            //overflow-y: scroll;
-        }
-
-        & > *:not(:last-child) {
-            margin-bottom: var(--st-spacing);
-        }
-    }
-
-    &__sidebar {
-        min-width: 350px;
-        max-height: 100vh;
-        position: sticky;
-        top: 0;
-        padding: var(--st-spacing);
-        background-color: var(--st-color-background-light);
-        border-left: 1px solid var(--st-color-border);
-        animation: slideInFromRight 0.5s;
-
-        overflow-y: auto;
-
-        display: flex;
-        flex-direction: column;
-        gap: var(--st-spacing);
-
-        @include breakpoint("small") {
-            border-top: 1px solid var(--st-color-border);
-            position: fixed;
-            top: auto;
-            bottom: 0;
-            min-width: 0;
-            width: 100%;
-            overflow-y: scroll;
-
-            .song-viewer__sidebar__buttons--advanced {
-                display: none;
-            }
-        }
-
-        &__content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--st-spacing);
-            overflow-y: auto;
-            flex-grow: 1;
-
-            @include breakpoint("small") {
-                overflow-y: scroll;
-            }
-        }
-
-        &__buttons {
-            display: flex;
-            gap: calc(var(--st-spacing) / 2);
-        }
-
-        .language-dropdown {
-            &__item {
-                cursor: pointer;
-
-                &:hover {
-                    color: var(--st-color-primary);
-                }
-            }
+.viewer-button, 
+.playlist-adder {
+    @include breakpoint("medium") {
+        .button__content {
+            display: none;
         }
     }
 }
