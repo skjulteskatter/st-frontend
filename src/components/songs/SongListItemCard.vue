@@ -1,17 +1,17 @@
 <template>
-    <base-card class="song-list__item-card clickable">
-        <div class="song-list__item-card__wrapper gap-x" v-if="song">
-            <b class="song-list__item-card__number">{{ song.number }}</b>
+    <base-card class="border hover:border-gray-400 cursor-pointer">
+        <div class="flex gap-2" v-if="song">
+            <b class="text-gray-400">{{ song.number }}</b>
             <div class="song-list__item-card__body">
                 <b class="song-list__item-card__title">{{
                     song.getName(languageKey)
                 }}</b>
-                <small class="song-list__item-card__info">
-                    <span class="tag">{{ song.verses }} verses</span>
-                    <span>{{ song.originalKey }}</span>
+                <small class="text-xs text-primary flex gap-2 mb-2">
+                    <span>{{ song.verses }} {{ $t('song.verses').toLocaleLowerCase() }}</span>
+                    <span>({{ song.originalKey }})</span>
                 </small>
-                <div class="song-list__item-card__contributors">
-                    <div class="song-list__item-card__contributor">
+                <div class="text-gray-500 text-sm">
+                    <div class="">
                         <small>{{ $t("song.author") }}: </small>
                         <small
                             v-for="author in song.authors"
@@ -20,7 +20,7 @@
                         >
                     </div>
                     <div
-                        class="song-list__item-card__contributor"
+                        class=""
                         v-if="song.composers.length"
                     >
                         <small>{{ $t("song.composer") }}: </small>
@@ -30,7 +30,7 @@
                             >{{ composer.name }}</small
                         >
                     </div>
-                    <p class="context">{{ context }}</p>
+                    <p class="mt-4 text-gray-400">{{ context }}</p>
                 </div>
             </div>
         </div>
@@ -66,29 +66,3 @@ export default class SongListItemCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.song-list__item-card {
-    &__wrapper {
-        display: flex;
-    }
-
-    &__number {
-        opacity: 0.5;
-    }
-
-    &__contributors {
-        opacity: 0.5;
-    }
-
-    &__info {
-        display: block;
-        margin: 0.5rem 0;
-    }
-
-    .context {
-        margin: 0.5em 0 0 0;
-        opacity: 0.6;
-    }
-}
-</style>
