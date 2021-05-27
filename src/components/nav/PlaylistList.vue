@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 mt-8 flex-grow text-sm hidden lg:block">
+    <div class="p-4 mt-8 flex-grow text-sm hidden md:block">
         <small class="uppercase flex justify-between mb-2">
             {{ $t("common.playlists") }}
             <router-link class="font-bold hover:underline" to="/playlists">
