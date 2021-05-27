@@ -1,15 +1,15 @@
 <template>
-    <div class="search-input">
+    <div class="flex relative">
         <input
             type="text"
-            class="search-input__input"
+            class="p-2 rounded border border-gray-300 w-full"
             :placeholder="$t('common.search')"
             :value="modelValue"
             @input="(event) => $emit('update:modelValue', event.target.value)"
             @keydown.enter="$emit('search')"
         />
         <Icon
-            class="search-input__icon"
+            class="absolute top-1/2 right-2 opacity-50 transform -translate-y-1/2"
             name="search"
             size="18"
             @click="$emit('search')"
@@ -37,35 +37,3 @@ export default class SearchInput extends Vue {
     public modelValue = "";
 }
 </script>
-
-<style lang="scss">
-.search-input {
-    display: flex;
-    height: 35px;
-    position: relative;
-
-    &__icon {
-        position: absolute;
-        right: calc(var(--st-spacing) / 2);
-        top: calc(var(--st-spacing) / 2);
-        cursor: pointer;
-        opacity: 0.5;
-    }
-
-    &__button {
-        border-left: none !important;
-        border-radius: 0px var(--st-border-radius) var(--st-border-radius) 0px !important;
-
-        .button__content {
-            display: flex;
-            align-items: center;
-        }
-    }
-
-    &__input {
-        border-radius: var(--st-border-radius) 0px 0px var(--st-border-radius) !important;
-        height: auto;
-        flex-grow: 1;
-    }
-}
-</style>

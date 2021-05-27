@@ -1,14 +1,12 @@
 <template>
-    <div class="button-group" v-if="buttons.length">
+    <div class="rounded border border-gray-300 flex overflow-hidden" v-if="buttons.length">
         <button
-            class="button-group__button"
-            v-for="button in buttons"
+            class="p-2 bg-white border-gray-300"
+            :class="{ 'border-l': i > 0, 'bg-primary text-white': button.selected }"
+            v-for="(button, i) in buttons"
             :key="button.label"
             @click="action ? clickButton(button.value) : undefined"
             :style="loading[button.value] ? 'opacity: 0.5' : ''"
-            :class="{
-                'button-group__button--selected': button.selected,
-            }"
         >
             {{ button.label }}
         </button>
@@ -50,29 +48,3 @@ export default class ButtonGroup extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.button-group {
-    border-radius: var(--st-border-radius);
-    border: 1px solid var(--st-color-border);
-    overflow: hidden;
-
-    display: flex;
-
-    &__button {
-        color: var(--st-color-text);
-        background-color: var(--st-color-background-light);
-        padding: calc(var(--st-spacing) * 0.5);
-        border-radius: 0px;
-
-        &--selected {
-            background-color: var(--st-color-primary);
-            color: white;
-        }
-
-        &:not(:last-child) {
-            border-right: 1px solid var(--st-color-border);
-        }
-    }
-}
-</style>

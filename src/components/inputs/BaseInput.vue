@@ -1,21 +1,13 @@
 <template>
-    <label class="base-input">
-        <small class="base-input__label" v-if="label">{{ label }}</small>
+    <label>
+        <small class="block mb-1" v-if="label">{{ label }}</small>
         <input
-            v-if="type != 'textarea'"
-            class="base-input__input"
+            class="p-2 rounded border border-gray-300 w-full"
             v-bind="$attrs"
-            :type="type"
             :value="modelValue"
             :disabled="disabled"
             @input="(event) => $emit('update:modelValue', event.target.value)"
         />
-        <textarea
-            v-if="type == 'textarea'"
-            v-bind="$attrs"
-            :value="modelValue"
-            @input="(event) => $emit('update:modelValue', event.target.value)"
-        ></textarea>
     </label>
 </template>
 
@@ -31,9 +23,6 @@ import { Options, Vue } from "vue-class-component";
         modelValue: {
             type: String,
         },
-        type: {
-            type: String,
-        },
         disabled: {
             type: Boolean,
         },
@@ -43,20 +32,6 @@ import { Options, Vue } from "vue-class-component";
 export default class BaseInput extends Vue {
     public label = "";
     public modelValue = "";
-    public type = "text";
     public disabled = false;
 }
 </script>
-
-<style lang="scss">
-.base-input {
-    &__label {
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    &__input {
-        width: 100%;
-    }
-}
-</style>
