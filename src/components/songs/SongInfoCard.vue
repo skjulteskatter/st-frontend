@@ -1,137 +1,145 @@
 <template>
     <base-card
         v-if="song"
-        header
-        toggleable
         v-cloak
-        :disableContent="!description"
     >
-        <template #header>
-            <router-link
-                :to="`/songs/${collection.key}`"
-                class="text-sm text-primary hover:underline"
-                v-if="collection"
+        <router-link
+            :to="`/songs/${collection.key}`"
+            class="text-sm text-primary hover:underline"
+            v-if="collection"
+        >
+            {{ collection.getName(languageKey) }}
+        </router-link>
+        <h2 class="flex gap-4 text-xl font-bold mb-2">
+            <span class="text-gray-400">
+                {{ song.number }}
+            </span>
+            <span>
+                {{ title }}
+            </span>
+        </h2>
+        <div class="flex items-start gap-2">
+            <img
+                id="song-details-image"
+                class="rounded"
+                v-if="song.image"
+                height="100"
+            />
+            <span
+                v-if="song.verses && imageLoaded"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition"
             >
-                {{ collection.getName(languageKey) }}
-            </router-link>
-            <h2 class="flex gap-4 text-xl font-bold mb-2">
-                <span class="text-gray-400">
-                    {{ song.number }}
-                </span>
-                <span>
-                    {{ title }}
-                </span>
-            </h2>
-            <div class="flex items-start gap-2">
-                <img
-                    id="song-details-image"
-                    class="rounded"
-                    v-if="song.image"
-                    height="100"
-                />
-                <span
-                    v-if="song.verses && imageLoaded"
-                    class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition"
+                {{ song.verses }}
+                {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
+            </span>
+            <div class="text-gray-500 text-base flex flex-col gap-1" v-if="imageLoaded">
+                <small class="flex gap-2" v-if="song.hasLyrics">
+                    <span>{{ $t("song.author") }}: </span>
+                    <span v-for="author in song.authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
+                        <router-link
+                            :to="{
+                                name: 'contributor',
+                                params: {
+                                    contributor: author.id,
+                                },
+                            }"
+                        >
+                            {{ author.name }}
+                        </router-link>
+                    </span>
+                </small>
+                <small
+                    v-if="song.composers.length > 0"
+                    class="flex gap-2"
                 >
-                    {{ song.verses }}
-                    {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
-                </span>
-                <div class="text-gray-500 text-base flex flex-col gap-1" v-if="imageLoaded">
-                    <small class="flex gap-2" v-if="song.hasLyrics">
-                        <span>{{ $t("song.author") }}: </span>
-                        <span v-for="author in song.authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
-                            <router-link
-                                :to="{
-                                    name: 'contributor',
-                                    params: {
-                                        contributor: author.id,
-                                    },
-                                }"
-                            >
-                                {{ author.name }}
-                            </router-link>
-                        </span>
-                    </small>
-                    <small
-                        v-if="song.composers.length > 0"
-                        class="flex gap-2"
+                    <span>{{ $t("song.composer") }}: </span>
+                    <span
+                        v-for="composer in song.composers"
+                        :key="composer.id"
+                        :label="composer.name"
+                        class="px-1 rounded bg-gray-200 border hover:border-gray-400"
                     >
-                        <span>{{ $t("song.composer") }}: </span>
-                        <span
-                            v-for="composer in song.composers"
-                            :key="composer.id"
-                            :label="composer.name"
-                            class="px-1 rounded bg-gray-200 border hover:border-gray-400"
+                        <router-link
+                            :to="{
+                                name: 'contributor',
+                                params: {
+                                    contributor: composer.id,
+                                },
+                            }"
                         >
-                            <router-link
-                                :to="{
-                                    name: 'contributor',
-                                    params: {
-                                        contributor: composer.id,
-                                    },
-                                }"
-                            >
-                                {{ composer.name }}
-                            </router-link>
-                        </span>
+                            {{ composer.name }}
+                        </router-link>
+                    </span>
+                </small>
+                <small
+                    class="flex gap-2"
+                    v-if="
+                        song.copyright.melody &&
+                        song.copyright.text &&
+                        identicalCopyright
+                    "
+                >
+                    © {{ getLocaleString(song.copyright.melody.name) }}
+                </small>
+                <div v-else>
+                    <small
+                        class="flex gap-2"
+                        v-if="song.copyright.text"
+                    >
+                        {{ $t("song.text") }} ©:
+                        {{ getLocaleString(song.copyright.text.name) }}
                     </small>
                     <small
                         class="flex gap-2"
-                        v-if="
-                            song.copyright.melody &&
-                            song.copyright.text &&
-                            identicalCopyright
-                        "
+                        v-if="song.copyright.melody"
                     >
-                        © {{ getLocaleString(song.copyright.melody.name) }}
-                    </small>
-                    <div v-else>
-                        <small
-                            class="flex gap-2"
-                            v-if="song.copyright.text"
-                        >
-                            {{ $t("song.text") }} ©:
-                            {{ getLocaleString(song.copyright.text.name) }}
-                        </small>
-                        <small
-                            class="flex gap-2"
-                            v-if="song.copyright.melody"
-                        >
-                            {{ $t("song.melody") }} ©:
-                            {{ getLocaleString(song.copyright.melody.name) }}
-                        </small>
-                    </div>
-                    <small
-                        class="flex gap-2"
-                        v-if="melodyOrigin"
-                    >
-                        {{ melodyOrigin }}
-                    </small>
-                    <small class="flex gap-2">
-                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
-                        <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
-                        <span v-if="song.originalKey">({{ song.originalKey }})</span>
+                        {{ $t("song.melody") }} ©:
+                        {{ getLocaleString(song.copyright.melody.name) }}
                     </small>
                 </div>
+                <small
+                    class="flex gap-2"
+                    v-if="melodyOrigin"
+                >
+                    {{ melodyOrigin }}
+                </small>
+                <small class="flex gap-2">
+                    <span v-if="song.originCountry">{{ song.originCountry }}</span>
+                    <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
+                    <span v-if="song.originalKey">({{ song.originalKey }})</span>
+                </small>
             </div>
-        </template>
-        <div
-            v-if="description"
-            class="text-sm"
-            v-html="description"
-        ></div>
+        </div>
+        <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
+            <hr />
+            <div
+                class="text-sm"
+                :class="{ 'h-12 overflow-hidden': !showDescription }"
+                v-html="description"
+            ></div>
+            <span 
+                class="absolute bg-gradient-to-t from-white to-transparent bottom-0 w-full h-full" 
+                v-if="!showDescription"
+            >
+                <button @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                    <icon name="arrowDown" />
+                </button>
+            </span>
+        </div>
     </base-card>
 </template>
 <script lang="ts">
 import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard, Modal } from "@/components";
+import { Icon } from "@/components/icon";
 import { useStore } from "@/store";
 
 @Options({
     components: {
         BaseCard,
         Modal,
+        Icon,
     },
     props: {
         languageKey: {
@@ -148,6 +156,7 @@ export default class SongInfoCard extends Vue {
     public song?: Song;
     public imageLoaded = false;
     public store = useStore();
+    public showDescription = false;
 
     public mounted() {
         if (this.song?.image) {
