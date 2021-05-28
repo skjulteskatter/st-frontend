@@ -11,7 +11,7 @@
                 :collection="c"
             />
         </div>
-        <p class="p-4 rounded bg-gray-500 text-center" v-else>{{ $t('dashboard.noactivity') }}</p>
+        <p class="p-4 rounded bg-gray-100 text-center" v-else>{{ $t('dashboard.noactivity') }}</p>
     </base-card>
 </template>
 

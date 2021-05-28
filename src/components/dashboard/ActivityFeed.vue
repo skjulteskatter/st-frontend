@@ -27,7 +27,7 @@
                     </small>
                 </router-link>
             </div>
-            <p class="p-4 bg-gray-500 rounded text-center" v-else>
+            <p class="p-4 bg-gray-100 rounded text-center" v-else>
                 {{ $t("dashboard.noactivity") }}
             </p>
         </loader>
