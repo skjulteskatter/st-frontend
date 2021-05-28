@@ -2,44 +2,7 @@
     <base-card v-if="song" class="overflow-visible" header toggleable>
         <template #header>
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
-            <div class="flex gap-2">
-                <base-dropdown
-                    origin="left"
-                    :style="type == 'transpose' ? '' : 'display: none;'"
-                    :label="
-                        relativeTranspositions.find(
-                            (r) => r.value == selectedTransposition
-                        )?.view
-                    "
-                    class="lyrics-card__header__transpose"
-                >
-                    <button
-                        :class="[
-                            selectedTransposition == t.value
-                                ? 'lyrics-card__header__transpose-button lyrics-card__header__transpose-button--active'
-                                : 'lyrics-card__header__transpose-button',
-                        ]"
-                        v-for="t in relativeTranspositions"
-                        :key="t.key"
-                        :disabled="selectedTransposition == t.value"
-                        @click="transpose(t.value)"
-                    >
-                        {{ t.view }}
-                    </button>
-                </base-dropdown>
-                <!-- <transpose-dropdown
-                    :transpositions="song.transpositions"
-                    :transpose="transpose"
-                ></transpose-dropdown> -->
-                <base-button
-                    v-if="song.hasChords"
-                    :style="{display: Lyrics?.hasChords ? '' : 'none'}"
-                    @click="transposeToggle()"
-                    icon="music"
-                    theme="tertiary"
-                >
-                    {{ $t("song.chords") }}
-                </base-button>
+            <div class="flex gap-2 items-end">
                 <select
                     id="language"
                     name="language"
@@ -55,6 +18,46 @@
                         {{ l.name }}
                     </option>
                 </select>
+                <SwitchGroup as="div" class="flex flex-col">
+                    <SwitchLabel class="text-sm text-gray-500">{{ $t("song.chords") }}</SwitchLabel>
+                    <Switch
+                        v-if="song.hasChords"
+                        @click="transposeToggle()"
+                        :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300']"
+                        class="relative inline-flex items-center h-10 rounded-full w-20 transition-colors"
+                    >
+                        <span
+                            :class="type == 'transpose' ? 'translate-x-11' : 'translate-x-1'"
+                            class="shadow-md inline-block w-8 h-8 transform bg-white rounded-full transition-transform" />
+                    </Switch>
+                </SwitchGroup>
+                <base-dropdown
+                    origin="left"
+                    :label="
+                        relativeTranspositions.find(
+                            (r) => r.value == selectedTransposition
+                        )?.view
+                    "
+                    :class="{ 'hidden': type != 'transpose' }"
+                >
+                    <button
+                        :class="[
+                            selectedTransposition == t.value
+                                ? 'bg-primary'
+                                : '',
+                        ]"
+                        v-for="t in relativeTranspositions"
+                        :key="t.key"
+                        :disabled="selectedTransposition == t.value"
+                        @click="transpose(t.value)"
+                    >
+                        {{ t.view }}
+                    </button>
+                </base-dropdown>
+                <!-- <transpose-dropdown
+                    :transpositions="song.transpositions"
+                    :transpose="transpose"
+                ></transpose-dropdown> -->
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
             </div>
         </template>
@@ -84,6 +87,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
+import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -94,6 +98,9 @@ import { appSession } from "@/services/session";
         LyricsViewer,
         BaseCard,
         BaseDropdown,
+        Switch,
+        SwitchGroup,
+        SwitchLabel,
     },
     props: {
         lyrics: {
@@ -235,7 +242,7 @@ export default class LyricsCard extends Vue {
         }
     }
 
-    public transposeToggle() {
+    public transposeToggle() {'1'
         if (this.type === "transpose") {
             this.store.commit(SongsMutationTypes.SET_VIEW, "default");
         } else {
