@@ -1,15 +1,15 @@
 <template>
     <transition name="note">
         <div 
-            class="p-4 rounded bg-white shadow-md max-w-sm relative flex justify-between gap-4 border-l-4 border-primary"
-            :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error' }" 
+            class="p-4 rounded bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4"
+            :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error', 'border-primary': type == 'primary' }" 
             v-if="show || persist"
         >
             <icon v-if="icon" :name="icon" size="18" />
-            <small>
+            <div class="flex-grow">
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body">{{ body }}</span>
-            </small>
+            </div>
             <Icon
                 name="error"
                 class="float-right"
@@ -34,7 +34,7 @@ import { notifications } from "@/services/notifications";
             type: String,
         },
         title: {
-            type: String,
+            type: [String, Number],
         },
         body: {
             type: String,
@@ -51,7 +51,7 @@ export default class Notification extends Vue {
     public id = "";
     public type?: string;
     public icon?: string;
-    public title?: string;
+    public title?: string | number;
     public body?: string;
     
     public persist = false;

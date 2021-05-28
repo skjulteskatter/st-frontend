@@ -4,6 +4,9 @@
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative">
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
+                    <header class="py-2 px-8 bg-white shadow hidden md:flex justify-end">
+                        <notification-list />
+                    </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
                 <div :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' || $route.name != 'song' }">
@@ -28,19 +31,19 @@ import { useStore } from "@/store";
 import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
-import { FeedbackForm } from "@/components/feedback";
 import { appSession } from "@/services/session";
 import { Loader } from "@/components";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { ref } from "@vue/runtime-core";
+import { NotificationList } from "@/components/notification";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
-        FeedbackForm,
         Loader,
         OpenSheetMusicDisplay,
+        NotificationList,
     },
     name: "dashboard-layout",
 })
