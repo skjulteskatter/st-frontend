@@ -21,13 +21,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseCard } from "@/components";
-import { Icon } from "@/components/icon";
 
 @Options({
     name: "base-dropdown",
     components: {
         BaseCard,
-        Icon,
     },
     props: {
         label: {

@@ -33,13 +33,9 @@ import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
-import { Icon } from "@/components/icon";
 
 @Options({
     name: "playlist-list",
-    components: {
-        Icon,
-    }
 })
 export default class CollectionList extends Vue {
     private store = useStore();

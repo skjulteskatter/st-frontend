@@ -49,14 +49,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 import { BaseDropdown } from "@/components/inputs";
 import { osmd } from "@/services/osmd";
 import { transposer } from "@/classes";
 
 @Options({
     components: {
-        Icon,
         BaseDropdown,
     },
     props: {

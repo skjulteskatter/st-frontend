@@ -126,7 +126,6 @@
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
 import { BaseCard } from "@/components";
-import { Icon } from "@/components/icon";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -134,11 +133,11 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { notify } from "@/services/notify";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
         BaseCard,
-        Icon,
         ChangePassword,
     },
     name: "settings-card",
@@ -256,7 +255,7 @@ export default class SettingsCard extends Vue {
     }
 
     public get languages(): Language[] {
-        return this.store.state.session.languages || [];
+        return appSession.languages || [];
     }
 
     public get user(): User | undefined {

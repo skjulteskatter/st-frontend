@@ -37,7 +37,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import BaseCard from "@/components/BaseCard.vue";
-import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@headlessui/vue";
+import { Dialog, DialogOverlay } from "@headlessui/vue";
 
 @Options({
     props: {

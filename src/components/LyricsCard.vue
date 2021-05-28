@@ -83,6 +83,7 @@ import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
+import { appSession } from "@/services/session";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -194,7 +195,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get languages() {
-        const languages = this.store.state.session.languages;
+        const languages = appSession.languages;
 
         return languages.filter((l) => this.song?.name[l.key]);
     }

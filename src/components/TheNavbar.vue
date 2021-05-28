@@ -12,13 +12,11 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 import { FullSearchInput } from "@/components/inputs";
 import { PlaylistList, UserProfile, NavLinks, NavLogo } from "@/components/nav";
 
 @Options({
     components: {
-        Icon,
         PlaylistList,
         FullSearchInput,
         UserProfile,

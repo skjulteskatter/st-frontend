@@ -164,7 +164,6 @@
 
 <script lang="ts">
 import { BaseCard } from "@/components";
-import { Icon } from "@/components/icon";
 
 import { Options, Vue } from "vue-class-component";
 import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
@@ -194,7 +193,6 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
         SongFilterDropdown,
         BackButton,
         SearchInput,
-        Icon,
     },
     name: "song-list",
 })

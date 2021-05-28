@@ -19,13 +19,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 
 @Options({
     name: "search-input",
-    components: {
-        Icon,
-    },
     props: {
         modelValue: {
             type: String,

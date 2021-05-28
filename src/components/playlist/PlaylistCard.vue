@@ -23,7 +23,6 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { BaseCard } from "@/components";
-import { Icon } from "@/components/icon";
 
 @Options({
     props: {
@@ -34,7 +33,6 @@ import { Icon } from "@/components/icon";
     },
     components: {
         BaseCard,
-        Icon,
     },
 })
 export default class PlaylistCard extends Vue {

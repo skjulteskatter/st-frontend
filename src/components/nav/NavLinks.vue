@@ -35,14 +35,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 import { useStore } from "@/store";
 
 @Options({
     name: "nav-links",
-    components: {
-        Icon,
-    },
 })
 export default class NavLinks extends Vue {
     public get isAdmin() {
