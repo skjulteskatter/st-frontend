@@ -7,7 +7,7 @@
 			<b>Notifications</b>
 			<base-button v-if="notifications.length" theme="tertiary" @click="clearNotifications()">Clear</base-button>
 		</div>
-		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-full" v-if="notifications.length">
+		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">
 			<notification
 				v-for="n in notifications"
 				:key="n.id"
