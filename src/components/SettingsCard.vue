@@ -22,7 +22,7 @@
                     </option>
                 </select>
             </div>
-            <div class="user-settings__offline field gap-x">
+            <!-- <div class="user-settings__offline field gap-x">
                 <label for="offline-mode">{{ $t("common.offline") }}</label>
                 <hr />
                 <input
@@ -32,7 +32,7 @@
                     v-model="offline"
                     @change="setOffline()"
                 />
-            </div>
+            </div> -->
             <div class="user-settings__language field gap-x">
                 <label for="language">{{ $t("common.language") }}</label>
                 <hr />
