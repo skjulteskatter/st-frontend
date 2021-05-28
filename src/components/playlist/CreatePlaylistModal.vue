@@ -23,7 +23,7 @@ import { useStore } from "vuex";
 import { Modal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { notify } from "@/services/notify";
 
 @Options({
 	name: "create-playlist-modal",
@@ -42,14 +42,7 @@ export default class CreatePlaylistModal extends Vue {
             name: this.playlistName,
         });
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "check",
-            title: this.$t("playlist.newplaylist"),
-            content: `${this.$t("playlist.newplaylist")} "${
-                this.playlistName
-            }"`,
-        });
+        notify("success", this.$t("playlist.newplaylist"), "check", `${this.$t("playlist.newplaylist")} "${this.playlistName}"`);
 
         this.playlistName = "";
     }

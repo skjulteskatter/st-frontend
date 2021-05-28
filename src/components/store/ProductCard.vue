@@ -52,7 +52,6 @@ import { useStore } from "@/store";
 import CollectionSettings from "../CollectionSettings.vue";
 import { Icon } from "@/components/icon";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 

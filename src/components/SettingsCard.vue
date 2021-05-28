@@ -131,7 +131,6 @@ import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { notify } from "@/services/notify";

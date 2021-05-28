@@ -3,7 +3,7 @@
         <div 
             class="p-4 rounded bg-white shadow-md max-w-sm relative flex justify-between gap-4 border-l-4 border-primary"
             :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error' }" 
-            v-if="show"
+            v-if="show || persist"
         >
             <icon v-if="icon" :name="icon" size="18" />
             <small>
@@ -46,6 +46,9 @@ import { notifications } from "@/services/notifications";
         icon: {
             type: String,
         },
+        persist: {
+            type: Boolean,
+        },
     },
 })
 export default class Notification extends Vue {
@@ -54,6 +57,8 @@ export default class Notification extends Vue {
     public icon?: string;
     public title?: string;
     public body?: string;
+    
+    public persist = false;
 
     public show = true;
 

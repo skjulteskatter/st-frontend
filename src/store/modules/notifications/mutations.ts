@@ -6,6 +6,7 @@ import { NotificationMutationTypes } from "./mutation-types";
 export type Mutations<S = State> = {
     [NotificationMutationTypes.ADD_NOTIFICATION](state: S, payload: Notification): void;
     [NotificationMutationTypes.ADD_NOTIFICATIONS](state: S, payload: Notification[]): void;
+    [NotificationMutationTypes.CLEAR_NOTIFICATIONS](state: S): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -14,5 +15,8 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [NotificationMutationTypes.ADD_NOTIFICATIONS](state, notifications) {
         state.notifications = [...state.notifications, ...notifications];
-    }
+    },
+    [NotificationMutationTypes.CLEAR_NOTIFICATIONS](state) {
+        state.notifications = [];
+    },
 };

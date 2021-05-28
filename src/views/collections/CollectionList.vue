@@ -37,7 +37,6 @@ import { Options, Vue } from "vue-class-component";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { notify } from "@/services/notify";
 
 @Options({

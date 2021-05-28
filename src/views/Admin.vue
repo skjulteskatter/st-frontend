@@ -75,7 +75,6 @@ import { UsersList, BaseCard } from "@/components";
 import api from "@/services/api";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 

@@ -54,6 +54,11 @@ export class Notifications {
         this.store.commit(NotificationMutationTypes.ADD_NOTIFICATIONS, nots);
     }
 
+    public async clear() {
+        await cache.clearStore("notifications");
+        this.store.commit(NotificationMutationTypes.CLEAR_NOTIFICATIONS);
+    }
+
     public get Notifications() {
         return readonly(Object.values(this.notifications));
     }

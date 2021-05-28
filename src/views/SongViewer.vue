@@ -73,7 +73,7 @@ import {
 } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
-import { Collection, Lyrics } from "@/classes";
+import { Collection } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -81,7 +81,6 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { notify } from "@/services/notify";
 
 @Options({

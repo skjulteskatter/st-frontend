@@ -33,7 +33,6 @@ import { BackButton, BaseCard } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { notify } from "@/services/notify";
 
 @Options({

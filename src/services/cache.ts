@@ -32,7 +32,7 @@ class CacheService {
     ];
     private version = 15;
 
-    public db() {
+    private db() {
         const v = this.version;
         const stores = this.stores;
         return openDB(this.dbName, v, {
@@ -64,6 +64,10 @@ class CacheService {
 
     private async tx(store: Store, write = false) {
         return (await this.db()).transaction(store, write ? "readwrite" : "readonly");
+    }
+
+    public async clearStore(store: Store) {
+        await (await this.tx(store, true)).objectStore(store).clear?.();
     }
 
     public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
