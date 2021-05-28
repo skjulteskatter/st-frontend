@@ -11,12 +11,11 @@
                         :label="$t('playlist.addtoplaylist')"
                         v-if="playlists.length"
                     >
-                        <h3 class="mt-0">
+                        <h3 class="mt-0 font-bold mb-4">
                             {{ $t("common.playlists") }}
                         </h3>
                         <div class="flex flex-col gap-2">
                             <playlist-card
-                                class="song-viewer__playlist"
                                 v-for="playlist in playlists"
                                 :key="playlist.id"
                                 :playlist="playlist"

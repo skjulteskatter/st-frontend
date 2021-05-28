@@ -12,7 +12,7 @@
             </button>
             <slot name="button" v-else></slot>
         </div>
-        <base-card v-if="show" :class="`absolute top-11 ${(origin == 'left') ? 'left-0' : 'right-0'}`">
+        <base-card v-if="show" :class="`absolute top-11 ${(origin == 'left') ? 'left-0 right-auto' : 'right-0 left-auto'}`">
             <slot name="default"></slot>
         </base-card>
     </div>
