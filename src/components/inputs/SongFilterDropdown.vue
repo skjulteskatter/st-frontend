@@ -1,5 +1,5 @@
 <template>
-    <base-dropdown :label="$t('common.select')">
+    <base-dropdown :label="$t('common.select')" origin="right">
         <div class="flex justify-between items-center gap-2">
             <b>{{ $t("song.showsongswith") }}...</b>
             <base-button theme="primary" @click="apply">
