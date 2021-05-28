@@ -38,8 +38,8 @@ import { BaseCard } from "@/components";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
+import { notify } from "@/services/notify";
 
 @Options({
     name: "playlist-song-card",
@@ -71,12 +71,7 @@ export default class PlaylistSongCard extends Vue {
             entryId: this.entry.id,
         });
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "trash",
-            title,
-            content,
-        });
+        notify("success", title, "trash", content);
     }
 
     public get languageKey() {

@@ -54,6 +54,7 @@ import { Icon } from "@/components/icon";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -78,11 +79,7 @@ export default class ProductCard extends Vue {
                 this.product.id,
             );
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "buy",
-            title: this.$t("store.addedToCart"),
-        });
+        notify("success", this.$t("store.addedToCart"), "buy");
     }
 
     public get inCart() {

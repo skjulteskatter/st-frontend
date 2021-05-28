@@ -1,6 +1,5 @@
-import { useStore } from "@/store";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { notifications } from "./notifications";
 
-export const notify = (type: string, title: string, icon: string, content?: string) => {
-    useStore().dispatch(NotificationActionTypes.ADD_NOTIFICATION, {type, title, icon, content});
+export const notify = (type: any, title: string, icon: string, content?: string) => {
+    notifications.notify({type, title, icon, content});
 };

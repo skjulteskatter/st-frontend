@@ -14,7 +14,7 @@
                 name="error"
                 class="float-right"
                 size="18"
-                @click="show = false"
+                @click="remove()"
             />
         </div>
     </transition>
@@ -23,6 +23,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Icon } from "@/components/icon";
+import { notifications } from "@/services/notifications";
 
 @Options({
     name: "notification",
@@ -30,6 +31,9 @@ import { Icon } from "@/components/icon";
         Icon,
     },
     props: {
+        id: {
+            type: String,
+        },
         type: {
             type: String,
         },
@@ -45,6 +49,7 @@ import { Icon } from "@/components/icon";
     },
 })
 export default class Notification extends Vue {
+    public id = "";
     public type?: string;
     public icon?: string;
     public title?: string;
@@ -59,6 +64,11 @@ export default class Notification extends Vue {
     public get typeClass() {
         if (!this.type) return "";
         return `notification--${this.type}`;
+    }
+
+    public async remove() {
+        await notifications.remove(this.id);
+        this.show = false;
     }
 }
 </script>

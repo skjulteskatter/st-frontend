@@ -134,6 +134,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -211,11 +212,7 @@ export default class SettingsCard extends Vue {
         }
 
         // Fire a success notification
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            title: this.$t("notification.saved"),
-            icon: "check",
-        });
+        notify("success", this.$t("notification.saved"), "check");
         this.loading = false;
     }
 

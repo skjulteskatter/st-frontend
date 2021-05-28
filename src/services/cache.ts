@@ -1,7 +1,7 @@
 import { Lyrics } from "@/classes";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile } from "dmb-api";
 import { openDB } from "idb";
-import { Notification } from "./notifications";
+import { Notification } from "songtreasures";
 
 type StoreTypes = {
     songs: ApiSong;
@@ -82,6 +82,11 @@ class CacheService {
         await tx.done;
 
         return result as Entry<S>;
+    }
+
+    public async delete<S extends Store>(store: S, key: string): Promise<void> {
+        const tx = await this.tx(store, true);
+        await tx.objectStore(store).delete?.(key);
     }
 
     public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {

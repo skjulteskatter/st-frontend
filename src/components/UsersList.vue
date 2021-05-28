@@ -106,6 +106,7 @@ import { NotificationActionTypes } from "@/store/modules/notifications/action-ty
 import { useStore } from "@/store";
 import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
+import { notify } from "@/services/notify";
 
 @Options({
     name: "users-list",
@@ -139,11 +140,7 @@ export default class UsersList extends Vue {
         this.disableButton = true;
         await this.store.dispatch(UsersActionTypes.GET_USERS);
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            title: this.$t("notification.fetchedusers"),
-            icon: "check",
-        });
+        notify("success", this.$t("notification.fetchedusers"), "check");
         this.loading = false;
         this.disableButton = false;
     }
@@ -163,11 +160,7 @@ export default class UsersList extends Vue {
     public async saveRoles(user: User) {
         this.loading = true;
         await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            title: this.$t("notification.saved"),
-            icon: "check",
-        });
+        notify("success", this.$t("notification.saved"), "check");
         this.loading = false;
     }
 }

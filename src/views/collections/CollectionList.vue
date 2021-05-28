@@ -38,6 +38,7 @@ import { ProductSlider, StoreCart } from "@/components/store";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -94,11 +95,7 @@ export default class StoreHome extends Vue {
         await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "check",
-            title: this.$t("common.subscriptionsRefreshed"),
-        });
+        notify("success", "check", this.$t("common.subscriptionsRefreshed"));
     }
 }
 </script>

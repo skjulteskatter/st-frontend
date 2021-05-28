@@ -1,6 +1,7 @@
+import { Notification } from "@/services/notifications";
 import { GetterTree } from "vuex";
 import { RootState } from "../..";
-import { Notification, State } from "./state";
+import { State } from "./state";
 
 export type Getters = {
     notifications(state: State): Notification[];

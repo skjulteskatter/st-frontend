@@ -77,6 +77,7 @@ import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -124,11 +125,7 @@ export default class Subscriptions extends Vue {
     public async clearCollection(collection: string) {
         this.loadingClearCache.push(collection);
         // Notification
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "error",
-            title: await api.admin.clearCache(collection),
-            icon: "trash",
-        });
+        notify("error", await api.admin.clearCache(collection), "trash");
         this.loadingClearCache = this.loadingClearCache.filter(
             (c) => c != collection,
         );
@@ -136,17 +133,9 @@ export default class Subscriptions extends Vue {
 
     public async syncFiles() {
         this.loadingSync = true;
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "error",
-            title: this.$t("notification.syncingfiles"),
-            icon: "trash",
-        });
+        notify("error", this.$t("notification.syncingfiles"), "trash");
         try {
-            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-                type: "success",
-                title: (await api.admin.sync()).result,
-                icon: "refresh",
-            });
+            notify("success", (await api.admin.sync()).result, "refresh");
         } finally {
             this.loadingSync = false;
         }

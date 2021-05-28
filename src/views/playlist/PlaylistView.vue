@@ -34,6 +34,7 @@ import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { notify } from "@/services/notify";
 
 @Options({
     name: "playlist-view",
@@ -55,12 +56,7 @@ export default class PlaylistView extends Vue {
         );
         this.$router.push("/playlists");
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "trash",
-            title: this.$t("playlist.deletedplaylist"),
-            content: `${this.$t("playlist.deletedplaylist")} "${name}"`,
-        });
+        notify("success",  this.$t("playlist.deletedplaylist"), "trash", `${this.$t("playlist.deletedplaylist")} "${name}"`);
     }
 
     public get languageKey() {

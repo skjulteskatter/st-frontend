@@ -1,11 +1,4 @@
-export type Notification = {
-    id?: string;
-    type: string;
-    title: string;
-    content?: string;
-    icon?: string;
-    hidden?: boolean;
-}
+import { Notification } from "@/services/notifications";
 
 export type State = {
     notifications: Notification[];

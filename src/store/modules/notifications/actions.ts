@@ -4,7 +4,7 @@ import { RootState } from "../..";
 import { Mutations } from "./mutations";
 import { NotificationActionTypes } from "./action-types";
 import { NotificationMutationTypes } from "./mutation-types";
-import { Notification } from "./state";
+import { Notification } from "@/services/notifications";
 
 type AugmentedActionContext = {
     commit<K extends keyof Mutations>(

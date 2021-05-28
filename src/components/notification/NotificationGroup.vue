@@ -7,11 +7,13 @@
             :icon="notification.icon"
             :type="notification.type"
             :body="notification.content"
+            :id="notification.id"
         />
     </div>
 </template>
 
 <script lang="ts">
+import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
@@ -25,8 +27,16 @@ import Notification from "./Notification.vue";
 export default class NotificationGroup extends Vue {
     private store = useStore();
 
+    public async mounted() {
+        await notifications.init();
+    }
+
     public get notifications() {
-        return this.store.getters.notifications;
+        return this.store.getters.notifications.filter(n => {
+            const diff = new Date().getTime() - n.dateTime.getTime();
+
+            return diff < 5000;
+        });
     }
 }
 </script>

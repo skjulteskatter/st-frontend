@@ -82,6 +82,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -204,14 +205,7 @@ export default class SongViewer extends Vue {
             });
             this.componentLoading[playlist.id] = false;
 
-            this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-                type: "success",
-                title: "Added to playlist",
-                content: `Added "${song.getName(
-                    this.languageKey,
-                )}" to playlist ${playlist.name}`,
-                icon: "check",
-            });
+            notify("success", "Added to playlist",  "check", `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`);
         }
     }
 

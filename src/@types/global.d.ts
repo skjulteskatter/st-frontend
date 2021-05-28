@@ -54,3 +54,14 @@ type SongFilter = {
     hasVideoFiles: boolean;
     hasSheetMusic: boolean;
 }
+
+declare module "songtreasures" {
+    interface Notification {
+        id?: string;
+        type: "warning" | "error" | "success" | "info";
+        title: string;
+        icon: string;
+        content?: string;
+        dateTime?: Date;
+    }
+}

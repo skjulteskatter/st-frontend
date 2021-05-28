@@ -43,8 +43,8 @@ import { Options, Vue } from "vue-class-component";
 import { BackButton, BaseCard } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { NotificationActionTypes } from "@/store/modules/notifications/action-types";
 import { appSession } from "@/services/session";
+import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -75,11 +75,7 @@ export default class StoreItem extends Vue {
                 this.product.id,
             );
 
-        this.store.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-            type: "success",
-            icon: "shop",
-            title: this.$t("store.addedToCart"),
-        });
+        notify("success", "shop",this.$t("store.addedToCart"));
     }
 
     public formatPrices(prices: Price[], type: string) {
