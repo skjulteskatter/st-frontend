@@ -59,8 +59,6 @@ async function init(state: State, commit: Commit): Promise<void> {
 
     commit(SessionMutationTypes.SET_USER, user);
     try {
-        const languages = await api.items.getLanguages();
-        commit(SessionMutationTypes.SET_LANGUAGES, languages);
         await appSession.init();
     } catch (e) {
         //console.log(e);
