@@ -35,7 +35,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 import { BaseDropdown } from "@/components/inputs";
 import Notification from "@/components/notification/Notification.vue";
 import { useStore } from "@/store";
@@ -45,7 +44,6 @@ import { notifications } from "@/services/notifications";
 @Options({
     name: "user-profile",
     components: {
-        Icon,
         BaseDropdown,
         Notification,
     },

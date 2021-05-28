@@ -22,14 +22,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 import { notifications } from "@/services/notifications";
 
 @Options({
     name: "notification",
-    components: {
-        Icon,
-    },
     props: {
         id: {
             type: String,

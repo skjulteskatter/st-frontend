@@ -2,7 +2,6 @@ import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 
 export type State = {
     currentUser?: User;
-    languages: Language[];
     initialized: boolean;
     extend: boolean;
     error: string;
@@ -13,7 +12,6 @@ export type State = {
 };
 
 export const state: State = {
-    languages: [],
     initialized: false,
     extend: false,
     error: "",

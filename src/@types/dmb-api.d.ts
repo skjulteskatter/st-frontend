@@ -49,7 +49,6 @@ declare module "dmb-api" {
         copyrights: {
             type: string;
             copyrightId?: string;
-            copyright?: ApiCopyright;
         }[];
         origins: {
             type: "text" | "melody";
@@ -61,7 +60,6 @@ declare module "dmb-api" {
         };
         verses: number;
         details?: LocaleString;
-        themes?: Theme[];
         files?: MediaFile[];
         newMelody: boolean;
     }

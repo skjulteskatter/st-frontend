@@ -7,7 +7,6 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.SET_USER](state: S, payload: User): void;
     [SessionMutationTypes.CLEAR_SESSION](state: S): void;
     [SessionMutationTypes.SET_SETTINGS](state: S, payload: UserSettings): void;
-    [SessionMutationTypes.SET_LANGUAGES](state: S, payload: Language[]): void;
 
     [SessionMutationTypes.SET_LOG_ITEMS](state: S, payload: ApiActivity[]): void;
     [SessionMutationTypes.CLEAR_LOGS](state: S): void;
@@ -48,10 +47,6 @@ export const mutations: MutationTree<State> & Mutations = {
             state.currentUser.settings = settings;
         }
     },
-    [SessionMutationTypes.SET_LANGUAGES](state, languages: Language[]): void {
-        state.languages = languages;
-    },
-
     [SessionMutationTypes.SET_LOG_ITEMS](state, value: ApiActivity[]): void {
         state.activities = state.activities ?? [];
         state.activities = state.activities.slice(0, 20 - value.length); 

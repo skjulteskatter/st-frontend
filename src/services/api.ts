@@ -36,6 +36,15 @@ export const session = {
 };
 
 export const items = {
+    getThemes() {
+        return http.get<Theme[]>("api/Themes");
+    },
+    getCountries() {
+        return http.get<Country[]>("api/Countries");
+    },
+    getCopyrights() {
+        return http.get<Copyright[]>("api/Copyrights");
+    },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
     },
@@ -76,12 +85,12 @@ export const songs = {
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
-    async getAllSongs(lastUpdated?: string) {
-        return await http.get<ApiSong[]>("api/Songs?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+    async getAllSongs(collectionIds: string[], lastUpdated?: string) {
+        return await http.get<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,files/contributors,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
-    async getSongs(collection: ApiCollection, lastUpdated?: string) {
-        return await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
-    },
+    // async getSongs(collection: ApiCollection, lastUpdated?: string) {
+    //     return await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+    // },
     async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
     },

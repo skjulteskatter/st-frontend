@@ -57,7 +57,6 @@
 <script lang="ts">
 import { BaseCard, Modal } from "@/components";
 import { AudioPlaylist, SheetmusicPlaylist } from "@/components/media";
-import { Icon } from "@/components/icon";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 
@@ -67,7 +66,6 @@ import { Options, Vue } from "vue-class-component";
         Modal,
         AudioPlaylist,
         SheetmusicPlaylist,
-        Icon,
     },
     props: {
         song: {

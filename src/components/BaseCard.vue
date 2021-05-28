@@ -24,7 +24,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 
 @Options({
     props: {
@@ -48,10 +47,7 @@ import { Icon } from "@/components/icon";
         },
         secondary: {
             type: Boolean,
-        }
-    },
-    components: {
-        Icon,
+        },
     },
     name: "base-card",
 })

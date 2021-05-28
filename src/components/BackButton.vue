@@ -7,12 +7,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 
 @Options({
-    components: {
-        Icon,
-    },
     name: "back-button",
 })
 export default class BackButton extends Vue {

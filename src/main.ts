@@ -11,11 +11,13 @@ import {
     BaseButton,
     Tooltip,
 } from "@/components";
+import { Icon } from "./components/icon";
 
 createApp(App)
     .use(store)
     .use(router)
     .use(i18n)
+    .component("Icon", Icon)
     .component("loader", Loader)
     .component("base-button", BaseButton)
     .component("tooltip", Tooltip)

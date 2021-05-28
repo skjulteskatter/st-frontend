@@ -18,13 +18,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Icon } from "@/components/icon";
 
 @Options({
     name: "base-button",
-    components: {
-        Icon,
-    },
     props: {
         theme: {
             type: String,

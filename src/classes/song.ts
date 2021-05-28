@@ -4,6 +4,7 @@ import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
 import { Converter } from "showdown";
 import i18n from "@/i18n";
+import { appSession } from "@/services/session";
 const converter = new Converter();
 
 export enum SheetMusicTypes {
@@ -45,7 +46,6 @@ export class Song extends BaseClass implements ApiSong {
     public composers: Contributor[] = [];
     public participants: Participant[] = [];
     public yearWritten = 0;
-    public themes: Theme[] = [];
     public audioFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
     public sheetMusic: MediaFile[] = [];
@@ -53,6 +53,10 @@ export class Song extends BaseClass implements ApiSong {
     public hasLyrics: boolean;
     public hasChords;
     public newMelody: boolean;
+
+    public get themes() {
+        return appSession.themes.filter(t => this.themeIds.includes(t.id));
+    }
 
     public get collectionIds() {
         return this.collections.map(c => c.id);
@@ -74,7 +78,6 @@ export class Song extends BaseClass implements ApiSong {
         this.details = song.details ?? {};
         this.copyrights = song.copyrights;
         this.type = song.type;
-        this.themes = song.themes ?? [];
         this.hasLyrics = song.hasLyrics;
         this.hasChords = song.hasChords;
         this.originalKey = song.originalKey;
@@ -110,8 +113,8 @@ export class Song extends BaseClass implements ApiSong {
 
     public get copyright() {
         return {
-            text: this.copyrights.find(c => c.type == "text")?.copyright,
-            melody: this.copyrights.find(c => c.type == "melody")?.copyright,
+            text: appSession.copyrights.find(c => c.id == this.copyrights.find(c => c.type == "text")?.copyrightId),
+            melody: appSession.copyrights.find(c => c.id == this.copyrights.find(c => c.type == "melody")?.copyrightId),
         };
     }
 

@@ -35,7 +35,6 @@
 import { Options, Vue } from "vue-class-component";
 
 import { BaseCard } from "@/components";
-import { Icon } from "@/components/icon";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
@@ -45,7 +44,6 @@ import { ApiPlaylist } from "dmb-api";
     components: {
         BaseCard,
         CreatePlaylistModal,
-        Icon,
     },
 })
 export default class Playlists extends Vue {

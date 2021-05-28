@@ -24,14 +24,12 @@
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
 import { BaseDropdown } from "@/components/inputs";
-import { Icon } from "@/components/icon";
 import { Collection } from "@/classes";
 
 @Options({
     components: {
         BaseButton,
         BaseDropdown,
-        Icon,
     },
     props: {
         collection: {
