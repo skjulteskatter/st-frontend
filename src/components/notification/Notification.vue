@@ -6,7 +6,7 @@
             v-if="show || persist"
         >
             <icon v-if="icon" :name="icon" size="18" />
-            <div class="flex-grow">
+            <div class="flex-grow text-xs">
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body">{{ body }}</span>
             </div>
