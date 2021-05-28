@@ -210,7 +210,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
         const res = await api.playlists.addToPlaylist(obj.playlistId, obj.songId, obj.transposition);
 
         if (res) {
-            playlist.entries.push(res);
+            playlist.entries = [...playlist.entries, ...res];
             commit(SessionMutationTypes.UPDATE_PLAYLIST, playlist);
         }
     },

@@ -132,13 +132,15 @@ export const playlists = {
         return http.delete(`api/Playlists/${id}`);
     },
     async addToPlaylist(playlistId: string, songId: string, transposition?: number) {
-        return await http.post<ApiPlaylistEntry, unknown>(`api/Playlists/${playlistId}`, {
-            songId,
+        return await http.post<ApiPlaylistEntry[], unknown>(`api/Playlists/${playlistId}`, {
+            songIds: [songId],
             transposition,
         });
     },
     async removeEntryFromPlaylist(playlistId: string, entryId: string) {
-        return (await http.delete<ApiPlaylist>(`api/Playlists/${playlistId}/${entryId}`));
+        return (await http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
+            removeEntryIds: [entryId],
+        }));
     },
 };
 

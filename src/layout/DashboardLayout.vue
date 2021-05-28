@@ -32,6 +32,7 @@ import { FeedbackForm } from "@/components/feedback";
 import { appSession } from "@/services/session";
 import { Loader } from "@/components";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
+import { ref } from "@vue/runtime-core";
 
 @Options({
     components: {
@@ -47,7 +48,7 @@ export default class DashboardLayout extends Vue {
     public store = useStore();
 
     public get initialized() {
-        return appSession.initialized;
+        return ref(appSession.initialized).value;
     }
 
     async mounted() {
