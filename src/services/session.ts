@@ -28,7 +28,6 @@ export class Session {
 
         this._initialized = false;
         this.collections = (await songs.getCollections()).map(c => new Collection(c));
-        const offline = (await cache.get("config", "offline")) == true;
 
         const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
 
@@ -52,7 +51,8 @@ export class Session {
         await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
         
         if (ownedCols.length) {
-            if (offline != false) {
+            // const offline = (await cache.get("config", "offline")) == true;
+            // if (offline) {
                 try {
                     const key = "last_updated_songs";
                     const lastUpdated = await cache.get("config", key) as string | undefined;
@@ -78,9 +78,9 @@ export class Session {
                 }
                 
                 this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-            } else {
-                this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
-            }
+            // } else {
+            //     this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
+            // }
         }
 
         items.getCountries().then(c => {
@@ -92,7 +92,7 @@ export class Session {
         items.getCopyrights().then(c => {
             this.copyrights = c;
         });
-        
+
         this.languages = await items.getLanguages();
 
         this._initialized = true;
