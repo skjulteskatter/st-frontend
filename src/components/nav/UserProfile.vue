@@ -7,7 +7,7 @@
             </b>
             <small class="text-gray-500">{{ user.email }}</small>
         </div>
-        <Icon
+        <icon
             name="settings"
             size="24"
             @click="$router.push({ name: 'settings' })"

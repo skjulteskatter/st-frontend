@@ -1,5 +1,5 @@
 <template>
-    <nav class="z-10 bg-white shadow-md md:max-w-xs flex sm:flex-col flex-shrink-0 sticky top-0 left-0">
+    <nav class="z-10 bg-white shadow-md md:max-w-xs flex justify-between sm:flex-col flex-shrink-0 sticky top-0 left-0">
         <nav-logo />
         <div class="p-4 hidden md:block">
             <FullSearchInput />

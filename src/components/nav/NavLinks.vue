@@ -27,7 +27,7 @@
             class="p-4 flex md:hidden gap-4 items-center"
             :to="{ name: 'settings' }"
         >
-            <Icon name="settings" size="20" />
+            <icon name="settings" size="20" />
             <span class="hidden md:block">{{ $t("common.settings") }}</span>
         </router-link>
     </div>

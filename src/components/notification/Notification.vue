@@ -18,7 +18,7 @@
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body">{{ body }}</span>
             </div>
-            <Icon
+            <icon
                 name="error"
                 class="float-right"
                 size="18"

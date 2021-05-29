@@ -9,7 +9,7 @@
             <div>
                 <slot name="header" />
             </div>
-            <Icon
+            <icon
                 class="cursor-pointer"
                 v-if="toggleable && !disableContent"
                 :name="isClosed ? 'arrowDown' : 'arrowUp'"

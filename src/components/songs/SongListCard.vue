@@ -1,34 +1,32 @@
 <template>
     <base-card class="theme-card" v-if="title && songs.length > 0">
-        <div class="theme-card__header">
+        <div class="flex justify-between mb-3">
             <b
-                class="theme-card__title"
-                :class="{ selectable: action != undefined }"
+                :class="{ 'border hover:border-gray-400 bg-gray-100 rounded px-1 cursor-pointer': action != undefined }"
                 @click="action"
-                :style="action ? 'cursor:pointer' : ''"
                 >{{ title }}</b
             >
-            <b class="theme-card__count" v-if="count">{{ songs.length }}</b>
+            <b class="text-gray-500" v-if="count">{{ songs.length }}</b>
         </div>
-        <ul class="theme-card__list">
+        <ul class="text-xs">
             <li
                 v-for="song in songs"
                 :key="song.id"
                 @click="available(song.number) ? selectSong(song) : undefined"
-                class="theme-card__list__item gap-x"
+                class="flex gap-2 hover:text-primary hover:underline cursor-pointer"
                 :class="{
-                    'wrong-language': anotherLanguage.includes(song),
-                    'available': available(song.number),
-                    'missing-sheetmusic': !song.sheetMusic.length,
+                    'text-red-700': anotherLanguage.includes(song),
+                    'text-gray-500': !available(song.number),
+                    'text-green-700': !song.sheetMusic.length,
                 }"
             >
-                <div class="theme-card__list__item__number">
-                    <b>{{ song.number }}</b>
-                </div>
-                <div class="theme-card__list__item__title">
-                    <span>{{ song.getName(languageKey) }}</span>
-                </div>
-                <icon style="color: var(--st-color-primary)" name="star" size="12" v-if="song.newMelody" />
+                <b class="w-6 text-right">
+                    {{ song.number }}
+                </b>
+                <span>
+                    {{ song.getName(languageKey) }}
+                </span>
+                <icon class="text-primary" name="star" size="12" v-if="song.newMelody" />
             </li>
         </ul>
     </base-card>
@@ -108,77 +106,6 @@ export default class SongListCard extends Vue {
 
     @supports not (gap: 1rem) {
         margin-bottom: var(--st-spacing);
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__count {
-        opacity: 0.5;
-    }
-
-    &__title {
-        display: flex;
-        margin-bottom: 0.2rem;
-        text-decoration: none;
-
-        &.selectable {
-            cursor: pointer;
-
-            &:hover {
-                color: var(--st-color-primary);
-
-                .theme-card__list__item__title {
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
-
-    &__list {
-        margin: var(--st-spacing) 0 0 0;
-        padding: 0;
-        font-size: 0.8rem;
-        color: var(--st-text-color);
-
-        &__item {
-            display: flex;
-            margin-bottom: 0.2rem;
-            text-decoration: none;
-            opacity: 0.5;
-
-            &.available {
-                opacity: 1;
-                cursor: pointer;
-
-                &:hover {
-                    color: var(--st-color-primary);
-
-                    .theme-card__list__item__title {
-                        text-decoration: underline;
-                    }
-                }
-            }
-
-            &.wrong-language {
-                color: var(--st-color-error);
-            }
-
-            &.missing-sheetmusic {
-                color: var(--st-color-success);
-            }
-
-            &__number {
-                width: 3ch;
-                text-align: right;
-            }
-
-            &__title {
-                word-wrap: normal;
-            }
-        }
     }
 }
 </style>

@@ -44,7 +44,6 @@
                     </div>
                     <search-input
                         type="text"
-                        class="w-full"
                         :placeholder="$t('common.search')"
                         v-model="searchString"
                         @search="search"
@@ -137,6 +136,7 @@
                         :key="s?.title ?? Math.random()"
                         :songs="s?.songs ?? []"
                         :title="s?.title ?? ''"
+                        class="mb-4"
                     ></song-list-card>
                 </div>
             </div>

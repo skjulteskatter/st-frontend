@@ -36,7 +36,7 @@
                         step="0.1"
                     />
                 </div>
-                <Icon
+                <icon
                     v-if="$route.name == 'song'"
                     name="error"
                     class="ml-auto cursor-pointer text-red-700"

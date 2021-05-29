@@ -27,14 +27,12 @@
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
 import { notifications } from "@/services/notifications";
-import { Icon } from "@/components/icon";
 import { useStore } from "vuex";
 
 @Options({
 	name: "notification-list",
 	components: {
 		Notification,
-		Icon,
 	},
 })
 export default class NotificationList extends Vue {

@@ -52,7 +52,7 @@ body {
     background-color: var(--st-color-background-dark);
     color: var(--st-color-text);
 
-    &.darkmode {
+    &.dark {
         --st-color-secondary: #ffffff;
         --st-color-background-dark: var(--st-color-ui-dm-dark);
         --st-color-background-medium: var(--st-color-ui-dm-medium);

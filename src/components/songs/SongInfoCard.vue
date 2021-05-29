@@ -132,13 +132,11 @@
 import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
-import { Icon } from "@/components/icon";
 import { useStore } from "@/store";
 
 @Options({
     components: {
         Modal,
-        Icon,
     },
     props: {
         languageKey: {

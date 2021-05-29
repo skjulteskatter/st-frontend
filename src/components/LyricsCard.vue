@@ -4,11 +4,11 @@
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end">
                 <select
+                    class="rounded border-gray-300"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
                     @change="translateTo()"
-                    class="p-2 border border-gray-300 rounded"
                 >
                     <option
                         v-for="l in (type == 'transpose' ? transposeLanguages : languages)"

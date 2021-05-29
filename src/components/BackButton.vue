@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center mb-4 cursor-pointer w-min" @click="back">
-        <Icon name="arrowLeft" size="20" />
+        <icon name="arrowLeft" size="20" />
         <span>{{ previous ? $t("common.back") : $t("common.home") }}</span>
     </div>
 </template>
