@@ -11,13 +11,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, Modal } from "@/components";
+import { Modal } from "@/components";
 import { useStore } from "@/store";
 
 @Options({
     name: "lyrics-viewer",
     components: {
-        BaseCard,
         Modal,
     },
 })

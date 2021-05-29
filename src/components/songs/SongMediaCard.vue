@@ -55,14 +55,13 @@
 </template>
 
 <script lang="ts">
-import { BaseCard, Modal } from "@/components";
+import { Modal } from "@/components";
 import { AudioPlaylist, SheetmusicPlaylist } from "@/components/media";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
     components: {
-        BaseCard,
         Modal,
         AudioPlaylist,
         SheetmusicPlaylist,

@@ -7,13 +7,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Song } from "@/classes";
-import BaseCard from "@/components/BaseCard.vue";
 
 @Options({
     name: "song-list-item-number",
-    components: {
-        BaseCard,
-    },
     props: {
         song: {
             type: Song,

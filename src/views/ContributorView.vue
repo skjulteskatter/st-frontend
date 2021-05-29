@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BackButton } from "@/components";
+import { BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Contributor, Song } from "@/classes";
 import { useStore } from "@/store";
@@ -71,7 +71,6 @@ import { appSession } from "@/services/session";
 
 @Options({
     components: {
-        BaseCard,
         SongListCard,
         BackButton,
     },

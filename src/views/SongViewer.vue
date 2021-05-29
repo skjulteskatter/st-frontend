@@ -66,11 +66,9 @@ import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
     LyricsCard,
-    BaseCard,
     BackButton,
     Modal,
 } from "@/components";
-import { BaseDropdown } from "@/components/inputs";
 import { PlaylistCard } from "@/components/playlist";
 import { Collection } from "@/classes";
 // import { osmd } from "@/services/osmd";
@@ -88,8 +86,6 @@ import { notify } from "@/services/notify";
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
-        BaseCard,
-        BaseDropdown,
         BackButton,
         Modal,
         PlaylistCard,

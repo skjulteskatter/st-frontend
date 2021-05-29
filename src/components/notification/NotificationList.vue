@@ -26,7 +26,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
-import { BaseDropdown } from "@/components/inputs";
 import { notifications } from "@/services/notifications";
 import { Icon } from "@/components/icon";
 import { useStore } from "vuex";
@@ -35,7 +34,6 @@ import { useStore } from "vuex";
 	name: "notification-list",
 	components: {
 		Notification,
-		BaseDropdown,
 		Icon,
 	},
 })

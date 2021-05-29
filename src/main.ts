@@ -10,6 +10,7 @@ import {
     Loader,
     BaseButton,
     Tooltip,
+    BaseCard,
 } from "@/components";
 import { Icon } from "./components/icon";
 import { BaseDropdown } from "./components/inputs";
@@ -18,9 +19,10 @@ createApp(App)
     .use(store)
     .use(router)
     .use(i18n)
-    .component("Icon", Icon)
+    .component("icon", Icon)
     .component("loader", Loader)
     .component("base-button", BaseButton)
+    .component("base-card", BaseCard)
     .component("tooltip", Tooltip)
     .component("base-dropdown", BaseDropdown)
     .mount("#app");

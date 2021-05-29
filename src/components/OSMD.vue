@@ -49,14 +49,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseDropdown } from "@/components/inputs";
 import { osmd } from "@/services/osmd";
 import { transposer } from "@/classes";
 
 @Options({
-    components: {
-        BaseDropdown,
-    },
     props: {
         options: {
             type: Object,

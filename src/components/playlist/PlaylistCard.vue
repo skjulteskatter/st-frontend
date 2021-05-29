@@ -22,17 +22,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
-import { BaseCard } from "@/components";
-
 @Options({
     props: {
         playlist: {
             type: Object,
             required: true,
         },
-    },
-    components: {
-        BaseCard,
     },
 })
 export default class PlaylistCard extends Vue {

@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { UsersList, BaseCard } from "@/components";
+import { UsersList } from "@/components";
 import api from "@/services/api";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -81,7 +81,6 @@ import { notify } from "@/services/notify";
 @Options({
     components: {
         UsersList,
-        BaseCard,
     },
     name: "admin",
 })

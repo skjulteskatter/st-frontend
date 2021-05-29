@@ -18,13 +18,12 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, CollectionCard } from "@/components";
+import { CollectionCard } from "@/components";
 import { appSession } from "@/services/session";
 
 @Options({
     name: "recent-collections",
     components: {
-        BaseCard,
         CollectionCard,
     },
 })

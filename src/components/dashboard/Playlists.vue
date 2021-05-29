@@ -33,8 +33,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-
-import { BaseCard } from "@/components";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
@@ -42,7 +40,6 @@ import { ApiPlaylist } from "dmb-api";
 @Options({
     name: "dashboard-playlists",
     components: {
-        BaseCard,
         CreatePlaylistModal,
     },
 })

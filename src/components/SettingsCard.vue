@@ -125,7 +125,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import themes, { Themes } from "@/classes/themes";
-import { BaseCard } from "@/components";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -137,7 +136,6 @@ import { appSession } from "@/services/session";
 
 @Options({
     components: {
-        BaseCard,
         ChangePassword,
     },
     name: "settings-card",

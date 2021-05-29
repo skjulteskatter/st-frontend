@@ -37,15 +37,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
-
-import { BaseCard } from "@/components";
 import { appSession } from "@/services/session";
 
 @Options({
     name: "activity-feed",
-    components: {
-        BaseCard,
-    },
 })
 export default class ActivityFeed extends Vue {
     private store = useStore();

@@ -16,15 +16,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { BaseCard } from "@/components";
+import { Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-@Options({
-    components: {
-        BaseCard,
-    },
-})
 export default class UserCard extends Vue {
     private store = useStore();
 

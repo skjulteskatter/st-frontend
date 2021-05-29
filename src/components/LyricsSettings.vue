@@ -74,12 +74,10 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
-import BaseCard from "@/components/BaseCard.vue";
 import Modal from "@/components/Modal.vue";
 
 @Options({
     components: {
-        BaseCard,
         Modal,
     },
     props: {

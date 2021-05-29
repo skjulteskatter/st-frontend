@@ -36,14 +36,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 
 @Options({
-    components: {
-        BaseCard,
-    },
     props: {
         title: {
             type: String,

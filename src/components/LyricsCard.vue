@@ -75,8 +75,6 @@
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import { BaseCard } from "@/components";
-import BaseDropdown from "@/components/inputs/BaseDropdown.vue";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
@@ -96,8 +94,6 @@ import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
         TransposedLyricsViewer,
         TransposeDropdown,
         LyricsViewer,
-        BaseCard,
-        BaseDropdown,
         Switch,
         SwitchGroup,
         SwitchLabel,

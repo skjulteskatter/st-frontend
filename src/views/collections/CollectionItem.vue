@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton, BaseCard } from "@/components";
+import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
@@ -49,7 +49,6 @@ import { notify } from "@/services/notify";
 @Options({
     components: {
         BackButton,
-        BaseCard,
     },
     name: "collection-item",
 })

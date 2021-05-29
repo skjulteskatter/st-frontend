@@ -129,15 +129,11 @@
 <script lang="ts">
 import { Collection } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import BaseDropdown from "./BaseDropdown.vue";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     name: "song-filter-dropdown",
-    components: {
-        BaseDropdown,
-    },
     props: {
         themes: {
             type: Array,

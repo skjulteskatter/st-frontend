@@ -23,14 +23,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
 import { useStore } from "@/store";
 import { IndexedSong } from "dmb-api";
 
 @Options({
-    components: {
-        BaseCard,
-    },
     props: {
         song: {
             type: Object,

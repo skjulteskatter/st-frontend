@@ -34,7 +34,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist, ApiPlaylistEntry } from "dmb-api";
-import { BaseCard } from "@/components";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -52,9 +51,6 @@ import { notify } from "@/services/notify";
             type: Object,
             required: true,
         },
-    },
-    components: {
-        BaseCard,
     },
 })
 export default class PlaylistSongCard extends Vue {

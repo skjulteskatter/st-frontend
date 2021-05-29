@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton, BaseCard } from "@/components";
+import { BackButton } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -39,7 +39,6 @@ import { notify } from "@/services/notify";
     name: "playlist-view",
     components: {
         BackButton,
-        BaseCard,
         PlaylistSongCard,
     },
 })

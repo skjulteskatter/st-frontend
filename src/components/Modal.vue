@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import BaseCard from "@/components/BaseCard.vue";
 import { Dialog, DialogOverlay } from "@headlessui/vue";
 
 @Options({
@@ -61,7 +60,6 @@ import { Dialog, DialogOverlay } from "@headlessui/vue";
         },
     },
     components: {
-        BaseCard,
         Dialog,
         DialogOverlay,
     },

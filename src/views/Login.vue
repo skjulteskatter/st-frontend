@@ -87,7 +87,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard  } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -95,7 +94,6 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {
-        BaseCard,
         BaseInput,
     },
     name: "login",

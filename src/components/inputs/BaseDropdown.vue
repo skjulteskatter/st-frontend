@@ -20,13 +20,9 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard } from "@/components";
 
 @Options({
     name: "base-dropdown",
-    components: {
-        BaseCard,
-    },
     props: {
         label: {
             type: String,

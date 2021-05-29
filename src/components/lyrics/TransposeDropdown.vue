@@ -14,13 +14,9 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseDropdown } from "@/components/inputs";
 import { useStore } from "@/store";
 
 @Options({
-    components: {
-        BaseDropdown,
-    },
     props: {
         transpositions: {
             type: Object,

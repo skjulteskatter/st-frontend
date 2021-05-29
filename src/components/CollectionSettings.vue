@@ -23,13 +23,11 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseButton } from "@/components";
-import { BaseDropdown } from "@/components/inputs";
 import { Collection } from "@/classes";
 
 @Options({
     components: {
         BaseButton,
-        BaseDropdown,
     },
     props: {
         collection: {

@@ -33,7 +33,6 @@
 </template>
 <script lang="ts">
 import { Modal } from "@/components";
-import { BaseDropdown } from "@/components/inputs";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
@@ -42,7 +41,6 @@ import { Options, Vue } from "vue-class-component";
 @Options({
     components: {
         Modal,
-        BaseDropdown,
     },
     name: "store-cart",
 })

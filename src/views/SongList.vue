@@ -163,8 +163,6 @@
 </template>
 
 <script lang="ts">
-import { BaseCard } from "@/components";
-
 import { Options, Vue } from "vue-class-component";
 import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 
@@ -185,7 +183,6 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 
 @Options({
     components: {
-        BaseCard,
         SongListItemNumber,
         SongListItemCard,
         SongListCard,

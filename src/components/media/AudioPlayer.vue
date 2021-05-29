@@ -45,16 +45,12 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard } from "@/components";
 import Plyr from "plyr";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     name: "audio-player",
-    components: {
-        BaseCard,
-    },
 })
 export default class AudioPlayer extends Vue {
     public store = useStore();

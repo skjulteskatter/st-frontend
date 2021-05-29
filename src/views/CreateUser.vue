@@ -61,14 +61,13 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BaseCard, BaseButton } from "@/components";
+import { BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {
-        BaseCard,
         BaseButton,
         BaseInput,
     },

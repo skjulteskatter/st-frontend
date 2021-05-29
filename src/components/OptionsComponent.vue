@@ -11,12 +11,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { BaseDropdown } from "@/components/inputs";
-
 @Options({
-    components: {
-        BaseDropdown,
-    },
     name: "options-component",
 })
 export default class OptionsComponent extends Vue {}
