@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/performance";
+// import "firebase/performance";
 import { firebaseConfig } from "@/config";
 import router from "@/router";
 import api from "./api";
@@ -27,7 +27,7 @@ firebase.initializeApp(firebaseConfig);
 
 const a = firebase.auth;
 
-firebase.performance();
+// firebase.performance();
 
 if (!a) {
     notInitialized();
