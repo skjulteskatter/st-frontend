@@ -12,6 +12,7 @@ import {
     Tooltip,
 } from "@/components";
 import { Icon } from "./components/icon";
+import { BaseDropdown } from "./components/inputs";
 
 createApp(App)
     .use(store)
@@ -21,4 +22,5 @@ createApp(App)
     .component("loader", Loader)
     .component("base-button", BaseButton)
     .component("tooltip", Tooltip)
+    .component("base-dropdown", BaseDropdown)
     .mount("#app");
