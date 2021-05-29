@@ -13,7 +13,7 @@ export class Product extends BaseClass implements ApiProduct {
         super();
         this._collections = collections?.filter(c => product.collectionIds.includes(c.id));
         this.id = product.id;
-        this.name = product.name;
+        this.name = this._collections[0]?.name ?? {};
         this.prices = product.prices;
         this.priority = product.priority;
         this.collectionIds = product.collectionIds;
