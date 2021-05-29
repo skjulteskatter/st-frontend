@@ -76,7 +76,7 @@
 import { Collection, Lyrics, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { BaseCard } from "@/components";
-import { BaseDropdown } from "@/components/inputs";
+import BaseDropdown from "@/components/inputs/BaseDropdown.vue";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
@@ -242,7 +242,7 @@ export default class LyricsCard extends Vue {
         }
     }
 
-    public transposeToggle() {'1'
+    public transposeToggle() {
         if (this.type === "transpose") {
             this.store.commit(SongsMutationTypes.SET_VIEW, "default");
         } else {

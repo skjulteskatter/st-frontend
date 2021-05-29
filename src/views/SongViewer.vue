@@ -52,7 +52,7 @@
             </div>
             <lyrics-card
                 :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                v-if="song.hasLyrics && lyrics"
+                v-if="song.hasLyrics && (lyrics || view == 'transpose')"
                 :song="song"
                 :lyrics="lyrics"
                 :collection="collection"
@@ -138,8 +138,21 @@ export default class SongViewer extends Vue {
         await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
         this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
-        if (this.song)
-            await this.collection?.getLyrics(this.song, this.store.state.songs.language);
+        if (this.song && this.collection)
+        {
+            if (this.store.state.songs.view == "transpose") {
+                await this.collection?.transposeLyrics(
+                    this.song.collections.find(s => s.id == this.collection?.id)?.number ?? 0, 
+                    this.store.state.songs.transposition ?? 0,
+                    this.languageKey,
+                );
+                // console.log(l);
+            }
+            else {
+                await this.collection?.getLyrics(this.song, this.store.state.songs.language);
+            }
+                
+        }
 
         const route = this.$route.fullPath;
         const log = () => {
@@ -156,6 +169,10 @@ export default class SongViewer extends Vue {
 
     public get lyrics() {
         return this.store.getters.lyrics;
+    }
+
+    public get view() {
+        return this.store.state.songs.view;
     }
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
