@@ -24,11 +24,11 @@
                         v-if="song.hasChords"
                         @click="transposeToggle()"
                         :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300']"
-                        class="relative inline-flex items-center h-10 rounded-full w-20 transition-colors"
+                        class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none"
                     >
                         <span
-                            :class="type == 'transpose' ? 'translate-x-11' : 'translate-x-1'"
-                            class="shadow-md inline-block w-8 h-8 transform bg-white rounded-full transition-transform" />
+                            :class="type == 'transpose' ? 'translate-x-9' : 'translate-x-1'"
+                            class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform" />
                     </Switch>
                 </SwitchGroup>
                 <base-dropdown

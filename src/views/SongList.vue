@@ -50,10 +50,10 @@
                     />
                 </div>
             </div>
-            <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4">
-                <p class="explanation explanation--star"><icon name="star" size="12" />{{$t("common.newMelody")}}</p>
-                <p class="explanation explanation--green">{{$t("common.noSheetMusic")}}</p>
-                <p class="explanation explanation--red">{{$t("common.notAvailableInThisLanguage")}}</p>
+            <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm">
+                <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
+                <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
+                <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
             </div>
             <div v-if="searchQuery == '' && !loading">
                 <div
@@ -421,44 +421,6 @@ export default class SongList extends Vue {
 
 <style lang="scss">
 @import "../style/mixins";
-
-.explanation {
-    margin: 0;
-    
-    &--red {
-        color: var(--st-color-error);
-        &:before {
-            background-color: var(--st-color-error);
-        }
-    }
-
-    &--green {
-        color: var(--st-color-success);
-        &:before {
-            background-color: var(--st-color-success);
-        }
-    }
-
-    &--star {
-        color: var(--st-color-primary);
-        display: flex;
-        align-items: center;
-        gap: var(--st-half-spacing);
-
-        &:before {
-            display: none !important;
-        }
-    }
-    
-    &:before {
-        content: "";
-        width: .5em;
-        height: .5em;
-        border-radius: 30rem;
-        display: inline-block;
-        margin-right: .5em;
-    }
-}
 
 .song-list {
     &__contributors {

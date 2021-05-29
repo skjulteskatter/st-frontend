@@ -1,6 +1,4 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
 	[type='text'],
@@ -20,9 +18,12 @@
 	select {
 		@apply w-full border-gray-300 rounded focus:border-primary focus:ring-primary;
 	}
-
+	
 	[type='checkbox'],
 	[type='radio'] {
 		@apply rounded border-gray-300 text-primary focus:ring-primary;
 	}
 }
+
+@tailwind components;
+@tailwind utilities;
