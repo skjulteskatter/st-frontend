@@ -134,7 +134,7 @@ export default class SongViewer extends Vue {
         await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
         this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
-        if (this.song && this.collection)
+        if (this.song?.hasLyrics && this.collection)
         {
             if (this.store.state.songs.view == "transpose") {
                 await this.collection?.transposeLyrics(
