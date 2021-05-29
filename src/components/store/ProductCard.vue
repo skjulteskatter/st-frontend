@@ -7,7 +7,7 @@
             :alt="product.getName(languageKey)"
         />
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300">
-            <div class="flex justify-between mb-4">
+            <div class="flex justify-between items-start mb-4">
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
