@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md" :class="{'border border-red-700': isAvailable}" v-if="product">
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md" :class="{'border border-green-700': isOwned}" v-if="product">
         <img
             class="w-full object-cover cursor-pointer"
             :src="image"
