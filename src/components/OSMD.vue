@@ -1,7 +1,7 @@
 <template>
     <div class="osmd-wrapper">
         <div class="flex">
-            <div class="p-2 bg-white border border-gray-400 flex items-center gap-2 w-full">
+            <div class="p-2 border border-gray-300 flex items-center gap-2 w-full">
                 <loader :loading="osmdLoading" :position="'local'" />
                 <base-dropdown
                         origin="left"

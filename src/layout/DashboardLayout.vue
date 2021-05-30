@@ -4,7 +4,7 @@
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative">
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
-                    <header class="py-2 px-8 bg-white shadow hidden md:flex justify-end">
+                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-end sticky top-0 z-10">
                         <notification-list />
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
