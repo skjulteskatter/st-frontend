@@ -2,7 +2,7 @@
     <base-card class="theme-card" v-if="title && songs.length > 0">
         <div class="flex justify-between mb-3">
             <b
-                :class="{ 'border hover:border-gray-400 bg-gray-100 rounded px-1 cursor-pointer': action != undefined }"
+                :class="{ 'border hover:border-gray-400 bg-gray-200 rounded px-1 cursor-pointer': action != undefined }"
                 @click="action"
                 >{{ title }}</b
             >
