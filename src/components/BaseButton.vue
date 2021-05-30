@@ -1,6 +1,6 @@
 <template>
     <button
-        class="py-2 px-4 text-white cursor-pointer flex justify-center items-center gap-2 rounded relative"
+        class="py-2 px-4 text-white cursor-pointer flex justify-center items-center gap-2 rounded relative focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="[`button-${theme}`, { 'button-loading': loading, 'button-disabled': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"

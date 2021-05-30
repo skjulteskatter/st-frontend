@@ -1,8 +1,8 @@
 <template>
     <label class="border-none p-0">
-        <small class="block mb-1" v-if="label">{{ label }}</small>
+        <small class="block" v-if="label">{{ label }}</small>
         <input
-            class="rounded border-gray-300 focus:ring-primary focus:border-primary"
+            class="rounded border-gray-300 focus:ring focus:ring-primary focus:ring-offset-2 focus:border-primary w-full"
             v-bind="$attrs"
             :value="modelValue"
             :disabled="disabled"
