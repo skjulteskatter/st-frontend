@@ -1,7 +1,7 @@
 <template>
-    <ul class="flex flex-col gap-2">
-        <li
-            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center"
+    <div class="flex flex-col gap-2">
+        <button
+            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center focus:ring focus:ring-primary focus:outline-none"
             v-for="audio in audiofiles"
             :key="audio.id"
             @click="selectAudio(audio)"
@@ -11,8 +11,8 @@
                 {{$t(`types.${audio.category}`) + (audio.languageKey ? ' (' + audio.languageKey + ')' : '')}}
                 <!-- <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span> -->
             </small>
-        </li>
-    </ul>
+        </button>
+    </div>
 </template>
 
 <script lang="ts">

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2">
-        <div
-            class="p-2 rounded cursor-pointer border border-gray-300 hover:border-gray-500 flex items-center gap-2"
+        <button
+            class="p-2 rounded cursor-pointer border border-gray-300 hover:border-gray-500 flex items-center gap-2 focus:ring focus:ring-primary focus:outline-none"
             v-for="sheet in sheetmusic"
             :key="sheet.id"
             @click="sheetMusic(sheet)"
@@ -11,7 +11,7 @@
                 {{$t(`types.${sheet.category}`)}}
                 <!-- <span style="opacity: 0.5">{{ $t(`types.${sheet.category}`).toLowerCase() }}</span> -->
             </small>
-        </div>
+        </button>
     </div>
 </template>
 
