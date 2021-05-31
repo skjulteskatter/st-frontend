@@ -1,7 +1,7 @@
 import { Collection } from "@/classes";
 import { getContributors } from "@/functions/helpers";
-import { analytics } from "@/main";
 import { songs } from "@/services/api";
+import { analytics } from "@/services/auth";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
 import { RootState } from "../..";
@@ -56,8 +56,11 @@ export const actions: ActionTree<State, RootState> & Actions = {
             const song = collection?.songs.find(s => s.number == number);
 
             if (song && song.type == "lyrics") {
-                analytics.logEvent("song_id", {
-                    songId: song.id,
+                analytics.logEvent("song_details_enter", {
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    song_id: song.id,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    collection_id: collection.id,
                 });
                 const lans = Object.keys(song.name);
                 const language = lans.includes(state.language) ? state.language : lans.includes("en") ? "en" : lans[0];

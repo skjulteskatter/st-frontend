@@ -1,12 +1,21 @@
 /* eslint-disable no-console */
 import firebase from "firebase/app";
-import { a, analytics } from "@/main";
+import "firebase/auth";
+import "firebase/performance";
+import "firebase/analytics";
 import router from "@/router";
 import api from "./api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { notify } from "./notify";
+import { firebaseConfig } from "@/config";
+
+firebase.initializeApp(firebaseConfig);
+
+export const analytics = firebase.analytics();
+
+export const a = firebase.auth;
 
 function notInitialized() {
     throw Error("FIREBASE DID NOT INITIALIZE");
