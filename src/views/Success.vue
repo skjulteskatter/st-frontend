@@ -3,7 +3,7 @@
         <div class="success__content">
             <h1 class="success__title">Thank you for your purchase!</h1>
             <p class="success__text">Your product should be available soon.</p>
-            <router-link class="success__link" to="/"
+            <router-link class="success__link" to="/collections"
                 >Go to dashboard</router-link
             >
         </div>

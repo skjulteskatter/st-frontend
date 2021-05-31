@@ -310,7 +310,15 @@ export class Collection extends BaseClass implements ApiCollection {
             if (!this._authors) {
                 if (!this.contributors)
                     await this.loadContributors();
-                this._authors = this.contributors?.filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.item.id && p.type == "author"))) ?? [];
+                    this._authors = this.contributors?.map(c => {
+                        const cItem: CollectionItem<ApiContributor> = {
+                            songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
+                            id: c.id,
+                            fileIds: c.fileIds,
+                            item: c.item,
+                        };
+                        return cItem;
+                    }) ?? [];   
                 return this._authors.length;
             }
         }
@@ -318,7 +326,15 @@ export class Collection extends BaseClass implements ApiCollection {
             if (!this._composers) {
                 if (!this.contributors)
                     await this.loadContributors();
-                this._composers = this.contributors?.filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.item.id && p.type == "composer"))) ?? [];
+                this._composers = this.contributors?.map(c => {
+                    const cItem: CollectionItem<ApiContributor> = {
+                        songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
+                        id: c.id,
+                        fileIds: c.fileIds,
+                        item: c.item,
+                    };
+                    return cItem;
+                }) ?? [];   
                 return this._composers.length;
             }
         }

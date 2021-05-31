@@ -31,7 +31,7 @@ class CacheService {
         "files",
         "notifications",
     ];
-    private version = 16;
+    private version = 17;
 
     private db() {
         const v = this.version;
@@ -100,7 +100,6 @@ class CacheService {
         const result = await tx.objectStore(store).getAll();
 
         await tx.done;
-
         if (store == "lyrics") {
             return result.map(l => new Lyrics(l)) as Entry<S>[];
         } else if (store == "contributors") {

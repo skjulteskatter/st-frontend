@@ -60,7 +60,6 @@ declare module "dmb-api" {
         };
         verses: number;
         details?: LocaleString;
-        files?: MediaFile[];
         newMelody: boolean;
     }
 
