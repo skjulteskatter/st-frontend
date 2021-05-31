@@ -24,6 +24,10 @@
                         </div>
                     </modal>
                     <base-button
+                        v-if="admin"
+                        @click="goToEditPage()"
+                    >Edit</base-button>
+                    <base-button
                         v-if="extended && song.hasLyrics"
                         @click="extend"
                         icon="screen"
@@ -52,7 +56,7 @@
             </div>
             <lyrics-card
                 :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                v-if="song.hasLyrics && (lyrics || view == 'transpose')"
+                v-if="song.hasLyrics"
                 :song="song"
                 :lyrics="lyrics"
                 :collection="collection"
@@ -163,6 +167,10 @@ export default class SongViewer extends Vue {
         this.lyricsLoading = false;
     }
 
+    public get admin() {
+        return this.store.state.session.currentUser?.roles.includes("administrator");
+    }
+
     public get lyrics() {
         return this.store.getters.lyrics;
     }
@@ -218,6 +226,10 @@ export default class SongViewer extends Vue {
 
             notify("success", "Added to playlist",  "check", `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`);
         }
+    }
+
+    public goToEditPage() {
+        window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id}`);
     }
 
     public get playlists() {
