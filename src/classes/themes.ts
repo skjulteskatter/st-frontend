@@ -35,9 +35,8 @@ export class Themes {
         // this.setThemeProperties(theme);
 
         // Add 'darkmode' class if user applies darkmode
-        const app = document.querySelector("body");
-        if (key == "dark") app?.classList.add("dark");
-        else if (key == "light") app?.classList.remove("dark");
+        if (key == "dark") document.documentElement.classList.add("dark");
+        else if (key == "light") document.documentElement.classList.remove("dark");
 
         localStorage.setItem("theme", key);
     }
