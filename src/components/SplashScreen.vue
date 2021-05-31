@@ -22,7 +22,7 @@ import { TransitionRoot } from "@headlessui/vue";
 		loading: {
 			type: Boolean,
 			default: true,
-		}
+		},
 	},
 	components: {
 		TransitionRoot,
