@@ -1,5 +1,5 @@
 <template>
-    <TransitionRoot
+    <transition-root
         :show="show"
         enter="transition-opacity duration-200"
         enter-from="opacity-0"
@@ -9,7 +9,7 @@
         leave-to="opacity-0"
     >
         <div
-            class="p-4 rounded bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4"
+            class="p-2 rounded bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4"
             :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error', 'border-primary': type == 'primary' }" 
             v-if="show || persist"
         >
@@ -25,7 +25,7 @@
                 @click="remove()"
             />
         </div>
-    </TransitionRoot>
+    </transition-root>
 </template>
 
 <script lang="ts">
