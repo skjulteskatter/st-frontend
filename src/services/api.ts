@@ -86,7 +86,7 @@ export const songs = {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
     async getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return await http.get<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,files/contributors,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return await http.get<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
         return http.get<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
