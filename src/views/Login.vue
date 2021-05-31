@@ -1,6 +1,6 @@
 <template>
     <!-- <div id="firebase-auth-container"></div> -->
-    <div class="p-4 h-screen w-screen flex flex-col justify-center items-center gap-8">
+    <div class="p-4 h-screen w-screen flex flex-col justify-center items-center gap-8" v-if="initialized && !user">
         <div class="flex flex-col justify-center gap-4">
             <img
                 src="/img/logo/icon.svg"
@@ -12,7 +12,7 @@
                 <p class="m-0 text-sm">Or <router-link class="text-primary hover:underline" to="/create">register an account</router-link></p>
             </div>
         </div>
-        <base-card id="login-card" class="p-4 max-w-md w-full" v-if="initialized && !user">
+        <base-card id="login-card" class="p-4 max-w-md w-full">
             <div class="flex flex-col gap-6">
                 <p v-if="noAccount" class="text-sm text-red-700 bg-red-100 rounded p-2">No account found with that email</p>
                 <form @submit.prevent="submitForm" class="flex flex-col gap-4">

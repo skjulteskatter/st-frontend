@@ -1,7 +1,6 @@
 <template>
-    <loader :loading="initialized === false">
-        <router-view />
-    </loader>
+    <splash-screen :loading="initialized === false" />
+    <router-view />
     <notification-group />
 </template>
 <script lang="ts">
@@ -9,10 +8,12 @@ import { Options, Vue } from "vue-class-component";
 import { NotificationGroup } from "@/components/notification";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import SplashScreen from "@/components/SplashScreen.vue";
 
 @Options({
     components: {
         NotificationGroup,
+        SplashScreen,
     },
     name: "app",
 })
