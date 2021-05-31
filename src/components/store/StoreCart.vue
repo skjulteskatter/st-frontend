@@ -7,7 +7,7 @@
                     {{ $t("store.clearCart") }}
                 </button>
             </div>
-            <div class="flex flex-col gap-4 mb-4">
+            <div class="flex flex-col gap-2 mb-4">
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
