@@ -7,6 +7,8 @@
             :icon="notification.icon"
             :type="notification.type"
             :body="notification.content"
+            :timeout="notification.timeout"
+            :callback="notification.callback"
             :id="notification.id"
         />
     </div>
