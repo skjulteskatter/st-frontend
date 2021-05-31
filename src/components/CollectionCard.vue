@@ -13,7 +13,6 @@
         />
         <span class="text-xs font-bold w-full flex justify-between items-center">
             {{ name }}
-            <icon name="book" size="16" class="text-gray-400" />
         </span>
     </button>
 </template>
