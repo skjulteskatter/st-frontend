@@ -2,6 +2,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/performance";
+import "firebase/analytics";
 import { firebaseConfig } from "@/config";
 import router from "@/router";
 import api from "./api";
@@ -28,6 +29,7 @@ firebase.initializeApp(firebaseConfig);
 const a = firebase.auth;
 
 firebase.performance();
+
 
 if (!a) {
     notInitialized();
