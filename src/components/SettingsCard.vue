@@ -1,17 +1,17 @@
 <template>
     <base-card class="md:col-span-3" v-if="user">
-        <div class="user-settings__fields gap-y">
-            <h3 class="user-settings__title">
+        <div class="flex flex-col gap-2 mb-4">
+            <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
                 <base-button
                     @click="cache.clearCache()"
-                    theme="tertiary"
+                    theme="error"
                 >Clear cache</base-button>
             </h3>
-            <div class="user-settings__theme field gap-x">
+            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
-                <hr />
                 <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -33,10 +33,10 @@
                     @change="setOffline()"
                 />
             </div> -->
-            <div class="user-settings__language field gap-x">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                 <label for="language">{{ $t("common.language") }}</label>
-                <hr />
                 <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -51,10 +51,10 @@
                     </option>
                 </select>
             </div>
-            <div class="user-settings__key field gap-x">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                 <label for="transposition-key">{{ $t("song.key") }}</label>
-                <hr />
                 <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -80,23 +80,22 @@
                 </select>
             </div> -->
         </div>
-        <div class="user-settings__fields gap-y">
-            <h3 class="user-settings__title">
+        <div class="flex flex-col gap-2 mb-4">
+            <h3 class="font-bold">
                 {{ $t("common.user") }}
             </h3>
-            <div class="user-settings__name field gap-x">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                 <label for="display-name">{{ $t("common.name") }}</label>
-                <hr />
                 <input
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     id="display-name"
                     type="text"
                     v-model="newDisplayName"
                     :placeholder="user.displayName"
                 />
             </div>
-            <div class="user-settings__image field gap-x">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                 <label for="image">{{ $t("common.image") }}</label>
-                <hr />
                 <input
                     id="image"
                     type="file"
@@ -104,9 +103,8 @@
                     @change="handleImage"
                 />
             </div>
-            <div class="user-settings__password field gap-x">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
                 <label>{{ $t("common.password") }}</label>
-                <hr />
                 <change-password />
             </div>
         </div>
@@ -115,7 +113,7 @@
             @click="save"
             theme="secondary"
             icon="check"
-            class="user-settings__save-button"
+            class="ml-auto"
         >
             {{ $t("common.save") }}
         </base-button>
@@ -286,64 +284,3 @@ export default class SettingsCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "../style/mixins";
-
-.user-settings {
-    display: flex;
-    flex-direction: column;
-    gap: var(--st-spacing);
-
-    &__fields {
-        margin-bottom: var(--st-spacing);
-        
-        .field {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            label {
-                white-space: nowrap;
-            }
-
-            hr {
-                border: none;
-                border-top: 1px solid var(--st-color-border);
-                width: 100%;
-            }
-        }
-    }
-
-    &__color {
-        display: flex;
-
-        input[type="color"] {
-            border-radius: var(--st-border-radius);
-            border: 1px solid var(--st-color-border);
-            height: 30px;
-            background: var(--secondary-backround-color);
-
-            &::-webkit-color-swatch {
-                border-radius: var(--st-border-radius);
-                border: none;
-            }
-        }
-    }
-
-    &__title {
-        margin: 0 0 var(--st-spacing) 0;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__save-button {
-        margin-left: auto;
-        margin-top: var(--st-spacing);
-
-        @include breakpoint("small") {
-            align-self: initial;
-        }
-    }
-}
-</style>
