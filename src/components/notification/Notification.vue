@@ -12,6 +12,7 @@
             class="p-2 rounded bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4"
             :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error', 'border-primary': type == 'primary' }" 
             v-if="show || persist"
+            @click="callback ? callback() : undefined"
         >
             <icon v-if="icon" :name="icon" size="18" />
             <div class="flex-grow text-xs">
@@ -54,10 +55,17 @@ import { TransitionRoot } from "@headlessui/vue";
         persist: {
             type: Boolean,
         },
+        callback: {
+            type: Function,
+        },
+        timeout: {
+            type: Number,
+            default: 5000,
+        },
     },
     components: {
         TransitionRoot,
-    }
+    },
 })
 export default class Notification extends Vue {
     public id = "";
@@ -65,13 +73,15 @@ export default class Notification extends Vue {
     public icon?: string;
     public title?: string | number;
     public body?: string;
+    public timeout?: number;
+    public callback?: Function;
     
     public persist = false;
 
     public show = true;
 
     public mounted() {
-        setTimeout(() => (this.show = false), 5000);
+        setTimeout(() => (this.show = false), this.timeout ?? 5000);
     }
 
     public get typeClass() {

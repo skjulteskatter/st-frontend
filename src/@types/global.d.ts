@@ -62,6 +62,8 @@ declare module "songtreasures" {
         title: string;
         icon: string;
         content?: string;
+        timeout?: number;
         dateTime?: Date;
+        callback?: Function;
     }
 }

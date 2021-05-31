@@ -17,7 +17,7 @@
                 <p class="text-sm mb-2">
                     {{ $t("song.sheetmusic") }}
                 </p>
-                <sheetmusic-playlist :sheetmusic="song.sheetMusic" />
+                <media-list-item :files="song.sheetMusic" :callback="selectSheetMusic" icon="book" />
             </div>
             <div
                 v-if="song.audioFiles.length"
@@ -25,7 +25,7 @@
                 <p class="text-sm mb-2">
                     Audio
                 </p>
-                <audio-playlist :audiofiles="song.audioFiles" />
+                <media-list-item :files="song.audioFiles" :callback="selectAudio" icon="music" />
             </div>
             <div
                 v-if="song.videoFiles.length"
@@ -56,15 +56,17 @@
 
 <script lang="ts">
 import { Modal } from "@/components";
-import { AudioPlaylist, SheetmusicPlaylist } from "@/components/media";
+import { MediaListItem } from "@/components/media";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { MediaFile } from "dmb-api";
+import { useStore } from "@/store";
 
 @Options({
     components: {
         Modal,
-        AudioPlaylist,
-        SheetmusicPlaylist,
+        MediaListItem,
     },
     props: {
         song: {
@@ -75,5 +77,39 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class SongMediaCard extends Vue {
     public song?: Song;
+    public store = useStore();
+
+    public selectSheetMusic(sheet: MediaFile) {
+        // this.$router.push({name: "songs-sheet-music"});
+        // osmd.load(this.songStore.state.sheetMusic);
+
+        const options: SheetMusicOptions = {
+            show: true,
+            url: sheet?.directUrl,
+            originalKey: this.song?.originalKey ?? "C",
+            transposition: this.transposition,
+            type: sheet?.type,
+        };
+
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+
+        // localStorage.setItem("song_item", JSON.stringify(this.song));
+        // localStorage.setItem("sheetmusic_options", JSON.stringify(options));
+
+        // window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    }
+
+    public get transposition() {
+        return this.store.state.songs.transposition;
+    }
+
+    public selectAudio(audio: MediaFile) {
+        const track: AudioTrack = {
+            file: audio,
+            song: this.song,
+            collection: this.store.getters.collection,
+        };
+        this.store.commit(SongsMutationTypes.SET_AUDIO, track);
+    }
 }
 </script>

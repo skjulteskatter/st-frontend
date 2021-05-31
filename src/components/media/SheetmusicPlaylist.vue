@@ -39,29 +39,6 @@ export default class SheetmusicPlaylist extends Vue {
         return this.sheetmusic ?? [];
     }
 
-    public sheetMusic(sheet: MediaFile) {
-        // this.$router.push({name: "songs-sheet-music"});
-        // osmd.load(this.songStore.state.sheetMusic);
-        const options: SheetMusicOptions = {
-            show: true,
-            url: sheet?.directUrl,
-            originalKey: this.song?.originalKey ?? "C",
-            transposition: this.transposition,
-            type: sheet?.type,
-        };
-
-        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
-
-        // localStorage.setItem("song_item", JSON.stringify(this.song));
-        // localStorage.setItem("sheetmusic_options", JSON.stringify(options));
-
-        // window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
-    }
-
-    public get transposition() {
-        return this.store.state.songs.transposition;
-    }
-
     public get languageKey() {
         return this.store.getters.languageKey;
     }

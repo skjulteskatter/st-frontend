@@ -36,6 +36,8 @@ import { Loader } from "@/components";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { ref } from "@vue/runtime-core";
 import { NotificationList } from "@/components/notification";
+import { notify } from "@/services/notify";
+import { cache } from "@/services/cache";
 
 @Options({
     components: {
@@ -60,6 +62,14 @@ export default class DashboardLayout extends Vue {
             themes.default,
         );
         themes.load();
+
+        const route = this.$route.name;
+        setTimeout(() => {
+            if (this.initialized == false && this.$route.name == route) {
+                notify("error", "Something is wrong", "exclamation", "Click here to reload", 30000, () => cache.clearCache());
+            }
+        }, 5000);
+
         if (!this.user) {
             this.$router.push({ name: "login" });
         } else {

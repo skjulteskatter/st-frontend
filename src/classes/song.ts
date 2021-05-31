@@ -74,7 +74,7 @@ export class Song extends BaseClass implements ApiSong {
         this.yearWritten = song.yearWritten;
         this.audioFiles = song.files?.filter(f => f.type == "audio") ?? [];
         this.videoFiles = song.files?.filter(f => f.type == "video") ?? [];
-        this.sheetMusic = song.files?.filter(f => f.type == "sheetmusic") ?? [];
+        this.sheetMusic = song.files?.filter(f => f.type.startsWith("sheetmusic")) ?? [];
         this.details = song.details ?? {};
         this.copyrights = song.copyrights;
         this.type = song.type;
