@@ -61,7 +61,7 @@
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
             </div>
         </template>
-        <loader :loading="collection?.loadingLyrics" position="local">
+        <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
             <transposed-lyrics-viewer
                 v-if="type == 'transpose' && lyrics?.format == 'html'"
                 :lyrics="lyrics"

@@ -1,5 +1,5 @@
 import { Collection, Song } from "@/classes";
-import { ApiSong } from "dmb-api";
+import { ApiSong, MediaFile } from "dmb-api";
 import { items, songs } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -8,6 +8,7 @@ export class Session {
     private _initialized?: boolean;
     public songs: Song[] = [];
     public collections: Collection[] = [];
+    public files: MediaFile[] = [];
 
     public themes: Theme[] = [];
     public countries: Country[] = [];
@@ -45,6 +46,15 @@ export class Session {
                 }, {} as {
                     [id: string]: ApiSong;
                 }));
+
+                // const f = await songs.getFiles(fetchSongs);
+
+                // await cache.replaceEntries("files", f.reduce((a, b) => {
+                //     a[b.id] = b;
+                //     return a;
+                // }, {} as {
+                //     [id: string]: MediaFile;
+                // }));
             }
         }
 
@@ -78,6 +88,29 @@ export class Session {
                 }
                 
                 this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
+
+                // try {
+                //     const key = "last_updated_files";
+                //     const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                //     const now = new Date();
+    
+                //     if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
+                //         const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
+    
+                //         await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                //             a[b.id] = b;
+                //             return a;
+                //         }, {} as {
+                //             [id: string]: ApiSong;
+                //         }));
+        
+                //         await cache.set("config", key, now.toISOString());
+                //     }
+                // } catch(e) {
+                //     notify("error", "Error fetching files", "warning", e);
+                //     this.files = await songs.getFiles(ownedCols);
+                // }
             // } else {
             //     this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
             // }

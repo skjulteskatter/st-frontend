@@ -28,9 +28,10 @@ class CacheService {
         "lyrics",
         "config",
         "items",
+        "files",
         "notifications",
     ];
-    private version = 15;
+    private version = 16;
 
     private db() {
         const v = this.version;

@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedSong } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedSong, MediaFile } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -87,6 +87,9 @@ export const songs = {
     },
     async getAllSongs(collectionIds: string[], lastUpdated?: string) {
         return await http.get<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,files/contributors,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+    },
+    getFiles(collectionIds: string[], lastUpdated?: string) {
+        return http.get<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     // async getSongs(collection: ApiCollection, lastUpdated?: string) {
     //     return await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
