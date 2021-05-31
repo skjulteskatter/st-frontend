@@ -3,7 +3,7 @@
         <h3 class="font-bold mb-4">
             {{ $t("activity.recentlyOpened") }}
         </h3>
-        <div class="grid grid-cols-2 gap-2" v-if="recentCollections.length">
+        <div class="flex flex-col gap-2" v-if="recentCollections.length">
             <collection-card
                 class="recent-collections__collection"
                 v-for="c in recentCollections"

@@ -1,6 +1,6 @@
 <template>
     <button
-        class="relative rounded overflow-hidden cursor-pointer border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+        class="flex items-center gap-2 p-2 text-xs text-left relative rounded bg-white border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="{
             disabled: !collection?.available,
         }"
@@ -9,10 +9,12 @@
         <img
             :src="image"
             :alt="name"
+            class="max-h-10 grayscale rounded"
         />
-        <p class="p-2 bg-white">
+        <span class="text-xs font-bold w-full flex justify-between items-center">
             {{ name }}
-        </p>
+            <icon name="book" size="16" class="text-gray-400" />
+        </span>
     </button>
 </template>
 

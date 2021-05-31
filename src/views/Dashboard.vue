@@ -4,6 +4,7 @@
             {{ $t("common.welcome") }}, {{ user.displayName }}
         </h1>
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <owned-collections />
             <activity-feed />
             <recent-collections />
             <playlists />
@@ -20,6 +21,7 @@ import {
     ActivityFeed,
     RecentCollections,
     Playlists,
+    OwnedCollections,
 } from "@/components/dashboard";
 
 @Options({
@@ -29,6 +31,7 @@ import {
         ActivityFeed,
         RecentCollections,
         Playlists,
+        OwnedCollections,
     },
 })
 export default class Dashboard extends Vue {
