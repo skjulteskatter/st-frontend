@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
-                class="rounded bg-white p-2 text-xs border hover:border-gray-400 flex gap-2 items-center"
+                class="rounded bg-white p-2 text-xs border hover:border-gray-400 flex gap-2 items-center focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"

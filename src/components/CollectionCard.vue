@@ -1,6 +1,6 @@
 <template>
-    <div
-        class="relative rounded overflow-hidden cursor-pointer border hover:border-gray-400"
+    <button
+        class="relative rounded overflow-hidden cursor-pointer border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="{
             disabled: !collection.available,
         }"
@@ -13,7 +13,7 @@
         <p class="p-2 bg-white">
             {{ collection.getName(languageKey) }}
         </p>
-    </div>
+    </button>
 </template>
 
 <script lang="ts">

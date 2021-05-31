@@ -7,7 +7,7 @@
         <loader :loading="activitiesInitialized === false">
             <div class="flex flex-col gap-2 relative" v-if="activities.length">
                 <router-link
-                    class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400"
+                    class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"

@@ -2,14 +2,14 @@
     <div class="p-4 mt-8 flex-grow text-sm hidden md:block">
         <small class="uppercase flex justify-between mb-2">
             {{ $t("common.playlists") }}
-            <router-link class="font-bold hover:underline" to="/playlists">
+            <router-link class="font-bold hover:underline focus:outline-none focus:ring focus:ring-primary rounded" to="/playlists">
                 {{ $t("playlist.seeall") }}
             </router-link>
         </small>
         <ul class="flex flex-col gap-2" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="p-2 border hover:border-gray-400 flex gap-2 rounded"
+                    class="p-2 border hover:border-gray-400 flex gap-2 rounded focus:outline-none focus:ring focus:ring-primary"
                     :to="{
                         name: 'playlist-view',
                         params: { id: playlist.id },

@@ -2,7 +2,7 @@
     <base-card class="border hover:border-gray-400">
         <div class="flex">
             <router-link
-                class="flex-grow"
+                class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 :to="{
                     name: 'song',
                     params: {
