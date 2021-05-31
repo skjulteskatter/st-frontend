@@ -1,5 +1,5 @@
 <template>
-    <base-card v-if="song" class="overflow-visible" header toggleable>
+    <base-card v-if="song" class="overflow-visible" header>
         <template #header>
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end">

@@ -26,6 +26,8 @@
                     <base-button
                         v-if="admin"
                         @click="goToEditPage()"
+                        theme="primary"
+                        icon="pencil"
                     >Edit</base-button>
                     <base-button
                         v-if="extended && song.hasLyrics"
