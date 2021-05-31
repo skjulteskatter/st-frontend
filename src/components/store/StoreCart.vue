@@ -1,47 +1,35 @@
 <template>
-    <!-- <modal
-        theme="primary"
-        :label="`${$t('store.inCart')} (${cartItems.length})`"
-        v-if="cartItems.length"
-        icon="buy"
-        class="store-cart__modal"
-    > -->
-    <base-dropdown icon="buy" :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
-        <div class="store-cart">
-            <div class="store-cart__header">
-                <h3 class="store-cart__title">{{ $t("store.inCart") }}</h3>
-                <small @click="clearCart" class="store-cart__clearcart">
+    <base-dropdown origin="right" class="text-sm" icon="buy" :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
+        <div class="w-max">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
+                <button @click="clearCart" class="text-red-700 cursor-pointer">
                     {{ $t("store.clearCart") }}
-                </small>
+                </button>
             </div>
-            <div class="store-cart__items">
+            <div class="flex flex-col gap-4 mb-4">
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
-                    class="store-cart__item"
+                    class="p-2 bg-gray-200 rounded flex justify-between gap-4"
                 >
                     {{ i.getName(languageKey) }}
-                    <small>{{ formatPrices(i.prices, "year") }}</small>
+                    <small class="text-gray-500">{{ formatPrices(i.prices, "year") }}</small>
                 </div>
             </div>
-            <base-button @click="checkout" icon="arrowRight">
+            <base-button @click="checkout" icon="arrowRight" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
     </base-dropdown>
-    <!-- </modal> -->
 </template>
 <script lang="ts">
-import { Modal } from "@/components";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    components: {
-        Modal,
-    },
     name: "store-cart",
 })
 export default class StoreCart extends Vue {
