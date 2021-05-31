@@ -24,7 +24,7 @@
                         v-if="song.hasChords"
                         @click="transposeToggle()"
                         :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300']"
-                        class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none"
+                        class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none my-1"
                     >
                         <span
                             :class="type == 'transpose' ? 'translate-x-9' : 'translate-x-1'"
