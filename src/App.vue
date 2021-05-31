@@ -1,6 +1,8 @@
 <template>
     <splash-screen :loading="initialized === false" />
-    <router-view />
+    <loader :loading="initialized === false">
+        <router-view />
+    </loader>
     <notification-group />
 </template>
 <script lang="ts">
