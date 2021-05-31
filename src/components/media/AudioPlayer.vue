@@ -22,7 +22,7 @@
                 >
                     {{ song.composers[0].name }}
                 </router-link>
-                <router-link class="flex gap-2" v-else :to="{name: 'song', params: {collection: collection, number: song.number}}">
+                <router-link class="flex gap-2" v-else :to="{name: 'song', params: {collection: song.collectionIds[0], number: song.number}}">
                     <b class="text-gray-500">
                         {{ song.number }}
                     </b>
