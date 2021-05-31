@@ -36,7 +36,7 @@ export class Session {
 
         if (previousCols) {
             const fetchSongs = ownedCols.filter(c => !(JSON.parse(previousCols as string) as string[]).some(i => i == c));
-
+            
             if (fetchSongs.length) {
                 const s = await songs.getAllSongs(fetchSongs);
 
@@ -47,14 +47,14 @@ export class Session {
                     [id: string]: ApiSong;
                 }));
 
-                // const f = await songs.getFiles(fetchSongs);
+                const f = await songs.getFiles(fetchSongs);
 
-                // await cache.replaceEntries("files", f.reduce((a, b) => {
-                //     a[b.id] = b;
-                //     return a;
-                // }, {} as {
-                //     [id: string]: MediaFile;
-                // }));
+                await cache.replaceEntries("files", f.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: MediaFile;
+                }));
             }
         }
 
@@ -63,6 +63,33 @@ export class Session {
         if (ownedCols.length) {
             // const offline = (await cache.get("config", "offline")) == true;
             // if (offline) {
+
+                try {
+                    const key = "last_updated_files";
+                    const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                    const now = new Date();
+    
+                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
+                        const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
+    
+                        await cache.replaceEntries("files", updateSongs.reduce((a, b) => {
+                            a[b.id] = b;
+                            return a;
+                        }, {} as {
+                            [id: string]: MediaFile;
+                        }));
+        
+                        await cache.set("config", key, now.toISOString());
+                    }
+                } catch(e) {
+                    notify("error", "Error fetching files", "warning", e);
+                    this.files = await songs.getFiles(ownedCols);
+                }
+
+                this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+                
+            // } else {
                 try {
                     const key = "last_updated_songs";
                     const lastUpdated = await cache.get("config", key) as string | undefined;
@@ -88,30 +115,6 @@ export class Session {
                 }
                 
                 this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-
-                // try {
-                //     const key = "last_updated_files";
-                //     const lastUpdated = await cache.get("config", key) as string | undefined;
-
-                //     const now = new Date();
-    
-                //     if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
-                //         const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
-    
-                //         await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-                //             a[b.id] = b;
-                //             return a;
-                //         }, {} as {
-                //             [id: string]: ApiSong;
-                //         }));
-        
-                //         await cache.set("config", key, now.toISOString());
-                //     }
-                // } catch(e) {
-                //     notify("error", "Error fetching files", "warning", e);
-                //     this.files = await songs.getFiles(ownedCols);
-                // }
-            // } else {
             //     this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
             // }
         }
