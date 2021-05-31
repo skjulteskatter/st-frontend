@@ -7,7 +7,7 @@
 		leave-to="opacity-0"
 	>
 		<div class="fixed top-0 left-0 z-20 w-screen h-screen bg-white flex justify-center items-center p-8">
-			<img src="/img/logo/dark.svg" alt="SongTreasures logo" class="max-w-xs animate-pulse">
+			<img src="/img/logo/dark.svg" alt="SongTreasures logo" class="w-40 md:w-80 animate-pulse">
 		</div>
 	</transition-root>
 </template>
