@@ -1,16 +1,16 @@
 <template>
-    <base-card class="theme-card" v-if="title && songs.length > 0">
+    <base-card class="theme-card" v-if="title && Songs.length > 0">
         <div class="flex justify-between mb-3">
             <b
                 :class="{ 'border hover:border-gray-400 bg-gray-200 rounded px-1 cursor-pointer': action != undefined }"
                 @click="action"
                 >{{ title }}</b
             >
-            <b class="text-gray-500" v-if="count">{{ songs.length }}</b>
+            <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
         </div>
         <ul class="text-xs">
             <li
-                v-for="song in songs"
+                v-for="song in Songs"
                 :key="song.id"
                 @click="available(song.number) ? selectSong(song) : undefined"
                 class="flex gap-2 hover:text-primary hover:underline cursor-pointer"
@@ -43,7 +43,7 @@ import { useStore } from "@/store";
             type: String,
         },
         songs: {
-            type: undefined,
+            type: Array,
         },
         count: {
             type: Boolean,
@@ -60,11 +60,15 @@ import { useStore } from "@/store";
 })
 export default class SongListCard extends Vue {
     private store = useStore();
-    public songs: Song[] = [];
-    public title = "";
+    public songs?: Song[];
+    public title?: string;
     public count?: boolean;
     public action?: Function;
     public collection?: Collection;
+
+    public get Songs() {
+        return this.songs ?? [];
+    }
 
     public get languageKey() {
         return this.store.getters.languageKey;
@@ -89,7 +93,7 @@ export default class SongListCard extends Vue {
     }
 
     public get anotherLanguage() {
-        return this.songs.filter(
+        return this.Songs.filter(
             (s) => s.type == "lyrics" && !s.name[this.languageKey],
         );
     }

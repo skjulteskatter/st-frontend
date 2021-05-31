@@ -29,37 +29,47 @@ import { Options, Vue } from "vue-class-component";
     props: {
         border: {
             type: Boolean,
+            default: false,
         },
         image: {
             type: String,
+            default: "",
         },
         header: {
             type: Boolean,
+            default: false,
         },
         toggleable: {
             type: Boolean,
+            default: false,
         },
         closed: {
             type: Boolean,
+            default: false,
         },
         disableContent: {
             type: Boolean,
+            default: false,
         },
         secondary: {
             type: Boolean,
+            default: false,
         },
     },
     name: "base-card",
 })
 export default class Card extends Vue {
-    public border = false;
-    public header = false;
-    public image = "";
-    public toggleable = false;
-    public closed = false;
-    public disableContent = false;
-    private isClosed = this.closed;
-    public secondary = false;
+    public border?: boolean;
+    public header?: boolean;
+    public image?: string;
+    public toggleable?: boolean;
+    public closed?: boolean;
+    public disableContent?: boolean;
+    public secondary?: boolean;
+
+    public get isClosed() {
+        return this.closed == true;
+    }
 }
 </script>
 

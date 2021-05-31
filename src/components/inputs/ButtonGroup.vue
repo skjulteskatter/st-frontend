@@ -28,11 +28,11 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class ButtonGroup extends Vue {
-    public buttons: {
+    public buttons?: {
         label: string;
         value: string;
         selected: boolean;
-    }[] = [];
+    }[];;
     public action?: Function;
 
     public loading: {

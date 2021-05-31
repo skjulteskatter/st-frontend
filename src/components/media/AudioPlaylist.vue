@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-2">
         <button
             class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center focus:ring focus:ring-primary focus:outline-none"
-            v-for="audio in audiofiles"
+            v-for="audio in AudioFiles"
             :key="audio.id"
             @click="selectAudio(audio)"
         >
@@ -33,7 +33,11 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class AudioPlaylist extends Vue {
     public store = useStore();
-    public audiofiles: MediaFile[] = [];
+    public audiofiles?: MediaFile[];
+
+    public get AudioFiles() {
+        return this.audiofiles ?? [];
+    }
 
     public selectAudio(audio: MediaFile) {
         const track: AudioTrack = {

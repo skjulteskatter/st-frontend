@@ -41,16 +41,17 @@ import icons from "./icons";
         },
         size: {
             type: String,
+            default: "24",
         },
     },
 })
 export default class Icon extends Vue {
     public icons = icons;
-    public name = "";
-    public size = "24";
+    public name?: string;
+    public size?: string;
 
     public get paths() {
-        return this.icons[this.name].paths ?? [];
+        return this.name ? this.icons[this.name].paths ?? [] : [];
     }
 }
 </script>

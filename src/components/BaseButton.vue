@@ -24,6 +24,7 @@ import { Options, Vue } from "vue-class-component";
     props: {
         theme: {
             type: String,
+            default: "primary",
             validator: (value: string) => {
                 return (
                     [
@@ -39,15 +40,19 @@ import { Options, Vue } from "vue-class-component";
         },
         loading: {
             type: Boolean,
+            default: false,
         },
         loadingLabel: {
             type: String,
+            default: "Loading...",
         },
         icon: {
             type: String,
+            default: "",
         },
         disabled: {
             type: Boolean,
+            default: false,
         },
         content: {
             type: Boolean,
@@ -56,12 +61,12 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class BaseButton extends Vue {
-    public loading = false;
-    public loadingLabel = "Loading...";
-    public theme = "primary";
-    public icon = "";
-    public disabled = false;
-    public content = true;
+    public loading?: boolean;
+    public loadingLabel?: string;
+    public theme?: string;
+    public icon?: string;
+    public disabled?: boolean;
+    public content?: boolean;
 
     public get isLoading() {
         return this.loading;

@@ -44,16 +44,17 @@ import { TransitionRoot } from "@headlessui/vue";
         },
         origin: {
             type: String,
+            default: "left",
         },
     },
     components: {
         TransitionRoot,
-    }
+    },
 })
 export default class BaseDropdown extends Vue {
-    public label = "";
-    public icon = "";
-    public origin = "left";
+    public label?: string;
+    public icon?: string;
+    public origin?: string;
     public show = false;
 
     public close(e: Event) {

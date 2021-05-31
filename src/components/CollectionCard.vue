@@ -2,16 +2,16 @@
     <button
         class="relative rounded overflow-hidden cursor-pointer border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="{
-            disabled: !collection.available,
+            disabled: !collection?.available,
         }"
-        @click="selectCollection(collection)"
+        @click="selectCollection()"
     >
         <img
             :src="image"
-            :alt="collection.getName(languageKey)"
+            :alt="name"
         />
         <p class="p-2 bg-white">
-            {{ collection.getName(languageKey) }}
+            {{ name }}
         </p>
     </button>
 </template>
@@ -31,20 +31,24 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class CollectionCard extends Vue {
     private store = useStore();
-    public collection: Collection = {} as Collection;
+    public collection?: Collection;
 
-    public selectCollection(collection: Collection) {
-        if (!this.collection.available) return;
+    public selectCollection() {
+        if (!this.collection?.available) return;
         this.$router.push({
             name: "song-list",
             params: {
-                collection: collection.key,
+                collection: this.collection.key,
             },
         });
     }
 
+    public get name() {
+        return this.collection?.getName(this.languageKey);
+    }
+
     public get image() {
-        return this.collection.image + "?w=200";
+        return this.collection?.image + "?w=200";
     }
 
     public get selected() {

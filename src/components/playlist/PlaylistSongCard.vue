@@ -55,13 +55,14 @@ import { notify } from "@/services/notify";
 })
 export default class PlaylistSongCard extends Vue {
     private store = useStore();
-    public entry: ApiPlaylistEntry = {} as ApiPlaylistEntry;
-    public playlist: ApiPlaylist = {} as ApiPlaylist;
+    public entry?: ApiPlaylistEntry;
+    public playlist?: ApiPlaylist;
 
     public async removeFromPlaylist() {
         const title = this.$t("playlist.removed");
         const content = this.$t("playlist.removedsong");
 
+        if (!this.playlist?.id || !this.entry?.id) return;
         await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
             playlistId: this.playlist.id,
             entryId: this.entry.id,
@@ -75,7 +76,7 @@ export default class PlaylistSongCard extends Vue {
     }
 
     public get song() {
-        return appSession.songs.find(s => s.id == this.entry.songId);
+        return appSession.songs.find(s => s.id == this.entry?.songId);
     }
 
     public get collection() {

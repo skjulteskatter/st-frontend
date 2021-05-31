@@ -16,9 +16,11 @@ import { Options, Vue } from "vue-class-component";
     props: {
         loading: {
             type: Boolean,
+            default: false,
         },
         position: {
             type: String,
+            default: "global",
             validator(value: string) {
                 return ["global", "local"].includes(value);
             },
@@ -26,8 +28,8 @@ import { Options, Vue } from "vue-class-component";
     },
 })
 export default class Loader extends Vue {
-    public loading = false;
-    public position = "global";
+    public loading?: boolean;
+    public position?: string;
 }
 </script>
 

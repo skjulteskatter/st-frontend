@@ -83,11 +83,10 @@ import Modal from "@/components/Modal.vue";
     props: {
         lyrics: {
             type: Object,
-            default: () => undefined,
         },
         languageKey: {
             type: String,
-            default: () => "",
+            default: "",
         },
         song: {
             type: Object,
@@ -102,7 +101,7 @@ export default class LyricsSettings extends Vue {
     public currentVerseNumber = 0;
     public currentLinesNumber = 0;
     public lyrics?: Lyrics;
-    public languageKey = "";
+    public languageKey?: string;
     public song?: Song;
 
     public lineSize = 2;
@@ -197,7 +196,7 @@ export default class LyricsSettings extends Vue {
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.description[this.languageKey] ??
+            this.song?.melodyOrigin?.description[this.languageKey ?? "en"] ??
             this.song?.melodyOrigin?.description.no ??
             undefined
         );

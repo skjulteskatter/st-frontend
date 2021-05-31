@@ -55,7 +55,7 @@ import { useStore } from "@/store";
 })
 export default class SongListItemCard extends Vue {
     public song?: Song;
-    public context = "";
+    public context?: string;
 
     public get languageKey() {
         return useStore().getters.languageKey;

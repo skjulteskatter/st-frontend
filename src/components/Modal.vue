@@ -49,6 +49,7 @@ import { Dialog, DialogOverlay } from "@headlessui/vue";
         },
         type: {
             type: String,
+            default: "button",
             validator: (value: string) =>
                 ["button", "span"].indexOf(value) != -1,
         },
@@ -68,10 +69,10 @@ import { Dialog, DialogOverlay } from "@headlessui/vue";
 export default class Modal extends Vue {
     public modalIsOpen = false;
     public mouseOverCard = false;
-    public type = "button";
-    public label = "";
-    public icon = "";
-    public theme = "";
+    public type?: string;
+    public label?: string;
+    public icon?: string;
+    public theme?: string;
     public callback: Function = () => undefined;
 
     public closeIfOutside() {

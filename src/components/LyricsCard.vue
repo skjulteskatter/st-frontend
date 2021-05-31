@@ -112,7 +112,7 @@ import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
     name: "lyrics-card",
 })
 export default class LyricsCard extends Vue {
-    public store = useStore();
+    private store = useStore();
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;

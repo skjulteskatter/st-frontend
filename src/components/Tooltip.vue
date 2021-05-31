@@ -19,7 +19,7 @@ import { Options, Vue } from "vue-class-component";
 	},
 })
 export default class Tooltip extends Vue {
-	public text = "";
+	public text?: string;
 
 	private open = false;
 

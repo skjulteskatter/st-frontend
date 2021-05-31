@@ -3,9 +3,9 @@
 		<ul class="stepper__breadcrumb">
 			<li
 				class="stepper__breadcrumb__item"
-				v-for="step in steps"
+				v-for="step in Steps"
 				:key="step.id"
-				@click="callback(step.type)"
+				@click="callback ? callback(step.type) : undefined"
 			>
 				{{ step.name }}
 			</li>
@@ -30,8 +30,12 @@ import { Options, Vue } from "vue-class-component";
     name: "stepper",
 })
 export default class Stepper extends Vue {
-	public steps: Step[] = [];
-	public callback: Function = () => undefined;
+	public steps?: Step[];
+	public callback?: Function;
+
+	public get Steps() {
+		return this.steps ?? [];
+	}
 }
 </script>
 

@@ -22,7 +22,7 @@
                     <th></th>
                 </thead>
                 <tbody>
-                    <tr v-for="u in users" :key="u.id">
+                    <tr v-for="u in Users" :key="u.id">
                         <td class="user-name">
                             <img
                                 :src="
@@ -43,7 +43,7 @@
                                 :label="$t('common.edit')"
                                 class="edit-user"
                                 theme="tertiary"
-                                v-if="u.id != getCurrentUser.id"
+                                v-if="u.id != User?.id"
                             >
                                 <div class="loading" v-if="loading"></div>
                                 <div class="edit-user__user">
@@ -123,8 +123,8 @@ import { notify } from "@/services/notify";
 })
 export default class UsersList extends Vue {
     public store = useStore();
-    public users: User[] = [];
-    public currentUser: User = {} as User;
+    public users?: User[];
+    public currentUser?: User;
     public disableButton = false;
     public loading = false;
 
@@ -143,7 +143,11 @@ export default class UsersList extends Vue {
         this.disableButton = false;
     }
 
-    public get getCurrentUser(): User {
+    public get Users() {
+        return this.users ?? [];
+    }
+
+    public get User(): User | undefined {
         return this.currentUser;
     }
 

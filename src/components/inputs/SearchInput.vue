@@ -30,6 +30,6 @@ import { Options, Vue } from "vue-class-component";
     emits: ["search", "update:modelValue"],
 })
 export default class SearchInput extends Vue {
-    public modelValue = "";
+    public modelValue?: string;
 }
 </script>

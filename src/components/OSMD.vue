@@ -67,13 +67,13 @@ export default class OSMD extends Vue {
     public osmd = osmd;
     public originalKey?: string;
     public transposition = 0;
-    public relativeKey = "C";
+    public relativeKey?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public playbackControl: any;
     public zoom = 1;
     public createdDone = false;
     public loading: string[] = [];
-    public options: SheetMusicOptions = { show: false, originalKey: "C" };
+    public options?: SheetMusicOptions;
 
     public relativeTranspositions: {
         value: number;
@@ -83,6 +83,7 @@ export default class OSMD extends Vue {
     }[] = [];
 
     public async mounted() {
+        this.options ??= { show: false, originalKey: "C" };
         this.transposition = this.options.transposition ?? 0;
         this.zoom = this.osmd.zoom;
         const c = document.getElementById("osmd-canvas");
@@ -91,7 +92,7 @@ export default class OSMD extends Vue {
 
         const transpositions = transposer.getTranspositions(originalKey, true);
 
-        this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey, transpositions);
+        this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions);
 
         await this.osmd.init(c, null);
 
@@ -103,7 +104,8 @@ export default class OSMD extends Vue {
     }
 
     public close() {
-        this.options.show = false;
+        if (this.options)
+            this.options.show = false;
     }
 
     public get osmdLoading() {

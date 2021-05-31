@@ -25,13 +25,14 @@ import { Options, Vue } from "vue-class-component";
         },
         disabled: {
             type: Boolean,
+            default: false,
         },
     },
     emits: ["update:modelValue"],
 })
 export default class BaseInput extends Vue {
-    public label = "";
-    public modelValue = "";
-    public disabled = false;
+    public label?: string;
+    public modelValue?: string;
+    public disabled?: boolean;
 }
 </script>

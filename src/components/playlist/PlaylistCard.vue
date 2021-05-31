@@ -3,10 +3,10 @@
         <button class="flex gap-2 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
             <icon name="playlist" class="text-gray-500" />
             <div>
-                <strong class="font-bold">{{ playlist.name }}</strong>
+                <strong class="font-bold">{{ playlist?.name }}</strong>
                 <div class="text-gray-500">
                     <small>
-                        {{ playlist.entries.length }}
+                        {{ playlist?.entries.length }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
                     <!-- <small class="playlist-card__shared">
@@ -31,10 +31,10 @@ import { ApiPlaylist } from "dmb-api";
     },
 })
 export default class PlaylistCard extends Vue {
-    public playlist: ApiPlaylist = {} as ApiPlaylist;
+    public playlist?: ApiPlaylist;
 
     public goToPlaylist() {
-        if (!this.playlist.id) return;
+        if (!this.playlist?.id) return;
 
         this.$router.push({
             name: "playlist-view",

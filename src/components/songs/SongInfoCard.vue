@@ -8,7 +8,7 @@
             class="text-sm text-primary hover:underline"
             v-if="collection"
         >
-            {{ collection.getName(languageKey) }}
+            {{ collection.getName(Language) }}
         </router-link>
         <h2 class="flex gap-4 text-xl font-bold mb-2">
             <span class="text-gray-400">
@@ -149,11 +149,15 @@ import { useStore } from "@/store";
     name: "song-info-card",
 })
 export default class SongInfoCard extends Vue {
-    public languageKey = "";
+    public languageKey?: string;
     public song?: Song;
     public imageLoaded = false;
     public store = useStore();
     public showDescription = false;
+
+    public get Language() {
+        return this.languageKey ?? "en";
+    }
 
     public mounted() {
         if (this.song?.image) {
@@ -185,12 +189,12 @@ export default class SongInfoCard extends Vue {
     }
 
     public get title() {
-        return this.song?.getName(this.languageKey);
+        return this.song?.getName(this.Language);
     }
 
     public getLocaleString(dictionary: { [key: string]: string }) {
         return (
-            dictionary[this.languageKey] ??
+            dictionary[this.Language] ??
             dictionary.en ??
             dictionary[Object.keys(dictionary)[0]]
         );
@@ -199,13 +203,13 @@ export default class SongInfoCard extends Vue {
     public get description() {
         return this.song?.getTranslatedProperty(
             this.song.description,
-            this.languageKey
+            this.Language
         );
     }
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.description[this.languageKey] ??
+            this.song?.melodyOrigin?.description[this.Language] ??
             this.song?.melodyOrigin?.description.no ??
             undefined
         );

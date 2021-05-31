@@ -1,6 +1,6 @@
 <template>
     <base-card class="song-list__item-number clickable" border>
-        {{ song.number }}
+        {{ song?.number }}
     </base-card>
 </template>
 
@@ -12,12 +12,12 @@ import { Song } from "@/classes";
     name: "song-list-item-number",
     props: {
         song: {
-            type: Song,
+            type: Object,
         },
     },
 })
 export default class SongListItemNumber extends Vue {
-    public song: Song = {} as Song;
+    public song?: Song;
 }
 </script>
 

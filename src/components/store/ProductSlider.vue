@@ -1,7 +1,7 @@
 <template>
     <div class="product-slider">
         <product-card
-            v-for="product in products"
+            v-for="product in Products"
             :key="product.id"
             :product="product"
         ></product-card>
@@ -26,7 +26,11 @@ import ProductCard from "./ProductCard.vue";
     name: "product-slider",
 })
 export default class ProductSlider extends Vue {
-    public products: Product[] = [];
+    public products?: Product[];
+
+    public get Products() {
+        return this.products ?? [];
+    }
 }
 </script>
 

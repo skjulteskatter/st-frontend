@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-2">
         <button
             class="p-2 rounded cursor-pointer border border-gray-300 hover:border-gray-500 flex items-center gap-2 focus:ring focus:ring-primary focus:outline-none"
-            v-for="sheet in sheetmusic"
+            v-for="sheet in SheetMusic"
             :key="sheet.id"
             @click="sheetMusic(sheet)"
         >
@@ -33,7 +33,11 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class SheetmusicPlaylist extends Vue {
     public store = useStore();
-    public sheetmusic: MediaFile[] = [];
+    public sheetmusic?: MediaFile[];
+
+    public get SheetMusic() {
+        return this.sheetmusic ?? [];
+    }
 
     public sheetMusic(sheet: MediaFile) {
         // this.$router.push({name: "songs-sheet-music"});

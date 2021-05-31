@@ -6,7 +6,7 @@
             v-for="(key, i) in keys"
             :key="i"
             :disabled="currentTransposition == key"
-            @click="transpose(transpositions[key])"
+            @click="transpose(transpositions ? transpositions[key] : 0)"
         >
             {{key}}
         </base-button>
@@ -30,15 +30,15 @@ export default class TransposeDropdown extends Vue {
     private store = useStore();
 
     public keys = ["Ab", "A", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"];
-    public transpositions: {
+    public transpositions?: {
         [key: string]: number;
-    } = {};
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public transpose = (n: number) => undefined;
 
     public get currentTransposition() {
-        return Object.entries(this.transpositions).find(e => e[1] == this.transposition)?.[0];
+        return Object.entries(this.transpositions ?? {}).find(e => e[1] == this.transposition)?.[0];
     }
 
     public get defaultTransposition() {
