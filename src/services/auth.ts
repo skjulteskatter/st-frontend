@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/performance";
-import "firebase/analytics";
-import { firebaseConfig } from "@/config";
+import { a, analytics } from "@/main";
 import router from "@/router";
 import api from "./api";
 import { useStore } from "@/store";
@@ -19,18 +16,6 @@ function invalidProvider() {
     throw Error("INVALID PROVIDER");
 }
 
-// function notLoggedIn() {
-//     router.push({name: "login"});
-//     throw Error("NOT LOGGED IN");
-// }
-
-firebase.initializeApp(firebaseConfig);
-
-const a = firebase.auth;
-
-firebase.performance();
-
-
 if (!a) {
     notInitialized();
 }
@@ -38,6 +23,7 @@ if (!a) {
 async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
     if (user.emailVerified) {
         useStore()?.commit(SessionMutationTypes.ERROR, "");
+        analytics.logEvent("login");
         return true;
     } else {
         useStore()?.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
