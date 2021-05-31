@@ -4,10 +4,6 @@ import i18n from "./i18n";
 import router from "./router";
 import { store } from "@/store";
 import "tailwindcss/tailwind.css";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/performance";
-import "firebase/analytics";
 
 // GLOBAL COMPONENTS
 import { 
@@ -18,12 +14,6 @@ import {
 } from "@/components";
 import { Icon } from "./components/icon";
 import { BaseDropdown } from "./components/inputs";
-import { firebaseConfig } from "./config";
-
-firebase.initializeApp(firebaseConfig);
-
-export const a = firebase.auth;
-export const analytics = firebase.analytics();
 
 createApp(App)
     .use(store)
