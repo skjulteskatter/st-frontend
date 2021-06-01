@@ -17,7 +17,7 @@
                         formatPrices(product.prices, "month")
                     }}
                 </p>
-                <div class="mb-8">
+                <div class="mb-4">
                     <base-button
                         theme="secondary"
                         icon="buy"
@@ -31,8 +31,9 @@
                         {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
+                <hr class="mb-4" v-if="details" />
                 <h3 class="font-bold text-lg" v-if="details">{{ $t('store.about') }}</h3>
-                <div v-html="details" class="flex flex-col gap-2"></div>
+                <div v-html="details" class="flex flex-col gap-2 text-sm"></div>
             </base-card>
         </div>
     </div>
