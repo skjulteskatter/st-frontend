@@ -17,11 +17,18 @@
                     />
                     <div id="osmd-canvas" class="bg-white"></div>
                 </div>
+                <div 
+                    class="w-full h-full flex flex-col"
+                    :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
+                >
+                    <div class="p-4 flex justify-end bg-white w-full">
+                        <base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+                    </div>
+                    <object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
+                </div>
                 <audio-player></audio-player>
             </main>
-            <!-- <feedback-form></feedback-form> -->
         </div>
-        <!-- <loader :loading="!(user && initialized)" position="global"></loader> -->
     </div>
 </template>
 <script lang="ts">
@@ -32,7 +39,6 @@ import themes from "@/classes/themes";
 import TheNavbar from "@/components/TheNavbar.vue";
 import { AudioPlayer } from "@/components/media";
 import { appSession } from "@/services/session";
-import { Loader } from "@/components";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { ref } from "@vue/runtime-core";
 import { NotificationList } from "@/components/notification";
@@ -43,7 +49,6 @@ import { cache } from "@/services/cache";
     components: {
         TheNavbar,
         AudioPlayer,
-        Loader,
         OpenSheetMusicDisplay,
         NotificationList,
     },
@@ -74,6 +79,12 @@ export default class DashboardLayout extends Vue {
             this.$router.push({ name: "login" });
         } else {
             await appSession.init();
+        }
+    }
+
+    public close() {
+        if(this.sheetMusicOptions) {
+            this.sheetMusicOptions.show = false;
         }
     }
 

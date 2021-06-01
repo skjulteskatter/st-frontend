@@ -36,12 +36,13 @@
                         step="0.1"
                     />
                 </div>
-                <icon
+                <base-button 
                     v-if="$route.name == 'song'"
-                    name="error"
-                    class="ml-auto cursor-pointer text-red-700"
+                    theme="error"
+                    icon="error"
                     @click="close()"
-                />
+                    class="ml-auto"
+                >{{$t('common.close')}}</base-button>
             </div>
         </div>
     </div>
