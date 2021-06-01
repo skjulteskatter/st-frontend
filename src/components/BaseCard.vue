@@ -6,9 +6,7 @@
             :style="{ backgroundImage: `url(${image})` }"
         ></div>
         <div class="p-4 border-b border-gray-300 flex justify-between" v-if="header">
-            <div>
-                <slot name="header" />
-            </div>
+            <slot name="header" />
             <icon
                 class="cursor-pointer"
                 v-if="toggleable && !disableContent"
