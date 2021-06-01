@@ -2,18 +2,12 @@
     <base-card class="cursor-pointer border hover:border-gray-400">
         <button class="flex gap-2 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
             <icon name="playlist" class="text-gray-500" />
-            <div>
+            <div class="flex flex-col">
                 <strong class="font-bold">{{ playlist?.name }}</strong>
-                <div class="text-gray-500">
-                    <small>
-                        {{ playlist?.entries.length }}
-                        {{ $t("common.songs").toLowerCase() }}
-                    </small>
-                    <!-- <small class="playlist-card__shared">
-                        {{ $t("playlist.sharedwith") }}
-                        {{ playlist.sharedWithIds.length }}
-                    </small> -->
-                </div>
+                <small class="text-gray-500 text-left">
+                    {{ playlist?.entries.length }}
+                    {{ $t("common.songs").toLowerCase() }}
+                </small>
             </div>
         </button>
     </base-card>
