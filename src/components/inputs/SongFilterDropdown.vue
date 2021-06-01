@@ -1,129 +1,135 @@
 <template>
-    <base-dropdown :label="$t('common.select')" origin="right">
-        <div class="flex justify-between items-center gap-2">
-            <b>{{ $t("song.showsongswith") }}...</b>
-            <base-button theme="primary" @click="apply">
-                {{ $t("song.apply") }}
-            </base-button>
-        </div>
-        <div class="flex gap-2 w-72" v-if="collection && !loading">
-            <div class="flex-grow">
-                <div class="py-2">
-                    <input
-                        v-model="typeValues.lyrics"
-                        type="checkbox"
-                        name="lyrics"
-                        id="lyrics"
-                        class="mr-2"
-                    /><label for="lyrics">
-                        <strong>
-                            {{ $t("types.lyrics") }}
-                        </strong>
-                    </label>
-                </div>
-                <div class="py-2">
-                    <input
-                        v-model="typeValues.video"
-                        type="checkbox"
-                        name="video"
-                        id="video"
-                        class="mr-2"
-                    /><label for="video">
-                        <strong>
-                            {{ $t("types.video") }}
-                        </strong>
-                    </label>
-                    <div
-                        class="ml-2 flex items-center gap-2"
-                        v-for="type in videoTypes"
-                        :key="type"
-                    >
-                        <input
-                            v-model="videoValues[type]"
-                            type="checkbox"
-                            :name="type"
-                            :id="`v-${type}`"
-                        />
-                        <label :for="`v-${type}`">
-                            {{ $t(`types.${type}`) }}
-                        </label>
-                    </div>
-                </div>
-                <div class="py-2">
-                    <input
-                        v-model="typeValues.sheetmusic"
-                        type="checkbox"
-                        name="sheetmusic"
-                        id="sheetmusic"
-                        class="mr-2"
-                    /><label for="sheetmusic">
-                        <strong>
-                            {{ $t("types.sheetmusic") }}
-                        </strong>
-                    </label>
-                    <div
-                        class="ml-2 flex items-center gap-2"
-                        v-for="type in sheetMusicTypes"
-                        :key="type"
-                    >
-                        <input
-                            v-model="sheetMusicValues[type]"
-                            type="checkbox"
-                            :name="type"
-                            :id="`sm-${type}`"
-                        />
-                        <label :for="`sm-${type}`">
-                            {{ $t(`types.${type}`) }}
-                        </label>
-                    </div>
-                </div>
+    <div class="relative">
+        <span class="flex h-3 w-3 absolute right-0 z-20 transform translate-x-1/3 -translate-y-1/3" v-if="filtersActive">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+        </span>
+        <base-dropdown :label="$t('common.select')" origin="right">
+            <div class="flex justify-between items-center gap-2">
+                <b>{{ $t("song.showsongswith") }}...</b>
+                <base-button theme="primary" @click="apply">
+                    {{ $t("song.apply") }}
+                </base-button>
             </div>
-            <div class="flex-grow">
-                <div class="py-2">
-                    <input
-                        v-model="typeValues.audio"
-                        type="checkbox"
-                        name="audio"
-                        id="audio"
-                        class="mr-2"
-                    /><label for="audio">
-                        <strong>
-                            {{ $t("types.audio") }}
-                        </strong>
-                    </label>
-                    <div
-                        class="ml-2 flex items-center gap-2"
-                        v-for="type in audioTypes"
-                        :key="type"
-                    >
+            <div class="flex gap-2 w-72" v-if="collection && !loading">
+                <div class="flex-grow">
+                    <div class="py-2">
                         <input
-                            v-model="audioValues[type]"
+                            v-model="typeValues.lyrics"
+                            type="checkbox"
+                            name="lyrics"
+                            id="lyrics"
+                            class="mr-2"
+                        /><label for="lyrics">
+                            <strong>
+                                {{ $t("types.lyrics") }}
+                            </strong>
+                        </label>
+                    </div>
+                    <div class="py-2">
+                        <input
+                            v-model="typeValues.video"
+                            type="checkbox"
+                            name="video"
+                            id="video"
+                            class="mr-2"
+                        /><label for="video">
+                            <strong>
+                                {{ $t("types.video") }}
+                            </strong>
+                        </label>
+                        <div
+                            class="ml-2 flex items-center gap-2"
+                            v-for="type in videoTypes"
+                            :key="type"
+                        >
+                            <input
+                                v-model="videoValues[type]"
+                                type="checkbox"
+                                :name="type"
+                                :id="`v-${type}`"
+                            />
+                            <label :for="`v-${type}`">
+                                {{ $t(`types.${type}`) }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="py-2">
+                        <input
+                            v-model="typeValues.sheetmusic"
+                            type="checkbox"
+                            name="sheetmusic"
+                            id="sheetmusic"
+                            class="mr-2"
+                        /><label for="sheetmusic">
+                            <strong>
+                                {{ $t("types.sheetmusic") }}
+                            </strong>
+                        </label>
+                        <div
+                            class="ml-2 flex items-center gap-2"
+                            v-for="type in sheetMusicTypes"
+                            :key="type"
+                        >
+                            <input
+                                v-model="sheetMusicValues[type]"
+                                type="checkbox"
+                                :name="type"
+                                :id="`sm-${type}`"
+                            />
+                            <label :for="`sm-${type}`">
+                                {{ $t(`types.${type}`) }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    <div class="py-2">
+                        <input
+                            v-model="typeValues.audio"
+                            type="checkbox"
+                            name="audio"
+                            id="audio"
+                            class="mr-2"
+                        /><label for="audio">
+                            <strong>
+                                {{ $t("types.audio") }}
+                            </strong>
+                        </label>
+                        <div
+                            class="ml-2 flex items-center gap-2"
+                            v-for="type in audioTypes"
+                            :key="type"
+                        >
+                            <input
+                                v-model="audioValues[type]"
+                                type="checkbox"
+                                :name="type"
+                                :id="`a-${type}`"
+                            />
+                            <label :for="`a-${type}`">
+                                {{ $t(`types.${type}`) }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="py-2">
+                    <small>Type</small>
+                    <div class="filter gap-x" v-for="type in contentTypes" :key="type">
+                        <input
+                            v-model="typeValues[type]"
                             type="checkbox"
                             :name="type"
-                            :id="`a-${type}`"
+                            :id="`t-${type}`"
                         />
-                        <label :for="`a-${type}`">
+                        <label :for="`t-${type}`">
                             {{ $t(`types.${type}`) }}
                         </label>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <!-- <div class="py-2">
-                <small>Type</small>
-                <div class="filter gap-x" v-for="type in contentTypes" :key="type">
-                    <input
-                        v-model="typeValues[type]"
-                        type="checkbox"
-                        :name="type"
-                        :id="`t-${type}`"
-                    />
-                    <label :for="`t-${type}`">
-                        {{ $t(`types.${type}`) }}
-                    </label>
-                </div>
-            </div> -->
-        </div>
-    </base-dropdown>
+        </base-dropdown>
+    </div>
 </template>
 
 <script lang="ts">
@@ -221,6 +227,10 @@ export default class SongFilterDropdown extends Vue {
         //filter.origins = origins;
 
         this.store.commit(SongsMutationTypes.SET_FILTER, filter);
+    }
+
+    public get filtersActive() {
+        return false;
     }
 
     public get languageKey() {

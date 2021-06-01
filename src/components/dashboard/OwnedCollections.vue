@@ -1,8 +1,9 @@
 <template>
 	<base-card class="border border-primary md:col-span-2">
 		<div class="flex flex-col gap-4 h-full">
-			<div class="flex justify-between items-center">
+			<div class="flex gap-4 items-center">
 				<h3 class="font-bold">{{ $t('common.your') }} {{ $t('common.collections').toLocaleLowerCase() }}</h3>
+				<tooltip text="Her ser du samlinger du har tilgang til" />
 			</div>
 			<div v-if="collections?.length" class="flex flex-col gap-2">
 				<collection-card

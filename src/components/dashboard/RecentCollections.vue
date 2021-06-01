@@ -1,8 +1,11 @@
 <template>
     <base-card>
-        <h3 class="font-bold mb-4">
-            {{ $t("activity.recentlyOpened") }}
-        </h3>
+        <div class="flex gap-4 items-center mb-4">
+            <h3 class="font-bold">
+                {{ $t("activity.recentlyOpened") }}
+            </h3>
+            <tooltip text="Her ser du nylig åpnede samlinger" />
+        </div>
         <div class="flex flex-col gap-2" v-if="recentCollections.length">
             <collection-card
                 class="recent-collections__collection"
