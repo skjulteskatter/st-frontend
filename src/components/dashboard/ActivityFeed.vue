@@ -1,9 +1,11 @@
 <template>
     <base-card>
-        <h3 class="font-bold flex gap-2 items-center mb-4">
-            {{ $t("common.activity") }}
-            <tooltip text="Her ser du all din nylige aktivitet" />
-        </h3>
+        <div class="flex gap-4 items-center mb-4">
+            <h3 class="font-bold">
+                {{ $t("common.activity") }}
+            </h3>
+            <tooltip text="Her ser du dine nylig åpnede sanger" />
+        </div>
         <loader :loading="activitiesInitialized === false">
             <div class="flex flex-col gap-2 relative" v-if="activities.length">
                 <router-link
