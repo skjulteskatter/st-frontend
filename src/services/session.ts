@@ -40,7 +40,7 @@ export class Session {
             if (fetchSongs.length) {
                 const s = await songs.getAllSongs(fetchSongs);
 
-                await cache.replaceEntries("songs", s.reduce((a, b) => {
+                await cache.replaceEntries("songs", s.result.reduce((a, b) => {
                     a[b.id] = b;
                     return a;
                 }, {} as {
@@ -49,7 +49,7 @@ export class Session {
 
                 const f = await songs.getFiles(fetchSongs);
 
-                await cache.replaceEntries("files", f.reduce((a, b) => {
+                await cache.replaceEntries("files", f.result.reduce((a, b) => {
                     a[b.id] = b;
                     return a;
                 }, {} as {
@@ -73,18 +73,18 @@ export class Session {
                     if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
                         const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
     
-                        await cache.replaceEntries("files", updateSongs.reduce((a, b) => {
+                        await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
                             a[b.id] = b;
                             return a;
                         }, {} as {
                             [id: string]: MediaFile;
                         }));
         
-                        await cache.set("config", key, now.toISOString());
+                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                     }
                 } catch(e) {
                     notify("error", "Error fetching files", "warning", e);
-                    this.files = await songs.getFiles(ownedCols);
+                    this.files = (await songs.getFiles(ownedCols)).result;
                 }
 
                 this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
@@ -99,19 +99,19 @@ export class Session {
                     if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
                         const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
     
-                        await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
+                        await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
                             a[b.id] = b;
                             return a;
                         }, {} as {
                             [id: string]: ApiSong;
                         }));
         
-                        await cache.set("config", key, now.toISOString());
+                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                     }
                 }
                 catch(e) {
                     notify("error", "Error occured", "warning", e);
-                    this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
+                    this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
                 }
                 
                 this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));

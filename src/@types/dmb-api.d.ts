@@ -195,3 +195,9 @@ interface Price {
     type: string;
 }
 
+interface Result<T> {
+    result: T;
+    success: boolean;
+    error: string;
+    lastUpdated: string;
+}
