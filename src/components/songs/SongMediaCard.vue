@@ -4,10 +4,11 @@
         header
     >
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center gap-4">
                 <h4 class="font-bold">
                     {{ $t("song.media") }}
                 </h4>
+                <tooltip text="Her finner du sangens tilhørende filer" />
             </div>
         </template>
         <div class="flex flex-col gap-4">
