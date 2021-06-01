@@ -1,5 +1,5 @@
 <template>
-	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip">
+	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="showTooltip">
 		<span class="w-4 h-4 rounded-full border border-secondary text-secondary text-sm flex justify-center items-center cursor-default">?</span>
 		<transition-root
 			:show="open"
