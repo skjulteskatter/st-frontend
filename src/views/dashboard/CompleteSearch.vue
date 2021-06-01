@@ -1,15 +1,17 @@
 <template>
-    <div class="complete-search">
-        <loader :loading="loading">
-            <back-button />
-            <h1>{{ $t("common.search") }}</h1>
-            <search-input v-model="searchQuery" @search="search" class="complete-search__input" />
-            <p class="complete-search__result-count">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
-            <div class="complete-search__list complete-search__list-cards">
-                <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
-            </div>
-        </loader>
-    </div>
+    <loader :loading="loading">
+        <div class="p-4 md:p-8">
+                <back-button />
+                <h1 class="text-2xl md:text-3xl font-bold mb-4">{{ $t("common.search") }}</h1>
+                <div class="flex flex-col gap-2 mb-4">
+                    <search-input v-model="searchQuery" @search="search" />
+                    <p class="text-gray-400">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
+                </div>
+        </div>
+    </loader>
 </template>
 
 <script lang="ts">
@@ -138,43 +140,3 @@ export default class CompleteSearch extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../../style/mixins";
-
-.complete-search {
-    padding: calc(var(--st-spacing) * 2);
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
-
-    &__input {
-        margin-bottom: var(--st-spacing);
-    }
-
-    &__result-count {
-        opacity: .5;
-    }
-
-    &__collection {
-        margin-top: 2rem;
-    }
-
-    &__list {
-
-        &-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: var(--st-spacing);
-
-            @include breakpoint("medium") {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            @include breakpoint("small") {
-                grid-template-columns: 1fr;
-            }
-        }
-    }
-}
-</style>
