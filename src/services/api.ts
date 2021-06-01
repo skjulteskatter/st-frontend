@@ -85,11 +85,11 @@ export const songs = {
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
-    async getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return await http.get<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+    getAllSongs(collectionIds: string[], lastUpdated?: string) {
+        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
-        return http.get<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
     },
     // async getSongs(collection: ApiCollection, lastUpdated?: string) {
     //     return await http.get<ApiSong[]>(`api/Songs/${collection.id}?expand=participants/contributor,details,files/contributors,themes,transpositions,copyrights,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));

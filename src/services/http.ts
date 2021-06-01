@@ -36,14 +36,28 @@ class Http {
      * @param  {String} path
      * @return {Promise}
      */
-    public get<T>(path: string, bypassAuth?: boolean): Promise<T> {
-        return this.apifetch(
+    public async get<T>(path: string, bypassAuth?: boolean): Promise<T> {
+        const result = await this.apifetch(
             path,
             {
                 method: "GET",
             }, 
             bypassAuth,
-        );
+        ) as Result<T>;
+
+        return result.result;
+    }
+
+    public async getWithResult<T>(path: string): Promise<Result<T>> {
+        const result = await this.apifetch(
+            path,
+            {
+                method: "GET",
+            },
+            false,
+        ) as Result<T>;
+
+        return result;
     }
 
     /**
@@ -54,13 +68,12 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public post<T, Y = T>(
+    public async post<T, Y = T>(
         path: string,
         content?: Y,
         options?: object,
     ): Promise<T> {
-
-        return this.apifetch(
+        const result = await this.apifetch(
             path,
             Object.assign(
                 {
@@ -72,7 +85,8 @@ class Http {
                 },
                 options || {},
             ),
-        );
+        ) as Result<T>;
+        return result.result;
     }
 
     /**
@@ -83,11 +97,11 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public patch<T>(
+    public async patch<T>(
         path: string,
         content: unknown,
     ): Promise<T> {
-        return this.apifetch(
+        const result = await this.apifetch(
             path,
             {
                 method: "PATCH",
@@ -96,7 +110,8 @@ class Http {
                     "Content-Type": "application/json",
                 },
             },
-        );
+        ) as Result<T>;
+        return result.result;
     }
 
     /**
@@ -107,11 +122,11 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public ["delete"]<T>(
+    public async ["delete"]<T>(
         path: string,
         options?: object,
     ): Promise<T> {
-        return this.apifetch(
+        const result = await this.apifetch(
             path,
             Object.assign(
                 {
@@ -119,7 +134,9 @@ class Http {
                 },
                 options || {},
             ),
-        );
+        ) as Result<T>;
+
+        return result.result;
     }
 
     /**
@@ -129,11 +146,11 @@ class Http {
      * @param  {Object} content
      * @return {Promise}
      */
-    public put<T>(
+    public async put<T>(
         path: string,
         content: T,
     ): Promise<T> {
-        return this.apifetch(
+        const result = await this.apifetch(
             path,
             Object.assign(
                 {
@@ -141,7 +158,8 @@ class Http {
                     body: JSON.stringify(content),
                 },
             ),
-        );
+        ) as Result<T>;
+        return result.result;
     }
 
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
@@ -157,9 +175,10 @@ class Http {
         const o = Object.assign(
             options, {headers});
         try {
-            return await fetch(path, o)
+            const result = await fetch(path, o)
                 .then(this.validateResponse)
                 .then(this.parseJson);
+            return result;
         }
         catch (e) {
             notify("error", e.status, "warning", e.value);
