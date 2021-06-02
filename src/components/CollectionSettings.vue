@@ -26,6 +26,7 @@ import { BaseButton } from "@/components";
 import { Collection } from "@/classes";
 
 @Options({
+    name: "collection-settings",
     components: {
         BaseButton,
     },

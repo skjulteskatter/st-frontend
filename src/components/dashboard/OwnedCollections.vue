@@ -27,6 +27,7 @@ import { useStore } from "@/store";
 import { Collection } from "@/classes";
 
 @Options({
+	name: "owned-collections",
 	components: {
 		CollectionCard,
 	},

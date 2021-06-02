@@ -15,7 +15,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StoreCart } from "@/components/store";
 
 @Options({
-    name: "store",
+    name: "collection-view",
     components: {
         StoreCart,
     },

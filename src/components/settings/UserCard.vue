@@ -16,9 +16,12 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
+@Options({
+    name: "user-card",
+})
 export default class UserCard extends Vue {
     private store = useStore();
 
