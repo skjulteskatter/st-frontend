@@ -17,6 +17,7 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 @Options({
+    name: "playlist-card",
     props: {
         playlist: {
             type: Object,

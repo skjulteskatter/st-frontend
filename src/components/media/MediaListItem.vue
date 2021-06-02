@@ -22,7 +22,7 @@ import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "audio-playlist",
+    name: "media-playlist",
     props: {
         icon: {
             type: String,

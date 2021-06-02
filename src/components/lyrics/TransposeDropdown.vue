@@ -17,6 +17,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
 @Options({
+    name: "transpose-dropdown",
     props: {
         transpositions: {
             type: Object,
