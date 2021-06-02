@@ -94,7 +94,7 @@ export default class StoreHome extends Vue {
         await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
 
-        notify("success", "check", this.$t("common.subscriptionsRefreshed"));
+        notify("success", this.$t("common.subscriptionsRefreshed"), "check");
     }
 }
 </script>
