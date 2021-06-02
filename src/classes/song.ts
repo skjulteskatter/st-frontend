@@ -56,7 +56,11 @@ export class Song extends BaseClass implements ApiSong {
     public newMelody: boolean;
 
     public get themes() {
-        return appSession.themes.filter(t => this.themeIds.includes(t.id));
+        return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
+    }
+
+    public get tags() {
+        return this.tagIds.length ? appSession.tags.filter(t => this.tagIds.includes(t.id)) : [];
     }
 
     public get collectionIds() {

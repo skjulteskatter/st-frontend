@@ -110,6 +110,14 @@
                 </small>
             </div>
         </div>
+        <div 
+            class="flex"
+            v-if="song.tags.length"
+        >
+            <small class="flex gap-2" v-for="tag in song.tags" :key="tag.id">
+                {{getLocaleString(tag.name)}}
+            </small>
+        </div>
         <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
             <hr />
             <div
