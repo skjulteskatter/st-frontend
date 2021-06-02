@@ -1,8 +1,7 @@
 <template>
-    <div class="osmd-wrapper">
-        <div class="flex">
-            <div class="p-2 border border-gray-300 flex items-center gap-2 w-full">
-                <loader :loading="osmdLoading" :position="'local'" />
+    <div class="flex">
+        <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full">
+            <loader :loading="osmdLoading" :position="'local'">
                 <base-dropdown
                         origin="left"
                         :label="
@@ -25,8 +24,11 @@
                         {{ t.view }}
                     </button>
                 </base-dropdown>
-                <div class="flex flex-col w-40">
-                    <small>{{ Math.floor(zoom * 100) }}%</small>
+                <div class="flex flex-col max-w-xs w-full rounded p-2 border border-gray-300">
+                    <small class="flex justify-between gap-4">
+                        <span class="text-gray-500">Zoom:</span>
+                        <span class="font-bold">{{ Math.floor(zoom * 100) }}%</span>
+                    </small>
                     <input
                         type="range"
                         v-model="zoom"
@@ -34,6 +36,7 @@
                         min="0.4"
                         max="1.4"
                         step="0.1"
+                        class="w-full"
                     />
                 </div>
                 <base-button 
@@ -43,7 +46,7 @@
                     @click="close()"
                     class="ml-auto"
                 >{{$t('common.close')}}</base-button>
-            </div>
+            </loader>
         </div>
     </div>
 </template>

@@ -9,7 +9,10 @@
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
-                <div :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }">
+                <div
+                    class="sticky bottom-0" 
+                    :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
+                >
                     <open-sheet-music-display
                         v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic'"
                         :options="sheetMusicOptions"
