@@ -17,6 +17,7 @@
             <span>
                 {{ title }}
             </span>
+            <span v-if="viewCount">({{viewCount}})</span>
         </h2>
         <div class="flex items-start gap-2">
             <img
@@ -153,6 +154,9 @@ import { useStore } from "@/store";
         song: {
             type: Object,
         },
+        viewCount: {
+            type: Number,
+        },
     },
     name: "song-info-card",
 })
@@ -162,6 +166,7 @@ export default class SongInfoCard extends Vue {
     public imageLoaded = false;
     public store = useStore();
     public showDescription = false;
+    public viewCount?: number;
 
     public get Language() {
         return this.languageKey ?? "en";

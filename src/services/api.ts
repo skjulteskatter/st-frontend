@@ -162,6 +162,12 @@ export const playlists = {
     },
 };
 
+export const analytics = {
+    getForSong(songId: string) {
+        return http.get<{viewCount: number}>("api/Analytics/" + songId);
+    },
+};
+
 export const tags = {
     async getAll(expand = false) {
         return (await http.get<ApiTag[]>("api/Tags" + (expand ? "?expand=songs" : "")));
@@ -222,6 +228,7 @@ const api = {
     playlists,
     activity,
     tags,
+    analytics,
 };
 
 export default api;
