@@ -4,7 +4,7 @@
         header
     >
         <template #header>
-            <div class="flex justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
                 <h4 class="font-bold">
                     {{ $t("song.media") }}
                 </h4>
