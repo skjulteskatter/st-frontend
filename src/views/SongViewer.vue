@@ -26,7 +26,7 @@
                     <base-button
                         v-if="admin"
                         @click="goToEditPage()"
-                        theme="primary"
+                        theme="tertiary"
                         icon="pencil"
                     >Edit</base-button>
                     <base-button

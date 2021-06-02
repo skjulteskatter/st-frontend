@@ -62,7 +62,7 @@
                 <base-button
                     v-if="editor"
                     class="ml-auto"
-                    theme="primary"
+                    theme="tertiary"
                     icon="pencil"
                     @click="edit()"
                 >Edit</base-button>
