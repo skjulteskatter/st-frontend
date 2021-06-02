@@ -122,16 +122,18 @@ export class Session {
 
         items.getCountries().then(c => {
             this.countries = c;
-        });
+        }).catch();
         items.getThemes().then(t => {
             this.themes = t;
-        });
+        }).catch();
+
         items.getCopyrights().then(c => {
             this.copyrights = c;
-        });
+        }).catch();
+
         items.getTags().then(t => {
             this.tags = t;
-        });
+        }).catch();
 
         this.languages = await items.getLanguages();
 

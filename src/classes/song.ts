@@ -40,8 +40,8 @@ export class Song extends BaseClass implements ApiSong {
         description: LocaleString;
     }[];
 
-    public themeIds;
-    public tagIds;
+    public themeIds: string[];
+    public tagIds: string[];
 
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
@@ -88,8 +88,8 @@ export class Song extends BaseClass implements ApiSong {
         this.image = song.image;
 
         this.origins = song.origins ?? [];
-        this.themeIds = song.themeIds;
-        this.tagIds = song.tagIds;
+        this.themeIds = song.themeIds ?? [];
+        this.tagIds = song.tagIds ?? [];
 
         this.collections = song.collections;
         this.newMelody = song.newMelody;
