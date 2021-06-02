@@ -4,7 +4,7 @@
         v-for="(verse, i) in text"
         :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
     >
-        <b>{{ verse.name }}</b>
+        <b class="text-sm">{{ verse.name }}</b>
         <p class="leading-7">{{ verse.content.join("\n") }}</p>
     </div>
 </template>

@@ -40,7 +40,8 @@ export class Song extends BaseClass implements ApiSong {
         description: LocaleString;
     }[];
 
-    public themeIds;
+    public themeIds: string[];
+    public tagIds: string[];
 
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
@@ -55,7 +56,11 @@ export class Song extends BaseClass implements ApiSong {
     public newMelody: boolean;
 
     public get themes() {
-        return appSession.themes.filter(t => this.themeIds.includes(t.id));
+        return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
+    }
+
+    public get tags() {
+        return this.tagIds.length ? appSession.tags.filter(t => this.tagIds.includes(t.id)) : [];
     }
 
     public get collectionIds() {
@@ -87,7 +92,8 @@ export class Song extends BaseClass implements ApiSong {
         this.image = song.image;
 
         this.origins = song.origins ?? [];
-        this.themeIds = song.themeIds;
+        this.themeIds = song.themeIds ?? [];
+        this.tagIds = song.tagIds ?? [];
 
         this.collections = song.collections;
         this.newMelody = song.newMelody;

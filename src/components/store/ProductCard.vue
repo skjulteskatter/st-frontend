@@ -26,7 +26,6 @@
                 <base-button
                     theme="secondary"
                     class="flex-1"
-                    icon="arrowRight"
                     @click="goToCollection"
                 >
                     {{ $t("common.open") }}

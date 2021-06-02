@@ -59,6 +59,13 @@
                     :transpose="transpose"
                 ></transpose-dropdown> -->
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
+                <base-button
+                    v-if="editor"
+                    class="ml-auto"
+                    theme="tertiary"
+                    icon="pencil"
+                    @click="edit()"
+                >Edit</base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
@@ -282,6 +289,14 @@ export default class LyricsCard extends Vue {
             this.defaultTransposition,
             this.song?.transpositions ?? {},
         );
+    }
+
+    public edit() {
+        window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id};lyrics;${this.lyrics?.id}`);
+    }
+
+    public get editor() {
+        return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
     }
 }
 </script>

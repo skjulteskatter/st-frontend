@@ -45,22 +45,20 @@ export default class TransposedLyricsViewer extends Vue {
 
 <style lang="scss">
 .transposed-lyrics {
-    width: 100%;
-
     .song {
         --chord-size: 1em;
-        margin: 0 auto;
         line-height: 1.5em;
 
         .verse-title,
         .chorus-title {
             font-weight: bold;
+            font-size: .9em;
         }
 
         .verse,
         .chorus {
             &:not(:last-child) {
-                margin-bottom: var(--st-spacing);
+                margin-bottom: calc(var(--st-spacing)*2);
             }
 
             .songline {

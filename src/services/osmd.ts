@@ -102,6 +102,7 @@ class OSMD {
                 drawHiddenNotes: true,
                 pageBackgroundColor: "#FFFFFF",
                 newSystemFromXML: true,
+                stretchLastSystemLine: true,
                 //pageFormat: "A4 P"
             });
 

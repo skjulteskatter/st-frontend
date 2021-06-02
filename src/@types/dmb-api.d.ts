@@ -46,6 +46,7 @@ declare module "dmb-api" {
         hasLyrics: boolean;
         hasChords: boolean;
         themeIds: string[];
+        tagIds: string[];
         copyrights: {
             type: string;
             copyrightId?: string;
@@ -171,6 +172,11 @@ interface Copyright {
 }
 
 interface Theme {
+    id: string;
+    name: LocaleString;
+}
+
+interface SongTag {
     id: string;
     name: LocaleString;
 }

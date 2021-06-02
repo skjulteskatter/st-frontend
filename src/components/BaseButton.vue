@@ -5,6 +5,7 @@
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
+        <icon size="18" v-if="icon" :name="icon" class="inline-block" />
         <span class="button__label--loading flex items-center" v-if="loading">{{
             loadingLabel
         }}</span>
@@ -12,7 +13,6 @@
         <span class="button__content text-sm" v-else-if="content">
             <slot></slot>
         </span>
-        <icon size="18" v-if="icon" :name="icon" class="inline-block" />
     </button>
 </template>
 

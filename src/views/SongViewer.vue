@@ -4,6 +4,7 @@
             <div class="flex justify-between">
                 <back-button />
                 <div class="flex gap-2">
+                    <small v-if="admin">{{song.id}}</small>
                     <modal
                         class="playlist-adder"
                         theme="secondary"
@@ -26,7 +27,7 @@
                     <base-button
                         v-if="admin"
                         @click="goToEditPage()"
-                        theme="primary"
+                        theme="tertiary"
                         icon="pencil"
                     >Edit</base-button>
                     <base-button
@@ -44,6 +45,7 @@
                 <song-info-card
                     :song="song"
                     :languageKey="languageKey"
+                    :viewCount="viewCount"
                     class="md:col-span-2"
                 />
                 <song-media-card 
@@ -85,6 +87,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
+import { analytics } from "@/services/api";
 
 @Options({
     components: {
@@ -105,6 +108,7 @@ export default class SongViewer extends Vue {
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
+    public viewCount = 0;
 
     public componentLoading: {
         [key: string]: boolean;
@@ -154,6 +158,15 @@ export default class SongViewer extends Vue {
                 await this.collection?.getLyrics(this.song, this.store.state.songs.language);
             }
                 
+        }
+
+        try {
+            if (this.song?.id) {
+                this.viewCount = (await analytics.getForSong(this.song.id)).viewCount;
+            }
+        }
+        catch {
+            //
         }
 
         const route = this.$route.fullPath;

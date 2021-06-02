@@ -6,6 +6,7 @@
 	>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 			<base-input
+				class="border border-gray-300"
 				:label="$t('common.name')"
 				v-model="playlistName"
 				required

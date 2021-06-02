@@ -1,6 +1,6 @@
 import router from "@/router";
 import api from "@/services/api";
-import auth from "@/services/auth";
+import auth, { analytics } from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
 import { ApiActivity, ApiContributor, ApiSong, ApiTag } from "dmb-api";
@@ -34,6 +34,7 @@ const ts: {
 async function init(state: State, commit: Commit): Promise<void> {
     const user = await api.session.getCurrentUser();
     if (user) {
+        analytics.setUserId(user.id);
         user.displayName = auth.user?.displayName ?? user.displayName;
     }
     

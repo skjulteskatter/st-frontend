@@ -8,6 +8,7 @@ import { useStore } from "@/store";
 import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
+import { analytics } from "@/services/auth";
 
 type CollectionSettings = {
     offline: boolean;
@@ -42,6 +43,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public hasComposers = false;
     public hasCountries = false;
     public hasThemes = false;
+    public hasTags = false;
 
     public themeTypes: Theme[] = [];
 
@@ -49,6 +51,9 @@ export class Collection extends BaseClass implements ApiCollection {
 
     private _themes?: CollectionItem<Theme>[];
     private _loadingThemes = false;
+
+    private _tags?: CollectionItem<SongTag>[];
+    private _loadingTags = false;
 
     private _authors?: CollectionItem<ApiContributor>[];
     private _composers?: CollectionItem<ApiContributor>[];
@@ -100,77 +105,11 @@ export class Collection extends BaseClass implements ApiCollection {
                 this.songs = (await api.songs.getAllSongs([this.id])).result.map(s => new Song(s));
             }
 
-
-            // if (this.settings?.offline) {
-            //     if (navigator.onLine) {
-            //         try {
-            //             const key = "songs_lastUpdated_" + this.id;
-            //             const lastUpdated = await cache.get("config", key) as string | undefined;
-            //             const updateSongs = await api.songs.getAllSongs(lastUpdated);
-    
-            //             await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-            //                 a[b.id] = b;
-            //                 return a;
-            //             }, {} as {
-            //                 [id: string]: Song;
-            //             }));
-
-            //             const now = new Date();
-
-            //             await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
-            //         }
-            //         catch(e) {
-            //             notify("error", "Error occured", "warning", e);
-            //             this.songs = await api.songs.getSongs(this);
-            //         }
-            //     }
-                
-            //     this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).filter(s => s.collectionIds.some(col => col == this.id)).sort((a, b) => a.number - b.number);
-            // } else {
-            //     this.songs = await api.songs.getSongs(this);
-            // }
-
-            // try {
-            //     try {
-            //         const key = "songs_lastUpdated_" + this.id;
-            //         const lastUpdated = (await cache.get("config", key))?.value as string | undefined;
-                    
-            //         const updateSongs = await api.songs.getAllSongs(this, lastUpdated);
-    
-            //         await cache.replaceEntries("songs", updateSongs.reduce((a, b) => {
-            //             a[b.id] = b;
-            //             return a;
-            //         }, {} as {
-            //             [id: string]: Song;
-            //         }));
-    
-
-            //         const now = new Date();
-
-            //         await cache.set("config", key, {
-            //             id: key,
-            //             value: new Date(now.getTime() - 172800).toISOString(),
-            //         });
-
-            //         this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
-            //     }
-            //     catch (e) {
-            //         this.songs = (await cache.getAll("songs")).filter(s => s.collectionId == this.id).sort((a, b) => a.number - b.number);
-
-            //         if (this.songs.length < 10) {
-            //             throw e;
-            //         }
-            //     }
-            // }
-            // catch (e) {
-            //     notify("error", "Error occured", "warning", e);
-            //     this.songs = await api.songs.getAllSongs(this);
-            // }
-
             this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
             this.hasComposers = this.hasComposers || this.songs.some(s => s.participants.some(p => p.type == "composer"));
-            this.hasThemes = this.hasThemes || this.songs.some(s => s.themes.length > 0);
+            this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
+            this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
         }
     }
     
@@ -361,6 +300,18 @@ export class Collection extends BaseClass implements ApiCollection {
                 return this._themes.length;
             }
         }
+        if (value == "tags") {
+            if (!this._tags) {
+                this._loadingTags = true;
+
+                const tags = await api.songs.getAllTags(this);
+
+                this._tags = tags.map(t => new CollectionItem(t));
+
+                this._loadingTags = false;
+                return this._tags.length;
+            }
+        }
 
         return 1;
     }
@@ -368,6 +319,13 @@ export class Collection extends BaseClass implements ApiCollection {
     public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
+            const song = this.songs.find(s => s.getNumber(this.id) == number);
+            analytics.logEvent("lyrics_view_transpose", {
+                "collection_id": this.id,
+                "song_id": song?.id,
+                "lyrics_language": language,
+                "lyrics_transposition": transpose,
+            });
             let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose);
             if (!lyrics) {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
@@ -383,6 +341,11 @@ export class Collection extends BaseClass implements ApiCollection {
     public async getLyrics(song: ApiSong, language: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
+            analytics.logEvent("lyrics_view", {
+                "collection_id": this.id,
+                "song_id": song.id,
+                "lyrics_language": language,
+            });
             let lyrics = this.lyrics.find(l => l.songId == song.id && l.languageKey == language);
             if (!lyrics) {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
@@ -409,6 +372,10 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get themes(): CollectionItem<Theme>[] {
         return this._themes ?? [];
+    }
+
+    public get tags(): CollectionItem<SongTag>[] {
+        return this._tags ?? [];
     }
 
     public getContributors(type: string) {

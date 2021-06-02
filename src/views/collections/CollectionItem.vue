@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div>
         <back-button />
         <div class="flex flex-col gap-4 md:flex-row" v-if="product">
             <img
@@ -7,7 +7,7 @@
                 :src="image"
                 :alt="product.getName(languageKey)"
             />
-            <base-card>
+            <base-card class="p-4">
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
