@@ -95,6 +95,24 @@
 
                 <div
                     class="song-list__contributors"
+                    v-if="listType == 'tags'"
+                >
+                    <song-list-card
+                        v-for="tag in collection.tags"
+                        :collection="collection"
+                        :key="tag.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                tag?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="tag?.item.name[languageKey] ?? ''"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__contributors"
                     v-if="listType == 'countries'"
                 >
                     <song-list-card
@@ -401,6 +419,11 @@ export default class SongList extends Vue {
                 value: "themes",
                 selected: this.listType == "themes",
             },
+            // {
+            //     label: this.$t("song.tag"),
+            //     value: "tags",
+            //     selected: this.listType == "tags",
+            // },
             {
                 label: this.$t("common.country"),
                 value: "countries",
