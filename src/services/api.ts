@@ -45,6 +45,9 @@ export const items = {
     getCopyrights() {
         return http.get<Copyright[]>("api/Copyrights");
     },
+    getTags() {
+        return http.get<SongTag[]>("api/SongTags");
+    },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
     },
@@ -118,6 +121,9 @@ export const songs = {
     },
     async getAllCountries(collection: ApiCollection) {
         return await http.get<ApiCollectionItem<Country>[]>(`api/Countries/${collection.id}?expand=item`); //).map(ci => new CountryCollectionItem(ci));
+    },
+    async getAllTags(collection: ApiCollection) {
+        return await http.get<ApiCollectionItem<SongTag>[]>(`api/SongTags/${collection.id}?expand=item`); //).map(ci => new CountryCollectionItem(ci));
     },
     /**
      * Search accross collections.

@@ -11,6 +11,7 @@ export class Session {
     public files: MediaFile[] = [];
 
     public themes: Theme[] = [];
+    public tags: SongTag[] = [];
     public countries: Country[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
@@ -127,6 +128,9 @@ export class Session {
         });
         items.getCopyrights().then(c => {
             this.copyrights = c;
+        });
+        items.getTags().then(t => {
+            this.tags = t;
         });
 
         this.languages = await items.getLanguages();

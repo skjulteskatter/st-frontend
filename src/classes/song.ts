@@ -41,6 +41,7 @@ export class Song extends BaseClass implements ApiSong {
     }[];
 
     public themeIds;
+    public tagIds;
 
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
@@ -88,6 +89,7 @@ export class Song extends BaseClass implements ApiSong {
 
         this.origins = song.origins ?? [];
         this.themeIds = song.themeIds;
+        this.tagIds = song.tagIds;
 
         this.collections = song.collections;
         this.newMelody = song.newMelody;
