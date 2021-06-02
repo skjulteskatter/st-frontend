@@ -185,7 +185,6 @@ import { Options, Vue } from "vue-class-component";
 import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 
 import {
-    SongListItemNumber,
     SongListItemCard,
     SongListCard,
 } from "@/components/songs";
@@ -201,7 +200,6 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 
 @Options({
     components: {
-        SongListItemNumber,
         SongListItemCard,
         SongListCard,
         ButtonGroup,
