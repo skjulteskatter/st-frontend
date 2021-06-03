@@ -115,9 +115,18 @@
             class="flex"
             v-if="song.tags.length"
         >
-            <small class="flex gap-2" v-for="tag in song.tags" :key="tag.id">
-                {{getLocaleString(tag.name)}}
-            </small>
+            <span v-for="tag in song.tags" :key="tag.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
+                <router-link
+                    :to="{
+                        name: 'tag',
+                        params: {
+                            id: tag.id,
+                        },
+                    }"
+                >
+                    {{getLocaleString(tag.name)}}
+                </router-link>
+            </span>
         </div>
         <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
             <hr />

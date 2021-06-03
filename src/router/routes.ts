@@ -80,6 +80,9 @@ const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/Ve
 const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
     window.location.reload();
 });
+const TagList = () => import(/* webpackChunkName: 'tagList' */ "../views/TagList.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -97,6 +100,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: "admin",
                 name: "admin",
                 component: Admin,
+            },
+            {
+                path: "tags/:id",
+                name: "tag",
+                component: TagList,
             },
             {
                 path: "songs",
