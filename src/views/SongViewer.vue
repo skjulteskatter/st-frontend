@@ -5,6 +5,13 @@
                 <back-button />
                 <div class="flex gap-2 items-center">
                     <small v-if="admin" class="p-2 border border-gray-400 rounded">{{song.id}}</small>
+                    <base-button
+                        v-if="admin"
+                        @click="goToEditPage()"
+                        theme="tertiary"
+                        icon="pencil"
+                        class="mr-4"
+                    >Edit</base-button>
                     <modal
                         class="playlist-adder"
                         theme="secondary"
@@ -24,12 +31,6 @@
                             />
                         </div>
                     </modal>
-                    <base-button
-                        v-if="admin"
-                        @click="goToEditPage()"
-                        theme="tertiary"
-                        icon="pencil"
-                    >Edit</base-button>
                     <base-button
                         v-if="extended && song.hasLyrics"
                         @click="extend"
