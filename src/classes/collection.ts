@@ -320,17 +320,18 @@ export class Collection extends BaseClass implements ApiCollection {
         this.loadingLyrics = true;
         try {
             const song = this.songs.find(s => s.getNumber(this.id) == number);
-            analytics.logEvent("lyrics_view_transpose", {
-                "collection_id": this.id,
-                "song_id": song?.id,
-                "lyrics_language": language,
-                "lyrics_transposition": transpose,
-            });
             let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose);
             if (!lyrics) {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
                 this.lyrics.push(lyrics);
             }
+            analytics.logEvent("lyrics_view_transpose", {
+                "collection_id": this.id,
+                "song_id": song?.id,
+                "lyrics_id": lyrics.id,
+                "lyrics_language": language,
+                "lyrics_transposition": transpose,
+            });
             return lyrics;
         }
         finally {
@@ -341,16 +342,17 @@ export class Collection extends BaseClass implements ApiCollection {
     public async getLyrics(song: ApiSong, language: string): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
-            analytics.logEvent("lyrics_view", {
-                "collection_id": this.id,
-                "song_id": song.id,
-                "lyrics_language": language,
-            });
             let lyrics = this.lyrics.find(l => l.songId == song.id && l.languageKey == language);
             if (!lyrics) {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
+            analytics.logEvent("lyrics_view", {
+                "collection_id": this.id,
+                "song_id": song.id,
+                "lyrics_language": language,
+                "lyrics_id": lyrics.id,
+            });
             return lyrics;
         }
         finally {
