@@ -21,9 +21,10 @@
                 </router-link>
             </li>
         </ul>
-        <p class="p-2 bg-gray-200 text-center rounded" v-else>
-            {{ $t("playlist.noplaylists") }}
-        </p>
+        <div class="p-4 bg-gray-200 rounded flex flex-col gap-2 justify-center items-center" v-else>
+            <small class="text-gray-500">{{ $t("playlist.noplaylists") }}</small>
+            <create-playlist-modal />
+        </div>
     </div>
 </template>
 
@@ -33,9 +34,13 @@ import { ApiPlaylist } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
+import { CreatePlaylistModal } from "@/components/playlist";
 
 @Options({
     name: "playlist-list",
+    components: {
+        CreatePlaylistModal,
+    },
 })
 export default class CollectionList extends Vue {
     private store = useStore();

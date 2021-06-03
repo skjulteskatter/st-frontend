@@ -1,8 +1,8 @@
 <template>
 	<modal
-		theme="primary"
+		theme="secondary"
 		:label="$t('playlist.createnew')"
-		icon="plus"
+		icon="playlist"
 	>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 			<base-input

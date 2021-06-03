@@ -6,7 +6,7 @@
 				{{ notifications.length }}
 			</span>
 		</template>
-		<div class="flex justify-between items-center gap-4 mb-2">
+		<div class="flex justify-between items-center gap-4 mb-4">
 			<b>Notifications</b>
 			<base-button v-if="notifications.length" theme="tertiary" @click="clearNotifications()">Clear</base-button>
 		</div>
