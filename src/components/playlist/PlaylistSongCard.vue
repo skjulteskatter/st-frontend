@@ -60,7 +60,7 @@ export default class PlaylistSongCard extends Vue {
 
     public async removeFromPlaylist() {
         const title = this.$t("playlist.removed");
-        const content = this.$t("playlist.removedsong");
+        const content = this.$t("notification.removedsong");
 
         if (!this.playlist?.id || !this.entry?.id) return;
         await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
