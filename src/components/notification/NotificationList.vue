@@ -1,8 +1,10 @@
 <template>
 	<base-dropdown class="cursor-pointer" origin="right">
 		<template #button>
-			<icon name="bell" />
-			{{ notifications.length ? notifications.length : "" }}
+			<icon name="bell" class="relative"/>
+			<span v-if="notifications.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
+				{{ notifications.length }}
+			</span>
 		</template>
 		<div class="flex justify-between items-center gap-4 mb-2">
 			<b>Notifications</b>
