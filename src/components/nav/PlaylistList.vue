@@ -23,7 +23,7 @@
         </ul>
         <div class="p-4 bg-gray-200 rounded flex flex-col gap-2 justify-center items-center" v-else>
             <small class="text-gray-500">{{ $t("playlist.noplaylists") }}</small>
-            <create-playlist-modal theme="secondary" icon="playlist" />
+            <create-playlist-modal />
         </div>
     </div>
 </template>
