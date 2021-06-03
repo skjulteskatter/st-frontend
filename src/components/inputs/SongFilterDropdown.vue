@@ -5,28 +5,28 @@
             <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
         </span>
         <base-dropdown :label="$t('common.select')" origin="right">
-            <div class="flex justify-between items-center gap-2">
-                <b>{{ $t("song.showsongswith") }}...</b>
-                <base-button theme="primary" @click="apply">
+            <div class="flex justify-between items-center gap-2 mb-4">
+                <h4 class="font-bold text-lg">{{ $t("song.showsongswith") }}...</h4>
+                <base-button theme="secondary" @click="apply">
                     {{ $t("song.apply") }}
                 </base-button>
             </div>
             <div class="flex gap-2 w-72" v-if="collection && !loading">
                 <div class="flex-grow">
-                    <div class="py-2">
+                    <label class="py-2 font-bold">
                         <input
                             v-model="typeValues.lyrics"
                             type="checkbox"
                             name="lyrics"
                             id="lyrics"
-                            class="mr-2"
-                        /><label for="lyrics">
-                            <strong>
-                                {{ $t("types.lyrics") }}
-                            </strong>
-                        </label>
-                    </div>
-                    <div class="py-2">
+                            class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                        />
+                        {{ $t("types.lyrics") }}
+                    </label>
+                    <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+                    <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+                    <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+                    <!-- <div class="py-2">
                         <input
                             v-model="typeValues.video"
                             type="checkbox"
@@ -81,9 +81,9 @@
                                 {{ $t(`types.${type}`) }}
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="flex-grow">
+                <!-- <div class="flex-grow">
                     <div class="py-2">
                         <input
                             v-model="typeValues.audio"
@@ -112,7 +112,7 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="py-2">
                     <small>Type</small>
                     <div class="filter gap-x" v-for="type in contentTypes" :key="type">
@@ -137,6 +137,7 @@ import { Collection } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import CheckboxGroup from "./CheckboxGroup.vue";
 
 @Options({
     name: "song-filter-dropdown",
@@ -147,6 +148,9 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
         origins: {
             type: Array,
         },
+    },
+    components: {
+        CheckboxGroup,
     },
 })
 export default class SongFilterDropdown extends Vue {
