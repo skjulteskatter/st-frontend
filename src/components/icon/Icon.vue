@@ -9,7 +9,7 @@
         class="inline flex-none"
         v-if="name"
     >
-        <g v-if="icons[name].paths">
+        <g v-if="icons[name]?.paths">
             <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -20,11 +20,11 @@
             />
         </g>
         <path
-            v-else-if="icons[name].path"
+            v-else-if="icons[name]?.path"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            :d="icons[name].path"
+            :d="icons[name]?.path"
         />
     </svg>
 </template>

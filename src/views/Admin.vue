@@ -6,7 +6,7 @@
         <div class="flex flex-col gap-4">
             <base-card>
                 <div class="flex flex-wrap gap-2">
-                    <base-card
+                    <!-- <base-card
                         v-for="collection in collections"
                         :key="collection.id"
                         border
@@ -21,31 +21,39 @@
                         >
                             {{ $t("admin.clearcache") }}
                         </base-button>
-                    </base-card>
-                    <base-button
+                    </base-card> -->
+                    <!-- <base-button
                         @click="clearCollection('Landax')"
                         icon="trash"
                         theme="error"
                         :loading="loadingClearCache.includes('Landax')"
                     >
                         Clear Landax
-                    </base-button>
+                    </base-button> --> 
                     <base-button
+                        @click="clearCollection('Import')"
+                        icon="refresh"
+                        theme="error"
+                        :loading="loadingClearCache.includes('Import')"
+                    >
+                        Import from Landax
+                    </base-button>
+                    <!-- <base-button
                         @click="clearCollection('Index')"
                         icon="refresh"
                         theme="secondary"
                         :loading="loadingClearCache.includes('Index')"
                     >
                         Index Songs
-                    </base-button>
-                    <base-button
+                    </base-button> -->
+                    <!-- <base-button
                         @click="syncFiles()"
                         icon="refresh"
                         theme="secondary"
                         :loading="loadingSync"
                     >
                         Files
-                    </base-button>
+                    </base-button> -->
                 </div>
             </base-card>
             <users-list :users="users" :currentUser="currentUser"></users-list>
@@ -77,6 +85,7 @@ import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {
@@ -122,8 +131,13 @@ export default class Subscriptions extends Vue {
 
     public async clearCollection(collection: string) {
         this.loadingClearCache.push(collection);
-        // Notification
-        notify("error", await api.admin.clearCache(collection), "trash");
+        notify("warning", "Importing from Landax", "refresh");
+        if (collection == "Import") {
+            await this.store.dispatch(SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX);
+        } else {
+            // Notification
+            notify("error", await api.admin.clearCache(collection), "trash");
+        }
         this.loadingClearCache = this.loadingClearCache.filter(
             (c) => c != collection,
         );

@@ -11,13 +11,13 @@
         <div
             class="p-2 rounded bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4"
             :class="{ 'border-green-700': type == 'success', 'border-red-700': type == 'error', 'border-primary': type == 'primary' }" 
-            v-if="show || persist"
+            v-if="show"
             @click="callback ? callback() : undefined"
         >
             <icon v-if="icon" :name="icon" size="18" />
             <div class="flex-grow text-xs">
                 <strong class="block">{{ title }} </strong>
-                <span v-if="body">{{ body }}</span>
+                <span v-if="body" style="">{{ body }}</span>
             </div>
             <icon
                 name="error"
@@ -76,12 +76,14 @@ export default class Notification extends Vue {
     public timeout?: number;
     public callback?: Function;
     
-    public persist = false;
+    public persist?: boolean;
 
     public show = true;
 
     public mounted() {
-        setTimeout(() => (this.show = false), this.timeout ?? 5000);
+        if (!this.persist) {
+            setTimeout(() => (this.show = false), this.timeout ?? 5000);
+        }
     }
 
     public get typeClass() {

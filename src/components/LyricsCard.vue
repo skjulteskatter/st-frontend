@@ -43,7 +43,7 @@
                 >
                     <button
                         :class="{
-                            'bg-gray-200': song.originalKey == t.view && selectedTransposition != t.value,
+                            'bg-gray-200': song?.originalKey == t.view && selectedTransposition != t.value,
                             'bg-primary text-white': selectedTransposition == t.value,
                         }"
                         class="px-4 py-1 w-full rounded"
@@ -293,7 +293,7 @@ export default class LyricsCard extends Vue {
     }
 
     public edit() {
-        window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id};lyrics;${this.lyrics?.id}`);
+        window.open(`https://songtreasures.sanity.studio/desk/lyrics;${this.lyrics?.id}`);
     }
 
     public get editor() {

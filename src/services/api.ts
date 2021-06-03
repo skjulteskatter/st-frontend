@@ -76,6 +76,9 @@ export const admin = {
     clearCache(collectionId: string) {
         return http.get<string>(`api/Admin/ClearCache/${collectionId}`);
     },
+    importFromLandax() {
+        return http.get<string>("api/Admin/Import");
+    },
     clearLandaxCache() {
         return http.get<string>("api/Admin/ClearCache/Landax");
     },

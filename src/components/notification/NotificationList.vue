@@ -2,6 +2,7 @@
 	<base-dropdown class="cursor-pointer" origin="right">
 		<template #button>
 			<icon name="bell" />
+			{{ notifications.length ? notifications.length : "" }}
 		</template>
 		<div class="flex justify-between items-center gap-4 mb-2">
 			<b>Notifications</b>
@@ -27,7 +28,7 @@
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
 import { notifications } from "@/services/notifications";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 
 @Options({
 	name: "notification-list",
@@ -39,7 +40,7 @@ export default class NotificationList extends Vue {
     public store = useStore();
 
 	public get notifications() {
-        return this.store.getters.notifications;
+        return this.store.getters.notifications.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);
     }
 
     public async clearNotifications() {
@@ -47,7 +48,3 @@ export default class NotificationList extends Vue {
     }
 }
 </script>
-
-<style>
-
-</style>
