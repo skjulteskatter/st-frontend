@@ -3,13 +3,18 @@
         v-if="song"
         v-cloak
     >
-        <router-link
-            :to="`/songs/${collection.key}`"
-            class="text-sm text-primary hover:underline"
-            v-if="collection"
-        >
-            {{ collection.getName(Language) }}
-        </router-link>
+        <span class="flex justify-between">
+            <router-link
+                :to="`/songs/${collection.key}`"
+                class="text-sm text-primary hover:underline"
+                v-if="collection"
+            >
+                {{ collection.getName(Language) }}
+            </router-link>
+            <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="text-gray-500 hover:text-gray-400 text-sm underline">
+                {{ $t('song.seeStatistics') }}
+            </router-link>
+        </span>
         <h2 class="flex gap-4 text-xl font-bold mb-2">
             <span class="text-gray-400">
                 {{ song.number }}

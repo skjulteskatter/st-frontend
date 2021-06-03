@@ -4,7 +4,7 @@
             <div class="flex justify-between">
                 <back-button />
                 <div class="flex gap-2 items-center">
-                    <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="p-2 border border-gray-400 rounded text-gray-500 text-sm">See statistics</router-link>
+                    <span v-if="admin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded">{{ song.id }}</span>
                     <base-button
                         v-if="admin"
                         @click="goToEditPage()"
