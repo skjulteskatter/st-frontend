@@ -1,10 +1,10 @@
 <template>
-    <div class="rounded border border-gray-300 flex overflow-hidden" v-if="buttons.length">
+    <div class="rounded border border-gray-300 flex overflow-hidden" v-if="Buttons.length">
         <button
+            v-for="(button, i) in Buttons"
+            :key="button.label"
             class="p-2 bg-white border-gray-300"
             :class="{ 'border-l': i > 0, 'bg-primary text-white': button.selected }"
-            v-for="(button, i) in buttons"
-            :key="button.label"
             @click="action ? clickButton(button.value) : undefined"
             :style="loading[button.value] ? 'opacity: 0.5' : ''"
         >
@@ -32,7 +32,7 @@ export default class ButtonGroup extends Vue {
         label: string;
         value: string;
         selected: boolean;
-    }[];;
+    }[];
     public action?: Function;
 
     public loading: {
@@ -45,6 +45,10 @@ export default class ButtonGroup extends Vue {
             await this.action(value);
             this.loading[value] = false;
         }
+    }
+
+    public get Buttons() {
+        return this.buttons ?? [];
     }
 }
 </script>

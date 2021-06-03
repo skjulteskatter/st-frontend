@@ -8,11 +8,11 @@
 		</label>
 		<label
 			class="flex items-center gap-2"
-			v-for="label in labels"
+			v-for="label in Labels"
 			:key="label"
 		>
 			<input
-				v-model="values[label]"
+				v-model="Values[label]"
 				type="checkbox"
 				:name="label"
 				class="border-gray-300 rounded text-primary focus:ring-primary"
@@ -37,7 +37,7 @@ import { Options, Vue } from "vue-class-component";
 		values: {
 			type: Object,
 		},
-	}
+	},
 })
 export default class CheckboxGroup extends Vue {
 	public name?: string;
@@ -45,5 +45,13 @@ export default class CheckboxGroup extends Vue {
 	public values?: {
 		[id: string]: boolean;
 	};
+
+	public get Values() {
+		return this.values ?? {};
+	}
+
+	public get Labels() {
+		return this.labels ?? [];
+	}
 }
 </script>
