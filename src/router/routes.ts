@@ -80,7 +80,10 @@ const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/Ve
 const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
     window.location.reload();
 });
-const TagList = () => import(/* webpackChunkName: 'tagList' */ "../views/TagList.vue").catch(() => {
+const TagView = () => import(/* webpackChunkName: 'tagList' */ "../views/tags/TagView.vue").catch(() => {
+    window.location.reload();
+});
+const TagList = () => import(/* webpackChunkName: 'tagsList' */ "../views/tags/TagList.vue").catch(() => {
     window.location.reload();
 });
 
@@ -102,9 +105,14 @@ const routes: Array<RouteRecordRaw> = [
                 component: Admin,
             },
             {
+                path: "tags",
+                name: "tags",
+                component: TagList,
+            },
+            {
                 path: "tags/:id",
                 name: "tag",
-                component: TagList,
+                component: TagView,
             },
             {
                 path: "songs",

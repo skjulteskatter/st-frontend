@@ -1,4 +1,5 @@
 import { Collection, Song } from "@/classes";
+import { Tag } from "@/classes/tag";
 import { ApiSong, MediaFile } from "dmb-api";
 import { items, songs } from "./api";
 import { cache } from "./cache";
@@ -11,7 +12,7 @@ export class Session {
     public files: MediaFile[] = [];
 
     public themes: Theme[] = [];
-    public tags: SongTag[] = [];
+    public tags: Tag[] = [];
     public countries: Country[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
@@ -132,7 +133,7 @@ export class Session {
         }).catch();
 
         items.getTags().then(t => {
-            this.tags = t;
+            this.tags = t.map(i => new Tag(i, false));
         }).catch();
 
         this.languages = await items.getLanguages();
