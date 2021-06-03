@@ -32,7 +32,7 @@
                         </div>
                     </modal>
                     <base-button
-                        v-if="extended && song.hasLyrics"
+                        v-if="song.hasLyrics"
                         @click="extend"
                         icon="screen"
                         :disabled="lyrics?.format != 'json'"
@@ -50,7 +50,7 @@
                     class="md:col-span-2"
                 />
                 <song-media-card 
-                    :song="song" 
+                    :song="song"
                 />
                 <lyrics-settings
                     v-if="isExtended"
