@@ -167,7 +167,7 @@ export default class SongViewer extends Vue {
 
         try {
             if (this.song?.id) {
-                this.viewCount = (await analytics.getForSong(this.song.id)).viewCount;
+                this.viewCount = await analytics.getViewsForSong(this.song.id);
             }
         }
         catch (e) {
@@ -201,6 +201,10 @@ export default class SongViewer extends Vue {
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
         return this.store.state.songs.sheetMusic;
+    }
+
+    public getAnalytics() {
+        return analytics.getForSong(this.song?.id as string);
     }
 
     // public sheetMusic(sheet: MediaFile) {
