@@ -166,7 +166,7 @@ export default class SongViewer extends Vue {
                 this.viewCount = (await analytics.getForSong(this.song.id)).viewCount;
             }
         }
-        catch {
+        catch (e) {
             //
         }
 
