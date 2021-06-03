@@ -3,8 +3,8 @@
         <div v-if="song" class="flex flex-col gap-4 p-4 md:p-8">
             <div class="flex justify-between">
                 <back-button />
-                <div class="flex gap-2">
-                    <small v-if="admin">{{song.id}}</small>
+                <div class="flex gap-2 items-center">
+                    <small v-if="admin" class="p-2 border border-gray-400 rounded">{{song.id}}</small>
                     <modal
                         class="playlist-adder"
                         theme="secondary"
