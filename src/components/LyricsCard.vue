@@ -39,13 +39,14 @@
                         )?.view
                     "
                     :class="{ 'hidden': type != 'transpose' }"
+                    class="flex flex-col"
                 >
                     <button
-                        :class="[
-                            selectedTransposition == t.value
-                                ? 'bg-primary'
-                                : '',
-                        ]"
+                        :class="{
+                            'bg-gray-200': song.originalKey == t.view && selectedTransposition != t.value,
+                            'bg-primary text-white': selectedTransposition == t.value,
+                        }"
+                        class="px-4 py-1 w-full rounded"
                         v-for="t in relativeTranspositions"
                         :key="t.key"
                         :disabled="selectedTransposition == t.value"
