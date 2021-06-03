@@ -15,9 +15,7 @@
         <template #button>
             <icon name="plus" style="cursor:pointer;" />
         </template>
-        <div>
-            <input v-model="tagFilter" type="text" placeholder="Tag name"/><icon name="plus" style="cursor:pointer;" @click="createTag" />
-        </div>
+        <input v-model="tagFilter" type="text" placeholder="Tag name"/><icon name="plus" style="cursor:pointer;" @click="createTag" />
         <ul>
             <li v-for="tag in Tags" :key="tag.id" style="cursor:pointer;" @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
         </ul>
