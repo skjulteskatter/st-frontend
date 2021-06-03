@@ -36,7 +36,7 @@ export default class OwnedCollections extends Vue {
 	private store = useStore();
 
 	public get collections(): Collection[] {
-		return this.store.getters.collections.filter(c => !c.available) ?? [];
+		return this.store.getters.collections.filter(c => c.available) ?? [];
 	}
 }
 </script>
