@@ -1,7 +1,7 @@
 import { Collection, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
 import { ApiSong, MediaFile } from "dmb-api";
-import { items, songs } from "./api";
+import { items, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
@@ -134,6 +134,15 @@ export class Session {
 
         items.getTags().then(t => {
             this.tags = t.map(i => new Tag(i, false));
+            tags.getAll().then(ts => {
+                for (const tag of ts) {
+                    for (const sId of tag.songIds) {
+                        const song = this.songs.find(s => s.id == sId);
+                        song?.tagIds.push(tag.id);
+                    }
+                }
+                this.tags = [...this.tags, ...ts.map(i => new Tag(i, true))];
+            });
         }).catch();
 
         this.languages = await items.getLanguages();
