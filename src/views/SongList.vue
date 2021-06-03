@@ -36,10 +36,7 @@
                             <label for="song-filters" class="text-xs text-gray-400">
                                 {{ $t("song.filter") }}
                             </label>
-                            <song-filter-dropdown
-                                :themes="collection.themeTypes"
-                                :origins="collection.origins"
-                            ></song-filter-dropdown>
+                            <song-filter-dropdown />
                         </div>
                     </div>
                     <search-input
