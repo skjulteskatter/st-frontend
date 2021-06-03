@@ -2,7 +2,7 @@
 	<div class="p-4 md:p-8">
 		<back-button />
 		<header class="flex gap-4 mb-4">
-			<h1 class="font-bold text-2xl md:text-3xl">{{ song.getName(languageKey) }}</h1>
+			<h1 class="font-bold text-2xl md:text-3xl">{{ song?.getName(languageKey) }}</h1>
 		</header>
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<base-card>
