@@ -42,6 +42,9 @@
                     </base-button>
                 </div>
             </div>
+            <div class="flex gap-2 flex-wrap">
+                <song-tags :song="song" />
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <song-info-card
                     :song="song"
@@ -70,7 +73,7 @@
     </loader>
 </template>
 <script lang="ts">
-import { SongInfoCard, SongMediaCard } from "@/components/songs";
+import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
@@ -96,6 +99,7 @@ import { analytics } from "@/services/api";
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
+        SongTags,
         BackButton,
         Modal,
         PlaylistCard,

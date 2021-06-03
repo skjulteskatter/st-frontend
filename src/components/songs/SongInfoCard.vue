@@ -111,11 +111,6 @@
                 </small>
             </div>
         </div>
-        <div 
-            class="flex"
-        >
-            <song-tags :song="song" />
-        </div>
         <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
             <hr />
             <div
@@ -139,12 +134,10 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
-import SongTags from "./SongTags.vue";
 
 @Options({
     components: {
         Modal,
-        SongTags,
     },
     props: {
         languageKey: {

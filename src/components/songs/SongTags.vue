@@ -1,5 +1,5 @@
 <template>
-    <span v-for="tag in Song.tags" :key="tag.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
+    <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border">
         <router-link
             :to="{
                 name: 'tag',
@@ -13,11 +13,11 @@
     </span>
     <base-dropdown>
         <template #button>
-            <icon name="plus" style="cursor:pointer;" />
+            <icon name="plus" class="cursor-pointer text-gray-500" />
         </template>
-        <input v-model="tagFilter" type="text" placeholder="Tag name"/><icon name="plus" style="cursor:pointer;" @click="createTag" />
+        <input v-model="tagFilter" type="text" placeholder="Tag name"/><icon name="plus" class="cursor-pointer" @click="createTag" />
         <ul>
-            <li v-for="tag in Tags" :key="tag.id" style="cursor:pointer;" @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
+            <li v-for="tag in Tags" :key="tag.id" class="cursor-pointer" @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
         </ul>
     </base-dropdown>
 </template>
