@@ -172,29 +172,29 @@ export const analytics = {
 };
 
 export const tags = {
-    async getAll(expand = false) {
-        return (await http.get<ApiTag[]>("api/Tags" + (expand ? "?expand=songs" : "")));
+    getAll() {
+        return http.get<ApiTag[]>("api/Tags");
     },
-    async get(id: string, expand = false) {
-        return (await http.get<ApiTag>("api/Tags/" + id + (expand ? "?expand=songs" : "")));
+    get(id: string) {
+        return http.get<ApiTag>("api/Tags/" + id);
     },
-    async create(name: string, color: string, songId: string) {
-        return (await http.post("api/Tags", {name, color, songId})) as ApiTag;
+    create(name: string, color: string, songId: string) {
+        return http.post<ApiTag, unknown>("api/Tags", {name, color, songId});
     },
-    async update(id: string, name?: string, color?: string) {
-        return (await http.patch("api/Tags/" + id, {
+    update(id: string, name?: string, color?: string) {
+        return http.patch("api/Tags/" + id, {
             name,
             color,
-        }));
+        });
     },
-    async delete(id: string){
-        return (await http.delete(`api/Tags/${id}`));
+    delete(id: string){
+        return http.delete(`api/Tags/${id}`);
     },
-    async addToTag(id: string, songId: string) {
-        return (await http.post<ApiTag>(`api/Tags/${id}/${songId}`));
+    addToTag(id: string, songId: string) {
+        return http.post<ApiTag>(`api/Tags/${id}/${songId}`);
     },
-    async removeFromTag(id: string, songId: string) {
-        return (await http.delete<ApiTag>(`api/Tags/${id}/${songId}`));
+    removeFromTag(id: string, songId: string) {
+        return http.delete<ApiTag>(`api/Tags/${id}/${songId}`);
     },
 };
 

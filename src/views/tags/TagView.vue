@@ -1,38 +1,28 @@
 <template>
-    <div v-if="tag != undefined" class="tag-list">
-        <h1>{{getLocaleString(tag.name)}}</h1>
+    <div v-if="tag != undefined" class="tag-view">
+        <h1>{{tag.getName(languageKey)}}</h1>
         <div v-for="song in songs" :key="song.id">{{song.getName(languageKey)}}</div>
     </div>
 </template>
 <script lang="ts">
 import { Song } from "@/classes";
+import { Tag } from "@/classes/tag";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    name: "tag-list",
+    name: "tag-view",
 })
-export default class TagList extends Vue {
+export default class TagVue extends Vue {
     private store = useStore();
-    public tag?: SongTag = undefined;
+    public tag?: Tag = undefined;
     public songs: Song[] = [];
 
     public async beforeMount() {
-        if (!appSession.initialized) {
-            await appSession.init();
-        }
         this.tag = appSession.tags.find(t => t.id == this.$route.params.id);
 
         this.songs = appSession.songs.filter(t => t.tagIds.includes(this.tag?.id ?? ""));
-    }
-
-    public getLocaleString(dictionary: { [key: string]: string }) {
-        return (
-            dictionary[this.languageKey] ??
-            dictionary.en ??
-            dictionary[Object.keys(dictionary)[0]]
-        );
     }
 
     public get languageKey() {

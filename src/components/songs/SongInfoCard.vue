@@ -113,20 +113,8 @@
         </div>
         <div 
             class="flex"
-            v-if="song.tags.length"
         >
-            <span v-for="tag in song.tags" :key="tag.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
-                <router-link
-                    :to="{
-                        name: 'tag',
-                        params: {
-                            id: tag.id,
-                        },
-                    }"
-                >
-                    {{getLocaleString(tag.name)}}
-                </router-link>
-            </span>
+            <song-tags :song="song" />
         </div>
         <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
             <hr />
@@ -151,10 +139,12 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
+import SongTags from "./SongTags.vue";
 
 @Options({
     components: {
         Modal,
+        SongTags,
     },
     props: {
         languageKey: {
