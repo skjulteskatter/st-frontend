@@ -2,7 +2,7 @@
     <loader :loading="loading">
         <div class="p-4 md:p-8" v-if="collection">
             <back-button />
-            <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
