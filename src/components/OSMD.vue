@@ -3,19 +3,20 @@
         <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full">
             <loader :loading="osmdLoading" :position="'local'">
                 <base-dropdown
-                        origin="left"
-                        :label="
-                            relativeTranspositions.find(
-                                (r) => r.value == transposition
-                            )?.view ?? 'Transpose'
-                        "
+                    origin="left"
+                    :label="
+                        relativeTranspositions.find(
+                            (r) => r.value == transposition
+                        )?.view ?? 'Transpose'
+                    "
+                    class="flex flex-col"
                 >
                     <button
-                        :class="[
-                            transposition == t.value
-                                ? 'bg-gray-100'
-                                : '',
-                        ]"
+                        :class="{
+                            'bg-primary text-white': transposition == t.value,
+                            'bg-gray-200': options.originalKey == t.view && transposition != t.value
+                        }"
+                        class="py-1 px-4 rounded w-full"
                         v-for="t in relativeTranspositions"
                         :key="t.key"
                         :disabled="transposition == t.value"
