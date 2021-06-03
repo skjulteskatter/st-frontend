@@ -8,7 +8,11 @@
             </router-link>
         </div>
         <div v-for="tag in CustomTags" :key="tag.id">
-            {{tag.name}}
+            <router-link
+                :to="{name: 'tag', params: {id: tag.id}}"
+            >
+                {{tag.getName(languageKey)}}
+            </router-link>
         </div>
     </div>
 </template>
