@@ -86,6 +86,9 @@ const TagView = () => import(/* webpackChunkName: 'tagList' */ "../views/tags/Ta
 const TagList = () => import(/* webpackChunkName: 'tagsList' */ "../views/tags/TagList.vue").catch(() => {
     window.location.reload();
 });
+const SongStatistics = () => import(/* webpackChunkName: 'songStatistics' */ "../views/statistics/SongStatistics.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -113,6 +116,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: "tags/:id",
                 name: "tag",
                 component: TagView,
+            },
+            {
+                path: "statistics/:id",
+                name: "song-stats",
+                component: SongStatistics,
             },
             {
                 path: "songs",
