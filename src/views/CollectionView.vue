@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full p-4 md:p-8">
+    <div class="p-4 md:p-8">
         <store-cart class="cart ml-2" />
         <loader :loading="loading">
             <router-view />
