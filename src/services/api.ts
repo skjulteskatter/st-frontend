@@ -169,6 +169,9 @@ export const analytics = {
     getForSong(songId: string) {
         return http.get<{viewCount: number}>("api/Analytics/" + songId);
     },
+    getViewsForSong(songId: string) {
+        return http.get<number>("api/Analytics/" + songId + "/Views");
+    },
 };
 
 export const tags = {
