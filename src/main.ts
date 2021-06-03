@@ -11,6 +11,7 @@ import {
     BaseButton,
     Tooltip,
     BaseCard,
+    BackButton,
 } from "@/components";
 import { Icon } from "./components/icon";
 import { BaseDropdown } from "./components/inputs";
@@ -23,6 +24,7 @@ createApp(App)
     .component("loader", Loader)
     .component("base-button", BaseButton)
     .component("base-card", BaseCard)
+    .component("back-button", BackButton)
     .component("tooltip", Tooltip)
     .component("base-dropdown", BaseDropdown)
     .mount("#app");

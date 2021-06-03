@@ -1,18 +1,35 @@
 <template>
-    <div>
-        <div v-for="tag in Tags" :key="tag.id">
-            <router-link
-                :to="{name: 'tag', params: {id: tag.id}}"
+    <div class="p-4 md:p-8">
+        <back-button />
+        <header>
+            <h1 class="font-bold text-2xl md:text-3xl mb-4">{{ $t('common.tags') }}</h1>
+        </header>
+        <div class="flex gap-2 flex-wrap mb-4">
+            <span
+                class="px-3 rounded-full border border-gray-500 text-gray-500 hover:bg-gray-300"
+                v-for="tag in Tags" 
+                :key="tag.id"
             >
-                {{tag.getName(languageKey)}}
-            </router-link>
+                <router-link
+                    :to="{name: 'tag', params: {id: tag.id}}"
+                >
+                    {{tag.getName(languageKey)}}
+                </router-link>
+            </span>
         </div>
-        <div v-for="tag in CustomTags" :key="tag.id">
-            <router-link
-                :to="{name: 'tag', params: {id: tag.id}}"
+        <div class="flex gap-2 flex-wrap mb-4" v-if="CustomTags.length">
+            <span class="">{{ $t('common.your') }} {{ $t('common.tags') }}</span>
+            <span
+                class="px-3 rounded-full border border-gray-500 text-gray-500 hover:bg-gray-300"
+                v-for="tag in CustomTags" 
+                :key="tag.id"
             >
-                {{tag.getName(languageKey)}}
-            </router-link>
+                <router-link
+                    :to="{name: 'tag', params: {id: tag.id}}"
+                >
+                    {{tag.getName(languageKey)}}
+                </router-link>
+            </span>
         </div>
     </div>
 </template>

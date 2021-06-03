@@ -13,7 +13,7 @@
     </span>
     <base-dropdown>
         <template #button>
-            <icon name="plus" class="cursor-pointer text-gray-500" />
+            <icon name="plus" class="cursor-pointer text-gray-400"/>
         </template>
         <input v-model="tagFilter" type="text" placeholder="Tag name"/><icon name="plus" class="cursor-pointer" @click="createTag" />
         <ul>
