@@ -38,7 +38,7 @@
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="song-filters" class="text-xs text-gray-500">
-                        {{ $t("song.filter") }}
+                        {{ $t("song.filterByContent") }}
                     </label>
                     <song-filter-dropdown />
                 </div>
