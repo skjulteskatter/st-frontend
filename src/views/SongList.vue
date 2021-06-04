@@ -6,51 +6,49 @@
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <div class="flex flex-col md:flex-row items-end gap-4 text-sm" v-if="!loading">
-                    <div class="flex gap-2">
-                        <div class="flex flex-col gap-1">
-                            <label for="song-category" class="text-gray-400 text-xs">
-                                {{ $t("song.sortby") }}
-                            </label>
-                            <button-group
-                                :buttons="buttons"
-                                :action="setListType"
-                                class="hidden md:flex"
-                            ></button-group>
-                            <select
-                                class="p-2 bg-white border border-gray-300 rounded block md:hidden"
-                                @input="setListType($event.target.value)"
-                            >
-                                <option
-                                    v-for="category in buttons"
-                                    :key="category.value"
-                                    :value="category.value"
-                                    :selected="category.value == listType"
-                                >
-                                    {{ category.label }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label for="song-filters" class="text-xs text-gray-400">
-                                {{ $t("song.filter") }}
-                            </label>
-                            <song-filter-dropdown />
-                        </div>
-                    </div>
-                    <search-input
-                        type="text"
-                        :placeholder="$t('common.search')"
-                        v-model="searchString"
-                        @search="search"
-                    />
+                <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm">
+                    <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
+                    <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
+                    <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
                 </div>
             </div>
-            <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm">
-                <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
-                <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
-                <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
+            <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
+                <div class="flex flex-col gap-1 text-sm">
+                    <label for="song-category" class="text-gray-500 text-xs">
+                        {{ $t("song.sortby") }}
+                    </label>
+                    <button-group
+                        :buttons="buttons"
+                        :action="setListType"
+                        class="hidden md:flex"
+                    ></button-group>
+                    <select
+                        class="p-2 bg-white border border-gray-300 rounded block md:hidden"
+                        @input="setListType($event.target.value)"
+                    >
+                        <option
+                            v-for="category in buttons"
+                            :key="category.value"
+                            :value="category.value"
+                            :selected="category.value == listType"
+                        >
+                            {{ category.label }}
+                        </option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="song-filters" class="text-xs text-gray-500">
+                        {{ $t("song.filter") }}
+                    </label>
+                    <song-filter-dropdown />
+                </div>
+                <search-input
+                    class="max-w-sm"
+                    type="text"
+                    :placeholder="$t('common.search')"
+                    v-model="searchString"
+                    @search="search"
+                />
             </div>
             <div v-if="searchQuery == '' && !loading">
                 <div

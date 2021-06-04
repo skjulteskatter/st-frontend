@@ -1,134 +1,35 @@
 <template>
-    <div class="relative">
-        <span class="flex h-3 w-3 absolute right-0 z-20 transform translate-x-1/3 -translate-y-1/3" v-if="filtersActive">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-        </span>
-        <base-dropdown :label="$t('common.select')" origin="right">
-            <div class="flex justify-between items-center gap-2 mb-4">
-                <h4 class="font-bold text-lg">{{ $t("song.showsongswith") }}...</h4>
-                <base-button theme="secondary" @click="apply">
-                    {{ $t("song.apply") }}
-                </base-button>
-            </div>
-            <div class="flex gap-2 w-72" v-if="collection && !loading">
-                <div class="flex-grow">
-                    <label class="py-2 font-bold">
-                        <input
-                            v-model="typeValues.lyrics"
-                            type="checkbox"
-                            name="lyrics"
-                            id="lyrics"
-                            class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
-                        />
-                        {{ $t("types.lyrics") }}
-                    </label>
-                    <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
-                    <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
-                    <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
-                    <!-- <div class="py-2">
-                        <input
-                            v-model="typeValues.video"
-                            type="checkbox"
-                            name="video"
-                            id="video"
-                            class="mr-2"
-                        /><label for="video">
-                            <strong>
-                                {{ $t("types.video") }}
-                            </strong>
-                        </label>
-                        <div
-                            class="ml-2 flex items-center gap-2"
-                            v-for="type in videoTypes"
-                            :key="type"
-                        >
-                            <input
-                                v-model="videoValues[type]"
-                                type="checkbox"
-                                :name="type"
-                                :id="`v-${type}`"
-                            />
-                            <label :for="`v-${type}`">
-                                {{ $t(`types.${type}`) }}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="py-2">
-                        <input
-                            v-model="typeValues.sheetmusic"
-                            type="checkbox"
-                            name="sheetmusic"
-                            id="sheetmusic"
-                            class="mr-2"
-                        /><label for="sheetmusic">
-                            <strong>
-                                {{ $t("types.sheetmusic") }}
-                            </strong>
-                        </label>
-                        <div
-                            class="ml-2 flex items-center gap-2"
-                            v-for="type in sheetMusicTypes"
-                            :key="type"
-                        >
-                            <input
-                                v-model="sheetMusicValues[type]"
-                                type="checkbox"
-                                :name="type"
-                                :id="`sm-${type}`"
-                            />
-                            <label :for="`sm-${type}`">
-                                {{ $t(`types.${type}`) }}
-                            </label>
-                        </div>
-                    </div> -->
-                </div>
-                <!-- <div class="flex-grow">
-                    <div class="py-2">
-                        <input
-                            v-model="typeValues.audio"
-                            type="checkbox"
-                            name="audio"
-                            id="audio"
-                            class="mr-2"
-                        /><label for="audio">
-                            <strong>
-                                {{ $t("types.audio") }}
-                            </strong>
-                        </label>
-                        <div
-                            class="ml-2 flex items-center gap-2"
-                            v-for="type in audioTypes"
-                            :key="type"
-                        >
-                            <input
-                                v-model="audioValues[type]"
-                                type="checkbox"
-                                :name="type"
-                                :id="`a-${type}`"
-                            />
-                            <label :for="`a-${type}`">
-                                {{ $t(`types.${type}`) }}
-                            </label>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- <div class="py-2">
-                    <small>Type</small>
-                    <div class="filter gap-x" v-for="type in contentTypes" :key="type">
-                        <input
-                            v-model="typeValues[type]"
-                            type="checkbox"
-                            :name="type"
-                            :id="`t-${type}`"
-                        />
-                        <label :for="`t-${type}`">
-                            {{ $t(`types.${type}`) }}
-                        </label>
-                    </div>
-                </div> -->
+    <div class="flex gap-2 text-sm">
+        <base-dropdown :label="$t('types.lyrics')" origin="left">
+            <div class="w-72" v-if="collection && !loading">
+                <label class="font-bold">
+                    <input
+                        v-model="typeValues.lyrics"
+                        type="checkbox"
+                        name="lyrics"
+                        id="lyrics"
+                        class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                    />
+                    {{ $t("types.lyrics") }}
+                </label>
             </div>
         </base-dropdown>
+        <base-dropdown :label="$t('types.video')" origin="left">
+            <div class="w-72" v-if="collection && !loading">
+                <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+            </div>
+        </base-dropdown>
+        <base-dropdown :label="$t('types.sheetmusic')" origin="left">
+            <div class="w-72" v-if="collection && !loading">
+                <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+            </div>
+        </base-dropdown>
+        <base-dropdown :label="$t('types.audio')" origin="left">
+            <div class="w-72" v-if="collection && !loading">
+                <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+            </div>
+        </base-dropdown>
+        <base-button theme="secondary" @click="apply()">{{ $t('song.apply') }}</base-button>
     </div>
 </template>
 
@@ -204,12 +105,6 @@ export default class SongFilterDropdown extends Vue {
     }
 
     public apply() {
-        // const themes =
-        //     this.collection?.themes
-        //         ?.filter((t) => this.themeValues[t.theme.id] == true)
-        //         ?.map((t) => t.theme.id) ?? [];
-        //const origins = this.collection?.origins?.filter(t => this.originValues[t.id] == true).map(t => t.id) ?? [];
-
         const videos = this.videoTypes.filter(
             (t) => this.videoValues[t] == true,
         );
@@ -228,7 +123,6 @@ export default class SongFilterDropdown extends Vue {
         filter.sheetMusicTypes = this.sheetMusicTypes.filter(
             (t) => this.sheetMusicValues[t] == true,
         );
-        //filter.origins = origins;
 
         this.store.commit(SongsMutationTypes.SET_FILTER, filter);
     }
