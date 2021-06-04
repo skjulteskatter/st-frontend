@@ -1,7 +1,7 @@
 <template>
 	<div class="p-4 md:p-8">
 		<back-button />
-		<header class="flex gap-4 mb-4">
+		<header class="flex gap-4 mb-8">
 			<h1 class="font-bold text-2xl md:text-3xl">{{ song?.getName(languageKey) }}</h1>
 		</header>
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -9,6 +9,7 @@
 				<h3 class="font-bold text-xl mb-2">View count</h3>
 				<p class="text-gray-500 text-xl">{{ viewCount }}</p>
 			</base-card>
+			<line-chart class="md:col-span-2" />
 		</div>
 	</div>
 </template>
@@ -17,9 +18,13 @@
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { analytics } from "@/services/api";
+import LineChart from "@/components/statistics/LineChart.vue";
 
 @Options({ 
 	name: "song-statistics",
+	components: {
+		LineChart,
+	},
 })
 export default class SongStatistics extends Vue {
 	private store = useStore();
