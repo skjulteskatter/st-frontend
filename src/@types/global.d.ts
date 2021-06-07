@@ -65,5 +65,6 @@ declare module "songtreasures" {
         timeout?: number;
         dateTime?: Date;
         callback?: Function;
+        store?: boolean;
     }
 }
