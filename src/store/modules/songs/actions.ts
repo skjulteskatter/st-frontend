@@ -49,7 +49,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
         if (!collection) {
             return;
         }
-        commit(SongsMutationTypes.SET_SONG_NUMBER, number);
+        const song = collection?.songs.find(s => s.getNumber(collection.id) == number);
+        commit(SongsMutationTypes.SET_SONG_ID, song?.id);
 
         if (!getters.lyrics) {
             

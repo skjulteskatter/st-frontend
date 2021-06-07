@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { Collection, Song } from "@/classes";
+import { Collection } from "@/classes";
 import { useStore } from "@/store";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
@@ -49,10 +49,6 @@ export default class MediaListItem extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
-    }
-
-    public get song(): Song | undefined {
-        return this.store.getters.song;
     }
 
     public get collection(): Collection | undefined {

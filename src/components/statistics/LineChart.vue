@@ -42,7 +42,7 @@ export default class LineChart extends Vue {
 	public get Series() {
 		return [
 			{
-				name: this.$t('statistics.views'),
+				name: this.$t("statistics.views"),
 				data: this.analytics?.activity?.map(a => a.count) ?? [],
 			},
 		];

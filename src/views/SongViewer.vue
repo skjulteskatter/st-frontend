@@ -147,7 +147,6 @@ export default class SongViewer extends Vue {
         }
 
         await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
-        this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
         if (this.song?.hasLyrics && this.collection)
         {
@@ -277,7 +276,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song() {
-        return this.store.getters.song;
+        return this.collection?.songs.find(s => s.getNumber((this.collection as Collection).id) == parseInt(this.$route.params.number as string));
     }
 
     public get languageKey() {
