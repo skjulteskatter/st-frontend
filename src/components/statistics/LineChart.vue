@@ -1,6 +1,6 @@
 <template>
 	<base-card>
-		<h2 class="font-bold text-xl">Views over time</h2>
+		<h2 class="font-bold text-xl">{{ $t('statistics.viewsOverTime') }}</h2>
 		<chart 
 			width="100%"
 			type="line"
@@ -31,19 +31,19 @@ export default class LineChart extends Vue {
 	public get Options() {
 		return {
 			chart: {
-				id: "example",
+				id: "song-statistics",
 				fontFamily: "Inter",
 			},
 			colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
-			labels: ["7. mai", "8. mai", "9. mai", "10. mai"],
+			labels: this.analytics?.activity?.map(a => a.dateHour) ?? [],
 		};
 	}
 
 	public get Series() {
 		return [
 			{
-				name: "Activity",
-				data: this.analytics?.activity?.map(a => a.dateHour) ?? [],
+				name: this.$t('statistics.views'),
+				data: this.analytics?.activity?.map(a => a.count) ?? [],
 			},
 		];
 	}
