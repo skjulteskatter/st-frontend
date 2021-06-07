@@ -1,7 +1,7 @@
 <template>
 	<base-card>
 		<h3 class="font-bold text-xl mb-4">{{ $t('statistics.viewsPerCountry') }}</h3>
-		<ol class="list-decimal divide-y divide-gray-200">
+		<ol class="list-decimal divide-y divide-gray-200 overflow-y-auto">
 			<li
 				class="px-2 py-2 sm:py-4 flex justify-between"
 				v-for="(country, i) in Analytics.countries"
