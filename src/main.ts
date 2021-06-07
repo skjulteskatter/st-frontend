@@ -14,7 +14,7 @@ import {
     BackButton,
 } from "@/components";
 import { Icon } from "./components/icon";
-import { BaseDropdown } from "./components/inputs";
+import { BaseDropdown, BaseInput } from "./components/inputs";
 
 createApp(App)
     .use(store)
@@ -27,4 +27,5 @@ createApp(App)
     .component("back-button", BackButton)
     .component("tooltip", Tooltip)
     .component("base-dropdown", BaseDropdown)
+    .component("base-input", BaseInput)
     .mount("#app");
