@@ -14,7 +14,7 @@
                     <button
                         :class="{
                             'bg-primary text-white': transposition == t.value,
-                            'bg-gray-200': options.originalKey == t.view && transposition != t.value
+                            'bg-gray-200': options?.originalKey == t.view && transposition != t.value
                         }"
                         class="py-1 px-4 rounded w-full"
                         v-for="t in relativeTranspositions"
