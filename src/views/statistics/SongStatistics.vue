@@ -1,18 +1,22 @@
 <template>
 	<div class="p-4 md:p-8">
 		<back-button />
-		<header class="flex gap-4 mb-8">
-			<h1 class="font-bold text-2xl md:text-3xl">{{ song?.getName(languageKey) }}</h1>
+		<header class="flex flex-col mb-4">
+			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
+			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 		</header>
-		<input type="text" v-model="fromDate" placeholder="From date...">
-		<input type="text" v-model="toDate" placeholder="To date...">
-		<base-button @click="getAnalytics">Get</base-button>
+		<div class="mb-4 rounded-md border border-gray-400 p-2 flex gap-2 flex-col md:flex-row md:items-end md:gap-4 md:p-4">
+			<base-input type="date" v-model="fromDate" label="From date..." />
+			<base-input type="date" v-model="toDate" label="To date..." />
+			<base-button theme="secondary" @click="getAnalytics">{{ $t('statistics.update') }}</base-button>
+		</div>
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			<base-card>
-				<h3 class="font-bold text-xl mb-2">View count</h3>
-				<p class="text-gray-500 text-xl">{{ viewCount }}</p>
+			<base-card class="sm:col-span-2 md:col-span-3">
+				<h3 class="font-bold text-xl mb-2">{{ $t('statistics.total') }}</h3>
+				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
 			</base-card>
 			<line-chart :analytics="analytics" class="md:col-span-2" />
+			<country-list :analytics="analytics" />
 		</div>
 	</div>
 </template>
@@ -21,12 +25,13 @@
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { analytics } from "@/services/api";
-import LineChart from "@/components/statistics/LineChart.vue";
+import { LineChart, CountryList } from "@/components/statistics";
 
 @Options({ 
 	name: "song-statistics",
 	components: {
 		LineChart,
+		CountryList,
 	},
 })
 export default class SongStatistics extends Vue {
