@@ -166,8 +166,8 @@ export const playlists = {
 };
 
 export const analytics = {
-    getForSong(songId: string) {
-        return http.get<{viewCount: number; logs: {country: string; timestamp: string}[]}>("api/Analytics/" + songId);
+    getForSong(songId: string, fromDate: Date, toDate?: Date) {
+        return http.get<AnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
     },
     getViewsForSong(songId: string) {
         return http.get<number>("api/Analytics/" + songId + "/Views");

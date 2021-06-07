@@ -18,9 +18,16 @@ import VueApexCharts from "vue3-apexcharts";
 	name: "line-chart",
 	components: {
 		chart: VueApexCharts,
-	}
+	},
+	props: {
+		analytics: {
+			type: Object,
+		},
+	},
 })
 export default class LineChart extends Vue {
+	public analytics?: AnalyticsItem;
+
 	public get Options() {
 		return {
 			chart: {
@@ -29,16 +36,16 @@ export default class LineChart extends Vue {
 			},
 			colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
 			labels: ["7. mai", "8. mai", "9. mai", "10. mai"],
-		}
+		};
 	}
 
 	public get Series() {
 		return [
 			{
-				name: "Song views",
-				data: [210, 105, 307, 484],
+				name: "Activity",
+				data: this.analytics?.activity?.map(a => a.dateHour) ?? [],
 			},
-		]
+		];
 	}
 }
 </script>

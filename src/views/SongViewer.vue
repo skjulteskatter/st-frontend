@@ -203,10 +203,6 @@ export default class SongViewer extends Vue {
         return this.store.state.songs.sheetMusic;
     }
 
-    public getAnalytics() {
-        return analytics.getForSong(this.song?.id as string);
-    }
-
     // public sheetMusic(sheet: MediaFile) {
     //     // this.$router.push({name: "songs-sheet-music"});
     //     // osmd.load(this.songStore.state.sheetMusic);

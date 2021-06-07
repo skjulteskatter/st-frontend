@@ -207,3 +207,20 @@ interface Result<T> {
     error: string;
     lastUpdated: string;
 }
+
+interface AnalyticsItem {
+    count: number; 
+    activity: {
+        dateHour: string;
+        count: number;
+    }[]; 
+    countries: {
+        country: string;
+        count: number;
+    }; 
+    lyrics: {
+        language: string;
+        dateHour: string;
+        count: string;
+    }[];
+}
