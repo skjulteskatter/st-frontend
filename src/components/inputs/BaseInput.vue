@@ -1,5 +1,5 @@
 <template>
-    <label class="border-none p-0">
+    <label class="border-none p-0 bg-transparent">
         <small class="block" v-if="label">{{ label }}</small>
         <input
             class="rounded border-gray-300 focus:ring focus:ring-primary focus:ring-offset-2 focus:border-primary w-full"
