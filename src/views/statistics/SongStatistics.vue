@@ -22,7 +22,6 @@ import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { analytics } from "@/services/api";
 import LineChart from "@/components/statistics/LineChart.vue";
-import { Song } from "@/classes";
 import { appSession } from "@/services/session";
 
 @Options({ 
@@ -38,10 +37,8 @@ export default class SongStatistics extends Vue {
 	public date = new Date();
 	public fromDate = "";
 	public toDate = "";
-	public song?: Song;
 
 	public async beforeMount() {
-		this.song = appSession.songs.find(s => s.id == this.$route.params.id);
 
 		if (this.song?.id) {
 			try {
@@ -57,6 +54,10 @@ export default class SongStatistics extends Vue {
 				//
 			}
 		}
+	}
+
+	public get song() {
+		return appSession.songs.find(s => s.id == this.$route.params.id);
 	}
 
 	public get languageKey() {
