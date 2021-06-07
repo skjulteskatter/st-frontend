@@ -47,7 +47,6 @@ export default class SongStatistics extends Vue {
 			}
 			try {
 				this.analytics = await analytics.getForSong(this.song.id, new Date("2021-06-01"), new Date("2021-06-05"));
-				console.log(this.analytics);
 			}
 			catch (e) {
 				//
