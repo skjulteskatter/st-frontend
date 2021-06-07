@@ -38,16 +38,16 @@ export default class LineChart extends Vue {
 		},
 		xaxis: {
 			type: "datetime",
-		}
+		},
 	}
 
 	public get Series() {
 		return [
 			{
-				name: this.$t('statistics.views'),
+				name: this.$t("statistics.views"),
 				data: this.analytics?.activity?.map(a => ({
 					x: new Date(a.dateHour).getTime(),
-					y: a.count ?? 0
+					y: a.count ?? 0,
 				})) ?? [],
 			},
 		];

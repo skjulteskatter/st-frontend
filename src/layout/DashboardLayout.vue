@@ -14,7 +14,7 @@
                     :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
                 >
                     <open-sheet-music-display
-                        v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic'"
+                        v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic-musicxml'"
                         :options="sheetMusicOptions"
                         :relativeKey="user.settings?.defaultTransposition"
                     />
