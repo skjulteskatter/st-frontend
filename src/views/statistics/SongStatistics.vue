@@ -5,13 +5,18 @@
 			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 		</header>
-		<div class="mb-8 rounded-md border border-gray-400 p-2 flex gap-2 flex-col md:flex-row md:items-end md:gap-4 md:p-4">
-			<base-input type="date" v-model="fromDate" label="From date..." />
-			<base-input type="date" v-model="toDate" label="To date..." />
-			<base-button theme="secondary" @click="getAnalytics">{{ $t('statistics.update') }}</base-button>
-		</div>
+		<loader :loading="loading" />
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			<base-card class="sm:col-span-2 md:col-span-3">
+			<div class="md:col-span-2 rounded-md border border-gray-400 p-2 flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4 lg:p-4">
+				<base-input type="date" v-model="fromDate" label="From date..." />
+				<base-input type="date" v-model="toDate" label="To date..." />
+				<base-button
+					theme="secondary"
+					@click="getAnalytics"
+					icon="refresh"
+				>{{ $t('statistics.update') }}</base-button>
+			</div>
+			<base-card>
 				<h3 class="font-bold text-xl mb-2">{{ $t('statistics.total') }}</h3>
 				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
 			</base-card>
@@ -42,10 +47,12 @@ export default class SongStatistics extends Vue {
 	public date = new Date();
 	public fromDate = "";
 	public toDate = "";
+	public loading = false;
 
 	public async beforeMount() {
 
 		if (this.song?.id) {
+			this.loading = true;
 			try {
 				this.viewCount = await analytics.getViewsForSong(this.song.id);
 			}
@@ -58,6 +65,7 @@ export default class SongStatistics extends Vue {
 			catch (e) {
 				//
 			}
+			this.loading = false;
 		}
 	}
 
@@ -71,12 +79,14 @@ export default class SongStatistics extends Vue {
 
 	public async getAnalytics() {
 		if (this.song) {
+			this.loading = true;
 			try {
 				this.analytics = await analytics.getForSong(this.song.id, new Date(this.fromDate), new Date(this.toDate));
 			}
 			catch (e) {
 				//
 			}
+			this.loading = false;
 		}
 	}
 }
