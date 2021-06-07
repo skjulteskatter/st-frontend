@@ -40,11 +40,10 @@ export default class SongStatistics extends Vue {
 	public viewCount = 0;
 	public analytics?: AnalyticsItem = {} as AnalyticsItem;
 	public date = new Date();
-	public fromDate = "";
-	public toDate = "";
+	public fromDate = "2021-06-01";
+	public toDate = "2021-06-05";
 
 	public async beforeMount() {
-
 		if (this.song?.id) {
 			try {
 				this.viewCount = await analytics.getViewsForSong(this.song.id);
@@ -53,12 +52,39 @@ export default class SongStatistics extends Vue {
 				//
 			}
 			try {
-				this.analytics = await analytics.getForSong(this.song.id, new Date("2021-06-01"), new Date("2021-06-05"));
+				await this.getAnalytics();
 			}
 			catch (e) {
 				//
 			}
 		}
+	}
+
+	public getAnalyticsBase(fromDate: string, endDate: string) {
+		const analytics: AnalyticsItem = {
+			count: 0,
+			activity: [],
+			lyrics: [],
+			countries: [],
+		};
+
+		const date = new Date(fromDate);
+		const toDate = new Date(endDate);
+
+		while(date <= toDate) {
+			for (let i = 0; i < 24; i++) {
+				const d =  `${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")}-${date.getFullYear()} ${i.toString().padStart(2, "0")}:00`;
+				
+				analytics.activity.push({
+					dateHour: d,
+					count: 0,
+				});
+			}
+
+			date.setDate(date.getDate() + 1);
+		}
+
+		return analytics;
 	}
 
 	public get song() {
@@ -72,7 +98,27 @@ export default class SongStatistics extends Vue {
 	public async getAnalytics() {
 		if (this.song) {
 			try {
-				this.analytics = await analytics.getForSong(this.song.id, new Date(this.fromDate), new Date(this.toDate));
+				const base = this.getAnalyticsBase(this.fromDate, this.toDate);
+
+				const result = await analytics.getForSong(this.song.id, new Date(this.fromDate), new Date(this.toDate));
+
+				base.count = result.count;
+				base.countries = result.countries.sort((a, b) => a.count > b.count ? 1 : -1);
+				base.lyrics = result.lyrics;
+
+				for (const a of result.activity) {
+					const entry = base.activity.find(e => e.dateHour == a.dateHour);
+
+					if (entry) {
+						entry.count = a.count;
+					} else {
+						base.activity.push(a);
+					}
+				}
+
+				base.activity = base.activity.sort((a, b) => a.dateHour > b.dateHour ? 1 : -1);
+
+				this.analytics = base;
 			}
 			catch (e) {
 				//

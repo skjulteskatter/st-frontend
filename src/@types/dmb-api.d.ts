@@ -217,7 +217,7 @@ interface AnalyticsItem {
     countries: {
         country: string;
         count: number;
-    }; 
+    }[]; 
     lyrics: {
         language: string;
         dateHour: string;

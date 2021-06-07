@@ -4,4 +4,4 @@ import CountryList from "./CountryList.vue";
 export {
 	LineChart,
 	CountryList,
-}
+};
