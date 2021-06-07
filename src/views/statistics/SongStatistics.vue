@@ -26,6 +26,7 @@ import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { analytics } from "@/services/api";
 import { LineChart, CountryList } from "@/components/statistics";
+import { appSession } from "@/services/session";
 
 @Options({ 
 	name: "song-statistics",
@@ -43,6 +44,7 @@ export default class SongStatistics extends Vue {
 	public toDate = "";
 
 	public async beforeMount() {
+
 		if (this.song?.id) {
 			try {
 				this.viewCount = await analytics.getViewsForSong(this.song.id);
@@ -59,13 +61,13 @@ export default class SongStatistics extends Vue {
 		}
 	}
 
+	public get song() {
+		return appSession.songs.find(s => s.id == this.$route.params.id);
+	}
+
 	public get languageKey() {
 		return this.store.getters.languageKey;
 	}
-
-	public get song() {
-        return this.store.getters.song;
-    }
 
 	public async getAnalytics() {
 		if (this.song) {
