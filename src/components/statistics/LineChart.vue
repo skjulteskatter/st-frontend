@@ -4,7 +4,7 @@
 		<chart 
 			width="100%"
 			type="line"
-			:options="Options"
+			:options="options"
 			:series="Series"
 		/>
 	</base-card>
@@ -27,23 +27,28 @@ import VueApexCharts from "vue3-apexcharts";
 })
 export default class LineChart extends Vue {
 	public analytics?: AnalyticsItem;
-
-	public get Options() {
-		return {
-			chart: {
-				id: "song-statistics",
-				fontFamily: "Inter",
-			},
-			colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
-			labels: this.analytics?.activity?.map(a => a.dateHour) ?? [],
-		};
+	public options = {
+		chart: {
+			id: "song-statistics",
+			fontFamily: "Inter",
+		},
+		colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
+		stroke: {
+			curve: "smooth",
+		},
+		xaxis: {
+			type: "datetime",
+		}
 	}
 
 	public get Series() {
 		return [
 			{
 				name: this.$t('statistics.views'),
-				data: this.analytics?.activity?.map(a => a.count) ?? [],
+				data: this.analytics?.activity?.map(a => ({
+					x: new Date(a.dateHour).getTime(),
+					y: a.count ?? 0
+				})) ?? [],
 			},
 		];
 	}

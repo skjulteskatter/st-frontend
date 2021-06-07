@@ -5,7 +5,7 @@
 			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 		</header>
-		<div class="mb-4 rounded-md border border-gray-400 p-2 flex gap-2 flex-col md:flex-row md:items-end md:gap-4 md:p-4">
+		<div class="mb-8 rounded-md border border-gray-400 p-2 flex gap-2 flex-col md:flex-row md:items-end md:gap-4 md:p-4">
 			<base-input type="date" v-model="fromDate" label="From date..." />
 			<base-input type="date" v-model="toDate" label="To date..." />
 			<base-button theme="secondary" @click="getAnalytics">{{ $t('statistics.update') }}</base-button>
