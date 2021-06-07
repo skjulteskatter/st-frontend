@@ -1,7 +1,7 @@
 import { Collection } from "@/classes";
 import { getContributors } from "@/functions/helpers";
 import { songs } from "@/services/api";
-import { analytics } from "@/services/auth";
+import { logs } from "@/services/logs";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
 import { RootState } from "../..";
@@ -57,11 +57,9 @@ export const actions: ActionTree<State, RootState> & Actions = {
             const song = collection?.songs.find(s => s.number == number);
 
             if (song && song.type == "lyrics") {
-                analytics.logEvent("song_details_enter", {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    song_id: song.id,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    collection_id: collection.id,
+                logs.event("song", {
+                    "song_id": song.id,
+                    "collection_id": collection.id,
                 });
                 const lans = Object.keys(song.name);
                 const language = lans.includes(state.language) ? state.language : lans.includes("en") ? "en" : lans[0];
@@ -78,6 +76,10 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         const contributor = getters.collection?.settings.offline ? (await getContributors(true)).find(c => c.id == contributorId) : await songs.getContributor(contributorId);
         if (contributor) {
+            logs.event("contributor", {
+                "contributor_id": contributor.id,
+            });
+
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
         }
     },
