@@ -6,7 +6,7 @@ export type State = {
     language: string;
     transcode: string;
     song?: Song;
-    songNumber?: number;
+    songId?: string;
     transposition?: number;
     verses: Verse[];
     lines: string[];

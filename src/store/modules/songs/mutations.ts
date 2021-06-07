@@ -12,7 +12,7 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.CONTRIBUTOR](state: S, payload: CollectionItem<ApiContributor> | undefined): void;
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
-    [SongsMutationTypes.SET_SONG_NUMBER](state: S, payload: number | undefined): void;
+    [SongsMutationTypes.SET_SONG_ID](state: S, payload: string | undefined): void;
 
     // [SongsMutationTypes.SET_LYRICS](state: S, payload: Lyrics): void;
     // [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state: S, payload: Lyrics): void;
@@ -53,8 +53,8 @@ export const mutations: MutationTree<State> & Mutations = {
     [SongsMutationTypes.SET_LIST](state, list: string): void {
         state.list = list;
     },
-    [SongsMutationTypes.SET_SONG_NUMBER](state, songNumber: number): void {
-        state.songNumber = songNumber;
+    [SongsMutationTypes.SET_SONG_ID](state, id: string): void {
+        state.songId = id;
         // state.lyrics = undefined;
     },
 

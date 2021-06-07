@@ -4,7 +4,7 @@
 		<ol class="list-decimal divide-y divide-gray-200">
 			<li
 				class="px-2 py-2 sm:py-4 flex justify-between"
-				v-for="(country, i) in analytics?.countries"
+				v-for="(country, i) in Analytics.countries"
 				:key="country"
 			>
 				<span>{{ i+1 }}. {{ country.country }}</span>
@@ -28,5 +28,14 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class CountryList extends Vue {
 	public analytics?: AnalyticsItem;
+
+	public get Analytics() {
+		return this.analytics ?? {
+			countries: [],
+			count: 0,
+			activity: [],
+			lyrics: [],
+		};
+	}
 }
 </script>

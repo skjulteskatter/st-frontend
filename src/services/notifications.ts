@@ -70,7 +70,7 @@ export class Notifications {
     public async notify(n: N) {
         const not = new Notification(n);
         this.store.commit(NotificationMutationTypes.ADD_NOTIFICATION, not);
-        if (n.callback == undefined)
+        if (n.callback == undefined && n.title != undefined)
             await this.setNotification(not);
     }
 

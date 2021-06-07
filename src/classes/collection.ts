@@ -8,7 +8,7 @@ import { useStore } from "@/store";
 import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
-import { analytics } from "@/services/auth";
+import { logs } from "@/services/logs";
 
 type CollectionSettings = {
     offline: boolean;
@@ -325,13 +325,14 @@ export class Collection extends BaseClass implements ApiCollection {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
                 this.lyrics.push(lyrics);
             }
-            analytics.logEvent("lyrics_view_transpose", {
-                "collection_id": this.id,
-                "song_id": song?.id,
-                "lyrics_id": lyrics.id,
-                "lyrics_language": language,
-                "lyrics_transposition": transpose,
-            });
+            if (song)
+                logs.event("lyricsChords", {
+                    "collection_id": this.id,
+                    "song_id": song.id,
+                    "lyrics_id": lyrics.id,
+                    "lyrics_language": language ?? "en",
+                    "lyrics_transposition": transpose,
+                });
             return lyrics;
         }
         finally {
@@ -347,7 +348,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
-            analytics.logEvent("lyrics_view", {
+            logs.event("lyrics", {
                 "collection_id": this.id,
                 "song_id": song.id,
                 "lyrics_language": language,
