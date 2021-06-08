@@ -116,10 +116,12 @@ export default class SongStatistics extends Vue {
 
 				for (const a of result.activity) {
 					a.dateHour = new Date(a.dateHour);
+					
 					const entry = base.activity.find(e => e.dateHour.getTime() == a.dateHour.getTime());
 
 					if (entry) {
 						entry.count = a.count;
+						entry.countries = a.countries;
 					} else {
 						base.activity.push(a);
 					}
