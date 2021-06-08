@@ -11,7 +11,7 @@
             >
                 {{ collection.getName(Language) }}
             </router-link>
-            <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="text-gray-500 hover:text-gray-400 text-sm underline">
+            <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="text-gray-500 hover:text-gray-400 text-sm underline dark:text-gray-400 dark:hover:text-gray-300">
                 {{ $t('song.seeStatistics') }}
             </router-link>
         </span>
@@ -32,15 +32,15 @@
             />
             <span
                 v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition dark:text-gray-400 dark:border-gray-400"
             >
                 {{ song.verses }}
                 {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
             </span>
-            <div class="text-gray-500 text-base flex flex-col gap-1" v-if="imageLoaded">
+            <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" v-if="imageLoaded">
                 <small class="flex gap-2" v-if="song.hasLyrics">
                     <span>{{ $t("song.author") }}: </span>
-                    <span v-for="author in song.authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
+                    <span v-for="author in song.authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400">
                         <router-link
                             :to="{
                                 name: 'contributor',

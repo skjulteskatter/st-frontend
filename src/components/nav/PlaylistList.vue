@@ -9,13 +9,13 @@
         <ul class="flex flex-col gap-2" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="p-2 border hover:border-gray-400 flex gap-2 rounded focus:outline-none focus:ring focus:ring-primary"
+                    class="p-2 border hover:border-gray-400 flex gap-2 rounded focus:outline-none focus:ring focus:ring-primary dark:border-gray-500 dark:hover:border-gray-400"
                     :to="{
                         name: 'playlist-view',
                         params: { id: playlist.id },
                     }"
                 >
-                    <icon name="playlist" size="18" class="text-gray-500" />
+                    <icon name="playlist" size="18" class="text-gray-500 dark:text-gray-400" />
                     {{ playlist.name }}
                     <small class="ml-auto">{{ playlist.entries.length }}</small>
                 </router-link>

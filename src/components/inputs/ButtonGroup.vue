@@ -1,12 +1,12 @@
 <template>
-    <div class="rounded border border-gray-300 flex overflow-hidden" v-if="Buttons.length">
+    <div class="rounded border border-gray-300 flex overflow-hidden dark:border-gray-500" v-if="Buttons.length">
         <button
             v-for="(button, i) in Buttons"
             :key="button.label"
-            class="p-2 bg-white border-gray-300"
+            class="p-2 bg-white border-gray-300 dark:bg-secondary dark:border-gray-500"
             :class="{ 
                 'border-l': i > 0, 
-                'bg-primary text-white': button.selected, 
+                'bg-primary dark:bg-primary text-white': button.selected, 
                 'hover:bg-gray-100': !button.selected, 
                 'bg-gray-200 cursor-wait': loading[button.value],
             }"

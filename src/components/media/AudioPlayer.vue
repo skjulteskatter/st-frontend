@@ -1,5 +1,7 @@
 <template>
-    <div class="w-full bg-white p-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 sticky left-0 bottom-0 z-30" v-if="audio && audio.directUrl && song">
+    <div class="w-full bg-white p-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 sticky left-0 bottom-0 z-30 dark:bg-secondary dark:border-gray-500" 
+        v-if="audio && audio.directUrl && song"
+    >
         <icon
             class="md:hidden absolute top-4 right-2"
             name="error"

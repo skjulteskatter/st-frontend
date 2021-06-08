@@ -1,10 +1,10 @@
 <template>
-    <base-card class="cursor-pointer border hover:border-gray-400">
+    <base-card class="cursor-pointer border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400">
         <button class="flex gap-2 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
-            <icon name="playlist" class="text-gray-500" />
+            <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
             <div class="flex flex-col">
                 <strong class="font-bold">{{ playlist?.name }}</strong>
-                <small class="text-gray-500 text-left">
+                <small class="text-gray-500 text-left dark:text-gray-400">
                     {{ playlist?.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
                 </small>

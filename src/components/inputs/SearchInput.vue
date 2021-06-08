@@ -2,7 +2,7 @@
     <div class="flex relative border-none p-0 bg-transparent w-full">
         <input
             type="text"
-            class="rounded border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2"
+            class="rounded border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2 dark:border-gray-500 dark:bg-secondary dark:text-white dark:placeholder-gray-400"
             :placeholder="$t('common.search')"
             :value="modelValue"
             @input="(event) => $emit('update:modelValue', event.target.value)"

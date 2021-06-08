@@ -8,12 +8,12 @@
         </div>
         <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
-                class="rounded bg-white p-2 text-xs border hover:border-gray-400 flex gap-2 items-center focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"
             >
-                <icon name="playlist" class="text-gray-500" />
+                <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
                 <div>
                     <strong>
                         {{ p.name }}

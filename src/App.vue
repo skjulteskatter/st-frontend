@@ -44,7 +44,7 @@ export default class App extends Vue {
     height: 100vh;
 }
 
-body {
+html {
     --st-color-background-dark: var(--st-color-ui-lm-medium);
     --st-color-background-medium: var(--st-color-ui-lm-light);
     --st-color-background-light: white;

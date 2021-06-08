@@ -1,11 +1,11 @@
 <template>
-    <div class="text-sm flex items-center gap-4 w-full p-4 border-t border-gray-300" v-if="user">
+    <div class="text-sm flex items-center gap-4 w-full p-4 border-t border-gray-300 dark:border-gray-500" v-if="user">
         <img :src="image" class="rounded-full max-h-12 object-cover flex-shrink-0" />
         <div class="flex-grow overflow-hidden overflow-ellipsis whitespace-nowrap">
             <b class="block">
                 {{ user.displayName }}
             </b>
-            <small class="text-gray-500">{{ user.email }}</small>
+            <small class="text-gray-500 dark:text-white dark:opacity-50">{{ user.email }}</small>
         </div>
         <icon
             name="settings"

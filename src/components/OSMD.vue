@@ -1,6 +1,6 @@
 <template>
     <div class="flex">
-        <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full">
+        <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full dark:bg-secondary dark:border-none">
             <loader :loading="osmdLoading" :position="'local'">
                 <base-dropdown
                     origin="left"
@@ -14,7 +14,7 @@
                     <button
                         :class="{
                             'bg-primary text-white': transposition == t.value,
-                            'bg-gray-200': options?.originalKey == t.view && transposition != t.value
+                            'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.view && transposition != t.value
                         }"
                         class="py-1 px-4 rounded w-full"
                         v-for="t in relativeTranspositions"
@@ -25,9 +25,9 @@
                         {{ t.view }}
                     </button>
                 </base-dropdown>
-                <div class="flex flex-col max-w-xs w-full rounded p-2 border border-gray-300">
+                <div class="flex flex-col max-w-xs w-full rounded p-2 border text-gray-500 border-gray-300 dark:border-gray-500 dark:text-gray-300">
                     <small class="flex justify-between gap-4">
-                        <span class="text-gray-500">Zoom:</span>
+                        <span>Zoom:</span>
                         <span class="font-bold">{{ Math.floor(zoom * 100) }}%</span>
                     </small>
                     <input

@@ -1,6 +1,6 @@
 <template>
     <button
-        class="flex items-center gap-2 p-2 text-xs text-left relative rounded bg-white border hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+        class="flex items-center gap-2 p-2 text-xs text-left relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="{
             disabled: !collection?.available,
         }"
@@ -9,7 +9,7 @@
         <img
             :src="image"
             :alt="name"
-            class="max-h-10 grayscale rounded"
+            class="max-h-10 rounded"
         />
         <span class="text-xs font-bold w-full flex justify-between items-center">
             {{ name }}

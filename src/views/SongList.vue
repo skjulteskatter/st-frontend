@@ -14,7 +14,7 @@
             </div>
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
                 <div class="flex flex-col gap-1 text-sm">
-                    <label for="song-category" class="text-gray-500 text-xs">
+                    <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
                         {{ $t("song.sortby") }}
                     </label>
                     <button-group
@@ -23,7 +23,7 @@
                         class="hidden md:flex"
                     ></button-group>
                     <select
-                        class="p-2 bg-white border border-gray-300 rounded block md:hidden"
+                        class="p-2 bg-white border border-gray-300 rounded block md:hidden dark:bg-secondary dark:border-gray-500"
                         @input="setListType($event.target.value)"
                     >
                         <option
@@ -37,7 +37,7 @@
                     </select>
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="song-filters" class="text-xs text-gray-500">
+                    <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
                         {{ $t("song.filterByContent") }}
                     </label>
                     <song-filter-dropdown />

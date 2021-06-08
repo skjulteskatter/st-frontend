@@ -11,7 +11,7 @@
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <p class="text-gray-500 text-sm mb-4">
+                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400">
                     {{
                         formatPrices(product.prices, "year") ||
                         formatPrices(product.prices, "month")
@@ -31,7 +31,7 @@
                         {{ $t("store.alreadyOwned") }}
                     </base-button>
                 </div>
-                <hr class="mb-4" v-if="details" />
+                <hr class="mb-4 dark:opacity-20" v-if="details" />
                 <h3 class="font-bold text-lg" v-if="details">{{ $t('store.about') }}</h3>
                 <div v-html="details" class="flex flex-col gap-2 text-sm"></div>
             </base-card>

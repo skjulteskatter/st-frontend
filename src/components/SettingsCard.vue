@@ -8,10 +8,10 @@
                     theme="error"
                 >Clear cache</base-button>
             </h3>
-            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -33,10 +33,10 @@
                     @change="setOffline()"
                 />
             </div> -->
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="language">{{ $t("common.language") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -51,10 +51,10 @@
                     </option>
                 </select>
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="transposition-key">{{ $t("song.key") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -84,17 +84,17 @@
             <h3 class="font-bold">
                 {{ $t("common.user") }}
             </h3>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="display-name">{{ $t("common.name") }}</label>
                 <input
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="display-name"
                     type="text"
                     v-model="newDisplayName"
                     :placeholder="user.displayName"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
                 <input
                     id="image"
@@ -103,7 +103,7 @@
                     @change="handleImage"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label>{{ $t("common.password") }}</label>
                 <change-password />
             </div>

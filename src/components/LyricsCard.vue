@@ -4,7 +4,7 @@
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end">
                 <select
-                    class="rounded border-gray-300"
+                    class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -19,16 +19,16 @@
                     </option>
                 </select>
                 <SwitchGroup as="div" class="flex flex-col">
-                    <SwitchLabel class="text-sm text-gray-500">{{ $t("song.chords") }}</SwitchLabel>
+                    <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.chords") }}</SwitchLabel>
                     <Switch
                         v-if="song.hasChords"
                         @click="transposeToggle()"
-                        :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300']"
+                        :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400']"
                         class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none my-1"
                     >
                         <span
                             :class="type == 'transpose' ? 'translate-x-9' : 'translate-x-1'"
-                            class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform" />
+                            class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary" />
                     </Switch>
                 </SwitchGroup>
                 <base-dropdown
@@ -43,7 +43,7 @@
                 >
                     <button
                         :class="{
-                            'bg-gray-200': song?.originalKey == t.view && selectedTransposition != t.value,
+                            'bg-gray-200 dark:bg-gray-800': song?.originalKey == t.view && selectedTransposition != t.value,
                             'bg-primary text-white': selectedTransposition == t.value,
                         }"
                         class="px-4 py-1 w-full rounded"

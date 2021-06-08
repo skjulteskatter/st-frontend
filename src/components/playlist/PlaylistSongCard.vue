@@ -1,5 +1,5 @@
 <template>
-    <base-card class="border hover:border-gray-400">
+    <base-card class="border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400">
         <div class="flex">
             <router-link
                 class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
@@ -15,14 +15,14 @@
                     <span class="font-semibold">
                         {{ entryName }}
                     </span>
-                    <small class="text-gray-500">
+                    <small class="text-gray-500 dark:text-gray-400">
                         {{ collection?.getName(languageKey) }}
                         {{ song?.number }}
                     </small>
                 </div>
             </router-link>
             <small
-                class="text-red-700 cursor-pointer hover:underline"
+                class="text-red-700 cursor-pointer hover:underline dark:text-red-400"
                 @click="removeFromPlaylist"
             >
                 {{ $t("playlist.remove") }}

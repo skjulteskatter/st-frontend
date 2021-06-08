@@ -13,7 +13,7 @@
                 v-for="song in Songs"
                 :key="song.id"
                 @click="available(song.number) ? selectSong(song) : undefined"
-                class="flex gap-2 hover:text-primary hover:underline cursor-pointer"
+                class="flex gap-2 hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
                     'text-red-700': anotherLanguage.includes(song),
                     'text-gray-500': !available(song.number),
