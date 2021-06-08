@@ -39,6 +39,11 @@ export default class LineChart extends Vue {
 		xaxis: {
 			type: "datetime",
 		},
+		tooltip: {
+			x: {
+				format: "dd MMM HH:mm"
+			},
+		},
 	};
 
 	public get Series(): {
