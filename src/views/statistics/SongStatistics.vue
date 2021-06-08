@@ -22,6 +22,18 @@
 			</base-card>
 			<line-chart :series="Series" class="md:col-span-2" />
 			<country-list :analytics="analytics" />
+			<base-card class="most-viewed md:col-span-3">
+				<h1>Mest åpnede sanger</h1>
+				<div v-for="(song, i) in MostViewed" :key="song.id">
+					<router-link 
+						:to="{name: 'song', params: 
+						{
+							number: song.number,
+							collection: collections.find(c => song.collectionIds.includes(c.id))?.key
+						}}"
+					>{{i + 1}}. {{song.getName(languageKey)}} ({{mostViewed[song.id]}})</router-link>
+				</div>
+			</base-card>
 		</div>
 	</div>
 </template>
@@ -48,9 +60,21 @@ export default class SongStatistics extends Vue {
 	public fromDate = "2021-06-01";
 	public toDate = "2021-06-05";
 	public loading = false;
+	public mostViewed: {
+		[key: string]: number;
+	} = {};
 
 	public get songId() {
 		return this.$route.params.id as string | undefined;
+	}
+
+	public get collections() {
+		return this.store.getters.collections;
+	}
+
+	public get MostViewed() {
+		const mostViewed = Object.keys(this.mostViewed);
+		return appSession.songs.filter(s => mostViewed.includes(s.id)).sort((a, b) => this.mostViewed[a.id] > this.mostViewed[b.id] ? -1 : 1).slice(0, 100);
 	}
 
 	public async beforeMount() {
@@ -58,6 +82,7 @@ export default class SongStatistics extends Vue {
 			this.loading = true;
 			try {
 				this.viewCount = await analytics.getViewsForSong(this.songId);
+				this.mostViewed = await analytics.getMostViewed();
 			}
 			catch (e) {
 				//

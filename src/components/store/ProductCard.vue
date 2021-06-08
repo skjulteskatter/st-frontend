@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isOwned}" v-if="product">
-        <icon name="lock" v-if="isAvailable" class="absolute top-4 left-4 text-secondary" />
+        <icon name="lock" v-if="!isAvailable" class="absolute top-4 left-4 text-secondary" />
         <img
             class="w-full object-cover cursor-pointer"
             :src="image"

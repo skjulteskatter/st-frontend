@@ -172,6 +172,9 @@ export const analytics = {
     getViewsForSong(songId: string) {
         return http.get<number>("api/Analytics/" + songId + "/Views");
     },
+    getMostViewed() {
+        return http.get<{[key: string]: number}>("api/Analytics/MostViewed");
+    },
 };
 
 export const tags = {
