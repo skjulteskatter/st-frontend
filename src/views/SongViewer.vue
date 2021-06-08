@@ -91,7 +91,6 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
-import { analytics } from "@/services/api";
 
 @Options({
     components: {
@@ -160,17 +159,7 @@ export default class SongViewer extends Vue {
             }
             else {
                 await this.collection?.getLyrics(this.song, this.store.state.songs.language);
-            }
-                
-        }
-
-        try {
-            if (this.song?.id) {
-                this.viewCount = await analytics.getViewsForSong(this.song.id);
-            }
-        }
-        catch (e) {
-            //
+            }  
         }
 
         const route = this.$route.fullPath;
