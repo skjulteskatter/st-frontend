@@ -81,7 +81,7 @@ import {
     BackButton,
     Modal,
 } from "@/components";
-import { PlaylistCard } from "@/components/playlist";
+import { PlaylistAddToCard } from "@/components/playlist";
 import { Collection } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
@@ -101,7 +101,7 @@ import { notify } from "@/services/notify";
         SongTags,
         BackButton,
         Modal,
-        PlaylistCard,
+        PlaylistCard: PlaylistAddToCard,
     },
     name: "song-viewer",
 })
