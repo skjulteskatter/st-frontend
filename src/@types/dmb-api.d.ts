@@ -211,16 +211,16 @@ interface Result<T> {
 interface AnalyticsItem {
     count: number; 
     activity: {
-        dateHour: string;
+        dateHour: Date;
+        countries: {
+            country: string;
+            count: number;
+        }[];
         count: number;
-    }[]; 
-    countries: {
-        country: string;
-        count: number;
-    }[]; 
+    }[];
     lyrics: {
         language: string;
-        dateHour: string;
+        dateHour: Date;
         count: string;
     }[];
 }

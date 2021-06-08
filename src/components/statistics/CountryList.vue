@@ -30,12 +30,30 @@ export default class CountryList extends Vue {
 	public analytics?: AnalyticsItem;
 
 	public get sortedCountries() {
-		return this.Analytics?.countries?.sort((a, b) => (a.count > b.count) ? -1 : 1);
+		const countries: {
+			country: string;
+			count: number;
+		}[] = [];
+		for (const a of this.Analytics.activity ?? []) {
+			// console.log(a);
+			for (const c of a.countries ?? []) {
+				let item = countries.find(i => i.country == c.country);
+				if (!item) {
+					item = {
+						country: c.country,
+						count: 0,
+					};
+					countries.push(item);
+				}
+				item.count += c.count;
+			}
+		}
+
+		return countries.sort((a, b) => a.count > b.count ? -1 : 1);
 	}
 
 	public get Analytics() {
 		return this.analytics ?? {
-			countries: [],
 			count: 0,
 			activity: [],
 			lyrics: [],

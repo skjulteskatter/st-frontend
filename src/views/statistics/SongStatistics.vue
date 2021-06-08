@@ -73,18 +73,18 @@ export default class SongStatistics extends Vue {
 			count: 0,
 			activity: [],
 			lyrics: [],
-			countries: [],
 		};
 
 		const date = new Date(fromDate);
 		const toDate = new Date(endDate);
 
 		while(date <= toDate) {
-			for (let i = 0; i < 24; i++) {
-				const d =  `${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")}-${date.getFullYear()} ${i.toString().padStart(2, "0")}:00`;
+			for (let i = 0; i < 12; i++) {
+				const d = new Date(`${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")}-${date.getFullYear()} ${(i * 2).toString().padStart(2, "0")}:00`);
 				
 				analytics.activity.push({
 					dateHour: d,
+					countries: [],
 					count: 0,
 				});
 			}
@@ -112,10 +112,10 @@ export default class SongStatistics extends Vue {
 				const result = await analytics.getForSong(this.song.id, new Date(this.fromDate), new Date(this.toDate));
 
 				base.count = result.count;
-				base.countries = result.countries.sort((a, b) => a.count > b.count ? 1 : -1);
 				base.lyrics = result.lyrics;
 
 				for (const a of result.activity) {
+					a.dateHour = new Date(a.dateHour);
 					const entry = base.activity.find(e => e.dateHour == a.dateHour);
 
 					if (entry) {
