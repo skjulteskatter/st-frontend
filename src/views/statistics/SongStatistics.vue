@@ -22,17 +22,19 @@
 			</base-card>
 			<line-chart :series="Series" class="md:col-span-2" />
 			<country-list :analytics="analytics" />
-			<base-card class="most-viewed md:col-span-3">
-				<h1>Mest åpnede sanger</h1>
-				<div v-for="(song, i) in MostViewed" :key="song.id">
-					<router-link 
-						:to="{name: 'song', params: 
-						{
-							number: song.number,
-							collection: collections.find(c => song.collectionIds.includes(c.id))?.key
-						}}"
-					>{{i + 1}}. {{song.getName(languageKey)}} ({{mostViewed[song.id]}})</router-link>
-				</div>
+			<base-card class="md:col-span-2">
+				<h1 class="font-bold text-xl mb-4">Mest åpnede sanger</h1>
+				<ol class="divide-y divide-gray-200">
+					<li v-for="(song, i) in MostViewed" :key="song.id" class="px-2 py-2 sm:py-4 flex justify-between">
+						<router-link
+							:to="{name: 'song', params: 
+							{
+								number: song.number,
+								collection: collections.find(c => song.collectionIds.includes(c.id))?.key
+							}}"
+						>{{i + 1}}. {{song.getName(languageKey)}} ({{mostViewed[song.id]}})</router-link>
+					</li>
+				</ol>
 			</base-card>
 		</div>
 	</div>
