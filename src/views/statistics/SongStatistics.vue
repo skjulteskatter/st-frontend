@@ -20,7 +20,7 @@
 				<h3 class="font-bold text-xl mb-2">{{ $t('statistics.total') }}</h3>
 				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
 			</base-card>
-			<line-chart :analytics="analytics" class="md:col-span-2" />
+			<line-chart :series="Series" class="md:col-span-2" />
 			<country-list :analytics="analytics" />
 		</div>
 	</div>
@@ -105,6 +105,29 @@ export default class SongStatistics extends Vue {
 
 	public get languageKey() {
 		return this.store.getters.languageKey;
+	}
+
+	public get Series() {
+		// const countries: {
+		// 	name: string;
+		// 	data: unknown[];
+		// }[] = [];
+
+		// for (const a of this.analytics?.activity ?? []) {
+		// 	for (const c of a.countries) {
+				
+		// 	}
+		// }
+
+		return [
+			{
+				name: this.$t("statistics.views"),
+				data: this.analytics?.activity?.map(a => ({
+					x: new Date(a.dateHour),
+					y: a.count ?? 0,
+				})) ?? [],
+			},
+		];
 	}
 
 	public async getAnalytics() {

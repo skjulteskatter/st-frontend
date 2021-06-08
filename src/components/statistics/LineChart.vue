@@ -5,7 +5,7 @@
 			width="100%"
 			type="line"
 			:options="options"
-			:series="Series"
+			:series="series"
 		/>
 	</base-card>
 </template>
@@ -20,48 +20,34 @@ import VueApexCharts from "vue3-apexcharts";
 		chart: VueApexCharts,
 	},
 	props: {
-		analytics: {
+		options: {
 			type: Object,
+			default: {
+				chart: {
+					id: "song-statistics",
+					fontFamily: "Inter",
+				},
+				colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
+				stroke: {
+					curve: "smooth",
+				},
+				xaxis: {
+					type: "datetime",
+				},
+				tooltip: {
+					x: {
+						format: "dd MMM HH:mm",
+					},
+				},
+			},
+		},
+		series: {
+			type: Array,
 		},
 	},
 })
 export default class LineChart extends Vue {
-	public analytics?: AnalyticsItem;
-	public options = {
-		chart: {
-			id: "song-statistics",
-			fontFamily: "Inter",
-		},
-		colors: ["var(--st-color-primary)", "var(--st-color-secondary)"],
-		stroke: {
-			curve: "smooth",
-		},
-		xaxis: {
-			type: "datetime",
-		},
-		tooltip: {
-			x: {
-				format: "dd MMM HH:mm",
-			},
-		},
-	};
-
-	public get Series(): {
-		name: string;
-		data: {
-			x: Date;
-			y: number;
-		}[];
-	}[] {
-		return [
-			{
-				name: this.$t("statistics.views"),
-				data: this.analytics?.activity?.map(a => ({
-					x: new Date(a.dateHour),
-					y: a.count ?? 0,
-				})) ?? [],
-			},
-		];
-	}
+	public options?: unknown;
+	public series?: unknown[];
 }
 </script>
