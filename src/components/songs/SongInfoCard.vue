@@ -62,7 +62,7 @@
                         v-for="composer in song.composers"
                         :key="composer.id"
                         :label="composer.name"
-                        class="px-1 rounded bg-gray-200 border hover:border-gray-400"
+                        class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400"
                     >
                         <router-link
                             :to="{

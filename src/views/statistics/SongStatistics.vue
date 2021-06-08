@@ -8,8 +8,8 @@
 		<loader :loading="loading" />
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<div class="md:col-span-2 rounded-md border border-gray-400 p-2 flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4 lg:p-4">
-				<base-input type="date" v-model="fromDate" label="From date..." />
-				<base-input type="date" v-model="toDate" label="To date..." />
+				<base-input type="date" v-model="fromDate" :label="$t('statistics.startDate')" />
+				<base-input type="date" v-model="toDate" :label="$t('statistics.endDate')" />
 				<base-button
 					theme="secondary"
 					@click="getAnalytics"
