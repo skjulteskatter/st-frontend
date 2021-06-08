@@ -41,7 +41,7 @@ export default class LineChart extends Vue {
 		},
 		tooltip: {
 			x: {
-				format: "dd MMM HH:mm"
+				format: "dd MMM HH:mm",
 			},
 		},
 	};
