@@ -49,11 +49,15 @@ export default class SongStatistics extends Vue {
 	public toDate = "2021-06-05";
 	public loading = false;
 
+	public get songId() {
+		return this.$route.params.id as string | undefined;
+	}
+
 	public async beforeMount() {
-		if (this.song?.id) {
+		if (this.songId) {
 			this.loading = true;
 			try {
-				this.viewCount = await analytics.getViewsForSong(this.song.id);
+				this.viewCount = await analytics.getViewsForSong(this.songId);
 			}
 			catch (e) {
 				//
