@@ -17,7 +17,7 @@
                     <small class="text-gray-500">{{ formatPrices(i.prices, "year") }}</small>
                 </div>
             </div>
-            <base-button @click="checkout" icon="arrowRight" class="w-full">
+            <base-button :disabled="checkingOut" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
@@ -34,6 +34,7 @@ import { Options, Vue } from "vue-class-component";
 })
 export default class StoreCart extends Vue {
     private store = useStore();
+    public checkingOut = false;
 
     public formatPrices(prices: Price[], type: string) {
         const unformattedPrice = prices.find((price) => price.type == type)
@@ -54,7 +55,9 @@ export default class StoreCart extends Vue {
     }
 
     public async checkout() {
+        this.checkingOut = true;
         await this.store.dispatch(StripeActionTypes.START_SESSION);
+        this.checkingOut = false;
     }
 
     public clearCart() {
