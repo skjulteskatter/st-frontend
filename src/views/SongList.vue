@@ -154,20 +154,6 @@
                 </div>
             </div>
 
-            <div
-                class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-                v-if="searchQuery != ''"
-            >
-                <song-list-item-card
-                    v-for="song in filteredSongs.slice(0, 24)"
-                    :key="song.id"
-                    :song="song"
-                    :context="context[song.number]"
-                    @click="selectSong(song.number)"
-                >
-                </song-list-item-card>
-            </div>
-
             <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
                 No results
             </h1>
@@ -193,6 +179,7 @@ import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { appSession } from "@/services/session";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
     components: {
@@ -214,7 +201,11 @@ export default class SongList extends Vue {
     public cId = "";
 
     public search() {
-        this.searchQuery = this.searchString;
+        this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, []);
+        this.$router.push({
+            name: "search",
+        });
     }
 
     private async loadCollection() {
