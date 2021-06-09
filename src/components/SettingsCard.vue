@@ -176,11 +176,13 @@ export default class SettingsCard extends Vue {
     }
 
     public get birthDay(): string {
-        if (this.user) {
-            const birthDay = new Date(this.user.birthDay);
-            return `${birthDay.getFullYear()}-${(birthDay.getMonth() + 1).toString().padStart(2, "0")}-${birthDay.getDate().toString().padStart(2, "0")}`;
+        let birthDay: Date;
+        if (this.user && this.user.birthDay) {
+            birthDay = new Date(this.user.birthDay);
+        } else {
+            birthDay = new Date();
         }
-        return new Date().toISOString();
+        return `${birthDay.getFullYear()}-${(birthDay.getMonth() + 1).toString().padStart(2, "0")}-${birthDay.getDate().toString().padStart(2, "0")}`;
     }
 
     public set birthDay(v: string) {
@@ -217,10 +219,15 @@ export default class SettingsCard extends Vue {
 
     public async save() {
         this.loading = true;
-        await session.saveProfile({
-            gender: this.gender,
-            birthDay: this.birthDay,
-        });
+        try {
+            await session.saveProfile({
+                gender: this.gender,
+                birthDay: this.birthDay,
+            });
+        }
+        catch {
+            //
+        }
         await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.themes.setTheme(this.theme);
         this.submitImage();
