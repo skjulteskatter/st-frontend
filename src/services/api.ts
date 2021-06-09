@@ -33,6 +33,13 @@ export const session = {
     uploadImage(fileName: string, base64Image: string) {
         return http.patch<{ image: string }>("api/Session/Image", { fileName, base64Image });
     },
+    saveProfile(options: {
+        gender?: string;
+        birthDay?: string;
+        address?: {};
+    }) {
+        return http.patch<User>("api/Session/Profile", options);
+    },
 };
 
 export const items = {

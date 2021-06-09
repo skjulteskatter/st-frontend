@@ -6,6 +6,9 @@ interface User {
     email: string;
     subscriptions: Subscription[];
     roles: string[];
+    address: {};
+    birthDay: string;
+    gender: "male" | "female" | "unknown";
     settings?: UserSettings;
     lastLogin: Date;
 }

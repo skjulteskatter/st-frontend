@@ -22,17 +22,6 @@
                     </option>
                 </select>
             </div>
-            <!-- <div class="user-settings__offline field gap-x">
-                <label for="offline-mode">{{ $t("common.offline") }}</label>
-                <hr />
-                <input
-                    type="checkbox"
-                    name="offline-mode"
-                    id="offline-mode"
-                    v-model="offline"
-                    @change="setOffline()"
-                />
-            </div> -->
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="language">{{ $t("common.language") }}</label>
                 <select
@@ -65,20 +54,6 @@
                     </option>
                 </select>
             </div>
-            <!-- <div class="user-settings__key field gap-x">
-                <label for="transcode">{{ $t("song.transcode") }}</label>
-                <hr />
-                <select
-                    id="transcode"
-                    name="transcode"
-                    v-model="selectedTranscode"
-                    @change="setTranscode"
-                >
-                    <option v-for="k in transcodes" :value="k" :key="k">
-                        {{ k }}
-                    </option>
-                </select>
-            </div> -->
         </div>
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold">
@@ -93,6 +68,23 @@
                     v-model="newDisplayName"
                     :placeholder="user.displayName"
                 />
+            </div>
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                <label for="gender">{{ $t("common.gender") }}</label>
+                <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    id="gender"
+                    name="gender"
+                    v-model="gender"
+                >
+                    <option value="unknown" key="male">Not set</option>
+                    <option value="male" key="male">Male</option>
+                    <option value="male" key="male">Female</option>
+                </select>
+            </div>
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                <label for="birthDay">{{ $t("common.birthDay") }}</label>
+                <input type="date" v-model="birthDay" />
             </div>
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
@@ -131,6 +123,7 @@ import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
+import { session } from "@/services/api";
 
 @Options({
     components: {
@@ -172,6 +165,30 @@ export default class SettingsCard extends Vue {
         "roman",
     ];
 
+    public get gender() {
+        return this.user?.gender ?? "unknown";
+    }
+    
+    public set gender(v: "male" | "female" | "unknown") {
+        if (this.user) {
+            this.user.gender = v;
+        }
+    }
+
+    public get birthDay(): string {
+        if (this.user) {
+            const birthDay = new Date(this.user.birthDay);
+            return `${birthDay.getFullYear()}-${(birthDay.getMonth() + 1).toString().padStart(2, "0")}-${birthDay.getDate().toString().padStart(2, "0")}`;
+        }
+        return new Date().toISOString();
+    }
+
+    public set birthDay(v: string) {
+        if (this.user) {
+            this.user.birthDay = v;
+        }
+    }
+
     public fileName = "";
     private selectedImage?: string;
 
@@ -193,11 +210,17 @@ export default class SettingsCard extends Vue {
         this.selectedTranscode =
             this.user?.settings?.defaultTranscode ?? "common";
         
+        this.gender = this.user?.gender ?? "unknown";
+        
         this.offline = await cache.get("config", "offline") == true;
     }
 
     public async save() {
         this.loading = true;
+        await session.saveProfile({
+            gender: this.gender,
+            birthDay: this.birthDay,
+        });
         await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.themes.setTheme(this.theme);
         this.submitImage();
