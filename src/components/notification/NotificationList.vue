@@ -22,7 +22,7 @@
 				:persist="true"
 			/>
 		</div>
-		<p v-else class="bg-gray-100 p-4 text-center text-sm rounded whitespace-nowrap">No notifications</p>
+		<p v-else class="bg-black bg-opacity-10 p-4 text-center text-sm rounded whitespace-nowrap">No notifications</p>
 	</base-dropdown>
 </template>
 
