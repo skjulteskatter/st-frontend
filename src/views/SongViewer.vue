@@ -22,7 +22,7 @@
                         <h3 class="mt-0 font-bold mb-4">
                             {{ $t("common.playlists") }}
                         </h3>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
                                 v-for="playlist in playlists"
                                 :key="playlist.id"
