@@ -162,9 +162,15 @@ class Http {
         return result.result;
     }
 
+    private _token: string | null = null;
+
+    public setToken(value: string) {
+        this._token = value;
+    }
+
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
-        const token = await auth.getToken();
+        const token = this._token ?? await auth.getToken();
         if (!token && !bypassAuth) throw new Error("No Authorization token available " + path);
 
         const headers = Object.assign({

@@ -32,6 +32,7 @@
             > -->
             <open-sheet-music-display
                 v-if="
+                    loaded &&
                     type != pdfType &&
                     url &&
                     ['sheet-music', 'sheet-music-embed'].includes(routeName)
@@ -78,6 +79,8 @@ import { SheetMusicTypes, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
+import http from "@/services/http";
+import { songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -91,27 +94,30 @@ export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
     public osmd = osmd;
     public pdfType = SheetMusicTypes.PDF;
-    public song?: Song;
+    public song: Song | null = null;
 
-    public created() {
-        const o = localStorage.getItem("sheetmusic_options");
-
-        if (o && !this.$route.params.id) {
-            const options = JSON.parse(o) as SheetMusicOptions ?? {};
-            options.originalKey ??= "C";
-            options.transposition ??= 0;
-            if (!this.sheetMusic.url) {
-                this.store.commit(
-                    SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
-                    options,
-                );
-            }
-        }
-    }
+    public loaded = false;
 
     public async mounted() {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
+
+        const token = this.searchParams.get("token");
+
+        if (token) {
+            http.setToken(token);
+            const file = await songs.getFile(this.$route.params.id as string);
+
+            const options: SheetMusicOptions = {
+                show: true,
+                originalKey: file.song?.originalKey ?? "C",
+                url: file.directUrl,
+                type: file.type,
+                transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
+                zoom: this.zoom,
+            };
+            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+        }
 
         if (this.type != SheetMusicTypes.PDF) {
             await osmd.init(c, pbc);
@@ -130,6 +136,8 @@ export default class SheetMusic extends Vue {
         // }
 
         // this.songStore.commit("sheetMusic", o)
+
+        this.loaded = true;
     }
 
     public get sheetMusic() {
