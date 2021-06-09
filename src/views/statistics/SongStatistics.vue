@@ -152,7 +152,7 @@ export default class SongStatistics extends Vue {
 			{
 				name: this.$t("statistics.views"),
 				data: this.analytics?.activity?.map(a => ({
-					x: new Date(a.dateHour),
+					x: a.dateHour,
 					y: a.count ?? 0,
 				})) ?? [],
 			},
