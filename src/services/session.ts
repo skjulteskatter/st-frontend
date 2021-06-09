@@ -160,7 +160,12 @@ export class Session {
 
     public async getViews() {
         if (this.views) return this.views;
-        this.views = await analytics.getTotalViews();
+        try {
+            this.views = await analytics.getTotalViews();
+        }
+        catch {
+            this.views = {};
+        }
 
         setTimeout(() => delete this.views, 5000);
     }
