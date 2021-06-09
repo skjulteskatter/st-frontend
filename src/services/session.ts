@@ -1,7 +1,7 @@
 import { Collection, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
 import { ApiSong, MediaFile } from "dmb-api";
-import { items, songs, tags } from "./api";
+import { analytics, items, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
@@ -148,6 +148,21 @@ export class Session {
         this.languages = await items.getLanguages();
 
         this._initialized = true;
+    }
+
+    private views?: {
+        [key: string]: number;
+    };
+
+    public get Views() {
+        return this.views ?? {};
+    }
+
+    public async getViews() {
+        if (this.views) return this.views;
+        this.views = await analytics.getTotalViews();
+
+        setTimeout(() => delete this.views, 5000);
     }
 }
 

@@ -26,6 +26,7 @@
                 <span>
                     {{ song.getName(languageKey) }}
                 </span>
+                <span class="ml-auto" style="opacity: 0.5">({{songViews(song)}})</span>
                 <icon class="text-primary" name="star" size="12" v-if="song.newMelody" />
             </li>
         </ul>
@@ -36,6 +37,7 @@
 import { Options, Vue } from "vue-class-component";
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 
 @Options({
     props: {
@@ -68,6 +70,10 @@ export default class SongListCard extends Vue {
 
     public get Songs() {
         return this.songs ?? [];
+    }
+
+    public songViews(song: Song) {
+        return appSession.Views[song.id] ?? 0;
     }
 
     public get languageKey() {

@@ -192,6 +192,7 @@ import { BackButton } from "@/components";
 import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -227,8 +228,9 @@ export default class SongList extends Vue {
         }
     }
 
-    public mounted() {
-        this.loadCollection();
+    public async mounted() {
+        await appSession.getViews();
+        await this.loadCollection();
     }
 
     public updated() {

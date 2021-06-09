@@ -56,7 +56,6 @@ import { appSession } from "@/services/session";
 })
 export default class SongStatistics extends Vue {
 	private store = useStore();
-	public viewCount = 0;
 	public analytics?: AnalyticsItem = {} as AnalyticsItem;
 	public date = new Date();
 	public fromDate = "2021-06-01";
@@ -79,11 +78,14 @@ export default class SongStatistics extends Vue {
 		return appSession.songs.filter(s => mostViewed.includes(s.id)).sort((a, b) => this.mostViewed[a.id] > this.mostViewed[b.id] ? -1 : 1).slice(0, 100);
 	}
 
+	public get viewCount() {
+		return this.analytics?.count;
+	}
+
 	public async beforeMount() {
 		if (this.songId) {
 			this.loading = true;
 			try {
-				this.viewCount = await analytics.getViewsForSong(this.songId);
 				this.mostViewed = await analytics.getMostViewed();
 			}
 			catch (e) {

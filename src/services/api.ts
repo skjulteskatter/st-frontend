@@ -169,11 +169,14 @@ export const analytics = {
     getForSong(songId: string, fromDate: Date, toDate?: Date) {
         return http.get<AnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
     },
-    getViewsForSong(songId: string) {
-        return http.get<number>("api/Analytics/" + songId + "/Views");
+    viewSong(songId: string) {
+        return http.post<number>("api/Analytics/View/" + songId);
     },
     getMostViewed() {
         return http.get<{[key: string]: number}>("api/Analytics/MostViewed");
+    },
+    getTotalViews() {
+        return http.get<{[key: string]: number}>("api/Analytics/Views");
     },
 };
 

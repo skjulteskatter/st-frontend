@@ -22,6 +22,9 @@
             <span>
                 {{ title }}
             </span>
+            <span v-if="viewCount != null">
+                ({{ viewCount }})
+            </span>
         </h2>
         <div class="flex items-start gap-2">
             <img
@@ -138,6 +141,7 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
+import { analytics } from "@/services/api";
 
 @Options({
     components: {
@@ -159,28 +163,35 @@ export default class SongInfoCard extends Vue {
     public imageLoaded = false;
     public store = useStore();
     public showDescription = false;
+    public viewCount: number | null = null;
 
     public get Language() {
         return this.languageKey ?? "en";
     }
 
     public mounted() {
-        if (this.song?.image) {
-            const image = document.getElementById(
-                "song-details-image",
-            ) as HTMLImageElement;
+        if (this.song) {
+            analytics.viewSong(this.song.id).then(i => {
+                this.viewCount = i;
+            });
+            if (this.song.image) {
 
-            image.style.display = "none";
+                const image = document.getElementById(
+                    "song-details-image",
+                ) as HTMLImageElement;
 
-            image.src = this.song.image;
+                image.style.display = "none";
 
-            image.onload = () => {
-                image.classList.add("song-details-transition");
+                image.src = this.song.image;
+
+                image.onload = () => {
+                    image.classList.add("song-details-transition");
+                    this.imageLoaded = true;
+                    image.style.display = "";
+                };
+            } else {
                 this.imageLoaded = true;
-                image.style.display = "";
-            };
-        } else {
-            this.imageLoaded = true;
+            }
         }
     }
 
