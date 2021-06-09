@@ -158,16 +158,27 @@ export class Session {
         return this.views ?? {};
     }
 
+    private lastUpdated?: Date;
+
     public async getViews() {
-        if (this.views) return this.views;
+        if (this.views) {
+            const date = new Date();
+            date.setSeconds(date.getSeconds() - 10);
+            
+            if (this.lastUpdated && this.lastUpdated < date) {
+                analytics.getTotalViews().then(r => {
+                    this.views = r;
+                });
+            }
+
+            return this.views;
+        }
         try {
             this.views = await analytics.getTotalViews();
         }
         catch {
             this.views = {};
         }
-
-        setTimeout(() => delete this.views, 5000);
     }
 }
 

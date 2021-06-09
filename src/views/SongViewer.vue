@@ -91,6 +91,8 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
+import { analytics } from "@/services/api";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -112,7 +114,11 @@ export default class SongViewer extends Vue {
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
-    public viewCount = 0;
+    private songViewCount: number | null = null;
+    
+    public get viewCount() {
+        return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
+    }
 
     public componentLoading: {
         [key: string]: boolean;
@@ -165,6 +171,11 @@ export default class SongViewer extends Vue {
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
+                analytics.viewSong(this.song.id).then(r => {
+                    this.songViewCount = r;
+                    if (this.song)
+                        appSession.Views[this.song.id] = r;
+                });
                 this.store.dispatch(
                     SessionActionTypes.LOG_SONG_ITEM,
                     this.song,

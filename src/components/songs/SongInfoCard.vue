@@ -141,7 +141,6 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
-import { analytics } from "@/services/api";
 
 @Options({
     components: {
@@ -154,6 +153,9 @@ import { analytics } from "@/services/api";
         song: {
             type: Object,
         },
+        viewCount: {
+            type: Number,
+        },
     },
     name: "song-info-card",
 })
@@ -163,7 +165,7 @@ export default class SongInfoCard extends Vue {
     public imageLoaded = false;
     public store = useStore();
     public showDescription = false;
-    public viewCount: number | null = null;
+    public viewCount?: number;
 
     public get Language() {
         return this.languageKey ?? "en";
@@ -171,9 +173,6 @@ export default class SongInfoCard extends Vue {
 
     public mounted() {
         if (this.song) {
-            analytics.viewSong(this.song.id).then(i => {
-                this.viewCount = i;
-            });
             if (this.song.image) {
 
                 const image = document.getElementById(
