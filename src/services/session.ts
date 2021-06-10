@@ -72,7 +72,7 @@ export class Session {
 
                     const now = new Date();
     
-                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
+                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
                         const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
     
                         await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
