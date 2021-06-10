@@ -71,7 +71,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'themes'"
                 >
                     <song-list-card
@@ -89,7 +89,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'tags'"
                 >
                     <song-list-card
@@ -107,7 +107,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'countries'"
                 >
                     <song-list-card
@@ -125,7 +125,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'default' && songsByNumber.length"
                 >
                     <song-list-card
@@ -140,7 +140,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'title' && songsByTitle.length"
                 >
                     <song-list-card
@@ -149,6 +149,21 @@
                         :key="s?.title ?? Math.random()"
                         :songs="s?.songs ?? []"
                         :title="s?.title ?? ''"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
+
+                <div
+                    class="song-list__songs"
+                    v-if="listType == 'views' && songsByViews.length"
+                >
+                    <song-list-card
+                        v-for="s in songsByViews"
+                        :collection="collection"
+                        :key="s?.title ?? Math.random()"
+                        :songs="s?.songs ?? []"
+                        :title="s?.title ?? ''"
+                        :count="false"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -179,6 +194,7 @@ import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -311,6 +327,34 @@ export default class SongList extends Vue {
         return songs;
     }
 
+    public get songsByViews(): {
+        title: string;
+        songs: Song[];
+    }[] {
+        const songs: {
+            title: string;
+            songs: Song[];
+        }[] = [];
+        const views = appSession.Views;
+
+        const filteredSongs = this.filteredSongs.sort((a, b) => ((views[a.id] ?? 0) > (views[b.id] ?? 0)) ? -1 : 1);
+
+        for (let i = 0; i < filteredSongs.length; i++) {
+            const song = filteredSongs[i];
+
+            const number = Math.floor((i)/50);
+            
+            songs[number] = songs[number] ?? {
+                title: `${number * 50 + 1}-${number * 50 + 50}`,
+                songs: [],
+            };
+
+            songs[number].songs.push(song);
+        }
+
+        return songs;
+    }
+
     public get songsByTitle(): {
         title: string;
         songs: Song[];
@@ -405,6 +449,11 @@ export default class SongList extends Vue {
             //     selected: this.listType == "tags",
             // },
             {
+                label: this.$t("common.views"),
+                value: "views",
+                selected: this.listType == "views",
+            },
+            {
                 label: this.$t("common.country"),
                 value: "countries",
                 selected: this.listType == "countries",
@@ -427,6 +476,10 @@ export default class SongList extends Vue {
 
 .song-list {
     &__contributors {
+        columns: 325px;
+        column-gap: var(--st-spacing);
+    }
+    &__songs {
         columns: 325px;
         column-gap: var(--st-spacing);
     }
