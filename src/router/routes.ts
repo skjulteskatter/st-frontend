@@ -146,7 +146,6 @@ const routes: Array<RouteRecordRaw> = [
                         path: "search",
                         name: "search",
                         component: CompleteSearch,
-                        props: { q: "" },
                     },
                     // {
                     //     path: 'sheetmusic',
