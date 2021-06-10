@@ -168,6 +168,32 @@ class Http {
         this._token = value;
     }
 
+    public async uploadAndDownload(path: string, content: string) {
+        path = `${config.api.basePath}${path}`;
+        const token = this._token ?? await auth.getToken();
+        if (!token) throw new Error("No Authorization token available " + path);
+
+        const headers = {
+            "Authorization": `Bearer ${token}`,
+            "X-Api-Version": "3.0",
+            "Content-Type": "application/json",
+        };
+
+        try {
+            const result = await fetch(path, {
+                headers,
+                method: "POST",
+                body: JSON.stringify({
+                    content,
+                }),
+            });
+            return result;
+        }
+        catch (e) {
+            notify("error", e.status, "warning", e.value);
+        }
+    }
+
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
         const token = this._token ?? await auth.getToken();

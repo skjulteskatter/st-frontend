@@ -132,6 +132,9 @@ export const songs = {
     searchCollections(query: string, collectionId?: string) {
         return http.post<(IndexedSong | IndexedContributor)[], unknown>("api/Songs/Search", {query, collectionId});
     },
+    creditSong(collectionId: string, number: number, language: string, content: string) {
+        return http.uploadAndDownload(`api/Songs/Credit?collectionId=${collectionId}&number=${number}&language=${language}`, content);
+    },
 };
 
 export const playlists = {

@@ -172,6 +172,18 @@ declare module "dmb-api" {
         subtitle: string;
         country: string;
     }
+
+    interface CreditSong {
+        id: string;
+        name: LocaleString;
+        collection: LocaleString;
+        number: number;
+        authors: string[];
+        composers: string[];
+        arrangers: string[];
+        textCopyright: LocaleString;
+        melodyCopyright: LocaleString;
+    }
 }
 
 interface Copyright {
