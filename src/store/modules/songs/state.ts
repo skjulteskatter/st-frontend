@@ -1,5 +1,5 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor, IndexedSong } from "dmb-api";
+import { ApiContributor, IndexedContributor, IndexedSong } from "dmb-api";
 
 export type State = {
     collectionId?: string;
@@ -19,7 +19,7 @@ export type State = {
     view: "transpose" | "default" | "loading";
     sheetMusic?: SheetMusicOptions;
     search?: string;
-    searchResult: IndexedSong[];
+    searchResult: (IndexedSong | IndexedContributor)[];
 }
 
 export const state: State = {

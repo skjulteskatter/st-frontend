@@ -164,6 +164,14 @@ declare module "dmb-api" {
         lyrics: LocaleString;
         contributors: string[];
     }
+
+    interface IndexedContributor {
+        id: string;
+        name: string;
+        biography: LocaleString;
+        subtitle: string;
+        country: string;
+    }
 }
 
 interface Copyright {

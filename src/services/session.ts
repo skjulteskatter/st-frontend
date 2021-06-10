@@ -147,6 +147,8 @@ export class Session {
 
         this.languages = await items.getLanguages();
 
+        await this.getViews();
+
         this._initialized = true;
     }
 

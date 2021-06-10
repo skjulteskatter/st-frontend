@@ -178,7 +178,6 @@ import { BackButton } from "@/components";
 import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { appSession } from "@/services/session";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 @Options({
@@ -220,7 +219,6 @@ export default class SongList extends Vue {
     }
 
     public async mounted() {
-        await appSession.getViews();
         await this.loadCollection();
     }
 

@@ -8,7 +8,7 @@
                 <p class="text-gray-400">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
             </div>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
+                <search-result-item @click="goToItem(item)" v-for="item in searchResult" :key="item.id" :item="item"></search-result-item>
             </div>
         </div>
     </loader>
@@ -21,7 +21,7 @@ import { SearchInput, SearchResultItem } from "@/components/inputs";
 
 import { songs } from "@/services/api";
 import { Collection } from "@/classes";
-import { IndexedSong } from "dmb-api";
+import { IndexedContributor, IndexedSong } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
@@ -44,6 +44,14 @@ export default class CompleteSearch extends Vue {
         }
     }
 
+    public get Songs() {
+        return this.searchResult.filter(r => typeof(r.name) != "string") as IndexedSong[];
+    }
+
+    public get Contributors() {
+        return this.searchResult.filter(r => typeof(r.name) == "string") as IndexedContributor[];
+    }
+
     public async search() {
         this.loading = true;
         if (this.searchQuery) {
@@ -64,6 +72,14 @@ export default class CompleteSearch extends Vue {
         return this.collections.filter(c => ids.includes(c.id));
     }
 
+    public goToItem(item: IndexedSong | IndexedContributor) {
+        if (typeof(item.name) == "string") {
+            this.goToContributor(item as IndexedContributor);
+        } else {
+            this.goToSong(item as IndexedSong);
+        }
+    }
+
     public goToSong(song: IndexedSong) {
         const collections = this.collections.filter(c => song.collectionIds.includes(c.id));
 
@@ -73,6 +89,15 @@ export default class CompleteSearch extends Vue {
             params: {
                 collection: cId,
                 number: song.number,
+            },
+        });
+    }
+
+    public goToContributor(item: IndexedContributor) {
+        this.$router.push({
+            name: "contributor",
+            params: {
+                contributor: item.id,
             },
         });
     }

@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedSong, MediaFile } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedContributor, IndexedSong, MediaFile } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -130,7 +130,7 @@ export const songs = {
         return http.get<ApiCollectionItem<SongTag>[]>(`api/SongTags/${collection.id}?expand=item`); //).map(ci => new CountryCollectionItem(ci));
     },
     searchCollections(query: string, collectionId?: string) {
-        return http.post<IndexedSong[], unknown>("api/Songs/Search", {query, collectionId});
+        return http.post<(IndexedSong | IndexedContributor)[], unknown>("api/Songs/Search", {query, collectionId});
     },
 };
 
