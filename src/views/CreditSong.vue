@@ -1,21 +1,30 @@
 <template>
-    <div class="credit-song">
+    <div class="p-4 md:p-8">
+        <back-button />
+        <header class="flex gap-4 mb-4">
+            <h1 class="font-bold text-3xl">{{ $t('credits.songCredit') }}</h1>
+        </header>
         <form
             @submit.prevent="getSong"
+            class="mb-4 flex flex-col gap-4 md:items-end md:flex-row p-4 rounded-md border border-gray-400"
         >
-            <select
-                class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
-                id="collection"
-                name="collection"
-                v-model="collection"
-            >
-                <option value="" key="">Not set</option>
-                <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
-            </select>
-            <input v-model="number" type="number" placeholder="Number"/>
+            <label class="text-xs flex flex-col gap-1">
+                {{ $t('common.collection') }}
+                <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    id="collection"
+                    name="collection"
+                    v-model="collection"
+                >
+                    <option value="" key="">{{ $t('common.collection') }}</option>
+                    <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
+                </select>
+            </label>
+            <base-input :label="$t('song.number')" v-model="number" type="number" :placeholder="$t('song.number')"/>
+            <base-button type="submit" theme="secondary">{{ $t('credits.getData') }}</base-button>
         </form>
-        <div v-if="song">{{song.getName(Language)}}</div>
-        <input type="file" id="credit-file-input" accept="audio/mpeg">
+        <base-card v-if="song">{{ song.getName(Language) }}</base-card>
+        <base-input type="file" id="credit-file-input" accept="audio/mpeg"/>
         <base-button @click="creditSong">Credit</base-button>
     </div>
 </template>
