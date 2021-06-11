@@ -1,35 +1,40 @@
 <template>
-    <div class="flex gap-2 text-sm">
-        <base-dropdown :label="$t('types.lyrics')" origin="left">
-            <div class="w-72" v-if="collection && !loading">
-                <label class="font-bold">
-                    <input
-                        v-model="typeValues.lyrics"
-                        type="checkbox"
-                        name="lyrics"
-                        id="lyrics"
-                        class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
-                    />
-                    {{ $t("types.lyrics") }}
-                </label>
-            </div>
-        </base-dropdown>
-        <base-dropdown :label="$t('types.video')" origin="left">
-            <div class="w-72" v-if="collection && !loading">
-                <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
-            </div>
-        </base-dropdown>
-        <base-dropdown :label="$t('types.sheetmusic')" origin="left">
-            <div class="w-72" v-if="collection && !loading">
-                <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
-            </div>
-        </base-dropdown>
-        <base-dropdown :label="$t('types.audio')" origin="left">
-            <div class="w-72" v-if="collection && !loading">
-                <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
-            </div>
-        </base-dropdown>
-        <base-button theme="secondary" @click="apply()">{{ $t('song.apply') }}</base-button>
+    <div class="flex flex-col sm:flex-row gap-2 text-sm" v-if="collection && !loading">
+        <div class="flex gap-2">
+            <base-dropdown :label="$t('types.lyrics')" origin="left">
+                <div class="w-72">
+                    <label class="font-bold">
+                        <input
+                            v-model="typeValues.lyrics"
+                            type="checkbox"
+                            name="lyrics"
+                            id="lyrics"
+                            class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                        />
+                        {{ $t("types.lyrics") }}
+                    </label>
+                </div>
+            </base-dropdown>
+            <base-dropdown :label="$t('types.video')" origin="left">
+                <div class="w-72" >
+                    <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+                </div>
+            </base-dropdown>
+            <base-dropdown :label="$t('types.sheetmusic')" origin="left">
+                <div class="w-72">
+                    <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+                </div>
+            </base-dropdown>
+            <base-dropdown :label="$t('types.audio')" origin="right">
+                <div class="w-72">
+                    <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+                </div>
+            </base-dropdown>
+        </div>
+        <div class="flex gap-2">
+            <base-button theme="secondary" @click="apply()" class="flex-grow">{{ $t('song.apply') }}</base-button>
+            <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common.remove') }}</button>
+        </div>
     </div>
 </template>
 
@@ -104,6 +109,15 @@ export default class SongFilterDropdown extends Vue {
         }
     }
 
+    public removeFilters() {
+        this.audioValues = {};
+        this.videoValues = {};
+        this.typeValues = {};
+        this.sheetMusicValues = {};
+
+        this.apply();
+    }
+
     public apply() {
         const videos = this.videoTypes.filter(
             (t) => this.videoValues[t] == true,
@@ -128,7 +142,14 @@ export default class SongFilterDropdown extends Vue {
     }
 
     public get filtersActive() {
-        return false;
+        let count = 0;
+
+        count += Object.keys(this.audioValues).length;
+        count += Object.keys(this.videoValues).length;
+        count += Object.keys(this.sheetMusicValues).length;
+        count += Object.keys(this.typeValues).length;
+
+        return count != 0;
     }
 
     public get languageKey() {
