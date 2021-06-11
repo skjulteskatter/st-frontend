@@ -31,8 +31,8 @@ export default class RedeemToken extends Vue {
             const r = await sharing.activateKey(this.token);
             this.result = r;
             if (r.type == "playlist") {
-                this.$router.push({name: "playlist-overview"});
                 this.store.commit(SessionMutationTypes.SET_PLAYLIST, r);
+                this.$router.push({name: "playlist-overview"});
             }
         }
     }
