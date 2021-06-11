@@ -7,14 +7,14 @@
                 <search-input v-model="searchQuery" @search="search" />
                 <p class="text-gray-400">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
             </div>
-            <div class="mb-4" v-if="contributorResult.length">
-                <h3 class="font-bold text-xl mb-2">{{ $t('song.contributor') }}</h3>
+            <div class="mb-8" v-if="contributorResult.length">
+                <h3 class="uppercase tracking-wide mb-2">{{ $t('song.contributors') }}</h3>
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <search-result-item @click="goToItem(item)" v-for="item in contributorResult" :key="item.id" :item="item"/>
                 </div>
             </div>
             <div v-if="songResult.length">
-                <h3 class="font-bold text-xl mb-2">{{ $t('common.songs') }}</h3>
+                <h3 class="uppercase tracking-wide mb-2">{{ $t('common.songs') }}</h3>
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     <search-result-item @click="goToItem(item)" v-for="item in songResult" :key="item.id" :item="item"/>
                 </div>
