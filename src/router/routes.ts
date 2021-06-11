@@ -92,6 +92,9 @@ const SongStatistics = () => import(/* webpackChunkName: 'songStatistics' */ "..
 const CreditSong = () => import(/* webpackChunkName: 'songStatistics' */ "../views/CreditSong.vue").catch(() => {
     window.location.reload();
 });
+const RedeemToken = () => import(/* webpackChunkName: 'redeemToken' */ "../views/RedeemToken.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -207,6 +210,11 @@ const routes: Array<RouteRecordRaw> = [
                         component: PlaylistView,
                     },
                 ],
+            },
+            {
+                path: "sharing",
+                name: "sharing",
+                component: RedeemToken,
             },
         ],
     },

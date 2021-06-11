@@ -146,9 +146,9 @@ class Http {
      * @param  {Object} content
      * @return {Promise}
      */
-    public async put<T>(
+    public async put<T, Y = T>(
         path: string,
-        content: T,
+        content: Y,
     ): Promise<T> {
         const result = await this.apifetch(
             path,
@@ -156,6 +156,9 @@ class Http {
                 {
                     method: "PUT",
                     body: JSON.stringify(content),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 },
             ),
         ) as Result<T>;

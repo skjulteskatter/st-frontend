@@ -9,9 +9,39 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
             </span>
+            <div v-if="playlist.userId == userId">
+                <base-button @click="toggleSharePlaylist()">Share</base-button>
+                <base-button @click="toggleSharedWith()">Shared With</base-button>
+            </div>
+            <base-modal
+                :show="showModal['sharedWith'] == true"
+                @close="showModal['sharedWith'] = false"
+            >
+                <h1>Shared with</h1>
+                <div v-for="user in Users" :key="user.id">
+                    {{user.displayName}}
+                    <base-button :disabled="deleted[user.id]" :loading="loadingDelete[user.id]" @click="deleteUser(user)">X</base-button>
+                </div>
+                <base-button @click="showModal['sharedWith'] = false">Close</base-button>
+                <base-button @click="sharePlaylist" :loading="sharingPlaylist">Share</base-button>
+            </base-modal>
             <base-button icon="trash" theme="error" @click="deletePlaylist">
                 {{ $t("playlist.delete") }}
             </base-button>
+            <base-modal
+                :show="showModal['share'] == true"
+                @close="showModal['share'] = false"
+            >
+                <h1>Share playlist</h1>
+                <div v-for="key in Keys" :key="key.key">
+                    <small><a :href="`/sharing?token=${key.key}`">{{key.key}}</a></small>
+                    <br/>
+                    <small>{{new Date(key.validTo).toLocaleDateString()}}</small>
+                    <base-button :disabled="deleted[key.key]" :loading="loadingDelete[key.key]" @click="deleteKey(key)">X</base-button>
+                </div>
+                <base-button @click="showModal['share'] = false">Close</base-button>
+                <base-button @click="sharePlaylist" :loading="sharingPlaylist">Share</base-button>
+            </base-modal>
         </header>
         <h2 v-if="!playlist.entries.length" class="opacity-50">
             {{ $t("playlist.nosongs") }}
@@ -29,21 +59,53 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { BackButton } from "@/components";
+import { BackButton, BaseModal } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
+import { playlists, sharing } from "@/services/api";
+import { appSession } from "@/services/session";
+import { PublicUser, ShareKey } from "dmb-api";
+import { reactive } from "@vue/reactivity";
+
+const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
 @Options({
     name: "playlist-view",
     components: {
         BackButton,
         PlaylistSongCard,
+        BaseModal,
     },
 })
 export default class PlaylistView extends Vue {
     private store = useStore();
+    public showModal: {
+        [key: string]: boolean;
+    } = {
+        sharedWith: false,
+        share: false,
+    };
+
+    public loadingDelete: {
+        [key: string]: boolean;
+    } = {};
+    public deleted: {
+        [key: string]: boolean;
+    } = {};
+    public loadingKeys = false;
+    public sharingPlaylist = false;
+
+    public get Keys() {
+        return keys.value?.filter(k => k.itemId == this.playlist?.id) ?? [];
+    }
+
+    public users?: PublicUser[];
+
+    public get Users() {
+        return this.users ?? [];
+    }
 
     public async deletePlaylist() {
         const name = this.playlist?.name;
@@ -57,6 +119,59 @@ export default class PlaylistView extends Vue {
         notify("success",  this.$t("playlist.deletedplaylist"), "trash", `${this.$t("playlist.deletedplaylist")} "${name}"`);
     }
 
+    public async toggleSharePlaylist() {
+        if (!this.showModal["share"]) {
+            if (keys.value == undefined) {
+                await this.loadKeys();
+            }
+            this.showModal["share"] = true;
+        } else {
+            this.showModal["share"] = false;
+        }
+    }
+
+    public async toggleSharedWith() {
+        if (!this.showModal["sharedWith"]) {
+            if (this.playlist)
+                this.users = this.users ?? await playlists.getUsers(this.playlist.id);
+            this.showModal["sharedWith"] = true;
+        } else {
+            this.showModal["sharedWith"] = false;
+        }
+    }
+
+    public async loadKeys() {
+        this.loadingKeys = true;
+        keys.value = await appSession.getKeys();
+        this.loadingKeys = false;
+    }
+
+    public async sharePlaylist() {
+        if (this.playlist) {
+            this.sharingPlaylist = true;
+            const key = await sharing.shareItem(this.playlist.id, "playlist");
+
+            appSession.addKey(key);
+            keys.value?.push(key);
+            this.sharingPlaylist = false;
+        }
+    }
+
+    public async deleteKey(key: ShareKey) {
+        this.loadingDelete[key.key] = true;
+        await sharing.deleteKey(key.key);
+        this.loadingDelete[key.key] = false;
+        this.deleted[key.key] = true;
+    }
+
+    public async deleteUser(user: PublicUser) {
+        this.loadingDelete[user.id] = true;
+        if (this.playlist)
+            await playlists.deleteUser(this.playlist.id, user.id);
+        this.loadingDelete[user.id] = false;
+        this.deleted[user.id] = true;
+    }
+
     public get languageKey() {
         return this.store.getters.languageKey;
     }
@@ -65,6 +180,10 @@ export default class PlaylistView extends Vue {
         return this.store.getters.playlists.find(
             (p) => p.id == this.$route.params.id,
         );
+    }
+
+    public get userId() {
+        return this.store.getters.user?.id;
     }
 }
 </script>
