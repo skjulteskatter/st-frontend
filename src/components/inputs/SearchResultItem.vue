@@ -1,5 +1,5 @@
 <template>
-    <base-card class="border hover:border-gray-400 cursor-pointer">
+    <base-card class="border hover:border-gray-400 cursor-pointer dark:border-gray-500 dark:hover:border-gray-300">
         <div class="flex gap-2" v-if="Song">
             <b class="text-gray-400">{{ Song.number }}</b>
             <div class="flex flex-col gap-2">
