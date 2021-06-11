@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedContributor, IndexedSong, MediaFile } from "dmb-api";
+import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -36,7 +36,13 @@ export const session = {
     saveProfile(options: {
         gender?: string;
         birthDay?: string;
-        address?: {};
+        address?: {
+            addressLine: string;
+            secondaryAddressLine: string;
+            zipCode: number;
+            city: string;
+            country: string;
+        };
     }) {
         return http.patch<User>("api/Session/Profile", options);
     },
@@ -95,6 +101,9 @@ export const admin = {
 };
 
 export const songs = {
+    getSongById(songId: string) {
+        return http.get<ApiSong>("api/Songs/Id/" + songId);
+    },
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
@@ -160,6 +169,30 @@ export const playlists = {
         return (await http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
             removeEntryIds: [entryId],
         }));
+    },
+    getUsers(playlistId: string) {
+        return http.get<PublicUser[]>("api/Playlists/" + playlistId + "/Users");
+    },
+    deleteUser(playlistId: string, userId: string) {
+        return http.delete(`api/Playlists/${playlistId}/Users/${userId}`);
+    },
+};
+
+export const sharing = {
+    getKeys() {
+        return http.get<ShareKey[]>("api/Sharing");
+    },
+    shareItem(itemId: string, type: "playlist" | "tag") {
+        return http.put<ShareKey, unknown>("api/Sharing", {
+            itemId,
+            type,
+        });
+    },
+    deleteKey(key: string) {
+        return http.delete("api/Sharing/" + key);
+    },
+    activateKey(key: string) {
+        return http.post<ApiPlaylist | ApiTag>("api/Sharing/" + key);
     },
 };
 

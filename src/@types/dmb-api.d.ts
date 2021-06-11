@@ -109,6 +109,7 @@ declare module "dmb-api" {
 
     interface ApiPlaylist {
         id: string;
+        type: "playlist";
         name: string;
         userId: string;
         entries: ApiPlaylistEntry[];
@@ -126,6 +127,7 @@ declare module "dmb-api" {
 
     interface ApiTag {
         id: string;
+        type: "tag";
         name: string;
         color: string;
         userId: string;
@@ -183,6 +185,21 @@ declare module "dmb-api" {
         arrangers: string[];
         textCopyright: LocaleString;
         melodyCopyright: LocaleString;
+    }
+
+    interface ShareKey {
+        itemId: string;
+        key: string;
+        userId: string;
+        type: string;
+        validTo: string;
+        usedByIds: string[];
+    }
+
+    interface PublicUser {
+        id: string;
+        displayName: string;
+        image: string;
     }
 }
 

@@ -102,6 +102,8 @@ export class Collection extends BaseClass implements ApiCollection {
             if (this.available) {
                 this.songs = appSession.songs.filter(s => s.collectionIds.some(c => this.id == c));
             } else {
+                const files = await api.songs.getFiles([this.id]);
+                appSession.files.push(...files.result);
                 this.songs = (await api.songs.getAllSongs([this.id])).result.map(s => new Song(s));
             }
 

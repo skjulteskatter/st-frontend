@@ -1,7 +1,7 @@
 import { Collection, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
-import { ApiSong, MediaFile } from "dmb-api";
-import { analytics, items, songs, tags } from "./api";
+import { ApiSong, MediaFile, ShareKey } from "dmb-api";
+import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
@@ -63,62 +63,55 @@ export class Session {
         await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
         
         if (ownedCols.length) {
-            // const offline = (await cache.get("config", "offline")) == true;
-            // if (offline) {
+            try {
+                const key = "last_updated_files";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
 
-                try {
-                    const key = "last_updated_files";
-                    const lastUpdated = await cache.get("config", key) as string | undefined;
+                const now = new Date();
 
-                    const now = new Date();
-    
-                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                        const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
-    
-                        await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: MediaFile;
-                        }));
-        
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
-                    }
-                } catch(e) {
-                    notify("error", "Error fetching files", "warning", e);
-                    this.files = (await songs.getFiles(ownedCols)).result;
-                }
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
 
-                this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
-                
-            // } else {
-                try {
-                    const key = "last_updated_songs";
-                    const lastUpdated = await cache.get("config", key) as string | undefined;
+                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: MediaFile;
+                    }));
     
-                    const now = new Date();
-    
-                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
-                        const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
-    
-                        await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: ApiSong;
-                        }));
-        
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
-                    }
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
-                catch(e) {
-                    notify("error", "Error occured", "warning", e);
-                    this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
+            } catch(e) {
+                notify("error", "Error fetching files", "warning", e);
+                this.files = (await songs.getFiles(ownedCols)).result;
+            }
+
+            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+            try {
+                const key = "last_updated_songs";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                const now = new Date();
+
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
+                    const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
+
+                    await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiSong;
+                    }));
+    
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
-                
-                this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-            //     this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
-            // }
+            }
+            catch(e) {
+                notify("error", "Error occured", "warning", e);
+                this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
+            }
+            
+            this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
         }
 
         items.getCountries().then(c => {
@@ -181,6 +174,28 @@ export class Session {
         catch {
             this.views = {};
         }
+    }
+
+    private keys?: ShareKey[];
+
+    public get Keys() {
+        return this.keys ?? [];
+    }
+
+    public addKey(key: ShareKey) {
+        this.keys = [...this.keys ?? [], key];
+    }
+
+    public async getKeys() {
+        if (this.keys) return this.Keys;
+
+        try {
+            this.keys = await sharing.getKeys();
+        }
+        catch {
+            this.keys = [];
+        }
+        return this.Keys;
     }
 }
 
