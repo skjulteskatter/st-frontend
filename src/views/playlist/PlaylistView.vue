@@ -10,18 +10,38 @@
                 </span>
             </span>
             <div v-if="playlist.userId == userId">
-                <base-button @click="toggleSharePlaylist()">Share</base-button>
-                <base-button @click="toggleSharedWith()">Shared With</base-button>
+                <base-button icon="user" @click="toggleSharePlaylist()">Share</base-button>
+                <base-button icon="user" @click="toggleSharedWith()">Shared With</base-button>
             </div>
             <base-modal
                 :show="showModal['sharedWith'] == true"
                 @close="showModal['sharedWith'] = false"
             >
-                <h1>Shared with</h1>
-                <div v-for="user in Users" :key="user.id">
-                    {{user.displayName}}
-                    <base-button :disabled="deleted[user.id]" :loading="loadingDelete[user.id]" @click="deleteUser(user)">X</base-button>
-                </div>
+                <h1>Shared with</h1> 
+                <table class="table-fixed">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="w-1/5 text-left p-2">{{ $t("common.name") }}</th>
+                            <th class="w-1/5 text-left p-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="u in Users" :key="u.id">
+                            <td class="flex gap-4 items-center">
+                                <img
+                                    :src="
+                                        u.image ?? '/img/portrait-placeholder.png'
+                                    "
+                                    class="w-8 h-8 object-cover rounded-full"
+                                />
+                                <span>{{ u.displayName }}</span>
+                            </td>
+                            <td class="items-center">
+                                <Icon name="trash" :disabled="deleted[u.id]" :loading="loadingDelete[u.id]" @click="deleteUser(u)" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <base-button @click="showModal['sharedWith'] = false">Close</base-button>
                 <base-button @click="sharePlaylist" :loading="sharingPlaylist">Share</base-button>
             </base-modal>
@@ -68,6 +88,7 @@ import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
+import { Icon } from "@/components/icon"; 
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
@@ -77,6 +98,7 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         BackButton,
         PlaylistSongCard,
         BaseModal,
+        Icon,
     },
 })
 export default class PlaylistView extends Vue {
