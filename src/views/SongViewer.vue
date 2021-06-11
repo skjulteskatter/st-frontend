@@ -20,7 +20,7 @@
                         v-if="playlists.length"
                     >
                         <h3 class="mt-0 font-bold mb-4">
-                            {{ $t("common.playlists") }}
+                            {{ $t('common.select') }} {{ $t("common.playlist").toLocaleLowerCase() }}
                         </h3>
                         <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
