@@ -1,5 +1,8 @@
 <template>
-    <base-dropdown origin="right" class="text-sm" icon="buy" :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
+    <base-dropdown origin="right" class="text-sm" icon="buy">
+        <template #button>
+            <icon name="buy" />
+        </template>
         <div class="w-max">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
@@ -65,57 +68,3 @@ export default class StoreCart extends Vue {
     }
 }
 </script>
-
-<style lang="scss" >
-@import "../../style/mixins";
-
-.store-cart__modal {
-    .modal__open-button {
-        .button__content {
-            @include breakpoint("small") {
-                display: none;
-            }
-        }
-    }
-}
-
-.store-cart {
-    min-width: 30vw;
-    min-height: 30vh;
-    display: flex;
-    flex-direction: column;
-
-    @include breakpoint("small"){
-        min-width: 80vw;
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__title {
-        margin-top: 0;
-    }
-
-    &__clearcart {
-        color: var(--st-color-error);
-        cursor: pointer;
-    }
-
-    &__items {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--st-spacing) / 2);
-    }
-
-    &__item {
-        display: flex;
-        justify-content: space-between;
-        padding: calc(var(--st-spacing) / 2);
-        border-radius: var(--st-border-radius);
-        background-color: var(--st-color-background-light);
-    }
-}
-</style>

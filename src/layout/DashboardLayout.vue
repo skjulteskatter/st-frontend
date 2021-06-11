@@ -4,7 +4,8 @@
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative">
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
-                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-end sticky top-0 z-20 dark:bg-secondary dark:border-none">
+                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-end items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
+                        <store-cart />
                         <notification-list />
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
@@ -45,6 +46,7 @@ import { appSession } from "@/services/session";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { ref } from "@vue/runtime-core";
 import { NotificationList } from "@/components/notification";
+import { StoreCart } from "@/components/store";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
 
@@ -54,6 +56,7 @@ import { cache } from "@/services/cache";
         AudioPlayer,
         OpenSheetMusicDisplay,
         NotificationList,
+        StoreCart,
     },
     name: "dashboard-layout",
 })

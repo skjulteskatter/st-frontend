@@ -1,6 +1,5 @@
 <template>
     <div class="p-4 md:p-8">
-        <store-cart class="cart ml-2" />
         <loader :loading="loading">
             <router-view />
         </loader>
@@ -12,13 +11,9 @@ import { Options, Vue } from "vue-class-component";
 
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { StoreCart } from "@/components/store";
 
 @Options({
     name: "collection-view",
-    components: {
-        StoreCart,
-    },
 })
 export default class Store extends Vue {
     private store = useStore();
@@ -35,9 +30,3 @@ export default class Store extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.cart {
-    float: right;
-}
-</style>
