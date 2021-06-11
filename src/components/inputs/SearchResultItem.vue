@@ -18,7 +18,8 @@
                 </div>
             </div>
         </div>
-        <div class="flex gap-2" v-if="Contributor">
+        <div class="flex gap-2 flex-col" v-if="Contributor">
+            <icon name="user" class="text-gray-400" />
             <div class="flex flex-col gap-2">
                 <div>
                     <b>{{
@@ -80,35 +81,3 @@ export default class SongListItemCard extends Vue {
     }
 }
 </script>
-
-// <style lang="scss">
-// .song-list__item-card {
-//     &__collection {
-//         color: var(--st-color-primary);
-//         font-size: .7em;
-//         display: block;
-//     }
-
-//     &__wrapper {
-//         display: flex;
-//     }
-
-//     &__number {
-//         opacity: 0.5;
-//     }
-
-//     &__contributors {
-//         opacity: 0.5;
-//     }
-
-//     &__info {
-//         display: block;
-//         margin: 0.5rem 0;
-//     }
-
-//     .context {
-//         margin: 0.5em 0 0 0;
-//         opacity: 0.6;
-//     }
-// }
-// </style>
