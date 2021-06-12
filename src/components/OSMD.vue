@@ -11,19 +11,26 @@
                     "
                     class="flex flex-col"
                 >
-                    <button
-                        :class="{
-                            'bg-primary text-white': transposition == t.value,
-                            'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.view && transposition != t.value
-                        }"
-                        class="py-1 px-4 rounded w-full"
-                        v-for="t in relativeTranspositions"
-                        :key="t.key"
-                        :disabled="transposition == t.value"
-                        @click="transpose(t.value)"
-                    >
-                        {{ t.view }}
-                    </button>
+                    <div class="max-h-64 overflow-y-auto">
+                        <button
+                            :class="{
+                                'bg-primary text-white': transposition == t.value,
+                                'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
+                            }"
+                            class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="transposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            <span class="font-semibold">
+                                {{ t.key }}
+                            </span>
+                            <span class="opacity-50">
+                                {{ t.original }}
+                            </span>
+                        </button>
+                    </div>
                 </base-dropdown>
                 <div class="flex flex-col max-w-xs w-full rounded p-2 border text-gray-500 border-gray-300 dark:border-gray-500 dark:text-gray-300">
                     <small class="flex justify-between gap-4">

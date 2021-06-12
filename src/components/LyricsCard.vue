@@ -39,21 +39,27 @@
                         )?.view
                     "
                     :class="{ 'hidden': type != 'transpose' }"
-                    class="flex flex-col"
                 >
-                    <button
-                        :class="{
-                            'bg-gray-200 dark:bg-gray-800': song?.originalKey == t.view && selectedTransposition != t.value,
-                            'bg-primary text-white': selectedTransposition == t.value,
-                        }"
-                        class="px-4 py-1 w-full rounded"
-                        v-for="t in relativeTranspositions"
-                        :key="t.key"
-                        :disabled="selectedTransposition == t.value"
-                        @click="transpose(t.value)"
-                    >
-                        {{ t.view }}
-                    </button>
+                    <div class="overflow-y-auto max-h-64">
+                        <button
+                            :class="{
+                                'bg-gray-200 dark:bg-gray-800': song?.originalKey == t.original && selectedTransposition != t.value,
+                                'bg-primary text-white': selectedTransposition == t.value,
+                            }"
+                            class="py-1 px-2 w-full rounded flex justify-between gap-4"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="selectedTransposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            <span class="font-semibold">
+                                {{ t.key }}
+                            </span>
+                            <span class="opacity-50">
+                                ({{ t.original }})
+                            </span>
+                        </button>
+                    </div>
                 </base-dropdown>
                 <!-- <transpose-dropdown
                     :transpositions="song.transpositions"
