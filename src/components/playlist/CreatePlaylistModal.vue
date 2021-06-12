@@ -3,6 +3,7 @@
 		theme="secondary"
 		:label="$t('playlist.createnew')"
 		icon="playlist"
+		ref="create-playlist-modal"
 	>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 			<base-input
@@ -11,7 +12,7 @@
 				v-model="playlistName"
 				required
 			/>
-			<base-button theme="secondary" type="submit">
+			<base-button :disabled="disabled" :loading="loading" theme="secondary" type="submit">
 				{{ $t("playlist.createnew") }}
 			</base-button>
 		</form>
@@ -37,15 +38,21 @@ import { notify } from "@/services/notify";
 export default class CreatePlaylistModal extends Vue {
 	private store = useStore();
     public playlistName = "";
+	public loading = false;
+	public disabled = false;
 
-    public createPlaylist() {
-        this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
+    public async createPlaylist() {
+		this.loading = true;
+        await this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
             name: this.playlistName,
         });
 
         notify("success", this.$t("playlist.newplaylist"), "check", `${this.$t("playlist.newplaylist")} "${this.playlistName}"`);
 
         this.playlistName = "";
+		this.loading = false;
+		this.disabled = true;
+		(this.$refs["create-playlist-modal"] as Modal).closeModal();
     }
 }
 </script>
