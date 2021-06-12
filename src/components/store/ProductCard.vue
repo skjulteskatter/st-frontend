@@ -20,7 +20,7 @@
                     @click="addToCart()"
                     :content="false"
                 ></base-button>
-                <collection-settings v-else :collection="product.collections[0]"></collection-settings>
+                <!-- <collection-settings v-else :collection="product.collections[0]"></collection-settings> -->
             </div>
             <div class="flex flex-col gap-2 md:flex-row">
                 <base-button
