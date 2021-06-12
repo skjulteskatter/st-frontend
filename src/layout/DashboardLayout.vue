@@ -7,6 +7,7 @@
                     <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-end items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
                         <store-cart />
                         <notification-list />
+                        <icon name="settings" class="cursor-pointer" @click="$router.push('/settings')" />
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>

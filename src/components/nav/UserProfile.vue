@@ -7,12 +7,6 @@
             </b>
             <small class="text-gray-500 dark:text-white dark:opacity-50">{{ user.email }}</small>
         </div>
-        <icon
-            name="settings"
-            size="24"
-            @click="$router.push({ name: 'settings' })"
-            class="flex-shrink-0 cursor-pointer"
-        />
     </div>
 </template>
 
