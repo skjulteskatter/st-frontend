@@ -6,7 +6,7 @@
                 theme="tertiary"
                 @click="refreshSubscriptions"
                 icon="refresh"
-                class="refresh-button"
+                class="refresh-button hidden"
                 :loading="loadingSubs"
             >
                 <span>

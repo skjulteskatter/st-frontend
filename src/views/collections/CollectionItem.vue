@@ -1,6 +1,6 @@
 <template>
     <div>
-        <back-button />
+        <back-button class="flex md:hidden mb-4" />
         <div class="flex flex-col gap-4 md:flex-row" v-if="product">
             <img
                 class="rounded-md shadow-md object-cover"

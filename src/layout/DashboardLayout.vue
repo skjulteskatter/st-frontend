@@ -4,9 +4,13 @@
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative">
                 <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
-                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-end items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
-                        <store-cart />
-                        <notification-list />
+                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
+                        <back-button v-if="$route.name != 'main'" />
+                        <div class="flex gap-4 items-center ml-auto">
+                            <store-cart />
+                            <notification-list />
+                            <icon name="settings" class="cursor-pointer" @click="$router.push('/settings')" />
+                        </div>
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
                 </div>
