@@ -127,15 +127,16 @@ export default class OSMD extends Vue {
     public transpose(n: number) {
         this.osmd.loading = true;
         this.transposition = n;
-        // setTimeout(() => {
-            if (this.transposition == n) {
-                this.osmd.transpose(n);
-            }
-        // }, 500);
+
+        if (this.transposition == n) {
+            this.osmd.transpose(n);
+        }
+        
         this.osmd.loading = false;
     }
 
     public setZoom() {
+        this.osmd.loading = true;
         const n = this.zoom;
 
         // setTimeout(() => {
@@ -144,6 +145,7 @@ export default class OSMD extends Vue {
                 this.osmd.rerender();
             }
         // }, 500);
+        this.osmd.loading = false;
     }
 }
 </script>
