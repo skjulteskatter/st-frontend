@@ -3,7 +3,7 @@
         <div v-if="song" class="flex flex-col gap-4 p-4 md:p-8">
             <div class="flex justify-between">
                 <back-button class="flex md:hidden mb-4" />
-                <div class="flex gap-2 items-center">
+                <div class="flex gap-2 items-center ml-auto">
                     <span v-if="admin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded">{{ song.id }}</span>
                     <base-button
                         v-if="admin"

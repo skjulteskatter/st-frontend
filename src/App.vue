@@ -54,6 +54,12 @@ html {
 
     background-color: var(--st-color-background-dark);
     color: var(--st-color-text);
+    
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
 
     &.dark {
         --st-color-secondary: #ffffff;
