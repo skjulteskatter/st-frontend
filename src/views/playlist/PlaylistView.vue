@@ -43,7 +43,6 @@
                     </tbody>
                 </table>
                 <base-button @click="showModal['sharedWith'] = false">Close</base-button>
-                <base-button @click="sharePlaylist" :loading="sharingPlaylist">Share</base-button>
             </base-modal>
             <base-button icon="trash" theme="error" @click="deletePlaylist">
                 {{ $t("playlist.delete") }}
