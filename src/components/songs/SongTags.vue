@@ -1,5 +1,5 @@
 <template>
-    <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center">
+    <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center">
         <router-link
             :to="{
                 name: 'tag',
@@ -10,11 +10,11 @@
         >
             {{ tag.getName(languageKey) }}
         </router-link>
-        <icon name="error" size="16" class="cursor-pointer hover:text-gray-600" v-if="tag.userDefined" />
+        <icon name="error" size="16" class="cursor-pointer hover:text-red-800" v-if="tag.userDefined" />
     </span>
     <base-dropdown>
         <template #button>
-            <button class="cursor-pointer text-gray-400 text-sm flex items-center">
+            <button class="cursor-pointer text-gray-500 text-sm flex items-center">
                 <icon name="plus"/>
                 {{ $t('song.addTag') }}
             </button>
