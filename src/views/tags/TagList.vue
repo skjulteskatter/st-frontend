@@ -4,9 +4,9 @@
         <header>
             <h1 class="font-bold text-2xl md:text-3xl mb-4">{{ $t('common.tags') }}</h1>
         </header>
-        <div class="flex gap-2 flex-wrap mb-4">
+        <div class="flex gap-2 flex-wrap mb-4 md:mb-8">
             <span
-                class="px-3 rounded-full border border-gray-500 text-gray-500 hover:bg-gray-300"
+                class="px-3 rounded-full border border-gray-400 text-gray-400 hover:border-gray-500 hover:text-gray-500"
                 v-for="tag in Tags" 
                 :key="tag.id"
             >
@@ -17,10 +17,10 @@
                 </router-link>
             </span>
         </div>
+        <h3 class="mb-2" v-if="CustomTags.length">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</h3>
         <div class="flex gap-2 flex-wrap mb-4" v-if="CustomTags.length">
-            <span class="">{{ $t('common.your') }} {{ $t('common.tags') }}</span>
             <span
-                class="px-3 rounded-full border border-gray-500 text-gray-500 hover:bg-gray-300"
+                class="px-3 rounded-full border border-gray-400 text-gray-400 hover:border-gray-500 hover:text-gray-500"
                 v-for="tag in CustomTags" 
                 :key="tag.id"
             >
