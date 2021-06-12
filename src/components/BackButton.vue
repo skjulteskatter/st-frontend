@@ -1,5 +1,5 @@
 <template>
-    <button class="flex items-center mb-4 cursor-pointer w-min focus:outline-none focus:ring focus:ring-primary rounded" @click="back">
+    <button class="flex items-center cursor-pointer w-min focus:outline-none focus:ring focus:ring-primary rounded" @click="back">
         <icon name="arrowLeft" size="20" />
         <span>{{ previous ? $t("common.back") : $t("common.home") }}</span>
     </button>

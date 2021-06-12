@@ -1,6 +1,6 @@
 <template>
     <div v-if="tag != undefined" class="p-4 md:p-8">
-        <back-button />
+        <back-button class="md:hidden mb-4" />
         <header class="mb-4 flex items-center gap-4">
             <h1 class="font-bold text-2xl md:text-3xl">{{ $t('common.tags') }}</h1>
             <p class="text-gray-500 rounded-full border border-gray-500 px-2 w-max">{{ tag.getName(languageKey) }}</p>

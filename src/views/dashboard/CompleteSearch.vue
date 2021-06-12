@@ -1,7 +1,7 @@
 <template>
     <loader :loading="loading">
         <div class="p-4 md:p-8">
-            <back-button />
+            <back-button class="md:hidden mb-4" />
             <h1 class="text-2xl md:text-3xl font-bold mb-4">{{ $t("common.search") }}</h1>
             <div class="flex flex-col gap-2 mb-4">
                 <search-input v-model="searchQuery" @search="search" />
