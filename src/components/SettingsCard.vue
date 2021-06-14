@@ -165,6 +165,8 @@ export default class SettingsCard extends Vue {
         "roman",
     ];
 
+    private _initDate = new Date();
+
     public get gender() {
         return this.user?.gender ?? "unknown";
     }
@@ -175,14 +177,18 @@ export default class SettingsCard extends Vue {
         }
     }
 
+    private dateToString(date: Date) {
+        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+    }
+
     public get birthDay(): string {
         let birthDay: Date;
         if (this.user && this.user.birthDay) {
             birthDay = new Date(this.user.birthDay);
         } else {
-            birthDay = new Date();
+            birthDay = this._initDate;
         }
-        return `${birthDay.getFullYear()}-${(birthDay.getMonth() + 1).toString().padStart(2, "0")}-${birthDay.getDate().toString().padStart(2, "0")}`;
+        return this.dateToString(birthDay);
     }
 
     public set birthDay(v: string) {
@@ -220,10 +226,15 @@ export default class SettingsCard extends Vue {
     public async save() {
         this.loading = true;
         try {
-            await session.saveProfile({
-                gender: this.gender,
-                birthDay: this.birthDay,
-            });
+            const gender = this.gender != this.user?.gender ? this.gender : undefined;
+            const birthDay = this.birthDay != this.dateToString(this._initDate) ? this.birthDay : undefined;
+
+            if (gender || birthDay) {
+                await session.saveProfile({
+                    gender,
+                    birthDay,
+                });
+            }
         }
         catch {
             //
