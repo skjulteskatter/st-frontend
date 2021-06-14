@@ -19,18 +19,20 @@
                 {{ $t('song.addTag') }}
             </button>
         </template>
-        <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full mb-2">
+        <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
             <base-input v-model="tagFilter" type="text" placeholder="Tag name" class="w-full"/>
             <base-button type="submit" theme="primary" icon="plus" :content="false" />
         </form>
-        <small class="text-gray-500">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</small>
-        <ul class="flex flex-wrap gap-1">
-            <li 
-                class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
-                v-for="tag in Tags" 
-                :key="tag.id" 
-                @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
-        </ul>
+        <div v-if="Tags.length" class="mt-2">
+            <small class="text-gray-500">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</small>
+            <ul class="flex flex-wrap gap-1">
+                <li 
+                    class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
+                    v-for="tag in Tags" 
+                    :key="tag.id" 
+                    @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
+            </ul>
+        </div>
     </base-dropdown>
 </template>
 <script lang="ts">
