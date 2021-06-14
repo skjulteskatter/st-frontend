@@ -9,9 +9,9 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
             </span>
-            <div v-if="playlist.userId == userId">
-                <base-button icon="user" @click="toggleSharePlaylist()">Share</base-button>
-                <base-button icon="user" @click="toggleSharedWith()">Shared With</base-button>
+            <div v-if="playlist.userId == userId" class="flex gap-2">
+                <base-button icon="share" @click="toggleSharePlaylist()">Share</base-button>
+                <base-button icon="share" @click="toggleSharedWith()">Shared With</base-button>
             </div>
             <base-modal
                 :show="showModal['sharedWith'] == true"
