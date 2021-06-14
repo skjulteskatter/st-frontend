@@ -214,6 +214,7 @@ export default class SongList extends Vue {
     public searchString = "";
 
     public cId = "";
+    private songsPerCard = 50;
 
     public search() {
         this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
@@ -315,10 +316,10 @@ export default class SongList extends Vue {
         }[] = [];
 
         for (const song of this.filteredSongs) {
-            const number = Math.floor((song.number - 1) / 50);
+            const number = Math.floor((song.number - 1) / this.songsPerCard);
 
             songs[number] = songs[number] ?? {
-                title: `${number * 50 + 1}-${number * 50 + 50}`,
+                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
                 songs: [],
             };
 
@@ -342,10 +343,10 @@ export default class SongList extends Vue {
         for (let i = 0; i < filteredSongs.length; i++) {
             const song = filteredSongs[i];
 
-            const number = Math.floor((i)/50);
+            const number = Math.floor((i)/this.songsPerCard);
             
             songs[number] = songs[number] ?? {
-                title: `${number * 50 + 1}-${number * 50 + 50}`,
+                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
                 songs: [],
             };
 
