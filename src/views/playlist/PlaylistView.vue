@@ -31,7 +31,7 @@
             :show="showModal['share'] == true"
             @close="showModal['share'] = false"
         >
-            <div class="relative">
+            <div class="relative w-72">
                 <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal['share'] = false">
                     <icon name="error" size="20" />
                 </button>
@@ -39,27 +39,28 @@
                 <div class="flex flex-col gap-2">
                     <div
                         v-for="key in Keys" :key="key.key"
-                        class="rounded border p-2 flex gap-2"
+                        class="flex flex-col gap-2"
                     >
-                        <span class="max-w-xs overflow-ellipsis overflow-x-hidden whitespace-nowrap">
-                            <small><a :href="`/sharing?token=${key.key}`">{{key.key}}</a></small>
-                            <small class="block opacity-50">{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
+                        <span class="w-full flex gap-2 justify-between">
+                            <input type="text" ref="shareLink" :value="getLink(key.key)" class="p-2 border-gray-300 text-sm flex-grow">
+                            <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
+                            <base-button
+                                theme="error"
+                                icon="trash"
+                                :disabled="deleted[key.key]"
+                                :loading="loadingDelete[key.key]"
+                                @click="deleteKey(key)"
+                                :content="false"
+                                class="px-3"
+                            />
                         </span>
-                        <base-button
-                            theme="error"
-                            icon="trash"
-                            :disabled="deleted[key.key]"
-                            :loading="loadingDelete[key.key]"
-                            @click="deleteKey(key)"
-                            :content="false"
-                            class="px-3"
-                        />
+                        <small class="block text-gray-400">{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
                     </div>
                     <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
                 </div>
-                <h3 class="text-xs font-bold my-4">{{ $t('playlist.sharedWith') }}</h3>
-                <div class="divide-y divide-gray-200">
-                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-gray-100">
+                <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
+                    <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
+                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-black bg-opacity-10">
                         <span class="flex gap-2 items-center">
                             <img
                                 :src="
@@ -127,6 +128,10 @@ export default class PlaylistView extends Vue {
 
     public get Users() {
         return this.users ?? [];
+    }
+
+    public getLink(key: string) {
+        return `${window.location}/sharing?token=${key}`;
     }
 
     public async deletePlaylist() {
