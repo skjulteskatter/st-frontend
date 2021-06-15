@@ -108,10 +108,10 @@ export const songs = {
         return (await http.get<ApiCollection[]>("api/Collections?expand=details,name")).map(c => new Collection(c));
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,transpositions,origins/description` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=participants/contributor,details,transpositions,origins/description` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
     },
     getFile(fileId: string) {
         return http.get<MediaFile>(`api/Files/${fileId}?expand=song`);
@@ -127,7 +127,7 @@ export const songs = {
         return new CollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
     },
     getAllContributors(lastUpdated?: string) {
-        return http.get<ApiCollectionItem<ApiContributor>[]>("api/Contributors?expand=item/biography" + (lastUpdated ? "&updatedAt=" + lastUpdated : ""));
+        return http.get<ApiCollectionItem<ApiContributor>[]>("api/Contributors?expand=item/biography" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getAllThemes(collection: ApiCollection) {
         return http.get<ApiCollectionItem<Theme>[]>(`api/Themes/${collection.id}?expand=item`); //).map(ci => new ThemeCollectionItem(ci));
