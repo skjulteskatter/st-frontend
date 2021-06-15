@@ -9,58 +9,12 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
             </span>
-            <div v-if="playlist.userId == userId" class="flex gap-2">
-                <base-button icon="share" @click="toggleSharePlaylist()">Share</base-button>
-                <base-button icon="share" @click="toggleSharedWith()">Shared With</base-button>
+            <div v-if="playlist.userId == userId">
+                <base-button icon="share" @click="toggleSharePlaylist()">{{ $t('playlist.share') }}</base-button>
             </div>
-            <base-modal
-                :show="showModal['sharedWith'] == true"
-                @close="showModal['sharedWith'] = false"
-            >
-                <h1>Shared with</h1> 
-                <table class="table-fixed">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="w-1/5 text-left p-2">{{ $t("common.name") }}</th>
-                            <th class="w-1/5 text-left p-2"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="u in Users" :key="u.id">
-                            <td class="flex gap-4 items-center">
-                                <img
-                                    :src="
-                                        u.image ?? '/img/portrait-placeholder.png'
-                                    "
-                                    class="w-8 h-8 object-cover rounded-full"
-                                />
-                                <span>{{ u.displayName }}</span>
-                            </td>
-                            <td class="items-center">
-                                <Icon name="trash" :disabled="deleted[u.id]" :loading="loadingDelete[u.id]" @click="deleteUser(u)" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <base-button @click="showModal['sharedWith'] = false">Close</base-button>
-            </base-modal>
             <base-button icon="trash" theme="error" @click="deletePlaylist">
                 {{ $t("playlist.delete") }}
             </base-button>
-            <base-modal
-                :show="showModal['share'] == true"
-                @close="showModal['share'] = false"
-            >
-                <h1>Share playlist</h1>
-                <div v-for="key in Keys" :key="key.key">
-                    <small><a :href="`/sharing?token=${key.key}`">{{key.key}}</a></small>
-                    <br/>
-                    <small>{{new Date(key.validTo).toLocaleDateString()}}</small>
-                    <base-button :disabled="deleted[key.key]" :loading="loadingDelete[key.key]" @click="deleteKey(key)">X</base-button>
-                </div>
-                <base-button @click="showModal['share'] = false">Close</base-button>
-                <base-button @click="sharePlaylist" :loading="sharingPlaylist">Share</base-button>
-            </base-modal>
         </header>
         <h2 v-if="!playlist.entries.length" class="opacity-50">
             {{ $t("playlist.nosongs") }}
@@ -73,6 +27,53 @@
                 :playlist="playlist"
             />
         </div>
+        <base-modal
+            :show="showModal['share'] == true"
+            @close="showModal['share'] = false"
+        >
+            <div class="relative">
+                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal['share'] = false">
+                    <icon name="error" size="20" />
+                </button>
+                <h3 class="font-bold mb-4">{{ $t('playlist.sharePlaylist') }}</h3>
+                <div class="flex flex-col gap-2">
+                    <div
+                        v-for="key in Keys" :key="key.key"
+                        class="rounded border p-2 flex gap-2"
+                    >
+                        <span class="max-w-xs overflow-ellipsis overflow-x-hidden whitespace-nowrap">
+                            <small><a :href="`/sharing?token=${key.key}`">{{key.key}}</a></small>
+                            <small class="block opacity-50">{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
+                        </span>
+                        <base-button
+                            theme="error"
+                            icon="trash"
+                            :disabled="deleted[key.key]"
+                            :loading="loadingDelete[key.key]"
+                            @click="deleteKey(key)"
+                            :content="false"
+                            class="px-3"
+                        />
+                    </div>
+                    <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
+                </div>
+                <h3 class="text-xs font-bold my-4">{{ $t('playlist.sharedWith') }}</h3>
+                <div class="divide-y divide-gray-200">
+                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-gray-100">
+                        <span class="flex gap-2 items-center">
+                            <img
+                                :src="
+                                    u.image ?? '/img/portrait-placeholder.png'
+                                "
+                                class="w-6 h-6 object-cover rounded-full"
+                            />
+                            <small>{{ u.displayName }}</small>
+                        </span>
+                        <icon class="text-red-700 cursor-pointer" name="error" :disabled="deleted[u.id]" :loading="loadingDelete[u.id]" @click="deleteUser(u)" />
+                    </div>
+                </div>
+            </div>
+        </base-modal>
     </div>
 </template>
 
@@ -142,8 +143,9 @@ export default class PlaylistView extends Vue {
 
     public async toggleSharePlaylist() {
         if (!this.showModal["share"]) {
-            if (keys.value == undefined) {
+            if (keys.value == undefined && this.playlist) {
                 await this.loadKeys();
+                this.users = this.users ?? await playlists.getUsers(this.playlist.id);
             }
             this.showModal["share"] = true;
         } else {
@@ -154,7 +156,6 @@ export default class PlaylistView extends Vue {
     public async toggleSharedWith() {
         if (!this.showModal["sharedWith"]) {
             if (this.playlist)
-                this.users = this.users ?? await playlists.getUsers(this.playlist.id);
             this.showModal["sharedWith"] = true;
         } else {
             this.showModal["sharedWith"] = false;
