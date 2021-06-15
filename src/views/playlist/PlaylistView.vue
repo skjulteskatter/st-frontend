@@ -42,7 +42,7 @@
                         class="flex flex-col gap-2"
                     >
                         <span class="w-full flex gap-2 justify-between">
-                            <input type="text" ref="shareLink" :value="getLink(key.key)" class="p-2 border-gray-300 text-sm flex-grow">
+                            <input type="text" ref="shareLink" :value="getLink(key.key)" class="p-2 border-gray-300 text-sm flex-grow bg-transparent">
                             <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
                             <base-button
                                 theme="error"
@@ -60,7 +60,7 @@
                 </div>
                 <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
                     <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
-                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-black bg-opacity-10">
+                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-black bg-opacity-10 dark:bg-opacity-20">
                         <span class="flex gap-2 items-center">
                             <img
                                 :src="
