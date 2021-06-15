@@ -2,14 +2,18 @@
     <base-modal
         :show="!policyAccepted"
     >
-        <h1>{{$t('policies.privacyPolicy')}}</h1>
-        <p>{{$t('policies.acceptPrivacyPolicy')}}</p>
-        <a href="/privacy-policy">{{$t('common.readHere')}}</a>
-        <base-button
-            :loading="loading"
-            :disabled="disabled"
-            @click="acceptPrivacyPolicy"
-        >{{$t('policies.agree')}}</base-button>
+        <div class="flex flex-col gap-4 items-center text-center">
+            <h1 class="text-xl font-bold">{{$t('policies.privacyPolicy')}}</h1>
+            <p class="max-w-sm">{{$t('policies.acceptPrivacyPolicy')}}</p>
+            <a href="/privacy-policy" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
+            <base-button
+                :loading="loading"
+                :disabled="disabled"
+                @click="acceptPrivacyPolicy"
+                icon="check"
+                theme="secondary"
+            >{{$t('policies.agree')}}</base-button>
+        </div>
     </base-modal>
 </template>
 <script lang="ts">
