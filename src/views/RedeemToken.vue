@@ -32,7 +32,7 @@ export default class RedeemToken extends Vue {
             this.result = r;
             if (r.type == "playlist") {
                 this.store.commit(SessionMutationTypes.SET_PLAYLIST, r);
-                this.$router.push({name: "playlist-overview"});
+                this.$router.push({name: "playlist-view", params: {id: r.id}});
             }
         }
     }
