@@ -179,6 +179,12 @@ export const playlists = {
     deleteUser(playlistId: string, userId: string) {
         return http.delete(`api/Playlists/${playlistId}/Users/${userId}`);
     },
+    updatePlaylist(playlistId: string, options: {
+        name?: string;
+        entryOrder?: string[];
+    }) {
+        return http.patch(`api/Playlists/${playlistId}`, options);
+    },
 };
 
 export const sharing = {

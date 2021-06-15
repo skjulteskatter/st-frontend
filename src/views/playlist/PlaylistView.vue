@@ -3,7 +3,11 @@
         <back-button class="md:hidden mb-4" />
         <header class="flex justify-between items-start mb-4">
             <span>
-                <h1 class="font-bold text-xl">{{ playlist.name }}</h1>
+                <h1 class="font-bold text-xl">
+                    <span v-if="!editName">{{ playlist.name }}</span>
+                    <input type="text" v-else v-model="newPlaylistName" :placeholder="playlist.name" @keydown.enter="saveName" />
+                    <icon @click="saveName" class="ml-2 cursor-pointer" :name="editName ? 'check' : 'pencil'" v-if="playlist.userId == userId" />
+                </h1>
                 <span class="text-gray-500">
                     {{ playlist.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
@@ -104,6 +108,8 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 })
 export default class PlaylistView extends Vue {
     private store = useStore();
+    public editName = false;
+    public newPlaylistName = "";
     public showModal: {
         [key: string]: boolean;
     } = {
@@ -211,6 +217,25 @@ export default class PlaylistView extends Vue {
 
     public get userId() {
         return this.store.getters.user?.id;
+    }
+
+    public async saveName() {
+        // console.log("savingName");
+
+        if (this.editName) {
+            this.editName = false;
+            if (this.playlist && this.newPlaylistName) {
+                this.playlist.name = this.newPlaylistName;
+
+                await playlists.updatePlaylist(this.playlist.id, {
+                    name: this.newPlaylistName,
+                });
+
+                this.newPlaylistName = "";
+            }
+        } else {
+            this.editName = true;
+        }
     }
 }
 </script>
