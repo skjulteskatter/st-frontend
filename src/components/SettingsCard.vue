@@ -140,6 +140,9 @@ export default class SettingsCard extends Vue {
     public themes: Themes = themes;
     public newDisplayName = "";
     public offline = false;
+    public gender: "male" | "female" | "unknown" = "unknown";
+    public birthDay = "";
+
     public transpositions = [
         "Ab",
         "A",
@@ -165,37 +168,29 @@ export default class SettingsCard extends Vue {
         "roman",
     ];
 
-    private _initDate = new Date();
-
-    public get gender() {
-        return this.user?.gender ?? "unknown";
-    }
-    
-    public set gender(v: "male" | "female" | "unknown") {
-        if (this.user) {
-            this.user.gender = v;
-        }
+    private get initDate() {
+        return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
     }
 
     private dateToString(date: Date) {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
     }
 
-    public get birthDay(): string {
-        let birthDay: Date;
-        if (this.user && this.user.birthDay) {
-            birthDay = new Date(this.user.birthDay);
-        } else {
-            birthDay = this._initDate;
-        }
-        return this.dateToString(birthDay);
-    }
+    // public get birthDay(): string {
+    //     let birthDay: Date;
+    //     if (this.user && this.user.birthDay) {
+    //         birthDay = new Date(this.user.birthDay);
+    //     } else {
+    //         birthDay = this.initDate;
+    //     }
+    //     return this.dateToString(birthDay);
+    // }
 
-    public set birthDay(v: string) {
-        if (this.user) {
-            this.user.birthDay = v;
-        }
-    }
+    // public set birthDay(v: string) {
+    //     if (this.user) {
+    //         this.user.birthDay = v;
+    //     }
+    // }
 
     public fileName = "";
     private selectedImage?: string;
@@ -219,6 +214,7 @@ export default class SettingsCard extends Vue {
             this.user?.settings?.defaultTranscode ?? "common";
         
         this.gender = this.user?.gender ?? "unknown";
+        this.birthDay = this.user?.birthDay ? this.dateToString(new Date(this.user.birthDay)) : this.dateToString(this.initDate);
         
         this.offline = await cache.get("config", "offline") == true;
     }
@@ -227,13 +223,21 @@ export default class SettingsCard extends Vue {
         this.loading = true;
         try {
             const gender = this.gender != this.user?.gender ? this.gender : undefined;
-            const birthDay = this.birthDay != this.dateToString(this._initDate) ? this.birthDay : undefined;
+            const birthDay = this.birthDay != this.dateToString(this.initDate) ? this.birthDay : undefined;
 
-            if (gender || birthDay) {
+            if (this.user && gender || birthDay) {
                 await session.saveProfile({
                     gender,
                     birthDay,
                 });
+
+                if (this.user) {
+                    if (gender)
+                        this.user.gender = gender;
+                    
+                    if (birthDay)
+                        this.user.birthDay = birthDay;
+                }
             }
         }
         catch {

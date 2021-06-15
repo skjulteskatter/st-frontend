@@ -11,6 +11,8 @@ interface User {
     gender: "male" | "female" | "unknown";
     settings?: UserSettings;
     lastLogin: Date;
+    privacyPolicy: boolean;
+    termsAndConditions: boolean;
 }
 
 interface UserSettings {
