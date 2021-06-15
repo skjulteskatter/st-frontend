@@ -46,6 +46,9 @@ export const session = {
     }) {
         return http.patch<User>("api/Session/Profile", options);
     },
+    acceptPrivacyPolicy() {
+        return http.get("api/Session/AcceptPolicies?privacyPolicy=true");
+    },
 };
 
 export const items = {

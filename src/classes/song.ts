@@ -2,10 +2,9 @@ import { ApiCollection, ApiSong, MediaFile } from "dmb-api";
 import { Contributor } from "./contributor";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
-import { Converter } from "showdown";
 import i18n from "@/i18n";
 import { appSession } from "@/services/session";
-const converter = new Converter();
+import router from "@/router";
 
 export enum SheetMusicTypes {
     PDF = "sheetmusic-pdf",
@@ -67,6 +66,29 @@ export class Song extends BaseClass implements ApiSong {
         return this.collections.map(c => c.id);
     }
 
+    public get available() {
+        return appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
+    }
+
+    public anotherLanguage(lan: string) {
+        return !Object.keys(this.name).includes(lan) && this.type == "lyrics";
+    }
+        
+
+    public view() {
+        if (!this.available) return;
+        const col = appSession.collections.find(c => this.collectionIds.includes(c.id));
+
+        if (col)
+            router.push({
+                name: "song",
+                params: {
+                    collection: col.key,
+                    number: this.getNumber(col.id) ?? this.id,
+                },
+            });
+    }
+
     constructor(song: ApiSong) {
         super();
 
@@ -103,19 +125,6 @@ export class Song extends BaseClass implements ApiSong {
         if (Object.keys(this.name).includes(code)) return true;
 
         return false;
-    }
-
-    public get description() {
-
-        const contents: {
-            [key: string]: string;
-        } = {};
-
-        for (const key of Object.keys(this.details)) {
-            contents[key] = converter.makeHtml(this.details[key]);
-        }
-
-        return contents;
     }
 
     public get copyright() {

@@ -36,6 +36,7 @@
                 </div>
                 <audio-player></audio-player>
             </main>
+            <policy-accepter></policy-accepter>
         </div>
     </div>
 </template>
@@ -53,6 +54,7 @@ import { NotificationList } from "@/components/notification";
 import { StoreCart } from "@/components/store";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
+import PolicyAccepter from "@/components/PolicyAccepter.vue";
 
 @Options({
     components: {
@@ -61,6 +63,7 @@ import { cache } from "@/services/cache";
         OpenSheetMusicDisplay,
         NotificationList,
         StoreCart,
+        PolicyAccepter,
     },
     name: "dashboard-layout",
 })

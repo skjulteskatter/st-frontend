@@ -290,18 +290,6 @@ export default class SongList extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public async selectSong(number: number) {
-        if (this.collection) {
-            this.$router.push({
-                name: "song",
-                params: {
-                    collection: this.collection?.key,
-                    number: number,
-                },
-            });
-        }
-    }
-
     public get songs(): Song[] {
         return this.collection?.songs ?? [];
     }

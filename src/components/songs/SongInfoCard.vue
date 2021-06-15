@@ -217,7 +217,7 @@ export default class SongInfoCard extends Vue {
 
     public get description() {
         return this.song?.getTranslatedProperty(
-            this.song.description,
+            this.song.details,
             this.Language
         );
     }
