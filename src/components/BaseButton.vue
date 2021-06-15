@@ -5,12 +5,12 @@
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <icon size="18" v-if="icon" :name="icon" class="inline-block" />
-        <span class="button__label--loading flex items-center" v-if="loading">{{
+        <icon size="18" name="refresh" class="animate-spin inline-block" v-if="loading" />
+        <icon size="18" v-else-if="icon" :name="icon" class="inline-block" />
+        <!-- <span class="button__label--loading flex items-center" v-if="loading">{{
             loadingLabel
-        }}</span>
-        <span class="spinner" v-if="loading"></span>
-        <span class="button__content text-sm" v-else-if="content">
+        }}</span> -->
+        <span class="button__content text-sm" v-if="content">
             <slot></slot>
         </span>
     </button>

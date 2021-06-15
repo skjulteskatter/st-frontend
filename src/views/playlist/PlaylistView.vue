@@ -23,14 +23,23 @@
         <h2 v-if="!playlist.entries.length" class="opacity-50">
             {{ $t("playlist.nosongs") }}
         </h2>
-        <div class="flex flex-col gap-4" v-else>
-            <playlist-song-card
-                v-for="entry in playlist.entries"
-                :key="entry.id"
-                :entry="entry"
-                :playlist="playlist"
-            />
-        </div>
+        <draggable
+            class="flex flex-col gap-4"
+            v-else
+            v-model="playlist.entries"
+            group="entries"
+            @start="drag=true"
+            @end="drag=false"
+            item-key="id"
+        >
+            <template #item="{element}">
+                <playlist-song-card
+                    :entry="element"
+                    :playlist="playlist"
+                />
+            </template>
+        </draggable>
+        <base-button class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" icon="save" v-if="entryOrderEdited">{{$t('common.save')}}</base-button>
         <base-modal
             :show="showModal['share'] == true"
             @close="showModal['share'] = false"
@@ -52,7 +61,7 @@
                                 theme="error"
                                 icon="trash"
                                 :disabled="deleted[key.key]"
-                                :loading="loadingDelete[key.key]"
+                                :loading="loading[key.key]"
                                 @click="deleteKey(key)"
                                 :content="false"
                                 class="px-3"
@@ -74,7 +83,7 @@
                             />
                             <small>{{ u.displayName }}</small>
                         </span>
-                        <icon class="text-red-700 cursor-pointer" name="error" :disabled="deleted[u.id]" :loading="loadingDelete[u.id]" @click="deleteUser(u)" />
+                        <icon class="text-red-700 cursor-pointer" name="error" :disabled="deleted[u.id]" :loading="loading[u.id]" @click="deleteUser(u)" />
                     </div>
                 </div>
             </div>
@@ -94,6 +103,7 @@ import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
 import { Icon } from "@/components/icon"; 
+import Draggable from "vuedraggable";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
@@ -104,11 +114,16 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         PlaylistSongCard,
         BaseModal,
         Icon,
+        Draggable,
     },
 })
 export default class PlaylistView extends Vue {
     private store = useStore();
+    public drag = false;
     public editName = false;
+    public orders: {
+        [key: string]: string[];
+    } = {};
     public newPlaylistName = "";
     public showModal: {
         [key: string]: boolean;
@@ -117,7 +132,30 @@ export default class PlaylistView extends Vue {
         share: false,
     };
 
-    public loadingDelete: {
+    public get originalEntryOrder(): string[] {
+        if (!this.playlist) return [];
+        let order = this.orders[this.playlist.id];
+
+        if (!order) {
+            order = this.playlist.entries.map(e => e.id);
+            this.orders[this.playlist.id] = order;
+        }
+
+        return order;
+    }
+
+    public get currentEntryOrder() {
+        return this.playlist?.entries.map(e => e.id) ?? [];
+    }
+
+    public get entryOrderEdited() {
+        for (let i = 0; i < this.currentEntryOrder.length; i++) {
+            if (this.currentEntryOrder[i] != this.originalEntryOrder[i]) return true;
+        }
+        return false;
+    }
+
+    public loading: {
         [key: string]: boolean;
     } = {};
     public deleted: {
@@ -191,17 +229,17 @@ export default class PlaylistView extends Vue {
     }
 
     public async deleteKey(key: ShareKey) {
-        this.loadingDelete[key.key] = true;
+        this.loading[key.key] = true;
         await sharing.deleteKey(key.key);
-        this.loadingDelete[key.key] = false;
+        this.loading[key.key] = false;
         this.deleted[key.key] = true;
     }
 
     public async deleteUser(user: PublicUser) {
-        this.loadingDelete[user.id] = true;
+        this.loading[user.id] = true;
         if (this.playlist)
             await playlists.deleteUser(this.playlist.id, user.id);
-        this.loadingDelete[user.id] = false;
+        this.loading[user.id] = false;
         this.deleted[user.id] = true;
     }
 
@@ -235,6 +273,20 @@ export default class PlaylistView extends Vue {
             }
         } else {
             this.editName = true;
+        }
+    }
+
+    public async saveOrder() {
+        if (this.entryOrderEdited) {
+            this.loading["entryOrder"] = true;
+            if (this.playlist) {
+                await playlists.updatePlaylist(this.playlist.id, {
+                    entryOrder: this.currentEntryOrder,
+                });
+
+                this.orders[this.playlist.id] = this.currentEntryOrder;
+            }
+            this.loading["entryOrder"] = false;
         }
     }
 }
