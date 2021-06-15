@@ -131,7 +131,7 @@ export default class PlaylistView extends Vue {
     }
 
     public getLink(key: string) {
-        return `${window.location}/sharing?token=${key}`;
+        return `${window.location.host}/sharing?token=${key}`;
     }
 
     public async deletePlaylist() {
