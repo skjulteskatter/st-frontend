@@ -78,8 +78,8 @@ export class Session {
                     }, {} as {
                         [id: string]: MediaFile;
                     }));
-                    if (updateSongs.result.length > 0)
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
+                    
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
             } catch(e) {
                 notify("error", "Error fetching files", "warning", e);
@@ -103,8 +103,7 @@ export class Session {
                         [id: string]: ApiSong;
                     }));
 
-                    if (updateSongs.result.length > 0)
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
             }
             catch(e) {
