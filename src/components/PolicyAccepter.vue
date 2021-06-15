@@ -9,7 +9,7 @@
             :loading="loading"
             :disabled="disabled"
             @click="acceptPrivacyPolicy"
-        >{{$t('policy.agree')}}</base-button>
+        >{{$t('policies.agree')}}</base-button>
     </base-modal>
 </template>
 <script lang="ts">
