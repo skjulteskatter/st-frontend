@@ -12,12 +12,12 @@
             <li
                 v-for="song in Songs"
                 :key="song.id"
-                @click="available(song.number) ? selectSong(song) : undefined"
+                @click="song.view()"
                 class="flex gap-2 hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
-                    'text-red-700': anotherLanguage.includes(song),
-                    'text-gray-500': !available(song.number),
-                    'text-green-700': !song.sheetMusic.length,
+                    'text-red-700': song.available && song.anotherLanguage(languageKey),
+                    'text-green-700': song.available && !song.sheetMusic.length,
+                    'text-gray-500': !song.available,
                 }"
             >
                 <b class="w-6 text-right">
@@ -78,24 +78,6 @@ export default class SongListCard extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
-    }
-
-    public selectSong(song: Song) {
-        const collection = this.store.getters.collections.find(c => song.collectionIds.some(col => col == c.id));
-        if (collection) {
-            this.$router.push({
-                name: "song",
-                params: {
-                    number: song.number,
-                    collection: collection.key,
-                },
-            });
-        } else {
-            this.$router.push({
-                name: "song",
-                params: { number: song.number },
-            });
-        }
     }
 
     public get anotherLanguage() {
