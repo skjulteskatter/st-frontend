@@ -18,7 +18,7 @@ type AugmentedActionContext = {
 
 export interface Actions {
     [SongsActionTypes.SELECT_COLLECTION](context: AugmentedActionContext, payload: string): Promise<void>;
-    [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number): Promise<void>;
+    [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number | string): Promise<void>;
     [SongsActionTypes.SELECT_CONTRIBUTOR](context: AugmentedActionContext, payload: string): Promise<void>;
     [SongsActionTypes.TRANSPOSE](context: AugmentedActionContext, payload: number): Promise<void>;
     [SongsActionTypes.SET_LIST](context: AugmentedActionContext, payload: string): Promise<void>;
@@ -43,13 +43,13 @@ export const actions: ActionTree<State, RootState> & Actions = {
             });
         }
     },
-    async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number: number): Promise<void> {
+    async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number): Promise<void> {
         const collection = getters.collection as Collection | undefined;
 
         if (!collection) {
             return;
         }
-        const song = collection?.songs.find(s => s.getNumber(collection.id) == number);
+        const song = collection?.songs.find(s => s.getNumber(collection.id) == number || s.id == number);
         commit(SongsMutationTypes.SET_SONG_ID, song?.id);
 
         if (!getters.lyrics) {

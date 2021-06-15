@@ -109,7 +109,7 @@ import { appSession } from "@/services/session";
 })
 export default class SongViewer extends Vue {
     private store = useStore();
-    public number = 0;
+    public number: number | string = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
@@ -135,7 +135,7 @@ export default class SongViewer extends Vue {
             originalKey: "C",
         });
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
-        this.number = parseInt(this.$route.params.number as string);
+        this.number = this.$route.params.number as string;
         if (
             !this.store.getters.collection
                 ?.getKeys()
@@ -276,7 +276,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song() {
-        return this.collection?.songs.find(s => s.getNumber((this.collection as Collection).id) == parseInt(this.$route.params.number as string));
+        return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
     }
 
     public get languageKey() {
