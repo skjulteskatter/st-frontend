@@ -1,6 +1,6 @@
 <template>
     <base-modal
-        :show="policyAccepted"
+        :show="!policyAccepted"
     >
         <h1>{{$t('policies.privacyPolicy')}}</h1>
         <p>{{$t('policies.acceptPrivacyPolicy')}}</p>
