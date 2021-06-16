@@ -17,7 +17,7 @@
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
                     'text-green-700': song.available && !song.sheetMusic.length,
-                    'text-gray-500': !song.available,
+                    'text-gray-400': !song.available,
                 }"
             >
                 <b class="w-6 text-right">

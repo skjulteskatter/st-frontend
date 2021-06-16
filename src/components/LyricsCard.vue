@@ -27,7 +27,7 @@
                     >
                         <div
                             class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"
-                            :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'"
+                            :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
                         >
                             <span
                                 :class="chordsEnabled ? 'translate-x-9' : 'translate-x-1'"
