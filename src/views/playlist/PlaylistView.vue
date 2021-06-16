@@ -6,7 +6,7 @@
                 <h1 class="font-bold text-xl">
                     <span v-if="!editName">{{ playlist.name }}</span>
                     <input type="text" v-else v-model="newPlaylistName" :placeholder="playlist.name" @keydown.enter="saveName" />
-                    <icon @click="saveName" class="ml-2 cursor-pointer" :name="editName ? 'check' : 'pencil'" v-if="playlist.userId == userId" />
+                    <icon @click="saveName" class="ml-2 cursor-pointer opacity-50" :name="editName ? 'check' : 'pencil'" v-if="playlist.userId == userId" />
                 </h1>
                 <span class="text-gray-500">
                     {{ playlist.entries.length }}
@@ -14,7 +14,7 @@
                 </span>
             </span>
             <div v-if="playlist.userId == userId">
-                <base-button icon="share" @click="toggleSharePlaylist()">{{ $t('playlist.share') }}</base-button>
+                <base-button icon="share" @click="toggleSharePlaylist()" :loading="loading['share']">{{ $t('playlist.share') }}</base-button>
             </div>
             <base-button icon="trash" theme="error" @click="deletePlaylist">
                 {{ $t("playlist.delete") }}
@@ -191,6 +191,7 @@ export default class PlaylistView extends Vue {
     }
 
     public async toggleSharePlaylist() {
+        this.loading["share"] = true;
         if (!this.showModal["share"]) {
             if (keys.value == undefined && this.playlist) {
                 await this.loadKeys();
@@ -200,6 +201,7 @@ export default class PlaylistView extends Vue {
         } else {
             this.showModal["share"] = false;
         }
+        this.loading["share"] = false;
     }
 
     public async toggleSharedWith() {
