@@ -12,7 +12,7 @@
             <li
                 v-for="song in Songs"
                 :key="song.id"
-                @click="song.view()"
+                @click="viewSong(song)"
                 class="flex gap-2 hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
@@ -30,6 +30,20 @@
                 <icon class="text-primary" name="star" size="12" v-if="song.newMelody" />
             </li>
         </ul>
+        <base-modal
+            :show="showCTA"
+            @close="closeCTA"
+        >
+            <div class="flex flex-col gap-4 items-center">
+                <icon name="lock" size="30" class="opacity-50" />
+                <span class="text-center">
+                    <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
+                    <p>{{ $t('store.gainAccess') }}</p>
+                </span>
+                <!-- <base-button theme="secondary" icon="buy" @click="closeCTA">{{ $t('store.addToCart') }}</base-button> -->
+                <base-button theme="secondary" @click="closeCTA">OK</base-button>
+            </div>
+        </base-modal>
     </base-card>
 </template>
 
@@ -38,6 +52,7 @@ import { Options, Vue } from "vue-class-component";
 import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
+import { BaseModal } from "@/components";
 
 @Options({
     props: {
@@ -58,6 +73,9 @@ import { appSession } from "@/services/session";
             type: Object,
         },
     },
+    components: {
+        BaseModal,
+    },
     name: "song-list-card",
 })
 export default class SongListCard extends Vue {
@@ -67,6 +85,8 @@ export default class SongListCard extends Vue {
     public count?: boolean;
     public action?: Function;
     public collection?: Collection;
+    
+    public showCTA = false;
 
     public get Songs() {
         return this.songs ?? [];
@@ -74,6 +94,21 @@ export default class SongListCard extends Vue {
 
     public songViews(song: Song) {
         return appSession.Views[song.id] ?? 0;
+    }
+
+    public viewSong(song: Song) {
+        if(!song.available) {
+            return this.openCTA();
+        }
+        song.view();
+    }
+
+    public openCTA() {
+        this.showCTA = true;
+    }
+
+    public closeCTA() {
+        this.showCTA = false;
     }
 
     public get languageKey() {
