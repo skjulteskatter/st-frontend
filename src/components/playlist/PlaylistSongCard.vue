@@ -1,6 +1,7 @@
 <template>
     <base-card class="border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400">
-        <div class="flex">
+        <div class="flex gap-4 items-center">
+            <icon name="selector" class="text-gray-400 cursor-move" />
             <router-link
                 v-if="!disabled"
                 class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
