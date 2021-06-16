@@ -51,7 +51,7 @@ export default class CreatePlaylistModal extends Vue {
 
         this.playlistName = "";
 		this.loading = false;
-		this.disabled = true;
+		// this.disabled = true;
 		(this.$refs["create-playlist-modal"] as Modal).closeModal();
     }
 }
