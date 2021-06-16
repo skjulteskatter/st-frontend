@@ -139,6 +139,14 @@ export default class LyricsCard extends Vue {
     public loaded = false;
     public chordsEnabled = false;
 
+    public get ChordsEnabled() {
+        return this.chordsEnabled;
+    }
+    
+    public set ChordsEnabled(v) {
+        this.chordsEnabled = v;
+    }
+
     public relativeTranspositions: {
         value: number;
         view: string;
@@ -150,7 +158,7 @@ export default class LyricsCard extends Vue {
         return this.lyrics;
     }
 
-    public mounted() {
+    public async mounted() {
         const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");
 
         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, t);
