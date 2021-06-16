@@ -15,6 +15,7 @@ export class Song extends BaseClass implements ApiSong {
     public id: string;
     public type: string;
     public image?: string;
+
     public get number() {
         return this.collections[0]?.number ?? 0;
     }
@@ -67,7 +68,7 @@ export class Song extends BaseClass implements ApiSong {
     }
 
     public get available() {
-        return appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
+        return this.collections.some(n => n.number && n.number <= 5) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
     }
 
     public anotherLanguage(lan: string) {
