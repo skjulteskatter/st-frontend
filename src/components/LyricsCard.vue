@@ -22,12 +22,12 @@
                     <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.chords") }}</SwitchLabel>
                     <Switch
                         @click="transposeToggle()"
-                        v-model="chordsEnabled"
-                        :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'"
+                        v-model="ChordsEnabled"
+                        :class="ChordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'"
                         class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none my-1"
                     >
                         <span
-                            :class="chordsEnabled ? 'translate-x-9' : 'translate-x-1'"
+                            :class="ChordsEnabled ? 'translate-x-9' : 'translate-x-1'"
                             class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
                         />
                     </Switch>
@@ -135,6 +135,14 @@ export default class LyricsCard extends Vue {
     public loaded = false;
     public chordsEnabled = false;
 
+    public get ChordsEnabled() {
+        return this.chordsEnabled;
+    }
+    
+    public set ChordsEnabled(v) {
+        this.chordsEnabled = v;
+    }
+
     public relativeTranspositions: {
         value: number;
         view: string;
@@ -146,7 +154,7 @@ export default class LyricsCard extends Vue {
         return this.lyrics;
     }
 
-    public mounted() {
+    public async mounted() {
         const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");
 
         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, t);
