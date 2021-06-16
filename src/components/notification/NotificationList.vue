@@ -8,7 +8,11 @@
 		</template>
 		<div class="flex justify-between items-center gap-4 mb-4">
 			<b>Notifications</b>
-			<base-button v-if="notifications.length" theme="tertiary" @click="clearNotifications()">Clear</base-button>
+			<button 
+				v-if="notifications.length"
+				@click="clearNotifications()"
+				class="text-sm text-red-700 hover:underline"
+			>Clear</button>
 		</div>
 		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">
 			<notification
