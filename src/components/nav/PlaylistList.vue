@@ -50,7 +50,7 @@ export default class CollectionList extends Vue {
     }
 
     public get playlists(): ApiPlaylist[] {
-        return this.store.state.session.playlists;
+        return this.store.state.session.playlists.slice(0, 5);
     }
 
     public get languageKey() {
