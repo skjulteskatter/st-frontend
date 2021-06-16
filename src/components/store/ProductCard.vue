@@ -76,7 +76,7 @@ export default class ProductCard extends Vue {
                 this.product.id,
             );
 
-        notify("success", this.$t("store.addedToCart"), "buy");
+        // notify("success", this.$t("store.addedToCart"), "buy");
     }
 
     public get inCart() {
