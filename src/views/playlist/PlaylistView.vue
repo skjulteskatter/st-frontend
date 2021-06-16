@@ -38,6 +38,7 @@
             @start="drag=true"
             @end="drag=false"
             item-key="id"
+            ghost-class="opacity-50"
         >
             <template #item="{element}">
                 <playlist-song-card
