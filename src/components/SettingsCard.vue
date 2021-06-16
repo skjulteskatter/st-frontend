@@ -1,5 +1,5 @@
 <template>
-    <base-card class="md:col-span-3" v-if="user">
+    <base-card class="md:col-span-3 md:row-span-2" v-if="user">
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
@@ -84,7 +84,7 @@
             </div>
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="birthDay">{{ $t("common.birthDay") }}</label>
-                <input type="date" v-model="birthDay" />
+                <input type="date" v-model="birthDay" class="bg-transparent rounded border-gray-300" />
             </div>
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>

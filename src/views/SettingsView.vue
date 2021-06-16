@@ -12,7 +12,7 @@
                 {{ $t("common.logout") }}
             </base-button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
             <settings-card />
             <user-card />
         </div>
