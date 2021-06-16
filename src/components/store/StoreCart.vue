@@ -13,7 +13,7 @@
                     {{ $t("store.clearCart") }}
                 </button>
             </div>
-            <div class="flex flex-col gap-2 mb-4">
+            <div class="flex flex-col gap-2 mb-4" v-if="cartItems.length">
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
@@ -23,7 +23,10 @@
                     <small class="text-gray-500">{{ formatPrices(i.prices, "year") }}</small>
                 </div>
             </div>
-            <base-button :disabled="checkingOut" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
+            <p v-else class="p-2 text-center mb-4 text-gray-400">
+                {{ $t('store.noItems') }}
+            </p>
+            <base-button :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
