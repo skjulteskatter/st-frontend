@@ -22,14 +22,18 @@
                     <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.chords") }}</SwitchLabel>
                     <Switch
                         @click="transposeToggle()"
-                        v-model="ChordsEnabled"
-                        :class="ChordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'"
-                        class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none my-1"
+                        v-model="chordsEnabled"
+                        class="focus:outline-none"
                     >
-                        <span
-                            :class="ChordsEnabled ? 'translate-x-9' : 'translate-x-1'"
-                            class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
-                        />
+                        <div
+                            class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"
+                            :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-400'"
+                        >
+                            <span
+                                :class="chordsEnabled ? 'translate-x-9' : 'translate-x-1'"
+                                class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                            />
+                        </div>
                     </Switch>
                 </SwitchGroup>
                 <base-dropdown
