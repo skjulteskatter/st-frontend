@@ -13,12 +13,19 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </span>
             </span>
-            <div v-if="playlist.userId == userId">
-                <base-button icon="share" @click="toggleSharePlaylist()" :loading="loading['share']">{{ $t('playlist.share') }}</base-button>
+            <div class="flex gap-2 md:gap-4">
+                <base-button
+                    icon="share"
+                    v-if="playlist.userId == userId"
+                    @click="toggleSharePlaylist()"
+                    :loading="loading['share']"
+                >
+                    {{ $t('playlist.share') }}
+                </base-button>
+                <base-button icon="trash" theme="error" @click="deletePlaylist">
+                    {{ $t("playlist.delete") }}
+                </base-button>
             </div>
-            <base-button icon="trash" theme="error" @click="deletePlaylist">
-                {{ $t("playlist.delete") }}
-            </base-button>
         </header>
         <h2 v-if="!playlist.entries.length" class="opacity-50">
             {{ $t("playlist.nosongs") }}
