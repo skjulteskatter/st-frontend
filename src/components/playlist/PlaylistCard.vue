@@ -7,7 +7,7 @@
         <button class="text-left flex gap-4 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
             <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
             <div class="flex flex-col">
-                <strong class="font-bold">{{ playlist?.name }}</strong>
+                <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                 <small class="text-gray-500 dark:text-gray-400">
                     {{ playlist?.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
