@@ -187,7 +187,7 @@ export default class SongViewer extends Vue {
     }
 
     public get admin() {
-        return this.store.state.session.currentUser?.roles.includes("administrator");
+        return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
     }
 
     public get lyrics() {
