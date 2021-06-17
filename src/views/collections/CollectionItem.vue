@@ -22,14 +22,14 @@
                         theme="secondary"
                         icon="buy"
                         :disabled="inCart"
-                        v-if="!ownedIds.includes(product.id)"
+                        v-if="!collections[0].available"
                         @click="addToCart()"
                     >
                         {{ $t("store.addToCart") }}
                     </base-button>
-                    <base-button theme="tertiary" v-else icon="shop" disabled>
+                    <span class="opacity-50" v-else>
                         {{ $t("store.alreadyOwned") }}
-                    </base-button>
+                    </span>
                 </div>
                 <hr class="mb-4 dark:opacity-20" v-if="details" />
                 <h3 class="font-bold text-lg" v-if="details">{{ $t('store.about') }}</h3>
