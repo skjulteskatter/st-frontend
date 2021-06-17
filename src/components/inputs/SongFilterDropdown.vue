@@ -1,35 +1,59 @@
 <template>
     <div class="flex flex-col sm:flex-row gap-2 text-sm" v-if="collection && !loading">
         <div class="flex gap-2">
-            <base-dropdown :label="$t('types.lyrics')" origin="left">
-                <div class="w-72">
-                    <label class="font-bold">
-                        <input
-                            v-model="typeValues.lyrics"
-                            type="checkbox"
-                            name="lyrics"
-                            id="lyrics"
-                            class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
-                        />
-                        {{ $t("types.lyrics") }}
-                    </label>
+            <div class="relative">
+                <div v-if="typeValues.lyrics">
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-            </base-dropdown>
-            <base-dropdown :label="$t('types.video')" origin="left">
-                <div class="w-72" >
-                    <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+                <base-dropdown :label="$t('types.lyrics')" origin="left">
+                    <div class="w-72">
+                        <label class="font-bold">
+                            <input
+                                v-model="typeValues.lyrics"
+                                type="checkbox"
+                                name="lyrics"
+                                id="lyrics"
+                                class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                            />
+                            {{ $t("types.lyrics") }}
+                        </label>
+                    </div>
+                </base-dropdown>
+            </div>
+            <div class="relative">
+                <div v-if="isEmpty(videoValues)">
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-            </base-dropdown>
-            <base-dropdown :label="$t('types.sheetmusic')" origin="left">
-                <div class="w-72">
-                    <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+                <base-dropdown :label="$t('types.video')" origin="left">
+                    <div class="w-72" >
+                        <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+                    </div>
+                </base-dropdown>
+            </div>
+            <div class="relative">
+                <div v-if="isEmpty(sheetMusicValues)">
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-            </base-dropdown>
-            <base-dropdown :label="$t('types.audio')" origin="right">
-                <div class="w-72">
-                    <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+                <base-dropdown :label="$t('types.sheetmusic')" origin="left">
+                    <div class="w-72">
+                        <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+                    </div>
+                </base-dropdown>
+            </div>
+            <div class="relative">
+                <div v-if="isEmpty(audioValues)">
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
+                    <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-            </base-dropdown>
+                <base-dropdown :label="$t('types.audio')" origin="right">
+                    <div class="w-72">
+                        <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+                    </div>
+                </base-dropdown>
+            </div>
         </div>
         <div class="flex gap-2">
             <base-button theme="secondary" @click="apply()" class="flex-grow">{{ $t('song.apply') }}</base-button>
@@ -162,6 +186,10 @@ export default class SongFilterDropdown extends Vue {
 
     public get collection(): Collection | undefined {
         return this.store.getters.collection;
+    }
+
+    public isEmpty(obj: object) {
+        return Object.values(obj).contains(true);
     }
 }
 </script>
