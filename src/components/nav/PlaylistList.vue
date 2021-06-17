@@ -16,7 +16,7 @@
                     }"
                 >
                     <icon name="playlist" size="18" class="text-gray-500 dark:text-gray-400" />
-                    {{ playlist.name }}
+                    <span class="overflow-x-hidden overflow-ellipsis whitespace-nowrap">{{ playlist.name }}</span>
                     <small class="ml-auto">{{ playlist.entries.length }}</small>
                 </router-link>
             </li>
