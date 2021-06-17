@@ -3,7 +3,7 @@
         <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative">
-                <div class="flex-1 overflow-y-scroll sm:overflow-y-auto">
+                <div class="flex-1 overflow-y-auto" style="overflow-y: overlay">
                     <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
                         <back-button v-if="$route.name != 'main'" />
                         <div class="flex gap-4 items-center ml-auto">
