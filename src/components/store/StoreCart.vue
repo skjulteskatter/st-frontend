@@ -9,7 +9,7 @@
         <div class="w-max">
             <div class="flex gap-4 justify-between items-center mb-4">
                 <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
-                <button @click="clearCart" class="text-red-700 cursor-pointer hover:underline">
+                <button @click="clearCart" class="text-red-700 cursor-pointer hover:underline" v-if="cartItems.length">
                     {{ $t("store.clearCart") }}
                 </button>
             </div>
