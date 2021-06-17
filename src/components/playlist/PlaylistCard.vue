@@ -4,16 +4,22 @@
             'bg-yellow-50': userId != playlist?.userId, 
         }"
     >
-        <button class="flex gap-2 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
+        <button class="text-left flex gap-4 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
             <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
             <div class="flex flex-col">
                 <strong class="font-bold">{{ playlist?.name }}</strong>
-                <small class="text-gray-500 text-left dark:text-gray-400">
+                <small class="text-gray-500 dark:text-gray-400">
                     {{ playlist?.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
             </div>
-            <icon name="share" v-if="playlist?.sharedWithIds.length"/>
+            <small
+                class="text-gray-400 ml-auto flex-shrink-0"
+                v-if="playlist?.sharedWithIds.length"
+            >
+                <icon name="share" size="16" />
+                {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
+            </small>
         </button>
     </base-card>
 </template>
