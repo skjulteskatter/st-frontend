@@ -52,7 +52,7 @@ import { useStore } from "@/store";
 import CollectionSettings from "../CollectionSettings.vue";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
-import { notify } from "@/services/notify";
+// import { notify } from "@/services/notify";
 
 @Options({
     components: {
