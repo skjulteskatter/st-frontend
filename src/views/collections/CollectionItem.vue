@@ -45,7 +45,7 @@ import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
-import { notify } from "@/services/notify";
+// import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -75,7 +75,7 @@ export default class StoreItem extends Vue {
                 this.product.id,
             );
 
-        notify("success", "shop",this.$t("store.addedToCart"));
+        // notify("success", "shop",this.$t("store.addedToCart"));
     }
 
     public formatPrices(prices: Price[], type: string) {
