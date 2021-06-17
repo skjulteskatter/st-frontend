@@ -36,7 +36,8 @@
                 </div>
                 <audio-player></audio-player>
             </main>
-            <policy-accepter></policy-accepter>
+            <privacy-policy-accept></privacy-policy-accept>
+            <tos></tos>
         </div>
     </div>
 </template>
@@ -54,7 +55,8 @@ import { NotificationList } from "@/components/notification";
 import { StoreCart } from "@/components/store";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
-import PolicyAccepter from "@/components/PolicyAccepter.vue";
+import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
+import TOSAccept from "@/components/TOSAccept.vue";
 
 @Options({
     components: {
@@ -63,7 +65,8 @@ import PolicyAccepter from "@/components/PolicyAccepter.vue";
         OpenSheetMusicDisplay,
         NotificationList,
         StoreCart,
-        PolicyAccepter,
+        PrivacyPolicyAccept,
+        tos: TOSAccept,
     },
     name: "dashboard-layout",
 })

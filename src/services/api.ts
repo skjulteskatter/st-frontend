@@ -49,6 +49,9 @@ export const session = {
     acceptPrivacyPolicy() {
         return http.get("api/Session/AcceptPolicies?privacyPolicy=true");
     },
+    acceptTermsOfService() {
+        return http.get("api/Session/AcceptPolicies?termsAndConditions=true");
+    },
 };
 
 export const items = {
