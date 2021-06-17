@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isOwned}" v-if="product">
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isAvailable}" v-if="product">
         <icon name="lock" v-if="!isAvailable" class="absolute top-4 left-4 text-secondary" />
         <img
             class="w-full object-cover cursor-pointer"
@@ -16,7 +16,7 @@
                     theme="tertiary"
                     icon="buy"
                     :disabled="inCart"
-                    v-if="!isOwned"
+                    v-if="!isAvailable"
                     @click="addToCart()"
                     :content="false"
                 ></base-button>
