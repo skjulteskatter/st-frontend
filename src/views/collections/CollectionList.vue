@@ -1,6 +1,9 @@
 <template>
     <div class="mb-4 flex justify-between items-center">
-        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+        <div class="flex justify-between w-full">
+            <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+            <store-cart class="md:hidden" />
+        </div>
         <div class="flex gap-2">
             <base-button
                 theme="tertiary"
