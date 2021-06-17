@@ -9,6 +9,8 @@ import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 
 type CollectionSettings = {
     offline: boolean;
@@ -156,6 +158,11 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get loading() {
         return this._loading || this._loadingThemes || this._loadingCountries;
+    }
+
+    public addToCart() {
+        const prod = this.store.getters.products.find(p => p.collectionIds.includes(this.id));
+        this.store.commit(StripeMutationTypes.CART_ADD_PRODUCT, prod?.id);
     }
 
     public getDetails(language: string){

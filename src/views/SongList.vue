@@ -2,11 +2,12 @@
     <loader :loading="loading">
         <div class="p-4 md:p-8" v-if="collection">
             <back-button class="md:hidden mb-4" />
-            <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm">
+                <base-button theme="secondary" icon="buy" @click="collection?.addToCart" v-if="!collection.available">{{ $t('store.buy') }}</base-button>
+                <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm md:ml-auto">
                     <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
                     <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
                     <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
