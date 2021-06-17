@@ -32,7 +32,7 @@
                         </div>
                     </modal>
                     <base-button
-                        v-if="song.hasLyrics"
+                        v-if="song.hasLyrics && (isExtended || isAdmin)"
                         @click="extend"
                         icon="screen"
                         :disabled="lyrics?.format != 'json'"
@@ -261,6 +261,10 @@ export default class SongViewer extends Vue {
 
     public get isExtended() {
         return this.store.state.session.extend;
+    }
+
+    public get isAdmin() {
+        return this.store.getters.isAdmin;
     }
 
     public get loading() {
