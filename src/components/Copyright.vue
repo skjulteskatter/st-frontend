@@ -1,6 +1,8 @@
 <template>
-    <div :style="view ? '' : 'display: none'" class="flex-1 w-full bottom-0 text-sm text-center sticky p-6">
-        <span class="bg-white rounded-lg p-2">© {{new Date().getFullYear()}} {{ $t('copyright.title')}} | All rights reserved.</span>
+    <div :class="{ 'hidden': hide }" class="w-full bottom-0 md:bottom-4 text-center sticky flex md:justify-center">
+        <div class="bg-white rounded-lg p-2 text-sm shadow-md">
+            <span>© {{new Date().getFullYear()}} {{ $t('copyright.title')}} | All rights reserved.</span>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -13,8 +15,8 @@ import { Options, Vue } from "vue-class-component";
 export default class Copyright extends Vue {
     private store = useStore();
 
-    public get view() {
-        return !this.store.getters.collection?.loading;
+    public get hide() {
+        return this.store.getters.collection?.loading;
     }
 }
 </script>
