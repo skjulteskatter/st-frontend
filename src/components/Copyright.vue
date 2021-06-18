@@ -1,8 +1,6 @@
 <template>
-    <div :class="{ 'hidden': hide }" class="w-full bottom-0 md:bottom-4 text-center sticky flex md:justify-center">
-        <div class="bg-white rounded-lg p-2 text-sm shadow-md">
-            <span>© {{new Date().getFullYear()}} {{ $t('copyright.title')}} | All rights reserved.</span>
-        </div>
+    <div :class="{ 'hidden': hide }" class="w-full mb-4 text-center flex md:justify-center">
+        <span class="text-sm text-gray-500">© {{new Date().getFullYear()}} {{ $t('copyright.title')}} | All rights reserved.</span>
     </div>
 </template>
 <script lang="ts">
