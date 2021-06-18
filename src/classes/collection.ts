@@ -9,7 +9,6 @@ import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 
 type CollectionSettings = {

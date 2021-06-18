@@ -2,8 +2,8 @@
     <div class="flex flex-col h-screen relative">
         <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
             <the-navbar></the-navbar>
-            <main class="w-full flex flex-col relative">
-                <div class="flex-1 overflow-y-auto" style="overflow-y: overlay">
+            <main class="w-full flex flex-col relative h-full">
+                <div class="flex-1 overflow-y-auto h-full" style="overflow-y: overlay">
                     <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
                         <back-button v-if="$route.name != 'main'" />
                         <div class="flex gap-4 items-center ml-auto">
@@ -13,7 +13,7 @@
                         </div>
                     </header>
                     <router-view />
-                    <copyright :style="loading ? 'display:none;' : ''"></copyright>
+                    <copyright />
                 </div>
                 <div
                     class="sticky bottom-0" 
@@ -78,10 +78,6 @@ export default class DashboardLayout extends Vue {
 
     public get initialized() {
         return ref(appSession.initialized).value;
-    }
-
-    public get loading() {
-        return this.store.getters.collection?.loading === true;
     }
 
     async mounted() {

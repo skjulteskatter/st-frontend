@@ -1,7 +1,5 @@
 <template>
-    <!-- <div class="view-song"> -->
     <router-view />
-    <!-- </div> -->
 </template>
 <script lang="ts">
 import { useStore } from "@/store";
