@@ -4,6 +4,8 @@ import Modal from "./Modal.vue";
 import BaseModal from "./BaseModal.vue";
 import Loader from "./Loader.vue";
 
+import Copyright from "./Copyright.vue";
+
 import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
 import OptionsComponent from "./OptionsComponent.vue";
@@ -28,4 +30,5 @@ export {
     BackButton,
     UsersList,
     Tooltip,
+    Copyright,
 };

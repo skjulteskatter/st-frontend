@@ -13,6 +13,7 @@
                         </div>
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
+                    <copyright></copyright>
                 </div>
                 <div
                     class="sticky bottom-0" 
@@ -55,6 +56,7 @@ import { NotificationList } from "@/components/notification";
 import { StoreCart } from "@/components/store";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
+import { Copyright } from "@/components";
 import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import TOSAccept from "@/components/TOSAccept.vue";
 
@@ -67,6 +69,7 @@ import TOSAccept from "@/components/TOSAccept.vue";
         StoreCart,
         PrivacyPolicyAccept,
         tos: TOSAccept,
+        Copyright,
     },
     name: "dashboard-layout",
 })
