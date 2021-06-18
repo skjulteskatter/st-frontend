@@ -4,7 +4,14 @@ import { notify } from "./notify";
 
 class Http {
     public async getCountry(): Promise<string> {
-        return JSON.parse((await (await fetch("https://ipinfo.io/json?token=c459017d0e37e2")).text())).country;
+        let entry = localStorage.getItem("country");
+
+        if (!entry) {
+            entry = JSON.parse((await (await fetch("https://ipinfo.io/json?token=c459017d0e37e2")).text())).country as string;
+            localStorage.setItem("country", entry);
+        }
+
+        return entry;
     }
 
     public validateResponse(response: Response): Promise<Response> {
