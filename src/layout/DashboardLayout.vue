@@ -13,7 +13,7 @@
                         </div>
                     </header>
                     <router-view v-if="$route.name != 'songs-sheet-music'" />
-                    <copyright></copyright>
+                    <copyright v-if="!loading"></copyright>
                 </div>
                 <div
                     class="sticky bottom-0" 
@@ -78,6 +78,10 @@ export default class DashboardLayout extends Vue {
 
     public get initialized() {
         return ref(appSession.initialized).value;
+    }
+
+    public get loading() {
+        return this.store.getters.collection?.loading;
     }
 
     async mounted() {
