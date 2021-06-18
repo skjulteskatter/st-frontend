@@ -12,8 +12,8 @@
                             <icon name="settings" class="cursor-pointer" @click="$router.push('/settings')" />
                         </div>
                     </header>
-                    <router-view v-if="$route.name != 'songs-sheet-music'" />
-                    <copyright v-if="!loading"></copyright>
+                    <router-view />
+                    <copyright :style="loading ? 'display:none;' : ''"></copyright>
                 </div>
                 <div
                     class="sticky bottom-0" 
@@ -81,7 +81,7 @@ export default class DashboardLayout extends Vue {
     }
 
     public get loading() {
-        return this.store.getters.collection?.loading;
+        return this.store.getters.collection?.loading === true;
     }
 
     async mounted() {
