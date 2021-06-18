@@ -20,7 +20,7 @@
                     class="p-2 bg-gray-200 rounded flex justify-between gap-4"
                 >
                     {{ i.getName(languageKey) }}
-                    <small class="text-gray-500" v-html="i.priceDiv(country)"></small>
+                    <small class="text-gray-500"><price-div :product="i" :country="country"></price-div></small>
                 </div>
             </div>
             <p v-else class="p-2 text-center mb-4 text-gray-400">
@@ -38,9 +38,13 @@ import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
+import PriceDiv from "./Price.vue";
 
 @Options({
     name: "store-cart",
+    components: {
+        PriceDiv,
+    },
 })
 export default class StoreCart extends Vue {
     private store = useStore();
