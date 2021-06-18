@@ -54,12 +54,12 @@ export default class StoreHome extends Vue {
     public loading = false;
     public loadingSubs = false;
 
-    public portal() {
+    public async portal() {
         this.loading = true;
-        this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
             window.location = (result as unknown) as Location;
         });
-        this.loading = false;
+        // this.loading = false;
     }
 
     public get products() {

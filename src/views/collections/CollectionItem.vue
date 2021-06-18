@@ -11,7 +11,9 @@
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400" v-html="product.priceDiv(country)"> </p>
+                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400">
+                    <price-div :product="product" :country="country"></price-div>
+                </p>
                 <div class="mb-4">
                     <base-button
                         theme="secondary"
@@ -41,11 +43,13 @@ import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
 import http from "@/services/http";
+import {Price as PriceDiv} from "@/components/store";
 // import { notify } from "@/services/notify";
 
 @Options({
     components: {
         BackButton,
+        PriceDiv,
     },
     name: "collection-item",
 })
