@@ -208,6 +208,7 @@ export default class SongInfoCard extends Vue {
     }
 
     public getLocaleString(dictionary: { [key: string]: string }) {
+        if (!dictionary) return "";
         return (
             dictionary[this.Language] ??
             dictionary.en ??
@@ -224,8 +225,8 @@ export default class SongInfoCard extends Vue {
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.description[this.Language] ??
-            this.song?.melodyOrigin?.description.no ??
+            this.song?.melodyOrigin?.description?.[this.Language] ??
+            this.song?.melodyOrigin?.description?.no ??
             undefined
         );
     }
