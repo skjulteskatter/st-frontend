@@ -9,7 +9,7 @@
             />
             <div class="flex flex-col items-center gap-3">
                 <h2 class="text-2xl font-bold md:text-3xl">Sign in to your account</h2>
-                <p class="m-0 text-sm">Or <router-link class="text-primary hover:underline" to="/create">register an account</router-link></p>
+                <p class="m-0 text-sm">Or <span @click="createUserModal = true" class="hover:underline">register an account</span></p>
             </div>
         </div>
         <base-card id="login-card" class="p-4 max-w-md w-full">
@@ -80,6 +80,35 @@
                 </div>
             </div>
         </base-card>
+        <base-modal :show="createUserModal" @close="createUserModal = false">
+            <h1 class="text-xl font-bold md:text-2xl mb-2">Register</h1>
+            <div class="mb-2">
+                <small><router-link class="text-primary hover:underline" to="/create">Create account</router-link></small>
+            </div>
+                <span class="flex justify-between items-center gap-4">
+                    <hr class="border-t border-gray-200 flex-grow">
+                    <small class="text-gray-500">Or create with</small>
+                    <hr class="border-t border-gray-200 flex-grow">
+                </span>
+            <div class="flex flex-col mt-5">
+                <div class="flex gap-3 justify-center">
+                    <button
+                        v-if="!providers.length || providers.includes('google.com')"
+                        class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
+                        @click="login('google')"
+                    >
+                        <img alt="Google" class="h-full" src="/img/google.png" />
+                    </button>
+                    <button
+                        v-if="!providers.length || providers.includes('apple.com')"
+                        class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
+                        @click="login('apple')"
+                    >
+                        <img alt="Apple" class="h-full" src="/img/apple.svg" />
+                    </button>
+                </div>
+            </div>
+        </base-modal>
     </div>
 </template>
 
@@ -89,10 +118,12 @@ import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { BaseModal } from "@/components";
 
 @Options({
     components: {
         BaseInput,
+        BaseModal,
     },
     name: "login",
 })
@@ -105,6 +136,8 @@ export default class Login extends Vue {
     public stayLoggedIn = false;
     private store = useStore();
     public providers: string[] = [];
+
+    public createUserModal = false;
 
     public mounted() {
         if (this.user) {
