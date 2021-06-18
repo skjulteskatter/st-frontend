@@ -3,6 +3,10 @@ import auth from "./auth";
 import { notify } from "./notify";
 
 class Http {
+    public async getCountry() {
+        return JSON.parse((await (await fetch("https://ipinfo.io/json?token=c459017d0e37e2")).text())).country;
+    }
+
     public validateResponse(response: Response): Promise<Response> {
         return new Promise((resolve, reject) => {
             if (response.status >= 200 && response.status < 300) {

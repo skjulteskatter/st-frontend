@@ -22,7 +22,7 @@
                         theme="secondary"
                         icon="buy"
                         :disabled="inCart"
-                        v-if="!collections[0].available"
+                        v-if="!collections[0].owned"
                         @click="addToCart()"
                     >
                         {{ $t("store.addToCart") }}

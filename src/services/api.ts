@@ -254,11 +254,14 @@ export const stripe = {
     setup() {
         return http.get<SetupResponse>("api/Store/Setup");
     },
-    startSession(productIds: string[]) {
-        return http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
+    async startSession(productIds: string[]) {
+        const country = await http.getCountry();
+
+        return await http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productIds,
             cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
+            country,
         });
     },
     getSession(sessionId: string) {
