@@ -235,7 +235,7 @@ interface Price {
     id: string;
     value: string;
     name: string;
-    type: string;
+    type: "month" | "year";
 }
 
 interface Result<T> {

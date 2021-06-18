@@ -11,12 +11,7 @@
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
-                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    {{
-                        formatPrices(product.prices, "year") ||
-                        formatPrices(product.prices, "month")
-                    }}
-                </p>
+                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400" v-html="product.priceDiv(country)"> </p>
                 <div class="mb-4">
                     <base-button
                         theme="secondary"
@@ -45,6 +40,7 @@ import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
+import http from "@/services/http";
 // import { notify } from "@/services/notify";
 
 @Options({
@@ -68,6 +64,12 @@ export default class StoreItem extends Vue {
     //     this.loading = false;
     // }
 
+    public country = "";
+
+    public async mounted() {
+        this.country = await http.getCountry();
+    }
+
     public addToCart() {
         if (this.product)
             this.store.commit(
@@ -78,6 +80,27 @@ export default class StoreItem extends Vue {
         // notify("success", "shop",this.$t("store.addedToCart"));
     }
 
+    public get discounted() {
+        return this.product?.discounted(this.country) === true;
+    }
+
+    public get price() {
+        return this.product?.price?.value;
+    }
+
+    public get currency() {
+        return this.price?.split(" ")[0];
+    }
+
+    public get amount(): number | null {
+        const n = this.product?.price?.value.split(" ")[1];
+        return n ? parseInt(n) / 100 : null;
+    }
+
+    public get type() {
+        return "year";
+    }
+
     public formatPrices(prices: Price[], type: string) {
         const unformattedPrice = prices.find((price) => price.type == type)
             ?.value;
@@ -85,6 +108,7 @@ export default class StoreItem extends Vue {
             0,
             unformattedPrice.length - 2
         );
+
         return `${formattedPrice} /${type}`;
     }
 

@@ -20,7 +20,7 @@
                     class="p-2 bg-gray-200 rounded flex justify-between gap-4"
                 >
                     {{ i.getName(languageKey) }}
-                    <small class="text-gray-500">{{ formatPrices(i.prices, "year") }}</small>
+                    <small class="text-gray-500" v-html="i.priceDiv(country)"></small>
                 </div>
             </div>
             <p v-else class="p-2 text-center mb-4 text-gray-400">
@@ -33,6 +33,7 @@
     </base-dropdown>
 </template>
 <script lang="ts">
+import http from "@/services/http";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
@@ -44,6 +45,11 @@ import { Options, Vue } from "vue-class-component";
 export default class StoreCart extends Vue {
     private store = useStore();
     public checkingOut = false;
+    public country = "";
+
+    public async mounted() {
+        this.country = await http.getCountry();
+    }
 
     public formatPrices(prices: Price[], type: string) {
         const unformattedPrice = prices.find((price) => price.type == type)
