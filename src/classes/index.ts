@@ -5,5 +5,6 @@ export * from "./contributor";
 export * from "./themes";
 export * from "./collectionItem";
 export * from "./transposer";
+export * from "./base64";
 export { Participant } from "./participant";
 export { Product } from "./product";

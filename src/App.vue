@@ -23,7 +23,7 @@ export default class App extends Vue {
     public store = useStore();
 
     public mounted() {
-        if (window.location.pathname.startsWith("/store/") || window.location.pathname.startsWith("/collections/")) {
+        if (!window.location.pathname.startsWith("/login")) {
             this.store.commit(
                 SessionMutationTypes.REDIRECT,
                 window.location.pathname,

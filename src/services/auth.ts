@@ -109,6 +109,23 @@ class Auth {
         });
     }
 
+    public async loginWithToken(token: string) {
+        if (!a) {
+            notInitialized();
+        }
+
+        await a().setPersistence(a.Auth.Persistence.LOCAL);
+
+        const result = await a()
+            .signInWithCustomToken(token);
+        
+        const user = result.user;
+
+        if (user) {
+            await loginUser(this, user);
+        }
+    }
+
     public async login(providerName: string) {
         if (!a) {
             notInitialized();
@@ -312,6 +329,13 @@ a().onAuthStateChanged(async s => {
     if (s) {
         await useStore().dispatch(SessionActionTypes.SESSION_START);
     }
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("authToken");
+
+    if (token) {
+        await auth.loginWithToken(token);
+    }
+
     useStore().commit(SessionMutationTypes.INITIALIZED);
 });
 
