@@ -255,7 +255,9 @@ export const stripe = {
         return http.get<SetupResponse>("api/Store/Setup");
     },
     async startSession(productIds: string[]) {
-        const country = await http.getCountry();
+        const country = await http.getCountry().catch(() => {
+            return undefined;
+        });
 
         return await http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productIds,

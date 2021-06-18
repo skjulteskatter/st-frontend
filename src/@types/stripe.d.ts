@@ -4,7 +4,7 @@ declare module "checkout" {
         productIds: string[];
         successUrl: string;
         cancelUrl: string;
-        country: string;
+        country?: string;
     }
 
     interface SessionResponse {

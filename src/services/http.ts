@@ -3,7 +3,7 @@ import auth from "./auth";
 import { notify } from "./notify";
 
 class Http {
-    public async getCountry() {
+    public async getCountry(): Promise<string> {
         return JSON.parse((await (await fetch("https://ipinfo.io/json?token=c459017d0e37e2")).text())).country;
     }
 
