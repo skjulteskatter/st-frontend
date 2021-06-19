@@ -1,9 +1,7 @@
 <template>
-	<modal
-		theme="secondary"
-		:label="$t('playlist.createnew')"
-		icon="playlist"
+	<base-modal
 		ref="create-playlist-modal"
+		:show="show"
 	>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 			<base-input
@@ -16,28 +14,36 @@
 				{{ $t("playlist.createnew") }}
 			</base-button>
 		</form>
-	</modal>
+	</base-modal>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "vuex";
-import { Modal, BaseButton } from "@/components";
+import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 
 @Options({
 	name: "create-playlist-modal",
+	props: {
+		show: {
+			type: Boolean,
+			default: false,
+		},
+	},
 	components: {
-		Modal,
+		BaseModal,
 		BaseButton,
 		BaseInput,
 	},
 })
 export default class CreatePlaylistModal extends Vue {
 	private store = useStore();
-    public playlistName = "";
+	public show?: boolean;
+    
+	public playlistName = "";
 	public loading = false;
 	public disabled = false;
 
@@ -52,7 +58,8 @@ export default class CreatePlaylistModal extends Vue {
         this.playlistName = "";
 		this.loading = false;
 		// this.disabled = true;
-		(this.$refs["create-playlist-modal"] as Modal).closeModal();
+		// (this.$refs["create-playlist-modal"] as Modal).closeModal();
+		this.$emit("close");
     }
 }
 </script>
