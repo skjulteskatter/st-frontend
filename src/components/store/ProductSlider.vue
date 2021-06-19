@@ -1,5 +1,5 @@
 <template>
-    <div class="product-slider">
+    <div class="gap-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         <product-card
             v-for="product in Products"
             :key="product.id"
@@ -33,13 +33,3 @@ export default class ProductSlider extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "../../style/mixins";
-
-.product-slider {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: var(--st-spacing);
-}
-</style>
