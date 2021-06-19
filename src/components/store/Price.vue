@@ -1,6 +1,9 @@
 <template>
     <div v-if="product">
-        {{ product.currency?.toUpperCase() }} <span v-if="discounted" class="line-through text-red-200">{{product.originalPrice}}</span><span v-if="discounted" class="ml-1">{{product.discountedPrice}}</span><span v-else>{{product.originalPrice}}</span> / year
+        {{ product.currency?.toUpperCase() }} 
+        <span v-if="discounted" class="line-through text-gray-400">{{product.originalPrice}}</span>
+        <span v-if="discounted" class="ml-1">{{product.discountedPrice}}</span>
+        <span v-else>{{product.originalPrice}}</span> / year
     </div>
 </template>
 <script lang="ts">

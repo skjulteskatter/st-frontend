@@ -17,7 +17,7 @@
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
-                    class="p-2 bg-gray-200 rounded flex justify-between gap-4"
+                    class="p-2 bg-black bg-opacity-10 rounded flex justify-between gap-4"
                 >
                     {{ i.getName(languageKey) }}
                     <small class="text-gray-500"><price-div :product="i" :country="country"></price-div></small>
