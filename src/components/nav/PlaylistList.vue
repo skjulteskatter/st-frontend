@@ -21,10 +21,14 @@
                 </router-link>
             </li>
         </ul>
-        <div class="p-4 bg-gray-100 rounded flex flex-col gap-2 justify-center items-center" v-else>
-            <small class="text-gray-500">{{ $t("playlist.noplaylists") }}</small>
-            <create-playlist-modal />
-        </div>
+        <button
+            v-if="playlists.length < 5"
+            class="w-full p-2 bg-black bg-opacity-10 rounded flex gap-2 justify-center items-center mt-2 hover:bg-opacity-20"
+            @click="openCreatePlaylist"
+        >
+            {{ $t("playlist.createnew") }}
+        </button>
+        <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
     </div>
 </template>
 
@@ -44,6 +48,15 @@ import { CreatePlaylistModal } from "@/components/playlist";
 })
 export default class CollectionList extends Vue {
     private store = useStore();
+    public createPlaylist = false;
+
+    public openCreatePlaylist() {
+        this.createPlaylist = true;
+    }
+
+    public closeCreatePlaylist() {
+        this.createPlaylist = false;
+    }
 
     public get collections(): Collection[] {
         return appSession.collections;
