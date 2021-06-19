@@ -4,7 +4,11 @@
             <h3 class="font-bold">
                 {{ $t("common.playlists") }}
             </h3>
-            <create-playlist-modal />
+            <button class="text-sm p-2 rounded bg-black bg-opacity-10 flex gap-2 items-center" @click="openCreatePlaylist">
+                <icon name="playlist" size="18" />
+                {{ $t('playlist.createnew') }}
+            </button>
+            <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
         </div>
         <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
@@ -25,7 +29,7 @@
                 </div>
             </router-link>
         </div>
-        <p class="p-4 bg-black bg-opacity-10 rounded text-center" v-else>
+        <p class="p-4 text-gray-500 text-center" v-else>
             {{ $t("playlist.noplaylists") }}
         </p>
     </base-card>
@@ -45,6 +49,16 @@ import { ApiPlaylist } from "dmb-api";
 })
 export default class Playlists extends Vue {
     private store = useStore();
+
+    public createPlaylist = false;
+
+    public openCreatePlaylist() {
+        this.createPlaylist = true;
+    }
+
+    public closeCreatePlaylist() {
+        this.createPlaylist = false;
+    }
 
     public playlistLink(playlist: ApiPlaylist) {
         return {

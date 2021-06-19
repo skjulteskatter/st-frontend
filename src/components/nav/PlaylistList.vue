@@ -23,7 +23,7 @@
         </ul>
         <button
             v-if="playlists.length < 5"
-            class="w-full p-2 bg-black bg-opacity-10 rounded flex flex-col gap-2 justify-center items-center mt-2 hover:bg-opacity-20"
+            class="w-full p-2 bg-black bg-opacity-10 rounded flex gap-2 justify-center items-center mt-2 hover:bg-opacity-20"
             @click="openCreatePlaylist"
         >
             {{ $t("playlist.createnew") }}
