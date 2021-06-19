@@ -59,6 +59,7 @@ import { cache } from "@/services/cache";
 import { Copyright } from "@/components";
 import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import TOSAccept from "@/components/TOSAccept.vue";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
     components: {
@@ -97,6 +98,11 @@ export default class DashboardLayout extends Vue {
         if (!this.user) {
             this.$router.push({ name: "login" });
         } else {
+            if (!this.store.getters.stripeInitialized) {
+                await this.store.dispatch(
+                    StripeActionTypes.SETUP,
+                );
+            }
             await appSession.init();
         }
     }

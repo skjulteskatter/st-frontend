@@ -160,13 +160,17 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public get product() {
-        return this.store.getters.products.find(p => p.collectionIds.includes(this.id));
+        return this.store.state.stripe.products.find(p => p.collectionIds.includes(this.id));
     }
 
     public get owned() {
         const prod = this.product;
 
         return prod && this.store.getters.user?.subscriptions.some(s => s.productIds.includes(prod.id));
+    }
+
+    public get inCart() {
+        return this.product ? this.store.state.stripe.cart.includes(this.product?.id) : false;
     }
 
     public addToCart() {

@@ -6,7 +6,7 @@
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <base-button theme="secondary" icon="buy" @click="collection?.addToCart" v-if="!collection.available">{{ $t('store.buy') }}</base-button>
+                <base-button theme="secondary" icon="buy" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.owned">{{ $t('store.buy') }}</base-button>
                 <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm md:ml-auto">
                     <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
                     <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
