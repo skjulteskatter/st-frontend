@@ -6,8 +6,8 @@ class Http {
     public async getCountry(): Promise<string> {
         let entry = localStorage.getItem("country");
 
-        if (!entry) {
-            entry = JSON.parse((await (await fetch("https://ipinfo.io/json?token=c459017d0e37e2")).text())).country as string;
+        if (!entry && entry?.length != 2) {
+            entry = await this.get<string>("api/Session/Country");
             localStorage.setItem("country", entry);
         }
 
