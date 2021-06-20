@@ -23,8 +23,11 @@
                         v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
                         :options="sheetMusicOptions"
                         :relativeKey="user.settings?.defaultTransposition"
+                        @startLoading="osmdLoading = true"
+                        @finishLoading="osmdLoading = false"
                     />
                     <div id="osmd-canvas" class="bg-white"></div>
+                    <loader :loading="osmdLoading" />
                 </div>
                 <div 
                     class="w-full h-full flex flex-col"
@@ -79,6 +82,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 })
 export default class DashboardLayout extends Vue {
     public store = useStore();
+    public osmdLoading = false;
 
     public get initialized() {
         return ref(appSession.initialized).value;

@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full dark:bg-secondary dark:border-none">
-            <loader :loading="osmdLoading" :position="'local'">
+            <loader :loading="osmdLoading || loading['transpose'] || loading['zoom']" :position="'local'">
                 <label class="flex flex-col">
                     <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
                     <base-dropdown
@@ -29,7 +29,7 @@
                                     {{ t.key }}
                                 </span>
                                 <span class="opacity-50" v-if="t.key != t.original">
-                                    {{ t.original }}
+                                    ({{ t.original }})
                                 </span>
                             </button>
                         </div>
@@ -90,8 +90,11 @@ export default class OSMD extends Vue {
     public playbackControl: any;
     public zoom = 1;
     public createdDone = false;
-    public loading: string[] = [];
     public options?: SheetMusicOptions;
+    
+    public loading: {
+        [key: string]: boolean;
+    } = {};
 
     public relativeTranspositions: {
         value: number;
@@ -130,28 +133,32 @@ export default class OSMD extends Vue {
         return this.osmd.loading;
     }
 
-    public transpose(n: number) {
-        this.osmd.loading = true;
+    public async transpose(n: number) {
+        this.loading["transpose"] = true;
         this.transposition = n;
 
         if (this.transposition == n) {
+            await new Promise(resolve => {
+                setTimeout(resolve, 10);
+            });
             this.osmd.transpose(n);
         }
-        
-        this.osmd.loading = false;
+        this.loading["transpose"] = false;
     }
 
-    public setZoom() {
-        this.osmd.loading = true;
+    public async setZoom() {
+        this.loading["zoom"] = true;
         const n = this.zoom;
 
-        // setTimeout(() => {
-            if (this.zoom == n) {
-                this.osmd.zoom = this.zoom;
-                this.osmd.rerender();
-            }
-        // }, 500);
-        this.osmd.loading = false;
+        if (this.zoom == n) {
+            await new Promise(resolve => {
+                setTimeout(resolve, 10);
+            });
+
+            this.osmd.zoom = this.zoom;
+            this.osmd.rerender();
+        }
+        this.loading["zoom"] = false;
     }
 }
 </script>
