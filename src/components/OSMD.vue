@@ -2,51 +2,57 @@
     <div class="flex">
         <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full dark:bg-secondary dark:border-none">
             <loader :loading="osmdLoading" :position="'local'">
-                <base-dropdown
-                    origin="left"
-                    :label="
-                        relativeTranspositions.find(
-                            (r) => r.value == transposition
-                        )?.view ?? 'Transpose'
-                    "
-                    class="flex flex-col"
-                >
-                    <div class="max-h-64 overflow-y-auto">
-                        <button
-                            :class="{
-                                'bg-primary text-white': transposition == t.value,
-                                'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
-                            }"
-                            class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                            v-for="t in relativeTranspositions"
-                            :key="t.key"
-                            :disabled="transposition == t.value"
-                            @click="transpose(t.value)"
-                        >
-                            <span class="font-semibold">
-                                {{ t.key }}
-                            </span>
-                            <span class="opacity-50">
-                                {{ t.original }}
-                            </span>
-                        </button>
-                    </div>
-                </base-dropdown>
-                <div class="flex flex-col max-w-xs w-full rounded p-2 border text-gray-500 border-gray-300 dark:border-gray-500 dark:text-gray-300">
-                    <small class="flex justify-between gap-4">
-                        <span>Zoom:</span>
-                        <span class="font-bold">{{ Math.floor(zoom * 100) }}%</span>
-                    </small>
-                    <input
-                        type="range"
+                <label class="flex flex-col">
+                    <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
+                    <base-dropdown
+                        origin="left"
+                        :label="
+                            relativeTranspositions.find(
+                                (r) => r.value == transposition
+                            )?.view ?? 'Transpose'
+                        "
+                        class="flex flex-col"
+                    >
+                        <div class="max-h-64 overflow-y-auto">
+                            <button
+                                :class="{
+                                    'bg-primary text-white': transposition == t.value,
+                                    'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
+                                }"
+                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                v-for="t in relativeTranspositions"
+                                :key="t.key"
+                                :disabled="transposition == t.value"
+                                @click="transpose(t.value)"
+                            >
+                                <span class="font-semibold">
+                                    {{ t.key }}
+                                </span>
+                                <span class="opacity-50" v-if="t.key != t.original">
+                                    {{ t.original }}
+                                </span>
+                            </button>
+                        </div>
+                    </base-dropdown>
+                </label>
+                <label class="flex flex-col">
+                    <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
+                    <select
+                        class="p-2 rounded border-gray-300"
+                        name="zoom"
+                        id="zoom"
                         v-model="zoom"
                         @change="setZoom"
-                        min="0.4"
-                        max="1.4"
-                        step="0.1"
-                        class="w-full"
-                    />
-                </div>
+                    >
+                        <option
+                            v-for="i in 10"
+                            :key="`zoom-${i+4}`"
+                            :value="(i+4)/10"
+                        >
+                            {{ (i+4)*10 }}%
+                        </option>
+                    </select>
+                </label>
                 <base-button 
                     v-if="$route.name == 'song'"
                     theme="error"
