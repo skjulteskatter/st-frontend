@@ -50,7 +50,7 @@ export default class Loader extends Vue {
     z-index: 9;
 
     &:before {
-        --size: 50px;
+        --size: 40px;
         content: "";
         width: var(--size);
         height: var(--size);
