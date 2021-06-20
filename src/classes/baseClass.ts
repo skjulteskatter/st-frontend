@@ -1,7 +1,11 @@
+import { useStore } from "@/store";
+
 export class BaseClass {
+    protected store = useStore();
     public name: LocaleString = {};
     
-    public getName(language: string) {
+    public getName(language?: string) {
+        language ??= this.store.getters.languageKey;
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.[0]];
     }
 

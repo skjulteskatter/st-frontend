@@ -4,7 +4,6 @@ import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
-import { useStore } from "@/store";
 import { CollectionItem } from "./collectionItem";
 import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
@@ -18,8 +17,6 @@ type CollectionSettings = {
 
 export class Collection extends BaseClass implements ApiCollection {
     public id;
-
-    private store = useStore();
     private _key;
     public keys: LocaleString;
     public defaultType;

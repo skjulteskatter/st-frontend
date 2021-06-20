@@ -35,9 +35,10 @@
                     </div>
                     <object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
                 </div>
-                <audio-player></audio-player>
+                <audio-player />
             </main>
-            <privacy-policy-accept></privacy-policy-accept>
+            <privacy-policy-accept />
+            <added-to-cart />
             <tos></tos>
         </div>
     </div>
@@ -58,6 +59,7 @@ import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
 import { Copyright } from "@/components";
 import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
+import AddedToCart from "@/components/store/AddedToCart.vue";
 import TOSAccept from "@/components/TOSAccept.vue";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
@@ -71,6 +73,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         PrivacyPolicyAccept,
         tos: TOSAccept,
         Copyright,
+        AddedToCart,
     },
     name: "dashboard-layout",
 })
