@@ -1,11 +1,18 @@
 <template>
     <base-modal :show="Show" @close="cancel = true">
-        <h1 class="text-lg">{{$t('store.addedToCart')}}</h1>
-        <div v-for="p in Products" :key="p.id">
-            {{p.getName()}}
+        <div class="flex flex-col gap-4">
+            <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
+            <div class="flex flex-col gap-2">
+                <div v-for="p in Products" :key="p.id" class="p-2 rounded bg-black bg-opacity-10 flex justify-between items-center gap-4">
+                    <span>{{ p.getName() }}</span>
+                    <span class="opacity-50 text-sm">{{ p.priceDiv(languageKey) }}</span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
+                <base-button theme="secondary" icon="buy" @click="checkout" :loading="checkingOut">{{$t('store.checkout')}}</base-button>
+            </div>
         </div>
-        <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
-        <base-button theme="success" @click="checkout" :loading="checkingOut">{{$t('store.checkout')}}</base-button>
     </base-modal>
 </template>
 <script lang="ts">
@@ -37,6 +44,10 @@ export default class AddedToCart extends Vue {
 
     public get Products() {
         return this.store.getters.cartItems;
+    }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
     }
 }
 </script>
