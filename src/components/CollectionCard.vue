@@ -45,7 +45,7 @@ export default class CollectionCard extends Vue {
     }
 
     public get name() {
-        return this.collection?.getName(this.languageKey);
+        return this.collection?.getName();
     }
 
     public get image() {
@@ -54,10 +54,6 @@ export default class CollectionCard extends Vue {
 
     public get selected() {
         return this.store.getters.collection ?? {};
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
     }
 }
 </script>

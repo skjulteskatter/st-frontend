@@ -173,12 +173,12 @@ export default class LyricsCard extends Vue {
 
         const fallbackLanguage = this.languages.find(l => l.key == "en")?.key ?? this.languages[0]?.key;
 
-        this.selectedLanguage =
-            (this.languages.find((l) => l.key == this.languageKey)
-                ? this.languageKey
-                : fallbackLanguage) ?? this.languageKey;
 
         if (this.song) {
+            this.selectedLanguage = (Object.keys(this.song.name).includes(this.languageKey)
+                    ? this.languageKey
+                    : fallbackLanguage) 
+                ?? this.languageKey;
             try {
                 this.relativeTranspositions = transposer.getRelativeTranspositions(
                     this.song.originalKey,

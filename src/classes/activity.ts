@@ -13,8 +13,8 @@ export class Activity {
         this.activity = activity;
     }
 
-    public getName(language: string) {
-        return this.activity.item ? (this.activity.type == "song" ? new Song(this.activity.item).getName(language) : this.activity.item.name) : undefined;
+    public get name() {
+        return this.activity.item ? (this.activity.type == "song" ? new Song(this.activity.item).getName() : this.activity.item.name) : undefined;
     }
 
     public getRouterLink(collections: Collection[]): RouteLocationRaw {
@@ -36,8 +36,8 @@ export class Activity {
         return this.type == "song" ? collections.find(c => this.collectionIds.some(col => col == c.id))?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
     }
 
-    public timeSince(languageKey: string) {
-        const rtfl = new Intl.RelativeTimeFormat(languageKey, {
+    public timeSince() {
+        const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
             localeMatcher: "best fit",
             numeric: "auto",
             style: "long",

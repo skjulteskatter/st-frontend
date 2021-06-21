@@ -21,11 +21,11 @@
                     <span class="flex flex-col justify-center flex-1">
                         <small class="text-gray-400">{{ $t(`song.${a.type}`) }}</small>
                         <strong>
-                            {{ a.getName(languageKey) }}
+                            {{ a.name }}
                         </strong>
                     </span>
                     <small class="opacity-50 absolute top-2 right-2">
-                        {{ a.timeSince(languageKey) }}
+                        {{ a.timeSince() }}
                     </small>
                 </router-link>
             </div>
@@ -46,10 +46,6 @@ import { appSession } from "@/services/session";
 })
 export default class ActivityFeed extends Vue {
     private store = useStore();
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
 
     public get collections() {
         return appSession.collections;

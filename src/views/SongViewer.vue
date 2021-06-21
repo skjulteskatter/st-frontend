@@ -4,13 +4,13 @@
             <div class="flex justify-between">
                 <back-button class="flex md:hidden mb-4" />
                 <div class="flex gap-2 items-center ml-auto">
-                    <span v-if="admin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded">{{ song.id }}</span>
+                    <span v-if="admin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded hidden xl:block">{{ song.id }}</span>
                     <base-button
                         v-if="admin"
                         @click="goToEditPage()"
                         theme="tertiary"
                         icon="pencil"
-                        class="mr-4"
+                        class="mr-4 hidden xl:block"
                     >Edit</base-button>
                     <modal
                         class="playlist-adder"
@@ -159,7 +159,7 @@ export default class SongViewer extends Vue {
                 await this.collection?.transposeLyrics(
                     this.song.collections.find(s => s.id == this.collection?.id)?.number ?? 0, 
                     this.store.state.songs.transposition ?? 0,
-                    this.languageKey,
+                    this.selectedLanguage,
                 );
                 // console.log(l);
             }
@@ -243,7 +243,7 @@ export default class SongViewer extends Vue {
             });
             this.componentLoading[playlist.id] = false;
 
-            notify("success", "Added to playlist",  "check", `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`);
+            notify("success", "Added to playlist",  "check", `Added "${song.getName()}" to playlist ${playlist.name}`);
         }
     }
 
