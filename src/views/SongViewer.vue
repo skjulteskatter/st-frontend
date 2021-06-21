@@ -243,7 +243,7 @@ export default class SongViewer extends Vue {
             });
             this.componentLoading[playlist.id] = false;
 
-            notify("success", "Added to playlist",  "check", `Added "${song.getName()}" to playlist ${playlist.name}`);
+            notify("success", "Added to playlist",  "check", `Added "${song.getName()}" to playlist ${playlist.name}`, undefined, undefined, false);
         }
     }
 

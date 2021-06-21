@@ -98,7 +98,7 @@ export default class DashboardLayout extends Vue {
         const route = this.$route.name;
         setTimeout(() => {
             if (this.initialized == false && this.$route.name == route) {
-                notify("error", "Something is wrong", "exclamation", "Click here to reload", 30000, () => cache.clearCache());
+                notify("error", "Something is wrong", "exclamation", "Click here to reload", 30000, () => cache.clearCache(), false);
             }
         }, 5000);
 
