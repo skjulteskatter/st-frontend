@@ -26,7 +26,7 @@ export default class AddedToCart extends Vue {
     public checkingOut = false;
 
     public get Show() {
-        return this.store.state.stripe.cart.length == 1 && !this.cancel;
+        return this.store.state.stripe.cart.length == 1 && !this.cancel && this.store.getters.user?.termsAndConditions == true;
     }
     
     public async checkout() {
