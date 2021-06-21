@@ -1,6 +1,6 @@
-import { Collection, Song } from "@/classes";
+import { Collection, CollectionItem, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
-import { ApiSong, MediaFile, ShareKey } from "dmb-api";
+import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
 import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -10,6 +10,7 @@ export class Session {
     public songs: Song[] = [];
     public collections: Collection[] = [];
     public files: MediaFile[] = [];
+    public contributors: CollectionItem<ApiContributor>[] = [];
 
     public themes: Theme[] = [];
     public tags: Tag[] = [];
@@ -56,6 +57,15 @@ export class Session {
                     return a;
                 }, {} as {
                     [id: string]: MediaFile;
+                }));
+
+                const c = await songs.getContributors();
+
+                await cache.replaceEntries("contributors", c.result.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: ApiCollectionItem<ApiContributor>;
                 }));
             }
         }
@@ -112,6 +122,32 @@ export class Session {
             }
             
             this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
+
+            try {
+                const key = "last_updated_contributors";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                const now = new Date();
+
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateItems = await songs.getContributors(lastUpdated);
+
+                    await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiCollectionItem<ApiContributor>;
+                    }));
+
+                    await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
+                }
+            }
+            catch(e) {
+                notify("error", "Error occured", "warning", e);
+                this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
+            }
+
+            this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
         }
 
         items.getCountries().then(c => {

@@ -1,7 +1,7 @@
 import { Collection } from "@/classes";
-import { getContributors } from "@/functions/helpers";
 import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
+import { appSession } from "@/services/session";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
 import { RootState } from "../..";
@@ -67,14 +67,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
             }
         }
     },
-    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit, getters }, contributorId: string): Promise<void> {
+    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit }, contributorId: string): Promise<void> {
         // const collection = getters.collection as Collection | undefined;
         // if (!collection) {
         //     return;
         // }
         commit(SongsMutationTypes.CONTRIBUTOR, undefined);
 
-        const contributor = getters.collection?.settings.offline ? (await getContributors(true)).find(c => c.id == contributorId) : await songs.getContributor(contributorId);
+        const contributor = appSession.contributors.find(c => c.id == contributorId) ?? await songs.getContributor(contributorId);
         if (contributor) {
             logs.event("contributor", {
                 "contributor_id": contributor.id,

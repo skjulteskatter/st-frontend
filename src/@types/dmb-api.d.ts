@@ -4,13 +4,13 @@ declare module "dmb-api" {
         id?: string;
         type: "contributor";
         itemId: string;
-        item?: ApiContributor;
+        // item?: ApiContributor;
         loggedDate: string;
     } | {
         id?: string;
         type: "song";
         itemId: string;
-        item?: ApiSong;
+        // item?: ApiSong;
         loggedDate: string;
     }
 

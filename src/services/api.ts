@@ -7,7 +7,7 @@ import http from "./http";
 
 export const activity = {
     async getActivities() {
-        return await http.get<ApiActivity[]>("api/Activity?expand=item&limit=20");
+        return await http.get<ApiActivity[]>("api/Activity?limit=20");
     },
     async pushActivities(activities: ApiActivity[]) {
         return await http.post<ApiActivity[]>("api/Activity", activities.map(a => {
@@ -132,8 +132,8 @@ export const songs = {
     async getContributor(id: string) {
         return new CollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
     },
-    getAllContributors(lastUpdated?: string) {
-        return http.get<ApiCollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
+    getContributors(lastUpdated?: string) {
+        return http.getWithResult<ApiCollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
     },
     getAllThemes(collection: ApiCollection) {
         return http.get<ApiCollectionItem<Theme>[]>(`api/Themes/${collection.id}`); //).map(ci => new ThemeCollectionItem(ci));

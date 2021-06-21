@@ -1,3 +1,4 @@
+import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { ApiActivity } from "dmb-api";
 import { RouteLocationRaw } from "vue-router";
@@ -13,8 +14,22 @@ export class Activity {
         this.activity = activity;
     }
 
+    public get item() {
+        if (this.activity.type == "song") {
+            return appSession.songs.find(i => i.id == this.activity.itemId);
+        } else {
+            return appSession.contributors.find(i => i.id == this.activity.itemId)?.item;
+        }
+    }
+
     public get name() {
-        return this.activity.item ? (this.activity.type == "song" ? new Song(this.activity.item).getName() : this.activity.item.name) : undefined;
+        const name = this.item?.name;
+        if (!name) return null;
+        if (typeof(name) == "string") {
+            return name;
+        } else {
+            return name[this.store.getters.languageKey] ?? name.en ?? Object.values(name)[0];
+        }
     }
 
     public getRouterLink(collections: Collection[]): RouteLocationRaw {
@@ -22,7 +37,7 @@ export class Activity {
             name: "song",
             params: {
                 collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "",
-                number: this.activity.item?.collections[0].number ?? "",
+                number: (this.item as Song | undefined)?.collections[0].number ?? "",
             },
         } : {
             name: "contributor",
@@ -33,7 +48,7 @@ export class Activity {
     }
 
     public getImage(collections: Collection[]): string | undefined {
-        return this.type == "song" ? collections.find(c => this.collectionIds.some(col => col == c.id))?.image : this.activity.item?.image ?? "/img/portrait-placeholder.png";
+        return this.type == "song" ? collections.find(c => this.collectionIds.some(col => col == c.id))?.image : this.item?.image ?? "/img/portrait-placeholder.png";
     }
 
     public timeSince() {
@@ -71,7 +86,7 @@ export class Activity {
     }
 
     public get collectionIds(): string[] {
-        return this.activity.type == "song" ? this.activity.item?.collections.map(c => c.id) ?? [] : [];
+        return this.activity.type == "song" ? (this.item as Song | undefined)?.collections.map(c => c.id) ?? [] : [];
     }
 
     public get type() {

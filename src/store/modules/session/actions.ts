@@ -235,7 +235,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             loggedDate: new Date().toISOString(),
             type: "song",
             itemId: item.id,
-            item: item,
         };
 
         items.push(i);
@@ -265,7 +264,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             loggedDate: new Date().toISOString(),
             type: "contributor",
             itemId: item.id,
-            item: item,
         };
 
         items.push(i);

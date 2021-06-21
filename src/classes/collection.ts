@@ -5,7 +5,6 @@ import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 import { CollectionItem } from "./collectionItem";
-import { getContributors } from "@/functions/helpers";
 import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
@@ -35,7 +34,6 @@ export class Collection extends BaseClass implements ApiCollection {
     private _initialized = false;
     private _loading = false;
 
-    public contributors?: CollectionItem<ApiContributor>[];
     public songs: Song[] = [];
     public lyrics: Lyrics[] = [];
     
@@ -62,6 +60,8 @@ export class Collection extends BaseClass implements ApiCollection {
     private _loadingCountries = false;
 
     private _currentLanguage = "";
+
+    public contributors: CollectionItem<ApiContributor>[] = [];
 
     constructor(collection: ApiCollection) {
         super();
@@ -112,6 +112,8 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
             this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
+
+            this.contributors = appSession.contributors.filter(i => this.songs.some(s => i.songIds.includes(s.id) || s.files.some(f => i.fileIds.includes(f.id))));
         }
     }
     
@@ -148,10 +150,6 @@ export class Collection extends BaseClass implements ApiCollection {
         }
 
         this._loading = false;
-    }
-
-    private async loadContributors() {
-        this.contributors = (await getContributors(this.settings?.offline == true)).filter(c => this.songs.some(s => s.participants.some(p => p.contributorId == c.id)));
     }
 
     public get loading() {
@@ -280,25 +278,21 @@ export class Collection extends BaseClass implements ApiCollection {
     public async getList(value: string) {
         if (value == "authors") {
             if (!this._authors) {
-                if (!this.contributors)
-                    await this.loadContributors();
-                    this._authors = this.contributors?.map(c => {
-                        const cItem: CollectionItem<ApiContributor> = {
-                            songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
-                            id: c.id,
-                            fileIds: c.fileIds,
-                            item: c.item,
-                        };
-                        return cItem;
-                    }) ?? [];   
+                this._authors = appSession.contributors.map(c => {
+                    const cItem: CollectionItem<ApiContributor> = {
+                        songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
+                        id: c.id,
+                        fileIds: c.fileIds,
+                        item: c.item,
+                    };
+                    return cItem;
+                }).filter(i => i.songIds.length || i.fileIds.length) ?? [];   
                 return this._authors.length;
             }
         }
         if (value == "composers") {
             if (!this._composers) {
-                if (!this.contributors)
-                    await this.loadContributors();
-                this._composers = this.contributors?.map(c => {
+                this._composers = appSession.contributors.map(c => {
                     const cItem: CollectionItem<ApiContributor> = {
                         songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
                         id: c.id,
@@ -306,7 +300,7 @@ export class Collection extends BaseClass implements ApiCollection {
                         item: c.item,
                     };
                     return cItem;
-                }) ?? [];   
+                }).filter(i => i.songIds.length || i.fileIds.length) ?? [];   
                 return this._composers.length;
             }
         }
