@@ -244,7 +244,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
             await api.activity.pushActivities(items);
             localStorage.setItem("activities", "[]");
         } else {
-            localStorage.setItem("activities", JSON.stringify(items));
+            try {
+                localStorage.setItem("activities", JSON.stringify(items));
+            }
+            catch {
+                // Err
+            }
         }
 
         commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);

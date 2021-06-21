@@ -1,5 +1,5 @@
 <template>
-    <search-input v-model="query" @search="searchAll"></search-input>
+    <search-input v-model="query" @search="searchAll" :disabled="$route.name == 'search'"></search-input>
 </template>
 
 <script lang="ts">

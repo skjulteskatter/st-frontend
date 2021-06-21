@@ -47,11 +47,14 @@ export default class NavLinks extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "../../style/mixins";
+
 .router-link-exact-active {
-    background-color: rgb(243, 244, 246);
-}
-.dark .router-link-exact-active {
-    background-color: rgba(white, .1);
+    border-left: 5px solid var(--st-color-primary);
+    @include breakpoint("small") {
+        border-left: none;
+        border-top: 5px solid var(--st-color-primary);
+    }
 }
 </style>
