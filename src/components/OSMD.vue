@@ -38,7 +38,7 @@
                 <label class="flex flex-col">
                     <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
                     <select
-                        class="p-2 rounded border-gray-300"
+                        class="p-2 rounded border-gray-300 pr-8"
                         name="zoom"
                         id="zoom"
                         v-model="zoom"
