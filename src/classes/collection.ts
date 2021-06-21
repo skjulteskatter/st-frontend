@@ -15,6 +15,8 @@ type CollectionSettings = {
     lastSynced?: string;
 }
 
+let closeId: string | null = null;
+
 export class Collection extends BaseClass implements ApiCollection {
     public id;
     private _key;
@@ -173,6 +175,18 @@ export class Collection extends BaseClass implements ApiCollection {
     public addToCart() {
         const prod = this.product;
         this.store.commit(StripeMutationTypes.CART_ADD_PRODUCT, prod?.id);
+
+        if (this.store.state.stripe.cart.length > 1) {
+            this.store.commit(StripeMutationTypes.CART_SHOW, true);
+            closeId = this.id;
+
+            setTimeout(() => {
+                if (closeId != null && closeId == this.id) {
+                    this.store.commit(StripeMutationTypes.CART_SHOW, false);
+                    closeId = null;
+                }
+            }, 3000);
+        }
     }
 
     public getDetails(language: string){

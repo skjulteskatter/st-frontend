@@ -50,7 +50,6 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 import CollectionSettings from "../CollectionSettings.vue";
-import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
 // import { notify } from "@/services/notify";
 
@@ -70,12 +69,7 @@ export default class ProductCard extends Vue {
     public store = useStore();
     
     public addToCart() {
-        if (this.product)
-            this.store.commit(
-                StripeMutationTypes.CART_ADD_PRODUCT,
-                this.product.id,
-            );
-
+        this.collection?.addToCart();
         // notify("success", this.$t("store.addedToCart"), "buy");
     }
 

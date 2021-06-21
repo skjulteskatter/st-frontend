@@ -1,12 +1,12 @@
 <template>
-    <base-dropdown origin="right" class="text-sm" icon="buy">
+    <base-dropdown origin="right" class="text-sm" icon="buy" :show="show">
         <template #button>
             <icon name="buy" class="relative" />
             <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
 				{{ cartItems.length }}
 			</span>
         </template>
-        <div class="w-max">
+        <div class="w-max" @mouseenter="mouseOn = true" @mouseleave="mouseOn = false">
             <div class="flex gap-4 justify-between items-center mb-4">
                 <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
                 <button @click="clearCart" class="text-red-700 cursor-pointer hover:underline" v-if="cartItems.length">
@@ -50,6 +50,7 @@ export default class StoreCart extends Vue {
     private store = useStore();
     public checkingOut = false;
     public country = "";
+    public mouseOn = false;
 
     public async mounted() {
         this.country = await http.getCountry();
@@ -77,6 +78,10 @@ export default class StoreCart extends Vue {
         this.checkingOut = true;
         await this.store.dispatch(StripeActionTypes.START_SESSION);
         // this.checkingOut = false;
+    }
+
+    public get show() {
+        return this.store.state.stripe.showCart == true || this.mouseOn;
     }
 
     public clearCart() {
