@@ -58,8 +58,16 @@ export default class SongStatistics extends Vue {
 	private store = useStore();
 	public analytics?: AnalyticsItem = {} as AnalyticsItem;
 	public date = new Date();
-	public fromDate = "2021-06-01";
-	public toDate = "2021-06-05";
+	public fromDate = (() => {
+		const d = new Date();
+		d.setTime(this.date.getTime() - (1000*60*60*24*7));
+		return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+	})();
+	public toDate = (() => {
+		const d = new Date();
+		d.setTime(this.date.getTime() - (1000*60*60*24));
+		return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+	})();
 	public loading = false;
 	public mostViewed: {
 		[key: string]: number;
