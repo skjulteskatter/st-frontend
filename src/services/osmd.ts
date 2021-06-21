@@ -166,14 +166,33 @@ class OSMD {
         this.transposition = sheetMusic.transposition ?? 0;
 
         this.osmd.setLogLevel("debug");
+
+        this.osmd.setOptions({
+            onXMLRead: (e) => {
+
+                console.log(sheetMusic.clef);
+
+                if (sheetMusic.clef == "bass") {
+                    e = e
+                        .replace(/<sign>G<\/sign>/g, '<sign>F</sign>')
+                        .replace(/<line>2<\/line>/g, '<line>4</line>');
+                }
+                
+                if (sheetMusic.clef == "alto") {
+                    e = e
+                        .replace(/<sign>G<\/sign>/g, '<sign>C</sign>')
+                        .replace(/<line>2<\/line>/g, '<line>3</line>');
+                }
+
+                return e;
+            }
+        })
         
         await this.osmd.load(sheetMusic.url);
 
-        console.log(sheetMusic.url);
-
         this.osmd.TransposeCalculator = new TransposeCalculator();
 
-        this.osmd.Sheet.Transpose = this.transposition;
+        this.osmd.Sheet.Transpose = sheetMusic.clef == "bass" ? this.transposition - 12 : this.transposition;
 
         this.osmd.updateGraphic();
 
@@ -185,7 +204,7 @@ class OSMD {
         
         // this.osmd.cursor.reset();
 
-        (window as any).osmd = this.osmd;
+        // (window as any).osmd = this.osmd;
 
         // await this.loadPlaybackManager();
         this.canvas.style.opacity = "1";

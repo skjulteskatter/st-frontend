@@ -115,6 +115,7 @@ export default class SheetMusic extends Vue {
                 type: file.type,
                 transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
                 zoom: this.zoom,
+                clef: "treble",
             };
             this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
         }
@@ -210,6 +211,7 @@ export default class SheetMusic extends Vue {
             originalKey: this.originalKey,
             transposition: this.transposition,
             type: this.type ?? undefined,
+            clef: "treble",
         };
     }
 

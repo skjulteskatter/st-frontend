@@ -36,6 +36,53 @@
                     </base-dropdown>
                 </label>
                 <label class="flex flex-col">
+                    <span class="text-sm text-gray-500">{{ $t('song.clef') }}</span>
+                    <base-dropdown
+                        origin="left"
+                        :label="options?.clef"
+                        class="flex flex-col"
+                    >
+                        <div class="max-h-64 overflow-y-auto">
+                            <button
+                                :class="{
+                                    'bg-primary text-white': options?.clef == 'bass',
+                                }"
+                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                :disabled="options?.clef == 'bass'"
+                                @click="setClef('bass')"
+                            >
+                                <span class="font-semibold">
+                                    Bass
+                                </span>
+                            </button>
+                            <button
+                                :class="{
+                                    'bg-primary text-white': options?.clef == 'treble',
+                                }"
+                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                :disabled="options?.clef == 'treble'"
+                                @click="setClef('treble')"
+                            >
+                                <span class="font-semibold">
+                                    Treble
+                                </span>
+                            </button>
+                            <button
+                                :class="{
+                                    'bg-primary text-white': options?.clef == 'alto',
+                                }"
+                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                :disabled="options?.clef == 'alto'"
+                                @click="setClef('alto')"
+                            >
+                                <span class="font-semibold">
+                                    Alto
+                                </span>
+                            </button>
+                        </div>
+                    </base-dropdown>
+                </label>
+                <label class="flex flex-col">
                     <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
                     <select
                         class="p-2 rounded border-gray-300 pr-8"
@@ -86,6 +133,7 @@ export default class OSMD extends Vue {
     public originalKey?: string;
     public transposition = 0;
     public relativeKey?: string;
+    public clefs: ("bass" | "treble" | "alto")[] = ["bass", "treble", "alto"];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public playbackControl: any;
     public zoom = 1;
@@ -104,7 +152,7 @@ export default class OSMD extends Vue {
     }[] = [];
 
     public async mounted() {
-        this.options ??= { show: false, originalKey: "C" };
+        this.options ??= { show: false, originalKey: "C", clef: "treble" };
         this.transposition = this.options.transposition ?? 0;
         this.zoom = this.osmd.zoom;
         const c = document.getElementById("osmd-canvas");
@@ -121,6 +169,14 @@ export default class OSMD extends Vue {
             await this.osmd.load(this.options);
         } catch (e) {
             //console.log(e);
+        }
+    }
+
+    public async setClef(c: "bass" | "treble" | "alto") {
+        if (this.options) {
+            this.options.clef = c;
+
+            await this.osmd.load(this.options);
         }
     }
 

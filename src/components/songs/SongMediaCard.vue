@@ -90,6 +90,7 @@ export default class SongMediaCard extends Vue {
             originalKey: this.song?.originalKey ?? "C",
             transposition: this.transposition,
             type: sheet?.type,
+            clef: "treble",
         };
 
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);

@@ -34,6 +34,7 @@ type SheetMusicOptions = {
     originalKey: string;
     transposition?: number;
     zoom?: number;
+    clef: "bass" | "treble" | "alto";
 }
 
 type AudioTrack = {
