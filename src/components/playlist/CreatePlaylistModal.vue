@@ -10,7 +10,7 @@
 				v-model="playlistName"
 				required
 			/>
-			<base-button :disabled="disabled" :loading="loading" theme="secondary" type="submit">
+			<base-button :loading="loading" theme="secondary" type="submit">
 				{{ $t("playlist.createnew") }}
 			</base-button>
 		</form>
@@ -45,7 +45,6 @@ export default class CreatePlaylistModal extends Vue {
     
 	public playlistName = "";
 	public loading = false;
-	public disabled = false;
 
     public async createPlaylist() {
 		this.loading = true;
@@ -57,8 +56,6 @@ export default class CreatePlaylistModal extends Vue {
 
         this.playlistName = "";
 		this.loading = false;
-		// this.disabled = true;
-		// (this.$refs["create-playlist-modal"] as Modal).closeModal();
 		this.$emit("close");
     }
 }
