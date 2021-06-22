@@ -64,7 +64,8 @@ export class Song extends BaseClass implements ApiSong {
     }
 
     public get tags() {
-        return this.tagIds.length ? appSession.Tags.filter(t => this.tagIds.includes(t.id)) : [];
+        const tags = this.tagIds.length ? appSession.Tags.filter(t => this.tagIds.includes(t.id)) : [];
+        return tags;
     }
 
     public get collectionIds() {

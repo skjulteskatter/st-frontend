@@ -76,6 +76,7 @@ export default class SongTags extends Vue {
 
         if (tag) {
             await tags.addToTag(tag.id, this.Song.id);
+
             this.Song.tagIds.push(tag.id);
         }
     }
@@ -84,9 +85,8 @@ export default class SongTags extends Vue {
         const tag = this.Song.tags.find(t => t.id == id);
 
         if (tag) {
-            const index = this.Song.tagIds.indexOf(tag.id);
             await tags.removeFromTag(tag.id, this.Song.id);
-            this.Song.tagIds.splice(index, 1);
+            this.Song.tagIds = this.Song.tagIds.filter(t => t != tag.id);
         }
     }
 
@@ -96,6 +96,7 @@ export default class SongTags extends Vue {
     }
 
     public get Song() {
+        // console.log(this.Tags);
         return this.song as Song;
     }
 
