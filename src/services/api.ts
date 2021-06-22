@@ -122,8 +122,8 @@ export const songs = {
     getFile(fileId: string) {
         return http.get<MediaFile>(`api/Files/${fileId}?expand=song`);
     },
-    async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string) {
-        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}`));
+    async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string, newMelody = false) {
+        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`));
     },
     async getAllLyrics(collection: ApiCollection, language: string, format: string, transpose: number, lastUpdated?: string) {
         const uri = `api/Lyrics/${collection.id}?language=${language}&format=${format}&transpose=${transpose}` + (lastUpdated ? `&updatedAt=${lastUpdated}` : "");

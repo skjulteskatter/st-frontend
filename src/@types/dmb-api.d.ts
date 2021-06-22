@@ -62,6 +62,7 @@ declare module "dmb-api" {
         verses: number;
         details?: LocaleString;
         newMelody: boolean;
+        newMelodies: string[];
     }
 
     interface ApiLyrics {
@@ -75,6 +76,7 @@ declare module "dmb-api" {
         hasChords: boolean;
         originalKey: string;
         transposedToKey: string;
+        secondaryChords: boolean;
         transpositions: {
             [key: string]: number;
         };

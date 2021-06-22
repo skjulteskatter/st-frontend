@@ -8,6 +8,7 @@ export type State = {
     song?: Song;
     songId?: string;
     transposition?: number;
+    newMelody: boolean;
     verses: Verse[];
     lines: string[];
     collections: Collection[];
@@ -28,6 +29,7 @@ export const state: State = {
     lines: [],
     initialized: false,
     list: "default",
+    newMelody: false,
     filter: {
         themes: [],
         videoFiles: [],

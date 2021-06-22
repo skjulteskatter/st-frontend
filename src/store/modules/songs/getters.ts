@@ -22,7 +22,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
                 if (l.format != format) 
                     continue;
                 if (transposition !== null) {
-                    if (l.transposition == transposition) {
+                    if (l.transposition == transposition && l.secondaryChords == state.newMelody) {
                         return l;
                     }
                 } else {
