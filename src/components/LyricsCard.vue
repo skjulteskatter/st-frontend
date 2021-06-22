@@ -41,9 +41,9 @@
                     :label="
                         relativeTranspositions.find(
                             (r) => r.value == selectedTransposition
-                        )?.view
+                        )?.view ?? 'Transpose'
                     "
-                    :class="{ 'hidden': type != 'transpose' }"
+                    :class="{ 'hidden': !ChordsEnabled }"
                 >
                     <div class="overflow-y-auto max-h-64">
                         <button
@@ -165,6 +165,7 @@ export default class LyricsCard extends Vue {
 
         if (this.type == "transpose") {
             if (this.song?.hasLyrics && this.song?.hasChords) {
+                this.chordsEnabled = true;
                 this.transposeView();
             } else {
                 this.store.commit(SongsMutationTypes.SET_VIEW, "default");
@@ -200,9 +201,15 @@ export default class LyricsCard extends Vue {
             ts.push(this.song.transpositions[k]);
         }
 
+        // console.log(t, ts);
+
+        // console.log(this.relativeTranspositions);
+
         if (ts.includes(t)) {
             return t;
         } else {
+            if (ts.includes(t - 12)) 
+                return t - 12;
             return t + 12;
         }
     }
