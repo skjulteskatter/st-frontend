@@ -19,6 +19,7 @@ export type Mutations<S = State> = {
 
     [SongsMutationTypes.SET_VERSES](state: S, payload: Verse[]): void;
     [SongsMutationTypes.SET_TRANSPOSITION](state: S, payload: number): void;
+    [SongsMutationTypes.SET_NEW_MELODY](state: S, payload: boolean): void;
     [SongsMutationTypes.SET_LINES](state: S, payload: string[]): void;
     [SongsMutationTypes.SET_SONG](state: S, payload: Song): void;
     [SongsMutationTypes.SET_FILTER](state: S, payload: SongFilter): void;
@@ -45,6 +46,9 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SongsMutationTypes.TRANSCODE](state, transcode) {
         state.transcode = transcode;
+    },
+    [SongsMutationTypes.SET_NEW_MELODY](state, payload) {
+        state.newMelody = payload;
     },
     [SongsMutationTypes.CONTRIBUTOR](state, contributor): void {
         state.contributorItem = contributor;

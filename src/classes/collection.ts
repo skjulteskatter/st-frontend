@@ -343,13 +343,13 @@ export class Collection extends BaseClass implements ApiCollection {
         return 1;
     }
 
-    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string): Promise<Lyrics> {
+    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string, newMelody = false): Promise<Lyrics> {
         this.loadingLyrics = true;
         try {
             const song = this.songs.find(s => s.getNumber(this.id) == number);
-            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose);
+            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose && l.secondaryChords == newMelody);
             if (!lyrics) {
-                lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common");
+                lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common", newMelody);
                 this.lyrics.push(lyrics);
             }
             if (song)

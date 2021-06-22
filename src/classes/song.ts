@@ -57,6 +57,7 @@ export class Song extends BaseClass implements ApiSong {
     public hasLyrics: boolean;
     public hasChords;
     public newMelody: boolean;
+    public newMelodies: string[];
 
     public get themes() {
         return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
@@ -123,6 +124,7 @@ export class Song extends BaseClass implements ApiSong {
 
         this.collections = song.collections;
         this.newMelody = song.newMelody;
+        this.newMelodies = song.newMelodies;
     }
 
     public language(code: string): boolean {
