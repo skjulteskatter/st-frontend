@@ -8,7 +8,8 @@
         >
             <icon :name="icon" size="14" class="text-gray-500 dark:text-gray-300" />
             <small>
-                {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}}
+                {{ file.name }}
+                <!-- {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}} -->
                 <!-- <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span> -->
             </small>
         </button>
