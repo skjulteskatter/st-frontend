@@ -33,6 +33,14 @@ export class Session {
         this._initialized = false;
         this.collections = (await songs.getCollections()).map(c => new Collection(c));
 
+        const lastCacheClear = await cache.get("config", "last_cache_clear") as number | undefined;
+
+        if (!lastCacheClear || lastCacheClear < (new Date().getTime() - 86400000)) {
+            await cache.clearCache();
+
+            await cache.set("config", "last_cache_clear", new Date().getTime());
+        }
+
         const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
 
         const previousCols = await cache.get("config", "owned_collections");
@@ -161,18 +169,16 @@ export class Session {
             this.copyrights = c;
         }).catch();
 
-        items.getTags().then(t => {
-            this.tags = t.map(i => new Tag(i, false));
-            tags.getAll().then(ts => {
-                for (const tag of ts) {
-                    for (const sId of tag.songIds) {
-                        const song = this.songs.find(s => s.id == sId);
-                        song?.tagIds.push(tag.id);
-                    }
-                }
-                this.tags = [...this.tags, ...ts.map(i => new Tag(i, true))];
-            });
-        }).catch();
+        const t = await items.getTags();
+        this.tags = t.map(i => new Tag(i, false));
+        const ts = await tags.getAll();
+        for (const tag of ts) {
+            for (const sId of tag.songIds) {
+                const song = this.songs.find(s => s.id == sId);
+                song?.tagIds.push(tag.id);
+            }
+        }
+        this.tags = [...this.tags, ...ts.map(i => new Tag(i, true))];
 
         this.languages = await items.getLanguages();
 
