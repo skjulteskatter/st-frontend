@@ -10,7 +10,9 @@
         >
             {{ tag.getName(languageKey) }}
         </router-link>
-        <icon name="error" size="16" class="cursor-pointer hover:text-red-800" v-if="tag.userDefined" />
+        <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
+            <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
+        </button>
     </span>
     <base-dropdown>
         <template #button>
@@ -58,7 +60,7 @@ export default class SongTags extends Vue {
     public tagFilter = "";
 
     public async createTag() {
-        if (this.tagFilter == "") {
+        if (this.tagFilter == "" || this.Tags.find(t => t.name == this.tagFilter)) {
             return;
         }
         const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
@@ -75,6 +77,16 @@ export default class SongTags extends Vue {
         if (tag) {
             await tags.addToTag(tag.id, this.Song.id);
             this.Song.tagIds.push(tag.id);
+        }
+    }
+
+    public async removeFromTag(id: string) {
+        const tag = this.Song.tags.find(t => t.id == id);
+
+        if (tag) {
+            const index = this.Song.tagIds.indexOf(tag.id);
+            await tags.removeFromTag(tag.id, this.Song.id);
+            this.Song.tagIds.splice(index, 1);
         }
     }
 
