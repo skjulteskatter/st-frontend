@@ -1,6 +1,7 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
+import { reactive } from "vue";
 import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -17,6 +18,10 @@ export class Session {
     public countries: Country[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
+
+    public get Tags() {
+        return reactive(this.tags);
+    }
 
     public get initialized() {
         return this._initialized == true;
