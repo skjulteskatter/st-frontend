@@ -10,6 +10,13 @@
                 v-for="song in songs"
                 :key="song.id"
                 :song="song"
+                @click="$router.push({
+                    name: 'song',
+                    params: {
+                        collection: song.collectionIds[0],
+                        number: song.number
+                    }
+                })"
             />
         </div>
     </div>
