@@ -1,5 +1,11 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor, IndexedContributor, IndexedSong } from "dmb-api";
+import { ApiContributor, IndexedContributor, IndexedSong, MediaFile } from "dmb-api";
+
+
+export type AudioTrack = {
+    file: MediaFile;
+    collection?: Collection;
+}
 
 export type State = {
     collectionId?: string;

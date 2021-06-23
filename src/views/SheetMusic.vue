@@ -6,14 +6,14 @@
                 {{ song.getName(languageKey) }}
             </h2>
             <p
-                v-for="c in song.authors"
+                v-for="c in song.Authors"
                 :key="c.id"
                 class="sheetmusic-viewer__info__author"
             >
                 {{ $t("song.author") }}: {{ c.name }}
             </p>
             <p
-                v-for="c in song.composers"
+                v-for="c in song.Composers"
                 :key="c.id"
                 class="sheetmusic-viewer__info__composer"
             >

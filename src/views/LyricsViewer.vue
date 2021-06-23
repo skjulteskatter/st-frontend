@@ -9,20 +9,20 @@
                     <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
                     <p
                         class="lyrics__credits__author"
-                        v-if="song.authors.length > 0"
+                        v-if="song.Authors.length > 0"
                     >
                         {{ $t("song.author") }}:
-                        <span v-for="author in song.authors" :key="author.id">
+                        <span v-for="author in song.Authors" :key="author.id">
                             {{ author.name }}
                         </span>
                     </p>
                     <p
                         class="lyrics__credits__composer"
-                        v-if="song.composers.length > 0"
+                        v-if="song.Composers.length > 0"
                     >
                         {{ $t("song.composer") }}:
                         <span
-                            v-for="composer in song.composers"
+                            v-for="composer in song.Composers"
                             :key="composer.id"
                         >
                             {{ composer.name }}

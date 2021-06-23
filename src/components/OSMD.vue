@@ -8,11 +8,11 @@
                         <small v-if="collection.name" class="text-gray-500">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
                         <small v-if="song.verses" class="text-gray-400 rounded p-1 border border-gray-400 ml-4">{{ song.verses }} {{ $t('song.verses').toLocaleLowerCase() }}</small>
                     </div>
-                    <div class="text-gray-600" v-if="song.authors.length">
-                        <small>{{(song.yearWritten ? $t('song.writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song.writtenBy')).replace('$authors', song.authors.map(c => c.name).join(", "))}}</small>
+                    <div class="text-gray-600" v-if="song.Authors.length">
+                        <small>{{(song.yearWritten ? $t('song.writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song.writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
                     </div>
-                    <div class="text-gray-600" v-if="song.composers.length">
-                        <small>{{(song.yearComposed ? $t('song.composedInBy').replace('$year', song.yearComposed.toString()) : $t('song.composedBy')).replace('$composers', song.composers.map(c => c.name).join(", "))}}</small>
+                    <div class="text-gray-600" v-if="song.Composers.length">
+                        <small>{{(song.yearComposed ? $t('song.composedInBy').replace('$year', song.yearComposed.toString()) : $t('song.composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
                     </div>
                 </div>
                 <div class="flex gap-4 mr-8">

@@ -14,18 +14,18 @@
                     <div class="">
                         <small>{{ $t("song.author") }}: </small>
                         <small
-                            v-for="author in song.authors"
+                            v-for="author in song.Authors"
                             :key="author.id"
                             >{{ author.name }}</small
                         >
                     </div>
                     <div
                         class=""
-                        v-if="song.composers.length"
+                        v-if="song.Composers.length"
                     >
                         <small>{{ $t("song.composer") }}: </small>
                         <small
-                            v-for="composer in song.composers"
+                            v-for="composer in song.Composers"
                             :key="composer.id"
                             >{{ composer.name }}</small
                         >

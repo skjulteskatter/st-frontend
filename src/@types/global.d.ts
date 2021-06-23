@@ -37,12 +37,6 @@ type SheetMusicOptions = {
     clef: "bass" | "treble" | "alto";
 }
 
-type AudioTrack = {
-    file: MediaFile;
-    song?: Song;
-    collection?: Collection;
-}
-
 type SongFilter = {
     themes: string[];
     origins: string[];
