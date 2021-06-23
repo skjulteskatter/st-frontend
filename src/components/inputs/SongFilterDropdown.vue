@@ -15,6 +15,7 @@
                                 name="lyrics"
                                 id="lyrics"
                                 class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                                @change="apply()"
                             />
                             {{ $t("types.lyrics") }}
                         </label>
@@ -28,7 +29,7 @@
                 </div>
                 <base-dropdown :label="$t('types.video')" origin="left">
                     <div class="w-72" >
-                        <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" />
+                        <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
@@ -39,7 +40,7 @@
                 </div>
                 <base-dropdown :label="$t('types.sheetmusic')" origin="left">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" />
+                        <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
@@ -50,13 +51,13 @@
                 </div>
                 <base-dropdown :label="$t('types.audio')" origin="right">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" />
+                        <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
         </div>
         <div class="flex gap-2">
-            <base-button theme="secondary" @click="apply()" class="flex-grow">{{ $t('song.apply') }}</base-button>
+            <!-- <base-button theme="secondary" @click="apply()" class="flex-grow">{{ $t('song.apply') }}</base-button> -->
             <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common.remove') }}</button>
         </div>
     </div>

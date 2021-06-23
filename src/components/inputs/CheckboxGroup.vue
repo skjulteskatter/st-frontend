@@ -16,6 +16,7 @@
 				type="checkbox"
 				:name="label"
 				class="border-gray-300 rounded text-primary focus:ring-primary"
+				@change="action"
 			/>
 			{{ $t(`types.${label}`) }}
 		</label>
@@ -37,6 +38,9 @@ import { Options, Vue } from "vue-class-component";
 		values: {
 			type: Object,
 		},
+		action: {
+			type: Function,
+		},
 	},
 })
 export default class CheckboxGroup extends Vue {
@@ -45,6 +49,7 @@ export default class CheckboxGroup extends Vue {
 	public values?: {
 		[id: string]: boolean;
 	};
+	public action?: () => undefined;
 
 	public get Values() {
 		return this.values ?? {};
