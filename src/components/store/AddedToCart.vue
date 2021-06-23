@@ -3,12 +3,23 @@
         <div class="flex flex-col gap-4">
             <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
             <div class="flex flex-col gap-2">
-                <div v-for="p in Products" :key="p.id" class="p-2 rounded bg-black bg-opacity-10 flex justify-between items-center gap-4">
-                    <span>{{ p.getName() }}</span>
-                    <span class="opacity-50 text-sm">{{ p.priceDiv(languageKey) }}</span>
+                <div
+                    v-for="p in Products"
+                    :key="p.id"
+                    class="p-2 rounded-md border border-gray-300 flex gap-2"
+                >
+                    <img
+                        :src="p.collections[0].image"
+                        alt="collection image"
+                        class="rounded h-12 w-12"
+                    >
+                    <span>
+                        <p >{{ p.getName() }}</p>
+                        <small class="opacity-50">{{ p.priceDiv(languageKey) }}</small>
+                    </span>
                 </div>
             </div>
-            <div class="flex gap-4">
+            <div class="flex gap-4 justify-end">
                 <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
                 <base-button theme="secondary" icon="buy" @click="checkout" :loading="checkingOut">{{$t('store.checkout')}}</base-button>
             </div>
