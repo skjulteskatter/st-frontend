@@ -1,112 +1,119 @@
 <template>
     <div class="flex">
-        <div class="p-4 border-t border-b border-gray-300 bg-white flex items-center gap-4 w-full dark:bg-secondary dark:border-none">
+        <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
             <loader :loading="osmdLoading || loading['transpose'] || loading['zoom']" :position="'local'">
-                <label class="flex flex-col">
-                    <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
-                    <base-dropdown
-                        origin="left"
-                        :label="
-                            relativeTranspositions.find(
-                                (r) => r.value == transposition
-                            )?.view ?? 'Transpose'
-                        "
-                        class="flex flex-col"
-                    >
-                        <div class="max-h-64 overflow-y-auto">
-                            <button
-                                :class="{
-                                    'bg-primary text-white': transposition == t.value,
-                                    'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
-                                }"
-                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                v-for="t in relativeTranspositions"
-                                :key="t.key"
-                                :disabled="transposition == t.value"
-                                @click="transpose(t.value)"
-                            >
-                                <span class="font-semibold">
-                                    {{ t.key }}
-                                </span>
-                                <span class="opacity-50" v-if="t.key != t.original">
-                                    ({{ t.original }})
-                                </span>
-                            </button>
-                        </div>
-                    </base-dropdown>
-                </label>
-                <label class="flex flex-col">
-                    <span class="text-sm text-gray-500">{{ $t('song.clef') }}</span>
-                    <base-dropdown
-                        origin="left"
-                        :label="options?.clef"
-                        class="flex flex-col"
-                    >
-                        <div class="max-h-64 overflow-y-auto">
-                            <button
-                                :class="{
-                                    'bg-primary text-white': options?.clef == 'bass',
-                                }"
-                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                :disabled="options?.clef == 'bass'"
-                                @click="setClef('bass')"
-                            >
-                                <span class="font-semibold">
-                                    Bass
-                                </span>
-                            </button>
-                            <button
-                                :class="{
-                                    'bg-primary text-white': options?.clef == 'treble',
-                                }"
-                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                :disabled="options?.clef == 'treble'"
-                                @click="setClef('treble')"
-                            >
-                                <span class="font-semibold">
-                                    Treble
-                                </span>
-                            </button>
-                            <button
-                                :class="{
-                                    'bg-primary text-white': options?.clef == 'alto',
-                                }"
-                                class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                :disabled="options?.clef == 'alto'"
-                                @click="setClef('alto')"
-                            >
-                                <span class="font-semibold">
-                                    Alto
-                                </span>
-                            </button>
-                        </div>
-                    </base-dropdown>
-                </label>
-                <label class="flex flex-col">
-                    <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
-                    <select
-                        class="p-2 rounded border-gray-300 pr-8"
-                        name="zoom"
-                        id="zoom"
-                        v-model="zoom"
-                        @change="setZoom"
-                    >
-                        <option
-                            v-for="i in 10"
-                            :key="`zoom-${i+4}`"
-                            :value="(i+4)/10"
+                <div v-if="song && collection">
+                    <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
+                    <small v-if="collection.name" class="text-gray-500">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
+                    <small v-if="song.verses" class="text-gray-400 rounded p-1 border border-gray-400 ml-4">{{ song.verses }} {{ $t('song.verses').toLocaleLowerCase() }}</small>
+                </div>
+                <div class="flex gap-4 mr-8">
+                    <label class="flex flex-col">
+                        <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
+                        <base-dropdown
+                            origin="left"
+                            :label="
+                                relativeTranspositions.find(
+                                    (r) => r.value == transposition
+                                )?.view ?? 'Transpose'
+                            "
+                            class="flex flex-col"
                         >
-                            {{ (i+4)*10 }}%
-                        </option>
-                    </select>
-                </label>
-                <base-button 
-                    v-if="$route.name == 'song'"
-                    theme="error"
-                    icon="error"
-                    @click="close()"
-                    class="ml-auto"
-                >{{$t('common.close')}}</base-button>
+                            <div class="max-h-64 overflow-y-auto">
+                                <button
+                                    :class="{
+                                        'bg-primary text-white': transposition == t.value,
+                                        'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
+                                    }"
+                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                    v-for="t in relativeTranspositions"
+                                    :key="t.key"
+                                    :disabled="transposition == t.value"
+                                    @click="transpose(t.value)"
+                                >
+                                    <span class="font-semibold">
+                                        {{ t.key }}
+                                    </span>
+                                    <span class="opacity-50" v-if="t.key != t.original">
+                                        ({{ t.original }})
+                                    </span>
+                                </button>
+                            </div>
+                        </base-dropdown>
+                    </label>
+                    <label class="flex flex-col">
+                        <span class="text-sm text-gray-500">{{ $t('song.clef') }}</span>
+                        <base-dropdown
+                            origin="left"
+                            :label="options?.clef"
+                            class="flex flex-col"
+                        >
+                            <div class="max-h-64 overflow-y-auto">
+                                <button
+                                    :class="{
+                                        'bg-primary text-white': options?.clef == 'bass',
+                                    }"
+                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                    :disabled="options?.clef == 'bass'"
+                                    @click="setClef('bass')"
+                                >
+                                    <span class="font-semibold">
+                                        Bass
+                                    </span>
+                                </button>
+                                <button
+                                    :class="{
+                                        'bg-primary text-white': options?.clef == 'treble',
+                                    }"
+                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                    :disabled="options?.clef == 'treble'"
+                                    @click="setClef('treble')"
+                                >
+                                    <span class="font-semibold">
+                                        Treble
+                                    </span>
+                                </button>
+                                <button
+                                    :class="{
+                                        'bg-primary text-white': options?.clef == 'alto',
+                                    }"
+                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
+                                    :disabled="options?.clef == 'alto'"
+                                    @click="setClef('alto')"
+                                >
+                                    <span class="font-semibold">
+                                        Alto
+                                    </span>
+                                </button>
+                            </div>
+                        </base-dropdown>
+                    </label>
+                    <label class="flex flex-col">
+                        <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
+                        <select
+                            class="p-2 rounded border-gray-300 pr-8"
+                            name="zoom"
+                            id="zoom"
+                            v-model="zoom"
+                            @change="setZoom"
+                        >
+                            <option
+                                v-for="i in 10"
+                                :key="`zoom-${i+4}`"
+                                :value="(i+4)/10"
+                            >
+                                {{ (i+4)*10 }}%
+                            </option>
+                        </select>
+                    </label>
+                    <button
+                        v-if="$route.name == 'song'"
+                        class="absolute top-4 right-4 text-red-700"
+                        @click="close()"
+                    >
+                        <icon name="error" />
+                    </button>
+                </div>
             </loader>
         </div>
     </div>
@@ -115,7 +122,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
-import { transposer } from "@/classes";
+import { Collection, transposer } from "@/classes";
+import { useStore } from "@/store";
 
 @Options({
     props: {
@@ -129,6 +137,7 @@ import { transposer } from "@/classes";
     name: "OSMD",
 })
 export default class OSMD extends Vue {
+    public store = useStore();
     public osmd = osmd;
     public originalKey?: string;
     public transposition = 0;
@@ -215,6 +224,18 @@ export default class OSMD extends Vue {
             this.osmd.rerender();
         }
         this.loading["zoom"] = false;
+    }
+
+    public get song() {
+        return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
+    }
+
+    public get collection(): Collection | undefined {
+        return this.store.getters.collection;
+    }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
     }
 }
 </script>
