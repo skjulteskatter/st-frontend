@@ -215,7 +215,7 @@ export class Collection extends BaseClass implements ApiCollection {
                         numbers.push(song.number);
                         continue;
                     }
-                    if (song.authors.find(a => a.name.toLowerCase().includes(filter)) || song.composers.find(c => c.name.toLowerCase().includes(filter))) {
+                    if (song.Authors.find(a => a.name.toLowerCase().includes(filter)) || song.Composers.find(c => c.name.toLowerCase().includes(filter))) {
                         numbers.push(song.number);
                         continue;
                     }

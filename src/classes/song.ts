@@ -1,5 +1,4 @@
 import { ApiCollection, ApiSong, MediaFile } from "dmb-api";
-import { Contributor } from "./contributor";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
 import i18n from "@/i18n";
@@ -43,8 +42,6 @@ export class Song extends BaseClass implements ApiSong {
     public themeIds: string[];
     public tagIds: string[];
 
-    public authors: Contributor[] = []
-    public composers: Contributor[] = [];
     public participants: Participant[] = [];
     public yearWritten;
     public yearComposed;
@@ -103,8 +100,6 @@ export class Song extends BaseClass implements ApiSong {
         this.id = song.id;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
-        this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
-        this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor ?? {} as Contributor);
         this.yearWritten = song.yearWritten;
         this.yearComposed = song.yearComposed;
         this.files = appSession.files.filter(f => f.songId == this.id);
@@ -143,14 +138,23 @@ export class Song extends BaseClass implements ApiSong {
         };
     }
 
+    public get Authors() {
+        return appSession.contributors.filter(c => this.participants.filter(p => p.type == "author").some(i => i.contributorId == c.id)).map(i => i.item);
+    }
+
+    public get Composers() {
+        return appSession.contributors.filter(c => this.participants.filter(p => p.type == "composer").some(i => i.contributorId == c.id)).map(i => i.item);
+    }
+
+
     public get rawContributorNames() {
         const names: string[] = [];
 
-        this.authors.forEach(a => {
+        this.Authors.forEach(a => {
             names.push(a.name.toLowerCase());
         });
 
-        this.composers.forEach(c => {
+        this.Composers.forEach(c => {
             names.push(c.name.toLowerCase());
         });
 

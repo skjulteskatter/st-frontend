@@ -107,7 +107,6 @@ declare module "dmb-api" {
 
     interface ApiParticipant {
         contributorId: string;
-        contributor?: ApiContributor;
         type: "composer" | "author" | "arranger" | "artist";
     }
 
