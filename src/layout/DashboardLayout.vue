@@ -9,7 +9,7 @@
                         <div class="flex gap-4 items-center ml-auto">
                             <store-cart />
                             <notification-list />
-                            <icon name="settings" class="cursor-pointer" @click="$router.push('/settings')" />
+                            <settings-dropdown />
                         </div>
                     </header>
                     <router-view />
@@ -58,6 +58,7 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import { ref } from "@vue/runtime-core";
 import { NotificationList } from "@/components/notification";
 import { StoreCart } from "@/components/store";
+import { SettingsDropdown } from "@/components/settings";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
 import { Copyright } from "@/components";
@@ -73,6 +74,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         OpenSheetMusicDisplay,
         NotificationList,
         StoreCart,
+        SettingsDropdown,
         PrivacyPolicyAccept,
         tos: TOSAccept,
         Copyright,
