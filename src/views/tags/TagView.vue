@@ -2,12 +2,12 @@
     <div v-if="tag != undefined" class="p-4 md:p-8">
         <back-button class="md:hidden mb-4" />
         <header class="mb-4 flex flex-col md:flex-row md:items-center gap-4">
-            <h1 class="font-bold text-2xl md:text-3xl">{{ $t('common.tags') }}</h1>
+            <h1 class="font-bold text-2xl md:text-3xl">{{ $t('common.categories') }}</h1>
             <span class="flex-grow flex gap-4 justify-between">
-                <p class="text-gray-500 rounded-full border border-gray-500 px-2 w-max">{{ tag.getName(languageKey) }}</p>
+                <p class="text-gray-500 rounded-full border border-gray-500 px-2 w-max">{{ tag.getName() }}</p>
                 <router-link :to="{ name: 'tags' }" class="text-gray-500 flex gap-2 items-center hover:underline">
                     <icon name="tag" size="20" />
-                    <span>{{ $t('playlist.seeall') }} {{ $t('common.tags').toLocaleLowerCase() }}</span>
+                    <span>{{ $t('playlist.seeall') }} {{ $t('common.categories').toLocaleLowerCase() }}</span>
                 </router-link>
             </span>
         </header>
