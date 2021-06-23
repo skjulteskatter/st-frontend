@@ -444,11 +444,11 @@ export default class SongList extends Vue {
                 value: "views",
                 selected: this.listType == "views",
             },
-            {
-                label: this.$t("common.country"),
-                value: "countries",
-                selected: this.listType == "countries",
-            },
+            // {
+            //     label: this.$t("common.country"),
+            //     value: "countries",
+            //     selected: this.listType == "countries",
+            // },
         ].filter(
             (b) =>
                 ![
