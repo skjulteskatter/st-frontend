@@ -7,10 +7,10 @@
             @click="callback ? callback(file) : undefined"
         >
             <icon :name="icon" size="14" class="text-gray-500 dark:text-gray-300" />
-            <small>
-                <div>{{ file.name }}</div>
+            <small class="flex flex-col items-start">
+                <p>{{ file.name }}</p>
                 <!-- {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}} -->
-                <span style="opacity: 0.5" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
+                <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
             </small>
         </button>
     </div>
