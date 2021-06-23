@@ -8,6 +8,7 @@ import { CollectionItem } from "./collectionItem";
 import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
+import { Tag } from "./tag";
 
 type CollectionSettings = {
     offline: boolean;
@@ -50,7 +51,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _themes?: CollectionItem<Theme>[];
     private _loadingThemes = false;
 
-    private _tags?: CollectionItem<SongTag>[];
+    private _tags?: CollectionItem<Tag>[];
     private _loadingTags = false;
 
     private _authors?: CollectionItem<ApiContributor>[];
@@ -331,9 +332,18 @@ export class Collection extends BaseClass implements ApiCollection {
             if (!this._tags) {
                 this._loadingTags = true;
 
-                const tags = await api.songs.getAllTags(this);
+                const tags = appSession.tags;
 
-                this._tags = tags.map(t => new CollectionItem(t));
+                this._tags = [];
+
+                for (const tag of tags) {
+                    this._tags.push(new CollectionItem<Tag>({
+                        songIds: this.songs.filter(s => s.tagIds.includes(tag.id)).map(s => s.id),
+                        fileIds: [],
+                        id: tag.id,
+                        item: tag,
+                    }));
+                }
 
                 this._loadingTags = false;
                 return this._tags.length;
@@ -404,7 +414,7 @@ export class Collection extends BaseClass implements ApiCollection {
         return this._themes ?? [];
     }
 
-    public get tags(): CollectionItem<SongTag>[] {
+    public get tags(): CollectionItem<Tag>[] {
         return this._tags ?? [];
     }
 

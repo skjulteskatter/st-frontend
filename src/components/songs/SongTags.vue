@@ -8,7 +8,7 @@
                 },
             }"
         >
-            {{ tag.getName(languageKey) }}
+            {{ tag.getName() }}
         </router-link>
         <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
             <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
@@ -18,7 +18,7 @@
         <template #button>
             <button class="cursor-pointer text-gray-500 text-sm flex items-center">
                 <icon name="plus"/>
-                {{ $t('song.addTag') }}
+                {{ $t('song.addCategory') }}
             </button>
         </template>
         <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
@@ -32,7 +32,7 @@
                     class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
                     v-for="tag in Tags" 
                     :key="tag.id" 
-                    @click="addToTag(tag.id)">{{tag.getName(languageKey)}}</li>
+                    @click="addToTag(tag.id)">{{tag.getName()}}</li>
             </ul>
         </div>
     </base-dropdown>
@@ -92,7 +92,7 @@ export default class SongTags extends Vue {
 
     public get Tags() {
         const tags = appSession.tags.filter(t => t.userDefined);
-        return tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName(this.languageKey).toLowerCase().includes(this.tagFilter.toLowerCase())));
+        return tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName().toLowerCase().includes(this.tagFilter.toLowerCase())));
     }
 
     public get Song() {

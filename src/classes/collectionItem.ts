@@ -1,6 +1,7 @@
 import { ApiCollectionItem, ApiContributor } from "dmb-api";
+import { Tag } from "./tag";
 
-export class CollectionItem<T extends (ApiContributor | Country | Theme)> implements ApiCollectionItem<T> {
+export class CollectionItem<T extends (ApiContributor | Country | Theme | Tag)> implements ApiCollectionItem<T> {
     public id;
     public item: T;
     public songIds;

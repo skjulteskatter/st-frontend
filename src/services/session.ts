@@ -1,5 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import { Tag } from "@/classes/tag";
+import { useStore } from "@/store";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
 import { reactive } from "vue";
 import { analytics, items, sharing, songs, tags } from "./api";
@@ -174,7 +175,10 @@ export class Session {
         }).catch();
 
         const t = await items.getTags();
-        this.tags = t.map(i => new Tag(i, false));
+        this.tags = t.map(i => new Tag({
+            id: i.id,
+            name: i.name[useStore().getters.languageKey] ?? Object.values(i.name)[0],
+        }, false));
         const ts = await tags.getAll();
         for (const tag of ts) {
             for (const sId of tag.songIds) {
@@ -182,7 +186,7 @@ export class Session {
                 song?.tagIds.push(tag.id);
             }
         }
-        this.tags = [...this.tags, ...ts.map(i => new Tag(i, true))];
+        this.tags = [...ts.map(i => new Tag(i, true)), ...this.tags];
 
         this.languages = await items.getLanguages();
 

@@ -97,12 +97,13 @@
                         v-for="tag in collection.tags"
                         :collection="collection"
                         :key="tag.item.id"
+                        :class="{'bg-yellow-50': tag.item.userDefined}"
                         :songs="
                             filteredSongs.filter((s) =>
                                 tag?.songIds.includes(s.id)
                             )
                         "
-                        :title="tag?.item.name[languageKey] ?? ''"
+                        :title="tag?.item.name ?? ''"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -428,16 +429,16 @@ export default class SongList extends Vue {
                 value: "composers",
                 selected: this.listType == "composers",
             },
-            {
-                label: this.$t("song.theme"),
-                value: "themes",
-                selected: this.listType == "themes",
-            },
             // {
-            //     label: this.$t("song.tag"),
-            //     value: "tags",
-            //     selected: this.listType == "tags",
+            //     label: this.$t("song.theme"),
+            //     value: "themes",
+            //     selected: this.listType == "themes",
             // },
+            {
+                label: this.$t("song.category"),
+                value: "tags",
+                selected: this.listType == "tags",
+            },
             {
                 label: this.$t("common.views"),
                 value: "views",
