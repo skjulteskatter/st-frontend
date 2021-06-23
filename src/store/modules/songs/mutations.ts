@@ -3,6 +3,7 @@ import { ApiContributor, IndexedContributor, IndexedSong } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
+import { AudioTrack } from "./state";
 
 export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTION](state: S, payload: string): void;
