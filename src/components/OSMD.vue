@@ -14,6 +14,9 @@
                     <div class="text-gray-600" v-if="song.Composers.length">
                         <small>{{(song.yearComposed ? $t('song.composedInBy').replace('$year', song.yearComposed.toString()) : $t('song.composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
                     </div>
+                    <div class="text-gray-600" v-if="melodyOrigin">
+                        <small>{{melodyOrigin}}</small>
+                    </div>
                 </div>
                 <div class="flex gap-4 mr-8">
                     <label class="flex flex-col">
@@ -167,6 +170,14 @@ export default class OSMD extends Vue {
         key: string;
         original: string;
     }[] = [];
+
+    public get melodyOrigin() {
+        return (
+            this.song?.melodyOrigin?.description?.[this.languageKey] ??
+            this.song?.melodyOrigin?.description?.no ??
+            undefined
+        );
+    }
 
     public async mounted() {
         this.options ??= { show: false, originalKey: "C", clef: "treble" };

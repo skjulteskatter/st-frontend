@@ -46,16 +46,16 @@
                     v-if="song.hasLyrics && song.Authors.length"
                 >
                     <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                    <span v-for="author in song.Authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400">
+                    <span v-for="i in song.Authors" :key="i.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400">
                         <router-link
                             :to="{
                                 name: 'contributor',
                                 params: {
-                                    contributor: author.id,
+                                    contributor: i.id,
                                 },
                             }"
                         >
-                            {{ author.name }}
+                            {{ i.name }}
                         </router-link>
                     </span>
                 </small>
@@ -65,20 +65,20 @@
                 >
                     <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
                     <span
-                        v-for="composer in song.Composers"
-                        :key="composer.id"
-                        :label="composer.name"
+                        v-for="i in song.Composers"
+                        :key="i.id"
+                        :label="i.name"
                         class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400"
                     >
                         <router-link
                             :to="{
                                 name: 'contributor',
                                 params: {
-                                    contributor: composer.id,
+                                    contributor: i.id,
                                 },
                             }"
                         >
-                            {{ composer.name }}
+                            {{ i.name }}
                         </router-link>
                     </span>
                 </small>

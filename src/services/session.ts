@@ -169,7 +169,6 @@ export class Session {
         items.getThemes().then(t => {
             this.themes = t;
         }).catch();
-
         items.getCopyrights().then(c => {
             this.copyrights = c;
         }).catch();
