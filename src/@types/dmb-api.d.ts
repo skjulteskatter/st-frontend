@@ -42,6 +42,7 @@ declare module "dmb-api" {
         name: LocaleString;
         participants: ApiParticipant[];
         yearWritten: number;
+        yearComposed: number;
         originalKey: string;
         hasLyrics: boolean;
         hasChords: boolean;

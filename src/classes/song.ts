@@ -47,6 +47,7 @@ export class Song extends BaseClass implements ApiSong {
     public composers: Contributor[] = [];
     public participants: Participant[] = [];
     public yearWritten = 0;
+    public yearComposed;
 
     public files: MediaFile[] = [];
 
@@ -105,6 +106,7 @@ export class Song extends BaseClass implements ApiSong {
         this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
         this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor ?? {} as Contributor);
         this.yearWritten = song.yearWritten;
+        this.yearComposed = song.yearComposed;
         this.files = appSession.files.filter(f => f.songId == this.id);
         this.audioFiles = this.files.filter(f => f.type == "audio") ?? [];
         this.videoFiles = this.files.filter(f => f.type == "video") ?? [];
