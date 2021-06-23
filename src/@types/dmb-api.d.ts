@@ -41,8 +41,8 @@ declare module "dmb-api" {
         image?: string;
         name: LocaleString;
         participants: ApiParticipant[];
-        yearWritten: number;
-        yearComposed: number;
+        yearWritten?: number;
+        yearComposed?: number;
         originalKey: string;
         hasLyrics: boolean;
         hasChords: boolean;

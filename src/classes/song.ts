@@ -46,7 +46,7 @@ export class Song extends BaseClass implements ApiSong {
     public authors: Contributor[] = []
     public composers: Contributor[] = [];
     public participants: Participant[] = [];
-    public yearWritten = 0;
+    public yearWritten;
     public yearComposed;
 
     public files: MediaFile[] = [];
