@@ -16,7 +16,7 @@
                     <copyright />
                 </div>
                 <div
-                    class="sticky bottom-0" 
+                    class="sticky bottom-0 md:overflow-y-auto"
                     :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
                 >
                     <open-sheet-music-display
