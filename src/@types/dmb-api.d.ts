@@ -77,6 +77,7 @@ declare module "dmb-api" {
         originalKey: string;
         transposedToKey: string;
         secondaryChords: boolean;
+        notes: string;
         transpositions: {
             [key: string]: number;
         };

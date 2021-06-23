@@ -105,6 +105,8 @@
             </transposed-lyrics-viewer>
             <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
             </lyrics-viewer>
+
+            <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
     </base-card>
 </template>

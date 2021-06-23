@@ -176,22 +176,6 @@ export default class SettingsCard extends Vue {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
     }
 
-    // public get birthDay(): string {
-    //     let birthDay: Date;
-    //     if (this.user && this.user.birthDay) {
-    //         birthDay = new Date(this.user.birthDay);
-    //     } else {
-    //         birthDay = this.initDate;
-    //     }
-    //     return this.dateToString(birthDay);
-    // }
-
-    // public set birthDay(v: string) {
-    //     if (this.user) {
-    //         this.user.birthDay = v;
-    //     }
-    // }
-
     public fileName = "";
     private selectedImage?: string;
 

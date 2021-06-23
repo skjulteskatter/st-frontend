@@ -21,6 +21,7 @@ export class Lyrics implements ApiLyrics {
     transposedToKey;
     transpositions;
     secondaryChords;
+    notes;
 
     constructor(lyrics: ApiLyrics) {
         this.id = lyrics.id;
@@ -35,6 +36,7 @@ export class Lyrics implements ApiLyrics {
         this.transposedToKey = lyrics.transposedToKey;
         this.transpositions = lyrics.transpositions;
         this.secondaryChords = lyrics.secondaryChords;
+        this.notes = lyrics.notes;
     }
 
     public get transposition() {
