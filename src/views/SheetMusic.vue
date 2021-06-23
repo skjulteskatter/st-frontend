@@ -3,7 +3,7 @@
     <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
         <div v-if="!embed && song" class="sheetmusic-viewer__info">
             <h2 class="sheetmusic-viewer__info__title">
-                {{ song.getName(languageKey) }}
+                {{ song.getName() }}
             </h2>
             <p
                 v-for="c in song.Authors"
@@ -213,10 +213,6 @@ export default class SheetMusic extends Vue {
             type: this.type ?? undefined,
             clef: "treble",
         };
-    }
-
-    public get languageKey() {
-        return useStore().getters.languageKey;
     }
 }
 </script>
