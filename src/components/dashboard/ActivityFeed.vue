@@ -4,7 +4,7 @@
             <h3 class="font-bold">
                 {{ $t("common.activity") }}
             </h3>
-            <tooltip text="Her ser du dine nylig åpnede sanger" />
+            <tooltip :text="$t('tooltip.recentActivity')" />
         </div>
         <loader :loading="activitiesInitialized === false">
             <div class="flex flex-col gap-2 relative" v-if="activities.length">

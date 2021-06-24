@@ -1,9 +1,12 @@
 <template>
     <base-card>
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold">
-                {{ $t("common.playlists") }}
-            </h3>
+            <span class="flex gap-4 items-center">
+                <h3 class="font-bold">
+                    {{ $t("common.playlists") }}
+                </h3>
+                <tooltip :text="$t('tooltip.playlists')" />
+            </span>
             <button class="text-sm p-2 rounded bg-black bg-opacity-10 flex gap-2 items-center hover:bg-opacity-20" @click="openCreatePlaylist">
                 {{ $t('playlist.createnew') }}
             </button>
