@@ -158,12 +158,18 @@ export default class LyricsCard extends Vue {
     public loaded = false;
     public chordsEnabled = false;
 
-    public relativeTranspositions: {
+    public get relativeTranspositions(): {
         value: number;
         view: string;
         key: string;
         original: string;
-    }[] = [];
+    }[] {
+        return this.lyrics ? transposer.getRelativeTranspositions(
+                this.lyrics.originalKey,
+                this.defaultTransposition,
+                this.lyrics.transpositions,
+            ) : [];
+    }
 
     public get Lyrics() {
         return this.lyrics;
@@ -188,19 +194,11 @@ export default class LyricsCard extends Vue {
 
 
         if (this.song) {
+            console.log("SONG")
             this.selectedLanguage = (Object.keys(this.song.name).includes(this.languageKey)
                     ? this.languageKey
                     : fallbackLanguage) 
                 ?? this.languageKey;
-            try {
-                this.relativeTranspositions = transposer.getRelativeTranspositions(
-                    this.song.originalKey,
-                    this.defaultTransposition,
-                    this.song.transpositions,
-                );
-            } catch {
-                // ss
-            }
         }
     }
 
@@ -313,14 +311,6 @@ export default class LyricsCard extends Vue {
     public async newMelody() {
         this.newMelodyView = !this.newMelodyView;
         await this.transpose();
-
-        if (this.song && this.lyrics) {
-            this.relativeTranspositions = transposer.getRelativeTranspositions(
-                this.lyrics.originalKey,
-                this.defaultTransposition,
-                this.lyrics.transpositions,
-            );
-        }
     }
 
     public get OriginalKey() {
