@@ -6,7 +6,7 @@
         </div>
         <nav-links />
         <playlist-list />
-        <user-profile class="hidden md:flex" />
+        <!-- <user-profile class="hidden md:flex" /> -->
     </nav>
 </template>
 
