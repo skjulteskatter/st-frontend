@@ -194,7 +194,6 @@ export default class LyricsCard extends Vue {
 
 
         if (this.song) {
-            console.log("SONG")
             this.selectedLanguage = (Object.keys(this.song.name).includes(this.languageKey)
                     ? this.languageKey
                     : fallbackLanguage) 
