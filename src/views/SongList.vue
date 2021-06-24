@@ -54,11 +54,11 @@
             <div v-if="searchQuery == '' && !loading">
                 <div
                     class="song-list__contributors"
-                    v-if="['composers', 'authors'].includes(listType)"
+                    v-if="listType == 'composer'"
                 >
                     <song-list-card
                         :collection="collection"
-                        v-for="ci in collection.getContributors(listType)"
+                        v-for="ci in collection.composers"
                         :key="ci.item.id"
                         :songs="
                             filteredSongs.filter((s) =>
@@ -70,7 +70,24 @@
                         class="mb-4"
                     ></song-list-card>
                 </div>
-
+                <div
+                    class="song-list__contributors"
+                    v-if="listType == 'author'"
+                >
+                    <song-list-card
+                        :collection="collection"
+                        v-for="ci in collection.authors"
+                        :key="ci.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                ci.songIds.includes(s.id)
+                            )
+                        "
+                        :title="ci.item.name"
+                        :action="() => gotoContributor(ci.item)"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
                 <div
                     class="song-list__songs"
                     v-if="listType == 'themes'"
@@ -128,7 +145,7 @@
 
                 <div
                     class="song-list__songs"
-                    v-if="listType == 'default' && songsByNumber.length"
+                    v-if="listType == 'number' && songsByNumber.length"
                 >
                     <song-list-card
                         v-for="s in songsByNumber"
@@ -411,8 +428,8 @@ export default class SongList extends Vue {
         return [
             {
                 label: this.$t("common.number"),
-                value: "default",
-                selected: this.listType == "default",
+                value: "number",
+                selected: this.listType == "number",
             },
             {
                 label: this.$t("common.title"),
@@ -421,13 +438,13 @@ export default class SongList extends Vue {
             },
             {
                 label: this.$t("song.author"),
-                value: "authors",
-                selected: this.listType == "authors",
+                value: "author",
+                selected: this.listType == "author",
             },
             {
                 label: this.$t("song.composer"),
-                value: "composers",
-                selected: this.listType == "composers",
+                value: "composer",
+                selected: this.listType == "composer",
             },
             // {
             //     label: this.$t("song.theme"),
@@ -452,8 +469,8 @@ export default class SongList extends Vue {
         ].filter(
             (b) =>
                 ![
-                    !this.collection?.hasAuthors ? "authors" : "",
-                    !this.collection?.hasComposers ? "composers" : "",
+                    !this.collection?.hasAuthors ? "author" : "",
+                    !this.collection?.hasComposers ? "composer" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
                 ].includes(b.value),

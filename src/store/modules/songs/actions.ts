@@ -33,14 +33,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
         commit(SongsMutationTypes.LANGUAGE, getters.languageKey);
         commit(SongsMutationTypes.TRANSCODE,getters.user?.settings?.defaultTranscode ?? "common");
         commit(SongsMutationTypes.COLLECTION, id);
-        const list = state.list;
-        commit(SongsMutationTypes.SET_LIST, "default");
         const collection = getters.collection as Collection;
 
         if (collection) {
-            collection.load(state.language).then(() => {
-                dispatch(SongsActionTypes.SET_LIST, list);
-            });
+            await collection.load(state.language);
+            
+            await dispatch(SongsActionTypes.SET_LIST, collection.defaultSort);
+
+            // console.log(collection.authors);
         }
     },
     async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number): Promise<void> {

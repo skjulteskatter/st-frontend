@@ -17,6 +17,7 @@ declare module "dmb-api" {
     interface ApiCollection {
         id: string;
         defaultType: string;
+        defaultSort: string;
         name: {
             [lang: string]: string;
         };

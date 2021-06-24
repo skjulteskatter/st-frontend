@@ -22,6 +22,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _key;
     public keys: LocaleString;
     public defaultType;
+    public defaultSort;
     public available?: boolean;
     public details?: LocaleString;
     public hasChords: {
@@ -54,8 +55,16 @@ export class Collection extends BaseClass implements ApiCollection {
     private _tags?: CollectionItem<Tag>[];
     private _loadingTags = false;
 
-    private _authors?: CollectionItem<ApiContributor>[];
-    private _composers?: CollectionItem<ApiContributor>[];
+    private _authors: CollectionItem<ApiContributor>[] = [];
+    private _composers: CollectionItem<ApiContributor>[] = [];
+
+    public get authors() {
+        return this._authors;
+    }
+
+    public get composers() {
+        return this._composers;
+    }
 
     private _countries?: CollectionItem<Country>[];
     private _loadingCountries = false;
@@ -69,6 +78,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this._key = collection.key;
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
+        this.defaultSort = collection.defaultSort;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
@@ -113,6 +123,27 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
             this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
+
+            this._authors = appSession.contributors.map(c => {
+                const cItem: CollectionItem<ApiContributor> = {
+                    songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
+                    id: c.id,
+                    fileIds: c.fileIds,
+                    item: c.item,
+                };
+                return cItem;
+            }).filter(i => i.songIds.length);
+            
+            
+            this._composers = appSession.contributors.map(c => {
+                const cItem: CollectionItem<ApiContributor> = {
+                    songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
+                    id: c.id,
+                    fileIds: c.fileIds,
+                    item: c.item,
+                };
+                return cItem;
+            }).filter(i => i.songIds.length);
 
             this.contributors = appSession.contributors.filter(i => this.songs.some(s => i.songIds.includes(s.id) || s.files.some(f => i.fileIds.includes(f.id))));
         }
@@ -277,34 +308,6 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public async getList(value: string) {
-        if (value == "authors") {
-            if (!this._authors) {
-                this._authors = appSession.contributors.map(c => {
-                    const cItem: CollectionItem<ApiContributor> = {
-                        songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
-                        id: c.id,
-                        fileIds: c.fileIds,
-                        item: c.item,
-                    };
-                    return cItem;
-                }).filter(i => i.songIds.length || i.fileIds.length) ?? [];   
-                return this._authors.length;
-            }
-        }
-        if (value == "composers") {
-            if (!this._composers) {
-                this._composers = appSession.contributors.map(c => {
-                    const cItem: CollectionItem<ApiContributor> = {
-                        songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
-                        id: c.id,
-                        fileIds: c.fileIds,
-                        item: c.item,
-                    };
-                    return cItem;
-                }).filter(i => i.songIds.length || i.fileIds.length) ?? [];   
-                return this._composers.length;
-            }
-        }
         if (value == "countries") {
             if (!this._countries) {
                 this._loadingCountries = true;
@@ -398,14 +401,6 @@ export class Collection extends BaseClass implements ApiCollection {
         }
     }
 
-    public get authors(): CollectionItem<ApiContributor>[] {
-        return this._authors ?? [];
-    }
-
-    public get composers(): CollectionItem<ApiContributor>[] {
-        return this._composers ?? [];
-    }
-
     public get countries(): CollectionItem<Country>[] {
         return this._countries ?? [];
     }
@@ -419,9 +414,9 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public getContributors(type: string) {
-        if (type == "authors") {
+        if (type == "author") {
             return this.authors;
-        } else if (type == "composers") {
+        } else if (type == "composer") {
             return this.composers;
         } else {
             return [];
