@@ -181,14 +181,14 @@ class Transposer {
         for (const e of Object.entries(transpositions)) {
             let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
 
-            while(t % 12 > 0) {
+            while(t % 12 > 12) {
                 t = t - 12;
             }
             
-            if (t < 0)
-                t = t + 12;
+            if (e[0].endsWith("b") && t > 0)
+                t = t - 12;
 
-            const ss = Object.entries(commonTranspositions).find(en => en[1] == t)?.[0] ?? "C";
+            const ss = Object.entries(commonTranspositions).find(en => en[1] == t || en[1] == t - 12 || en[1] == t + 12)?.[0] ?? "C";
 
             result.push({
                 key: e[0],

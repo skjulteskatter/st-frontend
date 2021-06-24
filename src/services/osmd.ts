@@ -165,7 +165,8 @@ class OSMD {
 
         this.transposition = sheetMusic.transposition ?? 0;
 
-        this.osmd.setLogLevel("debug");
+        if (process.env.NODE_ENV == "development")
+            this.osmd.setLogLevel("debug");
 
         this.osmd.setOptions({
             onXMLRead: (e) => {
