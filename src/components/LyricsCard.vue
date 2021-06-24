@@ -164,11 +164,13 @@ export default class LyricsCard extends Vue {
         key: string;
         original: string;
     }[] {
-        return this.lyrics ? transposer.getRelativeTranspositions(
-                this.lyrics.originalKey,
-                this.defaultTransposition,
-                this.lyrics.transpositions,
-            ) : [];
+
+        const ts = this.lyrics ? transposer.getRelativeTranspositions(
+            this.lyrics.originalKey,
+            this.defaultTransposition,
+            this.lyrics.transpositions,
+        ) : [];
+        return ts;
     }
 
     public get Lyrics() {
@@ -202,25 +204,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get selectedTransposition() {
-        const t = this.store.state.songs.transposition ?? 0;
-
-        if (!this.song) return 0;
-        const ts: number[] = [];
-        for (const k of Object.keys(this.song.transpositions)) {
-            ts.push(this.song.transpositions[k]);
-        }
-
-        // console.log(t, ts);
-
-        // console.log(this.relativeTranspositions);
-
-        if (ts.includes(t)) {
-            return t;
-        } else {
-            if (ts.includes(t - 12)) 
-                return t - 12;
-            return t + 12;
-        }
+        return this.store.state.songs.transposition ?? 0;
     }
 
     public set selectedTransposition(v) {
