@@ -107,8 +107,8 @@ export const admin = {
 };
 
 export const songs = {
-    getSongById(songId: string) {
-        return http.get<ApiSong>("api/Songs/Id/" + songId);
+    getSongById(songId: string, expand?: string) {
+        return http.get<ApiSong>("api/Songs/Id/" + songId + (expand ? "?expand=" + expand : ""));
     },
     async getCollections() {
         return (await http.get<ApiCollection[]>("api/Collections")).map(c => new Collection(c));
@@ -121,6 +121,9 @@ export const songs = {
     },
     getFile(fileId: string) {
         return http.get<MediaFile>(`api/Files/${fileId}?expand=song`);
+    },
+    getSongFiles(songId: string) {
+        return http.get<MediaFile[]>(`api/Files?songId=${songId}&type=sheetmusic-pdf`);
     },
     async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string, newMelody = false) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`));

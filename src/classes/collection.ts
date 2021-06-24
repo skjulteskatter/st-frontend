@@ -145,7 +145,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 return cItem;
             }).filter(i => i.songIds.length);
 
-            this.contributors = appSession.contributors.filter(i => this.songs.some(s => i.songIds.includes(s.id) || s.files.some(f => i.fileIds.includes(f.id))));
+            this.contributors = appSession.contributors.filter(i => this.songs.some(s => i.songIds.includes(s.id) || s.files?.some(f => i.fileIds.includes(f.id))));
         }
     }
     

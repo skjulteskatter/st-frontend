@@ -46,7 +46,7 @@ export class Song extends BaseClass implements ApiSong {
     public yearWritten;
     public yearComposed;
 
-    public files: MediaFile[] = [];
+    public files?: MediaFile[];
 
     public audioFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
@@ -123,6 +123,8 @@ export class Song extends BaseClass implements ApiSong {
         this.collections = song.collections;
         this.newMelody = song.newMelody;
         this.newMelodies = song.newMelodies;
+
+        this.files = song.files;
     }
 
     public language(code: string): boolean {

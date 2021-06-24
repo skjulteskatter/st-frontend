@@ -65,6 +65,7 @@ declare module "dmb-api" {
         details?: LocaleString;
         newMelody: boolean;
         newMelodies: string[];
+        files?: MediaFile[];
     }
 
     interface ApiLyrics {
