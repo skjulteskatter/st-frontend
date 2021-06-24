@@ -114,13 +114,13 @@
                         v-for="tag in collection.tags"
                         :collection="collection"
                         :key="tag.item.id"
-                        :class="{'bg-yellow-50': tag.item.userDefined}"
                         :songs="
                             filteredSongs.filter((s) =>
                                 tag?.songIds.includes(s.id)
                             )
                         "
                         :title="tag?.item.name ?? ''"
+                        :class="{'border border-primary bg-yellow-50': tag.item.userDefined}"
                         class="mb-4"
                     ></song-list-card>
                 </div>
