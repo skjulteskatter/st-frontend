@@ -1,7 +1,7 @@
 <template>
-    <div class="not-found">
-        <div class="not-found__content">
-            <h1 class="not-found__title">
+    <div class="w-full h-full flex justify-center items-center">
+        <div class="flex flex-col gap-4 p-8 rounded-md bg-white shadow-md">
+            <h1 class="text-xl font-bold">
                 A verification link has been sent to your email.
             </h1>
             <base-button @click="sendVerificationEmail" :disabled="sentEmail || verificationEmailSent">Resend</base-button>
@@ -41,20 +41,3 @@ export default class VerifyEmail extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.not-found {
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    padding: var(--st-spacing);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &__link {
-        color: var(--st-color-primary);
-    }
-}
-</style>

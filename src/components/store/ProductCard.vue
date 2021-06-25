@@ -1,13 +1,13 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isOwned}" v-if="product">
-        <icon name="lock" v-if="isAvailable" class="absolute top-4 left-4" />
+        <icon name="lock" v-if="!isOwned" class="absolute top-4 left-4 text-secondary" />
         <img
             class="w-full object-cover cursor-pointer"
             :src="image"
             @click="goToCollection"
             :alt="product.getName(languageKey)"
         />
-        <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300">
+        <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between items-start mb-4">
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
@@ -20,7 +20,7 @@
                     @click="addToCart()"
                     :content="false"
                 ></base-button>
-                <collection-settings v-else :collection="product.collections[0]"></collection-settings>
+                <!-- <collection-settings v-else :collection="product.collections[0]"></collection-settings> -->
             </div>
             <div class="flex flex-col gap-2 md:flex-row">
                 <base-button
@@ -50,9 +50,8 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 import CollectionSettings from "../CollectionSettings.vue";
-import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
-import { notify } from "@/services/notify";
+// import { notify } from "@/services/notify";
 
 @Options({
     components: {
@@ -70,13 +69,8 @@ export default class ProductCard extends Vue {
     public store = useStore();
     
     public addToCart() {
-        if (this.product)
-            this.store.commit(
-                StripeMutationTypes.CART_ADD_PRODUCT,
-                this.product.id,
-            );
-
-        notify("success", this.$t("store.addedToCart"), "buy");
+        this.collection?.addToCart();
+        // notify("success", this.$t("store.addedToCart"), "buy");
     }
 
     public get inCart() {

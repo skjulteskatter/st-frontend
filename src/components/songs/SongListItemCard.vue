@@ -1,5 +1,5 @@
 <template>
-    <base-card class="border hover:border-gray-400 cursor-pointer">
+    <base-card class="border hover:border-gray-400 cursor-pointer dark:border-gray-500 dark:hover:border-gray-300">
         <div class="flex gap-2" v-if="song">
             <b class="text-gray-400">{{ song.number }}</b>
             <div class="song-list__item-card__body">
@@ -14,18 +14,18 @@
                     <div class="">
                         <small>{{ $t("song.author") }}: </small>
                         <small
-                            v-for="author in song.authors"
+                            v-for="author in song.Authors"
                             :key="author.id"
                             >{{ author.name }}</small
                         >
                     </div>
                     <div
                         class=""
-                        v-if="song.composers.length"
+                        v-if="song.Composers.length"
                     >
                         <small>{{ $t("song.composer") }}: </small>
                         <small
-                            v-for="composer in song.composers"
+                            v-for="composer in song.Composers"
                             :key="composer.id"
                             >{{ composer.name }}</small
                         >

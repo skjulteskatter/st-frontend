@@ -1,36 +1,38 @@
 <template>
     <loader :loading="loading">
-        <div v-if="contributor" class="contributor">
-            <back-button />
-            <div class="contributor__biography">
-                <img
-                    :src="portrait"
-                    id="contributor-biography-image"
-                    class="contributor__biography__header__portrait"
-                />
-                <div class="contributor__biography__header">
-                    <p class="contributor__biography__header__title">
-                        {{ $t("song.contributor") }}
-                    </p>
-                    <h1 class="contributor__biography__header__name">
-                        {{ contributor.name }}
-                    </h1>
-                    <small
-                        class="contributor__biography__header__subtitle"
-                        v-if="contributor.subtitle"
-                    >
-                        {{ contributor.subtitle }}
-                    </small>
+        <div v-if="contributor" class="p-4 md:p-8">
+            <back-button class="md:hidden mb-4" />
+            <base-card>
+                <div class="contributor__biography">
+                    <img
+                        :src="portrait"
+                        id="contributor-biography-image"
+                        class="w-full rounded-lg mb-4 filter grayscale"
+                    />
+                    <div class="contributor__biography__header mb-4">
+                        <p class="text-primary">
+                            {{ $t("song.contributor") }}
+                        </p>
+                        <h1 class="font-bold text-2xl">
+                            {{ contributor.name }}
+                        </h1>
+                        <small
+                            class="text-gray-500 italic"
+                            v-if="contributor.subtitle"
+                        >
+                            {{ contributor.subtitle }}
+                        </small>
+                    </div>
+                    <div
+                        v-html="contributor.getBiography(languageKey)"
+                        class="text-sm"
+                    ></div>
                 </div>
-                <div
-                    v-html="contributor.getBiography(languageKey)"
-                    class="contributor__biography__bio"
-                ></div>
-            </div>
+            </base-card>
 
-            <div class="contributor__songs">
-                <base-card v-for="c in collections" :key="c.id">
-                    <h2>{{ c.getName(languageKey) }}</h2>
+            <div class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div v-for="c in collections" :key="c.id">
+                    <h2 class="font-bold mb-2">{{ c.getName(languageKey) }}</h2>
                     <div class="contributor__songs__wrapper">
                         <song-list-card
                             :collection="c"
@@ -40,7 +42,6 @@
                                     s.collectionIds.some(col => col == c.id)
                                 )
                             "
-                            border
                         ></song-list-card>
                         <song-list-card
                             :collection="c"
@@ -50,10 +51,9 @@
                                     s.collectionIds.some(col => col == c.id)
                                 )
                             "
-                            border
                         ></song-list-card>
                     </div>
-                </base-card>
+                </div>
             </div>
         </div>
     </loader>
@@ -171,11 +171,6 @@ export default class ContributorView extends Vue {
 @import "../style/mixins";
 
 .contributor {
-    padding: calc(var(--st-spacing) * 2);
-
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
 
     &__biography {
         columns: auto 325px;
@@ -191,29 +186,6 @@ export default class ContributorView extends Vue {
 
         &__header {
             break-inside: avoid;
-
-            &__title {
-                color: var(--st-color-primary);
-                margin: 0;
-            }
-
-            &__name {
-                margin: 0;
-            }
-
-            &__subtitle {
-                opacity: 0.5;
-                font-style: italic;
-            }
-
-            &__portrait {
-                width: 100%;
-                border-radius: var(--st-border-radius);
-                border: 3px solid var(--st-color-background-medium);
-                margin-bottom: var(--st-spacing);
-                filter: grayscale(1);
-                animation: slideInFromBottom 250ms ease-out;
-            }
         }
     }
 

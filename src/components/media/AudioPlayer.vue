@@ -1,5 +1,7 @@
 <template>
-    <div class="w-full bg-white p-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 sticky left-0 bottom-0 z-30" v-if="audio && audio.directUrl && song">
+    <div class="w-full bg-white p-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 sticky left-0 bottom-0 z-30 dark:bg-secondary dark:border-gray-500" 
+        v-if="audio && audio.directUrl && Song"
+    >
         <icon
             class="md:hidden absolute top-4 right-2"
             name="error"
@@ -7,26 +9,31 @@
         />
         <div class="flex flex-col items-center md:items-start">    
             <b>{{ audio.name }}</b>
-            <small class="">
-                <router-link
+            <small class=""
                     v-if="
-                        audio.category == 'probackmusic' || song.type == 'track'
-                    "
+                        audio.category == 'probackmusic' || Song.type == 'track'
+                    ">
+                <router-link
+                    class="mr-2"
+                    v-for="i in Song.Composers"
+                    :key="i.id"
                     :to="{
                         name: 'contributor',
                         params: {
                             collection: 'PBM',
-                            contributor: song.composers[0].id,
+                            contributor: i.id,
                         },
                     }"
                 >
-                    {{ song.composers[0].name }}
+                    {{ i.name }}
                 </router-link>
-                <router-link class="flex gap-2" v-else :to="{name: 'song', params: {collection: song.collectionIds[0], number: song.number}}">
+            </small>
+            <small v-else>
+                <router-link class="flex gap-2" v-for="c in Song.collectionIds" :key="c" :to="{name: 'song', params: {collection: c, number: Song?.getNumber(c)}}">
                     <b class="text-gray-500">
-                        {{ song.number }}
+                        {{ Song?.getNumber(c) }}
                     </b>
-                    <span>{{ song.getName(languageKey) }}</span>
+                    <span>{{ Song?.getName() }}</span>
                 </router-link>
             </small>
         </div>
@@ -48,6 +55,8 @@ import { Options, Vue } from "vue-class-component";
 import Plyr from "plyr";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { appSession } from "@/services/session";
+
 
 @Options({
     name: "audio-player",
@@ -70,8 +79,8 @@ export default class AudioPlayer extends Vue {
         return this.store.state.songs.audio?.file;
     }
 
-    public get song() {
-        return this.store.state.songs.audio?.song;
+    public get Song() {
+        return appSession.songs.find(s => s.id == this.audio?.songId);
     }
 
     public get collection(): string | undefined {

@@ -2,9 +2,10 @@
     <header class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-xl md:text-2xl">
             {{ $t("common.your") }}
-            {{ $t("common.playlists").toLowerCase() }}
+            {{ $t("common.collections").toLowerCase() }}
         </h1>
-        <create-playlist-modal />
+        <base-button @click="openCreatePlaylist" theme="secondary" icon="playlist">{{$t('playlist.createnew')}}</base-button>
+        <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
     </header>
     <div class="flex flex-col gap-4" v-if="playlists.length">
         <playlist-card
@@ -14,7 +15,7 @@
         />
     </div>
     <h3 class="bg-gray-300 p-4 rounded text-center" v-else>
-        {{ $t("playlist.noplaylists") }}
+        {{ $t("common.no-amount") + " " + $t("common.collections").toLowerCase() }}
     </h3>
 </template>
 
@@ -36,6 +37,15 @@ import { useStore } from "@/store";
 })
 export default class PlaylistOverview extends Vue {
     private store = useStore();
+    public createPlaylist = false;
+
+    public closeCreatePlaylist() {
+        this.createPlaylist = false;
+    }
+
+    public openCreatePlaylist() {
+        this.createPlaylist = true;
+    }
 
     public get playlists(): ApiPlaylist[] {
         return this.store.getters.playlists;

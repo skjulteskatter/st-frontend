@@ -30,16 +30,11 @@ interface Country {
 type SheetMusicOptions = {
     show: boolean;
     url?: string;
+    type?: string;
     originalKey: string;
     transposition?: number;
     zoom?: number;
-    type?: string;
-}
-
-type AudioTrack = {
-    file: MediaFile;
-    song?: Song;
-    collection?: Collection;
+    clef: "bass" | "treble" | "alto";
 }
 
 type SongFilter = {
@@ -65,5 +60,6 @@ declare module "songtreasures" {
         timeout?: number;
         dateTime?: Date;
         callback?: Function;
+        store?: boolean;
     }
 }

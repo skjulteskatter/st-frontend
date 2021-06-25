@@ -1,0 +1,107 @@
+<template>
+    <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center">
+        <router-link
+            :to="{
+                name: 'tag',
+                params: {
+                    id: tag.id,
+                },
+            }"
+        >
+            {{ tag.getName() }}
+        </router-link>
+        <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
+            <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
+        </button>
+    </span>
+    <base-dropdown>
+        <template #button>
+            <button class="cursor-pointer text-gray-500 text-sm flex items-center">
+                <icon name="plus"/>
+                {{ $t('song.addCategory') }}
+            </button>
+        </template>
+        <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
+            <base-input v-model="tagFilter" type="text" placeholder="Tag name" class="w-full"/>
+            <base-button type="submit" theme="primary" icon="plus" :content="false" />
+        </form>
+        <div v-if="Tags.length" class="mt-2">
+            <small class="text-gray-500">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</small>
+            <ul class="flex flex-wrap gap-1">
+                <li 
+                    class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
+                    v-for="tag in Tags" 
+                    :key="tag.id" 
+                    @click="addToTag(tag.id)">{{tag.getName()}}</li>
+            </ul>
+        </div>
+    </base-dropdown>
+</template>
+<script lang="ts">
+import { Song } from "@/classes";
+import { Tag } from "@/classes/tag";
+import { tags } from "@/services/api";
+import { appSession } from "@/services/session";
+import { useStore } from "@/store";
+import { Options, Vue } from "vue-class-component";
+
+@Options({
+    name: "song-tags",
+    props: {
+        song: {
+            type: Object,
+        },
+    },
+})
+export default class SongTags extends Vue {
+    private store = useStore();
+    private song?: Song;
+
+    public tagFilter = "";
+
+    public async createTag() {
+        if (this.tagFilter == "" || this.Tags.find(t => t.name == this.tagFilter)) {
+            return;
+        }
+        const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
+
+        appSession.tags.push(new Tag(newTag, true));
+        this.Song.tagIds.push(newTag.id);
+
+        this.tagFilter = "";
+    }
+
+    public async addToTag(id: string) {
+        const tag = this.Tags.find(t => t.id == id);
+
+        if (tag) {
+            await tags.addToTag(tag.id, this.Song.id);
+
+            this.Song.tagIds.push(tag.id);
+        }
+    }
+
+    public async removeFromTag(id: string) {
+        const tag = this.Song.tags.find(t => t.id == id);
+
+        if (tag) {
+            await tags.removeFromTag(tag.id, this.Song.id);
+            this.Song.tagIds = this.Song.tagIds.filter(t => t != tag.id);
+        }
+    }
+
+    public get Tags() {
+        const tags = appSession.tags.filter(t => t.userDefined);
+        return tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName().toLowerCase().includes(this.tagFilter.toLowerCase())));
+    }
+
+    public get Song() {
+        // console.log(this.Tags);
+        return this.song as Song;
+    }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
+    }
+}
+</script>

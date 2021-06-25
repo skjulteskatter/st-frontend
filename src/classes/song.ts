@@ -1,11 +1,9 @@
 import { ApiCollection, ApiSong, MediaFile } from "dmb-api";
-import { Contributor } from "./contributor";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
-import { Converter } from "showdown";
 import i18n from "@/i18n";
 import { appSession } from "@/services/session";
-const converter = new Converter();
+import router from "@/router";
 
 export enum SheetMusicTypes {
     PDF = "sheetmusic-pdf",
@@ -16,6 +14,7 @@ export class Song extends BaseClass implements ApiSong {
     public id: string;
     public type: string;
     public image?: string;
+
     public get number() {
         return this.collections[0]?.number ?? 0;
     }
@@ -43,10 +42,12 @@ export class Song extends BaseClass implements ApiSong {
     public themeIds: string[];
     public tagIds: string[];
 
-    public authors: Contributor[] = []
-    public composers: Contributor[] = [];
     public participants: Participant[] = [];
-    public yearWritten = 0;
+    public yearWritten;
+    public yearComposed;
+
+    public files?: MediaFile[];
+
     public audioFiles: MediaFile[] = [];
     public videoFiles: MediaFile[] = [];
     public sheetMusic: MediaFile[] = [];
@@ -54,17 +55,42 @@ export class Song extends BaseClass implements ApiSong {
     public hasLyrics: boolean;
     public hasChords;
     public newMelody: boolean;
+    public newMelodies: string[];
 
     public get themes() {
         return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
     }
 
     public get tags() {
-        return this.tagIds.length ? appSession.tags.filter(t => this.tagIds.includes(t.id)) : [];
+        const tags = this.tagIds.length ? appSession.Tags.filter(t => this.tagIds.includes(t.id)) : [];
+        return tags;
     }
 
     public get collectionIds() {
         return this.collections.map(c => c.id);
+    }
+
+    public get available() {
+        return this.collections.some(n => n.number && n.number <= 5) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
+    }
+
+    public anotherLanguage(lan: string) {
+        return !Object.keys(this.name).includes(lan) && this.type == "lyrics";
+    }
+        
+
+    public view() {
+        if (!this.available) return;
+        const col = appSession.collections.find(c => this.collectionIds.includes(c.id));
+
+        if (col)
+            router.push({
+                name: "song",
+                params: {
+                    collection: col.key,
+                    number: this.getNumber(col.id) ?? this.id,
+                },
+            });
     }
 
     constructor(song: ApiSong) {
@@ -74,13 +100,12 @@ export class Song extends BaseClass implements ApiSong {
         this.id = song.id;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
-        this.authors = this.participants.filter(p => p.type == "author").map(p => p.contributor ?? {} as Contributor);
-        this.composers = this.participants.filter(p => p.type == "composer").map(p => p.contributor ?? {} as Contributor);
         this.yearWritten = song.yearWritten;
-        const files = appSession.files.filter(f => f.songId == this.id);
-        this.audioFiles = files.filter(f => f.type == "audio") ?? [];
-        this.videoFiles = files.filter(f => f.type == "video") ?? [];
-        this.sheetMusic = files.filter(f => f.type.startsWith("sheetmusic")) ?? [];
+        this.yearComposed = song.yearComposed;
+        this.files = appSession.files.filter(f => f.songId == this.id);
+        this.audioFiles = this.files.filter(f => f.type == "audio") ?? [];
+        this.videoFiles = this.files.filter(f => f.type == "video") ?? [];
+        this.sheetMusic = this.files.filter(f => f.type.startsWith("sheetmusic")) ?? [];
         this.details = song.details ?? {};
         this.copyrights = song.copyrights;
         this.type = song.type;
@@ -97,25 +122,15 @@ export class Song extends BaseClass implements ApiSong {
 
         this.collections = song.collections;
         this.newMelody = song.newMelody;
+        this.newMelodies = song.newMelodies;
+
+        this.files = song.files;
     }
 
     public language(code: string): boolean {
         if (Object.keys(this.name).includes(code)) return true;
 
         return false;
-    }
-
-    public get description() {
-
-        const contents: {
-            [key: string]: string;
-        } = {};
-
-        for (const key of Object.keys(this.details)) {
-            contents[key] = converter.makeHtml(this.details[key]);
-        }
-
-        return contents;
     }
 
     public get copyright() {
@@ -125,14 +140,23 @@ export class Song extends BaseClass implements ApiSong {
         };
     }
 
+    public get Authors() {
+        return appSession.contributors.filter(c => this.participants.filter(p => p.type == "author").some(i => i.contributorId == c.id)).map(i => i.item);
+    }
+
+    public get Composers() {
+        return appSession.contributors.filter(c => this.participants.filter(p => p.type == "composer").some(i => i.contributorId == c.id)).map(i => i.item);
+    }
+
+
     public get rawContributorNames() {
         const names: string[] = [];
 
-        this.authors.forEach(a => {
+        this.Authors.forEach(a => {
             names.push(a.name.toLowerCase());
         });
 
-        this.composers.forEach(c => {
+        this.Composers.forEach(c => {
             names.push(c.name.toLowerCase());
         });
 

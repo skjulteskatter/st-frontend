@@ -1,13 +1,20 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor, IndexedSong } from "dmb-api";
+import { ApiContributor, IndexedContributor, IndexedSong, MediaFile } from "dmb-api";
+
+
+export type AudioTrack = {
+    file: MediaFile;
+    collection?: Collection;
+}
 
 export type State = {
     collectionId?: string;
     language: string;
     transcode: string;
     song?: Song;
-    songNumber?: number;
+    songId?: string;
     transposition?: number;
+    newMelody: boolean;
     verses: Verse[];
     lines: string[];
     collections: Collection[];
@@ -19,7 +26,7 @@ export type State = {
     view: "transpose" | "default" | "loading";
     sheetMusic?: SheetMusicOptions;
     search?: string;
-    searchResult: IndexedSong[];
+    searchResult: (IndexedSong | IndexedContributor)[];
 }
 
 export const state: State = {
@@ -28,6 +35,7 @@ export const state: State = {
     lines: [],
     initialized: false,
     list: "default",
+    newMelody: false,
     filter: {
         themes: [],
         videoFiles: [],

@@ -11,6 +11,7 @@ import { Mutations } from "./mutations";
 import { State } from "./state";
 import { SongsMutationTypes } from "../songs/mutation-types";
 import { appSession } from "@/services/session";
+import { notify } from "@/services/notify";
 
 
 
@@ -137,6 +138,7 @@ export interface Actions {
         tagId: string;
         songId: string;
     }): Promise<void>;
+    [SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX]({ commit }: AugmentedActionContext): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
@@ -233,7 +235,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             loggedDate: new Date().toISOString(),
             type: "song",
             itemId: item.id,
-            item: item,
         };
 
         items.push(i);
@@ -242,7 +243,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
             await api.activity.pushActivities(items);
             localStorage.setItem("activities", "[]");
         } else {
-            localStorage.setItem("activities", JSON.stringify(items));
+            try {
+                localStorage.setItem("activities", JSON.stringify(items));
+            }
+            catch {
+                // Err
+            }
         }
 
         commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);
@@ -258,7 +264,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             loggedDate: new Date().toISOString(),
             type: "contributor",
             itemId: item.id,
-            item: item,
         };
 
         items.push(i);
@@ -294,5 +299,13 @@ export const actions: ActionTree<State, RootState> & Actions = {
         const tag = await api.tags.removeFromTag(options.tagId, options.songId);
 
         commit(SessionMutationTypes.SET_TAG, tag);
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async [SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX](_) {
+        const result = await api.admin.importFromLandax();
+
+        if (result) {
+            notify("success", "Imported from Landax", "refresh", result);
+        }
     },
 };

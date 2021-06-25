@@ -1,7 +1,7 @@
 import { Collection } from "@/classes";
-import { getContributors } from "@/functions/helpers";
 import { songs } from "@/services/api";
-import { analytics } from "@/services/auth";
+import { logs } from "@/services/logs";
+import { appSession } from "@/services/session";
 import { ActionContext, ActionTree } from "vuex";
 import { State } from ".";
 import { RootState } from "../..";
@@ -18,7 +18,7 @@ type AugmentedActionContext = {
 
 export interface Actions {
     [SongsActionTypes.SELECT_COLLECTION](context: AugmentedActionContext, payload: string): Promise<void>;
-    [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number): Promise<void>;
+    [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number | string): Promise<void>;
     [SongsActionTypes.SELECT_CONTRIBUTOR](context: AugmentedActionContext, payload: string): Promise<void>;
     [SongsActionTypes.TRANSPOSE](context: AugmentedActionContext, payload: number): Promise<void>;
     [SongsActionTypes.SET_LIST](context: AugmentedActionContext, payload: string): Promise<void>;
@@ -33,34 +33,33 @@ export const actions: ActionTree<State, RootState> & Actions = {
         commit(SongsMutationTypes.LANGUAGE, getters.languageKey);
         commit(SongsMutationTypes.TRANSCODE,getters.user?.settings?.defaultTranscode ?? "common");
         commit(SongsMutationTypes.COLLECTION, id);
-        const list = state.list;
-        commit(SongsMutationTypes.SET_LIST, "default");
         const collection = getters.collection as Collection;
 
         if (collection) {
-            collection.load(state.language).then(() => {
-                dispatch(SongsActionTypes.SET_LIST, list);
-            });
+            await collection.load(state.language);
+            
+            await dispatch(SongsActionTypes.SET_LIST, collection.defaultSort);
+
+            // console.log(collection.authors);
         }
     },
-    async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number: number): Promise<void> {
+    async [SongsActionTypes.SELECT_SONG]({ state, getters, commit }, number): Promise<void> {
         const collection = getters.collection as Collection | undefined;
 
         if (!collection) {
             return;
         }
-        commit(SongsMutationTypes.SET_SONG_NUMBER, number);
+        const song = collection?.songs.find(s => s.getNumber(collection.id) == number || s.id == number);
+        commit(SongsMutationTypes.SET_SONG_ID, song?.id);
 
         if (!getters.lyrics) {
             
             const song = collection?.songs.find(s => s.number == number);
 
             if (song && song.type == "lyrics") {
-                analytics.logEvent("song_details_enter", {
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    song_id: song.id,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    collection_id: collection.id,
+                logs.event("song", {
+                    "song_id": song.id,
+                    "collection_id": collection.id,
                 });
                 const lans = Object.keys(song.name);
                 const language = lans.includes(state.language) ? state.language : lans.includes("en") ? "en" : lans[0];
@@ -68,15 +67,19 @@ export const actions: ActionTree<State, RootState> & Actions = {
             }
         }
     },
-    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit, getters }, contributorId: string): Promise<void> {
+    async [SongsActionTypes.SELECT_CONTRIBUTOR]({ commit }, contributorId: string): Promise<void> {
         // const collection = getters.collection as Collection | undefined;
         // if (!collection) {
         //     return;
         // }
         commit(SongsMutationTypes.CONTRIBUTOR, undefined);
 
-        const contributor = getters.collection?.settings.offline ? (await getContributors(true)).find(c => c.id == contributorId) : await songs.getContributor(contributorId);
+        const contributor = appSession.contributors.find(c => c.id == contributorId) ?? await songs.getContributor(contributorId);
         if (contributor) {
+            logs.event("contributor", {
+                "contributor_id": contributor.id,
+            });
+
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
         }
     },

@@ -1,12 +1,15 @@
 <template>
     <div class="mb-4 flex justify-between items-center">
-        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+        <div class="flex justify-between w-full">
+            <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+            <store-cart class="md:hidden" />
+        </div>
         <div class="flex gap-2">
             <base-button
                 theme="tertiary"
                 @click="refreshSubscriptions"
                 icon="refresh"
-                class="refresh-button"
+                class="refresh-button hidden"
                 :loading="loadingSubs"
             >
                 <span>
@@ -51,12 +54,12 @@ export default class StoreHome extends Vue {
     public loading = false;
     public loadingSubs = false;
 
-    public portal() {
+    public async portal() {
         this.loading = true;
-        this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
             window.location = (result as unknown) as Location;
         });
-        this.loading = false;
+        // this.loading = false;
     }
 
     public get products() {

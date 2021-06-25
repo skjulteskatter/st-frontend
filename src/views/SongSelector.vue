@@ -1,7 +1,5 @@
 <template>
-    <div class="view-song">
-        <router-view />
-    </div>
+    <router-view />
 </template>
 <script lang="ts">
 import { useStore } from "@/store";
@@ -29,7 +27,7 @@ export default class SongSelector extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.view-song {
-    height: 100%;
-}
+// .view-song {
+//     // height: 100%;
+// }
 </style>

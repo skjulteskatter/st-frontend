@@ -1,7 +1,7 @@
 <template>
     <div
         :class="['loader', position == 'global' ? 'loader--global' : '']"
-        v-if="loading"
+        v-if="Loading"
     >
         <strong class="loader__text">{{ $t("common.loading") }}</strong>
     </div>
@@ -30,6 +30,10 @@ import { Options, Vue } from "vue-class-component";
 export default class Loader extends Vue {
     public loading?: boolean;
     public position?: string;
+
+    public get Loading() {
+        return this.loading === true;
+    }
 }
 </script>
 
@@ -46,7 +50,7 @@ export default class Loader extends Vue {
     z-index: 9;
 
     &:before {
-        --size: 50px;
+        --size: 40px;
         content: "";
         width: var(--size);
         height: var(--size);

@@ -5,6 +5,7 @@ export type State = {
     publicKey: string;
     initialized: boolean;
     cart: string[];
+    showCart: boolean;
 };
 
 export const state: State = {
@@ -12,4 +13,5 @@ export const state: State = {
     publicKey: "",
     initialized: false,
     cart: [],
+    showCart: false,
 };

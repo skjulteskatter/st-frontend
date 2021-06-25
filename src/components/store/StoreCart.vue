@@ -1,39 +1,60 @@
 <template>
-    <base-dropdown origin="right" class="text-sm" icon="buy" :label="`${$t('store.inCart')} (${cartItems.length})`" v-if="cartItems.length">
-        <div class="w-max">
-            <div class="flex justify-between items-center mb-4">
+    <base-dropdown origin="right" class="text-sm" icon="buy" :show="show">
+        <template #button>
+            <icon name="buy" class="relative" />
+            <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
+				{{ cartItems.length }}
+			</span>
+        </template>
+        <div class="w-max" @mouseenter="mouseOn = true" @mouseleave="mouseOn = false">
+            <div class="flex gap-4 justify-between items-center mb-4">
                 <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
-                <button @click="clearCart" class="text-red-700 cursor-pointer">
+                <button @click="clearCart" class="text-red-700 cursor-pointer hover:underline" v-if="cartItems.length">
                     {{ $t("store.clearCart") }}
                 </button>
             </div>
-            <div class="flex flex-col gap-2 mb-4">
+            <div class="flex flex-col gap-2 mb-4" v-if="cartItems.length">
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
-                    class="p-2 bg-gray-200 rounded flex justify-between gap-4"
+                    class="p-2 bg-black bg-opacity-10 rounded flex justify-between gap-4"
                 >
                     {{ i.getName(languageKey) }}
-                    <small class="text-gray-500">{{ formatPrices(i.prices, "year") }}</small>
+                    <small class="text-gray-500"><price-div :product="i" :country="country"></price-div></small>
                 </div>
             </div>
-            <base-button @click="checkout" icon="arrowRight" class="w-full">
+            <p v-else class="p-2 text-center mb-4 text-gray-400">
+                {{ $t('store.noItems') }}
+            </p>
+            <base-button :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
     </base-dropdown>
 </template>
 <script lang="ts">
+import http from "@/services/http";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
+import PriceDiv from "./Price.vue";
 
 @Options({
     name: "store-cart",
+    components: {
+        PriceDiv,
+    },
 })
 export default class StoreCart extends Vue {
     private store = useStore();
+    public checkingOut = false;
+    public country = "";
+    public mouseOn = false;
+
+    public async mounted() {
+        this.country = await http.getCountry();
+    }
 
     public formatPrices(prices: Price[], type: string) {
         const unformattedPrice = prices.find((price) => price.type == type)
@@ -54,7 +75,13 @@ export default class StoreCart extends Vue {
     }
 
     public async checkout() {
+        this.checkingOut = true;
         await this.store.dispatch(StripeActionTypes.START_SESSION);
+        // this.checkingOut = false;
+    }
+
+    public get show() {
+        return this.store.state.stripe.showCart == true || this.mouseOn;
     }
 
     public clearCart() {
@@ -62,57 +89,3 @@ export default class StoreCart extends Vue {
     }
 }
 </script>
-
-<style lang="scss" >
-@import "../../style/mixins";
-
-.store-cart__modal {
-    .modal__open-button {
-        .button__content {
-            @include breakpoint("small") {
-                display: none;
-            }
-        }
-    }
-}
-
-.store-cart {
-    min-width: 30vw;
-    min-height: 30vh;
-    display: flex;
-    flex-direction: column;
-
-    @include breakpoint("small"){
-        min-width: 80vw;
-    }
-
-    &__header {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__title {
-        margin-top: 0;
-    }
-
-    &__clearcart {
-        color: var(--st-color-error);
-        cursor: pointer;
-    }
-
-    &__items {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        gap: calc(var(--st-spacing) / 2);
-    }
-
-    &__item {
-        display: flex;
-        justify-content: space-between;
-        padding: calc(var(--st-spacing) / 2);
-        border-radius: var(--st-border-radius);
-        background-color: var(--st-color-background-light);
-    }
-}
-</style>

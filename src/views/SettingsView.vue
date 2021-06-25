@@ -1,6 +1,6 @@
 <template>
     <div class="p-4 md:p-8">
-        <back-button />
+        <back-button class="md:hidden mb-4" />
         <div class="flex justify-between items-center mb-4">
             <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
             <base-button
@@ -12,7 +12,7 @@
                 {{ $t("common.logout") }}
             </base-button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
             <settings-card />
             <user-card />
         </div>

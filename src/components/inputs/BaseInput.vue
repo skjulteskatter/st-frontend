@@ -1,11 +1,12 @@
 <template>
-    <label class="border-none p-0">
+    <label class="border-none p-0 bg-transparent">
         <small class="block" v-if="label">{{ label }}</small>
         <input
-            class="rounded border-gray-300 focus:ring focus:ring-primary focus:ring-offset-2 focus:border-primary w-full"
+            class="rounded border-gray-300 placeholder-gray-500 focus:ring focus:ring-primary focus:ring-offset-2 focus:border-primary w-full dark:border-gray-500 dark:bg-secondary"
             v-bind="$attrs"
             :value="modelValue"
             :disabled="disabled"
+            :placeholder="placeholder"
             @input="(event) => $emit('update:modelValue', event.target.value)"
         />
     </label>
@@ -27,6 +28,9 @@ import { Options, Vue } from "vue-class-component";
             type: Boolean,
             default: false,
         },
+        placeholder: {
+            type: String,
+        },
     },
     emits: ["update:modelValue"],
 })
@@ -34,5 +38,6 @@ export default class BaseInput extends Vue {
     public label?: string;
     public modelValue?: string;
     public disabled?: boolean;
+    public placeholder?: string;
 }
 </script>

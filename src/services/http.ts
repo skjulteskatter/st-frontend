@@ -3,6 +3,17 @@ import auth from "./auth";
 import { notify } from "./notify";
 
 class Http {
+    public async getCountry(): Promise<string> {
+        let entry = localStorage.getItem("country");
+
+        if (!entry && entry?.length != 2) {
+            entry = await this.get<string>("api/Session/Country");
+            localStorage.setItem("country", entry);
+        }
+
+        return entry;
+    }
+
     public validateResponse(response: Response): Promise<Response> {
         return new Promise((resolve, reject) => {
             if (response.status >= 200 && response.status < 300) {
@@ -146,9 +157,9 @@ class Http {
      * @param  {Object} content
      * @return {Promise}
      */
-    public async put<T>(
+    public async put<T, Y = T>(
         path: string,
-        content: T,
+        content: Y,
     ): Promise<T> {
         const result = await this.apifetch(
             path,
@@ -156,15 +167,50 @@ class Http {
                 {
                     method: "PUT",
                     body: JSON.stringify(content),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 },
             ),
         ) as Result<T>;
         return result.result;
     }
 
+    private _token: string | null = null;
+
+    public setToken(value: string) {
+        this._token = value;
+    }
+
+    public async uploadAndDownload(path: string, content: string) {
+        path = `${config.api.basePath}${path}`;
+        const token = this._token ?? await auth.getToken();
+        if (!token) throw new Error("No Authorization token available " + path);
+
+        const headers = {
+            "Authorization": `Bearer ${token}`,
+            "X-Api-Version": "3.0",
+            "Content-Type": "application/json",
+        };
+
+        try {
+            const result = await fetch(path, {
+                headers,
+                method: "POST",
+                body: JSON.stringify({
+                    content,
+                }),
+            });
+            return result;
+        }
+        catch (e) {
+            notify("error", e.status, "warning", e.value);
+        }
+    }
+
     public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
         path = `${config.api.basePath}${path}`;
-        const token = await auth.getToken();
+        const token = this._token ?? await auth.getToken();
         if (!token && !bypassAuth) throw new Error("No Authorization token available " + path);
 
         const headers = Object.assign({

@@ -1,7 +1,10 @@
 import BaseCard from "./BaseCard.vue";
 import BaseButton from "./BaseButton.vue";
 import Modal from "./Modal.vue";
+import BaseModal from "./BaseModal.vue";
 import Loader from "./Loader.vue";
+
+import Copyright from "./Copyright.vue";
 
 import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
@@ -16,6 +19,7 @@ import Tooltip from "./Tooltip.vue";
 export {
     BaseCard,
     BaseButton,
+    BaseModal,
     Modal,
     Loader,
     LyricsSettings,
@@ -26,4 +30,5 @@ export {
     BackButton,
     UsersList,
     Tooltip,
+    Copyright,
 };

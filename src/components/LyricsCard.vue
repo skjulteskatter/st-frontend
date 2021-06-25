@@ -4,31 +4,36 @@
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end">
                 <select
-                    class="rounded border-gray-300"
+                    class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
                     @change="translateTo()"
                 >
                     <option
-                        v-for="l in (type == 'transpose' ? transposeLanguages : languages)"
+                        v-for="l in (type == 'transpose' ? newMelodyView ? newMelodyLanguages : transposeLanguages : languages)"
                         :value="l.key"
                         :key="l.key"
                     >
                         {{ l.name }}
                     </option>
                 </select>
-                <SwitchGroup as="div" class="flex flex-col">
-                    <SwitchLabel class="text-sm text-gray-500">{{ $t("song.chords") }}</SwitchLabel>
+                <SwitchGroup as="div" class="flex flex-col cursor-pointer" v-if="song.hasChords">
+                    <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.chords") }}</SwitchLabel>
                     <Switch
-                        v-if="song.hasChords"
                         @click="transposeToggle()"
-                        :class="[type == 'transpose' ? 'bg-primary' : 'bg-gray-300']"
-                        class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors focus:outline-none my-1"
+                        v-model="chordsEnabled"
+                        class="focus:outline-none"
                     >
-                        <span
-                            :class="type == 'transpose' ? 'translate-x-9' : 'translate-x-1'"
-                            class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform" />
+                        <div
+                            class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"
+                            :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
+                        >
+                            <span
+                                :class="chordsEnabled ? 'translate-x-9' : 'translate-x-1'"
+                                class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                            />
+                        </div>
                     </Switch>
                 </SwitchGroup>
                 <base-dropdown
@@ -36,24 +41,48 @@
                     :label="
                         relativeTranspositions.find(
                             (r) => r.value == selectedTransposition
-                        )?.view
+                        )?.view ?? 'Transpose'
                     "
-                    :class="{ 'hidden': type != 'transpose' }"
+                    :class="{ 'hidden': !chordsEnabled }"
                 >
-                    <button
-                        :class="[
-                            selectedTransposition == t.value
-                                ? 'bg-primary'
-                                : '',
-                        ]"
-                        v-for="t in relativeTranspositions"
-                        :key="t.key"
-                        :disabled="selectedTransposition == t.value"
-                        @click="transpose(t.value)"
-                    >
-                        {{ t.view }}
-                    </button>
+                    <div class="overflow-y-auto max-h-64">
+                        <button
+                            :class="{
+                                'bg-gray-200 dark:bg-gray-800': lyrics?.originalKey == t.original && selectedTransposition != t.value,
+                                'bg-primary text-white': selectedTransposition == t.value,
+                            }"
+                            class="py-1 px-2 w-full rounded flex justify-between gap-4"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="selectedTransposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            <span class="font-semibold">
+                                {{ t.key }}
+                            </span>
+                            <span class="opacity-50">
+                                ({{ t.original }})
+                            </span>
+                        </button>
+                    </div>
                 </base-dropdown>
+                <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="type == 'transpose' && song.newMelody && song.newMelodies.includes(languageKey)">
+                    <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.newMelody") }}</SwitchLabel>
+                    <Switch
+                        @click="newMelody()"
+                        class="focus:outline-none"
+                    >
+                        <div
+                            class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"
+                            :class="newMelodyView ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
+                        >
+                            <span
+                                :class="newMelodyView ? 'translate-x-9' : 'translate-x-1'"
+                                class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                            />
+                        </div>
+                    </Switch>
+                </SwitchGroup>
                 <!-- <transpose-dropdown
                     :transpositions="song.transpositions"
                     :transpose="transpose"
@@ -76,6 +105,8 @@
             </transposed-lyrics-viewer>
             <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
             </lyrics-viewer>
+
+            <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
     </base-card>
 </template>
@@ -125,25 +156,36 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
+    public chordsEnabled = false;
 
-    public relativeTranspositions: {
+    public get relativeTranspositions(): {
         value: number;
         view: string;
         key: string;
         original: string;
-    }[] = [];
+    }[] {
+
+        const ts = this.lyrics ? transposer.getRelativeTranspositions(
+            this.lyrics.originalKey,
+            this.defaultTransposition,
+            this.lyrics.transpositions,
+        ) : [];
+        return ts;
+    }
 
     public get Lyrics() {
         return this.lyrics;
     }
 
-    public mounted() {
+    public async mounted() {
         const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");
 
         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, t);
 
         if (this.type == "transpose") {
+            this.newMelodyView = false;
             if (this.song?.hasLyrics && this.song?.hasChords) {
+                this.chordsEnabled = true;
                 this.transposeView();
             } else {
                 this.store.commit(SongsMutationTypes.SET_VIEW, "default");
@@ -152,42 +194,29 @@ export default class LyricsCard extends Vue {
 
         const fallbackLanguage = this.languages.find(l => l.key == "en")?.key ?? this.languages[0]?.key;
 
-        this.selectedLanguage =
-            (this.languages.find((l) => l.key == this.languageKey)
-                ? this.languageKey
-                : fallbackLanguage) ?? this.languageKey;
 
         if (this.song) {
-            try {
-                this.relativeTranspositions = transposer.getRelativeTranspositions(
-                    this.song.originalKey,
-                    this.defaultTransposition,
-                    this.song.transpositions,
-                );
-            } catch {
-                // ss
-            }
+            this.selectedLanguage = (Object.keys(this.song.name).includes(this.languageKey)
+                    ? this.languageKey
+                    : fallbackLanguage) 
+                ?? this.languageKey;
         }
     }
 
     public get selectedTransposition() {
-        const t = this.store.state.songs.transposition ?? 0;
-
-        if (!this.song) return 0;
-        const ts: number[] = [];
-        for (const k of Object.keys(this.song.transpositions)) {
-            ts.push(this.song.transpositions[k]);
-        }
-
-        if (ts.includes(t)) {
-            return t;
-        } else {
-            return t + 12;
-        }
+        return this.store.state.songs.transposition ?? 0;
     }
 
     public set selectedTransposition(v) {
         this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
+    }
+
+    public get newMelodyView() {
+        return this.store.state.songs.newMelody;
+    }
+
+    public set newMelodyView(v) {
+        this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
     }
 
     // public get selectedTransposition() {
@@ -235,7 +264,9 @@ export default class LyricsCard extends Vue {
             const lyrics = await this.collection?.transposeLyrics(
                 this.song.number,
                 this.selectedTransposition,
-                this.store.state.songs.language
+                this.store.state.songs.language,
+                undefined,
+                this.newMelodyView
             );
             if (lyrics?.transposition !== undefined)
                 this.store.commit(
@@ -258,6 +289,15 @@ export default class LyricsCard extends Vue {
         this.store.commit(SessionMutationTypes.EXTEND, false);
         await this.transpose();
         this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
+    }
+
+    public async newMelody() {
+        this.newMelodyView = !this.newMelodyView;
+        await this.transpose();
+    }
+
+    public get OriginalKey() {
+        return this.lyrics?.originalKey ?? this.song?.originalKey ?? "C";
     }
 
     public get type() {
@@ -283,6 +323,10 @@ export default class LyricsCard extends Vue {
         return this.languages.filter(l => this.collection?.hasChords[l.key]);
     }
 
+    public get newMelodyLanguages() {
+        return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
+    }
+
     public transpositionStrings() {
         return transposer.getRelativeTranspositions(
             this.song?.originalKey ?? "C",
@@ -292,7 +336,7 @@ export default class LyricsCard extends Vue {
     }
 
     public edit() {
-        window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id};lyrics;${this.lyrics?.id}`);
+        window.open(`https://songtreasures.sanity.studio/desk/lyrics;${this.lyrics?.id}`);
     }
 
     public get editor() {

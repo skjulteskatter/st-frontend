@@ -1,8 +1,9 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor, IndexedSong } from "dmb-api";
+import { ApiContributor, IndexedContributor, IndexedSong } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
+import { AudioTrack } from "./state";
 
 export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTION](state: S, payload: string): void;
@@ -12,13 +13,14 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.CONTRIBUTOR](state: S, payload: CollectionItem<ApiContributor> | undefined): void;
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
-    [SongsMutationTypes.SET_SONG_NUMBER](state: S, payload: number | undefined): void;
+    [SongsMutationTypes.SET_SONG_ID](state: S, payload: string | undefined): void;
 
     // [SongsMutationTypes.SET_LYRICS](state: S, payload: Lyrics): void;
     // [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state: S, payload: Lyrics): void;
 
     [SongsMutationTypes.SET_VERSES](state: S, payload: Verse[]): void;
     [SongsMutationTypes.SET_TRANSPOSITION](state: S, payload: number): void;
+    [SongsMutationTypes.SET_NEW_MELODY](state: S, payload: boolean): void;
     [SongsMutationTypes.SET_LINES](state: S, payload: string[]): void;
     [SongsMutationTypes.SET_SONG](state: S, payload: Song): void;
     [SongsMutationTypes.SET_FILTER](state: S, payload: SongFilter): void;
@@ -29,7 +31,7 @@ export type Mutations<S = State> = {
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
 
     [SongsMutationTypes.SEARCH](state: S, payload?: string): void;
-    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: IndexedSong[]): void;
+    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: (IndexedSong | IndexedContributor)[]): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -46,6 +48,9 @@ export const mutations: MutationTree<State> & Mutations = {
     [SongsMutationTypes.TRANSCODE](state, transcode) {
         state.transcode = transcode;
     },
+    [SongsMutationTypes.SET_NEW_MELODY](state, payload) {
+        state.newMelody = payload;
+    },
     [SongsMutationTypes.CONTRIBUTOR](state, contributor): void {
         state.contributorItem = contributor;
     },
@@ -53,8 +58,8 @@ export const mutations: MutationTree<State> & Mutations = {
     [SongsMutationTypes.SET_LIST](state, list: string): void {
         state.list = list;
     },
-    [SongsMutationTypes.SET_SONG_NUMBER](state, songNumber: number): void {
-        state.songNumber = songNumber;
+    [SongsMutationTypes.SET_SONG_ID](state, id: string): void {
+        state.songId = id;
         // state.lyrics = undefined;
     },
 

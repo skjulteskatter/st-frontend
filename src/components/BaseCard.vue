@@ -5,7 +5,7 @@
             class="cover"
             :style="{ backgroundImage: `url(${image})` }"
         ></div>
-        <div class="p-4 border-b border-gray-300" v-if="header">
+        <div class="p-4 border-b border-gray-300 dark:border-gray-500" v-if="header">
             <slot name="header" />
             <icon
                 class="cursor-pointer"

@@ -4,7 +4,7 @@
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
         </div>
         <div class="flex flex-col gap-4">
-            <base-card>
+            <!-- <base-card>
                 <div class="flex flex-wrap gap-2">
                     <base-card
                         v-for="collection in collections"
@@ -29,6 +29,14 @@
                         :loading="loadingClearCache.includes('Landax')"
                     >
                         Clear Landax
+                    </base-button> 
+                    <base-button
+                        @click="clearCollection('Import')"
+                        icon="refresh"
+                        theme="error"
+                        :loading="loadingClearCache.includes('Import')"
+                    >
+                        Import from Landax
                     </base-button>
                     <base-button
                         @click="clearCollection('Index')"
@@ -47,7 +55,7 @@
                         Files
                     </base-button>
                 </div>
-            </base-card>
+            </base-card> -->
             <users-list :users="users" :currentUser="currentUser"></users-list>
 
             <base-card>
@@ -77,6 +85,7 @@ import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
     components: {
@@ -122,8 +131,13 @@ export default class Subscriptions extends Vue {
 
     public async clearCollection(collection: string) {
         this.loadingClearCache.push(collection);
-        // Notification
-        notify("error", await api.admin.clearCache(collection), "trash");
+        notify("warning", "Importing from Landax", "refresh");
+        if (collection == "Import") {
+            await this.store.dispatch(SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX);
+        } else {
+            // Notification
+            notify("error", await api.admin.clearCache(collection), "trash");
+        }
         this.loadingClearCache = this.loadingClearCache.filter(
             (c) => c != collection,
         );

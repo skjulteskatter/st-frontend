@@ -1,22 +1,23 @@
 <template>
     <div class="flex flex-col gap-2">
         <button
-            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center focus:ring focus:ring-primary focus:outline-none"
+            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center focus:ring focus:ring-primary focus:outline-none dark:border-gray-500 dark:hover:border-gray-400"
             v-for="file in Files"
             :key="file.id"
             @click="callback ? callback(file) : undefined"
         >
-            <icon :name="icon" size="14" class="text-gray-500" />
-            <small>
-                {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}}
-                <!-- <span style="opacity: 0.5">{{ $t(`types.${audio.category}`).toLowerCase() }}</span> -->
+            <icon :name="icon" size="14" class="text-gray-500 dark:text-gray-300" />
+            <small class="flex flex-col items-start">
+                <p>{{ file.name }}{{ file.type.endsWith("pdf") ? " (PDF)" : ""}}</p>
+                <!-- {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}} -->
+                <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
             </small>
         </button>
     </div>
 </template>
 
 <script lang="ts">
-import { Collection, Song } from "@/classes";
+import { Collection } from "@/classes";
 import { useStore } from "@/store";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
@@ -49,10 +50,6 @@ export default class MediaListItem extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
-    }
-
-    public get song(): Song | undefined {
-        return this.store.getters.song;
     }
 
     public get collection(): Collection | undefined {

@@ -1,7 +1,7 @@
 <template>
     <div class="relative z-10">
         <div class="cursor-pointer" @click="openDropdown">
-            <button class="bg-white p-2 rounded border border-gray-300 flex items-center gap-2" v-if="label">
+            <button class="bg-white p-2 rounded border border-gray-300 flex items-center gap-2 dark:bg-secondary dark:border-gray-500" v-if="label">
                 <span>{{ label }}</span>
                 <icon
                     :name="icon"
@@ -13,7 +13,7 @@
             <slot name="button" v-else></slot>
         </div>
         <transition-root 
-            :show="show"
+            :show="Show"
             as="template"
             enter="transition transform"
             enter-from="-translate-y-2 opacity-0"
@@ -46,6 +46,9 @@ import { TransitionRoot } from "@headlessui/vue";
             type: String,
             default: "left",
         },
+        show: {
+            type: Boolean,
+        },
     },
     components: {
         TransitionRoot,
@@ -55,11 +58,16 @@ export default class BaseDropdown extends Vue {
     public label?: string;
     public icon?: string;
     public origin?: string;
-    public show = false;
+    public show?: boolean;
+    public visible = false;
+
+    public get Show() {
+        return this.show || this.visible;
+    }
 
     public close(e: Event) {
         if (!this.$el.contains(e.target)) {
-            this.show = false;
+            this.visible = false;
         }
     }
 
@@ -72,7 +80,7 @@ export default class BaseDropdown extends Vue {
     }
 
     public openDropdown() {
-        this.show = !this.show;
+        this.visible = !this.visible;
     }
 }
 </script>

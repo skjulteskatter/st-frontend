@@ -80,6 +80,21 @@ const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/Ve
 const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
     window.location.reload();
 });
+const TagView = () => import(/* webpackChunkName: 'tagList' */ "../views/tags/TagView.vue").catch(() => {
+    window.location.reload();
+});
+const TagList = () => import(/* webpackChunkName: 'tagsList' */ "../views/tags/TagList.vue").catch(() => {
+    window.location.reload();
+});
+const SongStatistics = () => import(/* webpackChunkName: 'songStatistics' */ "../views/statistics/SongStatistics.vue").catch(() => {
+    window.location.reload();
+});
+const CreditSong = () => import(/* webpackChunkName: 'songStatistics' */ "../views/CreditSong.vue").catch(() => {
+    window.location.reload();
+});
+const RedeemToken = () => import(/* webpackChunkName: 'redeemToken' */ "../views/RedeemToken.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -94,9 +109,29 @@ const routes: Array<RouteRecordRaw> = [
                 component: Dashboard,
             },
             {
+                path: "credit",
+                name: "credit",
+                component: CreditSong,
+            },
+            {
                 path: "admin",
                 name: "admin",
                 component: Admin,
+            },
+            {
+                path: "tags",
+                name: "tags",
+                component: TagList,
+            },
+            {
+                path: "tags/:id",
+                name: "tag",
+                component: TagView,
+            },
+            {
+                path: "statistics/:id",
+                name: "song-stats",
+                component: SongStatistics,
             },
             {
                 path: "songs",
@@ -122,7 +157,6 @@ const routes: Array<RouteRecordRaw> = [
                         path: "search",
                         name: "search",
                         component: CompleteSearch,
-                        props: { q: "" },
                     },
                     // {
                     //     path: 'sheetmusic',
@@ -176,6 +210,11 @@ const routes: Array<RouteRecordRaw> = [
                         component: PlaylistView,
                     },
                 ],
+            },
+            {
+                path: "sharing",
+                name: "sharing",
+                component: RedeemToken,
             },
         ],
     },

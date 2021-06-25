@@ -4,19 +4,20 @@ declare module "dmb-api" {
         id?: string;
         type: "contributor";
         itemId: string;
-        item?: ApiContributor;
+        // item?: ApiContributor;
         loggedDate: string;
     } | {
         id?: string;
         type: "song";
         itemId: string;
-        item?: ApiSong;
+        // item?: ApiSong;
         loggedDate: string;
     }
 
     interface ApiCollection {
         id: string;
         defaultType: string;
+        defaultSort: string;
         name: {
             [lang: string]: string;
         };
@@ -41,7 +42,8 @@ declare module "dmb-api" {
         image?: string;
         name: LocaleString;
         participants: ApiParticipant[];
-        yearWritten: number;
+        yearWritten?: number;
+        yearComposed?: number;
         originalKey: string;
         hasLyrics: boolean;
         hasChords: boolean;
@@ -62,6 +64,8 @@ declare module "dmb-api" {
         verses: number;
         details?: LocaleString;
         newMelody: boolean;
+        newMelodies: string[];
+        files?: MediaFile[];
     }
 
     interface ApiLyrics {
@@ -75,6 +79,8 @@ declare module "dmb-api" {
         hasChords: boolean;
         originalKey: string;
         transposedToKey: string;
+        secondaryChords: boolean;
+        notes: string;
         transpositions: {
             [key: string]: number;
         };
@@ -103,12 +109,12 @@ declare module "dmb-api" {
 
     interface ApiParticipant {
         contributorId: string;
-        contributor?: ApiContributor;
         type: "composer" | "author" | "arranger" | "artist";
     }
 
     interface ApiPlaylist {
         id: string;
+        type: "playlist";
         name: string;
         userId: string;
         entries: ApiPlaylistEntry[];
@@ -126,6 +132,7 @@ declare module "dmb-api" {
 
     interface ApiTag {
         id: string;
+        type: "tag";
         name: string;
         color: string;
         userId: string;
@@ -164,6 +171,41 @@ declare module "dmb-api" {
         lyrics: LocaleString;
         contributors: string[];
     }
+
+    interface IndexedContributor {
+        id: string;
+        name: string;
+        biography: LocaleString;
+        subtitle: string;
+        country: string;
+    }
+
+    interface CreditSong {
+        id: string;
+        name: LocaleString;
+        collection: LocaleString;
+        number: number;
+        authors: string[];
+        composers: string[];
+        arrangers: string[];
+        textCopyright: LocaleString;
+        melodyCopyright: LocaleString;
+    }
+
+    interface ShareKey {
+        itemId: string;
+        key: string;
+        userId: string;
+        type: string;
+        validTo: string;
+        usedByIds: string[];
+    }
+
+    interface PublicUser {
+        id: string;
+        displayName: string;
+        image: string;
+    }
 }
 
 interface Copyright {
@@ -198,7 +240,7 @@ interface Price {
     id: string;
     value: string;
     name: string;
-    type: string;
+    type: "month" | "year";
 }
 
 interface Result<T> {
@@ -206,4 +248,21 @@ interface Result<T> {
     success: boolean;
     error: string;
     lastUpdated: string;
+}
+
+interface AnalyticsItem {
+    count: number; 
+    activity: {
+        dateHour: Date;
+        countries: {
+            country: string;
+            count: number;
+        }[];
+        count: number;
+    }[];
+    lyrics: {
+        language: string;
+        dateHour: Date;
+        count: string;
+    }[];
 }

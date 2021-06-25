@@ -2,20 +2,27 @@
     <loader :loading="loading">
         <div v-if="song" class="flex flex-col gap-4 p-4 md:p-8">
             <div class="flex justify-between">
-                <back-button />
-                <div class="flex gap-2">
-                    <small v-if="admin">{{song.id}}</small>
+                <back-button class="flex md:hidden mb-4" />
+                <div class="flex gap-2 items-center ml-auto">
+                    <span v-if="admin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded hidden xl:block">{{ song.id }}</span>
+                    <base-button
+                        v-if="admin"
+                        @click="goToEditPage()"
+                        theme="tertiary"
+                        icon="pencil"
+                        class="mr-4 hidden xl:block"
+                    >Edit</base-button>
                     <modal
                         class="playlist-adder"
                         theme="secondary"
                         icon="folder"
-                        :label="$t('playlist.addtoplaylist')"
+                        :label="$t('common.addTo') + ' ' + $t('common.collection').toLowerCase()"
                         v-if="playlists.length"
                     >
                         <h3 class="mt-0 font-bold mb-4">
-                            {{ $t("common.playlists") }}
+                            {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
                         </h3>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
                                 v-for="playlist in playlists"
                                 :key="playlist.id"
@@ -25,13 +32,7 @@
                         </div>
                     </modal>
                     <base-button
-                        v-if="admin"
-                        @click="goToEditPage()"
-                        theme="tertiary"
-                        icon="pencil"
-                    >Edit</base-button>
-                    <base-button
-                        v-if="extended && song.hasLyrics"
+                        v-if="song.hasLyrics && (isExtended || isAdmin)"
                         @click="extend"
                         icon="screen"
                         :disabled="lyrics?.format != 'json'"
@@ -41,6 +42,9 @@
                     </base-button>
                 </div>
             </div>
+            <div class="flex gap-2 flex-wrap">
+                <song-tags :song="song" />
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <song-info-card
                     :song="song"
@@ -49,7 +53,7 @@
                     class="md:col-span-2"
                 />
                 <song-media-card 
-                    :song="song" 
+                    :song="song"
                 />
                 <lyrics-settings
                     v-if="isExtended"
@@ -69,7 +73,7 @@
     </loader>
 </template>
 <script lang="ts">
-import { SongInfoCard, SongMediaCard } from "@/components/songs";
+import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
     LyricsSettings,
@@ -77,7 +81,7 @@ import {
     BackButton,
     Modal,
 } from "@/components";
-import { PlaylistCard } from "@/components/playlist";
+import { PlaylistAddToCard } from "@/components/playlist";
 import { Collection } from "@/classes";
 // import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
@@ -88,6 +92,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -95,20 +100,25 @@ import { analytics } from "@/services/api";
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
+        SongTags,
         BackButton,
         Modal,
-        PlaylistCard,
+        PlaylistCard: PlaylistAddToCard,
     },
     name: "song-viewer",
 })
 export default class SongViewer extends Vue {
     private store = useStore();
-    public number = 0;
+    public number: number | string = 0;
     public selectedLanguage = this.languageKey;
     public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
-    public viewCount = 0;
+    private songViewCount: number | null = null;
+    
+    public get viewCount() {
+        return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
+    }
 
     public componentLoading: {
         [key: string]: boolean;
@@ -122,10 +132,11 @@ export default class SongViewer extends Vue {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
             loaded: false,
+            clef: "treble",
             originalKey: "C",
         });
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
-        this.number = parseInt(this.$route.params.number as string);
+        this.number = this.$route.params.number as string;
         if (
             !this.store.getters.collection
                 ?.getKeys()
@@ -142,7 +153,6 @@ export default class SongViewer extends Vue {
         }
 
         await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
-        this.store.commit(SongsMutationTypes.SET_SONG_NUMBER, this.number);
 
         if (this.song?.hasLyrics && this.collection)
         {
@@ -150,28 +160,23 @@ export default class SongViewer extends Vue {
                 await this.collection?.transposeLyrics(
                     this.song.collections.find(s => s.id == this.collection?.id)?.number ?? 0, 
                     this.store.state.songs.transposition ?? 0,
-                    this.languageKey,
+                    this.selectedLanguage,
                 );
                 // console.log(l);
             }
             else {
                 await this.collection?.getLyrics(this.song, this.store.state.songs.language);
-            }
-                
-        }
-
-        try {
-            if (this.song?.id) {
-                this.viewCount = (await analytics.getForSong(this.song.id)).viewCount;
-            }
-        }
-        catch {
-            //
+            }  
         }
 
         const route = this.$route.fullPath;
         const log = () => {
             if (route == this.$route.fullPath && this.song) {
+                analytics.viewSong(this.song.id).then(r => {
+                    this.songViewCount = r;
+                    if (this.song)
+                        appSession.Views[this.song.id] = r;
+                });
                 this.store.dispatch(
                     SessionActionTypes.LOG_SONG_ITEM,
                     this.song,
@@ -183,7 +188,7 @@ export default class SongViewer extends Vue {
     }
 
     public get admin() {
-        return this.store.state.session.currentUser?.roles.includes("administrator");
+        return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
     }
 
     public get lyrics() {
@@ -239,7 +244,7 @@ export default class SongViewer extends Vue {
             });
             this.componentLoading[playlist.id] = false;
 
-            notify("success", "Added to playlist",  "check", `Added "${song.getName(this.languageKey)}" to playlist ${playlist.name}`);
+            notify("success", "Added to playlist",  "check", `Added "${song.getName()}" to playlist ${playlist.name}`, undefined, undefined, false);
         }
     }
 
@@ -259,6 +264,10 @@ export default class SongViewer extends Vue {
         return this.store.state.session.extend;
     }
 
+    public get isAdmin() {
+        return this.store.getters.isAdmin;
+    }
+
     public get loading() {
         return this.collection?.loading === true;
     }
@@ -272,7 +281,7 @@ export default class SongViewer extends Vue {
     }
 
     public get song() {
-        return this.store.getters.song;
+        return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
     }
 
     public get languageKey() {

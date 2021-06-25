@@ -1,8 +1,8 @@
-import { Collection, Contributor, Song } from "@/classes";
+import { Collection } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
-import { ApiActivity, ApiContributor, ApiPlaylist, ApiSong } from "dmb-api";
+import { ApiActivity, ApiPlaylist } from "dmb-api";
 import { Activity } from "@/classes/activity";
 import { appSession } from "@/services/session";
 
@@ -63,12 +63,6 @@ export const getters: GetterTree<State, RootState> & Getters = {
                 itemId: a.itemId,
                 loggedDate: a.loggedDate,
             };
-            if (a.type == "contributor") {
-                item.item = new Contributor(a.item as ApiContributor);
-            } else if (a.type == "song") {
-                item.item = new Song(a.item as ApiSong);
-            }
-
             return new Activity(item);
         }) ?? [];
     },

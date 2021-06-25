@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 cursor-pointer max-h-16 md:max-h-20" @click="$router.push('/')">
+    <div class="p-4 cursor-pointer max-h-16 md:max-h-20 h-full" @click="$router.push('/')">
         <img
             class="max-h-full m-0 hidden md:dark:block"
             alt="logo"

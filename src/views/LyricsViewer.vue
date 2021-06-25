@@ -9,20 +9,20 @@
                     <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
                     <p
                         class="lyrics__credits__author"
-                        v-if="song.authors.length > 0"
+                        v-if="song.Authors.length > 0"
                     >
                         {{ $t("song.author") }}:
-                        <span v-for="author in song.authors" :key="author.id">
+                        <span v-for="author in song.Authors" :key="author.id">
                             {{ author.name }}
                         </span>
                     </p>
                     <p
                         class="lyrics__credits__composer"
-                        v-if="song.composers.length > 0"
+                        v-if="song.Composers.length > 0"
                     >
                         {{ $t("song.composer") }}:
                         <span
-                            v-for="composer in song.composers"
+                            v-for="composer in song.Composers"
                             :key="composer.id"
                         >
                             {{ composer.name }}
@@ -75,6 +75,8 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 export default class LyricsViewer extends Vue {
     public store = useStore();
 
+    private song?: Song;
+
     public mounted() {
         themes.load();
         const lyricsItem = localStorage.getItem("lyrics");
@@ -83,13 +85,13 @@ export default class LyricsViewer extends Vue {
         }
         const songItem = localStorage.getItem("song");
         if (songItem) {
-            this.store.commit(SongsMutationTypes.SET_SONG, new Song(JSON.parse(songItem)));
+            this.song = new Song(JSON.parse(songItem));
         }
         window.addEventListener("storage", (event) => {
             if (event.key == "song") {
                 const item = localStorage.getItem("song");
                 if (item) {
-                    this.store.commit(SongsMutationTypes.SET_SONG, new Song(JSON.parse(item)));
+                    this.song = new Song(JSON.parse(item));
                 }
             }
             if (event.key == "lyrics") {
@@ -124,10 +126,6 @@ export default class LyricsViewer extends Vue {
         localStorage.setItem("lyrics_previous", Math.random().toString());
     }
 
-    public get song() {
-        return this.store.state.songs.song;
-    }
-
     public get title() {
         return this.song?.getName(this.languageKey);
     }
@@ -137,7 +135,7 @@ export default class LyricsViewer extends Vue {
     }
 
     public get melodyOrigin() {
-        const melodyOrigin = this.store.getters.song?.melodyOrigin;
+        const melodyOrigin = this.song?.melodyOrigin;
 
         return melodyOrigin
             ? melodyOrigin.description[this.languageKey] ?? melodyOrigin.description.no

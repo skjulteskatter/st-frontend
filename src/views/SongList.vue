@@ -1,68 +1,64 @@
 <template>
     <loader :loading="loading">
         <div class="p-4 md:p-8" v-if="collection">
-            <back-button />
-            <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <back-button class="md:hidden mb-4" />
+            <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <div class="flex flex-col md:flex-row items-end gap-4 text-sm" v-if="!loading">
-                    <div class="flex gap-2">
-                        <div class="flex flex-col gap-1">
-                            <label for="song-category" class="text-gray-400 text-xs">
-                                {{ $t("song.sortby") }}
-                            </label>
-                            <button-group
-                                :buttons="buttons"
-                                :action="setListType"
-                                class="hidden md:flex"
-                            ></button-group>
-                            <select
-                                class="p-2 bg-white border border-gray-300 rounded block md:hidden"
-                                @input="setListType($event.target.value)"
-                            >
-                                <option
-                                    v-for="category in buttons"
-                                    :key="category.value"
-                                    :value="category.value"
-                                    :selected="category.value == listType"
-                                >
-                                    {{ category.label }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label for="song-filters" class="text-xs text-gray-400">
-                                {{ $t("song.filter") }}
-                            </label>
-                            <song-filter-dropdown
-                                :themes="collection.themeTypes"
-                                :origins="collection.origins"
-                            ></song-filter-dropdown>
-                        </div>
-                    </div>
-                    <search-input
-                        type="text"
-                        :placeholder="$t('common.search')"
-                        v-model="searchString"
-                        @search="search"
-                    />
-                </div>
+                <base-button theme="secondary" icon="buy" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.owned">{{ $t('store.buy') }}</base-button>
+                <!-- <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm md:ml-auto">
+                    <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
+                    <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
+                    <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
+                </div> -->
             </div>
-            <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm">
-                <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
-                <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
-                <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
+            <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
+                <div class="flex flex-col gap-1 text-sm">
+                    <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
+                        {{ $t("song.sortby") }}
+                    </label>
+                    <button-group
+                        :buttons="buttons"
+                        :action="setListType"
+                        class="hidden md:flex"
+                    ></button-group>
+                    <select
+                        class="p-2 bg-white border border-gray-300 rounded block md:hidden dark:bg-secondary dark:border-gray-500"
+                        @input="setListType($event.target.value)"
+                    >
+                        <option
+                            v-for="category in buttons"
+                            :key="category.value"
+                            :value="category.value"
+                            :selected="category.value == listType"
+                        >
+                            {{ category.label }}
+                        </option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ $t("song.filterByContent") }}
+                    </label>
+                    <song-filter-dropdown />
+                </div>
+                <search-input
+                    class="max-w-sm"
+                    type="text"
+                    :placeholder="$t('common.search')"
+                    v-model="searchString"
+                    @search="search"
+                />
             </div>
             <div v-if="searchQuery == '' && !loading">
                 <div
                     class="song-list__contributors"
-                    v-if="['composers', 'authors'].includes(listType)"
+                    v-if="listType == 'composer'"
                 >
                     <song-list-card
                         :collection="collection"
-                        v-for="ci in collection.getContributors(listType)"
+                        v-for="ci in collection.composers"
                         :key="ci.item.id"
                         :songs="
                             filteredSongs.filter((s) =>
@@ -74,9 +70,26 @@
                         class="mb-4"
                     ></song-list-card>
                 </div>
-
                 <div
                     class="song-list__contributors"
+                    v-if="listType == 'author'"
+                >
+                    <song-list-card
+                        :collection="collection"
+                        v-for="ci in collection.authors"
+                        :key="ci.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                ci.songIds.includes(s.id)
+                            )
+                        "
+                        :title="ci.item.name"
+                        :action="() => gotoContributor(ci.item)"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
+                <div
+                    class="song-list__songs"
                     v-if="listType == 'themes'"
                 >
                     <song-list-card
@@ -94,7 +107,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'tags'"
                 >
                     <song-list-card
@@ -106,13 +119,14 @@
                                 tag?.songIds.includes(s.id)
                             )
                         "
-                        :title="tag?.item.name[languageKey] ?? ''"
+                        :title="tag?.item.name ?? ''"
+                        :class="{'border border-primary bg-yellow-50': tag.item.userDefined}"
                         class="mb-4"
                     ></song-list-card>
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'countries'"
                 >
                     <song-list-card
@@ -130,8 +144,8 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
-                    v-if="listType == 'default' && songsByNumber.length"
+                    class="song-list__songs"
+                    v-if="listType == 'number' && songsByNumber.length"
                 >
                     <song-list-card
                         v-for="s in songsByNumber"
@@ -145,7 +159,7 @@
                 </div>
 
                 <div
-                    class="song-list__contributors"
+                    class="song-list__songs"
                     v-if="listType == 'title' && songsByTitle.length"
                 >
                     <song-list-card
@@ -157,20 +171,21 @@
                         class="mb-4"
                     ></song-list-card>
                 </div>
-            </div>
 
-            <div
-                class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-                v-if="searchQuery != ''"
-            >
-                <song-list-item-card
-                    v-for="song in filteredSongs.slice(0, 24)"
-                    :key="song.id"
-                    :song="song"
-                    :context="context[song.number]"
-                    @click="selectSong(song.number)"
+                <div
+                    class="song-list__songs"
+                    v-if="listType == 'views' && songsByViews.length"
                 >
-                </song-list-item-card>
+                    <song-list-card
+                        v-for="s in songsByViews"
+                        :collection="collection"
+                        :key="s?.title ?? Math.random()"
+                        :songs="s?.songs ?? []"
+                        :title="s?.title ?? ''"
+                        :count="false"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
             </div>
 
             <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
@@ -197,6 +212,8 @@ import { BackButton } from "@/components";
 import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -216,9 +233,14 @@ export default class SongList extends Vue {
     public searchString = "";
 
     public cId = "";
+    private songsPerCard = 50;
 
     public search() {
-        this.searchQuery = this.searchString;
+        this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, []);
+        this.$router.push({
+            name: "search",
+        });
     }
 
     private async loadCollection() {
@@ -232,8 +254,8 @@ export default class SongList extends Vue {
         }
     }
 
-    public mounted() {
-        this.loadCollection();
+    public async mounted() {
+        await this.loadCollection();
     }
 
     public updated() {
@@ -287,24 +309,8 @@ export default class SongList extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get selected() {
-        return this.store.getters.song ?? {};
-    }
-
-    public async selectSong(number: number) {
-        if (this.collection) {
-            this.$router.push({
-                name: "song",
-                params: {
-                    collection: this.collection?.key,
-                    number: number,
-                },
-            });
-        }
-    }
-
     public get songs(): Song[] {
-        return this.store.getters.songs ?? [];
+        return this.collection?.songs ?? [];
     }
 
     public get songsByNumber(): {
@@ -317,15 +323,43 @@ export default class SongList extends Vue {
         }[] = [];
 
         for (const song of this.filteredSongs) {
-            const number = Math.floor((song.number - 1) / 50);
+            const number = Math.floor((song.number - 1) / this.songsPerCard);
 
             songs[number] = songs[number] ?? {
-                title: `${number * 50 + 1}-${number * 50 + 50}`,
+                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
                 songs: [],
             };
 
             songs[number].songs.push(song);
         }
+        return songs;
+    }
+
+    public get songsByViews(): {
+        title: string;
+        songs: Song[];
+    }[] {
+        const songs: {
+            title: string;
+            songs: Song[];
+        }[] = [];
+        const views = appSession.Views;
+
+        const filteredSongs = this.filteredSongs.sort((a, b) => ((views[a.id] ?? 0) > (views[b.id] ?? 0)) ? -1 : 1);
+
+        for (let i = 0; i < filteredSongs.length; i++) {
+            const song = filteredSongs[i];
+
+            const number = Math.floor((i)/this.songsPerCard);
+            
+            songs[number] = songs[number] ?? {
+                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
+                songs: [],
+            };
+
+            songs[number].songs.push(song);
+        }
+
         return songs;
     }
 
@@ -394,8 +428,8 @@ export default class SongList extends Vue {
         return [
             {
                 label: this.$t("common.number"),
-                value: "default",
-                selected: this.listType == "default",
+                value: "number",
+                selected: this.listType == "number",
             },
             {
                 label: this.$t("common.title"),
@@ -404,34 +438,39 @@ export default class SongList extends Vue {
             },
             {
                 label: this.$t("song.author"),
-                value: "authors",
-                selected: this.listType == "authors",
+                value: "author",
+                selected: this.listType == "author",
             },
             {
                 label: this.$t("song.composer"),
-                value: "composers",
-                selected: this.listType == "composers",
-            },
-            {
-                label: this.$t("song.theme"),
-                value: "themes",
-                selected: this.listType == "themes",
+                value: "composer",
+                selected: this.listType == "composer",
             },
             // {
-            //     label: this.$t("song.tag"),
-            //     value: "tags",
-            //     selected: this.listType == "tags",
+            //     label: this.$t("song.theme"),
+            //     value: "themes",
+            //     selected: this.listType == "themes",
             // },
             {
-                label: this.$t("common.country"),
-                value: "countries",
-                selected: this.listType == "countries",
+                label: this.$t("song.category"),
+                value: "tags",
+                selected: this.listType == "tags",
             },
+            {
+                label: this.$t("common.views"),
+                value: "views",
+                selected: this.listType == "views",
+            },
+            // {
+            //     label: this.$t("common.country"),
+            //     value: "countries",
+            //     selected: this.listType == "countries",
+            // },
         ].filter(
             (b) =>
                 ![
-                    !this.collection?.hasAuthors ? "authors" : "",
-                    !this.collection?.hasComposers ? "composers" : "",
+                    !this.collection?.hasAuthors ? "author" : "",
+                    !this.collection?.hasComposers ? "composer" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
                 ].includes(b.value),
@@ -445,6 +484,10 @@ export default class SongList extends Vue {
 
 .song-list {
     &__contributors {
+        columns: 325px;
+        column-gap: var(--st-spacing);
+    }
+    &__songs {
         columns: 325px;
         column-gap: var(--st-spacing);
     }

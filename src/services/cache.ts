@@ -31,7 +31,7 @@ class CacheService {
         "files",
         "notifications",
     ];
-    private version = 17;
+    private version = 20;
 
     private db() {
         const v = this.version;
@@ -55,12 +55,12 @@ class CacheService {
         });
     }
 
-    public clearCache() {
-        this.tx("config", true).then(db => {
-            db.objectStore("config").clear?.().then(() => {
-                window.location.reload();
-            });
-        });
+    public async clearCache() {
+        for (const store of this.stores) {
+            const tx = await this.tx(store, true);
+
+            await tx.objectStore(store).clear?.();
+        }
     }
 
     private async tx(store: Store, write = false) {

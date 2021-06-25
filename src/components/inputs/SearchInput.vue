@@ -2,7 +2,9 @@
     <div class="flex relative border-none p-0 bg-transparent w-full">
         <input
             type="text"
-            class="rounded border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2"
+            class="rounded border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2 dark:border-gray-500 dark:bg-secondary dark:text-white dark:placeholder-gray-400"
+            :class="{ 'cursor-not-allowed opacity-50': disabled }"
+            :disabled="disabled"
             :placeholder="$t('common.search')"
             :value="modelValue"
             @input="(event) => $emit('update:modelValue', event.target.value)"
@@ -26,10 +28,14 @@ import { Options, Vue } from "vue-class-component";
         modelValue: {
             type: String,
         },
+        disabled: {
+            type: Boolean,
+        },
     },
     emits: ["search", "update:modelValue"],
 })
 export default class SearchInput extends Vue {
     public modelValue?: string;
+    public disabled?: boolean;
 }
 </script>

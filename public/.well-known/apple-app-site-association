@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "L3B7XGC46A.no.sssf.songtreasures",
+                "paths": [ "/playlists", "/playlists/*"]
+            }
+        ]
+    }
+}

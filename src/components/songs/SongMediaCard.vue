@@ -63,6 +63,7 @@ import { Options, Vue } from "vue-class-component";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { useStore } from "@/store";
+import { AudioTrack } from "@/store/modules/songs/state";
 
 @Options({
     components: {
@@ -90,6 +91,7 @@ export default class SongMediaCard extends Vue {
             originalKey: this.song?.originalKey ?? "C",
             transposition: this.transposition,
             type: sheet?.type,
+            clef: "treble",
         };
 
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
@@ -107,7 +109,6 @@ export default class SongMediaCard extends Vue {
     public selectAudio(audio: MediaFile) {
         const track: AudioTrack = {
             file: audio,
-            song: this.song,
             collection: this.store.getters.collection,
         };
         this.store.commit(SongsMutationTypes.SET_AUDIO, track);

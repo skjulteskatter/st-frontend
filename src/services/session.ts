@@ -1,6 +1,9 @@
-import { Collection, Song } from "@/classes";
-import { ApiSong, MediaFile } from "dmb-api";
-import { items, songs } from "./api";
+import { Collection, CollectionItem, Song } from "@/classes";
+import { Tag } from "@/classes/tag";
+import { useStore } from "@/store";
+import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
+import { reactive } from "vue";
+import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
@@ -9,12 +12,17 @@ export class Session {
     public songs: Song[] = [];
     public collections: Collection[] = [];
     public files: MediaFile[] = [];
+    public contributors: CollectionItem<ApiContributor>[] = [];
 
     public themes: Theme[] = [];
-    public tags: SongTag[] = [];
+    public tags: Tag[] = [];
     public countries: Country[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
+
+    public get Tags() {
+        return reactive(this.tags);
+    }
 
     public get initialized() {
         return this._initialized == true;
@@ -30,6 +38,14 @@ export class Session {
 
         this._initialized = false;
         this.collections = (await songs.getCollections()).map(c => new Collection(c));
+
+        const lastCacheClear = await cache.get("config", "last_cache_clear") as number | undefined;
+
+        if (!lastCacheClear || lastCacheClear < (new Date().getTime() - 86400000)) {
+            await cache.clearCache();
+
+            await cache.set("config", "last_cache_clear", new Date().getTime());
+        }
 
         const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
 
@@ -56,68 +72,96 @@ export class Session {
                 }, {} as {
                     [id: string]: MediaFile;
                 }));
+
+                const c = await songs.getContributors();
+
+                await cache.replaceEntries("contributors", c.result.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: ApiCollectionItem<ApiContributor>;
+                }));
             }
         }
 
         await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
         
         if (ownedCols.length) {
-            // const offline = (await cache.get("config", "offline")) == true;
-            // if (offline) {
+            try {
+                const key = "last_updated_files";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
 
-                try {
-                    const key = "last_updated_files";
-                    const lastUpdated = await cache.get("config", key) as string | undefined;
+                const now = new Date();
 
-                    const now = new Date();
-    
-                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
-                        const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
-    
-                        await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: MediaFile;
-                        }));
-        
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
-                    }
-                } catch(e) {
-                    notify("error", "Error fetching files", "warning", e);
-                    this.files = (await songs.getFiles(ownedCols)).result;
-                }
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
 
-                this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
-                
-            // } else {
-                try {
-                    const key = "last_updated_songs";
-                    const lastUpdated = await cache.get("config", key) as string | undefined;
-    
-                    const now = new Date();
-    
-                    if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 86400000) {
-                        const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
-    
-                        await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
-                            a[b.id] = b;
-                            return a;
-                        }, {} as {
-                            [id: string]: ApiSong;
-                        }));
-        
-                        await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
-                    }
+                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: MediaFile;
+                    }));
+                    
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
-                catch(e) {
-                    notify("error", "Error occured", "warning", e);
-                    this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
+            } catch(e) {
+                notify("error", "Error fetching files", "warning", e);
+                this.files = (await songs.getFiles(ownedCols)).result;
+            }
+
+            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+            try {
+                const key = "last_updated_songs";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                const now = new Date();
+
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
+
+                    await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiSong;
+                    }));
+
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
-                
-                this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-            //     this.songs = (await songs.getAllSongs(ownedCols)).map(s => new Song(s));
-            // }
+            }
+            catch(e) {
+                notify("error", "Error occured", "warning", e);
+                this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
+            }
+            
+            this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
+
+            try {
+                const key = "last_updated_contributors";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+
+                const now = new Date();
+
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateItems = await songs.getContributors(lastUpdated);
+
+                    await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiCollectionItem<ApiContributor>;
+                    }));
+
+                    await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
+                }
+            }
+            catch(e) {
+                notify("error", "Error occured", "warning", e);
+                this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
+            }
+
+            this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
         }
 
         items.getCountries().then(c => {
@@ -126,18 +170,82 @@ export class Session {
         items.getThemes().then(t => {
             this.themes = t;
         }).catch();
-
         items.getCopyrights().then(c => {
             this.copyrights = c;
         }).catch();
 
-        items.getTags().then(t => {
-            this.tags = t;
-        }).catch();
+        const t = await items.getTags();
+        this.tags = t.map(i => new Tag({
+            id: i.id,
+            name: i.name[useStore().getters.languageKey] ?? Object.values(i.name)[0],
+        }, false));
+        const ts = await tags.getAll();
+        for (const tag of ts) {
+            for (const sId of tag.songIds) {
+                const song = this.songs.find(s => s.id == sId);
+                song?.tagIds.push(tag.id);
+            }
+        }
+        this.tags = [...ts.map(i => new Tag(i, true)), ...this.tags];
 
         this.languages = await items.getLanguages();
 
+        await this.getViews();
+
         this._initialized = true;
+    }
+
+    private views?: {
+        [key: string]: number;
+    };
+
+    public get Views() {
+        return this.views ?? {};
+    }
+
+    private lastUpdated?: Date;
+
+    public async getViews() {
+        if (this.views) {
+            const date = new Date();
+            date.setSeconds(date.getSeconds() - 10);
+            
+            if (this.lastUpdated && this.lastUpdated < date) {
+                analytics.getTotalViews().then(r => {
+                    this.views = r;
+                });
+            }
+
+            return this.views;
+        }
+        try {
+            this.views = await analytics.getTotalViews();
+        }
+        catch {
+            this.views = {};
+        }
+    }
+
+    private keys?: ShareKey[];
+
+    public get Keys() {
+        return this.keys ?? [];
+    }
+
+    public addKey(key: ShareKey) {
+        this.keys = [...this.keys ?? [], key];
+    }
+
+    public async getKeys() {
+        if (this.keys) return this.Keys;
+
+        try {
+            this.keys = await sharing.getKeys();
+        }
+        catch {
+            this.keys = [];
+        }
+        return this.Keys;
     }
 }
 

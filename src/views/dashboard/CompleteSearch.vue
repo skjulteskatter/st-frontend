@@ -1,15 +1,24 @@
 <template>
     <loader :loading="loading">
         <div class="p-4 md:p-8">
-                <back-button />
-                <h1 class="text-2xl md:text-3xl font-bold mb-4">{{ $t("common.search") }}</h1>
-                <div class="flex flex-col gap-2 mb-4">
-                    <search-input v-model="searchQuery" @search="search" />
-                    <p class="text-gray-400">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
-                </div>
+            <back-button class="md:hidden mb-4" />
+            <h1 class="text-2xl md:text-3xl font-bold mb-4">{{ $t("common.search") }}</h1>
+            <div class="flex flex-col gap-2 mb-4">
+                <search-input v-model="searchQuery" @search="search" />
+                <p class="text-gray-400">{{ searchResult.length + ' ' + $t('common.results').toLowerCase() }}</p>
+            </div>
+            <div class="mb-8" v-if="contributorResult.length">
+                <h3 class="uppercase tracking-wide mb-2">{{ $t('song.contributors') }}</h3>
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <search-result-item @click="goToSong(song)" v-for="song in searchResult" :key="song.id" :song="song"></search-result-item>
+                    <search-result-item @click="goToItem(item)" v-for="item in contributorResult" :key="item.id" :item="item"/>
                 </div>
+            </div>
+            <div v-if="songResult.length">
+                <h3 class="uppercase tracking-wide mb-2">{{ $t('common.songs') }}</h3>
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <search-result-item @click="goToItem(item)" v-for="item in songResult" :key="item.id" :item="item"/>
+                </div>
+            </div>
         </div>
     </loader>
 </template>
@@ -21,7 +30,7 @@ import { SearchInput, SearchResultItem } from "@/components/inputs";
 
 import { songs } from "@/services/api";
 import { Collection } from "@/classes";
-import { IndexedSong } from "dmb-api";
+import { IndexedContributor, IndexedSong } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
@@ -44,6 +53,14 @@ export default class CompleteSearch extends Vue {
         }
     }
 
+    public get Songs() {
+        return this.searchResult.filter(r => typeof(r.name) != "string") as IndexedSong[];
+    }
+
+    public get Contributors() {
+        return this.searchResult.filter(r => typeof(r.name) == "string") as IndexedContributor[];
+    }
+
     public async search() {
         this.loading = true;
         if (this.searchQuery) {
@@ -64,6 +81,14 @@ export default class CompleteSearch extends Vue {
         return this.collections.filter(c => ids.includes(c.id));
     }
 
+    public goToItem(item: IndexedSong | IndexedContributor) {
+        if (typeof(item.name) == "string") {
+            this.goToContributor(item as IndexedContributor);
+        } else {
+            this.goToSong(item as IndexedSong);
+        }
+    }
+
     public goToSong(song: IndexedSong) {
         const collections = this.collections.filter(c => song.collectionIds.includes(c.id));
 
@@ -73,6 +98,15 @@ export default class CompleteSearch extends Vue {
             params: {
                 collection: cId,
                 number: song.number,
+            },
+        });
+    }
+
+    public goToContributor(item: IndexedContributor) {
+        this.$router.push({
+            name: "contributor",
+            params: {
+                contributor: item.id,
             },
         });
     }
@@ -91,6 +125,16 @@ export default class CompleteSearch extends Vue {
 
     public get searchResult() {
         return this.store.state.songs.searchResult;
+    }
+
+    public get contributorResult() {
+        const results = this.searchResult.filter(i => typeof(i?.name) == "string");
+        return results;
+    }
+
+    public get songResult() {
+        const results = this.searchResult.filter(i => typeof(i?.name) != "string");
+        return results;
     }
 
     // public get songsByCollection() {

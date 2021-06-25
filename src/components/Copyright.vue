@@ -1,0 +1,20 @@
+<template>
+    <div :class="{ 'hidden': hide }" class="w-full mb-4 text-center flex md:justify-center">
+        <span class="text-sm text-gray-500">© {{new Date().getFullYear()}} {{ $t('copyright.title')}} | All rights reserved.</span>
+    </div>
+</template>
+<script lang="ts">
+import { useStore } from "@/store";
+import { Options, Vue } from "vue-class-component";
+
+@Options({
+    name: "copyright",
+})
+export default class Copyright extends Vue {
+    private store = useStore();
+
+    public get hide() {
+        return this.store.getters.collection?.loading;
+    }
+}
+</script>

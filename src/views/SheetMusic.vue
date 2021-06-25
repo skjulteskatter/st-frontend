@@ -1,45 +1,42 @@
 <template>
-    <loader :loading="osmd.loading" />
-    <div class="sheetmusic-viewer" :style="osmd.loading ? 'opacity: 0' : ''">
-        <div v-if="!embed && song" class="sheetmusic-viewer__info">
+    <div class="sheetmusic-viewer">
+        <!-- <div v-if="!embed && song" class="sheetmusic-viewer__info">
             <h2 class="sheetmusic-viewer__info__title">
                 {{ song.getName(languageKey) }}
             </h2>
             <p
-                v-for="c in song.authors"
+                v-for="c in song.Authors"
                 :key="c.id"
                 class="sheetmusic-viewer__info__author"
             >
                 {{ $t("song.author") }}: {{ c.name }}
             </p>
             <p
-                v-for="c in song.composers"
+                v-for="c in song.Composers"
                 :key="c.id"
                 class="sheetmusic-viewer__info__composer"
             >
                 {{ $t("song.composer") }}: {{ c.name }}
             </p>
-        </div>
+        </div> -->
+
+        <base-button v-for="file in files" :key="file.id" @click="setFile(file)">
+            {{file.name}} ({{file.category}})
+        </base-button>
 
         <div class="sheetmusic-wrapper">
-            <!-- <base-button
-                v-if="type != pdfType"
-                icon="settings"
-                class="pbcontrol-toggle"
-                style="position: fixed"
-                @click="osmd.toggleControls()"
-                >Controls</base-button
-            > -->
             <open-sheet-music-display
                 v-if="
+                    loaded &&
                     type != pdfType &&
+                    options &&
                     url &&
                     ['sheet-music', 'sheet-music-embed'].includes(routeName)
                 "
                 :options="options"
             ></open-sheet-music-display>
             <object
-                v-if="type == pdfType"
+                v-if="type == pdfType && options"
                 :data="options.url"
                 type="application/pdf"
                 width="100%"
@@ -48,23 +45,6 @@
                 <p>Couldn't load PDF</p>
             </object>
             <div id="osmd-canvas"></div>
-            <!-- <div id="pb-canvas"></div>
-            <div class="sheetmusic-controlpanel"
-                v-if="type != pdfType"
-            >
-                <base-button
-                    icon="refresh"
-                    theme="tertiary"
-                    @click="osmd.reset()"
-                    >RESET</base-button
-                >
-                <base-button
-                    :icon="osmd.playing ? 'pause' : 'play'"
-                    :theme="osmd.playing ? 'error' : 'secondary'"
-                    @click="osmd.playing ? osmd.pause() : osmd.play()"
-                    >{{ osmd.playing ? "PAUSE" : "PLAY" }}</base-button
-                >
-            </div> -->
         </div>
     </div>
     <!-- </loader> -->
@@ -73,11 +53,13 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
-import { ApiSong } from "dmb-api";
+import { MediaFile } from "dmb-api";
 import { SheetMusicTypes, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
+import http from "@/services/http";
+import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 
 @Options({
@@ -91,36 +73,33 @@ export default class SheetMusic extends Vue {
     public searchParams = new URLSearchParams(window.location.search);
     public osmd = osmd;
     public pdfType = SheetMusicTypes.PDF;
-    public song?: Song;
+    public files: MediaFile[] = [];
+    public song: Song | null = null;
+    public user?: User;
 
-    public created() {
-        const o = localStorage.getItem("sheetmusic_options");
-
-        if (o && !this.$route.params.id) {
-            const options = JSON.parse(o) as SheetMusicOptions ?? {};
-            options.originalKey ??= "C";
-            options.transposition ??= 0;
-            if (!this.sheetMusic.url) {
-                this.store.commit(
-                    SongsMutationTypes.SET_SHEETMUSIC_OPTIONS,
-                    options,
-                );
-            }
-        }
+    public get languageKey() {
+        return this.user?.settings?.languageKey;
     }
+
+    public loaded = false;
 
     public async mounted() {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
+        const token = this.searchParams.get("token");
+        await osmd.init(c, pbc);
 
-        if (this.type != SheetMusicTypes.PDF) {
-            await osmd.init(c, pbc);
+        if (token) {
+            http.setToken(token);
+
+            this.user = await session.getCurrentUser();
+
+            const song = new Song(await songs.getSongById(this.$route.params.id as string, "files"));
+            this.song = song;
+            this.files = song.files?.filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
         }
-
-        const song = localStorage.getItem("song_item");
-
-        if (song) {
-            this.song = new Song(JSON.parse(song) as ApiSong);
+        else {
+            throw new Error("No token present");
         }
         // const o: SheetMusicOptions = {
         //     show: true,
@@ -130,6 +109,29 @@ export default class SheetMusic extends Vue {
         // }
 
         // this.songStore.commit("sheetMusic", o)
+
+        this.loaded = true;
+    }
+    
+    public async setFile(file: MediaFile) {
+        this.loaded = false;
+
+        await new Promise(r => setTimeout(r, 10));
+        const options: SheetMusicOptions = {
+            show: true,
+            originalKey: file.song?.originalKey ?? "C",
+            url: file.directUrl,
+            type: file.type,
+            transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
+            zoom: this.zoom,
+            clef: "treble",
+        };
+        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+        this.loaded = true;
+    }
+
+    public get options() {
+        return this.store.state.songs.sheetMusic;
     }
 
     public get sheetMusic() {
@@ -195,19 +197,16 @@ export default class SheetMusic extends Vue {
         );
     }
 
-    public get options(): SheetMusicOptions {
-        return {
-            show: this.showSheetMusic,
-            url: this.url,
-            originalKey: this.originalKey,
-            transposition: this.transposition,
-            type: this.type ?? undefined,
-        };
-    }
-
-    public get languageKey() {
-        return useStore().getters.languageKey;
-    }
+    // public get options(): SheetMusicOptions {
+    //     return {
+    //         show: this.showSheetMusic,
+    //         url: this.url,
+    //         originalKey: this.originalKey,
+    //         transposition: this.transposition,
+    //         type: this.type ?? undefined,
+    //         clef: "treble",
+    //     };
+    // }
 }
 </script>
 <style lang="scss">

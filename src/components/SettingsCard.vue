@@ -1,5 +1,5 @@
 <template>
-    <base-card class="md:col-span-3" v-if="user">
+    <base-card class="md:col-span-3 md:row-span-2" v-if="user">
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
@@ -8,10 +8,10 @@
                     theme="error"
                 >Clear cache</base-button>
             </h3>
-            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -22,21 +22,10 @@
                     </option>
                 </select>
             </div>
-            <!-- <div class="user-settings__offline field gap-x">
-                <label for="offline-mode">{{ $t("common.offline") }}</label>
-                <hr />
-                <input
-                    type="checkbox"
-                    name="offline-mode"
-                    id="offline-mode"
-                    v-model="offline"
-                    @change="setOffline()"
-                />
-            </div> -->
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="language">{{ $t("common.language") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -51,10 +40,10 @@
                     </option>
                 </select>
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="transposition-key">{{ $t("song.key") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -65,36 +54,39 @@
                     </option>
                 </select>
             </div>
-            <!-- <div class="user-settings__key field gap-x">
-                <label for="transcode">{{ $t("song.transcode") }}</label>
-                <hr />
-                <select
-                    id="transcode"
-                    name="transcode"
-                    v-model="selectedTranscode"
-                    @change="setTranscode"
-                >
-                    <option v-for="k in transcodes" :value="k" :key="k">
-                        {{ k }}
-                    </option>
-                </select>
-            </div> -->
         </div>
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold">
                 {{ $t("common.user") }}
             </h3>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="display-name">{{ $t("common.name") }}</label>
                 <input
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="display-name"
                     type="text"
                     v-model="newDisplayName"
                     :placeholder="user.displayName"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                <label for="gender">{{ $t("common.gender") }}</label>
+                <select
+                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    id="gender"
+                    name="gender"
+                    v-model="gender"
+                >
+                    <option value="unknown" key="male">Not set</option>
+                    <option value="male" key="male">Male</option>
+                    <option value="male" key="male">Female</option>
+                </select>
+            </div>
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                <label for="birthDay">{{ $t("common.birthDay") }}</label>
+                <input type="date" v-model="birthDay" class="bg-transparent rounded border-gray-300" />
+            </div>
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
                 <input
                     id="image"
@@ -103,7 +95,7 @@
                     @change="handleImage"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label>{{ $t("common.password") }}</label>
                 <change-password />
             </div>
@@ -131,6 +123,7 @@ import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
+import { session } from "@/services/api";
 
 @Options({
     components: {
@@ -147,6 +140,9 @@ export default class SettingsCard extends Vue {
     public themes: Themes = themes;
     public newDisplayName = "";
     public offline = false;
+    public gender: "male" | "female" | "unknown" = "unknown";
+    public birthDay = "";
+
     public transpositions = [
         "Ab",
         "A",
@@ -172,6 +168,14 @@ export default class SettingsCard extends Vue {
         "roman",
     ];
 
+    private get initDate() {
+        return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
+    }
+
+    private dateToString(date: Date) {
+        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+    }
+
     public fileName = "";
     private selectedImage?: string;
 
@@ -193,11 +197,36 @@ export default class SettingsCard extends Vue {
         this.selectedTranscode =
             this.user?.settings?.defaultTranscode ?? "common";
         
+        this.gender = this.user?.gender ?? "unknown";
+        this.birthDay = this.user?.birthDay ? this.dateToString(new Date(this.user.birthDay)) : this.dateToString(this.initDate);
+        
         this.offline = await cache.get("config", "offline") == true;
     }
 
     public async save() {
         this.loading = true;
+        try {
+            const gender = this.gender != this.user?.gender ? this.gender : undefined;
+            const birthDay = this.birthDay != this.dateToString(this.initDate) ? this.birthDay : undefined;
+
+            if (this.user && gender || birthDay) {
+                await session.saveProfile({
+                    gender,
+                    birthDay,
+                });
+
+                if (this.user) {
+                    if (gender)
+                        this.user.gender = gender;
+                    
+                    if (birthDay)
+                        this.user.birthDay = birthDay;
+                }
+            }
+        }
+        catch {
+            //
+        }
         await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.themes.setTheme(this.theme);
         this.submitImage();

@@ -3,13 +3,18 @@
         v-if="song"
         v-cloak
     >
-        <router-link
-            :to="`/songs/${collection.key}`"
-            class="text-sm text-primary hover:underline"
-            v-if="collection"
-        >
-            {{ collection.getName(Language) }}
-        </router-link>
+        <span class="flex justify-between">
+            <router-link
+                :to="`/songs/${collection.key}`"
+                class="text-sm text-primary hover:underline"
+                v-if="collection"
+            >
+                {{ collection.getName(Language) }}
+            </router-link>
+            <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="text-gray-500 hover:text-gray-400 text-sm underline dark:text-gray-400 dark:hover:text-gray-300">
+                {{ $t('song.seeStatistics') }}
+            </router-link>
+        </span>
         <h2 class="flex gap-4 text-xl font-bold mb-2">
             <span class="text-gray-400">
                 {{ song.number }}
@@ -17,7 +22,9 @@
             <span>
                 {{ title }}
             </span>
-            <span v-if="viewCount">({{viewCount}})</span>
+            <span v-if="viewCount != null">
+                ({{ viewCount }})
+            </span>
         </h2>
         <div class="flex items-start gap-2">
             <img
@@ -28,47 +35,50 @@
             />
             <span
                 v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition dark:text-gray-400 dark:border-gray-400"
             >
                 {{ song.verses }}
                 {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
             </span>
-            <div class="text-gray-500 text-base flex flex-col gap-1" v-if="imageLoaded">
-                <small class="flex gap-2" v-if="song.hasLyrics">
-                    <span>{{ $t("song.author") }}: </span>
-                    <span v-for="author in song.authors" :key="author.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400">
+            <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" v-if="imageLoaded">
+                <small 
+                    class="flex gap-2" 
+                    v-if="song.hasLyrics && song.Authors.length"
+                >
+                    <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+                    <span v-for="i in song.Authors" :key="i.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400">
                         <router-link
                             :to="{
                                 name: 'contributor',
                                 params: {
-                                    contributor: author.id,
+                                    contributor: i.id,
                                 },
                             }"
                         >
-                            {{ author.name }}
+                            {{ i.name }}
                         </router-link>
                     </span>
                 </small>
                 <small
-                    v-if="song.composers.length > 0"
+                    v-if="song.Composers.length > 0"
                     class="flex gap-2"
                 >
-                    <span>{{ $t("song.composer") }}: </span>
+                    <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
                     <span
-                        v-for="composer in song.composers"
-                        :key="composer.id"
-                        :label="composer.name"
-                        class="px-1 rounded bg-gray-200 border hover:border-gray-400"
+                        v-for="i in song.Composers"
+                        :key="i.id"
+                        :label="i.name"
+                        class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400"
                     >
                         <router-link
                             :to="{
                                 name: 'contributor',
                                 params: {
-                                    contributor: composer.id,
+                                    contributor: i.id,
                                 },
                             }"
                         >
-                            {{ composer.name }}
+                            {{ i.name }}
                         </router-link>
                     </span>
                 </small>
@@ -106,18 +116,9 @@
                 </small>
                 <small class="flex gap-2">
                     <span v-if="song.originCountry">{{ song.originCountry }}</span>
-                    <span v-if="song.yearWritten">{{ song.yearWritten }}</span>
                     <span v-if="song.originalKey">({{ song.originalKey }})</span>
                 </small>
             </div>
-        </div>
-        <div 
-            class="flex"
-            v-if="song.tags.length"
-        >
-            <small class="flex gap-2" v-for="tag in song.tags" :key="tag.id">
-                {{getLocaleString(tag.name)}}
-            </small>
         </div>
         <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
             <hr />
@@ -173,22 +174,25 @@ export default class SongInfoCard extends Vue {
     }
 
     public mounted() {
-        if (this.song?.image) {
-            const image = document.getElementById(
-                "song-details-image",
-            ) as HTMLImageElement;
+        if (this.song) {
+            if (this.song.image) {
 
-            image.style.display = "none";
+                const image = document.getElementById(
+                    "song-details-image",
+                ) as HTMLImageElement;
 
-            image.src = this.song.image;
+                image.style.display = "none";
 
-            image.onload = () => {
-                image.classList.add("song-details-transition");
+                image.src = this.song.image;
+
+                image.onload = () => {
+                    image.classList.add("song-details-transition");
+                    this.imageLoaded = true;
+                    image.style.display = "";
+                };
+            } else {
                 this.imageLoaded = true;
-                image.style.display = "";
-            };
-        } else {
-            this.imageLoaded = true;
+            }
         }
     }
 
@@ -206,6 +210,7 @@ export default class SongInfoCard extends Vue {
     }
 
     public getLocaleString(dictionary: { [key: string]: string }) {
+        if (!dictionary) return "";
         return (
             dictionary[this.Language] ??
             dictionary.en ??
@@ -215,15 +220,15 @@ export default class SongInfoCard extends Vue {
 
     public get description() {
         return this.song?.getTranslatedProperty(
-            this.song.description,
+            this.song.details,
             this.Language
         );
     }
 
     public get melodyOrigin() {
         return (
-            this.song?.melodyOrigin?.description[this.Language] ??
-            this.song?.melodyOrigin?.description.no ??
+            this.song?.melodyOrigin?.description?.[this.Language] ??
+            this.song?.melodyOrigin?.description?.no ??
             undefined
         );
     }

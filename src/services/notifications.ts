@@ -13,6 +13,7 @@ export class Notification implements N {
     public dateTime: Date;
     public callback;
     public timeout;
+    public store;
 
     constructor(n: N) {
         this.id = n.id ?? Math.floor(new Date().getTime() * Math.random()).toString();
@@ -23,6 +24,7 @@ export class Notification implements N {
         this.dateTime = n.dateTime ?? new Date();
         this.callback = n.callback;
         this.timeout = n.timeout;
+        this.store = n.store;
     }
 }
 
@@ -70,7 +72,7 @@ export class Notifications {
     public async notify(n: N) {
         const not = new Notification(n);
         this.store.commit(NotificationMutationTypes.ADD_NOTIFICATION, not);
-        if (n.callback == undefined)
+        if ((n.callback == undefined && n.title != undefined) || n.store)
             await this.setNotification(not);
     }
 
