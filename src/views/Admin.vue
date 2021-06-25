@@ -4,9 +4,9 @@
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
         </div>
         <div class="flex flex-col gap-4">
-            <base-card>
+            <!-- <base-card>
                 <div class="flex flex-wrap gap-2">
-                    <!-- <base-card
+                    <base-card
                         v-for="collection in collections"
                         :key="collection.id"
                         border
@@ -21,15 +21,15 @@
                         >
                             {{ $t("admin.clearcache") }}
                         </base-button>
-                    </base-card> -->
-                    <!-- <base-button
+                    </base-card>
+                    <base-button
                         @click="clearCollection('Landax')"
                         icon="trash"
                         theme="error"
                         :loading="loadingClearCache.includes('Landax')"
                     >
                         Clear Landax
-                    </base-button> --> 
+                    </base-button> 
                     <base-button
                         @click="clearCollection('Import')"
                         icon="refresh"
@@ -38,24 +38,24 @@
                     >
                         Import from Landax
                     </base-button>
-                    <!-- <base-button
+                    <base-button
                         @click="clearCollection('Index')"
                         icon="refresh"
                         theme="secondary"
                         :loading="loadingClearCache.includes('Index')"
                     >
                         Index Songs
-                    </base-button> -->
-                    <!-- <base-button
+                    </base-button>
+                    <base-button
                         @click="syncFiles()"
                         icon="refresh"
                         theme="secondary"
                         :loading="loadingSync"
                     >
                         Files
-                    </base-button> -->
+                    </base-button>
                 </div>
-            </base-card>
+            </base-card> -->
             <users-list :users="users" :currentUser="currentUser"></users-list>
 
             <base-card>

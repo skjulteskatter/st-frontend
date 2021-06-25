@@ -20,10 +20,10 @@
                     @click="toggleSharePlaylist()"
                     :loading="loading['share']"
                 >
-                    {{ $t('playlist.share') }}
+                    {{ $t('common.share') + " " + $t('common.collection').toLowerCase() }}
                 </base-button>
                 <base-button icon="trash" theme="error" @click="deletePlaylist">
-                    {{ $t("playlist.delete") }}
+                    {{ $t("common.delete") }}
                 </base-button>
             </div>
         </header>
