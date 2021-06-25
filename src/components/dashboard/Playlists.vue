@@ -3,9 +3,9 @@
         <div class="flex justify-between items-center mb-4">
             <span class="flex gap-4 items-center">
                 <h3 class="font-bold">
-                    {{ $t("common.playlists") }}
+                    {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
                 </h3>
-                <tooltip :text="$t('tooltip.playlists')" />
+                <tooltip :text="$t('tooltip.myCollections')" />
             </span>
             <button class="text-sm p-2 rounded bg-black bg-opacity-10 flex gap-2 items-center hover:bg-opacity-20" @click="openCreatePlaylist">
                 {{ $t('playlist.createnew') }}

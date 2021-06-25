@@ -16,11 +16,11 @@
                         class="playlist-adder"
                         theme="secondary"
                         icon="folder"
-                        :label="$t('playlist.addtoplaylist')"
+                        :label="$t('common.addTo') + ' ' + $t('common.collection').toLowerCase()"
                         v-if="playlists.length"
                     >
                         <h3 class="mt-0 font-bold mb-4">
-                            {{ $t('common.select') }} {{ $t("common.playlist").toLocaleLowerCase() }}
+                            {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
                         </h3>
                         <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card

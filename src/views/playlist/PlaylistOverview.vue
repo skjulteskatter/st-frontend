@@ -2,7 +2,7 @@
     <header class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-xl md:text-2xl">
             {{ $t("common.your") }}
-            {{ $t("common.playlists").toLowerCase() }}
+            {{ $t("common.collections").toLowerCase() }}
         </h1>
         <base-button @click="openCreatePlaylist" theme="secondary" icon="playlist">{{$t('playlist.createnew')}}</base-button>
         <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
