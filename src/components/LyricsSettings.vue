@@ -151,9 +151,12 @@ export default class LyricsSettings extends Vue {
         //     this.currentVerses = [1, 2];
         // }
 
-        localStorage.setItem("lyrics", JSON.stringify(this.current));
-        localStorage.setItem("song", JSON.stringify(this.song));
-        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
+        if (this.song) {
+            localStorage.setItem("lyrics", JSON.stringify(this.current));
+            localStorage.setItem("song", JSON.stringify(this.song.raw()));
+            localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
+        }
+
     }
 
     public next() {
