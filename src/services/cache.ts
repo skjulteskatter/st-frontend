@@ -154,14 +154,19 @@ class CacheService {
             return JSON.parse(r.item) as T;
         }
 
-        const item = await factory();
+        try {
+            const item = await factory();
     
-        await this.set("general", key, {
-            expiry,
-            item: JSON.stringify(item),
-        });
-
-        return item;
+            await this.set("general", key, {
+                expiry,
+                item: JSON.stringify(item),
+            });
+    
+            return item;
+        }
+        catch {
+            return null;
+        }
     }
 }
 
