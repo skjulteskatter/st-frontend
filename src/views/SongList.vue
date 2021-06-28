@@ -457,11 +457,13 @@ export default class SongList extends Vue {
                 label: this.$t("song.author"),
                 value: "author",
                 selected: this.listType == "author",
+                hidden: !this.collection?.hasAuthors,
             },
             {
                 label: this.$t("song.composer"),
                 value: "composer",
                 selected: this.listType == "composer",
+                hidden: !this.collection?.hasComposers,
             },
             // {
             //     label: this.$t("song.theme"),
@@ -472,11 +474,13 @@ export default class SongList extends Vue {
                 label: this.$t("song.genre"),
                 value: "genre",
                 selected: this.listType == "genre",
+                hidden: !this.collection?.hasGenres,
             },
             {
                 label: this.$t("song.category"),
                 value: "tags",
                 selected: this.listType == "tags",
+                hidden: !this.collection?.hasTags,
             },
             {
                 label: this.$t("common.views"),
@@ -490,13 +494,7 @@ export default class SongList extends Vue {
             // },
         ].filter(
             (b) =>
-                ![
-                    !this.collection?.hasAuthors ? "author" : "",
-                    !this.collection?.hasComposers ? "composer" : "",
-                    !this.collection?.hasCountries ? "countries" : "",
-                    !this.collection?.hasThemes ? "themes" : "",
-                    !this.collection?.hasGenres ? "genre": "",
-                ].includes(b.value),
+                b.hidden != true,
         );
     }
 }
