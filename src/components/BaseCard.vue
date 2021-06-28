@@ -70,9 +70,3 @@ export default class Card extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.card {
-    animation: slideInFromBottom 0.3s ease;
-}
-</style>
