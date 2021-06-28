@@ -495,7 +495,7 @@ export default class SongList extends Vue {
                     !this.collection?.hasComposers ? "composer" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
-                    !this.collection?.hasGenres ? "genres": "",
+                    !this.collection?.hasGenres ? "genre": "",
                 ].includes(b.value),
         );
     }
