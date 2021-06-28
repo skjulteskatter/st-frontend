@@ -1,5 +1,5 @@
 <template>
-	<div class="py-2">
+	<div>
 		<label class="font-bold">
 			<!-- <input
 				type="checkbox"
