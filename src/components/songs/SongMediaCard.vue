@@ -8,7 +8,7 @@
                 <h4 class="font-bold">
                     {{ $t("song.media") }}
                 </h4>
-                <tooltip text="Her finner du sangens tilhørende filer" />
+                <tooltip :text="$t('tooltip.songFiles')" />
             </div>
         </template>
         <div class="flex flex-col gap-4">
