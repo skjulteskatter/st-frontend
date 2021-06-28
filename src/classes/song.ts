@@ -71,7 +71,7 @@ export class Song extends BaseClass implements ApiSong {
     }
 
     public get available() {
-        return this.collections.some(n => n.number && n.number <= 5) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
+        return this.collections.some(n => n.number && n.number <= 5 && appSession.collections.find(c => c.id == n.id)?.freeSongs) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
     }
 
     public anotherLanguage(lan: string) {
