@@ -18,6 +18,7 @@ declare module "dmb-api" {
         id: string;
         defaultType: string;
         defaultSort: string;
+        freeSongs: boolean;
         name: {
             [lang: string]: string;
         };

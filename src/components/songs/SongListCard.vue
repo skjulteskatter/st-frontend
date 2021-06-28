@@ -122,7 +122,7 @@ export default class SongListCard extends Vue {
     }
 
     public available(n: number) {
-        return this.collection?.available || n <= 5;
+        return this.collection?.available || (this.collection?.freeSongs && n <= 5);
     }
 }
 </script>
