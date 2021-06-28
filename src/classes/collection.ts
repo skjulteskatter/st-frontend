@@ -20,6 +20,7 @@ let closeId: string | null = null;
 export class Collection extends BaseClass implements ApiCollection {
     public id;
     private _key;
+    public freeSongs;
     public keys: LocaleString;
     public defaultType;
     public defaultSort;
@@ -76,6 +77,7 @@ export class Collection extends BaseClass implements ApiCollection {
     constructor(collection: ApiCollection) {
         super();
         this._key = collection.key;
+        this.freeSongs = collection.freeSongs;
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
         this.defaultSort = collection.defaultSort;
