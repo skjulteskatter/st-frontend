@@ -37,7 +37,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         if (collection) {
             await collection.load(state.language);
-            
+
             await dispatch(SongsActionTypes.SET_LIST, collection.defaultSort);
 
             // console.log(collection.authors);

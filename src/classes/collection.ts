@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor, ApiSong } from "dmb-api";
+import { ApiCollection, ApiContributor, ApiSong, Sort } from "dmb-api";
 import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
@@ -23,7 +23,24 @@ export class Collection extends BaseClass implements ApiCollection {
     public freeSongs;
     public keys: LocaleString;
     public defaultType;
-    public defaultSort;
+
+    private _defaultSort: Sort;
+
+    public get defaultSort(): Sort {
+        if (this._defaultSort == "author") 
+            if (this.hasAuthors)
+                return "author";
+            else 
+                return "title";
+        if (this._defaultSort == "composer") 
+            if (this.hasAuthors)
+                return "composer";
+            else 
+                return "title";
+
+        return this._defaultSort;
+    }
+
     public available?: boolean;
     public details?: LocaleString;
     public hasChords: {
@@ -45,6 +62,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public hasCountries = false;
     public hasThemes = false;
     public hasTags = false;
+    public hasGenres = false;
 
     public themeTypes: Theme[] = [];
 
@@ -55,6 +73,8 @@ export class Collection extends BaseClass implements ApiCollection {
 
     private _tags?: CollectionItem<Tag>[];
     private _loadingTags = false;
+
+    private _genres: CollectionItem<Genre>[] = [];
 
     private _authors: CollectionItem<ApiContributor>[] = [];
     private _composers: CollectionItem<ApiContributor>[] = [];
@@ -80,7 +100,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.freeSongs = collection.freeSongs;
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
-        this.defaultSort = collection.defaultSort;
+        this._defaultSort = collection.defaultSort;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
@@ -125,25 +145,26 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
             this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
+            this.hasGenres = this.hasGenres || this.songs.some(s => s.genreIds.length > 0);
 
             this._authors = appSession.contributors.map(c => {
-                const cItem: CollectionItem<ApiContributor> = {
+                const cItem = new CollectionItem<ApiContributor>({
                     songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
                     id: c.id,
                     fileIds: c.fileIds,
                     item: c.item,
-                };
+                });
                 return cItem;
             }).filter(i => i.songIds.length);
             
             
             this._composers = appSession.contributors.map(c => {
-                const cItem: CollectionItem<ApiContributor> = {
+                const cItem = new CollectionItem<ApiContributor>({
                     songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
                     id: c.id,
                     fileIds: c.fileIds,
                     item: c.item,
-                };
+                });
                 return cItem;
             }).filter(i => i.songIds.length);
 
@@ -333,6 +354,17 @@ export class Collection extends BaseClass implements ApiCollection {
                 return this._themes.length;
             }
         }
+        if (value == "genre") {
+            this._genres = appSession.genres.map(i => {
+                const cItem = new CollectionItem<Genre>({
+                    songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
+                    id: i.id,
+                    item: i,
+                    fileIds: [],
+                });
+                return cItem;
+            }).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
+        }
         if (value == "tags") {
             if (!this._tags) {
                 this._loadingTags = true;
@@ -413,6 +445,10 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get tags(): CollectionItem<Tag>[] {
         return this._tags ?? [];
+    }
+
+    public get genres() {
+        return this._genres;
     }
 
     public getContributors(type: string) {

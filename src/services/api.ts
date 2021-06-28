@@ -67,6 +67,9 @@ export const items = {
     getTags() {
         return http.get<SongTag[]>("api/SongTags");
     },
+    getGenres() {
+        return http.get<Genre[]>("api/Genres");
+    },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
     },

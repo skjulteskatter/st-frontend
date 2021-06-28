@@ -101,7 +101,24 @@
                                 theme?.songIds.includes(s.id)
                             )
                         "
-                        :title="theme?.item.name[languageKey] ?? ''"
+                        :title="theme?.name"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
+                <div
+                    class="song-list__songs"
+                    v-if="listType == 'genre'"
+                >
+                    <song-list-card
+                        v-for="i in collection.genres"
+                        :collection="collection"
+                        :key="i.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                i?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="i?.name"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -119,7 +136,7 @@
                                 tag?.songIds.includes(s.id)
                             )
                         "
-                        :title="tag?.item.name ?? ''"
+                        :title="tag?.name"
                         :class="{'border border-primary bg-yellow-50': tag.item.userDefined}"
                         class="mb-4"
                     ></song-list-card>
@@ -138,7 +155,7 @@
                                 country?.songIds.includes(s.id)
                             )
                         "
-                        :title="country?.item.name[languageKey] ?? country?.item.name.en ?? Object.values(country?.item.name ?? {})?.[0] ?? ''"
+                        :title="country?.name"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -452,6 +469,11 @@ export default class SongList extends Vue {
             //     selected: this.listType == "themes",
             // },
             {
+                label: this.$t("song.genre"),
+                value: "genre",
+                selected: this.listType == "genre",
+            },
+            {
                 label: this.$t("song.category"),
                 value: "tags",
                 selected: this.listType == "tags",
@@ -473,6 +495,7 @@ export default class SongList extends Vue {
                     !this.collection?.hasComposers ? "composer" : "",
                     !this.collection?.hasCountries ? "countries" : "",
                     !this.collection?.hasThemes ? "themes" : "",
+                    !this.collection?.hasGenres ? "genres": "",
                 ].includes(b.value),
         );
     }

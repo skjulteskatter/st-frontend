@@ -41,6 +41,7 @@ export class Song extends BaseClass implements ApiSong {
 
     public themeIds: string[];
     public tagIds: string[];
+    public genreIds: string[];
 
     public participants: Participant[] = [];
     public yearWritten;
@@ -56,6 +57,41 @@ export class Song extends BaseClass implements ApiSong {
     public hasChords;
     public newMelody: boolean;
     public newMelodies: string[];
+
+    constructor(song: ApiSong) {
+        super();
+
+        this.collections = song.collections ;
+        this.id = song.id;
+        this.name = song.name;
+        this.participants = song.participants?.map(c => new Participant(c)) ?? [];
+        this.yearWritten = song.yearWritten;
+        this.yearComposed = song.yearComposed;
+        this.files = appSession.files.filter(f => f.songId == this.id);
+        this.audioFiles = this.files.filter(f => f.type == "audio") ?? [];
+        this.videoFiles = this.files.filter(f => f.type == "video") ?? [];
+        this.sheetMusic = this.files.filter(f => f.type.startsWith("sheetmusic")) ?? [];
+        this.details = song.details ?? {};
+        this.copyrights = song.copyrights;
+        this.type = song.type;
+        this.hasLyrics = song.hasLyrics;
+        this.hasChords = song.hasChords;
+        this.originalKey = song.originalKey;
+        this.transpositions = song.transpositions ?? {};
+        this.verses = song.verses;
+        this.image = song.image;
+
+        this.origins = song.origins ?? [];
+        this.themeIds = song.themeIds ?? [];
+        this.tagIds = song.tagIds ?? [];
+        this.genreIds = song.genreIds ?? [];
+
+        this.collections = song.collections;
+        this.newMelody = song.newMelody;
+        this.newMelodies = song.newMelodies;
+
+        this.files = song.files;
+    }
 
     public get themes() {
         return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
@@ -91,40 +127,6 @@ export class Song extends BaseClass implements ApiSong {
                     number: this.getNumber(col.id) ?? this.id,
                 },
             });
-    }
-
-    constructor(song: ApiSong) {
-        super();
-
-        this.collections = song.collections ;
-        this.id = song.id;
-        this.name = song.name;
-        this.participants = song.participants?.map(c => new Participant(c)) ?? [];
-        this.yearWritten = song.yearWritten;
-        this.yearComposed = song.yearComposed;
-        this.files = appSession.files.filter(f => f.songId == this.id);
-        this.audioFiles = this.files.filter(f => f.type == "audio") ?? [];
-        this.videoFiles = this.files.filter(f => f.type == "video") ?? [];
-        this.sheetMusic = this.files.filter(f => f.type.startsWith("sheetmusic")) ?? [];
-        this.details = song.details ?? {};
-        this.copyrights = song.copyrights;
-        this.type = song.type;
-        this.hasLyrics = song.hasLyrics;
-        this.hasChords = song.hasChords;
-        this.originalKey = song.originalKey;
-        this.transpositions = song.transpositions ?? {};
-        this.verses = song.verses;
-        this.image = song.image;
-
-        this.origins = song.origins ?? [];
-        this.themeIds = song.themeIds ?? [];
-        this.tagIds = song.tagIds ?? [];
-
-        this.collections = song.collections;
-        this.newMelody = song.newMelody;
-        this.newMelodies = song.newMelodies;
-
-        this.files = song.files;
     }
 
     public language(code: string): boolean {

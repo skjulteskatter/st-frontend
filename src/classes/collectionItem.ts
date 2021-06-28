@@ -1,7 +1,10 @@
+import { useStore } from "@/store";
 import { ApiCollectionItem, ApiContributor } from "dmb-api";
 import { Tag } from "./tag";
 
 export class CollectionItem<T extends (ApiContributor | Country | Theme | Tag)> implements ApiCollectionItem<T> {
+    private store = useStore();
+
     public id;
     public item: T;
     public songIds;
@@ -16,5 +19,13 @@ export class CollectionItem<T extends (ApiContributor | Country | Theme | Tag)> 
         this.songs = item.songs;
         this.fileIds = item.fileIds;
         this.files = item.files;
+    }
+
+    public get name() {
+        if (typeof(this.item.name) == "string") {
+            return this.item.name;
+        }
+        const l = this.store.getters.languageKey;
+        return this.item.name[l] ?? this.item.name.en ?? Object.values(this.item.name)[0];
     }
 }

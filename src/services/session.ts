@@ -17,6 +17,7 @@ export class Session {
     public themes: Theme[] = [];
     public tags: Tag[] = [];
     public countries: Country[] = [];
+    public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
 
@@ -164,21 +165,20 @@ export class Session {
             this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
         }
 
-        items.getCountries().then(c => {
-            this.countries = c;
-        }).catch();
-        items.getThemes().then(t => {
-            this.themes = t;
-        }).catch();
-        items.getCopyrights().then(c => {
-            this.copyrights = c;
-        }).catch();
+        const expiry = new Date().getTime() + 3600000;
+        
+        this.countries = await cache.getOrCreateAsync("countries", () => items.getCountries(), expiry) ?? [];
+        this.themes = await cache.getOrCreateAsync("themes", () => items.getThemes(), expiry) ?? [];
+        this.copyrights = await cache.getOrCreateAsync("copyrights", () => items.getCopyrights(), expiry) ?? [];
+        this.genres = await cache.getOrCreateAsync("genres", () => items.getGenres(), expiry) ?? [];
 
-        const t = await items.getTags();
+        const t = await cache.getOrCreateAsync("tags", () => items.getTags(), expiry) ?? [];
+
         this.tags = t.map(i => new Tag({
             id: i.id,
             name: i.name[useStore().getters.languageKey] ?? Object.values(i.name)[0],
         }, false));
+
         const ts = await tags.getAll();
         for (const tag of ts) {
             for (const sId of tag.songIds) {
