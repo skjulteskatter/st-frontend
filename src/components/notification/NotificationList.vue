@@ -7,12 +7,12 @@
 			</span>
 		</template>
 		<div class="flex justify-between items-center gap-4 mb-4">
-			<b>Notifications</b>
+			<b>{{ $t('common.notifications') }}</b>
 			<button 
 				v-if="notifications.length"
 				@click="clearNotifications()"
 				class="text-sm text-red-700 hover:underline"
-			>Clear</button>
+			>{{ $t('common.remove') }}</button>
 		</div>
 		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">
 			<notification
@@ -26,7 +26,7 @@
 				:persist="true"
 			/>
 		</div>
-		<p v-else class="bg-black bg-opacity-10 p-4 text-center text-sm rounded whitespace-nowrap">No notifications</p>
+		<p v-else class="bg-black bg-opacity-10 p-4 text-center text-sm rounded whitespace-nowrap">{{ $t('notifications.noNotifications') }}</p>
 	</base-dropdown>
 </template>
 
