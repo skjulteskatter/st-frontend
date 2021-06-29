@@ -53,7 +53,7 @@
             @close="showModal['share'] = false"
         >
             <div class="relative w-72">
-                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal['share'] = false">
+                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal.share = false">
                     <icon name="error" size="20" />
                 </button>
                 <h3 class="font-bold mb-4">{{ $t('playlist.sharePlaylist') }}</h3>
