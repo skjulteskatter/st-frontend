@@ -18,7 +18,7 @@
                     @change="themes.setTheme(theme)"
                 >
                     <option :value="t" v-for="t in themes.keys" :key="t">
-                        {{ t }}
+                        {{ $t(`common.${t}`) }}
                     </option>
                 </select>
             </div>
