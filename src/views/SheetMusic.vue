@@ -1,28 +1,29 @@
 <template>
     <div class="sheetmusic-viewer">
-        <!-- <div v-if="!embed && song" class="sheetmusic-viewer__info">
-            <h2 class="sheetmusic-viewer__info__title">
-                {{ song.getName(languageKey) }}
-            </h2>
-            <p
-                v-for="c in song.Authors"
-                :key="c.id"
-                class="sheetmusic-viewer__info__author"
-            >
-                {{ $t("song.author") }}: {{ c.name }}
-            </p>
-            <p
-                v-for="c in song.Composers"
-                :key="c.id"
-                class="sheetmusic-viewer__info__composer"
-            >
-                {{ $t("song.composer") }}: {{ c.name }}
-            </p>
-        </div> -->
+        <div v-if="song" class="mb-4 p-4 bg-white">
+            <div class="sheetmusic-viewer__info">
+                <h2 class="font-bold">
+                    {{ song.getName(languageKey) }}
+                </h2>
+                <small
+                    v-for="c in song.Authors"
+                    :key="c.id"
+                    class="opacity-50"
+                >
+                    {{ $t("song.author") }}: {{ c.name }}
+                </small>
+                <small
+                    v-for="c in song.Composers"
+                    :key="c.id"
+                    class="opacity-50"
+                >
+                    {{ $t("song.composer") }}: {{ c.name }}
+                </small>
+            </div>
 
-        <base-button v-for="file in files" :key="file.id" @click="setFile(file)">
-            {{file.name}} ({{file.category}})
-        </base-button>
+            <small class="text-gray-500">{{ $t('song.sheetmusic') }}</small>
+            <media-list-item :files="files" :callback="setFile" />
+        </div>
 
         <div class="sheetmusic-wrapper">
             <open-sheet-music-display
@@ -61,10 +62,12 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
+import { MediaListItem } from "@/components/media";
 
 @Options({
     components: {
         OpenSheetMusicDisplay,
+        MediaListItem,
     },
     name: "sheet-music",
 })
