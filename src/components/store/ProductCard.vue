@@ -15,7 +15,7 @@
                 <base-button
                     theme="tertiary"
                     icon="buy"
-                    :disabled="inCart"
+                    :disabled="inCart || !collection?.enabled"
                     v-if="!isOwned"
                     @click="addToCart()"
                     :content="false"

@@ -18,6 +18,7 @@ declare module "dmb-api" {
 
     interface ApiCollection {
         id: string;
+        enabled: boolean;
         defaultType: string;
         defaultSort: Sort;
         freeSongs: boolean;
