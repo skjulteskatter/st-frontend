@@ -394,13 +394,13 @@ export class Collection extends BaseClass implements ApiCollection {
         this.loadingLyrics = true;
         try {
             const song = this.songs.find(s => s.getNumber(this.id) == number);
-            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose && l.secondaryChords == newMelody);
+            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition.includes(transpose) && l.secondaryChords == newMelody);
             if (!lyrics) {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common", newMelody);
                 this.lyrics.push(lyrics);
             }
             if (song)
-                logs.event("lyricsChords", {
+                logs.event("lyrics_transpose", {
                     "collection_id": this.id,
                     "song_id": song.id,
                     "lyrics_id": lyrics.id,
@@ -422,7 +422,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
-            logs.event("lyrics", {
+            logs.event("lyrics_view", {
                 "collection_id": this.id,
                 "song_id": song.id,
                 "lyrics_language": language,

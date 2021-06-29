@@ -161,7 +161,7 @@ class Transposer {
 
     public getTransposition(originalKey: string, relativeKey: string) {
         const diff = commonTranspositions[originalKey] - commonTranspositions[relativeKey];
-        return diff > 0 ? diff : diff + 12;
+        return diff < 0 ? [diff, diff + 12] : [diff - 12, diff];
     }
 
     public getRelativeTranspositions(originalKey: string, relativeKey: string, transpositions: {

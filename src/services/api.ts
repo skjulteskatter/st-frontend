@@ -117,7 +117,7 @@ export const songs = {
         return (await http.get<ApiCollection[]>("api/Collections")).map(c => new Collection(c));
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&details,transpositions,origins/description` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));

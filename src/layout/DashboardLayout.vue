@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col h-screen relative">
+        <loader :loading="!(user && initialized)">
         <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative h-full">
@@ -44,6 +45,7 @@
             <added-to-cart />
             <tos></tos>
         </div>
+        </loader>
     </div>
 </template>
 <script lang="ts">
