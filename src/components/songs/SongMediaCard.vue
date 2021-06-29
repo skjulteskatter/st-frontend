@@ -64,6 +64,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { AudioTrack } from "@/store/modules/songs/state";
+import { logs } from "@/services/logs";
 
 @Options({
     components: {
@@ -93,6 +94,12 @@ export default class SongMediaCard extends Vue {
             type: sheet?.type,
             clef: "treble",
         };
+
+        logs.event("sheetmusic_view", {
+            "file_id": sheet.id,
+            "sheetmusic_transposition": 0,
+            "song_id": this.song?.id,
+        });
 
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
 
