@@ -1,23 +1,29 @@
 <template>
     <div class="sheetmusic-viewer">
         <div v-if="song" class="mb-4 p-4 bg-white">
-            <div class="sheetmusic-viewer__info">
+            <div class="mb-4">
                 <h2 class="font-bold">
                     {{ song.getName(languageKey) }}
                 </h2>
-                <small
-                    v-for="c in song.Authors"
-                    :key="c.id"
-                    class="opacity-50"
-                >
-                    {{ $t("song.author") }}: {{ c.name }}
+                <small class="opacity-50" v-if="song.Authors.length">
+                    <span>{{ $t("song.author") }}: </span>
+                    <span
+                        v-for="c in song.Authors"
+                        :key="c.id"
+                        class="px-1"
+                    >
+                        {{ c.name }}
+                    </span>
                 </small>
-                <small
-                    v-for="c in song.Composers"
-                    :key="c.id"
-                    class="opacity-50"
-                >
-                    {{ $t("song.composer") }}: {{ c.name }}
+                <small class="opacity-50" v-if="song.Composers.length">
+                    <span>{{ $t('song.composer') }}: </span>
+                    <span
+                        v-for="c in song.Composers"
+                        :key="c.id"
+                        class="px-1"
+                    >
+                        {{ c.name }}
+                    </span>
                 </small>
             </div>
 
