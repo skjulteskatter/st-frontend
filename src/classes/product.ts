@@ -73,7 +73,7 @@ export class Product extends BaseClass implements ApiProduct {
     }
 
     public get price() {
-        return this.prices.find(p => p.type == "year");
+        return this.prices.find(p => p.type == "month");
     }
 
     public get currency() {
