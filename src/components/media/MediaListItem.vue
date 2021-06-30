@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col gap-2">
         <button
-            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex gap-2 items-center focus:ring focus:ring-primary focus:outline-none dark:border-gray-500 dark:hover:border-gray-400"
+            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex items-center focus:ring focus:ring-primary focus:outline-none dark:border-gray-500 dark:hover:border-gray-400"
             v-for="file in Files"
             :key="file.id"
             @click="callback ? callback(file) : undefined"
         >
-            <icon :name="icon" size="14" class="text-gray-500 dark:text-gray-300" />
+            <icon :name="icon" size="14" class="mr-2 text-gray-500 dark:text-gray-300" />
             <small class="flex flex-col items-start text-left">
                 <p>{{ file.name }}{{ file.type.endsWith("pdf") ? " (PDF)" : ""}}</p>
                 <!-- {{$t(`types.${file.category}`) + (file.languageKey ? ' (' + file.languageKey + ')' : '')}} -->
