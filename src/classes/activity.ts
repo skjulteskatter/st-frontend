@@ -33,11 +33,11 @@ export class Activity {
     }
 
     public getRouterLink(collections: Collection[]): RouteLocationRaw {
-        return this.activity.type == "song" ? {
+        const link: RouteLocationRaw = this.activity.type == "song" ? {
             name: "song",
             params: {
-                collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "",
-                number: (this.item as Song | undefined)?.collections[0].number ?? "",
+                collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "HV",
+                number: (this.item as Song | undefined)?.collections[0].number ?? "1",
             },
         } : {
             name: "contributor",
@@ -45,6 +45,7 @@ export class Activity {
                 contributor: this.activity.itemId,
             },
         };
+        return link;
     }
 
     public getImage(collections: Collection[]): string | undefined {
