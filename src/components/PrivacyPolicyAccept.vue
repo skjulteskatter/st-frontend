@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-4 items-center text-center">
             <h1 class="text-xl font-bold">{{$t('policies.privacyPolicy')}}</h1>
             <p class="max-w-sm">{{$t('policies.acceptPrivacyPolicy')}}</p>
-            <a href="/privacy-policy" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
+            <a href="https://songtreasures.org/privacy-policy/" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
             <base-button
                 :loading="loading"
                 :disabled="disabled"
