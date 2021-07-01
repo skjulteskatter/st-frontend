@@ -28,7 +28,7 @@
             </div>
 
             <small class="text-gray-500">{{ $t('song.sheetmusic') }}</small>
-            <media-list-item :files="files" :callback="setFile" />
+            <media-list-item v-if="files.length > 1" :files="files" :callback="setFile" />
         </div>
 
         <div class="sheetmusic-wrapper">
@@ -106,6 +106,9 @@ export default class SheetMusic extends Vue {
             const song = new Song(await songs.getSongById(this.$route.params.id as string, "files"));
             this.song = song;
             this.files = song.files?.filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
+            if (this.files.length == 1) {
+                this.setFile(this.files[0]);
+            }
         }
         else {
             throw new Error("No token present");
