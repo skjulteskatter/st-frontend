@@ -21,6 +21,7 @@
             </div>
             <div class="flex gap-4 justify-end">
                 <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
+                <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store.allItems')}}</base-button>
                 <base-button theme="secondary" icon="buy" @click="checkout" :loading="checkingOut">{{$t('store.checkout')}}</base-button>
             </div>
         </div>
@@ -29,6 +30,7 @@
 <script lang="ts">
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "..";
 
@@ -51,6 +53,12 @@ export default class AddedToCart extends Vue {
         this.checkingOut = true;
         await this.store.dispatch(StripeActionTypes.START_SESSION);
         // this.checkingOut = false;
+    }
+
+    public async addAllItemsCheckout() {
+        this.store.commit(StripeMutationTypes.CART_SET, this.store.getters.products.filter(i => i.collections[0]?.enabled).map(i => i.id));
+
+        await this.checkout();
     }
 
     public get Products() {
