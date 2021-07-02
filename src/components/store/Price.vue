@@ -3,7 +3,7 @@
         {{ product.currency?.toUpperCase() }} 
         <span v-if="discounted" class="line-through text-gray-400">{{product.originalPrice}}</span>
         <span v-if="discounted" class="ml-1">{{product.discountedPrice}}</span>
-        <span v-else>{{product.originalPrice}}</span> / year
+        <span v-else>{{product.originalPrice}}</span> / month
     </div>
 </template>
 <script lang="ts">
