@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isOwned}" v-if="product">
-        <icon name="lock" v-if="!isOwned" class="absolute top-4 left-4 text-secondary" />
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': collection.owned}" v-if="product && collection">
+        <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary" />
         <img
             class="w-full object-cover cursor-pointer"
             :src="image"
@@ -13,13 +13,13 @@
                     {{ product.getName(languageKey) }}
                 </h4>
                 <p class="flex items-start text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    <price class="text-gray-400" v-if="!isOwned" :product="product" :country="languageKey"></price>
+                    <price class="text-gray-400" v-if="!collection.owned" :product="product" :country="languageKey"></price>
                     <base-button
                         class="ml-2"
                         theme="tertiary"
                         icon="buy"
                         :disabled="inCart || !collection?.enabled"
-                        v-if="!isOwned"
+                        v-if="!collection.owned"
                         @click="addToCart()"
                         :content="false"
                     ></base-button>
@@ -115,10 +115,6 @@ export default class ProductCard extends Vue {
 
     public get isAvailable() {
         return this.collection?.available;
-    }
-
-    public get isOwned() {
-        return this.store.getters.user?.subscriptions.some(s => s.collectionIds.includes(this.collection?.id as string));
     }
 
     public get image() {
