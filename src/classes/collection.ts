@@ -42,7 +42,12 @@ export class Collection extends BaseClass implements ApiCollection {
         return this._defaultSort;
     }
 
-    public available?: boolean;
+    private _available?: boolean;
+
+    public get available() {
+        return this._available == true;    
+    }
+
     public details?: LocaleString;
     public hasChords: {
         [lang: string]: boolean;
@@ -106,7 +111,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
-        this.available = collection.available;
+        this._available = collection.available;
         this.details = collection.details;
         this.hasChords = collection.hasChords ?? {};
         cache.get("config", "collection_" + this.id).then((r) => {

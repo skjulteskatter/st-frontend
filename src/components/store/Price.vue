@@ -3,11 +3,12 @@
         {{ product.currency?.toUpperCase() }} 
         <span v-if="discounted" class="line-through text-gray-400">{{product.originalPrice}}</span>
         <span v-if="discounted" class="ml-1">{{product.discountedPrice}}</span>
-        <span v-else>{{product.originalPrice}}</span> / month
+        <span v-else>{{product.originalPrice}}</span> / {{$t('month').toLowerCase()}}
     </div>
 </template>
 <script lang="ts">
 import { Product } from "@/classes";
+import http from "@/services/http";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -16,14 +17,15 @@ import { Options, Vue } from "vue-class-component";
         product: {
             type: Object,
         },
-        country: {
-            type: String,
-        },
     },
 })
 export default class Price extends Vue {
     public product?: Product;
-    public country?: string;
+    public country = "no";
+
+    public async mounted() {
+        this.country = await http.getCountry();
+    }
 
     public get Country() {
         return this.country ?? "";

@@ -12,14 +12,18 @@
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
-                <base-button
-                    theme="tertiary"
-                    icon="buy"
-                    :disabled="inCart || !collection?.enabled"
-                    v-if="!isOwned"
-                    @click="addToCart()"
-                    :content="false"
-                ></base-button>
+                <p class="flex items-start text-gray-500 text-sm mb-4 dark:text-gray-400">
+                    <price class="text-gray-400" v-if="!isOwned" :product="product" :country="languageKey"></price>
+                    <base-button
+                        class="ml-2"
+                        theme="tertiary"
+                        icon="buy"
+                        :disabled="inCart || !collection?.enabled"
+                        v-if="!isOwned"
+                        @click="addToCart()"
+                        :content="false"
+                    ></base-button>
+                </p>
                 <!-- <collection-settings v-else :collection="product.collections[0]"></collection-settings> -->
             </div>
             <div class="flex flex-col gap-2 md:flex-row">
@@ -49,6 +53,8 @@ import { Options, Vue } from "vue-class-component";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
+import Price from "./Price.vue";
+
 import CollectionSettings from "../CollectionSettings.vue";
 import { appSession } from "@/services/session";
 // import { notify } from "@/services/notify";
@@ -56,6 +62,7 @@ import { appSession } from "@/services/session";
 @Options({
     components: {
         CollectionSettings,
+        Price,
     },
     name: "product-card",
     props: {
