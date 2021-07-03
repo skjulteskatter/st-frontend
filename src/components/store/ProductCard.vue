@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': collection.owned}" v-if="product && collection">
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': product.owned}" v-if="product && collection">
         <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary" />
         <img
             class="w-full object-cover cursor-pointer"
@@ -13,13 +13,13 @@
                     {{ product.getName(languageKey) }}
                 </h4>
                 <p class="flex items-start text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    <price class="text-gray-400" v-if="!collection.owned" :product="product" :country="languageKey"></price>
+                    <price class="text-gray-400" v-if="!product.owned" :product="product" :country="languageKey"></price>
                     <base-button
                         class="ml-2"
                         theme="tertiary"
                         icon="buy"
-                        :disabled="inCart || !collection?.enabled"
-                        v-if="!collection.owned"
+                        :disabled="inCart || !collection.enabled"
+                        v-if="!product.owned"
                         @click="addToCart()"
                         :content="false"
                     ></base-button>

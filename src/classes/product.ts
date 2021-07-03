@@ -64,6 +64,10 @@ export class Product extends BaseClass implements ApiProduct {
         this.collectionIds = product.collectionIds;
     }
 
+    public get owned() {
+        return this.store.getters.user?.subscriptions.some(i => i.productIds.includes(this.id));
+    }
+
     public get collections() {
         return this._collections ?? [];
     }
