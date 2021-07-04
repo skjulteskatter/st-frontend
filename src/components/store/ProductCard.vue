@@ -12,19 +12,18 @@
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
-                <p class="flex items-start text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    <price class="text-gray-400" v-if="!product.owned" :product="product" :country="languageKey"></price>
-                    <base-button
-                        class="ml-2"
-                        theme="tertiary"
-                        icon="buy"
-                        :disabled="inCart || !collection.enabled"
-                        v-if="!product.owned"
-                        @click="addToCart()"
-                        :content="false"
-                    ></base-button>
-                </p>
-                <!-- <collection-settings v-else :collection="product.collections[0]"></collection-settings> -->
+            </div>
+            <div class="flex justify-between items-center text-gray-500 text-sm mb-4 dark:text-gray-400">
+                <price class="text-gray-400" v-if="!product.owned" :product="product" :country="languageKey" />
+                <base-button
+                    class="ml-2"
+                    theme="tertiary"
+                    icon="buy"
+                    :disabled="inCart || !collection.enabled"
+                    v-if="!product.owned"
+                    @click="addToCart()"
+                    :content="false"
+                ></base-button>
             </div>
             <div class="flex flex-col gap-2 md:flex-row">
                 <base-button
