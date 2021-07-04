@@ -13,7 +13,7 @@
         <img
             src="/img/logo/icon.svg"
             alt="logo"
-            class="max-h-full m-0 md:hidden"
+            class="m-0 max-h-10 md:hidden"
         />
     </div>
 </template>
