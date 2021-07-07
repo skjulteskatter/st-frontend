@@ -26,6 +26,8 @@ class OSMD {
     public zoom = 1;
     public createdDone = false;
     public loading = false;
+
+    public clef?: string;
     // public playing = false;
 
     // private controlPanel: ControlPanel = {} as ControlPanel;
@@ -169,6 +171,8 @@ class OSMD {
         if (process.env.NODE_ENV == "development")
             this.osmd.setLogLevel("debug");
 
+        this.clef = sheetMusic.clef;
+
         this.osmd.setOptions({
             onXMLRead: (e) => {
 
@@ -235,7 +239,7 @@ class OSMD {
     public transpose(n: number) {
         this.transposition = n;
 
-        this.osmd.Sheet.Transpose = this.transposition;
+        this.osmd.Sheet.Transpose = this.clef == "bass" ? this.transposition - 12 : this.transposition;
 
         this.osmd.updateGraphic();
 
