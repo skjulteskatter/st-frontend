@@ -32,7 +32,7 @@
         </div>
     </div>
     <product-slider class="mb-4" :products="products" v-if="products.length" />
-    <p class="text-gray-500">{{$t('store.currencyDescription')}}</p>
+    <p class="text-center text-sm p-2 rounded bg-black/10">{{$t('store.currencyDescription')}}</p>
 </template>
 
 <script lang="ts">
