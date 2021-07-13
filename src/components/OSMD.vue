@@ -108,10 +108,10 @@
                         >
                             <option
                                 v-for="i in 10"
-                                :key="`zoom-${i+4}`"
-                                :value="(i+4)/10"
+                                :key="`zoom-${i+3}`"
+                                :value="(i+3)/10"
                             >
-                                {{ (i+4)*10 }}%
+                                {{ (i+3)*10 }}%
                             </option>
                         </select>
                     </label>
