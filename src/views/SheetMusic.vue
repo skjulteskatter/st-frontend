@@ -1,7 +1,7 @@
 <template>
     <div class="sheetmusic-viewer">
         <div v-if="song" class="mb-4 p-4 bg-white">
-            <div class="mb-4">
+            <div class="flex flex-col">
                 <h2 class="font-bold">
                     {{ song.getName(languageKey) }}
                 </h2>
@@ -27,7 +27,7 @@
                 </small>
             </div>
 
-            <small class="text-gray-500">{{ $t('song.sheetmusic') }}</small>
+            <small class="text-gray-500 mt-4" v-if="files.length > 1">{{ $t('song.sheetmusic') }}</small>
             <media-list-item v-if="files.length > 1" :files="files" :callback="setFile" />
         </div>
 
