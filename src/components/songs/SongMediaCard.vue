@@ -24,7 +24,7 @@
                 v-if="song.audioFiles.length"
             >
                 <p class="text-sm mb-2">
-                    Audio
+                    {{ $t('song.audioFiles') }}
                 </p>
                 <media-list-item :files="song.audioFiles" :callback="selectAudio" icon="music" />
             </div>
@@ -32,31 +32,41 @@
                 v-if="song.videoFiles.length"
             >
                 <p class="text-sm mb-2">
-                    Video
+                    {{ $t('song.videos') }}
                 </p>
-                <modal
-                    v-for="video in song.videoFiles"
-                    theme="tertiary"
-                    :key="video"
-                    :label="$t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '')"
+                <div class="flex flex-wrap gap-2">
+                    <button
+                        class="flex-grow text-sm text-left p-2 rounded border border-gray-300 hover:border-gray-500 dark:border-gray-500 dark:hover:border-gray-400"
+                        v-for="video in song.videoFiles"
+                        :key="'video-' + video.id"
+                        @click="setActiveVideo(video.directUrl)"
+                    >
+                        <icon name="play" size="16" class="mr-2 text-gray-500 dark:text-gray-300" />
+                        <span>{{ $t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '') }}</span>
+                    </button>
+                </div>
+                <base-modal
+                    :show="showVideo"
+                    @close="closeVideo"
                 >
                     <video
-                        :src="video.directUrl"
+                        :src="activeVideo"
                         width="500"
                         type="video/mp4"
                         controls
                         autoplay
+                        fullscreen
                     >
                         Sorry, your browser doesn't support embedded videos.
                     </video>
-                </modal>
+                </base-modal>
             </div>
         </div>
     </base-card>
 </template>
 
 <script lang="ts">
-import { Modal } from "@/components";
+import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
@@ -68,7 +78,7 @@ import { logs } from "@/services/logs";
 
 @Options({
     components: {
-        Modal,
+        BaseModal,
         MediaListItem,
     },
     props: {
@@ -81,11 +91,23 @@ import { logs } from "@/services/logs";
 export default class SongMediaCard extends Vue {
     public song?: Song;
     public store = useStore();
+    public showVideo = false;
+    public activeVideo = "";
+
+    public openVideo() {
+        this.showVideo = true;
+    }
+
+    public closeVideo() {
+        this.showVideo = false;
+    }
+
+    public setActiveVideo(url: string) {
+        this.activeVideo = url;
+        this.openVideo();
+    }
 
     public selectSheetMusic(sheet: MediaFile) {
-        // this.$router.push({name: "songs-sheet-music"});
-        // osmd.load(this.songStore.state.sheetMusic);
-
         const options: SheetMusicOptions = {
             show: true,
             url: sheet?.directUrl,
@@ -102,11 +124,10 @@ export default class SongMediaCard extends Vue {
         });
 
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+    }
 
-        // localStorage.setItem("song_item", JSON.stringify(this.song));
-        // localStorage.setItem("sheetmusic_options", JSON.stringify(options));
-
-        // window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
+    public get videoUrls() {
+        return this.song?.videoFiles.map(f => f.directUrl) ?? [];
     }
 
     public get transposition() {
