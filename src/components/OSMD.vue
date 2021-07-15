@@ -16,7 +16,7 @@
                         <small>{{melodyOrigin}}</small>
                     </div>
                 </div>
-                <div class="flex gap-4 mr-8">
+                <div class="flex gap-4">
                     <label class="flex flex-col">
                         <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
                         <base-dropdown

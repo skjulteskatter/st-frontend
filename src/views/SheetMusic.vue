@@ -54,7 +54,6 @@
             <div id="osmd-canvas"></div>
         </div>
     </div>
-    <!-- </loader> -->
 </template>
 
 <script lang="ts">
@@ -131,7 +130,7 @@ export default class SheetMusic extends Vue {
         await new Promise(r => setTimeout(r, 10));
         const options: SheetMusicOptions = {
             show: true,
-            originalKey: file.song?.originalKey ?? "C",
+            originalKey: this.song?.originalKey ?? "C",
             url: file.directUrl,
             type: file.type,
             transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
