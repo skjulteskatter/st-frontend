@@ -42,9 +42,7 @@
                     </base-button>
                 </div>
             </div>
-            <div class="flex gap-2 flex-wrap">
-                <song-tags :song="song" />
-            </div>
+            <song-tags :song="song" />
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <song-info-card
                     :song="song"
