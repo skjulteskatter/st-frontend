@@ -1,29 +1,21 @@
 <template>
     <div class="h-full flex flex-col justify-center items-center">
-        <h1 class="text-2xl font-bold">Thank you for your purchase!</h1>
-        <p>Your product should be available soon.</p>
-        <div
-            class="bg-gray-100 shadow-md p-4 mb-8 mt-8 rounded-md flex justify-center gap-8 max-w-sm"
-        >
-            <p class="text-gray-500 text-sm">Set your preferred language</p>
-            <div class="flex items-center">
-                <icon name="check" class="text-green-700 mr-4 p-1 rounded-full border border-green-700" v-if="languageSet" />
-                <select
-                    v-model="selectedLanguage"
-                    @change="setLanguage"
-                    class="rounded border-gray-300 text-sm bg-transparent dark:border-gray-500"
-                >
-                    <option
-                        v-for="lang in languages"
-                        :key="lang.key"
-                        :value="lang"
-                    >{{ lang.name }}</option>
-                </select>
+        <h1 class="text-2xl font-bold text-center">Thank you for your purchase!</h1>
+        <p class="text-center">Your product should be available soon.</p>
+        <div class="mt-8 text-center">
+            <p class="text-gray-500 text-sm uppercase tracking-widest">Download the app</p>
+            <div class="p-4 flex gap-4">
+                <a class="flex flex-col items-center" href="https://apps.apple.com/us/app/songtreasures/id1567166808?itsct=apps_box_link&itscg=30200">
+                    <img src="img/app_store_badge.png" alt="App Store" class="max-h-12">
+                </a>
+                <a class="flex flex-col items-center" href='https://play.google.com/store/apps/details?id=no.sssf.songtreasures&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+                    <img alt='Get it on Google Play' class="max-h-12" src='img/play_store_badge.png'/>
+                </a>
             </div>
         </div>
         <router-link
-            class="text-primary hover:underline"
             to="/collections"
+            class="text-primary mt-4 hover:underline"
         >
             Go to collections
         </router-link>
