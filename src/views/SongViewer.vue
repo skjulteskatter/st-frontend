@@ -71,6 +71,23 @@
             />
         </div>
     </loader>
+    <base-modal
+        :show="!songAvailable"
+    >
+        <div class="flex flex-col items-center">
+            <icon name="lock" size="32" class="text-primary mt-4 mb-4" />
+            <h2 class="text-2xl font-bold">{{ $t('store.limitedAccess') }}</h2>
+            <p class="text-center">{{ $t('store.gainAccess') }}</p>
+            <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
+                <img class="max-h-12 rounded" :src="collection.image" :alt="collection.getName(languageKey)">
+                <p>{{ collection.getName(languageKey) }}</p>
+            </div>
+            <div class="flex gap-4 mt-8">
+                <base-button theme="tertiary" icon="arrowLeft" @click="$router.back()">{{ $t('common.back') }}</base-button>
+                <base-button theme="secondary" icon="buy" @click="addToCart">{{ $t('store.addToCart') }}</base-button>
+            </div>
+        </div>
+    </base-modal>
 </template>
 <script lang="ts">
 import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
@@ -80,10 +97,10 @@ import {
     LyricsCard,
     BackButton,
     Modal,
+    BaseModal,
 } from "@/components";
 import { PlaylistAddToCard } from "@/components/playlist";
 import { Collection } from "@/classes";
-// import { osmd } from "@/services/osmd";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -103,6 +120,7 @@ import { appSession } from "@/services/session";
         SongTags,
         BackButton,
         Modal,
+        BaseModal,
         PlaylistCard: PlaylistAddToCard,
     },
     name: "song-viewer",
@@ -111,7 +129,6 @@ export default class SongViewer extends Vue {
     private store = useStore();
     public number: number | string = 0;
     public selectedLanguage = this.languageKey;
-    public sidebar = false;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
     private songViewCount: number | null = null;
@@ -123,10 +140,6 @@ export default class SongViewer extends Vue {
     public componentLoading: {
         [key: string]: boolean;
     } = {};
-
-    // public unmounted() {
-    //     this.songStore.commit("sheetMusic", {show: false});
-    // }
 
     public async beforeMount() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
@@ -162,7 +175,6 @@ export default class SongViewer extends Vue {
                     this.store.state.songs.transposition ?? 0,
                     this.selectedLanguage,
                 );
-                // console.log(l);
             }
             else {
                 await this.collection?.getLyrics(this.song, this.store.state.songs.language);
@@ -203,26 +215,6 @@ export default class SongViewer extends Vue {
         return this.store.state.songs.sheetMusic;
     }
 
-    // public sheetMusic(sheet: MediaFile) {
-    //     // this.$router.push({name: "songs-sheet-music"});
-    //     // osmd.load(this.songStore.state.sheetMusic);
-    //     const options: SheetMusicOptions = {
-    //         show: true,
-    //         url: sheet?.directUrl,
-    //         originalKey: this.song?.originalKey,
-    //         transposition: transposer.getRelativeTransposition(
-    //             this.store.getters.user?.settings?.defaultTransposition ?? "C",
-    //             true
-    //         ),
-    //         type: sheet?.type,
-    //     };
-
-    //     localStorage.setItem("song_item", JSON.stringify(this.song));
-    //     localStorage.setItem("sheetmusic_options", JSON.stringify(options));
-
-    //     window.open("/sheetmusic", "Sheet Music", "resizeable,scrollbars");
-    // }
-
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
         const song = this.song;
@@ -252,6 +244,10 @@ export default class SongViewer extends Vue {
         window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id}`);
     }
 
+    public addToCart() {
+        this.collection?.addToCart();
+    }
+
     public get playlists() {
         return this.store.state.session.playlists;
     }
@@ -278,6 +274,10 @@ export default class SongViewer extends Vue {
 
     public extend() {
         this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
+    }
+
+    public get songAvailable() {
+        return this.collection?.available || (this.collection?.freeSongs && this.song?.collections.some(c => c.number ? c.number <= 5 : false));
     }
 
     public get song() {
