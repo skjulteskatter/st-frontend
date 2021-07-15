@@ -103,7 +103,7 @@
                 :lyrics="lyrics"
             >
             </transposed-lyrics-viewer>
-            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
+            <lyrics-viewer :song="song" v-if="type == 'default' && lyrics?.format == 'json'">
             </lyrics-viewer>
 
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
