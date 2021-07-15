@@ -228,11 +228,11 @@ export default class SheetMusic extends Vue {
     height: 100vh;
     max-width: 1600px;
     margin: auto;
-    padding: calc(var(--st-spacing) * 2);
+    //padding: calc(var(--st-spacing) * 2);
 
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
+    //@include breakpoint("medium") {
+    //    padding: var(--st-spacing);
+    //}
 
     &__info {
         margin-bottom: var(--st-spacing);
