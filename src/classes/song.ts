@@ -13,6 +13,7 @@ export enum SheetMusicTypes {
 export class Song extends BaseClass implements ApiSong {
     public id: string;
     public type: string;
+    public available: boolean;
     public image?: string;
 
     public get number() {
@@ -61,7 +62,8 @@ export class Song extends BaseClass implements ApiSong {
     constructor(song: ApiSong) {
         super();
 
-        this.collections = song.collections ;
+        this.collections = song.collections;
+        this.available = song.available;
         this.id = song.id;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
@@ -104,10 +106,6 @@ export class Song extends BaseClass implements ApiSong {
 
     public get collectionIds() {
         return this.collections.map(c => c.id);
-    }
-
-    public get available() {
-        return this.collections.some(n => n.number && n.number <= 5 && appSession.collections.find(c => c.id == n.id)?.freeSongs) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
     }
 
     public anotherLanguage(lan: string) {

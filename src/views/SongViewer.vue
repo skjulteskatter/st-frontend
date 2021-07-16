@@ -70,7 +70,7 @@
         </div>
     </loader>
     <base-modal
-        :show="!songAvailable"
+        :show="!song?.available"
     >
         <div class="flex flex-col items-center">
             <icon name="lock" size="32" class="text-primary mt-4 mb-4" />
@@ -272,10 +272,6 @@ export default class SongViewer extends Vue {
 
     public extend() {
         this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
-    }
-
-    public get songAvailable() {
-        return this.collection?.available || (this.collection?.freeSongs && this.song?.collections.some(c => c.number ? c.number <= 5 : false));
     }
 
     public get song() {

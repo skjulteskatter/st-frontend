@@ -37,6 +37,7 @@ declare module "dmb-api" {
 
     interface ApiSong {
         id: string;
+        available: boolean;
         collections: {
             id: string;
             collection?: ApiCollection;
