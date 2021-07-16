@@ -3,13 +3,11 @@
         class="w-full whitespace-pre-line mb-4"
         v-for="(verse, i) in text"
         :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
-        @mouseover="hoverVerses[verse.name] = true"
-        @mouseleave="hoverVerses[verse.name] = false"
     >
         <b class="text-sm">{{ verse.name }}</b>
         <div class="flex gap-8 items-center">
             <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
-            <button 
+            <!-- <button 
                 class="px-2 py-1 text-sm bg-opacity-10 hover:bg-opacity-20 rounded"
                 :class="{'bg-green-800': copied, 'bg-black': !copied}"
                 v-if="hoverVerses[verse.name]"
@@ -17,7 +15,7 @@
             >
                 <icon name="share" size="12" class="mr-1" />
                 {{ $t('common.share') }}
-            </button>
+            </button> -->
         </div>
     </div>
 </template>
