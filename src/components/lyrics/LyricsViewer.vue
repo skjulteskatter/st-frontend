@@ -10,25 +10,16 @@
         <div class="flex gap-8 items-center">
             <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
             <button 
-                class="px-2 py-1 text-sm bg-black bg-opacity-10 hover:bg-opacity-20 rounded"
+                class="px-2 py-1 text-sm bg-opacity-10 hover:bg-opacity-20 rounded"
+                :class="{'bg-green-800': copied, 'bg-black': !copied}"
                 v-if="hoverVerses[verse.name]"
-                @click="shareText(verse.content.join('\n'))"
+                @click="!copied ? shareText(verse.content.join('\n')) : undefined"
             >
                 <icon name="share" size="12" class="mr-1" />
                 {{ $t('common.share') }}
             </button>
         </div>
     </div>
-    <base-modal
-        :show="copied"
-        @close="closeCopied"
-    >
-        <div class="flex flex-col items-center gap-4">
-            <icon name="check" size="32" class="rounded-full text-green-700 p-1 border border-green-700" />
-            <p class="">{{ $t('song.copiedToClipboard') }}!</p>
-            <base-button theme="primary" @click="closeCopied">{{ $t('common.close') }}</base-button>
-        </div>
-    </base-modal>
 </template>
 
 <script lang="ts">
@@ -59,16 +50,16 @@ export default class LyricsViewer extends Vue {
     public shareText(text: string) {
         this.copy(this.formattedText(text));
         this.copied = true;
+        setTimeout(() => this.copied = false, 2000);
     }
 
     public formattedText(text: string) {
-        return `
-            ${this.song?.getName(this.languageKey)}
-            ${this.collection?.getName(this.languageKey)} ${this.song?.getNumber(this.song.collectionIds[0])}
+        return `${this.song?.getName(this.languageKey)}
+${this.collection?.getName(this.languageKey)} ${this.song?.getNumber(this.song.collectionIds[0])}
             
-            "${text}"
-            
-            ${this.$t("copyright.title")}`;
+"${text}"
+
+${this.$t("copyright.title")}`;
     }
 
     public copy(text: string) {
