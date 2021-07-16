@@ -3,6 +3,18 @@
         <base-modal :show="Show" @close="cancel = true">
             <div class="flex flex-col gap-4">
                 <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
+                <select
+                    v-model="type"
+                >
+                    <option
+                        key="year"
+                        value="year"
+                    >{{$t('year')}}</option>
+                    <option
+                        key="month"
+                        value="month"
+                    >{{$t('month')}}</option>
+                </select>
                 <div class="flex flex-col gap-2">
                     <div
                         v-for="p in Products"
@@ -46,6 +58,15 @@ export default class AddedToCart extends Vue {
     private store = useStore();
     public cancel = false;
     public checkingOut = false;
+
+
+    public get type() {
+        return this.store.state.stripe.type;
+    }
+
+    public set type(v) {
+        this.store.commit(StripeMutationTypes.CART_TYPE, v);
+    }
 
     public get Show() {
         return this.checkingOut || (this.store.state.stripe.cart.length == 1 && !this.cancel && this.store.getters.user?.termsAndConditions == true);

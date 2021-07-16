@@ -26,6 +26,18 @@
             <p v-else class="p-2 text-center mb-4 text-gray-400">
                 {{ $t('store.noItems') }}
             </p>
+            <select
+                v-model="type"
+            >
+                <option
+                    key="year"
+                    value="year"
+                >{{$t('year')}}</option>
+                <option
+                    key="month"
+                    value="month"
+                >{{$t('month')}}</option>
+            </select>
             <base-button :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
@@ -72,6 +84,14 @@ export default class StoreCart extends Vue {
 
     public get languageKey() {
         return this.store.getters.languageKey;
+    }
+
+    public get type() {
+        return this.store.state.stripe.type;
+    }
+
+    public set type(v) {
+        this.store.commit(StripeMutationTypes.CART_TYPE, v);
     }
 
     public async checkout() {
