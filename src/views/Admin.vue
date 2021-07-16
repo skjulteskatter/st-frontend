@@ -56,7 +56,7 @@
                     </base-button>
                 </div>
             </base-card> -->
-            <users-list :users="users" :currentUser="currentUser"></users-list>
+            <!-- <users-list :users="users" :currentUser="currentUser"></users-list> -->
 
             <base-card>
                 <div class="flex justify-between">

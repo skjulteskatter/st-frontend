@@ -8,7 +8,7 @@
                     <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
                         <back-button v-if="$route.name != 'main'" />
                         <div class="flex gap-4 items-center ml-auto">
-                            <store-cart />
+                            <store-cart v-if="store.state.stripe.cart.length > 0" />
                             <notification-list />
                             <settings-dropdown />
                         </div>
