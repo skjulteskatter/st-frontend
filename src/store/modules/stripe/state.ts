@@ -13,7 +13,7 @@ export const state: State = {
     products: [],
     publicKey: "",
     initialized: false,
-    type: "month",
+    type: "year",
     cart: [],
     showCart: false,
 };
