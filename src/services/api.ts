@@ -267,7 +267,7 @@ export const stripe = {
 
         return await http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productIds,
-            cancelUrl: window.location.origin + "/dashboard",
+            cancelUrl: window.location.href,
             successUrl: window.location.origin + "/success",
             country,
             type,
@@ -278,7 +278,7 @@ export const stripe = {
     },
     getPortalSession() {
         return http.post("api/Store/Portal", {
-            returnUrl: `${window.location.origin}/collections`,
+            returnUrl: window.location.href,
         });
     },
     refreshSubscriptions() {
