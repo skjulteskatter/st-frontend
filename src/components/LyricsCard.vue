@@ -3,6 +3,11 @@
         <template #header>
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end">
+                <icon 
+                    class="cursor-pointer"
+                    name="arrowLeft"
+                    @click="song?.previous()"
+                />
                 <select
                     class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
@@ -88,6 +93,11 @@
                     :transpose="transpose"
                 ></transpose-dropdown> -->
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
+                <icon
+                    name="arrowRight"
+                    class="cursor-pointer"
+                    @click="song?.next()"
+                />
                 <base-button
                     v-if="editor"
                     class="ml-auto"

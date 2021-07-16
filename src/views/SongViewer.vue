@@ -70,7 +70,7 @@
         </div>
     </loader>
     <base-modal
-        :show="!song?.available"
+        :show="song?.available == false"
     >
         <div class="flex flex-col items-center">
             <icon name="lock" size="32" class="text-primary mt-4 mb-4" />
@@ -140,6 +140,14 @@ export default class SongViewer extends Vue {
     } = {};
 
     public async beforeMount() {
+        await this.load();
+    }
+
+    public async updated() {
+        await this.load();
+    }
+
+    public async load() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
             loaded: false,

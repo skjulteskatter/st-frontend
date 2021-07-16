@@ -20,7 +20,7 @@ export class Song extends BaseClass implements ApiSong {
         return this.collections[0]?.number ?? 0;
     }
     public getNumber(cId: string) {
-        return this.collections.find(c => c.id == cId)?.number;
+        return this.collections.find(c => c.id == cId)?.number ?? -1;
     }
     public collections: {
         id: string;
@@ -125,6 +125,41 @@ export class Song extends BaseClass implements ApiSong {
                     number: this.getNumber(col.id) ?? this.id,
                 },
             });
+    }
+
+    private get collection () {
+        return this.store.getters.collection;
+    }
+
+    private get previousSong() {
+        const songs = this.collection?.songs ?? [];
+
+        const index = songs.findIndex(i => i.id == this.id);
+
+        return songs[index - 1];
+    }
+    private get nextSong() {
+        const songs = this.collection?.songs ?? [];
+
+        const index = songs.findIndex(i => i.id == this.id);
+
+        return songs[index + 1];
+    }
+
+    public next() {
+        this.nextSong?.view();
+    }
+    
+    public previous() {
+        this.previousSong?.view();
+    }
+
+    public get hasNext() {
+        return this.nextSong != undefined;
+    }
+
+    public get hasPrevious() {
+        return this.previousSong != undefined;
     }
 
     public language(code: string): boolean {
