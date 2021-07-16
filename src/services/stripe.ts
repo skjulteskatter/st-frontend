@@ -19,10 +19,10 @@ class StripeService {
         return api.setup();
     }
 
-    public async checkout(productIds: string[]) {
+    public async checkout(productIds: string[], type: "year" | "month") {
         this.service = await loadStripe(this.key);
 
-        const session = await api.startSession(productIds);
+        const session = await api.startSession(productIds, type);
 
         this.service?.redirectToCheckout(session).catch(err => {
             if (err) throw err;

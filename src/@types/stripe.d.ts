@@ -5,6 +5,7 @@ declare module "checkout" {
         successUrl: string;
         cancelUrl: string;
         country?: string;
+        type: "year" | "month";
     }
 
     interface SessionResponse {

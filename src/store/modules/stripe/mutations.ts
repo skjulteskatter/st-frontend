@@ -13,6 +13,7 @@ export type Mutations<S = State> = {
     [StripeMutationTypes.CART_CLEAR](state: S): void;
     [StripeMutationTypes.CART_SHOW](state: S, payload: boolean): void;
     [StripeMutationTypes.CART_SET](state: S, payload: string[]): void;
+    [StripeMutationTypes.CART_TYPE](state: S, payload: "year" | "month"): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -37,5 +38,8 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [StripeMutationTypes.CART_SET](state, payload) {
         state.cart = payload;
+    },
+    [StripeMutationTypes.CART_TYPE](state, payload) {
+        state.type = payload;
     },
 };

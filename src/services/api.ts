@@ -260,7 +260,7 @@ export const stripe = {
     setup() {
         return http.get<SetupResponse>("api/Store/Setup");
     },
-    async startSession(productIds: string[]) {
+    async startSession(productIds: string[], type: "year" | "month") {
         const country = await http.getCountry().catch(() => {
             return undefined;
         });
@@ -270,6 +270,7 @@ export const stripe = {
             cancelUrl: window.location.origin + "/dashboard",
             successUrl: window.location.origin + "/success",
             country,
+            type,
         });
     },
     getSession(sessionId: string) {
