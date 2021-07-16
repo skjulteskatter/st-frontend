@@ -15,6 +15,7 @@
         <base-card id="login-card" class="p-4 max-w-md w-full">
             <div class="flex flex-col gap-6">
                 <p v-if="noAccount" class="text-sm text-red-700 bg-red-100 rounded p-2">No account found with that email</p>
+                <p v-if="wrongPassword" class="text-sm text-red-700 bg-red-100 rounded p-2">Wrong Password</p>
                 <form @submit.prevent="submitForm" class="flex flex-col gap-4">
                     <base-input
                         label="Email"
@@ -26,8 +27,9 @@
                     <base-input
                         label="Password"
                         type="password"
+                        :required="providers.includes('password')"
+                        v-if="providers.includes('password') || providers.length == 0"
                         v-model="form.password"
-                        required
                     />
                     <label class="flex gap-3 items-center">
                         <input type="checkbox" v-model="stayLoggedIn" class="rounded border border-gray-300 focus:ring-primary text-primary" />
@@ -37,16 +39,17 @@
                         theme="secondary"
                         type="submit"
                         formaction="submit"
+                        :loading="loading.login"
                     >
                         Sign in
                     </base-button>
                 </form>
-                <span class="flex justify-between items-center gap-4">
+                <span class="flex justify-between items-center gap-4" v-if="!providers.length || providers.filter(i => i != 'password').length">
                     <hr class="border-t border-gray-200 flex-grow">
                     <small class="text-gray-500">Or continue with</small>
                     <hr class="border-t border-gray-200 flex-grow">
                 </span>
-                <div class="flex flex-col">
+                <div class="flex flex-col" v-if="!providers.length || providers.filter(i => i != 'password').length">
                     <div class="flex gap-3 justify-center">
                         <button
                             v-if="!providers.length || providers.includes('google.com')"
@@ -106,6 +109,7 @@
             </div>
         </base-modal>
     </div>
+    <loader v-else :loading="true"></loader>
 </template>
 
 <script lang="ts">
@@ -129,9 +133,14 @@ export default class Login extends Vue {
         password: "",
     };
     public noAccount = false;
+    public wrongPassword = false;
     public stayLoggedIn = false;
     private store = useStore();
     public providers: string[] = [];
+
+    public loading: {
+        [key: string]: boolean | undefined;
+    } = {};
 
     public createUserModal = false;
 
@@ -142,6 +151,7 @@ export default class Login extends Vue {
     }
 
     public async submitForm() {
+        this.loading.login = true;
         if (this.form.email && !this.form.password) {
             this.noAccount = false;
             this.providers = await auth.getProviders(this.form.email);
@@ -149,12 +159,18 @@ export default class Login extends Vue {
                 this.noAccount = true;
             }
         } else {
-            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
-                email: this.form.email,
-                password: this.form.password,
-                stayLoggedIn: this.stayLoggedIn,
-            });
+            try {
+                await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
+                    email: this.form.email,
+                    password: this.form.password,
+                    stayLoggedIn: this.stayLoggedIn,
+                });
+            }
+            catch {
+                this.wrongPassword = true;
+            }
         }
+        this.loading.login = false;
     }
 
     public createUser() {
