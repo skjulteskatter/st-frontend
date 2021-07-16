@@ -167,9 +167,9 @@ export default class LyricsCard extends Vue {
         original: string;
     }[] {
         const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
-            this.lyrics?.originalKey ?? this.song?.originalKey ?? "C",
+            this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
             this.defaultTransposition,
-            this.lyrics?.transpositions ?? this.song?.transpositions ?? {},
+            this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
         ) : [];
         return ts;
     }
