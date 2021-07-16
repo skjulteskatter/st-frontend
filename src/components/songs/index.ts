@@ -3,6 +3,7 @@ import SongInfoCard from "./SongInfoCard.vue";
 import SongListCard from "./SongListCard.vue";
 import SongMediaCard from "./SongMediaCard.vue";
 import SongTags from "./SongTags.vue";
+import SongChanger from "./SongChanger.vue";
 
 export {
     SongInfoCard,
@@ -10,4 +11,5 @@ export {
     SongListCard,
     SongMediaCard,
     SongTags,
+    SongChanger,
 };
