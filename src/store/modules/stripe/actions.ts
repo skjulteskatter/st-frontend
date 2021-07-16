@@ -36,7 +36,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
     // eslint-disable-next-line no-empty-pattern
     async [StripeActionTypes.START_SESSION]({ state }) {
-        if (state.cart.length > 0) await stripeService.checkout(state.cart);
+        if (state.cart.length > 0) await stripeService.checkout(state.cart, state.type);
     },
     async [StripeActionTypes.REFRESH_COLLECTIONS]() {
         await stripeService.refreshSubscriptions();
