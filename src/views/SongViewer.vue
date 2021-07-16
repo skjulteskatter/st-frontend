@@ -279,7 +279,11 @@ export default class SongViewer extends Vue {
     }
 
     public extend() {
-        this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
+        if (!this.isAdmin)
+            this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
+        else {
+            this.store.commit(SessionMutationTypes.SPLASH, {show: true, title: "In Development", content: "This feature is still in development and will be available soon."});
+        }
     }
 
     public get song() {

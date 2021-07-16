@@ -44,6 +44,16 @@
             <privacy-policy-accept />
             <added-to-cart />
             <tos></tos>
+            <base-modal
+                :show="splash?.show == true"
+                @close="splash ? splash.show = false : undefined"
+            >
+                <h3 class="text-lg uppercase">{{splash?.title}}</h3>
+                <hr/>
+                <p class="mt-2">{{splash?.content}}</p>
+                <br/>
+                <base-button class="ml-auto" @click="splash ? splash.show = false : undefined">{{$t('common.close')}}</base-button>
+            </base-modal>
         </div>
         </loader>
     </div>
@@ -68,11 +78,14 @@ import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import AddedToCart from "@/components/store/AddedToCart.vue";
 import TOSAccept from "@/components/TOSAccept.vue";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import BaseModal from "@/components/BaseModal.vue";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
+        BaseModal,
         OpenSheetMusicDisplay,
         NotificationList,
         StoreCart,
@@ -130,6 +143,14 @@ export default class DashboardLayout extends Vue {
 
     public get user() {
         return this.store.getters.user;
+    }
+
+    public set splash(v) {
+        this.store.commit(SessionMutationTypes.SPLASH, v);
+    }
+
+    public get splash() {
+        return this.store.state.session.splash;
     }
 
     // public get isAdmin() {

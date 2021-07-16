@@ -9,6 +9,11 @@ export type State = {
     activities?: ApiActivity[];
     redirect?: string;
     tags: ApiTag[];
+    splash?: {
+        show: boolean;
+        title: string;
+        content: string;
+    };
 };
 
 export const state: State = {

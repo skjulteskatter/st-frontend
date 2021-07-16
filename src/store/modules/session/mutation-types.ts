@@ -25,5 +25,6 @@ export enum SessionMutationTypes {
     ERROR = "ERROR",
     REDIRECT = "REDIRECT",
     SET_LOG_ITEMS = "SET_LOG_ITEMS",
-    CLEAR_LOGS = "CLEAR_LOGS"
+    CLEAR_LOGS = "CLEAR_LOGS",
+    SPLASH = "SPLASH",
 }
