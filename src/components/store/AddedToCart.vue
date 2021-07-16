@@ -3,18 +3,8 @@
         <base-modal :show="Show" @close="cancel = true">
             <div class="flex flex-col gap-4">
                 <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
-                <select
-                    v-model="type"
-                >
-                    <option
-                        key="year"
-                        value="year"
-                    >{{$t('year')}}</option>
-                    <option
-                        key="month"
-                        value="month"
-                    >{{$t('month')}}</option>
-                </select>
+                <base-button :icon="type == 'year' ? 'check' : 'error'" :theme="type == 'year' ? 'success' : 'primary'" class="text-md" @click="type == 'year' ? type = 'month' : type = 'year'">{{$t('store.buyYearly')}}</base-button>
+                
                 <div class="flex flex-col gap-2">
                     <div
                         v-for="p in Products"
@@ -28,7 +18,7 @@
                         >
                         <span>
                             <p >{{ p.getName() }}</p>
-                            <small class="opacity-50">{{ p.priceDiv(languageKey) }}</small>
+                            <price-div :product="p"/>
                         </span>
                     </div>
                 </div>
@@ -47,11 +37,13 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "..";
+import PriceDiv from "./Price.vue";
 
 @Options({
     name: "added-to-cart",
     components: {
         BaseModal,
+        PriceDiv,
     },
 })
 export default class AddedToCart extends Vue {

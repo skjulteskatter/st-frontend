@@ -26,7 +26,10 @@
             <p v-else class="p-2 text-center mb-4 text-gray-400">
                 {{ $t('store.noItems') }}
             </p>
-            <select
+            
+            <base-button :icon="type == 'year' ? 'check' : 'error'" :theme="type == 'year' ? 'success' : 'primary'" class="text-md" @click="type == 'year' ? type = 'month' : type = 'year'">{{$t('store.buyYearly')}}</base-button>
+            
+            <!-- <select
                 v-model="type"
             >
                 <option
@@ -37,7 +40,7 @@
                     key="month"
                     value="month"
                 >{{$t('month')}}</option>
-            </select>
+            </select> -->
             <base-button :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
