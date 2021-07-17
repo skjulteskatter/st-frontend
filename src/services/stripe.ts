@@ -24,7 +24,7 @@ class StripeService {
 
         const session = await api.startSession(productIds, type);
 
-        this.service?.redirectToCheckout(session).catch(err => {
+        await this.service?.redirectToCheckout(session).catch(err => {
             if (err) throw err;
         });
     }

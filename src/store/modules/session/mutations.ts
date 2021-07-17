@@ -25,7 +25,7 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.SET_TAG](state: S, payload: ApiTag): void;
     [SessionMutationTypes.DELETE_TAG](state: S, payload: string): void;
 
-    [SessionMutationTypes.SPLASH](state: S, payload?: {show: boolean; title: string; content: string}): void;
+    [SessionMutationTypes.SPLASH](state: S, payload?: {title: string; content: string; callback?: () => Promise<void>}): void;
     // [SessionMutationTypes.TAG_ADD_SONG](state: S, payload: {
     //     tagId: string;
     //     songId: string;

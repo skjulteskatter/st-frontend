@@ -1,8 +1,10 @@
 import { Product } from "@/classes";
+import i18n from "@/i18n";
 import { appSession } from "@/services/session";
 import stripeService from "@/services/stripe";
 import { ActionContext, ActionTree } from "vuex";
-import { RootState } from "../..";
+import { RootState, useStore } from "../..";
+import { SessionMutationTypes } from "../session/mutation-types";
 import { StripeActionTypes } from "./action-types";
 import { StripeMutationTypes } from "./mutation-types";
 import { Mutations } from "./mutations";
@@ -36,7 +38,21 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
     // eslint-disable-next-line no-empty-pattern
     async [StripeActionTypes.START_SESSION]({ state }) {
-        if (state.cart.length > 0) await stripeService.checkout(state.cart, state.type);
+        const user = useStore().getters.user;
+
+        const fun = async () => {
+            if (state.cart.length > 0) await stripeService.checkout(state.cart, state.type);
+        };
+
+        if (user && user.email.endsWith("@privaterelay.appleid.com")) {
+            useStore().commit(SessionMutationTypes.SPLASH, {
+                content: i18n.global.t("store.privateRelayUsed").replace("%0", user.email),
+                title: "Private Relay",
+                callback: fun,
+            });
+        } else {
+            await fun();
+        }
     },
     async [StripeActionTypes.REFRESH_COLLECTIONS]() {
         await stripeService.refreshSubscriptions();

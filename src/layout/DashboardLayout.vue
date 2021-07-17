@@ -45,14 +45,18 @@
             <added-to-cart />
             <tos></tos>
             <base-modal
-                :show="splash?.show == true"
-                @close="splash ? splash.show = false : undefined"
+                :show="show && splash != undefined"
+                @close="closeSplash()"
             >
                 <h3 class="text-lg uppercase">{{splash?.title}}</h3>
                 <hr/>
                 <p class="mt-2">{{splash?.content}}</p>
                 <br/>
-                <base-button class="ml-auto" @click="splash ? splash.show = false : undefined">{{$t('common.close')}}</base-button>
+                <div v-if="splash?.callback" class="flex">
+                    <base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
+                    <base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
+                </div>
+                <base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
             </base-modal>
         </div>
         </loader>
@@ -100,6 +104,7 @@ import BaseModal from "@/components/BaseModal.vue";
 export default class DashboardLayout extends Vue {
     public store = useStore();
     public osmdLoading = false;
+    public show = true;
 
     public get initialized() {
         return ref(appSession.initialized).value;
@@ -135,6 +140,15 @@ export default class DashboardLayout extends Vue {
         if(this.sheetMusicOptions) {
             this.sheetMusicOptions.show = false;
         }
+    }
+
+    public closeSplash() {
+        this.show = false;
+
+        setTimeout(() => {
+            this.splash = undefined;
+            this.show = true;
+        }, 500);
     }
 
     public get sheetMusicOptions() {

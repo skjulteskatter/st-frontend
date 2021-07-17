@@ -10,9 +10,9 @@ export type State = {
     redirect?: string;
     tags: ApiTag[];
     splash?: {
-        show: boolean;
         title: string;
         content: string;
+        callback?: () => Promise<void>;
     };
 };
 

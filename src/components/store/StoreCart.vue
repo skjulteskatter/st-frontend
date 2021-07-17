@@ -100,7 +100,7 @@ export default class StoreCart extends Vue {
     public async checkout() {
         this.checkingOut = true;
         await this.store.dispatch(StripeActionTypes.START_SESSION);
-        // this.checkingOut = false;
+        this.checkingOut = false;
     }
 
     public get show() {
