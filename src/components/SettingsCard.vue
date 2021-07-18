@@ -69,7 +69,7 @@
                     :placeholder="user.displayName"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+            <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="gender">{{ $t("common.gender") }}</label>
                 <select
                     class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
@@ -85,7 +85,7 @@
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="birthDay">{{ $t("common.birthDay") }}</label>
                 <input type="date" v-model="birthDay" class="bg-transparent rounded border-gray-300" />
-            </div>
+            </div> -->
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
                 <input
