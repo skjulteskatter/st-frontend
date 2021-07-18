@@ -56,7 +56,7 @@
                             class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
                             @click="login('google')"
                         >
-                            <img alt="GOOGLE ICON" class="h-full" src="/img/google.png" />
+                            <img alt="GOOGLE ICON" class="h-full" src="/img/google.svg" />
                         </button>
                         <button
                             v-if="!providers.length || providers.includes('apple.com')"
