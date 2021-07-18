@@ -3,7 +3,10 @@
         <base-modal :show="Show" @close="cancel = true">
             <div class="flex flex-col gap-4">
                 <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
-                <base-button :icon="type == 'year' ? 'check' : 'error'" :theme="type == 'year' ? 'success' : 'primary'" class="text-md" @click="type == 'year' ? type = 'month' : type = 'year'">{{$t('store.buyYearly')}}</base-button>
+                <p @click="type == 'year' ? type = 'month' : type = 'year'" class="flex items-center cursor-pointer">
+                    <icon :name="type == 'year' ? 'check' : 'error'" class="p-1 rounded mr-2" :class="[type == 'year' ? 'bg-primary text-white' : 'bg-gray-300']" />
+                    {{ $t('store.buyYearly') }}
+                </p>
                 
                 <div class="flex flex-col gap-2">
                     <div
