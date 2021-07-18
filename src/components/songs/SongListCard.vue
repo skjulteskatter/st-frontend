@@ -13,14 +13,14 @@
                 v-for="song in Songs"
                 :key="song.id"
                 @click="viewSong(song)"
-                class="flex gap-2 hover:text-primary hover:underline cursor-pointer dark:opacity-90"
+                class="flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
                     'text-green-700': song.available && !song.sheetMusic.length,
                     'text-gray-400': !song.available,
                 }"
             >
-                <b class="w-6 text-right">
+                <b class="w-6 mr-2 text-right">
                     {{ song.number }}
                 </b>
                 <span>

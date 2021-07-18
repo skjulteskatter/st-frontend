@@ -1,12 +1,13 @@
 <template>
 	<base-card class="border border-primary md:col-span-2">
-		<div class="flex flex-col gap-4 h-full">
-			<div class="flex gap-4 items-center">
-				<h3 class="font-bold">{{ $t('common.collections') }}</h3>
+		<div class="flex flex-col h-full">
+			<div class="flex items-center mb-2">
+				<h3 class="font-bold mr-4">{{ $t('common.collections') }}</h3>
 				<tooltip :text="$t('tooltip.ownedCollections')" />
 			</div>
-			<div v-if="collections?.length" class="flex flex-col gap-2">
+			<div v-if="collections?.length" class="flex flex-col">
 				<collection-card
+					class="mt-2"
 					v-for="c in collections"
 					:key="c.id"
 					:collection="c"
