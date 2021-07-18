@@ -88,7 +88,7 @@
                     :transpose="transpose"
                 ></transpose-dropdown> -->
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
-                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" />
+                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <base-button
                     v-if="editor"
                     theme="tertiary"
