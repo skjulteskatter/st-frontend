@@ -14,7 +14,7 @@
             :playlist="playlist"
         />
     </div>
-    <h3 class="bg-gray-300 p-4 rounded text-center" v-else>
+    <h3 class="bg-black bg-opacity-10 p-4 rounded text-center" v-else>
         {{ $t("common.no-amount") + " " + $t("common.collections").toLowerCase() }}
     </h3>
 </template>

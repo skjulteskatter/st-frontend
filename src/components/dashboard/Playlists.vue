@@ -31,7 +31,7 @@
                 </div>
             </router-link>
         </div>
-        <p class="p-4 text-gray-500 text-center" v-else>
+        <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
             {{ $t("playlist.noplaylists") }}
         </p>
     </base-card>
