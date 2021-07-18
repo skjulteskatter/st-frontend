@@ -2,7 +2,7 @@
     <div class="mb-4 flex justify-between items-center">
         <div class="flex justify-between w-full">
             <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
-            <store-cart v-if="productIds.length" class="md:hidden" />
+            <store-cart class="md:hidden mr-4" />
         </div>
         <div class="flex gap-2">
             <base-button

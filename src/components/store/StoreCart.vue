@@ -1,5 +1,5 @@
 <template>
-    <base-dropdown origin="right" class="text-sm" icon="buy" :show="show">
+    <base-dropdown v-if="cartItems.length" origin="right" class="text-sm" icon="buy" :show="show">
         <template #button>
             <icon name="buy" class="relative" />
             <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
