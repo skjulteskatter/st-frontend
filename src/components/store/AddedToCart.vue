@@ -2,26 +2,42 @@
     <loader :loading="checkingOut" position="global">
         <base-modal :show="Show" @close="cancel = true">
             <div class="flex flex-col gap-4">
-                <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
-                <p @click="type == 'year' ? type = 'month' : type = 'year'" class="flex items-center cursor-pointer">
-                    <icon :name="type == 'year' ? 'check' : 'error'" class="p-1 rounded mr-2" :class="[type == 'year' ? 'bg-primary text-white' : 'bg-gray-300']" />
-                    {{ $t('store.buyYearly') }}
-                </p>
+                <div class="flex justify-between gap-4">
+                    <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
+                    <SwitchGroup as="div" class="flex items-center gap-2 cursor-pointer">
+                        <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("store.buyYearly") }}</SwitchLabel>
+                        <Switch
+                            @click="toggleType()"
+                            v-model="yearlySub"
+                            class="focus:outline-none"
+                        >
+                            <div
+                                class="relative inline-flex items-center h-4 w-8 rounded-full transition-colors my-1"
+                                :class="yearlySub ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
+                            >
+                                <span
+                                    :class="yearlySub ? 'translate-x-4' : 'translate-x-1'"
+                                    class="shadow-md inline-block w-3 h-3 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                                />
+                            </div>
+                        </Switch>
+                    </SwitchGroup>
+                </div>
                 
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 divide-y divide-gray-200">
                     <div
                         v-for="p in Products"
                         :key="p.id"
-                        class="p-2 rounded-md border border-gray-300 flex gap-2"
+                        class="py-4 flex items-center"
                     >
                         <img
                             :src="p.collections[0].image"
                             alt="collection image"
-                            class="rounded h-12 w-12"
+                            class="rounded h-12 w-12 mr-4"
                         >
                         <span>
-                            <p >{{ p.getName() }}</p>
-                            <price-div :product="p"/>
+                            <p class="text-base">{{ p.getName() }}</p>
+                            <price-div class="opacity-50 text-sm" :product="p"/>
                         </span>
                     </div>
                 </div>
@@ -41,12 +57,16 @@ import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "..";
 import PriceDiv from "./Price.vue";
+import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 
 @Options({
     name: "added-to-cart",
     components: {
         BaseModal,
         PriceDiv,
+        SwitchGroup,
+        Switch,
+        SwitchLabel,
     },
 })
 export default class AddedToCart extends Vue {
@@ -54,6 +74,11 @@ export default class AddedToCart extends Vue {
     public cancel = false;
     public checkingOut = false;
 
+    public yearlySub = true;
+
+    public toggleType() {
+        this.type = (this.type == "year" ? "month" : "year");
+    }
 
     public get type() {
         return this.store.state.stripe.type;
