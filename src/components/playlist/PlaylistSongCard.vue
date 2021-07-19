@@ -80,7 +80,7 @@ export default class PlaylistSongCard extends Vue {
 
         if (!this.song && this.entry) {
             this.song = new Song(await songs.getSongById(this.entry?.songId));
-            this.disabled = !this.song.collections.some(c => c.number && c.number <= 5);
+            this.disabled = !this.song.available;
         }
     }
 

@@ -1,22 +1,22 @@
 <template>
     <base-card>
-        <div class="flex gap-4 items-center mb-4">
-            <h3 class="font-bold">
+        <div class="flex items-center mb-2">
+            <h3 class="font-bold mr-4">
                 {{ $t("common.activity") }}
             </h3>
             <tooltip :text="$t('tooltip.recentActivity')" />
         </div>
         <loader :loading="activitiesInitialized === false">
-            <div class="flex flex-col gap-2 relative" v-if="activities.length">
+            <div class="flex flex-col relative" v-if="activities.length">
                 <router-link
-                    class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                    class="mt-2 flex p-2 text-xs relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
                 >
                     <img
                         :src="a.getImage(collections)"
-                        class="max-h-10 grayscale rounded"
+                        class="mr-2 max-h-10 grayscale rounded"
                     />
                     <span class="flex flex-col justify-center flex-1">
                         <small class="text-gray-400">{{ $t(`song.${a.type}`) }}</small>
@@ -29,7 +29,7 @@
                     </small>
                 </router-link>
             </div>
-            <p class="p-4 bg-black bg-opacity-10 rounded text-center" v-else>
+            <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
                 {{ $t("dashboard.noactivity") }}
             </p>
         </loader>

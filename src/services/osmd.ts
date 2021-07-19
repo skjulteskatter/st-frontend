@@ -168,6 +168,14 @@ class OSMD {
 
         this.transposition = sheetMusic.transposition ?? 0;
 
+        if (this.transposition > 6) {
+            this.transposition -= 12;
+        } else {
+            if (this.transposition < -6) {
+                this.transposition += 12;
+            }
+        }
+
         if (process.env.NODE_ENV == "development")
             this.osmd.setLogLevel("debug");
 
@@ -238,6 +246,14 @@ class OSMD {
 
     public transpose(n: number) {
         this.transposition = n;
+
+        if (this.transposition > 6) {
+            this.transposition -= 12;
+        } else {
+            if (this.transposition < -6) {
+                this.transposition += 12;
+            }
+        }
 
         this.osmd.Sheet.Transpose = this.clef == "bass" ? this.transposition - 12 : this.transposition;
 

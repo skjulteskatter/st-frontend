@@ -13,13 +13,14 @@ export enum SheetMusicTypes {
 export class Song extends BaseClass implements ApiSong {
     public id: string;
     public type: string;
+    public available: boolean;
     public image?: string;
 
     public get number() {
         return this.collections[0]?.number ?? 0;
     }
     public getNumber(cId: string) {
-        return this.collections.find(c => c.id == cId)?.number;
+        return this.collections.find(c => c.id == cId)?.number ?? -1;
     }
     public collections: {
         id: string;
@@ -58,10 +59,36 @@ export class Song extends BaseClass implements ApiSong {
     public newMelody: boolean;
     public newMelodies: string[];
 
+    public get raw(): ApiSong {
+        return {
+            id: this.id,
+            available: this.available,
+            collections: this.collections,
+            copyrights: this.copyrights,
+            genreIds: this.genreIds,
+            hasChords: this.hasChords,
+            hasLyrics: this.hasLyrics,
+            name: this.name,
+            newMelodies: this.newMelodies,
+            newMelody: this.newMelody,
+            originalKey: this.originalKey,
+            origins: this.origins,
+            participants: this.participants,
+            tagIds: this.tagIds,
+            themeIds: this.themeIds,
+            type: this.type,
+            verses: this.verses,
+            details: this.details,
+            yearComposed: this.yearComposed,
+            yearWritten: this.yearWritten,
+        };
+    }
+
     constructor(song: ApiSong) {
         super();
 
-        this.collections = song.collections ;
+        this.collections = song.collections;
+        this.available = song.available;
         this.id = song.id;
         this.name = song.name;
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
@@ -106,10 +133,6 @@ export class Song extends BaseClass implements ApiSong {
         return this.collections.map(c => c.id);
     }
 
-    public get available() {
-        return this.collections.some(n => n.number && n.number <= 5 && appSession.collections.find(c => c.id == n.id)?.freeSongs) || appSession.collections.some(c => c.available == true && this.collectionIds.includes(c.id));
-    }
-
     public anotherLanguage(lan: string) {
         return !Object.keys(this.name).includes(lan) && this.type == "lyrics";
     }
@@ -127,6 +150,41 @@ export class Song extends BaseClass implements ApiSong {
                     number: this.getNumber(col.id) ?? this.id,
                 },
             });
+    }
+
+    private get collection () {
+        return this.store.getters.collection;
+    }
+
+    private get previousSong() {
+        const songs = this.collection?.songs ?? [];
+
+        const index = songs.findIndex(i => i.id == this.id);
+
+        return songs[index - 1];
+    }
+    private get nextSong() {
+        const songs = this.collection?.songs ?? [];
+
+        const index = songs.findIndex(i => i.id == this.id);
+
+        return songs[index + 1];
+    }
+
+    public next() {
+        this.nextSong?.view();
+    }
+    
+    public previous() {
+        this.previousSong?.view();
+    }
+
+    public get hasNext() {
+        return this.nextSong != undefined;
+    }
+
+    public get hasPrevious() {
+        return this.previousSong != undefined;
     }
 
     public language(code: string): boolean {

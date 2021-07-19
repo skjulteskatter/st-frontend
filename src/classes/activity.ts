@@ -53,33 +53,37 @@ export class Activity {
     }
 
     public timeSince() {
-        const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
-            localeMatcher: "best fit",
-            numeric: "auto",
-            style: "long",
-        });
-
-        const now = new Date().getTime();
-        const then = new Date(this.activity.loggedDate).getTime();
-
-        const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
-            { unit: "year", amount: 31536000000 },
-            { unit: "month", amount: 2628000000 },
-            { unit: "day", amount: 86400000 },
-            { unit: "hour", amount: 3600000 },
-            { unit: "minute", amount: 60000 },
-            { unit: "second", amount: 1000 },
-        ];
-
-        const relatime = (elapsed: number) => {
-            for (const { unit, amount } of units) {
-                if (Math.abs(elapsed) > amount || unit === "second") {
-                    return rtfl.format(Math.round(elapsed / amount), unit);
+        try {
+            const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
+                localeMatcher: "best fit",
+                numeric: "auto",
+                style: "long",
+            });
+            
+            const now = new Date().getTime();
+            const then = new Date(this.activity.loggedDate).getTime();
+            
+            const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
+                { unit: "year", amount: 31536000000 },
+                { unit: "month", amount: 2628000000 },
+                { unit: "day", amount: 86400000 },
+                { unit: "hour", amount: 3600000 },
+                { unit: "minute", amount: 60000 },
+                { unit: "second", amount: 1000 },
+            ];
+            
+            const relatime = (elapsed: number) => {
+                for (const { unit, amount } of units) {
+                    if (Math.abs(elapsed) > amount || unit === "second") {
+                        return rtfl.format(Math.round(elapsed / amount), unit);
+                    }
                 }
-            }
-        };
-
-        return relatime(then - now);
+            };
+            
+            return relatime(then - now);
+        } catch(err) {
+            // Error handling
+        }
     }
 
     public get id() {

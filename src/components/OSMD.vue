@@ -16,7 +16,7 @@
                         <small>{{melodyOrigin}}</small>
                     </div>
                 </div>
-                <div class="flex gap-4 mr-8">
+                <div class="flex gap-4">
                     <label class="flex flex-col">
                         <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
                         <base-dropdown
@@ -108,10 +108,10 @@
                         >
                             <option
                                 v-for="i in 10"
-                                :key="`zoom-${i+4}`"
-                                :value="(i+4)/10"
+                                :key="`zoom-${i+3}`"
+                                :value="(i+3)/10"
                             >
-                                {{ (i+4)*10 }}%
+                                {{ (i+3)*10 }}%
                             </option>
                         </select>
                     </label>

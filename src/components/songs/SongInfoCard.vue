@@ -15,14 +15,14 @@
                 {{ $t('song.seeStatistics') }}
             </router-link>
         </span>
-        <h2 class="flex gap-4 text-xl font-bold mb-2">
-            <span class="text-gray-400">
+        <h2 class="flex text-xl font-bold mb-2">
+            <span class="text-gray-400 mr-4">
                 {{ song.number }}
             </span>
-            <span>
+            <span class="mr-4">
                 {{ title }}
             </span>
-            <span v-if="viewCount != null">
+            <span v-if="viewCount != null" class="opacity-50 font-normal">
                 ({{ viewCount }})
             </span>
         </h2>
@@ -35,7 +35,7 @@
             />
             <span
                 v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-sm song-details-transition dark:text-gray-400 dark:border-gray-400"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-xs song-details-transition dark:text-gray-400 dark:border-gray-400"
             >
                 {{ song.verses }}
                 {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}

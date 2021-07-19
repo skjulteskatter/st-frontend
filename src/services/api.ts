@@ -260,16 +260,17 @@ export const stripe = {
     setup() {
         return http.get<SetupResponse>("api/Store/Setup");
     },
-    async startSession(productIds: string[]) {
+    async startSession(productIds: string[], type: "year" | "month") {
         const country = await http.getCountry().catch(() => {
             return undefined;
         });
 
         return await http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productIds,
-            cancelUrl: window.location.origin + "/dashboard",
+            cancelUrl: window.location.href,
             successUrl: window.location.origin + "/success",
             country,
+            type,
         });
     },
     getSession(sessionId: string) {
@@ -277,7 +278,7 @@ export const stripe = {
     },
     getPortalSession() {
         return http.post("api/Store/Portal", {
-            returnUrl: `${window.location.origin}/collections`,
+            returnUrl: window.location.href,
         });
     },
     refreshSubscriptions() {

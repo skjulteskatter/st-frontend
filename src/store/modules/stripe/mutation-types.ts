@@ -6,4 +6,5 @@ export enum StripeMutationTypes {
     CART_CLEAR = "STORE_CART_CLEAR",
     CART_SHOW = "STORE_SHOW_CART",
     CART_SET = "STORE_CART_SET",
+    CART_TYPE = "STORE_SET_TYPE",
 }

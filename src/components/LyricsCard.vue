@@ -2,7 +2,7 @@
     <base-card v-if="song" class="overflow-visible" header>
         <template #header>
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
-            <div class="flex gap-2 items-end">
+            <div class="flex gap-2 items-end flex-wrap">
                 <select
                     class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
@@ -88,9 +88,9 @@
                     :transpose="transpose"
                 ></transpose-dropdown> -->
                 <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
+                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <base-button
                     v-if="editor"
-                    class="ml-auto"
                     theme="tertiary"
                     icon="pencil"
                     @click="edit()"
@@ -103,7 +103,7 @@
                 :lyrics="lyrics"
             >
             </transposed-lyrics-viewer>
-            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
+            <lyrics-viewer :song="song" v-if="type == 'default' && lyrics?.format == 'json'">
             </lyrics-viewer>
 
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
@@ -124,6 +124,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+import { SongChanger } from "@/components/songs";
 // import { SheetMusicOptions } from "@/store/songs";
 // import { osmd } from "@/services/osmd";
 
@@ -135,6 +136,7 @@ import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
         Switch,
         SwitchGroup,
         SwitchLabel,
+        SongChanger,
     },
     props: {
         lyrics: {
@@ -165,9 +167,9 @@ export default class LyricsCard extends Vue {
         original: string;
     }[] {
         const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
-            this.lyrics?.originalKey ?? this.song?.originalKey ?? "C",
+            this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
             this.defaultTransposition,
-            this.lyrics?.transpositions ?? this.song?.transpositions ?? {},
+            this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
         ) : [];
         return ts;
     }

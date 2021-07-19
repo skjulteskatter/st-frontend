@@ -1,7 +1,7 @@
 <template>
     <div class="sheetmusic-viewer">
         <div v-if="song" class="mb-4 p-4 bg-white">
-            <div class="mb-4">
+            <div class="flex flex-col">
                 <h2 class="font-bold">
                     {{ song.getName(languageKey) }}
                 </h2>
@@ -27,7 +27,7 @@
                 </small>
             </div>
 
-            <small class="text-gray-500">{{ $t('song.sheetmusic') }}</small>
+            <small class="text-gray-500 mt-4" v-if="files.length > 1">{{ $t('song.sheetmusic') }}</small>
             <media-list-item v-if="files.length > 1" :files="files" :callback="setFile" />
         </div>
 
@@ -54,7 +54,6 @@
             <div id="osmd-canvas"></div>
         </div>
     </div>
-    <!-- </loader> -->
 </template>
 
 <script lang="ts">
@@ -131,7 +130,7 @@ export default class SheetMusic extends Vue {
         await new Promise(r => setTimeout(r, 10));
         const options: SheetMusicOptions = {
             show: true,
-            originalKey: file.song?.originalKey ?? "C",
+            originalKey: this.song?.originalKey ?? "C",
             url: file.directUrl,
             type: file.type,
             transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
@@ -228,11 +227,11 @@ export default class SheetMusic extends Vue {
     height: 100vh;
     max-width: 1600px;
     margin: auto;
-    padding: calc(var(--st-spacing) * 2);
+    //padding: calc(var(--st-spacing) * 2);
 
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
+    //@include breakpoint("medium") {
+    //    padding: var(--st-spacing);
+    //}
 
     &__info {
         margin-bottom: var(--st-spacing);

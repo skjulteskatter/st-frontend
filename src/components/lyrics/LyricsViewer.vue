@@ -5,24 +5,68 @@
         :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
     >
         <b class="text-sm">{{ verse.name }}</b>
-        <p class="leading-7">{{ verse.content.join("\n") }}</p>
+        <div class="flex gap-8 items-center">
+            <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
+            <!-- <button 
+                class="px-2 py-1 text-sm bg-opacity-10 hover:bg-opacity-20 rounded"
+                :class="{'bg-green-800': copied, 'bg-black': !copied}"
+                v-if="hoverVerses[verse.name]"
+                @click="!copied ? shareText(verse.content.join('\n')) : undefined"
+            >
+                <icon name="share" size="12" class="mr-1" />
+                {{ $t('common.share') }}
+            </button> -->
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Modal } from "@/components";
+import { BaseModal } from "@/components";
 import { useStore } from "@/store";
+import { Song } from "@/classes";
 
 @Options({
     name: "lyrics-viewer",
+    props: {
+        song: {
+            type: Object,
+        },
+    },
     components: {
-        Modal,
+        BaseModal,
     },
 })
 export default class LyricsViewer extends Vue {
-    public selectVerses: string[] = [];
-    public currentVerseNumber = 0;
+    public store = useStore();
+    public song?: Song;
+    public copied = false;
+    public hoverVerses: {
+        [verse: string]: boolean;
+    } = {};
+
+    public shareText(text: string) {
+        this.copy(this.formattedText(text));
+        this.copied = true;
+        setTimeout(() => this.copied = false, 2000);
+    }
+
+    public formattedText(text: string) {
+        return `${this.song?.getName(this.languageKey)}
+${this.collection?.getName(this.languageKey)} ${this.song?.getNumber(this.song.collectionIds[0])}
+            
+"${text}"
+
+${this.$t("copyright.title")}`;
+    }
+
+    public copy(text: string) {
+        navigator.clipboard.writeText(text);
+    }
+
+    public closeCopied() {
+        this.copied = false;
+    }
 
     public get text() {
         const verses: { name: string; content: string[] }[] = [];
@@ -58,7 +102,15 @@ export default class LyricsViewer extends Vue {
     }
 
     public get lyrics() {
-        return useStore().getters.lyrics;
+        return this.store.getters.lyrics;
+    }
+
+    public get languageKey() {
+        return this.store.getters.languageKey;
+    }
+
+    public get collection() {
+        return this.store.getters.collection;
     }
 }
 </script>
