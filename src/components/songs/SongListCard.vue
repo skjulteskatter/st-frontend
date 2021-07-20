@@ -26,8 +26,10 @@
                 <span>
                     {{ song.getName(languageKey) }}
                 </span>
-                <span class="ml-auto" style="opacity: 0.5">({{songViews(song)}})</span>
-                <icon class="text-primary" name="star" size="12" v-if="song.newMelody" />
+                <div class="ml-auto">
+                    <icon class="text-primary mr-1" name="star" size="12" v-if="song.newMelody" />
+                    <span class="opacity-50">({{songViews(song)}})</span>
+                </div>
             </li>
         </ul>
         <base-modal

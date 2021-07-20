@@ -32,7 +32,7 @@
                 <div
                     v-for="i in cartItems"
                     :key="i.id"
-                    class="py-4 flex items-center border-b border-gray-100 dark:border-gray-500"
+                    class="py-4 flex items-center border-b border-gray-200 dark:border-gray-500"
                 >
                     <img :src="i.collections.find(c => i.collectionIds.includes(c.id))?.image" class="max-h-12 rounded mr-4 inline-block" />
                     <div class="inline-block mr-4">
