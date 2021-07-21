@@ -94,7 +94,7 @@
                     theme="tertiary"
                     icon="pencil"
                     @click="edit()"
-                >Edit</base-button>
+                >{{ $t('common.edit') }}</base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">

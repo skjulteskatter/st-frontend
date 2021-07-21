@@ -11,7 +11,7 @@
                         theme="tertiary"
                         icon="pencil"
                         class="mr-4 hidden xl:block"
-                    >Edit</base-button>
+                    >{{ $t('common.edit') }}</base-button>
                     <modal
                         class="playlist-adder"
                         theme="secondary"
