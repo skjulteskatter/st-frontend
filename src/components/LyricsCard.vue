@@ -101,10 +101,16 @@
             <transposed-lyrics-viewer
                 v-if="type == 'transpose' && lyrics?.format == 'html'"
                 :lyrics="lyrics"
-            >
-            </transposed-lyrics-viewer>
-            <lyrics-viewer :song="song" v-if="type == 'default' && lyrics?.format == 'json'">
-            </lyrics-viewer>
+            />
+            <lyrics-viewer 
+                v-if="type == 'default' && lyrics?.format == 'json'"
+                :song="song"
+            />
+            <!-- <component
+                :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
+                :song="song"
+                :lyrics="lyrics"
+            /> -->
 
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
