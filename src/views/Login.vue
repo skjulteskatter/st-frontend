@@ -16,7 +16,33 @@
             <div class="flex flex-col gap-6">
                 <p v-if="noAccount" class="text-sm text-red-700 bg-red-100 rounded p-2">No account found with that email</p>
                 <p v-if="wrongPassword" class="text-sm text-red-700 bg-red-100 rounded p-2">Wrong Password</p>
-                <form @submit.prevent="submitForm" class="flex flex-col gap-4">
+                <div class="flex flex-col" v-if="!providers.length || providers.filter(i => i != 'password').length">
+                    <div class="flex gap-3 justify-center">
+                        <img
+                            v-if="!providers.length || providers.includes('google.com')"
+                            alt="GOOGLE"
+                            src="/img/google.svg" 
+                            class="p-2 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            @click="login('google')"
+                        />
+                        <img
+                            v-if="!providers.length || providers.includes('apple.com')"
+                            alt="APPLE"
+                            src="/img/apple.svg" 
+                            class="p-2 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            @click="login('apple')"
+                        />
+                            <!-- <img alt="APPLE ICON" class="h-full" />
+                        </img> -->
+                    </div>
+                </div>
+                <span class="flex justify-between items-center gap-4" v-if="!providers.length || providers.filter(i => i != 'password').length">
+                    <hr class="border-t border-gray-200 flex-grow">
+                    <small @click="showEmail = !showEmail" class="text-gray-500 cursor-pointer hover:underline">Or log in with email.<icon :name="showEmail ? 'arrowUp' : 'arrowDown'" /></small>
+                    
+                    <hr class="border-t border-gray-200 flex-grow">
+                </span>
+                <form v-if="showEmail" @submit.prevent="submitForm" class="flex flex-col gap-4">
                     <base-input
                         label="Email"
                         type="email"
@@ -44,43 +70,6 @@
                         Sign in
                     </base-button>
                 </form>
-                <span class="flex justify-between items-center gap-4" v-if="!providers.length || providers.filter(i => i != 'password').length">
-                    <hr class="border-t border-gray-200 flex-grow">
-                    <small class="text-gray-500">Or continue with</small>
-                    <hr class="border-t border-gray-200 flex-grow">
-                </span>
-                <div class="flex flex-col" v-if="!providers.length || providers.filter(i => i != 'password').length">
-                    <div class="flex gap-3 justify-center">
-                        <button
-                            v-if="!providers.length || providers.includes('google.com')"
-                            class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
-                            @click="login('google')"
-                        >
-                            <img alt="GOOGLE ICON" class="h-full" src="/img/google.svg" />
-                        </button>
-                        <button
-                            v-if="!providers.length || providers.includes('apple.com')"
-                            class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
-                            @click="login('apple')"
-                        >
-                            <img alt="APPLE ICON" class="h-full" src="/img/apple.svg" />
-                        </button>
-                        <!-- <button
-                            class="social__button"
-                            @click="login('microsoft')"
-                            disabled
-                        >
-                            <img alt="MICROSOFT" src="/img/microsoft.png" />
-                        </button>
-                        <button
-                            class="social__button"
-                            @click="login('twitter')"
-                            disabled
-                        >
-                            <img alt="TWITTER ICON" src="/img/twitter.svg" />
-                        </button> -->
-                    </div>
-                </div>
             </div>
         </base-card>
         <base-modal :show="createUserModal" @close="createUserModal = false">
@@ -135,6 +124,7 @@ export default class Login extends Vue {
     public noAccount = false;
     public wrongPassword = false;
     public stayLoggedIn = false;
+    public showEmail = false;
     private store = useStore();
     public providers: string[] = [];
 
@@ -190,3 +180,9 @@ export default class Login extends Vue {
     }
 }
 </script>
+<style lang="scss">
+
+.login-image {
+    object-fit: contain;
+}
+</style>

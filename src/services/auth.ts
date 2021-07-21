@@ -258,6 +258,7 @@ class Auth {
     public async logout() {
         await a().signOut();
         localStorage.clear();
+        window.location.replace("/");
     }
 
     public async verificationCode(code: string) {
