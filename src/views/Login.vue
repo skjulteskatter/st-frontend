@@ -1,5 +1,4 @@
 <template>
-    <!-- <div id="firebase-auth-container"></div> -->
     <div class="p-4 h-screen w-screen flex flex-col justify-center items-center gap-8" v-if="initialized && !user">
         <div class="flex flex-col justify-center gap-4">
             <img
@@ -22,18 +21,16 @@
                             v-if="!providers.length || providers.includes('google.com')"
                             alt="GOOGLE"
                             src="/img/google.svg" 
-                            class="p-2 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
                             @click="login('google')"
                         />
                         <img
                             v-if="!providers.length || providers.includes('apple.com')"
                             alt="APPLE"
                             src="/img/apple.svg" 
-                            class="p-2 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
                             @click="login('apple')"
                         />
-                            <!-- <img alt="APPLE ICON" class="h-full" />
-                        </img> -->
                     </div>
                 </div>
                 <span class="flex justify-between items-center gap-4" v-if="!providers.length || providers.filter(i => i != 'password').length">
