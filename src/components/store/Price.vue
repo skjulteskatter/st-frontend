@@ -1,5 +1,5 @@
 <template>
-    <div v-if="product">
+    <div v-if="product" class="text-sm">
         {{ product.currency?.toUpperCase() }} 
         <span v-if="discounted" class="line-through text-gray-400">{{yearly ? product.originalPrice * 12 : product.originalPrice}}</span>
         <span v-if="discounted" class="ml-1">{{yearly ? product.discountedPrice * 12 : product.discountedPrice}}</span>
