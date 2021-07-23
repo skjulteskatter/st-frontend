@@ -3,17 +3,20 @@
 		ref="create-playlist-modal"
 		:show="show"
 	>
-		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
-			<base-input
-				class="border border-gray-300"
-				:label="$t('common.name')"
-				v-model="playlistName"
-				required
-			/>
-			<base-button :loading="loading" theme="secondary" type="submit">
-				{{ $t("playlist.createnew") }}
-			</base-button>
-		</form>
+		<div class="flex flex-col gap-2">
+			<h2 class="font-bold text-lg">{{ $t('playlist.createnew') }} {{ $t('common.collection').toLocaleLowerCase() }}</h2>
+			<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
+				<base-input
+					class="border border-gray-300"
+					:label="$t('common.name')"
+					v-model="playlistName"
+					required
+				/>
+				<base-button :loading="loading" theme="secondary" type="submit">
+					{{ $t("playlist.createnew") }}
+				</base-button>
+			</form>
+		</div>
 	</base-modal>
 </template>
 
