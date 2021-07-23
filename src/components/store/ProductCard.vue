@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': product.owned}" v-if="product && collection">
-        <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary" />
+        <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary z-10" />
         <div class="overflow-hidden">
             <img
                 class="w-full object-cover cursor-pointer transition transform hover:scale-105"
