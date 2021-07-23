@@ -13,7 +13,7 @@
 					:collection="c"
 				/>
 			</div>
-			<div v-else class="p-8 bg-black bg-opacity-10 rounded-md flex flex-col justify-center items-center gap-4 flex-grow">
+			<div v-else class="p-8 bg-black bg-opacity-10 rounded-md border-dashed border-2 border-black border-opacity-10 flex flex-col justify-center items-center gap-4 flex-grow">
 				<p class="text-gray-500 dark:text-gray-400 text-sm text-center">{{$t('dashboard.nocollections')}}</p>
 				<router-link to="/collections" class="rounded bg-secondary py-2 px-4 shadow-md text-white focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-white dark:text-gray-800">{{$t('dashboard.gotocollections')}}</router-link>
 			</div>
