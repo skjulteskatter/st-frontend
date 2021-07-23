@@ -1,42 +1,33 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': product.owned}" v-if="product && collection">
         <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary" />
-        <img
-            class="w-full object-cover cursor-pointer"
-            :src="image"
-            @click="goToCollection"
-            :alt="product.getName(languageKey)"
-        />
+        <div class="overflow-hidden">
+            <img
+                class="w-full object-cover cursor-pointer transition transform hover:scale-105"
+                :src="image"
+                @click="goToCollection"
+                :alt="product.getName(languageKey)"
+            />
+        </div>
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between items-start mb-4">
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
+                <price class="text-gray-400 flex-shrink-0" v-if="!product.owned" :product="product" :country="languageKey" />
             </div>
-            <div class="flex justify-between items-center text-gray-500 text-sm mb-4 dark:text-gray-400">
-                <price class="text-gray-400" v-if="!product.owned" :product="product" :country="languageKey" />
+            <div class="flex flex-col gap-2 lg:flex-row">
                 <base-button
-                    class="ml-2"
-                    theme="tertiary"
+                    class="flex-grow"
+                    theme="secondary"
                     icon="buy"
                     :disabled="inCart || !collection.enabled"
                     v-if="!product.owned"
                     @click="addToCart()"
-                    :content="false"
-                ></base-button>
-            </div>
-            <div class="flex flex-col gap-2 md:flex-row">
+                >{{ $t('store.addToCart') }}</base-button>
                 <base-button
-                    theme="secondary"
-                    class="flex-1"
-                    @click="goToCollection"
-                >
-                    {{ $t("common.open") }}
-                </base-button>
-                <base-button
-                    class="flex-1"
+                    class="flex-grow"
                     theme="tertiary"
-                    style="border: none"
                     @click="goToItem"
                 >
                     {{ $t("store.readmore") }}
@@ -76,7 +67,6 @@ export default class ProductCard extends Vue {
     
     public addToCart() {
         this.collection?.addToCart();
-        // notify("success", this.$t("store.addedToCart"), "buy");
     }
 
     public get inCart() {
