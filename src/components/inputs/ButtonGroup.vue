@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded border border-gray-300 flex overflow-hidden dark:border-gray-500" v-if="Buttons.length">
+    <div class="rounded-md border border-gray-300 flex overflow-hidden dark:border-gray-500" v-if="Buttons.length">
         <button
             v-for="(button, i) in Buttons"
             :key="button.label"

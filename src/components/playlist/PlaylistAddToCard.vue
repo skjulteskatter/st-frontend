@@ -1,5 +1,5 @@
 <template>
-    <button class="cursor-pointer border hover:border-gray-400 p-4 flex gap-2 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:border-gray-500 dark:hover:border-gray-400">
+    <button class="cursor-pointer border hover:border-gray-400 p-4 flex gap-2 w-full rounded-md focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:border-gray-500 dark:hover:border-gray-400">
         <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
         <div class="flex flex-col">
             <strong class="font-bold">{{ playlist?.name }}</strong>

@@ -1,7 +1,7 @@
 <template>
     <div class="relative z-10">
         <div class="cursor-pointer" @click="openDropdown">
-            <button class="bg-white p-2 rounded border border-gray-300 flex items-center gap-2 dark:bg-secondary dark:border-gray-500" v-if="label">
+            <button class="bg-white p-2 rounded-md border border-gray-300 flex items-center gap-2 dark:bg-secondary dark:border-gray-500" v-if="label">
                 <span>{{ label }}</span>
                 <icon
                     :name="icon"

@@ -26,7 +26,7 @@
 				:persist="true"
 			/>
 		</div>
-		<p v-else class="bg-black bg-opacity-10 p-4 text-center text-sm rounded whitespace-nowrap">{{ $t('notifications.noNotifications') }}</p>
+		<p v-else class="bg-black bg-opacity-10 p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications.noNotifications') }}</p>
 	</base-dropdown>
 </template>
 

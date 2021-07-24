@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2">
         <button
-            class="cursor-pointer p-2 rounded border border-gray-300 hover:border-gray-500 flex items-center focus:ring focus:ring-primary focus:outline-none dark:border-gray-500 dark:hover:border-gray-400"
+            class="cursor-pointer p-2 rounded-md border border-gray-300 hover:border-gray-500 flex items-center focus:ring focus:ring-primary focus:outline-none dark:border-gray-500 dark:hover:border-gray-400"
             v-for="file in Files"
             :key="file.id"
             @click="callback ? callback(file) : undefined"

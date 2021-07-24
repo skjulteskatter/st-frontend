@@ -9,7 +9,7 @@
         <ul class="flex flex-col gap-2" v-if="playlists.length > 0">
             <li v-for="playlist in playlists" :key="playlist.id">
                 <router-link
-                    class="p-2 border hover:border-gray-400 flex gap-2 rounded focus:outline-none focus:ring focus:ring-primary dark:border-gray-500 dark:hover:border-gray-400"
+                    class="p-2 border hover:border-gray-400 flex gap-2 rounded-md focus:outline-none focus:ring focus:ring-primary dark:border-gray-500 dark:hover:border-gray-400"
                     :to="{
                         name: 'playlist-view',
                         params: { id: playlist.id },
@@ -23,7 +23,7 @@
         </ul>
         <button
             v-if="playlists.length < 5"
-            class="w-full p-2 bg-black bg-opacity-10 rounded flex gap-2 justify-center items-center mt-2 hover:bg-opacity-20"
+            class="w-full p-2 bg-black bg-opacity-10 rounded-md flex gap-2 justify-center items-center mt-2 hover:bg-opacity-20"
             @click="openCreatePlaylist"
         >
             {{ $t("playlist.createnew") }}

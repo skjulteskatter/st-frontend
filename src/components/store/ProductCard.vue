@@ -45,13 +45,11 @@ import { useStore } from "@/store";
 
 import Price from "./Price.vue";
 
-import CollectionSettings from "../CollectionSettings.vue";
 import { appSession } from "@/services/session";
 // import { notify } from "@/services/notify";
 
 @Options({
     components: {
-        CollectionSettings,
         Price,
     },
     name: "product-card",

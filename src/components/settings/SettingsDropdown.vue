@@ -13,7 +13,7 @@
 			<select
 				v-model="selectedLanguage"
 				@change="setLanguage"
-				class="rounded border-gray-300 text-sm bg-transparent dark:border-gray-500"
+				class="rounded-md border-gray-300 text-sm bg-transparent dark:border-gray-500"
 			>
 				<option
 					v-for="lang in languages"
@@ -24,7 +24,7 @@
 			<select
 				v-model="selectedKey"
 				@change="setKey"
-				class="rounded border-gray-300 text-sm bg-transparent dark:border-gray-500"
+				class="rounded-md border-gray-300 text-sm bg-transparent dark:border-gray-500"
 			>
 				<option
 					v-for="key in transpositions"
@@ -33,7 +33,7 @@
 				>{{ key }}</option>
 			</select>
 			<router-link :to="{ name: 'settings' }">
-				<p class="text-sm rounded bg-black bg-opacity-10 p-2 hover:bg-opacity-20">{{ $t('settings.goToSettings') }}</p>
+				<p class="text-sm rounded-md bg-black bg-opacity-10 p-2 hover:bg-opacity-20">{{ $t('settings.goToSettings') }}</p>
 			</router-link>
             <base-button
                 theme="error"

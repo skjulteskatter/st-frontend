@@ -4,7 +4,7 @@
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
             <div class="flex gap-2 items-end flex-wrap">
                 <select
-                    class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
+                    class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
