@@ -183,7 +183,7 @@ export default class PlaylistView extends Vue {
     }
 
     public getLink(key: string) {
-        return `${window.location.host}/sharing?token=${key}`;
+        return `https://${window.location.host}/sharing?token=${key}`;
     }
 
     public async deletePlaylist() {
