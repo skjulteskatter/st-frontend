@@ -14,7 +14,7 @@
         </div>
         <div class="flex flex-col" v-if="playlists.length">
             <router-link
-                class="mt-2 flex p-2 text-xs relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="mt-2 flex p-2 text-xs relative rounded-md bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"

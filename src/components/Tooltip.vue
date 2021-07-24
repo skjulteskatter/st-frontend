@@ -5,7 +5,7 @@
 			:show="open"
 			as="div"
 			id="tooltip"
-			class="mb-2 absolute bottom-full right-1/2 transform translate-x-1/2 px-2 py-1 bg-secondary rounded shadow z-10 dark:bg-white"
+			class="mb-2 absolute bottom-full right-1/2 transform translate-x-1/2 px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white"
 			enter="transition"
 			enter-from="opacity-0 translate-y-1"
 			enter-to="opacity-100 translate-y-0"
