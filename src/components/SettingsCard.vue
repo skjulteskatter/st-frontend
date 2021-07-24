@@ -3,10 +3,10 @@
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
-                <base-button
+                <!-- <base-button
                     @click="cache.clearCache()"
                     theme="error"
-                >Clear cache</base-button>
+                >Clear cache</base-button> -->
             </h3>
             <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
