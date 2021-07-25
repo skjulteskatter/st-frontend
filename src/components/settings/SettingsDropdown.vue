@@ -32,8 +32,12 @@
 					:value="key"
 				>{{ key }}</option>
 			</select>
-			<router-link :to="{ name: 'settings' }">
-				<p class="text-sm rounded-md bg-black bg-opacity-10 p-2 hover:bg-opacity-20">{{ $t('settings.goToSettings') }}</p>
+			<router-link
+				:to="{ name: 'settings' }"
+				class="text-sm rounded-md bg-black bg-opacity-10 px-3 py-2 hover:bg-opacity-20 flex items-center"
+			>
+				<icon name="settings" size="18" class="mr-2" />
+				<span>{{ $t('settings.goToSettings') }}</span>
 			</router-link>
             <base-button
                 theme="error"
