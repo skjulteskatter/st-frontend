@@ -51,7 +51,7 @@
                 <span>{{ $t("store.total") }}:</span>
                 <span>{{ totalPrice }}</span>
             </p>
-            <base-button :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
+            <base-button theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
