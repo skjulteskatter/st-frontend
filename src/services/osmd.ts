@@ -244,6 +244,18 @@ class OSMD {
         this.canvas.style.opacity = "";
     }
 
+    public increaseOctave() {
+        this.osmd.Sheet.Transpose = this.osmd.Sheet.Transpose + 12;
+        this.osmd.updateGraphic();
+        this.rerender();
+    }
+
+    public decreaseOctave() {
+        this.osmd.Sheet.Transpose = this.osmd.Sheet.Transpose - 12;
+        this.osmd.updateGraphic();
+        this.rerender();
+    }
+
     public transpose(n: number) {
         this.transposition = n;
 
