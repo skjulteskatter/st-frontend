@@ -30,7 +30,7 @@
                     theme="tertiary"
                     @click="goToItem"
                 >
-                    {{ $t("store.readmore") }}
+                    {{ $t("store.learnMore") }}
                 </base-button>
             </div>
         </div>
