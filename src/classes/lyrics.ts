@@ -40,7 +40,7 @@ export class Lyrics implements ApiLyrics {
     }
 
     public get transposition() {
-        return this.transposedToKey ? transposer.getTransposition(this.originalKey, this.transposedToKey) : 0;
+        return this.transposedToKey ? transposer.getTransposition(this.originalKey, this.transposedToKey) : [-12, 0];
     }
 
     public get verses() {

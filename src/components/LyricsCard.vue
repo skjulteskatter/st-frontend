@@ -2,9 +2,9 @@
     <base-card v-if="song" class="overflow-visible" header>
         <template #header>
             <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
-            <div class="flex gap-2 items-end">
+            <div class="flex gap-2 items-end flex-wrap">
                 <select
-                    class="rounded border-gray-300 dark:bg-secondary dark:border-gray-500"
+                    class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -83,28 +83,29 @@
                         </div>
                     </Switch>
                 </SwitchGroup>
-                <!-- <transpose-dropdown
-                    :transpositions="song.transpositions"
-                    :transpose="transpose"
-                ></transpose-dropdown> -->
-                <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
+                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <base-button
                     v-if="editor"
-                    class="ml-auto"
                     theme="tertiary"
                     icon="pencil"
                     @click="edit()"
-                >Edit</base-button>
+                >{{ $t('common.edit') }}</base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
             <transposed-lyrics-viewer
                 v-if="type == 'transpose' && lyrics?.format == 'html'"
                 :lyrics="lyrics"
-            >
-            </transposed-lyrics-viewer>
-            <lyrics-viewer v-if="type == 'default' && lyrics?.format == 'json'">
-            </lyrics-viewer>
+            />
+            <lyrics-viewer 
+                v-if="type == 'default' && lyrics?.format == 'json'"
+                :song="song"
+            />
+            <!-- <component
+                :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
+                :song="song"
+                :lyrics="lyrics"
+            /> -->
 
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
@@ -124,8 +125,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
-// import { SheetMusicOptions } from "@/store/songs";
-// import { osmd } from "@/services/osmd";
+import { SongChanger } from "@/components/songs";
 
 @Options({
     components: {
@@ -135,6 +135,7 @@ import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
         Switch,
         SwitchGroup,
         SwitchLabel,
+        SongChanger,
     },
     props: {
         lyrics: {
@@ -164,11 +165,10 @@ export default class LyricsCard extends Vue {
         key: string;
         original: string;
     }[] {
-
-        const ts = this.lyrics ? transposer.getRelativeTranspositions(
-            this.lyrics.originalKey,
+        const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
+            this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
             this.defaultTransposition,
-            this.lyrics.transpositions,
+            this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
         ) : [];
         return ts;
     }
@@ -219,16 +219,6 @@ export default class LyricsCard extends Vue {
         this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
     }
 
-    // public get selectedTransposition() {
-    //     const t = this.store.state.songs.transposition ?? 0;
-
-    //     return Object.values(this.transpositions).includes(t) ? t : t + 12;
-    // }
-
-    // public set selectedTransposition(v) {
-    //     this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
-    // }
-
     public get languageKey() {
         return this.store.getters.languageKey;
     }
@@ -257,22 +247,21 @@ export default class LyricsCard extends Vue {
 
     public async transpose(n?: number) {
         if (n !== undefined) {
+            n += (n > 0 ? 0 : 12);
+            while(n > 0 && !Object.values(this.relativeTranspositions).some(i => i.value == n)) {
+                n -= 12;
+            }
             this.selectedTransposition = n;
         }
 
         if (this.song) {
-            const lyrics = await this.collection?.transposeLyrics(
+            await this.collection?.transposeLyrics(
                 this.song.number,
                 this.selectedTransposition,
                 this.store.state.songs.language,
                 undefined,
                 this.newMelodyView
             );
-            if (lyrics?.transposition !== undefined)
-                this.store.commit(
-                    SongsMutationTypes.SET_TRANSPOSITION,
-                    lyrics?.transposition,
-                );
         }
     }
 
@@ -287,7 +276,7 @@ export default class LyricsCard extends Vue {
     public async transposeView() {
         this.store.commit(SongsMutationTypes.SET_VIEW, "loading");
         this.store.commit(SessionMutationTypes.EXTEND, false);
-        await this.transpose();
+        await this.transpose(transposer.getRelativeTransposition(this.defaultTransposition));
         this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
     }
 
@@ -307,17 +296,6 @@ export default class LyricsCard extends Vue {
     public get defaultTransposition() {
         return this.store.getters.user?.settings?.defaultTransposition ?? "C";
     }
-
-    // public transpositionString(key: string, value: number): (string | number)[] {
-    //     if (this.defaultTransposition !== "C") {
-    //         const transposed = transposer.getTransposedString(key, 12 - transposer.getRelativeTransposition(this.defaultTransposition));
-
-    //         return [key, value, transposed ?? "C"];
-    //     }
-    //     else {
-    //         return [key, value];
-    //     }
-    // }
 
     public get transposeLanguages() {
         return this.languages.filter(l => this.collection?.hasChords[l.key]);

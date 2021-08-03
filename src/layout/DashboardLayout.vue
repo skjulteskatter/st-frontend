@@ -1,5 +1,6 @@
 <template>
     <div class="flex flex-col h-screen relative">
+        <loader :loading="!(user && initialized)">
         <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
             <the-navbar></the-navbar>
             <main class="w-full flex flex-col relative h-full">
@@ -7,7 +8,7 @@
                     <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
                         <back-button v-if="$route.name != 'main'" />
                         <div class="flex gap-4 items-center ml-auto">
-                            <store-cart />
+                            <store-cart v-if="store.state.stripe.cart.length > 0" />
                             <notification-list />
                             <settings-dropdown />
                         </div>
@@ -43,7 +44,22 @@
             <privacy-policy-accept />
             <added-to-cart />
             <tos></tos>
+            <base-modal
+                :show="show && splash != undefined"
+                @close="closeSplash()"
+            >
+                <h3 class="text-lg uppercase">{{splash?.title}}</h3>
+                <hr/>
+                <p class="mt-2">{{splash?.content}}</p>
+                <br/>
+                <div v-if="splash?.callback" class="flex">
+                    <base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
+                    <base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
+                </div>
+                <base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
+            </base-modal>
         </div>
+        </loader>
     </div>
 </template>
 <script lang="ts">
@@ -66,11 +82,14 @@ import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import AddedToCart from "@/components/store/AddedToCart.vue";
 import TOSAccept from "@/components/TOSAccept.vue";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import BaseModal from "@/components/BaseModal.vue";
 
 @Options({
     components: {
         TheNavbar,
         AudioPlayer,
+        BaseModal,
         OpenSheetMusicDisplay,
         NotificationList,
         StoreCart,
@@ -85,6 +104,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 export default class DashboardLayout extends Vue {
     public store = useStore();
     public osmdLoading = false;
+    public show = true;
 
     public get initialized() {
         return ref(appSession.initialized).value;
@@ -122,12 +142,29 @@ export default class DashboardLayout extends Vue {
         }
     }
 
+    public closeSplash() {
+        this.show = false;
+
+        setTimeout(() => {
+            this.splash = undefined;
+            this.show = true;
+        }, 500);
+    }
+
     public get sheetMusicOptions() {
         return this.store.state.songs.sheetMusic;
     }
 
     public get user() {
         return this.store.getters.user;
+    }
+
+    public set splash(v) {
+        this.store.commit(SessionMutationTypes.SPLASH, v);
+    }
+
+    public get splash() {
+        return this.store.state.session.splash;
     }
 
     // public get isAdmin() {

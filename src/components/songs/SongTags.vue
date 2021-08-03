@@ -1,41 +1,43 @@
 <template>
-    <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center">
-        <router-link
-            :to="{
-                name: 'tag',
-                params: {
-                    id: tag.id,
-                },
-            }"
-        >
-            {{ tag.getName() }}
-        </router-link>
-        <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
-            <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
-        </button>
-    </span>
-    <base-dropdown>
-        <template #button>
-            <button class="cursor-pointer text-gray-500 text-sm flex items-center">
-                <icon name="plus"/>
-                {{ $t('song.addCategory') }}
+    <div class="flex gap-2 flex-wrap">
+        <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center">
+            <router-link
+                :to="{
+                    name: 'tag',
+                    params: {
+                        id: tag.id,
+                    },
+                }"
+            >
+                {{ tag.getName() }}
+            </router-link>
+            <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
+                <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
             </button>
-        </template>
-        <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
-            <base-input v-model="tagFilter" type="text" placeholder="Tag name" class="w-full"/>
-            <base-button type="submit" theme="primary" icon="plus" :content="false" />
-        </form>
-        <div v-if="Tags.length" class="mt-2">
-            <small class="text-gray-500">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</small>
-            <ul class="flex flex-wrap gap-1">
-                <li 
-                    class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
-                    v-for="tag in Tags" 
-                    :key="tag.id" 
-                    @click="addToTag(tag.id)">{{tag.getName()}}</li>
-            </ul>
-        </div>
-    </base-dropdown>
+        </span>
+        <base-dropdown class="flex-grow">
+            <template #button>
+                <button class="cursor-pointer text-gray-500 text-sm flex items-center">
+                    <icon name="plus"/>
+                    {{ $t('song.addCategory') }}
+                </button>
+            </template>
+            <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
+                <base-input v-model="tagFilter" type="text" placeholder="Tag name" class="w-full"/>
+                <base-button type="submit" theme="primary" icon="plus" :content="false" />
+            </form>
+            <div v-if="Tags.length" class="mt-2">
+                <p class="text-gray-500 text-xs leading-none mb-2">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</p>
+                <ul class="flex flex-wrap gap-1">
+                    <li 
+                        class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
+                        v-for="tag in Tags" 
+                        :key="tag.id" 
+                        @click="addToTag(tag.id)">{{tag.getName()}}</li>
+                </ul>
+            </div>
+        </base-dropdown>
+    </div>
 </template>
 <script lang="ts">
 import { Song } from "@/classes";
@@ -96,7 +98,6 @@ export default class SongTags extends Vue {
     }
 
     public get Song() {
-        // console.log(this.Tags);
         return this.song as Song;
     }
 

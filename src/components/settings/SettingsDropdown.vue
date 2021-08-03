@@ -13,7 +13,7 @@
 			<select
 				v-model="selectedLanguage"
 				@change="setLanguage"
-				class="rounded border-gray-300 text-sm bg-transparent dark:border-gray-500"
+				class="rounded-md border-gray-300 text-sm bg-transparent dark:border-gray-500"
 			>
 				<option
 					v-for="lang in languages"
@@ -24,7 +24,7 @@
 			<select
 				v-model="selectedKey"
 				@change="setKey"
-				class="rounded border-gray-300 text-sm bg-transparent dark:border-gray-500"
+				class="rounded-md border-gray-300 text-sm bg-transparent dark:border-gray-500"
 			>
 				<option
 					v-for="key in transpositions"
@@ -32,9 +32,21 @@
 					:value="key"
 				>{{ key }}</option>
 			</select>
-			<router-link :to="{ name: 'settings' }">
-				<p class="text-sm rounded bg-black bg-opacity-10 p-2 hover:bg-opacity-20">{{ $t('settings.goToSettings') }}</p>
+			<router-link
+				:to="{ name: 'settings' }"
+				class="text-sm rounded-md bg-black bg-opacity-10 px-3 py-2 hover:bg-opacity-20 flex items-center"
+			>
+				<icon name="settings" size="18" class="mr-2" />
+				<span>{{ $t('settings.goToSettings') }}</span>
 			</router-link>
+            <base-button
+                theme="error"
+                icon="logout"
+                @click="logout"
+                class="settings-page__logout"
+            >
+                {{ $t("common.logout") }}
+            </base-button>
 		</div>
 	</base-dropdown>
 </template>
@@ -48,7 +60,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { Vue } from "vue-class-component";
 
 export default class SettingsDropdown extends Vue {
-	public store = useStore();
+	private store = useStore();
 	public theme = localStorage.getItem("theme") ?? "dark";
     public themes: Themes = themes;
 	public selectedLanguage: Language = {} as Language;
@@ -79,6 +91,13 @@ export default class SettingsDropdown extends Vue {
 
         this.selectedKey = this.user?.settings?.defaultTransposition ?? "C";
 	}
+
+    public logout() {
+        this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+            window.location.replace("/login");
+        });
+    }
+
 
 	public async save() {
         await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);

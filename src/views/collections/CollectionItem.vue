@@ -18,8 +18,8 @@
                     <base-button
                         theme="secondary"
                         icon="buy"
-                        :disabled="inCart"
-                        v-if="!collections[0].owned"
+                        :disabled="inCart || !collections[0].enabled"
+                        v-if="!product.owned"
                         @click="addToCart()"
                     >
                         {{ $t("store.addToCart") }}

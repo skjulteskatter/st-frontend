@@ -1,7 +1,15 @@
 <template>
-	<modal :label="$t('settings.changePassword')" theme="tertiary" class="change-password">
-		<h3 class="change-password__title">{{ $t("settings.changePassword") }}</h3>
-		<form @submit="resetPassword" class="change-password__form">
+	<button @click="showModal" class="text-sm px-3 py-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20">
+		<icon name="key" size="18" class="mr-2" />
+		<span>{{ $t('settings.changePassword') }}</span>
+	</button>
+	<base-modal
+		:show="show"
+		@close="hideModal"
+		class="change-password"
+	>
+		<h3 class="font-bold text-xl mb-4">{{ $t("settings.changePassword") }}</h3>
+		<form @submit="resetPassword" class="flex flex-col gap-4">
 			<base-input
 				type="password"
 				v-if="passwordUser"
@@ -19,14 +27,14 @@
 				v-model="repeatPassword"
 				:label="$t('settings.repeatPassword')"
 			/>
-			<button formaction="submit">{{ $t("common.submit") }}</button>
+			<base-button theme="secondary" formaction="submit">{{ $t("common.submit") }}</base-button>
 		</form>
-	</modal>
+	</base-modal>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Modal } from "@/components";
+import { BaseModal } from "@/components";
 import { useStore } from "vuex";
 import auth from "@/services/auth";
 import { BaseInput } from "@/components/inputs";
@@ -34,13 +42,14 @@ import { BaseInput } from "@/components/inputs";
 @Options({
 	name: "change-password",
 	components: {
-		Modal,
+		BaseModal,
 		BaseInput,
 	},
 })
 export default class ChangePassword extends Vue {
 	private store = useStore();
 
+	public show = false;
 	public updatePassword = false;
 
     public newPassword = "";
@@ -56,21 +65,13 @@ export default class ChangePassword extends Vue {
     public get passwordUser() {
         return auth.user?.providerData.find((p) => p?.providerId == "password");
     }
+
+	public showModal() {
+		this.show = true;
+	}
+
+	public hideModal() {
+		this.show = false;
+	}
 }
 </script>
-
-<style lang="scss">
-.change-password {
-	flex-shrink: 0;
-
-	&__title {
-		margin-top: 0;
-	}
-	&__form {
-		min-width: 300px;
-		display: flex;
-		flex-direction: column;
-		gap: var(--st-spacing);
-	}
-}
-</style>

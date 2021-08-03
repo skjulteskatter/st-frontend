@@ -35,7 +35,6 @@ export default class CountryList extends Vue {
 			count: number;
 		}[] = [];
 		for (const a of this.Analytics.activity ?? []) {
-			// console.log(a);
 			for (const c of a.countries ?? []) {
 				let item = countries.find(i => i.country == c.country);
 				if (!item) {

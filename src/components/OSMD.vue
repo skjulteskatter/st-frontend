@@ -1,7 +1,7 @@
 <template>
     <div class="flex">
         <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
-            <loader :loading="osmdLoading || loading['transpose'] || loading['zoom']" :position="'local'">
+            <loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
                 <div v-if="song && collection">
                     <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                     <div>
@@ -16,7 +16,7 @@
                         <small>{{melodyOrigin}}</small>
                     </div>
                 </div>
-                <div class="flex gap-4 mr-8">
+                <div class="flex gap-4">
                     <label class="flex flex-col">
                         <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
                         <base-dropdown
@@ -100,7 +100,7 @@
                     <label class="flex flex-col">
                         <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
                         <select
-                            class="p-2 rounded border-gray-300 pr-8"
+                            class="p-2 rounded-md border-gray-300 pr-8"
                             name="zoom"
                             id="zoom"
                             v-model="zoom"
@@ -108,12 +108,16 @@
                         >
                             <option
                                 v-for="i in 10"
-                                :key="`zoom-${i+4}`"
-                                :value="(i+4)/10"
+                                :key="`zoom-${i+3}`"
+                                :value="(i+3)/10"
                             >
-                                {{ (i+4)*10 }}%
+                                {{ (i+3)*10 }}%
                             </option>
                         </select>
+                    </label>
+                    <label class="flex flex-col">
+                        <small class="text-sm text-gray-500">{{ $t('song.octave') }}</small>
+                        <song-changer :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()" />
                     </label>
                     <button
                         v-if="$route.name == 'song'"
@@ -133,6 +137,7 @@ import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
 import { Collection, transposer } from "@/classes";
 import { useStore } from "@/store";
+import { SongChanger } from "@/components/songs";
 
 @Options({
     props: {
@@ -142,6 +147,9 @@ import { useStore } from "@/store";
         relativeKey: {
             type: String,
         },
+    },
+    components: {
+        SongChanger,
     },
     name: "OSMD",
 })
@@ -157,6 +165,7 @@ export default class OSMD extends Vue {
     public zoom = 1;
     public createdDone = false;
     public options?: SheetMusicOptions;
+    public octave = 0;
     
     public loading: {
         [key: string]: boolean;
@@ -213,6 +222,24 @@ export default class OSMD extends Vue {
 
     public get osmdLoading() {
         return this.osmd.loading;
+    }
+
+    public async increaseOctave() {
+        this.loading["octave"] = true;
+
+        this.octave += 1;
+        this.osmd.increaseOctave();
+
+        this.loading["octave"] = false;
+    }
+
+    public async decreaseOctave() {
+        this.loading["octave"] = true;
+
+        this.octave -= 1;
+        this.osmd.decreaseOctave();
+
+        this.loading["octave"] = false;
     }
 
     public async transpose(n: number) {

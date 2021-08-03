@@ -17,6 +17,7 @@ export class Session {
     public themes: Theme[] = [];
     public tags: Tag[] = [];
     public countries: Country[] = [];
+    public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
 
@@ -137,48 +138,48 @@ export class Session {
             
             this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
 
-            try {
-                const key = "last_updated_contributors";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
+        }
+        
+        try {
+            const key = "last_updated_contributors";
+            const lastUpdated = await cache.get("config", key) as string | undefined;
 
-                const now = new Date();
+            const now = new Date();
 
-                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                    const updateItems = await songs.getContributors(lastUpdated);
+            if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                const updateItems = await songs.getContributors(lastUpdated);
 
-                    await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: ApiCollectionItem<ApiContributor>;
-                    }));
+                await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
+                    a[b.id] = b;
+                    return a;
+                }, {} as {
+                    [id: string]: ApiCollectionItem<ApiContributor>;
+                }));
 
-                    await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
-                }
+                await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
             }
-            catch(e) {
-                notify("error", "Error occured", "warning", e);
-                this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
-            }
-
-            this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+        }
+        catch(e) {
+            notify("error", "Error occured", "warning", e);
+            this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
         }
 
-        items.getCountries().then(c => {
-            this.countries = c;
-        }).catch();
-        items.getThemes().then(t => {
-            this.themes = t;
-        }).catch();
-        items.getCopyrights().then(c => {
-            this.copyrights = c;
-        }).catch();
+        this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
 
-        const t = await items.getTags();
+        const expiry = new Date().getTime() + 3600000;
+        
+        this.countries = await cache.getOrCreateAsync("countries", () => items.getCountries(), expiry) ?? [];
+        this.themes = await cache.getOrCreateAsync("themes", () => items.getThemes(), expiry) ?? [];
+        this.copyrights = await cache.getOrCreateAsync("copyrights", () => items.getCopyrights(), expiry) ?? [];
+        this.genres = await cache.getOrCreateAsync("genres", () => items.getGenres(), expiry) ?? [];
+
+        const t = await cache.getOrCreateAsync("tags", () => items.getTags(), expiry) ?? [];
+
         this.tags = t.map(i => new Tag({
             id: i.id,
             name: i.name[useStore().getters.languageKey] ?? Object.values(i.name)[0],
         }, false));
+
         const ts = await tags.getAll();
         for (const tag of ts) {
             for (const sId of tag.songIds) {

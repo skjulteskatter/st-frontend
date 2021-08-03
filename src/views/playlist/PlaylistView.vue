@@ -20,7 +20,7 @@
                     @click="toggleSharePlaylist()"
                     :loading="loading['share']"
                 >
-                    {{ $t('common.share') + " " + $t('common.collection').toLowerCase() }}
+                    {{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}
                 </base-button>
                 <base-button icon="trash" theme="error" @click="deletePlaylist">
                     {{ $t("common.delete") }}
@@ -53,17 +53,24 @@
             @close="showModal['share'] = false"
         >
             <div class="relative w-72">
-                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal['share'] = false">
+                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal.share = false">
                     <icon name="error" size="20" />
                 </button>
-                <h3 class="font-bold mb-4">{{ $t('playlist.sharePlaylist') }}</h3>
+                <h3 class="font-bold mb-4">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
                 <div class="flex flex-col gap-2">
                     <div
                         v-for="key in Keys" :key="key.key"
                         class="flex flex-col gap-2"
                     >
                         <span class="w-full flex gap-2 justify-between">
-                            <input type="text" ref="shareLink" :value="getLink(key.key)" class="p-2 border-gray-300 text-sm flex-grow bg-transparent">
+                            <input 
+                                type="text"
+                                ref="shareLink"
+                                :value="getLink(key.key)"
+                                class="p-2 border-gray-300 rounded-md text-sm flex-grow bg-transparent"
+                                :disabled="new Date() > new Date(key.validTo)"
+                                :class="{'text-gray-400 cursor-not-allowed border-red-700': new Date() > new Date(key.validTo) }"
+                            >
                             <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
                             <base-button
                                 theme="error"
@@ -75,7 +82,11 @@
                                 class="px-3"
                             />
                         </span>
-                        <small class="block text-gray-400">{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
+                        <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
+                            <icon name="warning" size="16" />
+                            {{ $t('playlist.notValid') }}
+                        </small>
+                        <small class="block text-gray-400" v-else>{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
                     </div>
                     <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
                 </div>
@@ -183,7 +194,7 @@ export default class PlaylistView extends Vue {
     }
 
     public getLink(key: string) {
-        return `${window.location.host}/sharing?token=${key}`;
+        return `https://${window.location.host}/sharing?token=${key}`;
     }
 
     public async deletePlaylist() {

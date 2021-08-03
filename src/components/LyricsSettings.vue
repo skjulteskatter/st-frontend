@@ -1,5 +1,5 @@
 <template>
-    <div class="lyrics-settings" v-if="song">
+    <div class="lyrics-settings" v-if="song && lyrics">
         <base-card class="lyrics-settings__viewer">
             <h4 class="lyrics-settings__viewer__title">
                 {{ $t("song.viewer") }}
@@ -63,7 +63,7 @@
                         :id="key"
                     />
                     <label :for="key">
-                        {{ verses[key].name }}
+                        {{ verses[key]?.name }}
                     </label>
                 </div>
             </div>
@@ -103,34 +103,45 @@ export default class LyricsSettings extends Vue {
     public lyrics?: Lyrics;
     public languageKey?: string;
     public song?: Song;
+    public keydownEvent = (event: KeyboardEvent) => {
+        if (event.key == "ArrowRight") {
+            this.next();
+        }
+        if (event.key == "ArrowLeft") {
+            this.previous();
+        }
+    }
+
+    public storageEvent = (event: StorageEvent) => {
+        if (event.key == "lyrics_next") {
+            this.next();
+        }
+        if (event.key == "lyrics_previous") {
+            this.previous();
+        }
+    }
 
     public lineSize = 2;
 
-    // public toggleVerse(key: string) {
-    // }
+    public mounted() {
+        window.addEventListener("keydown", this.keydownEvent);
+        window.addEventListener("storage", this.storageEvent);
+        this.load();
+    }
 
-    public async mounted() {
+    public updated() {
+        this.load();
+    }
+
+    public unmounted() {
+        window.removeEventListener("keydown", this.keydownEvent);
+        window.removeEventListener("storage", this.storageEvent);
+    }
+
+    private load() {
         for (const key of Object.keys(this.verses)) {
             this.selectVerses[key] = true;
         }
-
-        window.addEventListener("keydown", (event) => {
-            if (event.key == "ArrowRight") {
-                this.next();
-            }
-            if (event.key == "ArrowLeft") {
-                this.previous();
-            }
-        });
-
-        window.addEventListener("storage", (event) => {
-            if (event.key == "lyrics_next") {
-                this.next();
-            }
-            if (event.key == "lyrics_previous") {
-                this.previous();
-            }
-        });
     }
 
     public setLineSize(number: number) {
@@ -144,19 +155,9 @@ export default class LyricsSettings extends Vue {
     }
 
     public updateLyrics() {
-        // if (this.size == 1) {
-        //     this.currentVerses = [1];
-        // }
-        // if (this.size == 2) {
-        //     this.currentVerses = [1, 2];
-        // }
-
-        if (this.song) {
-            localStorage.setItem("lyrics", JSON.stringify(this.current));
-            localStorage.setItem("song", JSON.stringify(this.song.raw()));
-            localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
-        }
-
+        localStorage.setItem("lyrics", JSON.stringify(this.current));
+        localStorage.setItem("song", JSON.stringify(this.song?.raw));
+        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
     }
 
     public next() {
@@ -194,7 +195,7 @@ export default class LyricsSettings extends Vue {
     }
 
     public get size() {
-        return this.verses[1].content.length <= 5 ? 2 : 1;
+        return this.verses[0]?.content.length <= 5 ? 2 : 1;
     }
 
     public get melodyOrigin() {

@@ -1,42 +1,53 @@
 import { analytics } from "./auth";
 
-type Events = "contributor" | "song" | "lyrics" | "lyricsChords"
+type Events = "song_view" | "song_list" | "collection_view" | "lyrics_view" | "lyrics_transpose" | "file_accessed" | "sheetmusic_view" | "contributor_view";
 
-type EventProps = {
-    contributor: {
-        contributor_id: string;
-    };
-    song: {
+type EventModels = {
+    song_view: {
         song_id: string;
+        collection_id?: string | null;
+    };
+    song_list: {
         collection_id: string;
     };
-    lyrics: {
+    collection_view: {
         collection_id: string;
-        song_id: string;
-        lyrics_language: string;
+    };
+    lyrics_view: {
+        song_id?: string;
+        collection_id?: string;
         lyrics_id: string;
+        lyrics_language: string;
     };
-    lyricsChords: {
-        collection_id: string;
-        song_id: string;
+    lyrics_transpose: {
+        song_id?: string;
+        collection_id?: string;
         lyrics_id: string;
         lyrics_language: string;
         lyrics_transposition: number;
     };
+    file_accessed: {
+        song_id?: string;
+        collection_id?: string;
+        file_id: string;
+    };
+    sheetmusic_view: {
+        song_id?: string;
+        collection_id?: string;
+        file_id: string;
+        sheetmusic_transposition: number;
+    };
+    contributor_view: {
+        collection_id?: string;
+        contributor_id: string;
+    };
 }
 
-class Logs {
-    private logTypes: {
-        [key: string]: string;
-    } = {
-        contributor: "contributor_view",
-        song: "song_details_enter",
-        lyrics: "lyrics_view",
-        lyricsChords: "lyrics_view_transpose",
-    };
+type AnalyticsEvent<E extends Events> = EventModels[E];
 
-    public event<E extends Events>(key: E, props: EventProps[E]) {
-        analytics.logEvent(this.logTypes[key], props);
+class Logs {
+    public event<E extends Events>(event: E, body: AnalyticsEvent<E>) {
+        analytics.logEvent(event as string, body);
     }
 }
 

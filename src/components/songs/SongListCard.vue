@@ -13,21 +13,23 @@
                 v-for="song in Songs"
                 :key="song.id"
                 @click="viewSong(song)"
-                class="flex gap-2 hover:text-primary hover:underline cursor-pointer dark:opacity-90"
+                class="flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
                     'text-green-700': song.available && !song.sheetMusic.length,
                     'text-gray-400': !song.available,
                 }"
             >
-                <b class="w-6 text-right">
+                <b class="w-6 mr-2 text-right">
                     {{ song.number }}
                 </b>
                 <span>
                     {{ song.getName(languageKey) }}
                 </span>
-                <span class="ml-auto" style="opacity: 0.5">({{songViews(song)}})</span>
-                <icon class="text-primary" name="star" size="12" v-if="song.newMelody" />
+                <div class="ml-auto">
+                    <icon class="text-primary mr-1" name="star" size="12" v-if="song.newMelody" />
+                    <span class="opacity-50">({{songViews(song)}})</span>
+                </div>
             </li>
         </ul>
         <base-modal
@@ -40,7 +42,6 @@
                     <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
                     <p>{{ $t('store.gainAccess') }}</p>
                 </span>
-                <!-- <base-button theme="secondary" icon="buy" @click="closeCTA">{{ $t('store.addToCart') }}</base-button> -->
                 <base-button theme="secondary" @click="closeCTA">OK</base-button>
             </div>
         </base-modal>
@@ -122,7 +123,7 @@ export default class SongListCard extends Vue {
     }
 
     public available(n: number) {
-        return this.collection?.available || n <= 5;
+        return this.collection?.available || (this.collection?.freeSongs && n <= 5);
     }
 }
 </script>

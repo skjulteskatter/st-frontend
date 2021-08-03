@@ -20,7 +20,6 @@ export interface Actions {
     [SongsActionTypes.SELECT_COLLECTION](context: AugmentedActionContext, payload: string): Promise<void>;
     [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number | string): Promise<void>;
     [SongsActionTypes.SELECT_CONTRIBUTOR](context: AugmentedActionContext, payload: string): Promise<void>;
-    [SongsActionTypes.TRANSPOSE](context: AugmentedActionContext, payload: number): Promise<void>;
     [SongsActionTypes.SET_LIST](context: AugmentedActionContext, payload: string): Promise<void>;
 }
 
@@ -37,7 +36,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         if (collection) {
             await collection.load(state.language);
-            
+
             await dispatch(SongsActionTypes.SET_LIST, collection.defaultSort);
 
             // console.log(collection.authors);
@@ -57,7 +56,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
             const song = collection?.songs.find(s => s.number == number);
 
             if (song && song.type == "lyrics") {
-                logs.event("song", {
+                logs.event("song_view", {
                     "song_id": song.id,
                     "collection_id": collection.id,
                 });
@@ -76,23 +75,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         const contributor = appSession.contributors.find(c => c.id == contributorId) ?? await songs.getContributor(contributorId);
         if (contributor) {
-            logs.event("contributor", {
+            logs.event("contributor_view", {
                 "contributor_id": contributor.id,
             });
 
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
         }
-    },
-    async [SongsActionTypes.TRANSPOSE]({ commit, getters }, transpose: number): Promise<void> {
-        const collection = getters.collection as Collection | undefined;
-        if (!collection || !getters.song) {
-            return;
-        }
-
-        const lyrics = await collection.transposeLyrics(getters.song.number, transpose);
-
-        // commit(SongsMutationTypes.SET_LYRICS_TRANSPOSED, lyrics);
-        commit(SongsMutationTypes.SET_TRANSPOSITION, lyrics.transposition);
     },
     async [SongsActionTypes.SET_LIST]({ commit, getters }, value: string): Promise<void> {
         const r = await (getters.collection as Collection).getList(value);

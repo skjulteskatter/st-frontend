@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-4 items-center text-center">
             <h1 class="text-xl font-bold">{{$t('policies.termsOfService')}}</h1>
             <p class="max-w-sm">{{$t('policies.acceptTOS')}}</p>
-            <a href="/terms-of-service" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
+            <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
             <base-button
                 :loading="loading"
                 :disabled="disabled"
@@ -54,6 +54,10 @@ export default class PolicyAccepter extends Vue {
             this.store.getters.user.termsAndConditions = true;
         this.loading = false;
         this.disabled = true;
+    }
+
+    public openWindow() {
+        window.open("https://songtreasures.org/terms-of-purchase/");
     }
 }
 </script>

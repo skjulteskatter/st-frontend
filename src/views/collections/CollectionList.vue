@@ -1,7 +1,10 @@
 <template>
     <div class="mb-4 flex justify-between items-center">
         <div class="flex justify-between w-full">
-            <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.collections") }}</h1>
+            <div class="flex items-center">
+                <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common.collections") }}</h1>
+                <tooltip :text="$t('store.currencyDescription')" />
+            </div>
             <store-cart class="md:hidden" />
         </div>
         <div class="flex gap-2">
@@ -31,7 +34,8 @@
             </base-button>
         </div>
     </div>
-    <product-slider :products="products" v-if="products.length" />
+    <product-slider class="mb-4" :products="products" v-if="products.length" />
+    <!-- <p class="text-center text-sm p-2 rounded-md bg-black/10">{{$t('store.currencyDescription')}}</p> -->
 </template>
 
 <script lang="ts">

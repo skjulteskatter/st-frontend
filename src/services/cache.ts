@@ -14,9 +14,13 @@ type StoreTypes = {
     };
     files: MediaFile;
     notifications: Notification;
+    general: {
+        expiry: number;
+        item: string;
+    };
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -30,8 +34,9 @@ class CacheService {
         "items",
         "files",
         "notifications",
+        "general",
     ];
-    private version = 20;
+    private version = 23;
 
     private db() {
         const v = this.version;
@@ -136,6 +141,32 @@ class CacheService {
         }
 
         await tx.done;
+    }
+
+    public async getOrCreateAsync<T>(key: string, factory: () => Promise<T>, expiry: number) {
+        const tx = await this.tx("general", true);
+
+        const r = (await tx.objectStore("general").get?.(key)) as Entry<"general"> | null;
+
+        await tx.done;
+
+        if (r && r.expiry > new Date().getTime()) {
+            return JSON.parse(r.item) as T;
+        }
+
+        try {
+            const item = await factory();
+    
+            await this.set("general", key, {
+                expiry,
+                item: JSON.stringify(item),
+            });
+    
+            return item;
+        }
+        catch {
+            return null;
+        }
     }
 }
 

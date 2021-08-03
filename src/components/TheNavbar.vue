@@ -6,20 +6,18 @@
         </div>
         <nav-links />
         <playlist-list />
-        <!-- <user-profile class="hidden md:flex" /> -->
     </nav>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { FullSearchInput } from "@/components/inputs";
-import { PlaylistList, UserProfile, NavLinks, NavLogo } from "@/components/nav";
+import { PlaylistList, NavLinks, NavLogo } from "@/components/nav";
 
 @Options({
     components: {
         PlaylistList,
         FullSearchInput,
-        UserProfile,
         NavLinks,
         NavLogo,
     },

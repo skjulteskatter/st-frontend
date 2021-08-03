@@ -22,6 +22,13 @@
                         >
                             {{ contributor.subtitle }}
                         </small>
+                        <base-button
+                            v-if="isEditor"
+                            @click="goToEditPage()"
+                            theme="tertiary"
+                            icon="pencil"
+                            class="mr-4 hidden xl:block"
+                        >Edit</base-button>
                     </div>
                     <div
                         v-html="contributor.getBiography(languageKey)"
@@ -163,6 +170,14 @@ export default class ContributorView extends Vue {
 
     public get collections(): Collection[] {
         return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id)));
+    }
+
+    public get isEditor() {
+        return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+    }
+
+    public goToEditPage() {
+        window.open(`https://songtreasures.sanity.studio/desk/contributor;${this.contributor?.id}`);
     }
 }
 </script>

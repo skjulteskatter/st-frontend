@@ -1,25 +1,25 @@
 <template>
     <base-card>
-        <div class="flex justify-between items-center mb-4">
-            <span class="flex gap-4 items-center">
-                <h3 class="font-bold">
+        <div class="flex justify-between items-center mb-2">
+            <span class="flex items-center">
+                <h3 class="font-bold mr-4">
                     {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
                 </h3>
                 <tooltip :text="$t('tooltip.myCollections')" />
             </span>
-            <button class="text-sm p-2 rounded bg-black bg-opacity-10 flex gap-2 items-center hover:bg-opacity-20" @click="openCreatePlaylist">
+            <button class="text-sm py-2 px-3 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20" @click="openCreatePlaylist">
                 {{ $t('playlist.createnew') }}
             </button>
             <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
         </div>
-        <div class="flex flex-col gap-2" v-if="playlists.length">
+        <div class="flex flex-col" v-if="playlists.length">
             <router-link
-                class="flex gap-2 p-2 text-xs relative rounded bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="mt-2 flex p-2 text-xs relative rounded-md bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"
             >
-                <icon name="playlist" class="text-gray-500 dark:text-gray-400" />
+                <icon name="playlist" class="mr-2 text-gray-500 dark:text-gray-400" />
                 <div>
                     <strong>
                         {{ p.name }}
@@ -31,7 +31,7 @@
                 </div>
             </router-link>
         </div>
-        <p class="p-4 text-gray-500 text-center" v-else>
+        <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
             {{ $t("playlist.noplaylists") }}
         </p>
     </base-card>

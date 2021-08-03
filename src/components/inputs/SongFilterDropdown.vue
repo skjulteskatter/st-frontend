@@ -56,10 +56,7 @@
                 </base-dropdown>
             </div>
         </div>
-        <div class="flex gap-2">
-            <!-- <base-button theme="secondary" @click="apply()" class="flex-grow">{{ $t('song.apply') }}</base-button> -->
-            <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common.remove') }}</button>
-        </div>
+        <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common.remove') }}</button>
     </div>
 </template>
 

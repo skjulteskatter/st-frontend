@@ -67,6 +67,9 @@ export const items = {
     getTags() {
         return http.get<SongTag[]>("api/SongTags");
     },
+    getGenres() {
+        return http.get<Genre[]>("api/Genres");
+    },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
     },
@@ -114,7 +117,7 @@ export const songs = {
         return (await http.get<ApiCollection[]>("api/Collections")).map(c => new Collection(c));
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&details,transpositions,origins/description` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
@@ -257,16 +260,17 @@ export const stripe = {
     setup() {
         return http.get<SetupResponse>("api/Store/Setup");
     },
-    async startSession(productIds: string[]) {
+    async startSession(productIds: string[], type: "year" | "month") {
         const country = await http.getCountry().catch(() => {
             return undefined;
         });
 
         return await http.post<RedirectToCheckoutOptions, SessionRequest>("api/Store/Session", {
             productIds,
-            cancelUrl: window.location.origin + "/dashboard",
+            cancelUrl: window.location.href,
             successUrl: window.location.origin + "/success",
             country,
+            type,
         });
     },
     getSession(sessionId: string) {
@@ -274,7 +278,7 @@ export const stripe = {
     },
     getPortalSession() {
         return http.post("api/Store/Portal", {
-            returnUrl: `${window.location.origin}/collections`,
+            returnUrl: window.location.href,
         });
     },
     refreshSubscriptions() {

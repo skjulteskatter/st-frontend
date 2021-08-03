@@ -1,42 +1,36 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': isOwned}" v-if="product">
-        <icon name="lock" v-if="!isOwned" class="absolute top-4 left-4 text-secondary" />
-        <img
-            class="w-full object-cover cursor-pointer"
-            :src="image"
-            @click="goToCollection"
-            :alt="product.getName(languageKey)"
-        />
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': product.owned}" v-if="product && collection">
+        <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary z-10" />
+        <div class="overflow-hidden">
+            <img
+                class="w-full object-cover cursor-pointer transition transform hover:scale-105"
+                :src="image"
+                @click="goToCollection"
+                :alt="product.getName(languageKey)"
+            />
+        </div>
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between items-start mb-4">
                 <h4 class="font-bold">
                     {{ product.getName(languageKey) }}
                 </h4>
-                <base-button
-                    theme="tertiary"
-                    icon="buy"
-                    :disabled="inCart"
-                    v-if="!isOwned"
-                    @click="addToCart()"
-                    :content="false"
-                ></base-button>
-                <!-- <collection-settings v-else :collection="product.collections[0]"></collection-settings> -->
+                <price class="text-gray-400 flex-shrink-0" v-if="!product.owned" :product="product" :country="languageKey" />
             </div>
-            <div class="flex flex-col gap-2 md:flex-row">
+            <div class="flex flex-col gap-2 lg:flex-row">
                 <base-button
+                    class="flex-grow"
                     theme="secondary"
-                    class="flex-1"
-                    @click="goToCollection"
-                >
-                    {{ $t("common.open") }}
-                </base-button>
+                    icon="buy"
+                    :disabled="inCart || !collection.enabled"
+                    v-if="!product.owned"
+                    @click="addToCart()"
+                >{{ $t('store.addToCart') }}</base-button>
                 <base-button
-                    class="flex-1"
+                    class="flex-grow"
                     theme="tertiary"
-                    style="border: none"
                     @click="goToItem"
                 >
-                    {{ $t("store.readmore") }}
+                    {{ $t("store.learnMore") }}
                 </base-button>
             </div>
         </div>
@@ -49,13 +43,13 @@ import { Options, Vue } from "vue-class-component";
 import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
-import CollectionSettings from "../CollectionSettings.vue";
+import Price from "./Price.vue";
+
 import { appSession } from "@/services/session";
-// import { notify } from "@/services/notify";
 
 @Options({
     components: {
-        CollectionSettings,
+        Price,
     },
     name: "product-card",
     props: {
@@ -70,7 +64,6 @@ export default class ProductCard extends Vue {
     
     public addToCart() {
         this.collection?.addToCart();
-        // notify("success", this.$t("store.addedToCart"), "buy");
     }
 
     public get inCart() {
@@ -108,10 +101,6 @@ export default class ProductCard extends Vue {
 
     public get isAvailable() {
         return this.collection?.available;
-    }
-
-    public get isOwned() {
-        return this.store.getters.user?.subscriptions.some(s => s.collectionIds.includes(this.collection?.id as string));
     }
 
     public get image() {

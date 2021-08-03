@@ -5,7 +5,8 @@
 			:show="open"
 			as="div"
 			id="tooltip"
-			class="mb-2 absolute bottom-full right-1/2 transform translate-x-1/2 px-2 py-1 bg-secondary rounded shadow z-10 dark:bg-white"
+			class="mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white"
+			:class="positionClasses"
 			enter="transition"
 			enter-from="opacity-0 translate-y-1"
 			enter-to="opacity-100 translate-y-0"
@@ -13,8 +14,11 @@
 			leave-from="opacity-100 translate-y-0"
 			leave-to="opacity-0 translate-y-1"
 		>
-			<span class="bg-secondary w-2 h-2 transform rotate-45 absolute -bottom-1 left-1/2 -translate-x-1/2 dark:bg-white"></span>
-			<small class="text-white font-normal leading-tight whitespace-nowrap dark:text-secondary">{{ text }}</small>
+			<span
+				class="bg-secondary w-2 h-2 rotate-45 absolute -bottom-0.5 dark:bg-white"
+				:class="{ 'right-3': position == 'right', 'left-3': position == 'left' }"
+			></span>
+			<small class="text-white font-normal whitespace-nowrap dark:text-secondary">{{ text }}</small>
 		</transition-root>
 	</div>
 </template>
@@ -38,8 +42,25 @@ import { TransitionRoot } from "@headlessui/vue";
 export default class Tooltip extends Vue {
 	public text?: string;
 	private open = false;
+	public position = "left";
 
-	public showTooltip() {
+	public get positionClasses() {
+		switch(this.position) {
+			case "left": 
+				return "-left-2";
+			case "right":
+				return "-right-2";
+			default:
+				return "right-1/2 -translate-x-1/2";
+		}
+	}
+
+	public handlePosition(e: MouseEvent) {
+		this.position = (e.clientX < window.innerWidth / 2) ? "left" : "right";
+	}
+
+	public showTooltip(e: MouseEvent) {
+		this.handlePosition(e);
 		this.open = true;
 	}
 

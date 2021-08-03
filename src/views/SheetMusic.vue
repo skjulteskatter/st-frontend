@@ -1,28 +1,35 @@
 <template>
     <div class="sheetmusic-viewer">
-        <!-- <div v-if="!embed && song" class="sheetmusic-viewer__info">
-            <h2 class="sheetmusic-viewer__info__title">
-                {{ song.getName(languageKey) }}
-            </h2>
-            <p
-                v-for="c in song.Authors"
-                :key="c.id"
-                class="sheetmusic-viewer__info__author"
-            >
-                {{ $t("song.author") }}: {{ c.name }}
-            </p>
-            <p
-                v-for="c in song.Composers"
-                :key="c.id"
-                class="sheetmusic-viewer__info__composer"
-            >
-                {{ $t("song.composer") }}: {{ c.name }}
-            </p>
-        </div> -->
+        <div v-if="song" class="mb-4 p-4 bg-white">
+            <div class="flex flex-col">
+                <h2 class="font-bold">
+                    {{ song.getName(languageKey) }}
+                </h2>
+                <small class="opacity-50" v-if="song.Authors.length">
+                    <span>{{ $t("song.author") }}: </span>
+                    <span
+                        v-for="c in song.Authors"
+                        :key="c.id"
+                        class="px-1"
+                    >
+                        {{ c.name }}
+                    </span>
+                </small>
+                <small class="opacity-50" v-if="song.Composers.length">
+                    <span>{{ $t('song.composer') }}: </span>
+                    <span
+                        v-for="c in song.Composers"
+                        :key="c.id"
+                        class="px-1"
+                    >
+                        {{ c.name }}
+                    </span>
+                </small>
+            </div>
 
-        <base-button v-for="file in files" :key="file.id" @click="setFile(file)">
-            {{file.name}} ({{file.category}})
-        </base-button>
+            <small class="text-gray-500 mt-4" v-if="files.length > 1">{{ $t('song.sheetmusic') }}</small>
+            <media-list-item v-if="files.length > 1" :files="files" :callback="setFile" />
+        </div>
 
         <div class="sheetmusic-wrapper">
             <open-sheet-music-display
@@ -47,7 +54,6 @@
             <div id="osmd-canvas"></div>
         </div>
     </div>
-    <!-- </loader> -->
 </template>
 
 <script lang="ts">
@@ -61,10 +67,12 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
+import { MediaListItem } from "@/components/media";
 
 @Options({
     components: {
         OpenSheetMusicDisplay,
+        MediaListItem,
     },
     name: "sheet-music",
 })
@@ -97,6 +105,9 @@ export default class SheetMusic extends Vue {
             const song = new Song(await songs.getSongById(this.$route.params.id as string, "files"));
             this.song = song;
             this.files = song.files?.filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
+            if (this.files.length == 1) {
+                this.setFile(this.files[0]);
+            }
         }
         else {
             throw new Error("No token present");
@@ -119,7 +130,7 @@ export default class SheetMusic extends Vue {
         await new Promise(r => setTimeout(r, 10));
         const options: SheetMusicOptions = {
             show: true,
-            originalKey: file.song?.originalKey ?? "C",
+            originalKey: this.song?.originalKey ?? "C",
             url: file.directUrl,
             type: file.type,
             transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
@@ -216,11 +227,11 @@ export default class SheetMusic extends Vue {
     height: 100vh;
     max-width: 1600px;
     margin: auto;
-    padding: calc(var(--st-spacing) * 2);
+    //padding: calc(var(--st-spacing) * 2);
 
-    @include breakpoint("medium") {
-        padding: var(--st-spacing);
-    }
+    //@include breakpoint("medium") {
+    //    padding: var(--st-spacing);
+    //}
 
     &__info {
         margin-bottom: var(--st-spacing);

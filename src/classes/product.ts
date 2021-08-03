@@ -64,6 +64,10 @@ export class Product extends BaseClass implements ApiProduct {
         this.collectionIds = product.collectionIds;
     }
 
+    public get owned() {
+        return this.store.getters.user?.subscriptions.some(i => i.productIds.includes(this.id));
+    }
+
     public get collections() {
         return this._collections ?? [];
     }
@@ -73,7 +77,7 @@ export class Product extends BaseClass implements ApiProduct {
     }
 
     public get price() {
-        return this.prices.find(p => p.type == "year");
+        return this.prices.find(p => p.type == "month");
     }
 
     public get currency() {
@@ -91,6 +95,6 @@ export class Product extends BaseClass implements ApiProduct {
 
     public priceDiv(country: string) {
         const discount = this.discounted(country);
-        return `${this.currency?.toUpperCase()} ${discount ? "<span class=\"line-through text-red-200\">" + this.originalPrice + "</span><span class=\"ml-1\">" + this.discountedPrice + "</span>" : this.originalPrice} / year`;
+        return `${this.currency?.toUpperCase()} ${discount ? "<span class=\"line-through text-red-200\">" + this.originalPrice + "</span><span class=\"ml-1\">" + this.discountedPrice + "</span>" : this.originalPrice} / month`;
     }
 }

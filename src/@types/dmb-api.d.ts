@@ -14,10 +14,14 @@ declare module "dmb-api" {
         loggedDate: string;
     }
 
+    type Sort = "title" | "number" | "composer" | "author" | "genre";
+
     interface ApiCollection {
         id: string;
+        enabled: boolean;
         defaultType: string;
-        defaultSort: string;
+        defaultSort: Sort;
+        freeSongs: boolean;
         name: {
             [lang: string]: string;
         };
@@ -33,6 +37,7 @@ declare module "dmb-api" {
 
     interface ApiSong {
         id: string;
+        available: boolean;
         collections: {
             id: string;
             collection?: ApiCollection;
@@ -48,6 +53,7 @@ declare module "dmb-api" {
         hasLyrics: boolean;
         hasChords: boolean;
         themeIds: string[];
+        genreIds: string[];
         tagIds: string[];
         copyrights: {
             type: string;
@@ -221,6 +227,12 @@ interface Theme {
 interface SongTag {
     id: string;
     name: LocaleString;
+}
+
+interface Genre {
+    id: string;
+    name: LocaleString;
+    description: LocaleString;
 }
 
 interface JsonContent {

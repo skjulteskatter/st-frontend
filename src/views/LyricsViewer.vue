@@ -75,7 +75,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 export default class LyricsViewer extends Vue {
     public store = useStore();
 
-    private song?: Song;
+    public song: Song | null = null;
 
     public mounted() {
         themes.load();

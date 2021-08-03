@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor, ApiSong } from "dmb-api";
+import { ApiCollection, ApiContributor, ApiSong, Sort } from "dmb-api";
 import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
@@ -20,10 +20,34 @@ let closeId: string | null = null;
 export class Collection extends BaseClass implements ApiCollection {
     public id;
     private _key;
+    public enabled;
+    public freeSongs;
     public keys: LocaleString;
     public defaultType;
-    public defaultSort;
-    public available?: boolean;
+
+    private _defaultSort: Sort;
+
+    public get defaultSort(): Sort {
+        if (this._defaultSort == "author") 
+            if (this.hasAuthors)
+                return "author";
+            else 
+                return "title";
+        if (this._defaultSort == "composer") 
+            if (this.hasAuthors)
+                return "composer";
+            else 
+                return "title";
+
+        return this._defaultSort;
+    }
+
+    private _available?: boolean;
+
+    public get available() {
+        return this._available == true;    
+    }
+
     public details?: LocaleString;
     public hasChords: {
         [lang: string]: boolean;
@@ -44,6 +68,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public hasCountries = false;
     public hasThemes = false;
     public hasTags = false;
+    public hasGenres = false;
 
     public themeTypes: Theme[] = [];
 
@@ -54,6 +79,8 @@ export class Collection extends BaseClass implements ApiCollection {
 
     private _tags?: CollectionItem<Tag>[];
     private _loadingTags = false;
+
+    private _genres: CollectionItem<Genre>[] = [];
 
     private _authors: CollectionItem<ApiContributor>[] = [];
     private _composers: CollectionItem<ApiContributor>[] = [];
@@ -76,13 +103,15 @@ export class Collection extends BaseClass implements ApiCollection {
     constructor(collection: ApiCollection) {
         super();
         this._key = collection.key;
+        this.enabled = collection.enabled;
+        this.freeSongs = collection.freeSongs;
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
-        this.defaultSort = collection.defaultSort;
+        this._defaultSort = collection.defaultSort;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
-        this.available = collection.available;
+        this._available = collection.available;
         this.details = collection.details;
         this.hasChords = collection.hasChords ?? {};
         cache.get("config", "collection_" + this.id).then((r) => {
@@ -111,11 +140,11 @@ export class Collection extends BaseClass implements ApiCollection {
             await appSession.init();
 
             if (this.available) {
-                this.songs = appSession.songs.filter(s => s.collectionIds.some(c => this.id == c));
+                this.songs = appSession.songs.filter(s => s.collectionIds.some(c => this.id == c)).sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
             } else {
                 const files = await api.songs.getFiles([this.id]);
                 appSession.files.push(...files.result);
-                this.songs = (await api.songs.getAllSongs([this.id])).result.map(s => new Song(s));
+                this.songs = ((await api.songs.getAllSongs([this.id])).result.map(s => new Song(s))).sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
             }
 
             this.hasAuthors = this.hasAuthors || this.songs.some(s => s.participants.some(p => p.type == "author"));
@@ -123,25 +152,26 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
             this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
+            this.hasGenres = this.hasGenres || this.songs.some(s => s.genreIds.length > 0);
 
             this._authors = appSession.contributors.map(c => {
-                const cItem: CollectionItem<ApiContributor> = {
+                const cItem = new CollectionItem<ApiContributor>({
                     songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
                     id: c.id,
                     fileIds: c.fileIds,
                     item: c.item,
-                };
+                });
                 return cItem;
             }).filter(i => i.songIds.length);
             
             
             this._composers = appSession.contributors.map(c => {
-                const cItem: CollectionItem<ApiContributor> = {
+                const cItem = new CollectionItem<ApiContributor>({
                     songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
                     id: c.id,
                     fileIds: c.fileIds,
                     item: c.item,
-                };
+                });
                 return cItem;
             }).filter(i => i.songIds.length);
 
@@ -192,11 +222,11 @@ export class Collection extends BaseClass implements ApiCollection {
         return this.store.state.stripe.products.find(p => p.collectionIds.includes(this.id));
     }
 
-    public get owned() {
-        const prod = this.product;
+    // public get owned() {
+    //     const prod = this.product;
 
-        return prod && this.store.getters.user?.subscriptions.some(s => s.productIds.includes(prod.id));
-    }
+    //     return prod && this.store.getters.user?.subscriptions.some(s => s.productIds.includes(prod.id));
+    // }
 
     public get inCart() {
         return this.product ? this.store.state.stripe.cart.includes(this.product?.id) : false;
@@ -331,6 +361,17 @@ export class Collection extends BaseClass implements ApiCollection {
                 return this._themes.length;
             }
         }
+        if (value == "genre") {
+            this._genres = appSession.genres.map(i => {
+                const cItem = new CollectionItem<Genre>({
+                    songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
+                    id: i.id,
+                    item: i,
+                    fileIds: [],
+                });
+                return cItem;
+            }).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
+        }
         if (value == "tags") {
             if (!this._tags) {
                 this._loadingTags = true;
@@ -360,13 +401,13 @@ export class Collection extends BaseClass implements ApiCollection {
         this.loadingLyrics = true;
         try {
             const song = this.songs.find(s => s.getNumber(this.id) == number);
-            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition == transpose && l.secondaryChords == newMelody);
+            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition.includes(transpose) && l.secondaryChords == newMelody);
             if (!lyrics) {
                 lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common", newMelody);
                 this.lyrics.push(lyrics);
             }
             if (song)
-                logs.event("lyricsChords", {
+                logs.event("lyrics_transpose", {
                     "collection_id": this.id,
                     "song_id": song.id,
                     "lyrics_id": lyrics.id,
@@ -388,7 +429,7 @@ export class Collection extends BaseClass implements ApiCollection {
                 lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
                 this.lyrics.push(lyrics);
             }
-            logs.event("lyrics", {
+            logs.event("lyrics_view", {
                 "collection_id": this.id,
                 "song_id": song.id,
                 "lyrics_language": language,
@@ -411,6 +452,10 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get tags(): CollectionItem<Tag>[] {
         return this._tags ?? [];
+    }
+
+    public get genres() {
+        return this._genres;
     }
 
     public getContributors(type: string) {

@@ -3,10 +3,10 @@
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
-                <base-button
+                <!-- <base-button
                     @click="cache.clearCache()"
                     theme="error"
-                >Clear cache</base-button>
+                >Clear cache</base-button> -->
             </h3>
             <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
@@ -18,7 +18,7 @@
                     @change="themes.setTheme(theme)"
                 >
                     <option :value="t" v-for="t in themes.keys" :key="t">
-                        {{ t }}
+                        {{ $t(`common.${t}`) }}
                     </option>
                 </select>
             </div>
@@ -69,7 +69,7 @@
                     :placeholder="user.displayName"
                 />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+            <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="gender">{{ $t("common.gender") }}</label>
                 <select
                     class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
@@ -85,7 +85,7 @@
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="birthDay">{{ $t("common.birthDay") }}</label>
                 <input type="date" v-model="birthDay" class="bg-transparent rounded border-gray-300" />
-            </div>
+            </div> -->
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
                 <input

@@ -6,7 +6,7 @@
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <base-button theme="secondary" icon="buy" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.owned">{{ $t('store.buy') }}</base-button>
+                <base-button theme="secondary" icon="buy" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">{{ $t('store.buy') }}</base-button>
                 <!-- <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm md:ml-auto">
                     <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
                     <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
@@ -101,7 +101,24 @@
                                 theme?.songIds.includes(s.id)
                             )
                         "
-                        :title="theme?.item.name[languageKey] ?? ''"
+                        :title="theme?.name"
+                        class="mb-4"
+                    ></song-list-card>
+                </div>
+                <div
+                    class="song-list__songs"
+                    v-if="listType == 'genre'"
+                >
+                    <song-list-card
+                        v-for="i in collection.genres"
+                        :collection="collection"
+                        :key="i.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                i?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="i?.name"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -119,7 +136,7 @@
                                 tag?.songIds.includes(s.id)
                             )
                         "
-                        :title="tag?.item.name ?? ''"
+                        :title="tag?.name"
                         :class="{'border border-primary bg-yellow-50': tag.item.userDefined}"
                         class="mb-4"
                     ></song-list-card>
@@ -138,7 +155,7 @@
                                 country?.songIds.includes(s.id)
                             )
                         "
-                        :title="country?.item.name[languageKey] ?? country?.item.name.en ?? Object.values(country?.item.name ?? {})?.[0] ?? ''"
+                        :title="country?.name"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -440,11 +457,13 @@ export default class SongList extends Vue {
                 label: this.$t("song.author"),
                 value: "author",
                 selected: this.listType == "author",
+                hidden: !this.collection?.hasAuthors,
             },
             {
                 label: this.$t("song.composer"),
                 value: "composer",
                 selected: this.listType == "composer",
+                hidden: !this.collection?.hasComposers,
             },
             // {
             //     label: this.$t("song.theme"),
@@ -452,9 +471,16 @@ export default class SongList extends Vue {
             //     selected: this.listType == "themes",
             // },
             {
+                label: this.$t("song.genre"),
+                value: "genre",
+                selected: this.listType == "genre",
+                hidden: !this.collection?.hasGenres,
+            },
+            {
                 label: this.$t("song.category"),
                 value: "tags",
                 selected: this.listType == "tags",
+                hidden: !this.collection?.hasTags,
             },
             {
                 label: this.$t("common.views"),
@@ -468,12 +494,7 @@ export default class SongList extends Vue {
             // },
         ].filter(
             (b) =>
-                ![
-                    !this.collection?.hasAuthors ? "author" : "",
-                    !this.collection?.hasComposers ? "composer" : "",
-                    !this.collection?.hasCountries ? "countries" : "",
-                    !this.collection?.hasThemes ? "themes" : "",
-                ].includes(b.value),
+                b.hidden != true,
         );
     }
 }

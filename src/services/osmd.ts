@@ -9,6 +9,7 @@ import {
     // PlaybackManager, 
     TransposeCalculator 
 } from "opensheetmusicdisplay";
+import { logs } from "./logs";
 // const timingSource = new LinearTimingSource();
 // const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);
 // playbackManager.DoPlayback = true;
@@ -25,6 +26,8 @@ class OSMD {
     public zoom = 1;
     public createdDone = false;
     public loading = false;
+
+    public clef?: string;
     // public playing = false;
 
     // private controlPanel: ControlPanel = {} as ControlPanel;
@@ -165,8 +168,18 @@ class OSMD {
 
         this.transposition = sheetMusic.transposition ?? 0;
 
+        if (this.transposition > 6) {
+            this.transposition -= 12;
+        } else {
+            if (this.transposition < -6) {
+                this.transposition += 12;
+            }
+        }
+
         if (process.env.NODE_ENV == "development")
             this.osmd.setLogLevel("debug");
+
+        this.clef = sheetMusic.clef;
 
         this.osmd.setOptions({
             onXMLRead: (e) => {
@@ -231,10 +244,30 @@ class OSMD {
         this.canvas.style.opacity = "";
     }
 
+    public increaseOctave() {
+        this.osmd.Sheet.Transpose = this.osmd.Sheet.Transpose + 12;
+        this.osmd.updateGraphic();
+        this.rerender();
+    }
+
+    public decreaseOctave() {
+        this.osmd.Sheet.Transpose = this.osmd.Sheet.Transpose - 12;
+        this.osmd.updateGraphic();
+        this.rerender();
+    }
+
     public transpose(n: number) {
         this.transposition = n;
 
-        this.osmd.Sheet.Transpose = this.transposition;
+        if (this.transposition > 6) {
+            this.transposition -= 12;
+        } else {
+            if (this.transposition < -6) {
+                this.transposition += 12;
+            }
+        }
+
+        this.osmd.Sheet.Transpose = this.clef == "bass" ? this.transposition - 12 : this.transposition;
 
         this.osmd.updateGraphic();
 

@@ -2,25 +2,29 @@ import { stripe as api } from "@/services/api";
 import  { loadStripe, Stripe } from "@stripe/stripe-js";
 
 class StripeService {
-    private service: Stripe = {} as Stripe;
+    private service: Stripe | null = null;
+    private key = "";
 
     public async init(publicKey: string) {
-        const stripe = await loadStripe(publicKey);
-        if (stripe === null) {
-            throw new Error("Stripe failed to load");
-        }
+        this.key = publicKey;
+        // const stripe = await loadStripe(publicKey);
+        // if (stripe === null) {
+        //     throw new Error("Stripe failed to load");
+        // }
 
-        this.service = stripe;
+        // this.service = stripe;
     }
 
     public setup() {
         return api.setup();
     }
 
-    public async checkout(productIds: string[]) {
-        const session = await api.startSession(productIds);
+    public async checkout(productIds: string[], type: "year" | "month") {
+        this.service = await loadStripe(this.key);
 
-        this.service.redirectToCheckout(session).catch(err => {
+        const session = await api.startSession(productIds, type);
+
+        await this.service?.redirectToCheckout(session).catch(err => {
             if (err) throw err;
         });
     }

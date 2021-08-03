@@ -8,7 +8,6 @@ import Copyright from "./Copyright.vue";
 
 import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
-import OptionsComponent from "./OptionsComponent.vue";
 import SettingsCard from "./SettingsCard.vue";
 import CollectionCard from "./CollectionCard.vue";
 import BackButton from "./BackButton.vue";
@@ -23,7 +22,6 @@ export {
     Modal,
     Loader,
     LyricsSettings,
-    OptionsComponent,
     SettingsCard,
     CollectionCard,
     LyricsCard,

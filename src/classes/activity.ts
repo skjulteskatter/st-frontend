@@ -33,11 +33,11 @@ export class Activity {
     }
 
     public getRouterLink(collections: Collection[]): RouteLocationRaw {
-        return this.activity.type == "song" ? {
+        const link: RouteLocationRaw = this.activity.type == "song" ? {
             name: "song",
             params: {
-                collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "",
-                number: (this.item as Song | undefined)?.collections[0].number ?? "",
+                collection: collections.find(c => this.collectionIds.some(col => col == c.id))?.key ?? "HV",
+                number: (this.item as Song | undefined)?.collections[0].number ?? "1",
             },
         } : {
             name: "contributor",
@@ -45,6 +45,7 @@ export class Activity {
                 contributor: this.activity.itemId,
             },
         };
+        return link;
     }
 
     public getImage(collections: Collection[]): string | undefined {
@@ -52,33 +53,37 @@ export class Activity {
     }
 
     public timeSince() {
-        const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
-            localeMatcher: "best fit",
-            numeric: "auto",
-            style: "long",
-        });
-
-        const now = new Date().getTime();
-        const then = new Date(this.activity.loggedDate).getTime();
-
-        const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
-            { unit: "year", amount: 31536000000 },
-            { unit: "month", amount: 2628000000 },
-            { unit: "day", amount: 86400000 },
-            { unit: "hour", amount: 3600000 },
-            { unit: "minute", amount: 60000 },
-            { unit: "second", amount: 1000 },
-        ];
-
-        const relatime = (elapsed: number) => {
-            for (const { unit, amount } of units) {
-                if (Math.abs(elapsed) > amount || unit === "second") {
-                    return rtfl.format(Math.round(elapsed / amount), unit);
+        try {
+            const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
+                localeMatcher: "best fit",
+                numeric: "auto",
+                style: "long",
+            });
+            
+            const now = new Date().getTime();
+            const then = new Date(this.activity.loggedDate).getTime();
+            
+            const units: { unit: Intl.RelativeTimeFormatUnit; amount: number }[] = [
+                { unit: "year", amount: 31536000000 },
+                { unit: "month", amount: 2628000000 },
+                { unit: "day", amount: 86400000 },
+                { unit: "hour", amount: 3600000 },
+                { unit: "minute", amount: 60000 },
+                { unit: "second", amount: 1000 },
+            ];
+            
+            const relatime = (elapsed: number) => {
+                for (const { unit, amount } of units) {
+                    if (Math.abs(elapsed) > amount || unit === "second") {
+                        return rtfl.format(Math.round(elapsed / amount), unit);
+                    }
                 }
-            }
-        };
-
-        return relatime(then - now);
+            };
+            
+            return relatime(then - now);
+        } catch(err) {
+            // Error handling
+        }
     }
 
     public get id() {

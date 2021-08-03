@@ -1,5 +1,4 @@
 <template>
-    <!-- <div id="firebase-auth-container"></div> -->
     <div class="p-4 h-screen w-screen flex flex-col justify-center items-center gap-8" v-if="initialized && !user">
         <div class="flex flex-col justify-center gap-4">
             <img
@@ -15,7 +14,32 @@
         <base-card id="login-card" class="p-4 max-w-md w-full">
             <div class="flex flex-col gap-6">
                 <p v-if="noAccount" class="text-sm text-red-700 bg-red-100 rounded p-2">No account found with that email</p>
-                <form @submit.prevent="submitForm" class="flex flex-col gap-4">
+                <p v-if="wrongPassword" class="text-sm text-red-700 bg-red-100 rounded p-2">Wrong Password</p>
+                <div class="flex flex-col" v-if="!providers.length || providers.filter(i => i != 'password').length">
+                    <div class="flex gap-3 justify-center">
+                        <img
+                            v-if="!providers.length || providers.includes('google.com')"
+                            alt="GOOGLE"
+                            src="/img/google.svg" 
+                            class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            @click="login('google')"
+                        />
+                        <img
+                            v-if="!providers.length || providers.includes('apple.com')"
+                            alt="APPLE"
+                            src="/img/apple.svg" 
+                            class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            @click="login('apple')"
+                        />
+                    </div>
+                </div>
+                <span class="flex justify-between items-center gap-4" v-if="!providers.length || providers.filter(i => i != 'password').length">
+                    <hr class="border-t border-gray-200 flex-grow">
+                    <small @click="showEmail = !showEmail" class="text-gray-500 cursor-pointer hover:underline">Or log in with email.<icon :name="showEmail ? 'arrowUp' : 'arrowDown'" /></small>
+                    
+                    <hr class="border-t border-gray-200 flex-grow">
+                </span>
+                <form v-if="showEmail" @submit.prevent="submitForm" class="flex flex-col gap-4">
                     <base-input
                         label="Email"
                         type="email"
@@ -26,8 +50,9 @@
                     <base-input
                         label="Password"
                         type="password"
+                        :required="providers.includes('password')"
+                        v-if="providers.includes('password') || providers.length == 0"
                         v-model="form.password"
-                        required
                     />
                     <label class="flex gap-3 items-center">
                         <input type="checkbox" v-model="stayLoggedIn" class="rounded border border-gray-300 focus:ring-primary text-primary" />
@@ -37,47 +62,11 @@
                         theme="secondary"
                         type="submit"
                         formaction="submit"
+                        :loading="loading.login"
                     >
                         Sign in
                     </base-button>
                 </form>
-                <span class="flex justify-between items-center gap-4">
-                    <hr class="border-t border-gray-200 flex-grow">
-                    <small class="text-gray-500">Or continue with</small>
-                    <hr class="border-t border-gray-200 flex-grow">
-                </span>
-                <div class="flex flex-col">
-                    <div class="flex gap-3 justify-center">
-                        <button
-                            v-if="!providers.length || providers.includes('google.com')"
-                            class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
-                            @click="login('google')"
-                        >
-                            <img alt="GOOGLE ICON" class="h-full" src="/img/google.png" />
-                        </button>
-                        <button
-                            v-if="!providers.length || providers.includes('apple.com')"
-                            class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
-                            @click="login('apple')"
-                        >
-                            <img alt="APPLE ICON" class="h-full" src="/img/apple.svg" />
-                        </button>
-                        <!-- <button
-                            class="social__button"
-                            @click="login('microsoft')"
-                            disabled
-                        >
-                            <img alt="MICROSOFT" src="/img/microsoft.png" />
-                        </button>
-                        <button
-                            class="social__button"
-                            @click="login('twitter')"
-                            disabled
-                        >
-                            <img alt="TWITTER ICON" src="/img/twitter.svg" />
-                        </button> -->
-                    </div>
-                </div>
             </div>
         </base-card>
         <base-modal :show="createUserModal" @close="createUserModal = false">
@@ -91,7 +80,7 @@
                             class="flex-grow p-2 border border-gray-300 rounded hover:border-gray-400 h-10 w-16 flex justify-center items-center"
                             @click="login('google')"
                         >
-                            <img alt="Google" class="h-full" src="/img/google.png" />
+                            <img alt="Google" class="h-full" src="/img/google.svg" />
                         </button>
                         <button
                             v-if="!providers.length || providers.includes('apple.com')"
@@ -106,6 +95,7 @@
             </div>
         </base-modal>
     </div>
+    <loader v-else :loading="true"></loader>
 </template>
 
 <script lang="ts">
@@ -129,9 +119,15 @@ export default class Login extends Vue {
         password: "",
     };
     public noAccount = false;
+    public wrongPassword = false;
     public stayLoggedIn = false;
+    public showEmail = false;
     private store = useStore();
     public providers: string[] = [];
+
+    public loading: {
+        [key: string]: boolean | undefined;
+    } = {};
 
     public createUserModal = false;
 
@@ -142,6 +138,7 @@ export default class Login extends Vue {
     }
 
     public async submitForm() {
+        this.loading.login = true;
         if (this.form.email && !this.form.password) {
             this.noAccount = false;
             this.providers = await auth.getProviders(this.form.email);
@@ -149,12 +146,18 @@ export default class Login extends Vue {
                 this.noAccount = true;
             }
         } else {
-            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
-                email: this.form.email,
-                password: this.form.password,
-                stayLoggedIn: this.stayLoggedIn,
-            });
+            try {
+                await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
+                    email: this.form.email,
+                    password: this.form.password,
+                    stayLoggedIn: this.stayLoggedIn,
+                });
+            }
+            catch {
+                this.wrongPassword = true;
+            }
         }
+        this.loading.login = false;
     }
 
     public createUser() {
@@ -174,3 +177,9 @@ export default class Login extends Vue {
     }
 }
 </script>
+<style lang="scss">
+
+.login-image {
+    object-fit: contain;
+}
+</style>
