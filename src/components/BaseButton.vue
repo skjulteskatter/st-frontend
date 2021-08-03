@@ -7,9 +7,6 @@
     >
         <icon size="18" name="refresh" class="animate-spin inline-block" v-if="loading" />
         <icon size="18" v-else-if="icon" :name="icon" class="inline-block" />
-        <!-- <span class="button__label--loading flex items-center" v-if="loading">{{
-            loadingLabel
-        }}</span> -->
         <span class="button__content text-sm" v-if="content">
             <slot></slot>
         </span>

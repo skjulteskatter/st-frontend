@@ -1,9 +1,6 @@
 <template>
 	<div>
 		<label class="font-bold">
-			<!-- <input
-				type="checkbox"
-			/> -->
 			{{ name }}
 		</label>
 		<label

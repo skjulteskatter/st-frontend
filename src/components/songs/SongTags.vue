@@ -98,7 +98,6 @@ export default class SongTags extends Vue {
     }
 
     public get Song() {
-        // console.log(this.Tags);
         return this.song as Song;
     }
 

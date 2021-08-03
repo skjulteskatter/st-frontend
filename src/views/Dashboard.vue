@@ -6,7 +6,6 @@
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             <owned-collections />
             <activity-feed />
-            <!-- <recent-collections /> -->
             <playlists />
         </div>
     </div>
@@ -19,7 +18,6 @@ import { useStore } from "@/store";
 import { CollectionCard } from "@/components";
 import {
     ActivityFeed,
-    RecentCollections,
     Playlists,
     OwnedCollections,
 } from "@/components/dashboard";
@@ -29,7 +27,6 @@ import {
     components: {
         CollectionCard,
         ActivityFeed,
-        RecentCollections,
         Playlists,
         OwnedCollections,
     },

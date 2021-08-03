@@ -123,9 +123,6 @@ export default class LyricsSettings extends Vue {
 
     public lineSize = 2;
 
-    // public toggleVerse(key: string) {
-    // }
-
     public mounted() {
         window.addEventListener("keydown", this.keydownEvent);
         window.addEventListener("storage", this.storageEvent);
@@ -158,13 +155,6 @@ export default class LyricsSettings extends Vue {
     }
 
     public updateLyrics() {
-        // if (this.size == 1) {
-        //     this.currentVerses = [1];
-        // }
-        // if (this.size == 2) {
-        //     this.currentVerses = [1, 2];
-        // }
-
         localStorage.setItem("lyrics", JSON.stringify(this.current));
         localStorage.setItem("song", JSON.stringify(this.song?.raw));
         localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));

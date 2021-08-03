@@ -42,7 +42,6 @@
                     <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
                     <p>{{ $t('store.gainAccess') }}</p>
                 </span>
-                <!-- <base-button theme="secondary" icon="buy" @click="closeCTA">{{ $t('store.addToCart') }}</base-button> -->
                 <base-button theme="secondary" @click="closeCTA">OK</base-button>
             </div>
         </base-modal>

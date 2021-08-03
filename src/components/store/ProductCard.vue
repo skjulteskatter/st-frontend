@@ -46,7 +46,6 @@ import { useStore } from "@/store";
 import Price from "./Price.vue";
 
 import { appSession } from "@/services/session";
-// import { notify } from "@/services/notify";
 
 @Options({
     components: {

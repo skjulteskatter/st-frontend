@@ -83,11 +83,6 @@
                         </div>
                     </Switch>
                 </SwitchGroup>
-                <!-- <transpose-dropdown
-                    :transpositions="song.transpositions"
-                    :transpose="transpose"
-                ></transpose-dropdown> -->
-                <!-- <base-button v-if="sheetMusicUrl" @click="sheetMusic">Sheet music</base-button> -->
                 <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <base-button
                     v-if="editor"
@@ -131,8 +126,6 @@ import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
-// import { SheetMusicOptions } from "@/store/songs";
-// import { osmd } from "@/services/osmd";
 
 @Options({
     components: {
@@ -226,16 +219,6 @@ export default class LyricsCard extends Vue {
         this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
     }
 
-    // public get selectedTransposition() {
-    //     const t = this.store.state.songs.transposition ?? 0;
-
-    //     return Object.values(this.transpositions).includes(t) ? t : t + 12;
-    // }
-
-    // public set selectedTransposition(v) {
-    //     this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
-    // }
-
     public get languageKey() {
         return this.store.getters.languageKey;
     }
@@ -313,17 +296,6 @@ export default class LyricsCard extends Vue {
     public get defaultTransposition() {
         return this.store.getters.user?.settings?.defaultTransposition ?? "C";
     }
-
-    // public transpositionString(key: string, value: number): (string | number)[] {
-    //     if (this.defaultTransposition !== "C") {
-    //         const transposed = transposer.getTransposedString(key, 12 - transposer.getRelativeTransposition(this.defaultTransposition));
-
-    //         return [key, value, transposed ?? "C"];
-    //     }
-    //     else {
-    //         return [key, value];
-    //     }
-    // }
 
     public get transposeLanguages() {
         return this.languages.filter(l => this.collection?.hasChords[l.key]);
