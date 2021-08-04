@@ -19,7 +19,15 @@
 				</small>
 			</div>
 		</header>
-		<main class="lyrics">
+		<main v-if="Object.keys(verses).length <= 4" class="flex justify-center">
+			<section class="flex flex-col gap-4">
+				<div class="mb-4" v-for="verse of verses" :key="verse.name">
+					<b>{{ verse.name }}</b>
+					<p v-for="line in verse.content" :key="verse.name + line">{{ line }}</p>
+				</div>
+			</section>
+		</main>
+		<main class="lyrics" v-else>
 			<div class="mb-4" v-for="verse of verses" :key="verse.name">
 				<b>{{ verse.name }}</b>
 				<p v-for="line in verse.content" :key="verse.name + line">{{ line }}</p>
