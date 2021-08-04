@@ -95,6 +95,9 @@ const CreditSong = () => import(/* webpackChunkName: 'songStatistics' */ "../vie
 const RedeemToken = () => import(/* webpackChunkName: 'redeemToken' */ "../views/RedeemToken.vue").catch(() => {
     window.location.reload();
 });
+const PrintView = () => import(/* webpackChunkName: 'printView' */ "../views/PrintView.vue").catch(() => {
+    window.location.reload();
+});
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -262,6 +265,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/sheetmusic",
         name: "sheet-music",
         component: SheetMusic,
+    },
+    {
+        path: "/print",
+        name: "print",
+        component: PrintView,
     },
 ];
 
