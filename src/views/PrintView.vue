@@ -1,6 +1,6 @@
 <template>
-	<article class="bg-white" v-if="song && collection && verses">
-		<header class="mb-8 py-4 border-b border-gray-200 flex justify-between items-end">
+	<article class="bg-white p-8" v-if="song && collection && verses">
+		<header class="mb-8 py-4 border-b border-gray-300 flex justify-between items-end">
 			<div>
 				<p class="text-primary">{{ collection.getName(languageKey) }}</p>
 				<h1 class="text-2xl flex gap-4">
