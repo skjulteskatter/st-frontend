@@ -1,5 +1,6 @@
 <template>
 	<article class="bg-white p-8" v-if="song && collection && verses">
+		<back-button class="back-button" />
 		<header class="mb-8 py-4 border-b border-gray-300 flex justify-between items-end">
 			<div>
 				<p class="text-primary">{{ collection.getName(languageKey) }}</p>
@@ -9,17 +10,25 @@
 				</h1>
 			</div>
 			<div class="text-gray-500 leading-none">
-				<small class="flex gap-1" v-if="song.hasLyrics && song.Authors.length">
+				<small class="flex gap-1 whitespace-nowrap" v-if="song.hasLyrics && song.Authors.length">
 					<span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
 					<span v-for="author in song.Authors" :key="author.id">{{ author.name }}</span>
 				</small>
-				<small class="flex gap-1" v-if="song.Composers.length">
+				<small class="flex gap-1 whitespace-nowrap" v-if="song.Composers.length">
 					<span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
 					<span v-for="composer in song.Composers" :key="composer.id">{{ composer.name }}</span>
 				</small>
 			</div>
 		</header>
-		<main class="lyrics">
+		<main v-if="Object.keys(verses).length <= 4" class="flex justify-center">
+			<section class="flex flex-col gap-4">
+				<div class="mb-4" v-for="verse of verses" :key="verse.name">
+					<b>{{ verse.name }}</b>
+					<p v-for="line in verse.content" :key="verse.name + line">{{ line }}</p>
+				</div>
+			</section>
+		</main>
+		<main class="lyrics" v-else>
 			<div class="mb-4" v-for="verse of verses" :key="verse.name">
 				<b>{{ verse.name }}</b>
 				<p v-for="line in verse.content" :key="verse.name + line">{{ line }}</p>
@@ -73,5 +82,11 @@ export default class PrintView extends Vue {
 
 .lyrics > div {
 	break-inside: avoid;
+}
+
+@media print {
+	.back-button {
+		display: none;
+	}
 }
 </style>
