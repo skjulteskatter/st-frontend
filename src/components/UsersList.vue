@@ -2,6 +2,7 @@
     <div>
         <div class="flex gap-4 justify-between items-end mb-4">
             <h3 class="font-bold">{{ $t("admin.users") }}</h3>
+            <input v-model="userQuery" type="text" @keydown.enter="searchUser" />
             <base-button
                 :class="{ disabled: disableButton }"
                 @click="refreshUsers"
@@ -49,6 +50,7 @@
                                 :label="$t('common.edit')"
                                 theme="tertiary"
                                 v-if="u.id != User?.id"
+                                @open="getUser(u.id)"
                             >
                                 <loader :loading="loading" />
                                 <div class="flex flex-col gap-4">
@@ -68,27 +70,51 @@
                                         </span>
                                     </div>
                                     <div class="flex flex-col">
-                                        <label
-                                            class="font-bold"
-                                            >Roles</label
-                                        >
-                                        <label
-                                            class="text-sm"
-                                            v-for="role in roles"
-                                            :key="role"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                class="text-primary rounded border-gray-300 focus:ring-primary"
-                                                :checked="
-                                                    u.roles.find(
-                                                        (r) => r == role
-                                                    )
-                                                "
-                                                @change="toggleRole(u, role)"
-                                            />
-                                            {{ role }}
-                                        </label>
+                                        <div class="flex flex-col">
+                                            <label
+                                                class="font-bold"
+                                                >Roles</label
+                                            >
+                                            <label
+                                                class="text-sm"
+                                                v-for="role in roles"
+                                                :key="role"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    class="text-primary rounded border-gray-300 focus:ring-primary"
+                                                    :checked="
+                                                        u.roles.find(
+                                                            (r) => r == role
+                                                        )
+                                                    "
+                                                    @change="toggleRole(u, role)"
+                                                />
+                                                {{ role }}
+                                            </label>
+                                        </div>
+                                        <br/>
+                                        <div class="flex flex-col">
+                                            <h3 class="font-bold">{{$t('common.collections')}}</h3>
+                                            <div v-for="i in u.subscriptions" :key="i.id">
+                                                <span>{{getCollection(i)?.getName()}}</span>
+                                                <icon class="cursor-pointer" @click="deleteSub(u, i)" size="24" name="trash" v-if="i.id.startsWith('custom')" />
+                                            </div>
+                                            <base-dropdown
+                                                :label="'Add'"
+                                            >
+                                                <div class="mb-2 text-sm" v-for="i in getUnownedCollections(u.subscriptions)" :key="i.id">
+                                                    <label :key="i.id" class="cursor-pointer">
+                                                        <input :key="i.id" type="checkbox" v-model="newSubs[u.id][i.id]" />
+                                                        {{i.getName()}}
+                                                    </label>
+                                                </div>
+                                                <br/>
+                                                <span class="text-sm">Valid To</span>
+                                                <input type="date" v-model="validTo[u.id]"/>
+                                                <base-button class="mb-2" :disabled="!Object.values(newSubs[u.id]).includes(true) || !validTo[u.id]" @click="addSubscriptions(u)">Save</base-button>
+                                            </base-dropdown>
+                                        </div>
                                     </div>
                                     <base-button
                                         theme="secondary"
@@ -112,6 +138,7 @@ import { useStore } from "@/store";
 import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
+import api from "@/services/api";
 
 @Options({
     name: "users-list",
@@ -134,15 +161,33 @@ export default class UsersList extends Vue {
     public disableButton = false;
     public loading = false;
 
+    public newSubs: {
+        [key: string]: {
+            [key: string]: boolean;
+        };
+    } = {};
+
+    public validTo: {
+        [key: string]: string;
+    } = {};
+
+    public userQuery = "";
+
     public async mounted() {
-        await this.store.dispatch(UsersActionTypes.GET_USERS);
+        // await this.store.dispatch(UsersActionTypes.GET_USERS);
         await this.store.dispatch(UsersActionTypes.GET_ROLES);
+    }
+
+    public async searchUser() {
+        
+        if (this.userQuery)
+            this.store.commit(UsersMutationTypes.SET_USERS, await api.admin.getUsers(this.userQuery));
     }
 
     public async refreshUsers() {
         this.loading = true;
         this.disableButton = true;
-        await this.store.dispatch(UsersActionTypes.GET_USERS);
+        await this.searchUser();
 
         notify("success", this.$t("notification.fetchedusers"), "check");
         this.loading = false;
@@ -163,6 +208,49 @@ export default class UsersList extends Vue {
 
     public toggleRole(user: User, role: string) {
         this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
+    }
+
+    public getCollection(subscription: Subscription) {
+        return this.store.getters.collections.find(i => subscription.collectionIds.includes(i.id));
+    }
+
+    public getUnownedCollections(subscriptions: Subscription[]) {
+        return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds.includes(i.id)));
+    }
+
+    public async getUser(uid: string) {
+        const user = this.users?.find(i => i.id == uid);
+
+        if (user && this.newSubs[user.id] !== {}) {
+            user.subscriptions = (await api.admin.getUser(uid)).subscriptions;
+            this.newSubs[user.id] = {};
+        }
+    }
+
+    public async addSubscriptions(user: User) {
+        const cols = [];
+
+        for (const v of Object.entries(this.newSubs[user.id])) {
+            if (v[1] === true)
+                cols.push(v[0]);
+        }
+
+        if (cols.length > 0 && this.validTo[user.id]) {
+            const sub = await api.admin.createSubscription(user.id, {
+                collectionIds: cols,
+                validTo: this.validTo[user.id],
+            });
+
+            user.subscriptions.push(sub);
+            this.newSubs[user.id] = {};
+            delete this.validTo[user.id];
+        }
+            
+    }
+
+    public async deleteSub(user: User, subscription: Subscription) {
+        await api.admin.deleteSubcription(user.id, subscription.id);
+        user.subscriptions = user.subscriptions.filter(i => i.id != subscription.id);
     }
 
     public async saveRoles(user: User) {

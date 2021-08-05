@@ -89,10 +89,12 @@ export default class Modal extends Vue {
     }
 
     public openModal() {
+        this.$emit("open");
         this.modalIsOpen = true;
     }
 
     public closeModal() {
+        this.$emit("close");
         this.modalIsOpen = false;
     }
 }
