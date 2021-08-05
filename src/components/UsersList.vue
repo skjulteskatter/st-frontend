@@ -2,19 +2,23 @@
     <div>
         <div class="flex gap-4 justify-between items-end mb-4">
             <h3 class="font-bold">{{ $t("admin.users") }}</h3>
-            <input v-model="userQuery" type="text" @keydown.enter="searchUser" />
-            <base-button
-                :class="{ disabled: disableButton }"
-                @click="refreshUsers"
-                :loading="loading"
-                icon="refresh"
-                theme="primary"
-                >{{ $t("common.update") }}</base-button
-            >
+            <div class="flex gap-2 items-center">
+                <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common.search')} ${$t('admin.email').toLocaleLowerCase()}`" />
+                <base-button
+                    :class="{ disabled: disableButton }"
+                    @click="refreshUsers"
+                    :loading="loading"
+                    :content="false"
+                    icon="refresh"
+                    theme="primary"
+                >
+                    {{ $t("common.update") }}
+                </base-button>
+            </div>
         </div>
         <base-card class="overflow-x-auto">
-            <table class="table-fixed">
-                <thead class="bg-gray-100">
+            <table class="table-fixed" v-if="Users.length">
+                <thead class="bg-black bg-opacity-10">
                     <tr>
                         <th class="w-1/5 text-left p-2">{{ $t("common.name") }}</th>
                         <th class="w-2/5 text-left p-2">Email</th>
@@ -128,12 +132,15 @@
                     </tr>
                 </tbody>
             </table>
+            <p v-else class="w-full text-center text-gray-500">No users to show</p>
         </base-card>
     </div>
 </template>
+
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
+import { SearchInput } from "@/components/inputs";
 import { useStore } from "@/store";
 import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
@@ -144,6 +151,7 @@ import api from "@/services/api";
     name: "users-list",
     components: {
         Modal,
+        SearchInput,
     },
     props: {
         users: {

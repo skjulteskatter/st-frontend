@@ -1,7 +1,8 @@
 <template>
     <div class="p-4 md:p-8" v-if="isAdmin">
-        <div class="mb-4">
+        <div class="mb-4 flex gap-4">
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
+            <copy-to-clipboard :content="token" label="API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-4">
             <!-- <base-card>
@@ -57,19 +58,6 @@
                 </div>
             </base-card> -->
             <users-list :users="users" :currentUser="currentUser"></users-list>
-
-            <base-card>
-                <div class="flex justify-between">
-                    <h3 class="font-bold text-lg">API token</h3>
-                    <base-button
-                        theme="secondary"
-                        @click="copyToken()"
-                    >
-                        Copy to clipboard
-                    </base-button>
-                </div>
-                <input type="text" :value="token" id="apiToken" />
-            </base-card>
         </div>
     </div>
     <div v-else>
@@ -80,6 +68,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { UsersList } from "@/components";
+import { CopyToClipboard } from "@/components/inputs";
 import api from "@/services/api";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -90,6 +79,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 @Options({
     components: {
         UsersList,
+        CopyToClipboard,
     },
     name: "admin",
 })
