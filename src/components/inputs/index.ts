@@ -5,6 +5,7 @@ import SearchInput from "./SearchInput.vue";
 import SearchResultItem from "./SearchResultItem.vue";
 import FullSearchInput from "./FullSearchInput.vue";
 import BaseInput from "./BaseInput.vue";
+import CopyToClipboard from "./CopyToClipboard.vue";
 
 export {
     ButtonGroup,
@@ -14,4 +15,5 @@ export {
     SearchResultItem,
     FullSearchInput,
     BaseInput,
+    CopyToClipboard,
 };
