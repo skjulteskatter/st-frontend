@@ -1,11 +1,13 @@
 <template>
-	<div>
-		<button
+	<div class="flex gap-2 items-center">
+		<base-button
 			class="px-2 py-1 mr-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20"
 			@click="copy()"
+			icon="clipboard"
+			:content="label != undefined"
 		>
-			<icon name="clipboard" size="20" />
-		</button>
+			{{ label }}
+		</base-button>
 		<TransitionRoot
 			:show="copied"
 			as="small"
@@ -31,12 +33,16 @@ import { TransitionRoot } from "@headlessui/vue";
 			type: String,
 			required: true,
 		},
+		label: {
+			type: String,
+		},
 	},
 	components: {
 		TransitionRoot,
 	},
 })
 export default class CopyToClipboard extends Vue {
+	public label?: string;
 	public content?: string;
 	private copied = false;
 
