@@ -38,7 +38,7 @@
 		<!-- Modals -->
 		<privacy-policy-accept />
 		<added-to-cart />
-		<tos></tos>
+		<tos />
 		<base-modal
 			:show="show && splash != undefined"
 			@close="closeSplash()"
@@ -65,17 +65,24 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { appSession } from "@/services/session";
 
 import TheNavbar from "@/components/TheNavbar.vue";
-import { Copyright } from "@/components";
+import { Copyright, BaseModal } from "@/components";
 import { AudioPlayer } from "@/components/media";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
+import Tos from "@/components/TOSAccept.vue";
+import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
+import AddedToCart from "@/components/store/AddedToCart.vue";
 
 @Options({
 	name: "stacked-layout",
 	components: {
 		TheNavbar,
 		Copyright,
+		BaseModal,
 		AudioPlayer,
 		OpenSheetMusicDisplay,
+		Tos,
+		PrivacyPolicyAccept,
+		AddedToCart,
 	},
 })
 export default class StackedLayout extends Vue {
