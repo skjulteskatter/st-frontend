@@ -71,6 +71,10 @@ import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import Tos from "@/components/TOSAccept.vue";
 import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import AddedToCart from "@/components/store/AddedToCart.vue";
+import themes from "@/classes/themes";
+import { notify } from "@/services/notify";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { cache } from "@/services/cache";
 
 @Options({
 	name: "stacked-layout",
@@ -92,6 +96,32 @@ export default class StackedLayout extends Vue {
 
 	public get initialized() {
         return ref(appSession.initialized).value;
+    }
+
+	async mounted() {
+        document.documentElement.style.setProperty(
+            "--st-color-primary",
+            themes.default,
+        );
+        themes.load();
+
+        const route = this.$route.name;
+        setTimeout(() => {
+            if (this.initialized == false && this.$route.name == route) {
+                notify("error", "Something is wrong", "exclamation", "Click here to reload", 30000, () => cache.clearCache(), false);
+            }
+        }, 5000);
+
+        if (!this.user) {
+            this.$router.push({ name: "login" });
+        } else {
+            if (!this.store.getters.stripeInitialized) {
+                await this.store.dispatch(
+                    StripeActionTypes.SETUP,
+                );
+            }
+            await appSession.init();
+        }
     }
 
 	public close() {
