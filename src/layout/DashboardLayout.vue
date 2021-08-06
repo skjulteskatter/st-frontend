@@ -1,64 +1,64 @@
 <template>
     <div class="flex flex-col h-screen relative">
         <loader :loading="!(user && initialized)">
-        <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
-            <the-navbar></the-navbar>
-            <main class="w-full flex flex-col relative h-full">
-                <div class="flex-1 overflow-y-auto h-full" style="overflow-y: overlay">
-                    <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
-                        <back-button v-if="$route.name != 'main'" />
-                        <div class="flex gap-4 items-center ml-auto">
-                            <store-cart v-if="store.state.stripe.cart.length > 0" />
-                            <notification-list />
-                            <settings-dropdown />
-                        </div>
-                    </header>
-                    <router-view />
-                    <copyright />
-                </div>
-                <div
-                    class="sticky bottom-0 md:overflow-y-auto"
-                    :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
-                >
-                    <open-sheet-music-display
-                        v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
-                        :options="sheetMusicOptions"
-                        :relativeKey="user.settings?.defaultTransposition"
-                        @startLoading="osmdLoading = true"
-                        @finishLoading="osmdLoading = false"
-                    />
-                    <div id="osmd-canvas" class="bg-white"></div>
-                    <loader :loading="osmdLoading" />
-                </div>
-                <div 
-                    class="w-full h-full flex flex-col"
-                    :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
-                >
-                    <div class="p-4 flex justify-end bg-white w-full">
-                        <base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+            <div class="flex flex-col sm:flex-row h-full" v-if="user && initialized">
+                <the-navbar></the-navbar>
+                <main class="w-full flex flex-col relative h-full">
+                    <div class="flex-1 overflow-y-auto h-full" style="overflow-y: overlay">
+                        <header class="py-2 px-8 bg-white border-b border-gray-300 hidden md:flex justify-between items-center gap-4 sticky top-0 z-20 dark:bg-secondary dark:border-none">
+                            <back-button v-if="$route.name != 'main'" />
+                            <div class="flex gap-4 items-center ml-auto">
+                                <store-cart v-if="store.state.stripe.cart.length > 0" />
+                                <notification-list />
+                                <settings-dropdown />
+                            </div>
+                        </header>
+                        <router-view />
+                        <copyright />
                     </div>
-                    <object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
-                </div>
-                <audio-player />
-            </main>
-            <privacy-policy-accept />
-            <added-to-cart />
-            <tos></tos>
-            <base-modal
-                :show="show && splash != undefined"
-                @close="closeSplash()"
-            >
-                <h3 class="text-lg uppercase">{{splash?.title}}</h3>
-                <hr/>
-                <p class="mt-2">{{splash?.content}}</p>
-                <br/>
-                <div v-if="splash?.callback" class="flex">
-                    <base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
-                    <base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
-                </div>
-                <base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
-            </base-modal>
-        </div>
+                    <div
+                        class="sticky bottom-0 md:overflow-y-auto"
+                        :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
+                    >
+                        <open-sheet-music-display
+                            v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
+                            :options="sheetMusicOptions"
+                            :relativeKey="user.settings?.defaultTransposition"
+                            @startLoading="osmdLoading = true"
+                            @finishLoading="osmdLoading = false"
+                        />
+                        <div id="osmd-canvas" class="bg-white"></div>
+                        <loader :loading="osmdLoading" />
+                    </div>
+                    <div 
+                        class="w-full h-full flex flex-col"
+                        :class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
+                    >
+                        <div class="p-4 flex justify-end bg-white w-full">
+                            <base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+                        </div>
+                        <object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
+                    </div>
+                    <audio-player />
+                </main>
+                <privacy-policy-accept />
+                <added-to-cart />
+                <tos></tos>
+                <base-modal
+                    :show="show && splash != undefined"
+                    @close="closeSplash()"
+                >
+                    <h3 class="text-lg uppercase">{{splash?.title}}</h3>
+                    <hr/>
+                    <p class="mt-2">{{splash?.content}}</p>
+                    <br/>
+                    <div v-if="splash?.callback" class="flex">
+                        <base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
+                        <base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
+                    </div>
+                    <base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
+                </base-modal>
+            </div>
         </loader>
     </div>
 </template>
@@ -166,9 +166,5 @@ export default class DashboardLayout extends Vue {
     public get splash() {
         return this.store.state.session.splash;
     }
-
-    // public get isAdmin() {
-    //     return this.store.getters..isAdmin;
-    // }
 }
 </script>

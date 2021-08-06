@@ -1,6 +1,6 @@
 <template>
     <loader :loading="loading">
-        <div v-if="song" class="flex flex-col gap-4 p-4 md:p-8">
+        <div v-if="song" class="flex flex-col gap-4">
             <div class="flex justify-between">
                 <back-button class="flex md:hidden mb-4" />
                 <div class="flex gap-2 items-center ml-auto">

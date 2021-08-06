@@ -1,6 +1,6 @@
 <template>
     <loader :loading="loading">
-        <div v-if="contributor" class="p-4 md:p-8">
+        <div v-if="contributor">
             <back-button class="md:hidden mb-4" />
             <base-card>
                 <div class="contributor__biography">

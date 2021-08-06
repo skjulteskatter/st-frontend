@@ -1,6 +1,9 @@
 import { RouteRecordRaw } from "vue-router";
 
-const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ "../layout/DashboardLayout.vue").catch(() => {
+// const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ "../layout/DashboardLayout.vue").catch(() => {
+//     window.location.reload();
+// });
+const StackedLayout = () => import(/* webpackChunkName: 'stackedLayout' */ "../layout/StackedLayout.vue").catch(() => {
     window.location.reload();
 });
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue").catch(() => {
@@ -21,9 +24,6 @@ const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/Lyr
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
     window.location.reload();
 });
-//const Collections = () => import(/* webpackChunkName: 'collections' */ "../views/Collections.vue").catch(() => {
-//     window.location.reload();
-// });
 const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
     window.location.reload();
 });
@@ -103,7 +103,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "dashboard",
-        component: DashboardLayout,
+        component: StackedLayout,
         children: [
             {
                 path: "",
@@ -141,11 +141,6 @@ const routes: Array<RouteRecordRaw> = [
                 name: "songs",
                 component: SongSelector,
                 children: [
-                    // {
-                    //     path: "",
-                    //     name: "collections",
-                    //     component: Collections,
-                    // },
                     {
                         path: ":collection",
                         name: "song-list",
@@ -161,11 +156,6 @@ const routes: Array<RouteRecordRaw> = [
                         name: "search",
                         component: CompleteSearch,
                     },
-                    // {
-                    //     path: 'sheetmusic',
-                    //     name: 'songs-sheet-music',
-                    //     component: SheetMusic
-                    // }
                 ],
             },
             {

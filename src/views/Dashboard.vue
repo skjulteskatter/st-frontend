@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 md:p-8" v-if="user">
+    <div v-if="user">
         <h1 class="font-bold text-2xl mb-4">
             {{ $t("common.welcome") }}, {{ user.displayName }}
         </h1>
