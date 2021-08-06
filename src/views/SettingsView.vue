@@ -1,40 +1,38 @@
 <template>
-    <div class="p-4 md:p-8">
-        <back-button class="md:hidden mb-4" />
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
-            <base-button
-                theme="error"
-                icon="logout"
-                @click="logout"
-                class="settings-page__logout"
-            >
-                {{ $t("common.logout") }}
-            </base-button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
-            <settings-card />
-            <div>
-                <user-card />
-                <base-card class="mt-4" v-if="collections.length">
-                    <div class="flex mb-2">
-                        <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
-                    </div>
-                    <hr class="mb-2" />
-                    
-                    <div class="mb-2" v-for="col in collections" :key="col.id">{{col.getName()}}</div>
-                    <base-button 
-                        @click="portal"
-                        :loading="loading"
-                        class="ml-auto cursor-pointer"
-                        :class="{'opacity-40': loading}"
-                    >
-                        {{ $t("common.manage") }}
-                        {{ $t("common.subscriptions").toLowerCase() }}
-                    </base-button>
-                <!-- <owned-collections /> -->
-                </base-card>
-            </div>
+    <back-button class="md:hidden mb-4" />
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
+        <base-button
+            theme="error"
+            icon="logout"
+            @click="logout"
+            class="settings-page__logout"
+        >
+            {{ $t("common.logout") }}
+        </base-button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
+        <settings-card />
+        <div>
+            <user-card />
+            <base-card class="mt-4" v-if="collections.length">
+                <div class="flex mb-2">
+                    <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
+                </div>
+                <hr class="mb-2" />
+                
+                <div class="mb-2" v-for="col in collections" :key="col.id">{{col.getName()}}</div>
+                <base-button 
+                    @click="portal"
+                    :loading="loading"
+                    class="ml-auto cursor-pointer"
+                    :class="{'opacity-40': loading}"
+                >
+                    {{ $t("common.manage") }}
+                    {{ $t("common.subscriptions").toLowerCase() }}
+                </base-button>
+            <!-- <owned-collections /> -->
+            </base-card>
         </div>
     </div>
 </template>

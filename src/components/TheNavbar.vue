@@ -21,7 +21,7 @@
 				
 				<div class="hidden md:block">
 					<div class="ml-4 flex items-center md:ml-6">
-						<store-cart v-if="store.state.stripe.cart.length > 0" />
+						<store-cart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
 						<notification-list />
 
 						<!-- Profile dropdown -->
@@ -77,7 +77,7 @@
 					<notification-list class="ml-auto" />
 				</div>
 				<div class="mt-3 px-2 space-y-1">
-					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:text-white hover:bg-gray-700">{{ $t('common.settings') }}</router-link>
+					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-10 hover:bg-black">{{ $t('common.settings') }}</router-link>
 					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-100 text-red-500 hover:text-red-700 hover:bg-red-200" @click="logout()">{{ $t('common.logout') }}</button>
 				</div>
 			</div>
