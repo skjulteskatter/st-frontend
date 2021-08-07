@@ -17,20 +17,20 @@
             </div>
         </div>
         <base-card class="overflow-x-auto">
-            <table class="table-fixed" v-if="Users.length">
-                <thead class="bg-black bg-opacity-10">
+            <table class="min-w-full" v-if="Users.length">
+                <thead>
                     <tr>
-                        <th class="w-1/5 text-left p-2">{{ $t("common.name") }}</th>
-                        <th class="w-2/5 text-left p-2">Email</th>
-                        <th class="w-1/5 text-left p-2">{{ $t("common.role") }}</th>
-                        <th class="w-1/5 text-left p-2">Last Login</th>
-                        <th class="w-1/5 text-left p-2">Id</th>
-                        <th class="w-1/5 text-left p-2"></th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.name") }}</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Email</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.role") }}</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Last Login</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Id</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider"><span class="sr-only">{{$t('common.edit')}}</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="u in Users" :key="u.id">
-                        <td class="flex gap-4 items-center">
+                        <td class="flex gap-4 items-center px-4 py-3 whitespace-nowrap">
                             <img
                                 :src="
                                     u.image ?? '/img/portrait-placeholder.png'
@@ -39,17 +39,17 @@
                             />
                             <span>{{ u.displayName }}</span>
                         </td>
-                        <td>{{ u.email }}</td>
-                        <td>
-                            <span :class="[u.roles[0] ? 'border border-gray-500' : '', 'text-gray-500 rounded text-sm p-1']">
-                                {{ u.roles[0] ? u.roles[0] : "NOT SET" }}
+                        <td class="px-4 py-3 whitespace-nowrap">{{ u.email }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <span v-if="u.roles[0]" :class="[u.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2']">
+                                {{ u.roles[0] }}
                             </span>
                         </td>
-                        <td>
+                        <td class="px-4 py-3 whitespace-nowrap">
                             {{ new Date(u.lastLogin).toLocaleString() }}
                         </td>
-                        <td>{{ u.id }}</td>
-                        <td>
+                        <td class="px-4 py-3 whitespace-nowrap">{{ u.id }}</td>
+                        <td class="px-4 py-3 whitespace-nowrap">
                             <modal
                                 :label="$t('common.edit')"
                                 theme="tertiary"
