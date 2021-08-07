@@ -4,6 +4,14 @@
 			<div class="flex items-center mb-2">
 				<h3 class="font-bold mr-4">{{ $t('common.collections') }}</h3>
 				<tooltip :text="$t('tooltip.ownedCollections')" />
+				<router-link
+					v-if="collections?.length"
+					to="/collections"
+					class="px-2 py-1 rounded-md ml-auto text-sm hover:bg-black hover:bg-opacity-10"
+				>
+					{{ $t('playlist.seeall') }}
+					<icon name="arrowRight" size="16" />
+				</router-link>
 			</div>
 			<div v-if="collections?.length" class="flex flex-col">
 				<collection-card
