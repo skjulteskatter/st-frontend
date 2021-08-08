@@ -1,6 +1,6 @@
 <template>
 	<base-button theme="tertiary" class="px-2 py-1" @click="showModal()">{{ $t('common.edit') }}</base-button>
-	<slide-panel :open="show" @close="hideModal()" :title="$t('common.edit')">
+	<slide-panel :open="show" @close="hideModal()" :title="`${$t('common.edit')} ${$t('common.user').toLocaleLowerCase()}`">
 		<loader :loading="loading" position="local">
 			<div class="flex flex-col gap-4">
 				<div class="flex gap-4 items-center">

@@ -16,9 +16,9 @@
                   </button>
                 </div>
               </TransitionChild>
-              <div class="h-full flex flex-col py-6 bg-white dark:bg-secondary shadow-xl overflow-y-scroll">
-                <div class="px-4 sm:px-6">
-                  <DialogTitle class="text-lg font-medium text-gray-900">
+              <div class="h-full mt-16 flex flex-col py-6 bg-white dark:bg-secondary shadow-xl overflow-y-scroll">
+                <div class="px-4 sm:px-6" v-if="title">
+                  <DialogTitle class="text-lg font-medium">
                     {{ title }}
                   </DialogTitle>
                 </div>
@@ -59,7 +59,6 @@ import {
 		},
 		title: {
 			type: String,
-			required: true,
 		},
 	},
 	emits: ["close"],
