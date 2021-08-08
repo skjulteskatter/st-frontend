@@ -18,7 +18,7 @@
 						<small class="text-gray-500">{{ User.email }}</small>
 					</span>
 				</div>
-				<div class="flex flex-col divide-y divide-gray-200">
+				<div class="flex flex-col">
 					<div class="flex flex-col gap-1 py-4">
 						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common.roles')}}</small>
 						<label
