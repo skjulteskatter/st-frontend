@@ -49,11 +49,11 @@
         </draggable>
         <base-button class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" icon="save" v-if="entryOrderEdited">{{$t('common.save')}}</base-button>
         <base-modal
-            :show="showModal['share'] == true"
-            @close="showModal['share'] = false"
+            :show="Show"
+            @close="hideModal()"
         >
             <div class="relative w-72">
-                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal.share = false">
+                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="hideModal()">
                     <icon name="error" size="20" />
                 </button>
                 <h3 class="font-bold mb-4">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
@@ -144,12 +144,7 @@ export default class PlaylistView extends Vue {
         [key: string]: string[];
     } = {};
     public newPlaylistName = "";
-    public showModal: {
-        [key: string]: boolean;
-    } = {
-        sharedWith: false,
-        share: false,
-    };
+    public show = false;
 
     public get originalEntryOrder(): string[] {
         if (!this.playlist) return [];
@@ -193,6 +188,18 @@ export default class PlaylistView extends Vue {
         return this.users ?? [];
     }
 
+    public get Show() {
+        return this.show;
+    }
+
+    public showModal() {
+        this.show = true;
+    }
+
+    public hideModal() {
+        this.show = false;
+    }
+
     public getLink(key: string) {
         return `https://${window.location.host}/sharing?token=${key}`;
     }
@@ -211,25 +218,16 @@ export default class PlaylistView extends Vue {
 
     public async toggleSharePlaylist() {
         this.loading["share"] = true;
-        if (!this.showModal["share"]) {
+        if (!this.show) {
             if (keys.value == undefined && this.playlist) {
                 await this.loadKeys();
                 this.users = this.users ?? await playlists.getUsers(this.playlist.id);
             }
-            this.showModal["share"] = true;
+            this.showModal();
         } else {
-            this.showModal["share"] = false;
+            this.hideModal();
         }
         this.loading["share"] = false;
-    }
-
-    public async toggleSharedWith() {
-        if (!this.showModal["sharedWith"]) {
-            if (this.playlist)
-            this.showModal["sharedWith"] = true;
-        } else {
-            this.showModal["sharedWith"] = false;
-        }
     }
 
     public async loadKeys() {
