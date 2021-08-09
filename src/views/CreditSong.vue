@@ -24,8 +24,8 @@
             <base-button type="submit" theme="secondary">{{ $t('credits.getData') }}</base-button>
         </form>
         <base-card v-if="song">{{ song.getName(Language) }}</base-card>
-        <base-input type="file" id="credit-file-input" accept="audio/mpeg"/>
-        <base-button @click="creditSong">Credit</base-button>
+        <input type="file" id="credit-file-input" accept="audio/mpeg"/>
+        <base-button @click="creditSong()">Credit</base-button>
     </div>
 </template>
 <script lang="ts">
