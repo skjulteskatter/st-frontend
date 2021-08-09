@@ -168,6 +168,10 @@ export default class LyricsCard extends Vue {
         return this.lyrics?.format == "html";
     }
 
+    public set chordsEnabled(v) {
+        // 
+    }
+
     public get relativeTranspositions(): {
         value: number;
         view: string;
