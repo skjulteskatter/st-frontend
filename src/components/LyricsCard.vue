@@ -163,7 +163,10 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
-    public chordsEnabled = false;
+
+    public get chordsEnabled() {
+        return this.lyrics?.format == "html";
+    }
 
     public get relativeTranspositions(): {
         value: number;
@@ -191,7 +194,6 @@ export default class LyricsCard extends Vue {
         if (this.type == "transpose") {
             this.newMelodyView = false;
             if (this.song?.hasLyrics && this.song?.hasChords) {
-                this.chordsEnabled = true;
                 this.transposeView();
             } else {
                 this.store.commit(SongsMutationTypes.SET_VIEW, "default");
