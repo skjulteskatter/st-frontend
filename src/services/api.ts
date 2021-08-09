@@ -52,6 +52,9 @@ export const session = {
     acceptTermsOfService() {
         return http.get("api/Session/AcceptPolicies?termsAndConditions=true");
     },
+    verifyEmail() {
+        return http.get("api/Session/VerifyEmail");
+    },
 };
 
 export const items = {
@@ -86,8 +89,20 @@ export const admin = {
     async getAllSubscriptions() {
         return await http.get<Subscription[]>("api/Admin/Subscriptions");
     },
-    getAllUsers() {
-        return http.get<User[]>("api/Admin/Users");
+    getUsers(query: string) {
+        return http.get<User[]>("api/Admin/Users?query=" + query);
+    },
+    getUser(uid: string) {
+        return http.get<User>("api/Admin/User/" + uid);
+    },
+    createSubscription(uid: string, options: {
+        collectionIds: string[];
+        validTo: string;
+    }) {
+        return http.post<Subscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
+    },
+    deleteSubcription(uid: string, subscriptionId: string) {
+        return http.delete(`api/Admin/User/${uid}/Subscriptions/${subscriptionId}`);  
     },
     getRoles() {
         return http.get<string[]>("api/Admin/Roles");

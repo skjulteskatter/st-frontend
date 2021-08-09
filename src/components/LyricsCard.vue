@@ -1,7 +1,11 @@
 <template>
     <base-card v-if="song" class="overflow-visible" header>
         <template #header>
-            <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
+            <div class="w-full flex items-center gap-2">
+                <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
+                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
+                <print-button />
+            </div>
             <div class="flex gap-2 items-end flex-wrap">
                 <select
                     class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
@@ -83,9 +87,9 @@
                         </div>
                     </Switch>
                 </SwitchGroup>
-                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <base-button
                     v-if="editor"
+                    class="ml-auto"
                     theme="tertiary"
                     icon="pencil"
                     @click="edit()"
@@ -118,6 +122,7 @@ import {
     TransposedLyricsViewer,
     LyricsViewer,
     TransposeDropdown,
+    PrintButton,
 } from "./lyrics";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -132,6 +137,7 @@ import { SongChanger } from "@/components/songs";
         TransposedLyricsViewer,
         TransposeDropdown,
         LyricsViewer,
+        PrintButton,
         Switch,
         SwitchGroup,
         SwitchLabel,
@@ -157,7 +163,14 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
-    public chordsEnabled = false;
+
+    public get chordsEnabled() {
+        return this.lyrics?.format == "html";
+    }
+
+    public set chordsEnabled(v) {
+        // 
+    }
 
     public get relativeTranspositions(): {
         value: number;
@@ -185,7 +198,6 @@ export default class LyricsCard extends Vue {
         if (this.type == "transpose") {
             this.newMelodyView = false;
             if (this.song?.hasLyrics && this.song?.hasChords) {
-                this.chordsEnabled = true;
                 this.transposeView();
             } else {
                 this.store.commit(SongsMutationTypes.SET_VIEW, "default");

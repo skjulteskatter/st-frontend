@@ -16,15 +16,10 @@ type AugmentedActionContext = {
 
 export interface Actions {
     [UsersActionTypes.GET_ROLES]({ commit }: AugmentedActionContext): Promise<void>;
-    [UsersActionTypes.GET_USERS]({ commit }: AugmentedActionContext): Promise<void>;
     [UsersActionTypes.SET_ROLES]({ commit }: AugmentedActionContext, payload: User): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
-    async [UsersActionTypes.GET_USERS]({ commit }): Promise<void> {
-        const result = await api.admin.getAllUsers();
-        commit(UsersMutationTypes.SET_USERS, result ?? []);
-    },
     async [UsersActionTypes.GET_ROLES]({ commit }) {
         const result = await api.admin.getRoles();
         commit(UsersMutationTypes.SET_ROLES, result);

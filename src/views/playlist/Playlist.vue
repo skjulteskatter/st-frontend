@@ -1,7 +1,5 @@
 <template>
-    <div class="p-4 md:p-8">
-        <router-view />
-    </div>
+    <router-view />
 </template>
 
 <script lang="ts">

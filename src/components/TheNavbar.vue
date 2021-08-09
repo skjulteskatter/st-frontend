@@ -1,27 +1,169 @@
 <template>
-    <nav class="z-10 bg-white sm:w-16 md:w-full shadow-md md:max-w-xs flex justify-between sm:justify-start sm:flex-col sticky top-0 left-0 dark:bg-secondary">
-        <nav-logo />
-        <div class="p-4 hidden md:block">
-            <full-search-input :disabled="$route.name == 'search'" />
-        </div>
-        <nav-links />
-        <playlist-list />
-    </nav>
+	<Disclosure as="nav" class="bg-white dark:bg-secondary sticky top-0 shadow-md z-30" v-slot="{ open }">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="flex gap-4 items-center justify-between h-16">
+				<div class="flex items-center">
+					<div class="flex-shrink-0">
+						<router-link to="/">
+							<img class="h-8 w-8" src="/img/logo/icon.svg" alt="SongTreasures" />
+						</router-link>
+					</div>
+					<div class="hidden md:block">
+						<div class="ml-10 flex items-baseline space-x-4">
+							<template v-for="item in links" :key="item.name">
+								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm font-medium">{{ item.name }}</router-link>
+							</template>
+						</div>
+					</div>
+				</div>
+
+				<full-search-input class="md:ml-auto" :disabled="$route.name == 'search'" />
+				
+				<div class="hidden md:block">
+					<div class="ml-4 flex items-center md:ml-6">
+						<store-cart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
+						<notification-list />
+
+						<!-- Profile dropdown -->
+						<Menu as="div" class="ml-3 relative">
+							<div>
+								<MenuButton class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+									<span class="sr-only">Open user menu</span>
+									<icon name="user" class="w-8 h-8 text-gray-500" v-if="!user.image" />
+									<img class="h-8 w-8 rounded-full" :src="user.image" :alt="user.displayName" v-else />
+								</MenuButton>
+							</div>
+							<transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+								<MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-secondary ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<MenuItem v-slot="{ active }">
+										<router-link to="/settings" :class="[active ? 'bg-black bg-opacity-10' : '', 'block px-4 py-2 text-sm']">{{ $t('common.settings') }}</router-link>
+									</MenuItem>
+									<MenuItem>
+										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-100">{{ $t('common.logout') }}</button>
+									</MenuItem>
+								</MenuItems>
+							</transition>
+						</Menu>
+					</div>
+				</div>
+				<div class="-mr-2 flex md:hidden">
+					<!-- Mobile menu button -->
+					<DisclosureButton class="hover:bg-black hover:bg-opacity-10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+						<span class="sr-only">Open main menu</span>
+						<icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+						<icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />
+					</DisclosureButton>
+				</div>
+			</div>
+		</div>
+
+		<!-- Mobile -->
+		<DisclosurePanel class="md:hidden">
+			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+				<template v-for="item in links" :key="item.name">
+					<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
+				</template>
+			</div>
+			<div class="pt-4 pb-3 border-t border-gray-300">
+				<div class="flex items-center px-5">
+					<div class="flex-shrink-0">
+						<icon name="user" class="w-10 h-10 text-gray-500" v-if="!user.image" />
+						<img class="h-10 w-10 rounded-full" :src="user.image" :alt="user.displayName" v-else />
+					</div>
+					<div class="ml-3">
+						<div class="text-base leading-tight font-medium">{{ user.displayName }}</div>
+						<div class="text-sm leading-tight opacity-50">{{ user.email }}</div>
+					</div>
+					<notification-list class="ml-auto" />
+				</div>
+				<div class="mt-3 px-2 space-y-1">
+					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-10 hover:bg-black">{{ $t('common.settings') }}</router-link>
+					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-100 text-red-500 hover:text-red-700 hover:bg-red-200" @click="logout()">{{ $t('common.logout') }}</button>
+				</div>
+			</div>
+		</DisclosurePanel>
+	</Disclosure>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { FullSearchInput } from "@/components/inputs";
-import { PlaylistList, NavLinks, NavLogo } from "@/components/nav";
+import { StoreCart } from "@/components/store";
+import { useStore } from "vuex";
+import { 
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+} from "@headlessui/vue";
+import { NotificationList } from "@/components/notification";
+import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
-    components: {
-        PlaylistList,
-        FullSearchInput,
-        NavLinks,
-        NavLogo,
-    },
-    name: "the-navbar",
+	components: {
+		FullSearchInput,
+		StoreCart,
+		Disclosure,
+		DisclosureButton,
+		DisclosurePanel,
+		Menu,
+		MenuButton,
+		MenuItem,
+		MenuItems,
+		NotificationList,
+	},
+	name: "the-navbar",
 })
-export default class TheNavbar extends Vue {}
+export default class TheNavbar extends Vue {
+	public store = useStore();
+	public open = false;
+
+	public logout() {
+        this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+            window.location.replace("/login");
+        });
+    }
+
+	private get links() {
+		return [
+			{
+				name: this.$t("common.home"),
+				path: "/",
+				condition: true,
+			},
+			{
+				name: this.$t("common.collections"),
+				path: "/collections",
+				condition: true,
+			},
+			{
+				name: `${this.$t("common.your")} ${this.$t("common.collections").toLocaleLowerCase()}`,
+				path: "/playlists",
+				condition: true,
+			},
+			{
+				name: "Admin",
+				path: "/admin",
+				condition: this.isAdmin,
+			},
+		];
+	}
+
+	public get isAdmin() {
+		return this.store.getters.isAdmin;
+	}
+
+	public get user() {
+		return this.store.getters.user;
+	}
+}
 </script>
+
+<style scoped>
+.router-link-exact-active {
+	@apply text-primary;
+}
+</style>

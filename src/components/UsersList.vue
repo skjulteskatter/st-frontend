@@ -2,121 +2,83 @@
     <div>
         <div class="flex gap-4 justify-between items-end mb-4">
             <h3 class="font-bold">{{ $t("admin.users") }}</h3>
-            <base-button
-                :class="{ disabled: disableButton }"
-                @click="refreshUsers"
-                :loading="loading"
-                icon="refresh"
-                theme="primary"
-                >{{ $t("common.update") }}</base-button
-            >
+            <div class="flex gap-2 items-center">
+                <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common.search')} ${$t('admin.email').toLocaleLowerCase()}`" />
+                <base-button
+                    :class="{ disabled: disableButton }"
+                    @click="refreshUsers"
+                    :loading="loading['refresh']"
+                    :content="false"
+                    icon="refresh"
+                    theme="primary"
+                >
+                    {{ $t("common.update") }}
+                </base-button>
+            </div>
         </div>
         <base-card class="overflow-x-auto">
-            <table class="table-fixed">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="w-1/5 text-left p-2">{{ $t("common.name") }}</th>
-                        <th class="w-2/5 text-left p-2">Email</th>
-                        <th class="w-1/5 text-left p-2">{{ $t("common.role") }}</th>
-                        <th class="w-1/5 text-left p-2">Last Login</th>
-                        <th class="w-1/5 text-left p-2">Id</th>
-                        <th class="w-1/5 text-left p-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="u in Users" :key="u.id">
-                        <td class="flex gap-4 items-center">
-                            <img
-                                :src="
-                                    u.image ?? '/img/portrait-placeholder.png'
-                                "
-                                class="w-8 h-8 object-cover rounded-full"
-                            />
-                            <span>{{ u.displayName }}</span>
-                        </td>
-                        <td>{{ u.email }}</td>
-                        <td>
-                            <span :class="[u.roles[0] ? 'border border-gray-500' : '', 'text-gray-500 rounded text-sm p-1']">
-                                {{ u.roles[0] ? u.roles[0] : "NOT SET" }}
-                            </span>
-                        </td>
-                        <td>
-                            {{ new Date(u.lastLogin).toLocaleString() }}
-                        </td>
-                        <td>{{ u.id }}</td>
-                        <td>
-                            <modal
-                                :label="$t('common.edit')"
-                                theme="tertiary"
-                                v-if="u.id != User?.id"
-                            >
-                                <loader :loading="loading" />
-                                <div class="flex flex-col gap-4">
-                                    <div class="flex gap-4 items-center">
-                                        <img
-                                            :src="
-                                                u.image ??
-                                                '/img/portrait-placeholder.png'
-                                            "
-                                            class="rounded-full w-20 h-20 object-cover"
-                                        />
-                                        <span class="flex flex-col">
-                                            <h3 class="font-bold">
-                                                {{ u.displayName }}
-                                            </h3>
-                                            <small class="text-gray-500">{{ u.email }}</small>
-                                        </span>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <label
-                                            class="font-bold"
-                                            >Roles</label
-                                        >
-                                        <label
-                                            class="text-sm"
-                                            v-for="role in roles"
-                                            :key="role"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                class="text-primary rounded border-gray-300 focus:ring-primary"
-                                                :checked="
-                                                    u.roles.find(
-                                                        (r) => r == role
-                                                    )
-                                                "
-                                                @change="toggleRole(u, role)"
-                                            />
-                                            {{ role }}
-                                        </label>
-                                    </div>
-                                    <base-button
-                                        theme="secondary"
-                                        @click="saveRoles(u)"
-                                        :loading="loading"
-                                        >{{ $t("common.save") }}</base-button
-                                    >
-                                </div>
-                            </modal>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <loader :loading="loading['search']" position="local">
+                <table class="min-w-full" v-if="Users.length">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.name") }}</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Email</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.role") }}</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Last Login</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Id</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider"><span class="sr-only">{{$t('common.edit')}}</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="u in Users" :key="u.id">
+                            <td class="flex gap-4 items-center px-4 py-3 whitespace-nowrap">
+                                <img
+                                    :src="
+                                        u.image ?? '/img/portrait-placeholder.png'
+                                    "
+                                    class="w-8 h-8 object-cover rounded-full"
+                                />
+                                <span>{{ u.displayName }}</span>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap">{{ u.email }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span v-if="u.roles[0]" :class="[u.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2']">
+                                    {{ u.roles[0] }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                {{ new Date(u.lastLogin).toLocaleString() }}
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap">{{ u.id }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <edit-user v-if="u.id != User?.id" :user="u" @save="saveRoles(u)" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p v-else class="w-full text-center text-gray-500">No users to show</p>
+            </loader>
         </base-card>
     </div>
 </template>
+
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
+import { SearchInput } from "@/components/inputs";
+import EditUser from "@/components/admin/EditUser.vue";
 import { useStore } from "@/store";
 import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
+import api from "@/services/api";
 
 @Options({
     name: "users-list",
     components: {
         Modal,
+        SearchInput,
+        EditUser,
     },
     props: {
         users: {
@@ -132,20 +94,32 @@ export default class UsersList extends Vue {
     public users?: User[];
     public currentUser?: User;
     public disableButton = false;
-    public loading = false;
+    public loading: {
+        [key: string]: boolean;
+    } = {};
+
+    public userQuery = "";
 
     public async mounted() {
-        await this.store.dispatch(UsersActionTypes.GET_USERS);
+        // await this.store.dispatch(UsersActionTypes.GET_USERS);
         await this.store.dispatch(UsersActionTypes.GET_ROLES);
     }
 
+    public async searchUser() {
+        this.loading["search"] = true;
+        if (this.userQuery) {
+            this.store.commit(UsersMutationTypes.SET_USERS, await api.admin.getUsers(this.userQuery));
+        }
+        this.loading["search"] = false;
+    }
+
     public async refreshUsers() {
-        this.loading = true;
+        this.loading["refresh"] = true;
         this.disableButton = true;
-        await this.store.dispatch(UsersActionTypes.GET_USERS);
+        await this.searchUser();
 
         notify("success", this.$t("notification.fetchedusers"), "check");
-        this.loading = false;
+        this.loading["refresh"] = false;
         this.disableButton = false;
     }
 
@@ -161,15 +135,11 @@ export default class UsersList extends Vue {
         return this.store.state.users.roles;
     }
 
-    public toggleRole(user: User, role: string) {
-        this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
-    }
-
     public async saveRoles(user: User) {
-        this.loading = true;
+        this.loading["save"] = true;
         await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
         notify("success", this.$t("notification.saved"), "check");
-        this.loading = false;
+        this.loading["save"] = false;
     }
 }
 </script>

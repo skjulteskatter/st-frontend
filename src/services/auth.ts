@@ -4,12 +4,13 @@ import "firebase/auth";
 import "firebase/performance";
 import "firebase/analytics";
 import router from "@/router";
-import api from "./api";
+import api, { session } from "./api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { notify } from "./notify";
 import { firebaseConfig } from "@/config";
+import http from "./http";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -247,10 +248,8 @@ class Auth {
 
         if (user && !this.verificationEmailSent) {
             this.verificationEmailSent = true;
-            await user.sendEmailVerification({
-                handleCodeInApp: true,
-                url: window.origin,
-            });
+            http.setToken(await user.getIdToken());
+            await session.verifyEmail();
             router.push({name: "verify-email"});
         }
     }

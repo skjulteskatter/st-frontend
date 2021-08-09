@@ -1,7 +1,10 @@
 <template>
 	<base-dropdown class="cursor-pointer" origin="right">
 		<template #button>
-			<icon name="bell" class="relative"/>
+			<button class="relative p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white">
+				<span class="sr-only">View notifications</span>
+				<icon name="bell" class="opacity-50" />
+			</button>
 			<span v-if="notifications.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
 				{{ notifications.length }}
 			</span>
