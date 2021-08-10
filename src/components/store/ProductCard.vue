@@ -1,6 +1,7 @@
 <template>
-    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" :class="{'border border-green-700': product.owned}" v-if="product && collection">
-        <icon name="lock" v-if="!collection.available" class="absolute top-4 left-4 text-secondary z-10" />
+    <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" v-if="product && collection">
+        <LockClosedIcon v-if="!collection.available" class="w-5 h-5 text-secondary z-10 absolute top-4 left-4" />
+        <CheckCircleIcon v-else-if="collection.available" class="w-5 h-5 text-green-700 z-10 absolute top-4 left-4" />
         <div class="overflow-hidden">
             <img
                 class="w-full object-cover cursor-pointer transition transform hover:scale-105"
@@ -20,11 +21,15 @@
                 <base-button
                     class="flex-grow"
                     theme="secondary"
-                    icon="buy"
                     :disabled="inCart || !collection.enabled"
                     v-if="!product.owned"
                     @click="addToCart()"
-                >{{ $t('store.addToCart') }}</base-button>
+                >
+                    <template #icon>
+                        <ShoppingCartIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('store.addToCart') }}
+                </base-button>
                 <base-button
                     class="flex-grow"
                     theme="tertiary"
@@ -44,12 +49,16 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 import Price from "./Price.vue";
+import { ShoppingCartIcon, CheckCircleIcon, LockClosedIcon } from "@heroicons/vue/solid";
 
 import { appSession } from "@/services/session";
 
 @Options({
     components: {
         Price,
+        ShoppingCartIcon,
+        CheckCircleIcon,
+        LockClosedIcon,
     },
     name: "product-card",
     props: {

@@ -104,9 +104,11 @@
             :loading="loading"
             @click="save"
             theme="secondary"
-            icon="check"
             class="ml-auto"
         >
+            <template #icon>
+                <CheckIcon class="w-4 h-4" />
+            </template>
             {{ $t("common.save") }}
         </base-button>
     </base-card>
@@ -121,6 +123,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
+import { CheckIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
@@ -128,6 +131,7 @@ import { session } from "@/services/api";
 @Options({
     components: {
         ChangePassword,
+        CheckIcon,
     },
     name: "settings-card",
 })

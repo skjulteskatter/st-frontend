@@ -18,7 +18,7 @@
                 <p class="text-sm mb-2">
                     {{ $t("song.sheetmusic") }}
                 </p>
-                <media-list-item :files="song.sheetMusic" :callback="selectSheetMusic" icon="book" />
+                <media-list-item :files="song.sheetMusic" :callback="selectSheetMusic" type="sheetmusic" />
             </div>
             <div
                 v-if="song.audioFiles.length"
@@ -26,7 +26,7 @@
                 <p class="text-sm mb-2">
                     {{ $t('song.audioFiles') }}
                 </p>
-                <media-list-item :files="song.audioFiles" :callback="selectAudio" icon="music" />
+                <media-list-item :files="song.audioFiles" :callback="selectAudio" type="audio" />
             </div>
             <div
                 v-if="song.videoFiles.length"
@@ -41,7 +41,7 @@
                         :key="'video-' + video.id"
                         @click="setActiveVideo(video.directUrl)"
                     >
-                        <icon name="play" size="16" class="mr-2 text-gray-500 dark:text-gray-300" />
+                        <PlayIcon class="w-4 h-4 mr-2 opacity-50 inline" />
                         <span>{{ $t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '') }}</span>
                     </button>
                 </div>
@@ -68,6 +68,7 @@
 <script lang="ts">
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
+import { PlayIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -80,6 +81,7 @@ import { logs } from "@/services/logs";
     components: {
         BaseModal,
         MediaListItem,
+        PlayIcon,
     },
     props: {
         song: {

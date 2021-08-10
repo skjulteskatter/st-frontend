@@ -6,9 +6,12 @@
         v-bind="$attrs"
     >
         <icon size="18" name="refresh" class="animate-spin inline-block" v-if="loading" />
-        <icon size="18" v-else-if="icon" :name="icon" class="inline-block" />
-        <span class="button__content text-sm" v-if="content">
-            <slot></slot>
+        <icon size="18" v-else-if="icon && !$slots.icon" :name="icon" class="inline-block" />
+        <span v-if="$slots.icon">
+            <slot name="icon" />
+        </span>
+        <span class="text-sm" v-if="content">
+            <slot />
         </span>
     </button>
 </template>

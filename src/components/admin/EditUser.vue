@@ -41,9 +41,12 @@
 					</div>
 					<div class="flex flex-col py-4">
 						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common.collections')}}</small>
-						<div v-for="i in User.subscriptions" :key="i.id" class="mb-2">
-							<span class="text-sm">{{i.id}}</span><icon class="cursor-pointer" @click="deleteSub(User, i)" size="24" name="trash" v-if="i.id.startsWith('custom')" />
-							<div v-for="c in getCollections(i)" :key="c.id">{{c.getName()}}</div>
+						<div v-for="i in User.subscriptions" :key="i.id" class="relative p-2 rounded-md border border-gray-300 mb-2">
+							<b class="text-sm">{{i.id}}</b>
+							<button class="cursor-pointer text-red-700 absolute right-2 top-2" @click="deleteSub(User, i)" v-if="i.id.startsWith('custom')">
+								<TrashIcon class="w-4 h-4" />
+							</button>
+							<small class="whitespace-nowrap block" v-for="c in getCollections(i)" :key="c.id">{{c.getName()}}</small>
 						</div>
 						<base-dropdown
 							:label="'Add'"
@@ -75,6 +78,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import SlidePanel from "@/components/SlidePanel.vue";
+import { TrashIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
@@ -84,6 +88,7 @@ import api, { admin } from "@/services/api";
 	name: "edit-user",
 	components: {
 		SlidePanel,
+		TrashIcon,
 	},
 	props: {
 		user: {

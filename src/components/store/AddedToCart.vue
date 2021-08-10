@@ -44,7 +44,12 @@
                 <div class="flex gap-4 justify-end">
                     <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
                     <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store.allItems')}}</base-button>
-                    <base-button theme="secondary" icon="buy" @click="checkout" :loading="checkingOut">{{$t('store.checkout')}}</base-button>
+                    <base-button theme="secondary" @click="checkout" :loading="checkingOut">
+                        <template #icon>
+                            <ShoppingCartIcon class="w-4 h-4" />
+                        </template>
+                        {{$t('store.checkout')}}
+                    </base-button>
                 </div>
             </div>
         </base-modal>
@@ -58,6 +63,7 @@ import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "..";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
+import { ShoppingCartIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "added-to-cart",
@@ -67,6 +73,7 @@ import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
         SwitchGroup,
         Switch,
         SwitchLabel,
+        ShoppingCartIcon,
     },
 })
 export default class AddedToCart extends Vue {

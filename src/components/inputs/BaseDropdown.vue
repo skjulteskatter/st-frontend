@@ -8,7 +8,7 @@
                     size="18"
                     v-if="icon"
                 />
-                <icon v-else name="arrowDown" size="18" />
+                <ChevronDownIcon v-else class="w-4 h-4" />
             </button>
             <slot name="button" v-else></slot>
         </div>
@@ -32,6 +32,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { TransitionRoot } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "base-dropdown",
@@ -52,6 +53,7 @@ import { TransitionRoot } from "@headlessui/vue";
     },
     components: {
         TransitionRoot,
+        ChevronDownIcon,
     },
 })
 export default class BaseDropdown extends Vue {

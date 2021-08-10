@@ -11,14 +11,14 @@
             >
                 {{ tag.getName() }}
             </router-link>
-            <button v-if="tag.userDefined" @click="removeFromTag(tag.id)">
-                <icon name="error" size="16" class="cursor-pointer hover:text-red-800" />
+            <button v-if="tag.userDefined" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
+                <XIcon class="w-4 h-4" />
             </button>
         </span>
         <base-dropdown class="flex-grow">
             <template #button>
-                <button class="cursor-pointer text-gray-500 text-sm flex items-center">
-                    <icon name="plus"/>
+                <button class="cursor-pointer text-gray-500 text-sm flex items-center gap-2">
+                    <PlusIcon class="w-4 h-4" />
                     {{ $t('song.addCategory') }}
                 </button>
             </template>
@@ -46,6 +46,7 @@ import { tags } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
+import { XIcon, PlusIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "song-tags",
@@ -53,6 +54,10 @@ import { Options, Vue } from "vue-class-component";
         song: {
             type: Object,
         },
+    },
+    components: {
+        XIcon,
+        PlusIcon,
     },
 })
 export default class SongTags extends Vue {

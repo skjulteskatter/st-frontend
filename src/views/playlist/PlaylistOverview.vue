@@ -4,7 +4,12 @@
             {{ $t("common.your") }}
             {{ $t("common.collections").toLowerCase() }}
         </h1>
-        <base-button @click="openCreatePlaylist" theme="secondary" icon="playlist">{{$t('playlist.createnew')}}</base-button>
+        <base-button @click="openCreatePlaylist" theme="secondary">
+            <template #icon>
+                <FolderIcon class="w-4 h-4" />
+            </template>
+            {{$t('playlist.createnew')}}
+        </base-button>
         <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
     </header>
     <div class="flex flex-col gap-4" v-if="playlists.length">
@@ -25,6 +30,7 @@ import { ApiPlaylist } from "dmb-api";
 
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
+import { FolderIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 
 @Options({
@@ -33,6 +39,7 @@ import { useStore } from "@/store";
         PlaylistCard,
         CreatePlaylistModal,
         BaseInput,
+        FolderIcon,
     },
 })
 export default class PlaylistOverview extends Vue {

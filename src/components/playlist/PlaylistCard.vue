@@ -5,7 +5,7 @@
         }"
     >
         <button class="text-left flex gap-4 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
-            <icon name="playlist" class="opacity-50" />
+            <FolderIcon class="w-6 h-6 opacity-50" />
             <div class="flex flex-col">
                 <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                 <small class="opacity-50">
@@ -17,7 +17,7 @@
                 class="text-gray-400 ml-auto flex-shrink-0"
                 v-if="playlist?.sharedWithIds.length"
             >
-                <icon name="share" size="16" />
+                <ShareIcon class="w-4 h-4" />
                 {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
             </small>
         </button>
@@ -28,6 +28,9 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { useStore } from "@/store";
+import { FolderIcon } from "@heroicons/vue/outline";
+import { ShareIcon } from "@heroicons/vue/solid";
+
 @Options({
     name: "playlist-card",
     props: {
@@ -35,6 +38,10 @@ import { useStore } from "@/store";
             type: Object,
             required: true,
         },
+    },
+    components: {
+        FolderIcon,
+        ShareIcon,
     },
 })
 export default class PlaylistCard extends Vue {

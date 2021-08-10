@@ -6,7 +6,8 @@
             :key="file.id"
             @click="callback ? callback(file) : undefined"
         >
-            <icon :name="icon" size="14" class="mr-2 text-gray-500 dark:text-gray-300" />
+            <MusicNoteIcon v-if="type == 'sheetmusic'" class="w-4 h-4 mr-2 opacity-50" />
+            <VolumeUpIcon v-if="type == 'audio'" class="w-4 h-4 mr-2 opacity-50" />
             <small class="flex flex-col items-start text-left">
                 <p>{{ file.name }}{{ file.type.endsWith("pdf") ? " (PDF)" : ""}}</p>
                 <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
@@ -19,13 +20,15 @@
 import { useStore } from "@/store";
 import { MediaFile } from "dmb-api";
 import { Options, Vue } from "vue-class-component";
+import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "media-playlist",
     props: {
-        icon: {
+        type: {
             type: String,
-            default: "book",
+            enum: ["sheetmusic", "audio"],
+            default: "sheetmusic",
         },
         files: {
             type: Array,
@@ -35,10 +38,14 @@ import { Options, Vue } from "vue-class-component";
             type: Function,
         },
     },
+    components: {
+        MusicNoteIcon,
+        VolumeUpIcon,
+    },
 })
 export default class MediaListItem extends Vue {
     public store = useStore();
-    public icon?: string;
+    public type?: string;
     public files?: MediaFile[];
     public callback?: Function;
 

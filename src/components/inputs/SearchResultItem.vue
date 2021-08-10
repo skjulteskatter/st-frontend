@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="flex gap-2 flex-col" v-if="Contributor">
-            <icon name="user" class="text-gray-400" />
+            <UserCircleIcon class="w-6 h-6 opacity-50" />
             <div class="flex flex-col gap-2">
                 <div>
                     <b>{{
@@ -39,12 +39,16 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { IndexedContributor, IndexedSong } from "dmb-api";
+import { UserCircleIcon } from "@heroicons/vue/outline";
 
 @Options({
     props: {
         item: {
             type: Object,
         },
+    },
+    components: {
+        UserCircleIcon,
     },
     name: "search-result-item",
 })

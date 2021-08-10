@@ -4,14 +4,18 @@
 		title="Print"
 		@click="print()"
 	>
-		<icon name="print" size="20" />
+		<PrinterIcon class="w-5 h-5 opacity-75" />
 	</button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { PrinterIcon } from "@heroicons/vue/solid";
 
 @Options({
+	components: {
+		PrinterIcon,
+	},
 })
 export default class PrintButton extends Vue {
 	public print() {
