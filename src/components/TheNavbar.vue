@@ -22,6 +22,7 @@
 				<div class="hidden md:block">
 					<div class="ml-4 flex items-center md:ml-6">
 						<store-cart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
+						<feedback />
 						<notification-list />
 
 						<!-- Profile dropdown -->
@@ -100,6 +101,7 @@ import {
 	MenuItems,
 } from "@headlessui/vue";
 import { NotificationList } from "@/components/notification";
+import Feedback from "@/components/feedback/Feedback.vue";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
@@ -114,6 +116,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 		MenuItem,
 		MenuItems,
 		NotificationList,
+		Feedback,
 	},
 	name: "the-navbar",
 })
