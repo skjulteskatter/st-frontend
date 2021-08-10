@@ -7,7 +7,7 @@
                 </h3>
                 <tooltip :text="$t('tooltip.myCollections')" />
             </span>
-            <button class="text-sm py-2 px-3 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20" @click="openCreatePlaylist">
+            <button class="text-sm py-1 px-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20" @click="openCreatePlaylist">
                 {{ $t('playlist.createnew') }}
             </button>
             <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
