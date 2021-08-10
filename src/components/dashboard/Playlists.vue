@@ -2,9 +2,9 @@
     <base-card>
         <div class="flex justify-between items-center mb-2">
             <span class="flex items-center">
-                <h3 class="font-bold mr-4">
+                <h2 class="font-bold mr-4">
                     {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
-                </h3>
+                </h2>
                 <tooltip :text="$t('tooltip.myCollections')" />
             </span>
             <button class="text-sm py-1 px-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20" @click="openCreatePlaylist">

@@ -1,5 +1,5 @@
 <template>
-	<button class="p-1 rounded-full focus:ring-2 focus:ring-primary" @click="openPanel()">
+	<button aria-label="Help button" class="p-1 rounded-full focus:ring-2 focus:ring-primary" @click="openPanel()">
 		<QuestionMarkCircleIcon class="opacity-50 w-6 h-6" />
 	</button>
 	<slide-panel title="Help & Support" :open="open" @close="closePanel()">

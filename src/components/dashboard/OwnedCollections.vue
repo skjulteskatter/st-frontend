@@ -2,7 +2,7 @@
 	<base-card class="border border-primary md:col-span-2">
 		<div class="flex flex-col h-full">
 			<div class="flex items-center mb-2">
-				<h3 class="font-bold mr-4">{{ $t('common.collections') }}</h3>
+				<h2 class="font-bold mr-4">{{ $t('common.collections') }}</h2>
 				<tooltip :text="$t('tooltip.ownedCollections')" />
 				<router-link
 					v-if="collections?.length"

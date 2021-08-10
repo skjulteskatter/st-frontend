@@ -1,9 +1,9 @@
 <template>
     <base-card>
         <div class="flex items-center mb-2">
-            <h3 class="font-bold mr-4">
+            <h2 class="font-bold mr-4">
                 {{ $t("common.activity") }}
-            </h3>
+            </h2>
             <tooltip :text="$t('tooltip.recentActivity')" />
         </div>
         <loader :loading="activitiesInitialized === false">
@@ -15,6 +15,7 @@
                     :to="a.getRouterLink(collections)"
                 >
                     <img
+                        alt="Activity thumbnail"
                         :src="a.getImage(collections)"
                         class="mr-2 max-h-10 grayscale rounded"
                     />
