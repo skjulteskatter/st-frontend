@@ -65,11 +65,11 @@
                         :collection="collection"
                     />
                 </div>
-                <div>
+                <aside>
                     <song-media-card
                         :song="song"
                     />
-                </div>
+                </aside>
             </div>
         </div>
     </loader>
