@@ -43,30 +43,33 @@
                 </div>
             </div>
             <song-tags :song="song" />
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <song-info-card
-                    :song="song"
-                    :languageKey="languageKey"
-                    :viewCount="viewCount"
-                    class="md:col-span-2"
-                />
-                <song-media-card 
-                    :song="song"
-                />
-                <lyrics-settings
-                    v-if="isExtended"
-                    :languageKey="languageKey"
-                    :lyrics="lyrics"
+            <div class="flex flex-col md:flex-row gap-6 md:items-start">
+                <div class="flex flex-col gap-4 flex-grow">
+                    <song-info-card
+                        :song="song"
+                        :languageKey="languageKey"
+                        :viewCount="viewCount"
+                        class="md:col-span-2"
+                    />
+                    <lyrics-settings
+                        v-if="isExtended"
+                        :languageKey="languageKey"
+                        :lyrics="lyrics"
+                        :song="song"
+                    />
+                    <lyrics-card
+                        :style="sheetMusicOptions?.show ? 'display: none;' : ''"
+                        v-if="song.hasLyrics"
+                        :song="song"
+                        :lyrics="lyrics"
+                        :collection="collection"
+                    />
+                </div>
+                <song-media-card
+                    class="flex-shrink-0"
                     :song="song"
                 />
             </div>
-            <lyrics-card
-                :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                v-if="song.hasLyrics"
-                :song="song"
-                :lyrics="lyrics"
-                :collection="collection"
-            />
         </div>
     </loader>
     <base-modal
