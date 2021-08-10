@@ -7,10 +7,10 @@
 				<router-link
 					v-if="collections?.length"
 					to="/collections"
-					class="px-2 py-1 rounded-md ml-auto text-sm hover:bg-black hover:bg-opacity-10"
+					class="flex gap-2 items-center px-2 py-1 rounded-md ml-auto text-sm hover:bg-black hover:bg-opacity-10"
 				>
 					{{ $t('playlist.seeall') }}
-					<icon name="arrowRight" size="16" />
+					<ArrowRightIcon class="h-4 w-4" />
 				</router-link>
 			</div>
 			<div v-if="collections?.length" class="flex flex-col">
@@ -32,6 +32,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { CollectionCard } from "@/components";
+import { ArrowRightIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
 
@@ -39,6 +40,7 @@ import { Collection } from "@/classes";
 	name: "owned-collections",
 	components: {
 		CollectionCard,
+		ArrowRightIcon,
 	},
 })
 export default class OwnedCollections extends Vue {

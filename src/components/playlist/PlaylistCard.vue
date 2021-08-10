@@ -14,7 +14,7 @@
                 </small>
             </div>
             <small
-                class="text-gray-400 ml-auto flex-shrink-0"
+                class="opacity-50 ml-auto flex-shrink-0 flex gap-1 items-center"
                 v-if="playlist?.sharedWithIds.length"
             >
                 <ShareIcon class="w-4 h-4" />
