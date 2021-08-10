@@ -43,8 +43,8 @@
                 </div>
             </div>
             <song-tags :song="song" />
-            <div class="flex flex-col md:flex-row gap-6 md:items-start">
-                <div class="flex flex-col gap-4 flex-grow">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex flex-col gap-4 md:col-span-2">
                     <song-info-card
                         :song="song"
                         :languageKey="languageKey"
@@ -65,10 +65,11 @@
                         :collection="collection"
                     />
                 </div>
-                <song-media-card
-                    class="flex-shrink-0"
-                    :song="song"
-                />
+                <div>
+                    <song-media-card
+                        :song="song"
+                    />
+                </div>
             </div>
         </div>
     </loader>
