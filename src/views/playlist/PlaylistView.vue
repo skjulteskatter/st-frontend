@@ -1,6 +1,6 @@
 <template>
     <div v-if="playlist">
-        <back-button class="md:hidden mb-4" />
+        <back-button class="mb-4" />
         <header class="flex justify-between items-start mb-4">
             <span>
                 <h1 class="font-bold text-xl">

@@ -1,6 +1,6 @@
 <template>
 	<div class="p-4 md:p-8">
-		<back-button class="md:hidden mb-4" />
+		<back-button class="mb-4" />
 		<header class="flex flex-col mb-4">
 			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>

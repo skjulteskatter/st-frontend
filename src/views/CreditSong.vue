@@ -1,6 +1,6 @@
 <template>
     <div class="p-4 md:p-8">
-        <back-button class="md:hidden mb-4" />
+        <back-button class="mb-4" />
         <header class="flex gap-4 mb-4">
             <h1 class="font-bold text-3xl">{{ $t('credits.songCredit') }}</h1>
         </header>

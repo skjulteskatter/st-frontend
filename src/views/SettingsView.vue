@@ -1,5 +1,5 @@
 <template>
-    <back-button class="md:hidden mb-4" />
+    <back-button class="mb-4" />
     <div class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
         <base-button

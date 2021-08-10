@@ -1,7 +1,7 @@
 <template>
     <loader :loading="loading">
         <div v-if="contributor">
-            <back-button class="md:hidden mb-4" />
+            <back-button class="mb-4" />
             <base-card>
                 <div class="contributor__biography">
                     <img
