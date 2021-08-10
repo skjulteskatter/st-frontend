@@ -6,9 +6,9 @@
             :key="file.id"
             @click="callback ? callback(file) : undefined"
         >
-            <MusicNoteIcon v-if="type == 'sheetmusic'" class="w-4 h-4 mr-2 opacity-50" />
-            <VolumeUpIcon v-if="type == 'audio'" class="w-4 h-4 mr-2 opacity-50" />
-            <small class="flex flex-col items-start text-left">
+            <MusicNoteIcon v-if="type == 'sheetmusic'" class="w-4 h-4 opacity-50" />
+            <VolumeUpIcon v-if="type == 'audio'" class="w-4 h-4 opacity-50" />
+            <small class="flex flex-col items-start text-left ml-2">
                 <p>{{ file.name }}{{ file.type.endsWith("pdf") ? " (PDF)" : ""}}</p>
                 <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
             </small>
