@@ -11,7 +11,12 @@
 					<div class="hidden md:block">
 						<div class="ml-10 flex items-baseline space-x-4">
 							<template v-for="item in links" :key="item.name">
-								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm font-medium">{{ item.name }}</router-link>
+								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm font-medium">
+									<span class="flex items-center gap-2">
+										<LockClosedIcon v-if="item.name == 'Admin'" class="w-3 h-3" />
+										{{ item.name }}
+									</span>
+								</router-link>
 							</template>
 						</div>
 					</div>
@@ -102,6 +107,7 @@ import {
 } from "@headlessui/vue";
 import { NotificationList } from "@/components/notification";
 import Feedback from "@/components/feedback/Feedback.vue";
+import { LockClosedIcon } from "@heroicons/vue/solid";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
@@ -117,6 +123,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 		MenuItems,
 		NotificationList,
 		Feedback,
+		LockClosedIcon,
 	},
 	name: "the-navbar",
 })
