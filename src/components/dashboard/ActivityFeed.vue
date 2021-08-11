@@ -20,7 +20,7 @@
                         class="mr-2 max-h-10 grayscale rounded"
                     />
                     <span class="flex flex-col justify-center flex-1">
-                        <small class="text-gray-400">{{ $t(`song.${a.type}`) }}</small>
+                        <small class="opacity-50 tracking-wide">{{ $t(`song.${a.type}`) }}</small>
                         <strong>
                             {{ a.name }}
                         </strong>

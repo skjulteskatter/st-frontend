@@ -15,7 +15,7 @@
             <div
                 v-if="song.sheetMusic.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t("song.sheetmusic") }}
                 </p>
                 <media-list-item :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
@@ -23,7 +23,7 @@
             <div
                 v-if="song.audioFiles.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t('song.audioFiles') }}
                 </p>
                 <media-list-item :files="song.audioFiles" :callback="selectAudio" type="audio" />
@@ -31,18 +31,21 @@
             <div
                 v-if="song.videoFiles.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t('song.videos') }}
                 </p>
                 <div class="flex flex-wrap gap-2">
                     <button
-                        class="flex-grow text-sm text-left p-2 rounded border border-gray-300 hover:border-gray-500 dark:border-gray-500 dark:hover:border-gray-400"
+                        class="flex-grow flex items-center text-sm text-left p-2 rounded border border-gray-300 hover:border-gray-500 dark:border-gray-500 dark:hover:border-gray-400"
                         v-for="video in song.videoFiles"
                         :key="'video-' + video.id"
                         @click="setActiveVideo(video.directUrl)"
                     >
                         <PlayIcon class="w-4 h-4 mr-2 opacity-50 inline" />
-                        <span>{{ $t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '') }}</span>
+                        <div class="flex-grow inline-flex gap-4 justify-between items-center">
+                            <span>{{ $t(`types.${video.category}`) }}</span>
+                            <span v-if="video.languageKey" class="text-xs uppercase tracking-wider opacity-50 ml-auto">{{ video.languageKey }}</span>
+                        </div>
                     </button>
                 </div>
                 <base-modal
