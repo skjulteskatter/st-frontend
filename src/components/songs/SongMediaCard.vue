@@ -18,7 +18,7 @@
                 <p class="text-sm mb-2">
                     {{ $t("song.sheetmusic") }}
                 </p>
-                <media-list-item :files="song.sheetMusic" :callback="selectSheetMusic" type="sheetmusic" />
+                <media-list-item :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
             </div>
             <div
                 v-if="song.audioFiles.length"

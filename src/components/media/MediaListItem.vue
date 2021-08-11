@@ -8,8 +8,14 @@
         >
             <MusicNoteIcon v-if="type == 'sheetmusic'" class="w-4 h-4 opacity-50" />
             <VolumeUpIcon v-if="type == 'audio'" class="w-4 h-4 opacity-50" />
-            <small class="flex flex-col items-start text-left ml-2">
-                <p>{{ file.name }}{{ file.type.endsWith("pdf") ? " (PDF)" : ""}}</p>
+            <small class="flex flex-col items-start text-left ml-2 w-full">
+                <p class="w-full flex gap-4 justify-between">
+                    {{ file.name }}
+                    <span class="text-xs text-primary tracking-wide">
+                        {{ file.type.endsWith("pdf") ? "PDF" : ""}}
+                        {{ file.type.endsWith("sibelius") ? "Sibelius" : ""}}
+                    </span>
+                </p>
                 <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
             </small>
         </button>
