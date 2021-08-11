@@ -6,12 +6,12 @@
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}
                 </h1>
-                <base-button theme="secondary" icon="buy" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">{{ $t('store.buy') }}</base-button>
-                <!-- <div class="flex justify-end flex-col md:flex-row md:gap-4 mb-4 text-sm md:ml-auto">
-                    <span class="text-primary"><icon name="star" size="12" />{{$t("common.newMelody")}}</span>
-                    <span class="text-green-700">{{$t("common.noSheetMusic")}}</span>
-                    <span class="text-red-700">{{$t("common.notAvailableInThisLanguage")}}</span>
-                </div> -->
+                <base-button theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <template #icon>
+                        <ShoppingCartIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('store.buy') }}
+                </base-button>
             </div>
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
                 <div class="flex flex-col gap-1 text-sm">
@@ -226,6 +226,7 @@ import {
     SearchInput,
 } from "@/components/inputs";
 import { BackButton } from "@/components";
+import { ShoppingCartIcon } from "@heroicons/vue/solid";
 import { ApiContributor } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
@@ -240,6 +241,7 @@ import { appSession } from "@/services/session";
         SongFilterDropdown,
         BackButton,
         SearchInput,
+        ShoppingCartIcon,
     },
     name: "song-list",
 })

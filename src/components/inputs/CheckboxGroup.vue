@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="flex flex-col gap-1">
 		<label class="font-bold">
 			{{ name }}
 		</label>
