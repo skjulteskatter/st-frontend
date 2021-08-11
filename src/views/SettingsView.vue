@@ -14,7 +14,6 @@
         </base-button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
-        <settings-card />
         <div>
             <user-card />
             <base-card class="mt-4" v-if="collections.length">
@@ -35,6 +34,9 @@
                 </base-button>
             <!-- <owned-collections /> -->
             </base-card>
+        </div>
+        <div class="md:col-span-3">
+            <settings-card />
         </div>
     </div>
 </template>

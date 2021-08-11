@@ -1,5 +1,5 @@
 <template>
-    <base-card class="md:col-span-3 md:row-span-2" v-if="user">
+    <base-card v-if="user">
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
@@ -100,17 +100,19 @@
                 <change-password />
             </div>
         </div>
-        <base-button
-            :loading="loading"
-            @click="save"
-            theme="secondary"
-            class="ml-auto"
-        >
-            <template #icon>
-                <CheckIcon class="w-4 h-4" />
-            </template>
-            {{ $t("common.save") }}
-        </base-button>
+        <template #footer>
+            <base-button
+                :loading="loading"
+                @click="save"
+                theme="secondary"
+                class="ml-auto"
+            >
+                <template #icon>
+                    <CheckIcon class="w-4 h-4" />
+                </template>
+                {{ $t("common.save") }}
+            </base-button>
+        </template>
     </base-card>
 </template>
 
