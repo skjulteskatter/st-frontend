@@ -1,7 +1,6 @@
 <template>
     <base-card
-        v-if="song && (song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)"
-        header
+        v-if="song"
     >
         <template #header>
             <div class="flex items-center gap-4">
@@ -11,7 +10,7 @@
                 <tooltip :text="$t('tooltip.songFiles')" />
             </div>
         </template>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4" v-if="(song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)">
             <div
                 v-if="song.sheetMusic.length"
             >
@@ -65,6 +64,7 @@
                 </base-modal>
             </div>
         </div>
+        <p v-else class="text-sm opacity-50 text-center p-2">{{ $t('song.noFiles') }}</p>
     </base-card>
 </template>
 
