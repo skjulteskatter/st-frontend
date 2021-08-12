@@ -35,7 +35,7 @@
                         v-if="song.hasLyrics && (isExtended || isAdmin)"
                         @click="extend"
                         :disabled="lyrics?.format != 'json'"
-                        class="viewer-button"
+                        class="viewer-button hidden md:flex"
                     >
                         <template #icon>
                             <DesktopComputerIcon class="w-4 h-4" />
@@ -330,16 +330,3 @@ export default class SongViewer extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-.viewer-button, 
-.playlist-adder {
-    @include breakpoint("medium") {
-        .button__content {
-            display: none;
-        }
-    }
-}
-</style>
