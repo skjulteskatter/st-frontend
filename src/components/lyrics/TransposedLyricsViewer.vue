@@ -63,6 +63,10 @@ export default class TransposedLyricsViewer extends Vue {
                 td {
                     padding: 0;
                 }
+
+                .indent:before {
+                    content: " ";
+                }
             }
 
             .chords {
