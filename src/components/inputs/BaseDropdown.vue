@@ -1,5 +1,5 @@
 <template>
-    <div class="relative z-10">
+    <div class="relative">
         <div class="cursor-pointer" @click="openDropdown">
             <button class="bg-white p-2 rounded-md border border-gray-300 flex items-center gap-2 dark:bg-secondary dark:border-gray-500" v-if="label">
                 <span>{{ label }}</span>
@@ -22,7 +22,7 @@
             leave-from="translate-y-0 opacity-100"
             leave-to="translate-y-2 opacity-0"
         >
-            <base-card :class="`absolute top-11 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
+            <base-card :class="`z-10 absolute top-11 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
                 <slot name="default"></slot>
             </base-card>
         </transition-root>
