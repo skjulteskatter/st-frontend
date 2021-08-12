@@ -23,7 +23,7 @@
 				<loader :loading="osmdLoading" />
 			</div>
 			<div 
-				class="w-full h-full flex flex-col"
+				class="w-full h-full flex flex-col fixed top-20"
 				:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
 			>
 				<div class="p-4 flex justify-end bg-white w-full">
