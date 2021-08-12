@@ -1,8 +1,6 @@
 <template>
-    <base-card class="cursor-pointer border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400"
-        :class="{
-            'border-primary': userId != playlist?.userId, 
-        }"
+    <base-card class="cursor-pointer hover:ring-2 hover:ring-gray-400"
+        :class="{ 'border border-primary': userId != playlist?.userId }"
     >
         <button class="text-left w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
             <FolderIcon class="w-8 h-8 opacity-50 mb-2" />
