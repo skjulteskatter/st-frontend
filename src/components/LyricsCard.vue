@@ -91,25 +91,21 @@
                     v-if="editor"
                     class="ml-auto"
                     theme="tertiary"
-                    icon="pencil"
                     @click="edit()"
-                >{{ $t('common.edit') }}</base-button>
+                >
+                    <template #icon>
+                        <PencilAltIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('common.edit') }}
+                </base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
-            <transposed-lyrics-viewer
-                v-if="type == 'transpose' && lyrics?.format == 'html'"
-                :lyrics="lyrics"
-            />
-            <lyrics-viewer 
-                v-if="type == 'default' && lyrics?.format == 'json'"
-                :song="song"
-            />
-            <!-- <component
+            <component
                 :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
                 :song="song"
                 :lyrics="lyrics"
-            /> -->
+            />
 
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
@@ -131,6 +127,7 @@ import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
+import { PencilAltIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
@@ -142,6 +139,7 @@ import { SongChanger } from "@/components/songs";
         SwitchGroup,
         SwitchLabel,
         SongChanger,
+        PencilAltIcon,
     },
     props: {
         lyrics: {

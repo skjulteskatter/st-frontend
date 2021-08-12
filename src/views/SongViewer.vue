@@ -2,16 +2,20 @@
     <loader :loading="loading">
         <div v-if="song" class="flex flex-col gap-4">
             <div class="flex justify-between">
-                <back-button class="flex md:hidden mb-4" />
+                <back-button />
                 <div class="flex gap-2 items-center ml-auto">
-                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded hidden xl:block">{{ song.id }}</span>
+                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded-md hidden xl:block">{{ song.id }}</span>
                     <base-button
                         v-if="isAdmin"
                         @click="goToEditPage()"
                         theme="tertiary"
-                        icon="pencil"
-                        class="mr-4 hidden xl:block"
-                    >{{ $t('common.edit') }}</base-button>
+                        class="mr-4 hidden lg:flex"
+                    >
+                        <template #icon>
+                            <PencilAltIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t('common.edit') }}
+                    </base-button>
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
                             <FolderAddIcon class="w-4 h-4" />
@@ -114,7 +118,7 @@ import {
     BaseModal,
 } from "@/components";
 import { PlaylistAddToCard } from "@/components/playlist";
-import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
 import { Collection } from "@/classes";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -142,6 +146,7 @@ import { appSession } from "@/services/session";
         LockClosedIcon,
         ShoppingCartIcon,
         ArrowLeftIcon,
+        PencilAltIcon,
     },
     name: "song-viewer",
 })

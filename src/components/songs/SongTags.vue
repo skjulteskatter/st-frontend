@@ -23,14 +23,18 @@
                 </button>
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
-                <base-input v-model="tagFilter" type="text" placeholder="Tag name" class="w-full"/>
-                <base-button type="submit" theme="primary" icon="plus" :content="false" />
+                <base-input v-model="tagFilter" type="text" :placeholder="$t('song.category')" class="w-full"/>
+                <base-button type="submit" theme="primary" :content="false">
+                    <template #icon>
+                        <PlusIcon class="w-4 h-4" />
+                    </template>
+                </base-button>
             </form>
             <div v-if="Tags.length" class="mt-2">
-                <p class="text-gray-500 text-xs leading-none mb-2">{{ $t('common.your') }} {{ $t('common.tags').toLocaleLowerCase() }}</p>
+                <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small>
                 <ul class="flex flex-wrap gap-1">
                     <li 
-                        class="px-2 rounded-full text-sm text-gray-400 border-gray-400 border flex gap-1 items-center cursor-pointer" 
+                        class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center cursor-pointer" 
                         v-for="tag in Tags" 
                         :key="tag.id" 
                         @click="addToTag(tag.id)">{{tag.getName()}}</li>
