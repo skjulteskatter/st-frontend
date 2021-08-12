@@ -12,7 +12,7 @@
         </base-button>
         <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
     </header>
-    <div class="flex flex-col gap-4" v-if="playlists.length">
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6" v-if="playlists.length">
         <playlist-card
             v-for="playlist in playlists"
             :key="playlist.id"

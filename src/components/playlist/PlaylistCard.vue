@@ -4,22 +4,22 @@
             'border-primary': userId != playlist?.userId, 
         }"
     >
-        <button class="text-left flex gap-4 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
-            <FolderIcon class="w-6 h-6 opacity-50" />
+        <button class="text-left w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
+            <FolderIcon class="w-8 h-8 opacity-50 mb-2" />
             <div class="flex flex-col">
                 <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                 <small class="opacity-50">
                     {{ playlist?.entries.length }}
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
+                <small
+                    class="opacity-50 ml-auto flex-shrink-0 flex gap-1 items-center"
+                    v-if="playlist?.sharedWithIds.length"
+                >
+                    <ShareIcon class="w-4 h-4" />
+                    {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
+                </small>
             </div>
-            <small
-                class="opacity-50 ml-auto flex-shrink-0 flex gap-1 items-center"
-                v-if="playlist?.sharedWithIds.length"
-            >
-                <ShareIcon class="w-4 h-4" />
-                {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
-            </small>
         </button>
     </base-card>
 </template>
