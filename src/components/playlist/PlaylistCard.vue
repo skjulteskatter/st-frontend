@@ -7,7 +7,7 @@
             <div class="flex flex-col">
                 <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                 <small class="opacity-50">
-                    {{ playlist?.entries.length }}
+                    {{ playlist?.entries.length || $t('common.no-amount') }}
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
                 <small
