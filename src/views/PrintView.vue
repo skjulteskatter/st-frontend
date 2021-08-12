@@ -83,7 +83,7 @@ export default class PrintView extends Vue {
 	}
 
 	public get verses() {
-		return this.lyrics?.verses;
+		return this.lyrics?.content as object;
 	}
 }
 </script>
