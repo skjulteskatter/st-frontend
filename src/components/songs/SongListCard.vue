@@ -17,7 +17,7 @@
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
                     'text-green-700': song.available && !song.sheetMusic.length,
-                    'text-gray-400': !song.available,
+                    'opacity-40': !song.available,
                 }"
             >
                 <b class="w-6 mr-2 text-right">
@@ -26,9 +26,9 @@
                 <span>
                     {{ song.getName(languageKey) }}
                 </span>
-                <div class="ml-auto">
-                    <icon class="text-primary mr-1" name="star" size="12" v-if="song.newMelody" />
-                    <span class="opacity-50">({{songViews(song)}})</span>
+                <div class="flex-grow flex items-center">
+                    <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
+                    <span class="ml-auto opacity-50">({{ songViews(song) }})</span>
                 </div>
             </li>
         </ul>
@@ -37,12 +37,17 @@
             @close="closeCTA"
         >
             <div class="flex flex-col gap-4 items-center">
-                <icon name="lock" size="30" class="opacity-50" />
+                <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
                 <span class="text-center">
                     <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
                     <p>{{ $t('store.gainAccess') }}</p>
                 </span>
-                <base-button theme="secondary" @click="closeCTA">OK</base-button>
+                <base-button theme="secondary" @click="closeCTA">
+                    <template #icon>
+                        <CheckIcon class="w-4 h-4" />
+                    </template>
+                    OK
+                </base-button>
             </div>
         </base-modal>
     </base-card>
@@ -54,6 +59,7 @@ import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { BaseModal } from "@/components";
+import { StarIcon, LockClosedIcon, CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
     props: {
@@ -76,6 +82,9 @@ import { BaseModal } from "@/components";
     },
     components: {
         BaseModal,
+        StarIcon,
+        LockClosedIcon,
+        CheckIcon,
     },
     name: "song-list-card",
 })
