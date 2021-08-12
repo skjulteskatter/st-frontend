@@ -2,7 +2,7 @@
     <base-card v-if="song" class="overflow-visible" header>
         <template #header>
             <div class="w-full flex items-center gap-2">
-                <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
+                <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
                 <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <print-button />
             </div>

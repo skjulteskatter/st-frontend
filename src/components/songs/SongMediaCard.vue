@@ -4,9 +4,9 @@
     >
         <template #header>
             <div class="flex items-center gap-4">
-                <h4 class="font-bold">
+                <h3 class="font-bold">
                     {{ $t("song.media") }}
-                </h4>
+                </h3>
                 <tooltip :text="$t('tooltip.songFiles')" />
             </div>
         </template>

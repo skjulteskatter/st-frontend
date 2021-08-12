@@ -11,13 +11,13 @@
             >
                 {{ tag.getName() }}
             </router-link>
-            <button v-if="tag.userDefined" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
+            <button aria-label="Remove category" v-if="tag.userDefined" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
                 <XIcon class="w-4 h-4" />
             </button>
         </span>
         <base-dropdown class="flex-grow">
             <template #button>
-                <button class="cursor-pointer text-gray-500 text-sm flex items-center gap-2">
+                <button aria-label="Add category" class="cursor-pointer text-gray-500 text-sm flex items-center gap-2">
                     <PlusIcon class="w-4 h-4" />
                     {{ $t('song.addCategory') }}
                 </button>

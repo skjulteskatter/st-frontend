@@ -1,10 +1,10 @@
 <template>
 	<div class="p-2 flex gap-2 items-center rounded-md border border-gray-300 text-gray-500 dark:border-gray-500 dark:text-gray-300">
-		<button @click="$emit('previous')" class="cursor-pointer p-1 rounded">
+		<button aria-label="Previous" @click="$emit('previous')" class="cursor-pointer p-1 rounded">
 			<ChevronLeftIcon class="h-5 w-5" :class="{ 'opacity-50': !hasPrevious }" />
 		</button>
 		<p class="text-sm" v-if="label">{{ label }}</p>
-		<button @click="$emit('next')" class="cursor-pointer p-1 rounded">
+		<button aria-label="Next" @click="$emit('next')" class="cursor-pointer p-1 rounded">
 			<ChevronRightIcon class="h-5 w-5" :class="{ 'opacity-50': !hasNext }" />
 		</button>
 	</div>

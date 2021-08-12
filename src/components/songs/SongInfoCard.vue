@@ -131,8 +131,8 @@
                 class="absolute bg-gradient-to-t from-white to-transparent bottom-0 w-full h-full" 
                 v-if="!showDescription"
             >
-                <button @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-                    <icon name="arrowDown" />
+                <button aria-label="Show song details" @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                    <ArrowDownIcon class="w-5 h-5" />
                 </button>
             </span>
         </div>
@@ -143,10 +143,12 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
+import { ArrowDownIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         Modal,
+        ArrowDownIcon,
     },
     props: {
         languageKey: {
