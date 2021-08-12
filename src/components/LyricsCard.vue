@@ -104,9 +104,8 @@
             <component
                 :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
                 :song="song"
-                :lyrics="lyrics"
+                :lyrics="type == 'transpose' ? lyrics : undefined"
             />
-
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
     </base-card>
