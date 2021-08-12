@@ -4,7 +4,7 @@
 		:show="show"
 	>
 		<div class="flex flex-col gap-2">
-			<h2 class="font-bold text-lg">{{ $t('playlist.createnew') }} {{ $t('common.collection').toLocaleLowerCase() }}</h2>
+			<h2 class="font-bold text-lg">{{ $t('playlist.createnew') }}</h2>
 			<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
 				<base-input
 					class="border border-gray-300"
@@ -13,7 +13,10 @@
 					required
 				/>
 				<base-button :loading="loading" theme="secondary" type="submit">
-					{{ $t("playlist.createnew") }}
+					<template #icon>
+						<CheckIcon class="w-4 h-4" />
+					</template>
+					Ok
 				</base-button>
 			</form>
 		</div>
@@ -27,6 +30,7 @@ import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
+import { CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
 	name: "create-playlist-modal",
@@ -40,6 +44,7 @@ import { notify } from "@/services/notify";
 		BaseModal,
 		BaseButton,
 		BaseInput,
+		CheckIcon,
 	},
 })
 export default class CreatePlaylistModal extends Vue {
