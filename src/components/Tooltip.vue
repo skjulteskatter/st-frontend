@@ -7,10 +7,10 @@
 			id="tooltip"
 			class="mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white"
 			:class="positionClasses"
-			enter="transition duration-150"
+			enter="transition duration-100"
 			enter-from="opacity-0"
 			enter-to="opacity-100"
-			leave="transition duration-150"
+			leave="transition duration-100"
 			leave-from="opacity-100"
 			leave-to="opacity-0"
 		>
