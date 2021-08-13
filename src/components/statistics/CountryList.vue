@@ -1,9 +1,11 @@
 <template>
 	<base-card>
-		<h3 class="font-bold text-xl mb-4">{{ $t('statistics.viewsPerCountry') }}</h3>
-		<ol class="list-decimal divide-y divide-gray-200 overflow-y-auto">
+		<template #header>
+			<h3 class="font-bold text-xl">{{ $t('statistics.viewsPerCountry') }}</h3>
+		</template>
+		<ol class="list-decimal overflow-y-auto">
 			<li
-				class="px-2 py-2 sm:py-4 flex justify-between"
+				class="px-2 py-2 rounded-md hover:bg-black/5 flex justify-between"
 				v-for="(country, i) in sortedCountries"
 				:key="country"
 			>
