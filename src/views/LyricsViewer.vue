@@ -68,14 +68,14 @@ import themes from "@/classes/themes";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { viewer } from "@/classes/presentation/viewer";
 
 @Options({
     name: "lyrics-viewer",
 })
 export default class LyricsViewer extends Vue {
     public store = useStore();
-
-    public song: Song | null = null;
+    public viewer = viewer;
 
     public mounted() {
         themes.load();

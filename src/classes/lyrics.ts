@@ -23,7 +23,10 @@ export class Lyrics implements ApiLyrics {
     secondaryChords;
     notes;
 
+    public raw;
+
     constructor(lyrics: ApiLyrics) {
+        this.raw = lyrics;
         this.id = lyrics.id;
         this.songId = lyrics.songId;
         this.number = lyrics.number;

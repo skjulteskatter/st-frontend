@@ -51,7 +51,7 @@
                         :viewCount="viewCount"
                         class="md:col-span-2"
                     />
-                    <lyrics-settings
+                    <presentation-control
                         v-if="isExtended"
                         :languageKey="languageKey"
                         :lyrics="lyrics"
@@ -95,7 +95,7 @@
 import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
-    LyricsSettings,
+    PresentationControl,
     LyricsCard,
     BackButton,
     Modal,
@@ -115,7 +115,7 @@ import { appSession } from "@/services/session";
 
 @Options({
     components: {
-        LyricsSettings,
+        PresentationControl,
         LyricsCard,
         SongInfoCard,
         SongMediaCard,

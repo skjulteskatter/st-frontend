@@ -18,7 +18,10 @@ const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/S
 const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue").catch(() => {
     window.location.reload();
 });
-const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue").catch(() => {
+// const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue").catch(() => {
+//     window.location.reload();
+// });
+const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
     window.location.reload();
 });
 const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
@@ -221,10 +224,15 @@ const routes: Array<RouteRecordRaw> = [
         name: "create-user",
         component: CreateUser,
     },
+    // {
+    //     path: "/lyrics",
+    //     name: "lyrics",
+    //     component: LyricsViewer,
+    // },
     {
-        path: "/lyrics",
-        name: "lyrics",
-        component: LyricsViewer,
+        path: "/presentation",
+        name: "presentation-view",
+        component: PresentationView,
     },
     {
         path: "/karaoke",

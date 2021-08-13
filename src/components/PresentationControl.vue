@@ -8,7 +8,7 @@
                 <base-button
                     class="lyrics-settings__controls__open"
                     theme="tertiary"
-                    @click="openLyricsWindow('lyrics')"
+                    @click="open()"
                 >
                     {{ $t("song.openviewer") }}
                 </base-button>
@@ -16,7 +16,7 @@
                     class="lyrics-settings__controls__update"
                     theme="tertiary"
                     icon="refresh"
-                    @click="updateLyrics"
+                    @click="refresh()"
                 >
                     {{ $t("song.updateviewer") }}
                 </base-button>
@@ -29,7 +29,7 @@
             <h4 class="lyrics-settings__controls__title">
                 {{ $t("song.controlpanel") }}
             </h4>
-            <div class="lyrics-settings__controls__buttons">
+            <!-- <div class="lyrics-settings__controls__buttons">
                 <base-button
                     class="lyrcis-settings__controls__previous"
                     icon="arrowLeft"
@@ -46,8 +46,8 @@
                 >
                     {{ $t("common.next") }}
                 </base-button>
-            </div>
-            <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
+            </div> -->
+            <!-- <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
                 <h5 class="lyrics-settings__verses__title">
                     {{ $t("common.show") }} / {{ $t('common.hide') }}
                 </h5>
@@ -66,7 +66,7 @@
                         {{ verses[key]?.name }}
                     </label>
                 </div>
-            </div>
+            </div> -->
         </base-card>
     </div>
 </template>
@@ -93,9 +93,9 @@ import { control } from "@/classes/presentation/control";
             type: Object,
         },
     },
-    name: "lyrics-settings",
+    name: "presentation-control",
 })
-export default class LyricsSettings extends Vue {
+export default class PresentationControl extends Vue {
     public selectVerses: {
         [key: string]: boolean;
     } = {};
@@ -104,149 +104,20 @@ export default class LyricsSettings extends Vue {
     public lyrics?: Lyrics;
     public languageKey?: string;
     public song?: Song;
-    public keydownEvent = (event: KeyboardEvent) => {
-        if (event.key == "ArrowRight") {
-            this.next();
-        }
-        if (event.key == "ArrowLeft") {
-            this.previous();
-        }
-    }
-
-    public storageEvent = (event: StorageEvent) => {
-        if (event.key == "lyrics_next") {
-            this.next();
-        }
-        if (event.key == "lyrics_previous") {
-            this.previous();
-        }
-    }
 
     public lineSize = 2;
 
     public mounted() {
         control.init();
-        window.addEventListener("keydown", this.keydownEvent);
-        window.addEventListener("storage", this.storageEvent);
-        this.load();
     }
 
-    public updated() {
-        this.load();
+    public open() {
+        //
     }
 
-    public unmounted() {
-        window.removeEventListener("keydown", this.keydownEvent);
-        window.removeEventListener("storage", this.storageEvent);
-    }
-
-    private load() {
-        for (const key of Object.keys(this.verses)) {
-            this.selectVerses[key] = true;
-        }
-    }
-
-    public setLineSize(number: number) {
-        this.lineSize = number;
-        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
-    }
-
-    public openLyricsWindow(type: string) {
-        this.updateLyrics();
-        window.open("/" + type, "Lyrics Viewer", "resizeable,scrollbars");
-    }
-
-    public updateLyrics() {
+    public refresh() {
         if (this.lyrics)
             control.setLyrics(this.lyrics);
-        localStorage.setItem("lyrics", JSON.stringify(this.current));
-        localStorage.setItem("song", JSON.stringify(this.song?.raw));
-        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
-    }
-
-    public next() {
-        if (this.size == 2) {
-            this.currentVerseNumber = this.currentVerseNumber + 2;
-        } else {
-            this.currentVerseNumber++;
-        }
-        this.currentLinesNumber = this.currentLinesNumber + this.lineSize;
-        localStorage.setItem("lyrics", JSON.stringify(this.current));
-        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
-    }
-
-    public previous() {
-        if (this.currentVerseNumber !== 0) {
-            if (this.size == 2) {
-                this.currentVerseNumber = this.currentVerseNumber - 2;
-            } else {
-                this.currentVerseNumber--;
-            }
-        }
-        if (this.currentLinesNumber !== 0) {
-            this.currentLinesNumber = this.currentLinesNumber - this.lineSize;
-        }
-        localStorage.setItem("lyrics", JSON.stringify(this.current));
-        localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));
-    }
-
-    public get selected() {
-        return Object.keys(this.verses).filter((v) => this.selectVerses[v]);
-    }
-
-    public get verses() {
-        return this.lyrics?.verses ?? {};
-    }
-
-    public get size() {
-        return this.verses[0]?.content.length <= 5 ? 2 : 1;
-    }
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.description[this.languageKey ?? "en"] ??
-            this.song?.melodyOrigin?.description.no ??
-            undefined
-        );
-    }
-
-    public get currentVerses(): string[] {
-        const keys = [];
-        if (this.size == 1) {
-            if (this.selected[this.currentVerseNumber])
-                keys.push(this.selected[this.currentVerseNumber]);
-        } else if (this.size == 2) {
-            if (this.selected[this.currentVerseNumber])
-                keys.push(this.selected[this.currentVerseNumber]);
-            if (this.selected[this.currentVerseNumber + 1])
-                keys.push(this.selected[this.currentVerseNumber + 1]);
-        }
-        return keys;
-    }
-
-    public get currentLines(): string[] {
-        const lines = this.lyrics?.lines ?? [];
-
-        return (
-            lines.slice(
-                this.currentLinesNumber,
-                this.currentLinesNumber + this.lineSize,
-            ) ?? []
-        );
-    }
-
-    public get current() {
-        const verses: Verse[] = [];
-
-        for (const key of this.currentVerses) {
-            if (this.verses[key]) verses.push(this.verses[key]);
-        }
-
-        return verses;
-    }
-
-    public get verseSelect() {
-        return Object.keys(this.selectVerses).reduce((a, b) => a.length < 20 ? [...a, b] : a, [] as string[]);
     }
 }
 </script>
