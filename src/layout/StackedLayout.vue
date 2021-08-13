@@ -28,7 +28,7 @@
 					<div class="p-4 flex justify-end bg-white w-full">
 						<base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
 					</div>
-					<object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
+					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
 				<audio-player />
 			</main>
