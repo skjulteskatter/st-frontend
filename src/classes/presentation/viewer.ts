@@ -35,14 +35,14 @@ class PresentationViewer extends PresentationBase {
     }
 
     public next() {
-        if (this._settings) {
-            this._settings.currentIndex += this._settings.size;
+        if (this.settings) {
+            this.settings.currentIndex += this.settings.size;
         }
     }
 
     public previous() {
-        if (this._settings) {
-            this._settings.currentIndex -= this._settings.size;
+        if (this.settings) {
+            this.settings.currentIndex -= this.settings.size;
         }
     }
 }

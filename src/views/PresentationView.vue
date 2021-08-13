@@ -81,6 +81,7 @@ export default class PresentationView extends Vue {
         viewer.init();
         this.lyrics = viewer.Lyrics;
         this.song = viewer.Song ?? null;
+        this.verses = viewer.Verses;
 
         viewer.registerCallback("lyrics", () => {
             this.lyrics = viewer.Lyrics;

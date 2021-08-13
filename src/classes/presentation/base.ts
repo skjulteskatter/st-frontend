@@ -53,7 +53,7 @@ export class PresentationBase {
         return this.lyrics ? new Lyrics(this.lyrics) : null;
     }
 
-    protected _settings?: Settings;
+    private _settings?: Settings;
 
     protected get settings() {
         if (!this._settings)
