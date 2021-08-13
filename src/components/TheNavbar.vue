@@ -11,7 +11,7 @@
 					<div class="hidden md:block">
 						<div class="ml-10 flex items-baseline space-x-4">
 							<template v-for="item in links" :key="item.name">
-								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm font-medium">
+								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
 									<span class="flex items-center gap-2">
 										<LockClosedIcon v-if="item.name == 'Admin'" class="w-3 h-3" />
 										{{ item.name }}
@@ -41,10 +41,10 @@
 							<transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
 								<MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-secondary ring-1 ring-black ring-opacity-5 focus:outline-none">
 									<MenuItem v-slot="{ active }">
-										<router-link to="/settings" :class="[active ? 'bg-black bg-opacity-10' : '', 'block px-4 py-2 text-sm']">{{ $t('common.settings') }}</router-link>
+										<router-link to="/settings" :class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']">{{ $t('common.settings') }}</router-link>
 									</MenuItem>
 									<MenuItem>
-										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-100">{{ $t('common.logout') }}</button>
+										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-500/10">{{ $t('common.logout') }}</button>
 									</MenuItem>
 								</MenuItems>
 							</transition>
@@ -53,7 +53,7 @@
 				</div>
 				<div class="-mr-2 flex md:hidden">
 					<!-- Mobile menu button -->
-					<DisclosureButton class="hover:bg-black hover:bg-opacity-10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
 						<span class="sr-only">Open main menu</span>
 						<icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
 						<icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />
@@ -66,7 +66,7 @@
 		<DisclosurePanel class="md:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<template v-for="item in links" :key="item.name">
-					<router-link v-if="item.condition" :to="item.path" class="hover:bg-black hover:bg-opacity-10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
+					<router-link v-if="item.condition" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
 				</template>
 			</div>
 			<div class="pt-4 pb-3 border-t border-gray-300">
@@ -81,7 +81,7 @@
 					<notification-list class="ml-auto" />
 				</div>
 				<div class="mt-3 px-2 space-y-1">
-					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-10 hover:bg-black">{{ $t('common.settings') }}</router-link>
+					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common.settings') }}</router-link>
 					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-100 text-red-500 hover:text-red-700 hover:bg-red-200" @click="logout()">{{ $t('common.logout') }}</button>
 				</div>
 			</div>
