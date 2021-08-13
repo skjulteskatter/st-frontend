@@ -120,7 +120,7 @@
                 </small>
             </div>
         </div>
-        <div v-if="description" class="flex flex-col gap-4 mt-4 pt-4 relative border-t border-gray-300 dark:border-white/10">
+        <div v-if="description" class="flex flex-col gap-4 mt-4 pt-4 relative border-t border-black/10 dark:border-white/10">
             <div
                 class="text-sm"
                 :class="{ 'h-12 overflow-hidden': !showDescription }"
