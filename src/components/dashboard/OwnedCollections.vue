@@ -22,10 +22,14 @@
 					:collection="c"
 				/>
 			</div>
-			<div v-else class="p-8 bg-black/5 dark:bg-white/10 rounded-md border-dashed border-2 border-black border-opacity-10 flex flex-col justify-center items-center gap-4 flex-grow">
-				<p class="text-gray-500 dark:text-gray-400 text-sm text-center">{{$t('dashboard.nocollections')}}</p>
-				<router-link to="/collections" class="rounded bg-secondary py-2 px-4 shadow-md text-white focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-white dark:text-gray-800">{{$t('dashboard.gotocollections')}}</router-link>
-			</div>
+			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md border-dashed hover:border-transparent dark:hover:border-transparent border-2 border-black/10 dark:border-white/10 flex flex-col items-center">
+				<CollectionIcon class="w-10 h-10 mb-4 opacity-50" />
+				<small class="text-xs tracking-wide text-center">{{$t('dashboard.nocollections')}}</small>
+				<p class="font-semibold flex gap-2 items-center">
+					{{ $t('dashboard.gotocollections') }}
+					<ArrowRightIcon class="w-4 h-4" />
+				</p>
+			</router-link>
 		</div>
 	</base-card>
 </template>
@@ -33,7 +37,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { CollectionCard } from "@/components";
-import { ArrowRightIcon } from "@heroicons/vue/solid";
+import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
 
@@ -42,6 +46,7 @@ import { Collection } from "@/classes";
 	components: {
 		CollectionCard,
 		ArrowRightIcon,
+		CollectionIcon,
 	},
 })
 export default class OwnedCollections extends Vue {
