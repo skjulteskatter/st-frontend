@@ -3,8 +3,6 @@ import { useStore } from "@/store";
 import { ApiContributor, ApiLyrics, ApiSong } from "dmb-api";
 import { Lyrics } from "../lyrics";
 
-const keys = ["viewer_song", "viewer_lyrics"];
-
 type Settings = {
     size: number;
     currentVerses: string[];
@@ -67,6 +65,18 @@ export class PresentationBase {
         verses: [],
     };
 
+    protected callbacks: {
+        [key: string]: Function;
+    } = {};
+
+    public registerCallback(key: Key, callback: Function) {
+        this.callbacks[key] = callback;
+    }
+
+    private executeCallback(key: Key) {
+        this.callbacks[key]?.();
+    }
+
     private type: "control" | "viewer" | "not-initialized" = "not-initialized";
 
     protected initialize(type: "control" | "viewer") {
@@ -77,8 +87,10 @@ export class PresentationBase {
                 if (this.type == "not-initialized")
                     throw new Error("PresentationView - Not initialized");
 
-                if (!e.key || !keys.includes(e.key)) 
+                if (!e.key?.startsWith("viewer_")) 
                     return;
+                
+                const key = e.key.replace("viewer_", "");
                 
                 const item = localStorage.getItem(e.key);
                 if (!item) 
@@ -98,8 +110,9 @@ export class PresentationBase {
                     //     this.contributors = JSON.parse(item);
                     // }
 
-                    if (e.key.endsWith("lyrics")) {
+                    if (key.endsWith("lyrics")) {
                         this.lyrics = JSON.parse(item);
+                        this.executeCallback("lyrics");
                     }
                 }
             });
