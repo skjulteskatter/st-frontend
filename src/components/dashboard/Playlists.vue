@@ -34,7 +34,7 @@
             </router-link>
         </div>
         <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
-            {{ $t("playlist.noplaylists") }}
+            {{ $t("common.no-amount") }} {{ $t('common.collections').toLocaleLowerCase() }}
         </p>
     </base-card>
 </template>
