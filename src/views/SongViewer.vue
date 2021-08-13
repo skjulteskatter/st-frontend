@@ -80,7 +80,7 @@
         </div>
     </loader>
     <base-modal
-        :show="!song?.available"
+        :show="song ? !song.available : false"
     >
         <div class="flex flex-col items-center">
             <LockClosedIcon class="w-10 h-10 text-primary my-4" />
