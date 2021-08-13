@@ -66,7 +66,6 @@ import { Lyrics, Song } from "@/classes";
 import { viewer } from "@/classes/presentation/viewer";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { ref } from "@vue/reactivity";
 import { Vue } from "vue-class-component";
 
 export default class PresentationView extends Vue {

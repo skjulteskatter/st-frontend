@@ -112,7 +112,8 @@ export default class PresentationControl extends Vue {
     }
 
     public open() {
-        //
+        this.refresh();
+        window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
     }
 
     public refresh() {
