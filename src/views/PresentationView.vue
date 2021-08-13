@@ -90,6 +90,17 @@ export default class PresentationView extends Vue {
         viewer.registerCallback("settings", () => {
             this.verses = viewer.Verses;
         });
+
+        addEventListener("keydown", (e) => {
+            if (e.key == "ArrowRight") {
+                viewer.next();
+                this.verses = viewer.Verses;
+            }
+            if (e.key == "ArrowLeft") {
+                viewer.previous();
+                this.verses = viewer.Verses;
+            }
+        });
     }
 
     public get melodyOrigin() {
