@@ -6,7 +6,7 @@ import { Lyrics } from "../lyrics";
 export type Settings = {
     size: number;
     availableVerses: string[];
-    currentVerses: string[];
+    currentIndex: number;
 }
 
 type KeyTypes = {
@@ -73,6 +73,10 @@ export class PresentationBase {
         }
 
         this._settings = v;
+    }
+
+    public get Settings() {
+        return this.settings;
     }
     
     protected callbacks: {

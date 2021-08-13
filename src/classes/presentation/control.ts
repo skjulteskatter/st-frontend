@@ -14,23 +14,7 @@ class PresentationControl extends PresentationBase {
 
     public next() {
         if (this.settings) {
-            const index = this.settings.availableVerses.indexOf(this.settings.currentVerses[0]);
-            const size = this.settings.size;
-            const verses: string[] = [];
-            const verse = this.settings.availableVerses[index + size];
-            if (verse) {
-                verses.push(verse);
-
-                if (size > 1) {
-                    const nextVerse = this.settings.availableVerses[index + size + 1];
-
-                    if (nextVerse) {
-                        verses.push(nextVerse);
-                    }
-                }
-            }
-
-            this.settings.currentVerses = verses;
+            this.settings.currentIndex = this.settings.currentIndex + this.settings.size;
         }
     }
 }

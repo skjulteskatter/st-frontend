@@ -74,7 +74,31 @@ export default class PresentationView extends Vue {
     public song: Song | null = null;
 
     public get verses() {
-        return Object.values(this.lyrics?.verses ?? {});
+        return Object.entries(this.lyrics?.verses ?? {})
+            .filter(i => this.currentVerses.includes(i[0]))
+            .map(i => i[1]);
+    }
+
+    public get currentVerses() {
+        const verses: string[] = [];
+        if (viewer.Settings) {
+            const index = viewer.Settings.currentIndex;
+            const size = viewer.Settings.size;
+
+            const verse = viewer.Settings.availableVerses[index];
+            if (verse) {
+                verses.push(verse);
+                
+                if (size > 1) {
+                    const verse2 = viewer.Settings.availableVerses[index + 1];
+
+                    if (verse2) {
+                        verses.push(verse2);
+                    }
+                }
+            }
+        }
+        return verses;
     }
 
     public async mounted() {
