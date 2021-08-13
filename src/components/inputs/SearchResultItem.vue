@@ -9,7 +9,7 @@
                     }}</b>
                     <small class="block text-xs text-primary" v-for="c in collections" :key="c.id">{{c.getName(languageKey)}}</small>
                 </div>
-                <div class="text-sm text-gray-400 flex flex-col">
+                <div class="text-sm leading-normal text-gray-400 flex flex-col">
                     <small v-if="Song.yearWritten">{{ Song.yearWritten }}</small>
                     <small 
                         v-for="(con, i) in Song.contributors"
