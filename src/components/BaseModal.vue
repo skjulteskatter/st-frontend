@@ -25,7 +25,13 @@
                 @mouseover="mouseOverCard = true"
                 @mouseleave="mouseOverCard = false"
             >
-                <slot></slot>
+                <template #header v-if="$slots.header">
+                    <slot name="header" />
+                </template>
+                <slot/>
+                <template #footer v-if="$slots.footer">
+                    <slot name="footer" />
+                </template>
             </base-card>
         </transition-child>
     </transition-root>
