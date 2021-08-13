@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-white rounded-lg shadow-md dark:bg-secondary">
+    <div class="bg-white rounded-lg shadow-md dark:bg-secondary flex flex-col">
         <div class="p-4 border-b border-black/10 dark:border-white/10" v-if="$slots.header">
             <slot name="header" />
         </div>
-        <div class="p-4 h-full">
+        <div class="p-4 flex-grow">
             <slot name="default" />
         </div>
         <div class="p-4 border-t border-black/10 dark:border-white/10" v-if="$slots.footer">
