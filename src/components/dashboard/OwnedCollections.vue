@@ -22,7 +22,7 @@
 					:collection="c"
 				/>
 			</div>
-			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md border-dashed hover:border-transparent dark:hover:border-transparent border-2 border-black/10 dark:border-white/10 flex flex-col items-center">
+			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md flex flex-col items-center">
 				<CollectionIcon class="w-10 h-10 mb-4 opacity-50" />
 				<small class="text-xs tracking-wide text-center">{{$t('dashboard.nocollections')}}</small>
 				<p class="font-semibold flex gap-2 items-center">
