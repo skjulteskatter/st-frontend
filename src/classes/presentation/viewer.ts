@@ -33,18 +33,6 @@ class PresentationViewer extends PresentationBase {
             .filter(i => this.currentVerses.includes(i[0]))
             .map(i => i[1]);
     }
-
-    public next() {
-        if (this.settings) {
-            this.settings.currentIndex += this.settings.size;
-        }
-    }
-
-    public previous() {
-        if (this.settings) {
-            this.settings.currentIndex -= this.settings.size;
-        }
-    }
 }
 
 export const viewer = new PresentationViewer();
