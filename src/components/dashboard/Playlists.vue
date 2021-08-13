@@ -27,7 +27,7 @@
                         {{ p.name }}
                     </strong>
                     <small class="text-gray-400 block tracking-wide">
-                        {{ p.entries.length }}
+                        {{ p.entries.length || $t('common.no-amount') }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
                 </div>
