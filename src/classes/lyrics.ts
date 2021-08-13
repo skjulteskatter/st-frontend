@@ -118,4 +118,10 @@ export class Lyrics implements ApiLyrics {
         }
         return ls;
     }
+
+    public get size() {
+        if (this.format !== "json")
+            throw new Error("Invalid format for .size");
+        return Object.values(this.content as Content)[0].content.length;
+    }
 }

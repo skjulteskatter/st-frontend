@@ -3,8 +3,9 @@ import { useStore } from "@/store";
 import { ApiContributor, ApiLyrics, ApiSong } from "dmb-api";
 import { Lyrics } from "../lyrics";
 
-type Settings = {
+export type Settings = {
     size: number;
+    availableVerses: string[];
     currentVerses: string[];
 }
 
@@ -12,15 +13,15 @@ type KeyTypes = {
     song: ApiSong;
     lyrics: ApiLyrics;
     contributors: ApiContributor[];
-    verses: Verse[];
-    verse: number;
+    settings: Settings;
 }
 
-type Key = "song" | "lyrics" | "contributors" | "verses" | "verse";
+type Key = "song" | "lyrics" | "contributors" | "settings";
 
 type KeyEntry<K extends Key> = KeyTypes[K];
 
 export class PresentationBase {
+    private initialized = false;
     protected store = useStore();
 
     public get Song() {
@@ -52,19 +53,28 @@ export class PresentationBase {
         return this.lyrics ? new Lyrics(this.lyrics) : null;
     }
 
-    protected verses?: string[];
-    protected verse = 0;
+    private _settings?: Settings;
 
-    protected initialized = false;
+    protected get settings() {
+        if (!this._settings)
+            this._settings = this.getKey("settings");
+        
+        return this._settings;
+    }
 
-    protected settings: {
-        size: number;
-        verses: number[];
-    } = {
-        size: 1,
-        verses: [],
-    };
+    protected set settings(v) {
+        if (v) {
+            const settings = this.settings;
+            if (!this._settings || JSON.stringify(settings) != JSON.stringify(v)) {
+                this.setKey("settings", v);
+            }
+        } else {
+            this.removeKey("settings");
+        }
 
+        this._settings = v;
+    }
+    
     protected callbacks: {
         [key: string]: Function;
     } = {};
@@ -83,6 +93,12 @@ export class PresentationBase {
         this.type = type;
 
         if(!this.initialized) {
+            if (type == "control") {
+                this.removeKey("settings");
+                this.removeKey("song");
+                this.removeKey("lyrics");
+            }
+
             addEventListener("storage", (e: StorageEvent) => {
                 if (this.type == "not-initialized")
                     throw new Error("PresentationView - Not initialized");
@@ -114,6 +130,10 @@ export class PresentationBase {
                         this.lyrics = JSON.parse(item);
                         this.executeCallback("lyrics");
                     }
+                    if (key.endsWith("settings")) {
+                        this.settings = JSON.parse(item);
+                        this.executeCallback("settings");
+                    }
                 }
             });
         }
@@ -130,42 +150,5 @@ export class PresentationBase {
     protected getKey<K extends Key>(key: K) {
         const i = localStorage.getItem("viewer_" + key);
         return i ? JSON.parse(i) as KeyEntry<K> : undefined;
-    }
-
-    protected next() {
-        if (this.type == "control") {
-            if (this.verse < (this.Song?.verses ?? 0))
-                this.verse++;
-
-            this.updateVerse();
-        } else if (this.type == "viewer") {
-            this.setKey("verse", this.verse + 1);
-        }
-    }
-
-    protected previous() {
-        if (this.type == "control") {
-            if (this.verse > 0)
-                this.verse++;
-            
-            this.updateVerse();
-        } else if (this.type == "viewer") {
-            this.setKey("verse", this.verse - 1);
-        }
-    }
-
-    protected updateVerse() {
-        if (this.type != "control")
-            throw new Error("Only Control can use this.");
-        
-        // const verses = this.lyrics ? Object.values(this.lyrics.verses) : [];
-
-        // const firstVerse = this.verse * this.settings.size;
-        // const lastVerse = this.settings.size != 1 ? this.verse * this.settings.size + this.settings.size : null;
-
-        // const result = lastVerse ? [verses[firstVerse], verses[lastVerse]] : [verses[firstVerse]];
-
-        // this.setKey("verses", result);
-        // this.setKey("verse", this.verse);
     }
 }

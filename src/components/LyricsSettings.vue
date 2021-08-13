@@ -157,8 +157,6 @@ export default class LyricsSettings extends Vue {
     }
 
     public updateLyrics() {
-        if (this.lyrics)
-            control.setLyrics(this.lyrics);
         localStorage.setItem("lyrics", JSON.stringify(this.current));
         localStorage.setItem("song", JSON.stringify(this.song?.raw));
         localStorage.setItem("lyrics_lines", JSON.stringify(this.currentLines));

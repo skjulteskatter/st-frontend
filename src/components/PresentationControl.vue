@@ -116,8 +116,15 @@ export default class PresentationControl extends Vue {
     }
 
     public refresh() {
-        if (this.lyrics)
-            control.setLyrics(this.lyrics);
+        if (this.lyrics) {
+            
+            const verses = Object.keys(this.lyrics.verses);
+            control.setLyrics(this.lyrics, {
+                size: this.lyrics.size <= 5 ? 2 : 1,
+                availableVerses: Object.keys(this.lyrics.verses),
+                currentVerses: verses.slice(0,2),
+            });
+        }
     }
 }
 </script>
