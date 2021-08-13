@@ -1,13 +1,15 @@
 <template>
     <base-card class="theme-card" v-if="title && Songs.length > 0">
-        <div class="flex justify-between mb-3">
-            <b
-                :class="{ 'border hover:border-gray-400 bg-black bg-opacity-10 rounded px-1 cursor-pointer dark:bg-white dark:bg-opacity-20 dark:border-none dark:hover:bg-opacity-30': action != undefined }"
-                @click="action"
-                >{{ title }}</b
-            >
-            <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
-        </div>
+        <template #header>
+            <div class="flex justify-between">
+                <b
+                    :class="{ 'hover:bg-black/10 bg-black/5 rounded px-2 cursor-pointer dark:bg-white/10 dark:hover:bg-white/20': action != undefined }"
+                    @click="action"
+                    >{{ title }}</b
+                >
+                <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
+            </div>
+        </template>
         <ul class="text-xs">
             <li
                 v-for="song in Songs"
