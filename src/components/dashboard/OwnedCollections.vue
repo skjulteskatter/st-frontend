@@ -1,7 +1,7 @@
 <template>
 	<base-card class="border border-primary md:col-span-2">
-		<div class="flex flex-col h-full">
-			<div class="flex items-center mb-2">
+		<template #header>
+			<div class="flex items-center">
 				<h2 class="font-bold mr-4">{{ $t('common.collections') }}</h2>
 				<tooltip :text="$t('tooltip.ownedCollections')" />
 				<router-link
@@ -13,15 +13,16 @@
 					<ArrowRightIcon class="h-4 w-4" />
 				</router-link>
 			</div>
+		</template>
+		<div class="flex flex-col gap-2 h-full">
 			<div v-if="collections?.length" class="flex flex-col">
 				<collection-card
-					class="mt-2"
 					v-for="c in collections"
 					:key="c.id"
 					:collection="c"
 				/>
 			</div>
-			<div v-else class="p-8 bg-black bg-opacity-10 rounded-md border-dashed border-2 border-black border-opacity-10 flex flex-col justify-center items-center gap-4 flex-grow">
+			<div v-else class="p-8 bg-black/5 dark:bg-white/10 rounded-md border-dashed border-2 border-black border-opacity-10 flex flex-col justify-center items-center gap-4 flex-grow">
 				<p class="text-gray-500 dark:text-gray-400 text-sm text-center">{{$t('dashboard.nocollections')}}</p>
 				<router-link to="/collections" class="rounded bg-secondary py-2 px-4 shadow-md text-white focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-white dark:text-gray-800">{{$t('dashboard.gotocollections')}}</router-link>
 			</div>
