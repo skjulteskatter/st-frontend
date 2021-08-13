@@ -1,6 +1,6 @@
 <template>
     <button
-        class="flex items-center gap-2 p-2 text-xs text-left relative rounded-md bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+        class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
         :class="{
             disabled: !collection?.available,
         }"
@@ -11,7 +11,7 @@
             :alt="name"
             class="max-h-10 rounded"
         />
-        <span class="text-xs font-bold w-full flex justify-between items-center">
+        <span class="text-xs font-semibold tracking-wide w-full flex justify-between items-center">
             {{ name }}
         </span>
     </button>

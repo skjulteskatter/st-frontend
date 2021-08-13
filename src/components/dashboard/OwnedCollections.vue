@@ -7,7 +7,7 @@
 				<router-link
 					v-if="collections?.length"
 					to="/collections"
-					class="flex gap-2 items-center px-2 py-1 rounded-md ml-auto text-sm hover:bg-black hover:bg-opacity-10"
+					class="flex gap-2 items-center px-2 py-1 rounded-md ml-auto text-sm hover:bg-black/5 dark:hover:bg-white/10"
 				>
 					{{ $t('playlist.seeall') }}
 					<ArrowRightIcon class="h-4 w-4" />
