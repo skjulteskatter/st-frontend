@@ -36,7 +36,7 @@
                     </p>
                 </div>
             </div>
-            <div id="text-wrapper">
+            <div id="text-wrapper" v-if="verses">
                 <div
                     class="lyrics__verse"
                     :class="{ 'lyrics__verse-chorus': verse.type == 'chorus' }"
@@ -66,40 +66,15 @@ import { Lyrics, Song } from "@/classes";
 import { viewer } from "@/classes/presentation/viewer";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
+import { ref } from "@vue/reactivity";
 import { Vue } from "vue-class-component";
 
 export default class PresentationView extends Vue {
+    public viewer = viewer;
     private store = useStore();
     public lyrics: Lyrics | null = null;
     public song: Song | null = null;
-
-    public get verses() {
-        return Object.entries(this.lyrics?.verses ?? {})
-            .filter(i => this.currentVerses.includes(i[0]))
-            .map(i => i[1]);
-    }
-
-    public get currentVerses() {
-        const verses: string[] = [];
-        if (viewer.Settings) {
-            const index = viewer.Settings.currentIndex;
-            const size = viewer.Settings.size;
-
-            const verse = viewer.Settings.availableVerses[index];
-            if (verse) {
-                verses.push(verse);
-                
-                if (size > 1) {
-                    const verse2 = viewer.Settings.availableVerses[index + 1];
-
-                    if (verse2) {
-                        verses.push(verse2);
-                    }
-                }
-            }
-        }
-        return verses;
-    }
+    public verses: Verse[] | null = null;
 
     public async mounted() {
         await appSession.init();
@@ -110,6 +85,10 @@ export default class PresentationView extends Vue {
         viewer.registerCallback("lyrics", () => {
             this.lyrics = viewer.Lyrics;
             this.song = viewer.Song ?? null;
+        });
+
+        viewer.registerCallback("settings", () => {
+            this.verses = viewer.Verses;
         });
     }
 

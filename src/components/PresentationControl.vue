@@ -29,7 +29,7 @@
             <h4 class="lyrics-settings__controls__title">
                 {{ $t("song.controlpanel") }}
             </h4>
-            <!-- <div class="lyrics-settings__controls__buttons">
+            <div class="lyrics-settings__controls__buttons">
                 <base-button
                     class="lyrcis-settings__controls__previous"
                     icon="arrowLeft"
@@ -46,7 +46,7 @@
                 >
                     {{ $t("common.next") }}
                 </base-button>
-            </div> -->
+            </div>
             <!-- <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
                 <h5 class="lyrics-settings__verses__title">
                     {{ $t("common.show") }} / {{ $t('common.hide') }}
@@ -118,13 +118,20 @@ export default class PresentationControl extends Vue {
     public refresh() {
         if (this.lyrics) {
             
-            const verses = Object.keys(this.lyrics.verses);
             control.setLyrics(this.lyrics, {
                 size: this.lyrics.size <= 5 ? 2 : 1,
                 availableVerses: Object.keys(this.lyrics.verses),
                 currentIndex: 0,
             });
         }
+    }
+
+    public next() {
+        control.next();
+    }
+
+    public previous() {
+        control.previous();
     }
 }
 </script>

@@ -64,8 +64,7 @@ export class PresentationBase {
 
     protected set settings(v) {
         if (v) {
-            const settings = this.settings;
-            if (!this._settings || JSON.stringify(settings) != JSON.stringify(v)) {
+            if (this.type == "control") {
                 this.setKey("settings", v);
             }
         } else {
