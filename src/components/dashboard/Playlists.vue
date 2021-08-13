@@ -1,20 +1,22 @@
 <template>
     <base-card>
-        <div class="flex justify-between items-center mb-2">
-            <span class="flex items-center">
-                <h3 class="font-bold mr-4">
-                    {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
-                </h3>
-                <tooltip :text="$t('tooltip.myCollections')" />
-            </span>
-            <button class="text-sm py-1 px-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20" @click="openCreatePlaylist">
-                {{ $t('playlist.createnew') }}
-            </button>
-            <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
-        </div>
-        <div class="flex flex-col" v-if="playlists.length">
+        <template #header>
+            <div class="flex justify-between items-center">
+                <span class="flex items-center">
+                    <h2 class="font-bold mr-4">
+                        {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
+                    </h2>
+                    <tooltip :text="$t('tooltip.myCollections')" />
+                </span>
+                <button class="text-sm py-1 px-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10" @click="openCreatePlaylist">
+                    <PlusIcon class="w-4 h-4" />
+                </button>
+                <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
+            </div>
+        </template>
+        <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
-                class="mt-2 flex p-2 text-xs relative rounded-md bg-white border hover:border-gray-400 dark:bg-secondary dark:border-gray-500 dark:hover:border-gray-400 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"
@@ -24,7 +26,7 @@
                     <strong>
                         {{ p.name }}
                     </strong>
-                    <small class="text-gray-400 block">
+                    <small class="text-gray-400 block tracking-wide">
                         {{ p.entries.length }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
@@ -42,11 +44,13 @@ import { Options, Vue } from "vue-class-component";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "dashboard-playlists",
     components: {
         CreatePlaylistModal,
+        PlusIcon,
     },
 })
 export default class Playlists extends Vue {

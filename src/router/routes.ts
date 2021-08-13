@@ -1,8 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
 
-// const DashboardLayout = () => import(/* webpackChunkName: 'dashboardLayout' */ "../layout/DashboardLayout.vue").catch(() => {
-//     window.location.reload();
-// });
 const StackedLayout = () => import(/* webpackChunkName: 'stackedLayout' */ "../layout/StackedLayout.vue").catch(() => {
     window.location.reload();
 });

@@ -1,33 +1,32 @@
 <template>
-    <base-card class="cursor-pointer border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400"
-        :class="{
-            'border-primary': userId != playlist?.userId, 
-        }"
-    >
-        <button class="text-left flex gap-4 w-full rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2" @click="goToPlaylist">
-            <icon name="playlist" class="opacity-50" />
-            <div class="flex flex-col">
+    <button class="text-left rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2" @click="goToPlaylist">
+        <base-card
+            class="h-full cursor-pointer hover:ring-2 hover:ring-gray-400"
+            :class="{ 'border border-primary': userId != playlist?.userId }"
+        >
+                <FolderIcon class="w-8 h-8 opacity-50 mb-2" />
                 <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
-                <small class="opacity-50">
-                    {{ playlist?.entries.length }}
+                <small class="opacity-50 block">
+                    {{ playlist?.entries.length || $t('common.no-amount') }}
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
-            </div>
-            <small
-                class="text-gray-400 ml-auto flex-shrink-0"
-                v-if="playlist?.sharedWithIds.length"
-            >
-                <icon name="share" size="16" />
-                {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
-            </small>
-        </button>
-    </base-card>
+            <template #footer v-if="playlist?.sharedWithIds.length">
+                <small class="opacity-50 ml-auto flex gap-1 items-center">
+                    <ShareIcon class="w-4 h-4" />
+                    {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
+                </small>
+            </template>
+        </base-card>
+    </button>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { useStore } from "@/store";
+import { FolderIcon } from "@heroicons/vue/outline";
+import { ShareIcon } from "@heroicons/vue/solid";
+
 @Options({
     name: "playlist-card",
     props: {
@@ -35,6 +34,10 @@ import { useStore } from "@/store";
             type: Object,
             required: true,
         },
+    },
+    components: {
+        FolderIcon,
+        ShareIcon,
     },
 })
 export default class PlaylistCard extends Vue {

@@ -23,11 +23,7 @@ const lanKey = localStorage.getItem("languageKey") ?? "en";
 let currentTranslation = validLanguages.includes(lanKey) ? lanKey : "en";
 
 export async function setLocale(locale: string) {
-    const result = await api.items.getTranslations([locale]);
-    translations = countries.getNames(locale);
-    for (const l of Object.keys(result)) {
-        translations[l] = result[l][locale];
-    }
+    translations = await (await fetch(`/translations/${locale}.json`)).json();
     i18n.global.setLocaleMessage("current", translations);
     currentTranslation = locale;
 }

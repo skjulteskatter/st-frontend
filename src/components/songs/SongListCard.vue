@@ -1,13 +1,15 @@
 <template>
     <base-card class="theme-card" v-if="title && Songs.length > 0">
-        <div class="flex justify-between mb-3">
-            <b
-                :class="{ 'border hover:border-gray-400 bg-black bg-opacity-10 rounded px-1 cursor-pointer dark:bg-white dark:bg-opacity-20 dark:border-none dark:hover:bg-opacity-30': action != undefined }"
-                @click="action"
-                >{{ title }}</b
-            >
-            <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
-        </div>
+        <template #header>
+            <div class="flex justify-between">
+                <b
+                    :class="{ 'hover:bg-black/10 bg-black/5 rounded px-2 cursor-pointer dark:bg-white/10 dark:hover:bg-white/20': action != undefined }"
+                    @click="action"
+                    >{{ title }}</b
+                >
+                <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
+            </div>
+        </template>
         <ul class="text-xs">
             <li
                 v-for="song in Songs"
@@ -17,7 +19,7 @@
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(languageKey),
                     'text-green-700': song.available && !song.sheetMusic.length,
-                    'text-gray-400': !song.available,
+                    'opacity-40': !song.available,
                 }"
             >
                 <b class="w-6 mr-2 text-right">
@@ -26,9 +28,9 @@
                 <span>
                     {{ song.getName(languageKey) }}
                 </span>
-                <div class="ml-auto">
-                    <icon class="text-primary mr-1" name="star" size="12" v-if="song.newMelody" />
-                    <span class="opacity-50">({{songViews(song)}})</span>
+                <div class="flex-grow flex items-center">
+                    <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
+                    <span class="ml-auto opacity-50">({{ songViews(song) }})</span>
                 </div>
             </li>
         </ul>
@@ -37,12 +39,17 @@
             @close="closeCTA"
         >
             <div class="flex flex-col gap-4 items-center">
-                <icon name="lock" size="30" class="opacity-50" />
+                <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
                 <span class="text-center">
                     <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
                     <p>{{ $t('store.gainAccess') }}</p>
                 </span>
-                <base-button theme="secondary" @click="closeCTA">OK</base-button>
+                <base-button theme="secondary" @click="closeCTA">
+                    <template #icon>
+                        <CheckIcon class="w-4 h-4" />
+                    </template>
+                    OK
+                </base-button>
             </div>
         </base-modal>
     </base-card>
@@ -54,6 +61,7 @@ import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { BaseModal } from "@/components";
+import { StarIcon, LockClosedIcon, CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
     props: {
@@ -76,6 +84,9 @@ import { BaseModal } from "@/components";
     },
     components: {
         BaseModal,
+        StarIcon,
+        LockClosedIcon,
+        CheckIcon,
     },
     name: "song-list-card",
 })

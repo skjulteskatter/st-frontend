@@ -1,7 +1,7 @@
 <template>
     <base-card class="border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400">
         <div class="flex gap-4 items-center">
-            <icon name="selector" class="text-gray-400 cursor-move" />
+            <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
             <router-link
                 v-if="!disabled"
                 class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
@@ -54,6 +54,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 import { songs } from "@/services/api";
+import { SelectorIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "playlist-song-card",
@@ -66,6 +67,9 @@ import { songs } from "@/services/api";
             type: Object,
             required: true,
         },
+    },
+    components: {
+        SelectorIcon,
     },
 })
 export default class PlaylistSongCard extends Vue {

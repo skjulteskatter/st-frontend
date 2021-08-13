@@ -120,19 +120,18 @@
                 </small>
             </div>
         </div>
-        <div v-if="description" class="flex flex-col gap-4 mt-4 relative">
-            <hr />
+        <div v-if="description" class="flex flex-col gap-4 mt-4 pt-4 relative border-t border-black/10 dark:border-white/10">
             <div
                 class="text-sm"
                 :class="{ 'h-12 overflow-hidden': !showDescription }"
                 v-html="description"
             ></div>
             <span 
-                class="absolute bg-gradient-to-t from-white to-transparent bottom-0 w-full h-full" 
+                class="absolute bg-gradient-to-t from-white to-transparent dark:from-secondary bottom-0 w-full h-full" 
                 v-if="!showDescription"
             >
-                <button @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-                    <icon name="arrowDown" />
+                <button aria-label="Show song details" @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+                    <ArrowDownIcon class="w-5 h-5" />
                 </button>
             </span>
         </div>
@@ -143,10 +142,12 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
+import { ArrowDownIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         Modal,
+        ArrowDownIcon,
     },
     props: {
         languageKey: {

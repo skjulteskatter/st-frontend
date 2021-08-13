@@ -2,23 +2,27 @@
     <loader :loading="loading">
         <div v-if="song" class="flex flex-col gap-4">
             <div class="flex justify-between">
-                <back-button class="flex md:hidden mb-4" />
+                <back-button />
                 <div class="flex gap-2 items-center ml-auto">
-                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded hidden xl:block">{{ song.id }}</span>
+                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded-md hidden xl:block">{{ song.id }}</span>
                     <base-button
                         v-if="isAdmin"
                         @click="goToEditPage()"
                         theme="tertiary"
-                        icon="pencil"
-                        class="mr-4 hidden xl:block"
-                    >{{ $t('common.edit') }}</base-button>
-                    <modal
-                        class="playlist-adder"
-                        theme="secondary"
-                        icon="folder"
-                        :label="$t('common.addTo') + ' ' + $t('common.collection').toLowerCase()"
-                        v-if="playlists.length"
+                        class="mr-4 hidden lg:flex"
                     >
+                        <template #icon>
+                            <PencilAltIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t('common.edit') }}
+                    </base-button>
+                    <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
+                        <template #icon>
+                            <FolderAddIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t('common.addTo') + ' ' + $t('common.collection').toLowerCase() }}
+                    </base-button>
+                    <base-modal :show="show" @close="closeAdder()">
                         <h3 class="mt-0 font-bold mb-4">
                             {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
                         </h3>
@@ -30,14 +34,16 @@
                                 @click="addToPlaylist(playlist)"
                             />
                         </div>
-                    </modal>
+                    </base-modal>
                     <base-button
                         v-if="song.hasLyrics && (isExtended || isAdmin)"
                         @click="extend"
-                        icon="screen"
                         :disabled="lyrics?.format != 'json'"
-                        class="viewer-button"
+                        class="viewer-button hidden md:flex"
                     >
+                        <template #icon>
+                            <DesktopComputerIcon class="w-4 h-4" />
+                        </template>
                         {{ $t("song.viewer") }}
                     </base-button>
                 </div>
@@ -74,10 +80,10 @@
         </div>
     </loader>
     <base-modal
-        :show="song?.available == false"
+        :show="song ? !song.available : false"
     >
         <div class="flex flex-col items-center">
-            <icon name="lock" size="32" class="text-primary mt-4 mb-4" />
+            <LockClosedIcon class="w-10 h-10 text-primary my-4" />
             <h2 class="text-2xl font-bold">{{ $t('store.limitedAccess') }}</h2>
             <p class="text-center">{{ $t('store.gainAccess') }}</p>
             <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
@@ -85,8 +91,18 @@
                 <p>{{ collection.getName(languageKey) }}</p>
             </div>
             <div class="flex gap-4 mt-8">
-                <base-button theme="tertiary" icon="arrowLeft" @click="$router.back()">{{ $t('common.back') }}</base-button>
-                <base-button theme="secondary" icon="buy" @click="addToCart">{{ $t('store.addToCart') }}</base-button>
+                <base-button theme="tertiary" @click="$router.back()">
+                    <template #icon>
+                        <ArrowLeftIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('common.back') }}
+                </base-button>
+                <base-button theme="secondary" @click="addToCart">
+                    <template #icon>
+                        <ShoppingCartIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('store.addToCart') }}
+                </base-button>
             </div>
         </div>
     </base-modal>
@@ -102,6 +118,7 @@ import {
     BaseModal,
 } from "@/components";
 import { PlaylistAddToCard } from "@/components/playlist";
+import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
 import { Collection } from "@/classes";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -124,6 +141,12 @@ import { appSession } from "@/services/session";
         Modal,
         BaseModal,
         PlaylistCard: PlaylistAddToCard,
+        FolderAddIcon,
+        DesktopComputerIcon,
+        LockClosedIcon,
+        ShoppingCartIcon,
+        ArrowLeftIcon,
+        PencilAltIcon,
     },
     name: "song-viewer",
 })
@@ -134,6 +157,7 @@ export default class SongViewer extends Vue {
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
     public lyricsLoading = true;
     private songViewCount: number | null = null;
+    public show = false;
     
     public get viewCount() {
         return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
@@ -142,6 +166,14 @@ export default class SongViewer extends Vue {
     public componentLoading: {
         [key: string]: boolean;
     } = {};
+
+    public openAdder() {
+        this.show = true;
+    }
+
+    public closeAdder() {
+        this.show = false;
+    }
 
     public async beforeMount() {
         await this.load();
@@ -303,16 +335,3 @@ export default class SongViewer extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-.viewer-button, 
-.playlist-adder {
-    @include breakpoint("medium") {
-        .button__content {
-            display: none;
-        }
-    }
-}
-</style>

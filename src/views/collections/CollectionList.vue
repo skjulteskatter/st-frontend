@@ -11,23 +11,25 @@
             <base-button
                 theme="tertiary"
                 @click="refreshSubscriptions"
-                icon="refresh"
                 class="refresh-button hidden"
                 :loading="loadingSubs"
             >
-                <span>
-                    {{ $t("common.refreshSubscriptions") }}
-                </span>
+                <template #icon>
+                    <RefreshIcon class="h-4 w-4" />
+                </template>
+                {{ $t("common.refreshSubscriptions") }}
             </base-button>
             <base-button
                 v-if="productIds.length"
                 @click="portal"
                 theme="tertiary"
                 :loading="loading"
-                icon="collection"
                 class="manage-button"
             >
-                <span>
+                <template #icon>
+                    <CollectionIcon class="w-4 h-4" />
+                </template>
+                <span class="whitespace-nowrap">
                     {{ $t("common.manage") }}
                     {{ $t("common.subscriptions").toLowerCase() }}
                 </span>
@@ -41,6 +43,7 @@
 import { Options, Vue } from "vue-class-component";
 
 import { ProductSlider, StoreCart } from "@/components/store";
+import { RefreshIcon, CollectionIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { notify } from "@/services/notify";
@@ -49,6 +52,8 @@ import { notify } from "@/services/notify";
     components: {
         ProductSlider,
         StoreCart,
+        RefreshIcon,
+        CollectionIcon,
     },
     name: "collections-home",
 })

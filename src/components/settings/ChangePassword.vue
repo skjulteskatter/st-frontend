@@ -1,6 +1,6 @@
 <template>
 	<button @click="showModal" class="text-sm px-3 py-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20">
-		<icon name="key" size="18" class="mr-2" />
+		<KeyIcon class="inline w-4 h-4 mr-2" />
 		<span>{{ $t('settings.changePassword') }}</span>
 	</button>
 	<base-modal
@@ -38,12 +38,14 @@ import { BaseModal } from "@/components";
 import { useStore } from "vuex";
 import auth from "@/services/auth";
 import { BaseInput } from "@/components/inputs";
+import { KeyIcon } from "@heroicons/vue/solid";
 
 @Options({
 	name: "change-password",
 	components: {
 		BaseModal,
 		BaseInput,
+		KeyIcon,
 	},
 })
 export default class ChangePassword extends Vue {

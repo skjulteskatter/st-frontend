@@ -2,7 +2,7 @@
     <base-card v-if="song" class="overflow-visible" header>
         <template #header>
             <div class="w-full flex items-center gap-2">
-                <h4 class="font-bold">{{ $t("song.lyrics") }}</h4>
+                <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
                 <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <print-button />
             </div>
@@ -91,26 +91,21 @@
                     v-if="editor"
                     class="ml-auto"
                     theme="tertiary"
-                    icon="pencil"
                     @click="edit()"
-                >{{ $t('common.edit') }}</base-button>
+                >
+                    <template #icon>
+                        <PencilAltIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('common.edit') }}
+                </base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
-            <transposed-lyrics-viewer
-                v-if="type == 'transpose' && lyrics?.format == 'html'"
-                :lyrics="lyrics"
-            />
-            <lyrics-viewer 
-                v-if="type == 'default' && lyrics?.format == 'json'"
-                :song="song"
-            />
-            <!-- <component
+            <component
                 :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
                 :song="song"
-                :lyrics="lyrics"
-            /> -->
-
+                :lyrics="type == 'transpose' ? lyrics : undefined"
+            />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
     </base-card>
@@ -131,6 +126,7 @@ import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
+import { PencilAltIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
@@ -142,6 +138,7 @@ import { SongChanger } from "@/components/songs";
         SwitchGroup,
         SwitchLabel,
         SongChanger,
+        PencilAltIcon,
     },
     props: {
         lyrics: {

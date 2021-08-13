@@ -2,7 +2,7 @@
     <div class="flex relative border-none p-0 bg-transparent">
         <input
             type="search"
-            class="pl-8 rounded-md border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2 dark:border-gray-500 dark:bg-secondary dark:text-white dark:placeholder-gray-400"
+            class="pl-8 py-1 rounded-md border-gray-300 w-full focus:border-primary focus:ring focus:ring-primary focus:ring-offset-2 dark:border-gray-500 dark:bg-secondary dark:text-white dark:placeholder-gray-400"
             :class="{ 'cursor-not-allowed opacity-50': disabled }"
             :disabled="disabled"
             :placeholder="placeholder ?? $t('common.search')"
@@ -10,10 +10,8 @@
             @input="(event) => $emit('update:modelValue', event.target.value)"
             @keydown.enter="$emit('search')"
         />
-        <icon
-            class="absolute top-1/2 left-2 opacity-50 -translate-y-1/2"
-            name="search"
-            size="18"
+        <SearchIcon
+            class="w-4 h-4 absolute top-1/2 left-2 opacity-50 -translate-y-1/2"
             @click="$emit('search')"
         />
     </div>
@@ -21,6 +19,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { SearchIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "search-input",
@@ -34,6 +33,9 @@ import { Options, Vue } from "vue-class-component";
         placeholder: {
             type: String,
         },
+    },
+    components: {
+        SearchIcon,
     },
     emits: ["search", "update:modelValue"],
 })

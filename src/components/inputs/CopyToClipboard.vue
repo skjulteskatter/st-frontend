@@ -3,9 +3,11 @@
 		<base-button
 			class="px-2 py-1 mr-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20"
 			@click="copy()"
-			icon="clipboard"
 			:content="label != undefined"
 		>
+			<template #icon>
+				<ClipboardCopyIcon class="w-4 h-4" />
+			</template>
 			{{ label }}
 		</base-button>
 		<TransitionRoot
@@ -26,6 +28,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { TransitionRoot } from "@headlessui/vue";
+import { ClipboardCopyIcon } from "@heroicons/vue/solid";
 
 @Options({
 	props: {
@@ -39,6 +42,7 @@ import { TransitionRoot } from "@headlessui/vue";
 	},
 	components: {
 		TransitionRoot,
+		ClipboardCopyIcon,
 	},
 })
 export default class CopyToClipboard extends Vue {

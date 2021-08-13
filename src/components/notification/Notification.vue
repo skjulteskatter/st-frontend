@@ -19,12 +19,9 @@
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body" style="">{{ body }}</span>
             </div>
-            <icon
-                name="error"
-                class="float-right"
-                size="18"
-                @click="remove()"
-            />
+            <button @click="remove()" class="float-right">
+                <XIcon class="w-4 h-4" />
+            </button>
         </div>
     </transition-root>
 </template>
@@ -33,6 +30,7 @@
 import { Options, Vue } from "vue-class-component";
 import { notifications } from "@/services/notifications";
 import { TransitionRoot } from "@headlessui/vue";
+import { XIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "notification",
@@ -65,6 +63,7 @@ import { TransitionRoot } from "@headlessui/vue";
     },
     components: {
         TransitionRoot,
+        XIcon,
     },
 })
 export default class Notification extends Vue {

@@ -82,6 +82,42 @@ export class Lyrics implements ApiLyrics {
         return verses;
     }
 
+    public getText(translations: {
+        chorus: string;
+        bridge: string;
+    }) {
+        const verses: { name: string; content: string[] }[] = [];
+
+        const types: {
+            [key: string]: string;
+        } = {
+            "[Chorus]": "chorus",
+            "[Bridge]": "bridge",
+        };
+
+        if (this.content) {
+            for (const key of Object.keys(this.content)) {
+                const verse: Verse = {
+                    name: (this.content as JsonContent)[key].name,
+                    content: (this.content as JsonContent)[key].content,
+                    type:
+                        types[(this.content as JsonContent)[key].name] ??
+                        "verse",
+                };
+
+                if (verse.type == "chorus") {
+                    verse.name = translations.chorus;
+                } else if (verse.type == "bridge") {
+                    verse.name = translations.bridge;
+                }
+
+                verses.push(verse);
+            }
+        }
+
+        return verses;
+    }
+
     public get rawContent() {
         const lines = [];
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <link rel="icon" href="<%= BASE_URL %>favicon.ico">
         <link rel="manifest" href="<%= BASE_URL %>manifest.webmanifest" crossorigin="use-credentials">
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,5 +16,11 @@
             <strong>We're sorry but SongTreasures doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
         </noscript>
         <div id="app"></div>
+
+        <!-- Feedback widget setup -->
+        <script type="text/javascript" src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"></script>
+		<style type="text/css" media="screen, projection">
+			@import url("https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css"); 
+		</style>
     </body>
 </html>

@@ -3,7 +3,7 @@
 		<template #button>
 			<button class="relative p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white">
 				<span class="sr-only">View notifications</span>
-				<icon name="bell" class="opacity-50" />
+				<BellIcon class="w-6 h-6 opacity-50" />
 			</button>
 			<span v-if="notifications.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
 				{{ notifications.length }}
@@ -36,6 +36,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Notification from "./Notification.vue";
+import { BellIcon } from "@heroicons/vue/outline";
 import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
 
@@ -43,6 +44,7 @@ import { useStore } from "@/store";
 	name: "notification-list",
 	components: {
 		Notification,
+		BellIcon,
 	},
 })
 export default class NotificationList extends Vue {

@@ -1,5 +1,5 @@
 <template>
-    <base-card class="md:col-span-3 md:row-span-2" v-if="user">
+    <base-card v-if="user">
         <div class="flex flex-col gap-2 mb-4">
             <h3 class="font-bold flex justify-between">
                 {{ $t("settings.general") }}
@@ -11,7 +11,7 @@
             <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="theme-mode">{{ $t("common.theme") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -25,7 +25,7 @@
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="language">{{ $t("common.language") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -43,7 +43,7 @@
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="transposition-key">{{ $t("song.key") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -62,7 +62,7 @@
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="display-name">{{ $t("common.name") }}</label>
                 <input
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="display-name"
                     type="text"
                     v-model="newDisplayName"
@@ -72,7 +72,7 @@
             <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="gender">{{ $t("common.gender") }}</label>
                 <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="rounded-mdborder border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="gender"
                     name="gender"
                     v-model="gender"
@@ -84,7 +84,7 @@
             </div>
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="birthDay">{{ $t("common.birthDay") }}</label>
-                <input type="date" v-model="birthDay" class="bg-transparent rounded border-gray-300" />
+                <input type="date" v-model="birthDay" class="bg-transparent rounded-md border-gray-300" />
             </div> -->
             <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                 <label for="image">{{ $t("common.image") }}</label>
@@ -100,15 +100,19 @@
                 <change-password />
             </div>
         </div>
-        <base-button
-            :loading="loading"
-            @click="save"
-            theme="secondary"
-            icon="check"
-            class="ml-auto"
-        >
-            {{ $t("common.save") }}
-        </base-button>
+        <template #footer>
+            <base-button
+                :loading="loading"
+                @click="save"
+                theme="secondary"
+                class="ml-auto"
+            >
+                <template #icon>
+                    <CheckIcon class="w-4 h-4" />
+                </template>
+                {{ $t("common.save") }}
+            </base-button>
+        </template>
     </base-card>
 </template>
 
@@ -121,6 +125,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
+import { CheckIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
@@ -128,6 +133,7 @@ import { session } from "@/services/api";
 @Options({
     components: {
         ChangePassword,
+        CheckIcon,
     },
     name: "settings-card",
 })

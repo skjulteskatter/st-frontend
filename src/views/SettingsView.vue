@@ -4,15 +4,16 @@
         <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
         <base-button
             theme="error"
-            icon="logout"
             @click="logout"
             class="settings-page__logout"
         >
+            <template #icon>
+                <LogoutIcon class="w-4 h-4" />
+            </template>
             {{ $t("common.logout") }}
         </base-button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
-        <settings-card />
         <div>
             <user-card />
             <base-card class="mt-4" v-if="collections.length">
@@ -34,6 +35,9 @@
             <!-- <owned-collections /> -->
             </base-card>
         </div>
+        <div class="md:col-span-3">
+            <settings-card />
+        </div>
     </div>
 </template>
 
@@ -43,6 +47,7 @@ import { SettingsCard, BackButton } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import { OwnedCollections } from "@/components/dashboard";
+import { LogoutIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
@@ -54,6 +59,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         UserCard,
         BackButton,
         OwnedCollections,
+        LogoutIcon,
     },
     name: "settings-view",
 })

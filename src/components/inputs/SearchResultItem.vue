@@ -1,5 +1,5 @@
 <template>
-    <base-card class="border hover:border-gray-400 cursor-pointer dark:border-gray-500 dark:hover:border-gray-300">
+    <base-card class="hover:ring-2 hover:ring-gray-400 cursor-pointer">
         <div class="flex gap-2" v-if="Song">
             <b class="text-gray-400">{{ Song.number }}</b>
             <div class="flex flex-col gap-2">
@@ -9,7 +9,7 @@
                     }}</b>
                     <small class="block text-xs text-primary" v-for="c in collections" :key="c.id">{{c.getName(languageKey)}}</small>
                 </div>
-                <div class="text-sm text-gray-400 flex flex-col">
+                <div class="text-sm leading-normal text-gray-400 flex flex-col">
                     <small v-if="Song.yearWritten">{{ Song.yearWritten }}</small>
                     <small 
                         v-for="(con, i) in Song.contributors"
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="flex gap-2 flex-col" v-if="Contributor">
-            <icon name="user" class="text-gray-400" />
+            <UserCircleIcon class="w-6 h-6 opacity-50" />
             <div class="flex flex-col gap-2">
                 <div>
                     <b>{{
@@ -39,12 +39,16 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { IndexedContributor, IndexedSong } from "dmb-api";
+import { UserCircleIcon } from "@heroicons/vue/outline";
 
 @Options({
     props: {
         item: {
             type: Object,
         },
+    },
+    components: {
+        UserCircleIcon,
     },
     name: "search-result-item",
 })
