@@ -1,6 +1,6 @@
 <template>
 	<button
-		class="px-3 py-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20"
+		class="px-3 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10"
 		title="Print"
 		@click="print()"
 	>

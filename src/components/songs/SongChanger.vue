@@ -1,5 +1,5 @@
 <template>
-	<div class="p-2 flex gap-2 items-center rounded-md border border-gray-300 text-gray-500 dark:border-gray-500 dark:text-gray-300">
+	<div class="px-2 py-1 flex gap-2 items-center rounded-md border border-gray-300 text-gray-500 dark:border-gray-500 dark:text-gray-300">
 		<button aria-label="Previous" @click="$emit('previous')" class="cursor-pointer p-1 rounded">
 			<ChevronLeftIcon class="h-5 w-5" :class="{ 'opacity-50': !hasPrevious }" />
 		</button>

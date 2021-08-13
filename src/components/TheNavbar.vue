@@ -82,7 +82,7 @@
 				</div>
 				<div class="mt-3 px-2 space-y-1">
 					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common.settings') }}</router-link>
-					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-100 text-red-500 hover:text-red-700 hover:bg-red-200" @click="logout()">{{ $t('common.logout') }}</button>
+					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-500/10 text-red-500" @click="logout()">{{ $t('common.logout') }}</button>
 				</div>
 			</div>
 		</DisclosurePanel>

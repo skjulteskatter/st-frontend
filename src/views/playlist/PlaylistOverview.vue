@@ -17,7 +17,7 @@
             :key="playlist.id"
             :playlist="playlist"
         />
-        <button @click="openCreatePlaylist" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-solid dark:border-gray-800 dark:hover:bg-white/5">
+        <button @click="openCreatePlaylist" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-transparent dark:border-white/5 dark:hover:bg-white/5 dark:hover:border-transparent">
             <FolderAddIcon class="w-8 h-8 opacity-50" />
             <p class="tracking-wide">{{ $t('playlist.createnew') }}</p>
         </button>
