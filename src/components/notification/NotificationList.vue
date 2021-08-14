@@ -1,7 +1,7 @@
 <template>
 	<base-dropdown class="cursor-pointer" origin="right">
 		<template #button>
-			<button class="relative p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white">
+			<button class="relative p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white hover:bg-black/5 dark:hover:bg-white/10">
 				<span class="sr-only">View notifications</span>
 				<BellIcon class="w-6 h-6 opacity-50" />
 			</button>
