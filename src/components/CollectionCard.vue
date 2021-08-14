@@ -9,7 +9,7 @@
         <img
             :src="image"
             :alt="name"
-            class="max-h-10 rounded"
+            class="max-h-10 rounded border"
         />
         <span class="text-xs font-semibold tracking-wide w-full flex justify-between items-center">
             {{ name }}

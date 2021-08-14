@@ -19,7 +19,7 @@
                     <img
                         alt="Activity thumbnail"
                         :src="a.getImage(collections)"
-                        class="mr-2 max-h-10 grayscale rounded"
+                        class="mr-2 max-h-10 grayscale rounded border"
                     />
                     <span class="flex flex-col justify-center flex-1">
                         <small class="opacity-50 tracking-wide">{{ $t(`song.${a.type}`) }}</small>
