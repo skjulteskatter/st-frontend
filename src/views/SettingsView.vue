@@ -17,21 +17,25 @@
         <div>
             <user-card />
             <base-card class="mt-4" v-if="collections.length">
-                <div class="flex mb-2">
+                <template #header>
                     <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
+                </template>
+                <div class="flex flex-col gap-2">
+                    <p v-for="col in collections" :key="col.id">{{col.getName()}}</p>
                 </div>
-                <hr class="mb-2" />
-                
-                <div class="mb-2" v-for="col in collections" :key="col.id">{{col.getName()}}</div>
-                <base-button 
-                    @click="portal"
-                    :loading="loading"
-                    class="ml-auto cursor-pointer"
-                    :class="{'opacity-40': loading}"
-                >
-                    {{ $t("common.manage") }}
-                    {{ $t("common.subscriptions").toLowerCase() }}
-                </base-button>
+                <template #footer>
+                    <base-button 
+                        @click="portal"
+                        :loading="loading"
+                        :class="{'opacity-40': loading}"
+                    >
+                        <template #icon>
+                            <CreditCardIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t("common.manage") }}
+                        {{ $t("common.subscriptions").toLowerCase() }}
+                    </base-button>
+                </template>
             <!-- <owned-collections /> -->
             </base-card>
         </div>
@@ -47,7 +51,7 @@ import { SettingsCard, BackButton } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import { OwnedCollections } from "@/components/dashboard";
-import { LogoutIcon } from "@heroicons/vue/solid";
+import { LogoutIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
@@ -60,6 +64,7 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         BackButton,
         OwnedCollections,
         LogoutIcon,
+        CreditCardIcon,
     },
     name: "settings-view",
 })

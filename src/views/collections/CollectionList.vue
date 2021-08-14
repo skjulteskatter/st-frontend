@@ -27,7 +27,7 @@
                 class="manage-button"
             >
                 <template #icon>
-                    <CollectionIcon class="w-4 h-4" />
+                    <CreditCardIcon class="w-4 h-4" />
                 </template>
                 <span class="whitespace-nowrap">
                     {{ $t("common.manage") }}
@@ -43,7 +43,7 @@
 import { Options, Vue } from "vue-class-component";
 
 import { ProductSlider, StoreCart } from "@/components/store";
-import { RefreshIcon, CollectionIcon } from "@heroicons/vue/solid";
+import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { notify } from "@/services/notify";
@@ -53,7 +53,7 @@ import { notify } from "@/services/notify";
         ProductSlider,
         StoreCart,
         RefreshIcon,
-        CollectionIcon,
+        CreditCardIcon,
     },
     name: "collections-home",
 })
