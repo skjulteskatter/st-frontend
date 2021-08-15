@@ -8,8 +8,10 @@
 		@close="hideModal"
 		class="change-password"
 	>
-		<h3 class="font-bold text-xl mb-4">{{ $t("settings.changePassword") }}</h3>
-		<form @submit="resetPassword" class="flex flex-col gap-4">
+		<template #header>
+			<h3 class="font-bold text-xl">{{ $t("settings.changePassword") }}</h3>
+		</template>
+		<form @submit="resetPassword" class="flex flex-col gap-2">
 			<base-input
 				type="password"
 				v-if="passwordUser"
@@ -27,7 +29,12 @@
 				v-model="repeatPassword"
 				:label="$t('settings.repeatPassword')"
 			/>
-			<base-button theme="secondary" formaction="submit">{{ $t("common.submit") }}</base-button>
+			<base-button theme="secondary" formaction="submit">
+				<template #icon>
+					<CheckIcon class="w-4 h-4" />
+				</template>
+				{{ $t("common.submit") }}
+			</base-button>
 		</form>
 	</base-modal>
 </template>
@@ -38,7 +45,7 @@ import { BaseModal } from "@/components";
 import { useStore } from "vuex";
 import auth from "@/services/auth";
 import { BaseInput } from "@/components/inputs";
-import { KeyIcon } from "@heroicons/vue/solid";
+import { KeyIcon, CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
 	name: "change-password",
@@ -46,6 +53,7 @@ import { KeyIcon } from "@heroicons/vue/solid";
 		BaseModal,
 		BaseInput,
 		KeyIcon,
+		CheckIcon,
 	},
 })
 export default class ChangePassword extends Vue {
