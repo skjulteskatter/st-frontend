@@ -37,7 +37,7 @@
         </div>
         <div class="ml-80 mt-10" v-if="verses">
             <div
-                class="relative mb-6 text-5xl"
+                class="relative mb-16 text-5xl"
                 :class="{ 'italic border-l-4 border-black/10 dark:border-white/10 pl-4': verse.type == 'chorus' }"
                 v-for="(verse, i) in verses"
                 :key="i + '_' + verse"
@@ -49,7 +49,7 @@
                 >
                 <p
                     class="my-4 tracking-wide"
-                    :class="{ 'opacity-50': line.trim()[0] == '(' }"
+                    :class="{ 'opacity-30 mt-8 text-4xl': line.trim()[0] == '(' }"
                     v-for="(line, i) in verse.content"
                     :key="i + '_' + line"
                 >
