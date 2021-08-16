@@ -1,10 +1,10 @@
 <template>
-    <base-card v-if="song" class="overflow-visible" header>
+    <base-card v-if="song" class="overflow-visible">
         <template #header>
             <div class="w-full flex items-center gap-2">
                 <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
                 <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
-                <print-button />
+                <print-button class="hidden md:flex" />
             </div>
             <div class="flex gap-2 items-end flex-wrap">
                 <select
@@ -22,20 +22,20 @@
                         {{ l.name }}
                     </option>
                 </select>
-                <SwitchGroup as="div" class="flex flex-col cursor-pointer" v-if="song.hasChords">
-                    <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.chords") }}</SwitchLabel>
+                <SwitchGroup as="div" class="flex flex-col gap-1 cursor-pointer" v-if="song.hasChords">
+                    <SwitchLabel class="text-xs tracking-wide">{{ $t("song.chords") }}</SwitchLabel>
                     <Switch
                         @click="transposeToggle()"
                         v-model="chordsEnabled"
                         class="focus:outline-none"
                     >
                         <div
-                            class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"
-                            :class="chordsEnabled ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
+                            class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
+                            :class="chordsEnabled ? 'bg-primary' : 'bg-black/20 dark:bg-black/40'"
                         >
                             <span
-                                :class="chordsEnabled ? 'translate-x-9' : 'translate-x-1'"
-                                class="shadow-md inline-block w-6 h-6 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                                :class="chordsEnabled ? 'translate-x-5' : 'translate-x-1'"
+                                class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
                             />
                         </div>
                     </Switch>
