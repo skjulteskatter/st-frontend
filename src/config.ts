@@ -13,6 +13,7 @@ export const firebaseConfig = {
     storageBucket: "songtreasures.appspot.com",
     messagingSenderId: "721098499416",
     appId: "1:721098499416:web:fc3d22660728b82e82f12d",
+    measurementId: "G-YWMEW6TKB8",
 };
 
 // export const firebaseConfig = {

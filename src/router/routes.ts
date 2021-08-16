@@ -1,8 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
 
-const StackedLayout = () => import(/* webpackChunkName: 'stackedLayout' */ "../layout/StackedLayout.vue").catch(() => {
-    window.location.reload();
-});
+import StackedLayout from "../layout/StackedLayout.vue";
+
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue").catch(() => {
     window.location.reload();
 });
@@ -21,9 +20,9 @@ const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongS
 const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
     window.location.reload();
 });
-const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
-    window.location.reload();
-});
+// const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
+//     window.location.reload();
+// });
 const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
     window.location.reload();
 });
@@ -231,11 +230,11 @@ const routes: Array<RouteRecordRaw> = [
         name: "presentation-view",
         component: PresentationView,
     },
-    {
-        path: "/karaoke",
-        name: "karaoke",
-        component: KaraokeViewer,
-    },
+    // {
+    //     path: "/karaoke",
+    //     name: "karaoke",
+    //     component: KaraokeViewer,
+    // },
     {
         path: "/success",
         name: "success",
