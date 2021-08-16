@@ -3,18 +3,21 @@
         v-if="song"
         v-cloak
     >
-        <span class="flex justify-between">
-            <router-link
-                :to="`/songs/${collection.key}`"
-                class="text-sm text-primary hover:underline"
-                v-if="collection"
-            >
-                {{ collection.getName(Language) }}
-            </router-link>
-            <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="text-gray-500 hover:text-gray-400 text-sm underline dark:text-gray-400 dark:hover:text-gray-300">
-                {{ $t('song.seeStatistics') }}
-            </router-link>
-        </span>
+        <template #header>
+            <span class="flex justify-between items-center">
+                <router-link
+                    :to="`/songs/${collection.key}`"
+                    class="text-sm text-primary hover:underline"
+                    v-if="collection"
+                >
+                    {{ collection.getName(Language) }}
+                </router-link>
+                <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
+                    <ArrowSmRightIcon class="w-4 h-4" />
+                    {{ $t('song.seeStatistics') }}
+                </router-link>
+            </span>
+        </template>
         <h2 class="flex text-xl font-bold mb-2">
             <span class="text-gray-400 mr-4">
                 {{ song.number }}
@@ -142,12 +145,13 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
-import { ArrowDownIcon } from "@heroicons/vue/solid";
+import { ArrowDownIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         Modal,
         ArrowDownIcon,
+        ArrowSmRightIcon,
     },
     props: {
         languageKey: {
