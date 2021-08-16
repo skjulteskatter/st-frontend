@@ -1,28 +1,57 @@
 <template>
-    <div class="lyrics-settings" v-if="song && lyrics">
-        <base-card class="lyrics-settings__viewer">
-            <h4 class="lyrics-settings__viewer__title">
-                {{ $t("song.viewer") }}
-            </h4>
-            <div class="lyrics-settings__viewer__buttons">
+    <div class="flex flex-col gap-4" v-if="song && lyrics">
+        <base-card class="ring-1 ring-primary">
+            <template #header>
+                <h3 class="font-bold">
+                    {{ $t("song.viewer") }}
+                </h3>
+            </template>
+            <div class="flex flex-col items-center gap-2 py-4">
                 <base-button
-                    class="lyrics-settings__controls__open"
-                    theme="tertiary"
+                    theme="primary"
                     @click="open()"
                 >
                     {{ $t("song.openviewer") }}
                 </base-button>
                 <base-button
-                    class="lyrics-settings__controls__update"
                     theme="tertiary"
-                    icon="refresh"
                     @click="refresh()"
                 >
+                    <template #icon>
+                        <RefreshIcon class="w-4 h-4" />
+                    </template>
                     {{ $t("song.updateviewer") }}
                 </base-button>
             </div>
+            <template #footer>
+                <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
+                    {{ $t("song.controlpanel") }}
+                </h4>
+                <div class="flex gap-2">
+                    <base-button
+                        class="flex-grow"
+                        @click="previous"
+                        theme="secondary"
+                    >
+                        <template #icon>
+                            <ArrowSmLeftIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t("common.previous") }} {{ $t('song.verse').toLocaleLowerCase() }}
+                    </base-button>
+                    <base-button
+                        class="flex-grow"
+                        @click="next"
+                        theme="secondary"
+                    >
+                        <template #icon>
+                            <ArrowSmRightIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t("common.next") }} {{ $t('song.verse').toLocaleLowerCase() }}
+                    </base-button>
+                </div>
+            </template>
         </base-card>
-        <base-card
+        <!-- <base-card
             v-if="song.type == 'lyrics'"
             class="lyrics-settings__controls"
         >
@@ -46,7 +75,7 @@
                 >
                     {{ $t("common.next") }}
                 </base-button>
-            </div>
+            </div> -->
             <!-- <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
                 <h5 class="lyrics-settings__verses__title">
                     {{ $t("common.show") }} / {{ $t('common.hide') }}
@@ -67,19 +96,21 @@
                     </label>
                 </div>
             </div> -->
-        </base-card>
+        <!-- </base-card> -->
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
-import Modal from "@/components/Modal.vue";
 import { control } from "@/classes/presentation/control";
+import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
-        Modal,
+        RefreshIcon,
+        ArrowSmLeftIcon,
+        ArrowSmRightIcon,
     },
     props: {
         lyrics: {
@@ -138,18 +169,6 @@ export default class PresentationControl extends Vue {
 </script>
 
 <style lang="scss">
-#biography img {
-    max-width: 100%;
-}
-
-.biography-wrapper {
-    color: var(--st-text-color);
-
-    img {
-        max-width: 50%;
-    }
-}
-
 .lyrics-settings {
     --half-spacing: calc(var(--st-spacing) * 0.5);
     flex-shrink: 0;
