@@ -35,17 +35,26 @@
                             />
                         </div>
                     </base-modal>
-                    <base-button
-                        v-if="song.hasLyrics && (isExtended || isAdmin)"
-                        @click="extend"
-                        :disabled="lyrics?.format != 'json'"
-                        class="viewer-button hidden md:flex"
-                    >
-                        <template #icon>
-                            <DesktopComputerIcon class="w-4 h-4" />
-                        </template>
-                        {{ $t("song.viewer") }}
-                    </base-button>
+                    <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics && (isExtended || isAdmin)">
+                        <SwitchLabel class="text-xs tracking-wide">{{ $t("song.viewer") }}</SwitchLabel>
+                        <Switch
+                            :disabled="view == 'transpose'"
+                            @click="extend()"
+                            v-model="switchExtended"
+                            class="focus:outline-none"
+                            :class="{ 'opacity-50 cursor-not-allowed': view == 'transpose' }"
+                        >
+                            <div
+                                class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
+                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-black/40'"
+                            >
+                                <span
+                                    :class="switchExtended ? 'translate-x-5' : 'translate-x-1'"
+                                    class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                                />
+                            </div>
+                        </Switch>
+                    </SwitchGroup>
                 </div>
             </div>
             <song-tags :song="song" />
@@ -57,23 +66,21 @@
                         :viewCount="viewCount"
                         class="md:col-span-2"
                     />
-                    <presentation-control
-                        v-if="isExtended"
-                        :languageKey="languageKey"
-                        :lyrics="lyrics"
-                        :song="song"
-                    />
                     <lyrics-card
-                        :style="sheetMusicOptions?.show ? 'display: none;' : ''"
-                        v-if="song.hasLyrics"
+                        :class="{ 'hidden': sheetMusicOptions?.show }"
+                        v-if="song.hasLyrics && !isExtended"
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
                     />
                 </div>
                 <aside>
-                    <song-media-card
+                    <component
+                        :is="isExtended ? 'PresentationControl' : 'SongMediaCard'"
                         :song="song"
+                        :lyrics="lyrics ?? undefined"
+                        :languageKey="languageKey ?? undefined"
+                        class="sticky top-20"
                     />
                 </aside>
             </div>
@@ -119,6 +126,7 @@ import {
 } from "@/components";
 import { PlaylistAddToCard } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
+import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection } from "@/classes";
 import { ApiPlaylist, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
@@ -147,6 +155,9 @@ import { appSession } from "@/services/session";
         ShoppingCartIcon,
         ArrowLeftIcon,
         PencilAltIcon,
+        SwitchGroup,
+        Switch,
+        SwitchLabel,
     },
     name: "song-viewer",
 })
@@ -158,6 +169,7 @@ export default class SongViewer extends Vue {
     public lyricsLoading = true;
     private songViewCount: number | null = null;
     public show = false;
+    public switchExtended = false;
     
     public get viewCount() {
         return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
