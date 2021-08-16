@@ -13,8 +13,8 @@
                     {{ collection.getName(Language) }}
                 </router-link>
                 <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
-                    <ArrowSmRightIcon class="w-4 h-4" />
                     {{ $t('song.seeStatistics') }}
+                    <ArrowSmRightIcon class="w-4 h-4" />
                 </router-link>
             </span>
         </template>
