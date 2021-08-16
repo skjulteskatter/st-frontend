@@ -1,41 +1,45 @@
 <template>
     <loader :loading="loading">
         <div v-if="contributor">
-            <back-button class="md:hidden mb-4" />
-            <base-card>
-                <div class="contributor__biography">
+            <back-button class="mb-4" />
+            <div class="grid gap-4 md:grid-cols-4">
+                <div class="flex flex-col gap-4 col-span-1">
                     <img
                         :src="portrait"
                         id="contributor-biography-image"
-                        class="w-full rounded-lg mb-4 filter grayscale"
+                        class="w-full rounded-lg filter grayscale"
                     />
-                    <div class="contributor__biography__header mb-4">
-                        <p class="text-primary">
-                            {{ $t("song.contributor") }}
-                        </p>
-                        <h1 class="font-bold text-2xl">
-                            {{ contributor.name }}
-                        </h1>
-                        <small
-                            class="text-gray-500 italic"
-                            v-if="contributor.subtitle"
-                        >
-                            {{ contributor.subtitle }}
-                        </small>
-                        <base-button
-                            v-if="isEditor"
-                            @click="goToEditPage()"
-                            theme="tertiary"
-                            icon="pencil"
-                            class="mr-4 hidden xl:block"
-                        >Edit</base-button>
-                    </div>
-                    <div
-                        v-html="contributor.getBiography(languageKey)"
-                        class="text-sm"
-                    ></div>
                 </div>
-            </base-card>
+                <base-card class="md:col-span-3">
+                    <div class="contributor__biography">
+                        <div class="contributor__biography__header mb-6">
+                            <base-button
+                                v-if="isEditor"
+                                @click="goToEditPage()"
+                                theme="tertiary"
+                                icon="pencil"
+                                class="mb-4 hidden xl:block"
+                            >Edit</base-button>
+                            <p class="text-primary">
+                                {{ $t("song.contributor") }}
+                            </p>
+                            <h1 class="font-bold text-2xl">
+                                {{ contributor.name }}
+                            </h1>
+                            <small
+                                class="text-gray-500 italic"
+                                v-if="contributor.subtitle"
+                            >
+                                {{ contributor.subtitle }}
+                            </small>
+                        </div>
+                        <div
+                            v-html="contributor.getBiography(languageKey)"
+                            class="text-sm"
+                        ></div>
+                    </div>
+                </base-card>
+            </div>
 
             <div class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div v-for="c in collections" :key="c.id">
@@ -186,7 +190,6 @@ export default class ContributorView extends Vue {
 @import "../style/mixins";
 
 .contributor {
-
     &__biography {
         columns: auto 325px;
 

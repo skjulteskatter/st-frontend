@@ -1,22 +1,24 @@
 <template>
-    <div>
-        <div class="flex gap-4 justify-between items-end mb-4">
-            <h3 class="font-bold">{{ $t("admin.users") }}</h3>
-            <div class="flex gap-2 items-center">
-                <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common.search')} ${$t('admin.email').toLocaleLowerCase()}`" />
-                <base-button
-                    :class="{ disabled: disableButton }"
-                    @click="refreshUsers"
-                    :loading="loading['refresh']"
-                    :content="false"
-                    icon="refresh"
-                    theme="primary"
-                >
-                    {{ $t("common.update") }}
-                </base-button>
+    <base-card>
+        <template #header>
+            <div class="flex gap-4 justify-between items-center">
+                <h3 class="font-bold">{{ $t("admin.users") }}</h3>
+                <div class="flex gap-2 items-center">
+                    <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common.search')} ${$t('admin.email').toLocaleLowerCase()}`" />
+                    <base-button
+                        :class="{ disabled: disableButton }"
+                        @click="refreshUsers"
+                        :loading="loading['refresh']"
+                        :content="false"
+                        icon="refresh"
+                        theme="primary"
+                    >
+                        {{ $t("common.update") }}
+                    </base-button>
+                </div>
             </div>
-        </div>
-        <base-card class="overflow-x-auto">
+        </template>
+        <div class="overflow-x-auto">
             <loader :loading="loading['search']" position="local">
                 <table class="min-w-full" v-if="Users.length">
                     <thead>
@@ -58,8 +60,8 @@
                 </table>
                 <p v-else class="w-full text-center text-gray-500">No users to show</p>
             </loader>
-        </base-card>
-    </div>
+        </div>
+    </base-card>
 </template>
 
 <script lang="ts">

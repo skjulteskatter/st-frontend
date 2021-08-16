@@ -6,7 +6,7 @@
                     {{ song.number }}
                 </h1>
                 <div>
-                    <h3 class="lyrics__title" v-if="title">{{ title }}</h3>
+                    <h3 class="lyrics__title">{{ song.getName() }}</h3>
                     <p
                         class="lyrics__credits__author"
                         v-if="song.Authors.length > 0"
@@ -36,11 +36,11 @@
                     </p>
                 </div>
             </div>
-            <div id="text-wrapper">
+            <div id="text-wrapper" v-if="verses">
                 <div
                     class="lyrics__verse"
                     :class="{ 'lyrics__verse-chorus': verse.type == 'chorus' }"
-                    v-for="(verse, i) in lyrics"
+                    v-for="(verse, i) in verses"
                     :key="i + '_' + verse"
                 >
                     <span
@@ -61,93 +61,55 @@
         </div>
     </div>
 </template>
-
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import themes from "@/classes/themes";
-import { Song } from "@/classes";
-import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { Lyrics, Song } from "@/classes";
 import { viewer } from "@/classes/presentation/viewer";
+import { appSession } from "@/services/session";
+import { useStore } from "@/store";
+import { Vue } from "vue-class-component";
 
-@Options({
-    name: "lyrics-viewer",
-})
-export default class LyricsViewer extends Vue {
-    public store = useStore();
+export default class PresentationView extends Vue {
     public viewer = viewer;
+    private store = useStore();
+    public lyrics: Lyrics | null = null;
+    public song: Song | null = null;
+    public verses: Verse[] | null = null;
 
-    public mounted() {
-        themes.load();
-        const lyricsItem = localStorage.getItem("lyrics");
-        if (lyricsItem) {
-            this.store.commit(SongsMutationTypes.SET_VERSES, JSON.parse(lyricsItem));
-        }
-        const songItem = localStorage.getItem("song");
-        if (songItem) {
-            this.song = new Song(JSON.parse(songItem));
-        }
-        window.addEventListener("storage", (event) => {
-            if (event.key == "song") {
-                const item = localStorage.getItem("song");
-                if (item) {
-                    this.song = new Song(JSON.parse(item));
-                }
-            }
-            if (event.key == "lyrics") {
-                const item = localStorage.getItem("lyrics");
-                if (item) {
-                    this.store.commit(SongsMutationTypes.SET_VERSES, JSON.parse(item));
-                }
-            }
-            if (event.key == "theme") {
-                const item = localStorage.getItem("theme");
-                if (item) {
-                    themes.load();
-                }
-            }
+    public async mounted() {
+        await appSession.init();
+        viewer.init();
+        this.lyrics = viewer.Lyrics;
+        this.song = viewer.Song ?? null;
+        this.verses = viewer.Verses;
+
+        viewer.registerCallback("lyrics", () => {
+            this.lyrics = viewer.Lyrics;
+            this.song = viewer.Song ?? null;
         });
 
-        window.addEventListener("keydown", (event) => {
-            if (event.key == "ArrowRight") {
-                this.next();
+        viewer.registerCallback("settings", () => {
+            this.verses = viewer.Verses;
+        });
+
+        addEventListener("keydown", (e) => {
+            if (e.key == "ArrowRight") {
+                viewer.next();
+                this.verses = viewer.Verses;
             }
-            if (event.key == "ArrowLeft") {
-                this.previous();
+            if (e.key == "ArrowLeft") {
+                viewer.previous();
+                this.verses = viewer.Verses;
             }
         });
-    }
-
-    private next() {
-        localStorage.setItem("lyrics_next", Math.random().toString());
-    }
-
-    private previous() {
-        localStorage.setItem("lyrics_previous", Math.random().toString());
-    }
-
-    public get title() {
-        return this.song?.getName(this.languageKey);
-    }
-
-    public get lyrics() {
-        return this.store.state.songs.verses;
     }
 
     public get melodyOrigin() {
         const melodyOrigin = this.song?.melodyOrigin;
 
-        return melodyOrigin
-            ? melodyOrigin.description[this.languageKey] ?? melodyOrigin.description.no
-            : undefined;
-    }
-
-    public get languageKey(): string {
-        return this.store.getters.languageKey;
+        return melodyOrigin?.description[this.store.getters.languageKey] ?? melodyOrigin?.description.no;
     }
 }
 </script>
-
 <style lang="scss">
 #text-wrapper {
     margin-left: 10em;

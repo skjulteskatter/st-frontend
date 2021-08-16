@@ -4,19 +4,25 @@
             {{ $t("common.your") }}
             {{ $t("common.collections").toLowerCase() }}
         </h1>
-        <base-button @click="openCreatePlaylist" theme="secondary" icon="playlist">{{$t('playlist.createnew')}}</base-button>
-        <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
+        <base-button @click="openCreatePlaylist" theme="secondary" class="sm:hidden">
+            <template #icon>
+                <FolderIcon class="w-4 h-4" />
+            </template>
+            {{$t('playlist.createnew')}}
+        </base-button>
     </header>
-    <div class="flex flex-col gap-4" v-if="playlists.length">
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         <playlist-card
             v-for="playlist in playlists"
             :key="playlist.id"
             :playlist="playlist"
         />
+        <button @click="openCreatePlaylist" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-transparent dark:border-white/5 dark:hover:bg-white/5 dark:hover:border-transparent">
+            <FolderAddIcon class="w-8 h-8 opacity-50" />
+            <p class="tracking-wide">{{ $t('playlist.createnew') }}</p>
+        </button>
     </div>
-    <h3 class="bg-black bg-opacity-10 p-4 rounded text-center" v-else>
-        {{ $t("common.no-amount") + " " + $t("common.collections").toLowerCase() }}
-    </h3>
+    <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
 </template>
 
 <script lang="ts">
@@ -25,6 +31,8 @@ import { ApiPlaylist } from "dmb-api";
 
 import { BaseInput } from "@/components/inputs";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
+import { FolderIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
 
 @Options({
@@ -33,6 +41,8 @@ import { useStore } from "@/store";
         PlaylistCard,
         CreatePlaylistModal,
         BaseInput,
+        FolderIcon,
+        FolderAddIcon,
     },
 })
 export default class PlaylistOverview extends Vue {

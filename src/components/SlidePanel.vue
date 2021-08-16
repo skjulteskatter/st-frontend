@@ -16,7 +16,7 @@
                   </button>
                 </div>
               </TransitionChild>
-              <div class="h-full mt-16 flex flex-col py-6 bg-white dark:bg-secondary shadow-xl overflow-y-scroll">
+              <div class="h-full flex flex-col py-6 bg-white dark:bg-secondary shadow-xl overflow-y-scroll">
                 <div class="px-4 sm:px-6" v-if="title">
                   <DialogTitle class="text-lg font-medium">
                     {{ title }}

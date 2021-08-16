@@ -1,32 +1,61 @@
 <template>
-    <div class="p-4 md:p-8">
-        <back-button class="md:hidden mb-4" />
+    <section>
+        <back-button class="mb-4" />
         <header class="flex gap-4 mb-4">
             <h1 class="font-bold text-3xl">{{ $t('credits.songCredit') }}</h1>
         </header>
-        <form
-            @submit.prevent="getSong"
-            class="mb-4 flex flex-col gap-4 md:items-end md:flex-row p-4 rounded-md border border-gray-400"
-        >
-            <label class="text-xs flex flex-col gap-1">
-                {{ $t('common.collection') }}
-                <select
-                    class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
-                    id="collection"
-                    name="collection"
-                    v-model="collection"
-                >
-                    <option value="" key="">{{ $t('common.collection') }}</option>
-                    <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
-                </select>
-            </label>
-            <base-input :label="$t('song.number')" v-model="number" type="number" :placeholder="$t('song.number')"/>
-            <base-button type="submit" theme="secondary">{{ $t('credits.getData') }}</base-button>
-        </form>
-        <base-card v-if="song">{{ song.getName(Language) }}</base-card>
-        <base-input type="file" id="credit-file-input" accept="audio/mpeg"/>
-        <base-button @click="creditSong">Credit</base-button>
-    </div>
+        <section class="mb-4">
+            <base-card v-if="step == 1">
+                <h2 class="font-semibold mb-4">Choose song</h2>
+                <div class="flex flex-col gap-4">
+                    <label class="text-xs flex flex-col gap-1">
+                        {{ $t('common.collection') }}
+                        <select
+                            class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                            id="collection"
+                            name="collection"
+                            v-model="collection"
+                        >
+                            <option value="" key="">{{ $t('common.collection') }}</option>
+                            <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
+                        </select>
+                    </label>
+                    <base-input :label="$t('song.number')" v-model="number" type="number" :placeholder="$t('song.number')"/>
+                </div>
+            </base-card>
+            <base-card v-if="step == 2">
+                <div v-if="song">
+                    <div class="flex flex-col mb-4">
+                        <h2 class="font-bold text-lg">{{ song.getName(Language) }}</h2>
+                        <small>{{ $t('song.author') }}: {{ song.Authors[0]?.name }}</small>
+                        <small>{{ $t('song.composer') }}: {{ song.Composers[0]?.name }}</small>
+                    </div>
+                    <input ref="file" type="file" id="credit-file-input" accept="audio/mpeg"/>
+                </div>
+                <p v-else>Please select a song</p>
+            </base-card>
+        </section>
+        <div class="flex gap-4 justify-end">
+            <base-button theme="tertiary" @click="previousStep()" v-if="step > 1">
+                <template #icon>
+                    <ArrowLeftIcon class="w-4 h-4" />
+                </template>
+                {{ $t('common.previous') }}
+            </base-button>
+            <base-button theme="secondary" :disabled="!(collection && number)" @click="nextStep()" v-if="step < 2">
+                <template #icon>
+                    <ArrowRightIcon class="w-4 h-4" />
+                </template>
+                {{ $t('common.next') }}
+            </base-button>
+            <base-button theme="secondary" :loading="loading" :disabled="!downloadReady" @click="creditSong()" v-if="step == 2">
+                <template #icon>
+                    <DownloadIcon class="w-4 h-4" />
+                </template>
+                {{ $t('credits.creditAndDownload') }}
+            </base-button>
+        </div>
+    </section>
 </template>
 <script lang="ts">
 import { songs } from "@/services/api";
@@ -34,6 +63,7 @@ import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { Song } from "@/classes";
+import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon } from "@heroicons/vue/solid";
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
     let binary = "";
@@ -61,17 +91,40 @@ const saveByteArray = (function () {
 
 @Options({
     name: "credit-song-view",
+    components: {
+        ArrowRightIcon,
+        ArrowLeftIcon,
+        DownloadIcon,
+    },
 })
 export default class CreditSongView extends Vue {
     private store = useStore();
     public collection = "";
     public number: number | null = null;
     public song: Song | null = null;
+    public loading = false;
+    public step = 1;
+
+    public nextStep() {
+        if(this.step >= 2) return;
+        this.step ++;
+        this.getSong();
+    }
+
+    public previousStep() {
+        if(this.step <= 1) return;
+        this.step --;
+    }
+
+    public get downloadReady() {
+        return this.song != undefined;
+    }
 
     public creditSong() {
         const el = document.getElementById("credit-file-input") as HTMLInputElement;
 
         if (el.files?.length) {
+            this.loading = true;
             const reader = new FileReader();
             
             reader.onload = async () => {
@@ -85,6 +138,7 @@ export default class CreditSongView extends Vue {
 
                     if (file) {
                         saveByteArray([file], `${this.Collections.find(c => c.id == this.collection)?.key} ${this.number} - ${this.song?.getName(this.Language)}.mp3`);
+                        this.loading = false;
                     }
                 }
             };
@@ -92,7 +146,6 @@ export default class CreditSongView extends Vue {
             reader.readAsArrayBuffer(el.files[0]);
         }
 
-        
     }
 
     public get Collections() {

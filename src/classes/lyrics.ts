@@ -23,7 +23,10 @@ export class Lyrics implements ApiLyrics {
     secondaryChords;
     notes;
 
+    public raw;
+
     constructor(lyrics: ApiLyrics) {
+        this.raw = lyrics;
         this.id = lyrics.id;
         this.songId = lyrics.songId;
         this.number = lyrics.number;
@@ -79,6 +82,42 @@ export class Lyrics implements ApiLyrics {
         return verses;
     }
 
+    public getText(translations: {
+        chorus: string;
+        bridge: string;
+    }) {
+        const verses: { name: string; content: string[] }[] = [];
+
+        const types: {
+            [key: string]: string;
+        } = {
+            "[Chorus]": "chorus",
+            "[Bridge]": "bridge",
+        };
+
+        if (this.content) {
+            for (const key of Object.keys(this.content)) {
+                const verse: Verse = {
+                    name: (this.content as JsonContent)[key].name,
+                    content: (this.content as JsonContent)[key].content,
+                    type:
+                        types[(this.content as JsonContent)[key].name] ??
+                        "verse",
+                };
+
+                if (verse.type == "chorus") {
+                    verse.name = translations.chorus;
+                } else if (verse.type == "bridge") {
+                    verse.name = translations.bridge;
+                }
+
+                verses.push(verse);
+            }
+        }
+
+        return verses;
+    }
+
     public get rawContent() {
         const lines = [];
 
@@ -114,5 +153,11 @@ export class Lyrics implements ApiLyrics {
             content[key].content.forEach(s => ls.push(s));
         }
         return ls;
+    }
+
+    public get size() {
+        if (this.format !== "json")
+            throw new Error("Invalid format for .size");
+        return Object.values(this.content as Content)[0].content.length;
     }
 }

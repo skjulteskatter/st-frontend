@@ -14,10 +14,10 @@
         <transition-child
             as="div"
             class="max-w-xl"
-            enter="transition transform"
-            enter-from="translate-y-4"
-            enter-to="translate-y-0"
-            leave="transition transform"
+            enter="transition"
+            enter-from="scale-90"
+            enter-to="scale-100"
+            leave="transition"
             leave-from="translate-y-0"
             leave-to="translate-y-4"
         >
@@ -25,7 +25,13 @@
                 @mouseover="mouseOverCard = true"
                 @mouseleave="mouseOverCard = false"
             >
-                <slot></slot>
+                <template #header v-if="$slots.header">
+                    <slot name="header" />
+                </template>
+                <slot/>
+                <template #footer v-if="$slots.footer">
+                    <slot name="footer" />
+                </template>
             </base-card>
         </transition-child>
     </transition-root>

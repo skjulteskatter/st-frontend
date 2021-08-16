@@ -49,7 +49,21 @@ export default class PrintView extends Vue {
 	public store = useStore();
 
 	public mounted() {
+		if(this.song){
+			document.title = this.formattedTitle;
+		}
 		window.print();
+	}
+
+	public get formattedTitle() {
+		if(this.collection && this.song) {
+			const collection = this.collection.key;
+			const number = this.song.getNumber(this.collection.id);
+			const name = this.song.getName(this.languageKey);
+
+			return `${collection}${number} - ${name}`;
+		}
+		return "";
 	}
 
 	public get languageKey() {
@@ -69,7 +83,7 @@ export default class PrintView extends Vue {
 	}
 
 	public get verses() {
-		return this.lyrics?.verses;
+		return this.lyrics?.content as object;
 	}
 }
 </script>

@@ -1,38 +1,46 @@
 <template>
-    <back-button class="md:hidden mb-4" />
+    <back-button class="mb-4" />
     <div class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
         <base-button
             theme="error"
-            icon="logout"
             @click="logout"
             class="settings-page__logout"
         >
+            <template #icon>
+                <LogoutIcon class="w-4 h-4" />
+            </template>
             {{ $t("common.logout") }}
         </base-button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
-        <settings-card />
         <div>
             <user-card />
             <base-card class="mt-4" v-if="collections.length">
-                <div class="flex mb-2">
+                <template #header>
                     <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
+                </template>
+                <div class="flex flex-col gap-2">
+                    <p v-for="col in collections" :key="col.id">{{col.getName()}}</p>
                 </div>
-                <hr class="mb-2" />
-                
-                <div class="mb-2" v-for="col in collections" :key="col.id">{{col.getName()}}</div>
-                <base-button 
-                    @click="portal"
-                    :loading="loading"
-                    class="ml-auto cursor-pointer"
-                    :class="{'opacity-40': loading}"
-                >
-                    {{ $t("common.manage") }}
-                    {{ $t("common.subscriptions").toLowerCase() }}
-                </base-button>
+                <template #footer>
+                    <base-button 
+                        @click="portal"
+                        :loading="loading"
+                        :class="{'opacity-40': loading}"
+                    >
+                        <template #icon>
+                            <CreditCardIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t("common.manage") }}
+                        {{ $t("common.subscriptions").toLowerCase() }}
+                    </base-button>
+                </template>
             <!-- <owned-collections /> -->
             </base-card>
+        </div>
+        <div class="md:col-span-3">
+            <settings-card />
         </div>
     </div>
 </template>
@@ -43,6 +51,7 @@ import { SettingsCard, BackButton } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import { OwnedCollections } from "@/components/dashboard";
+import { LogoutIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
@@ -54,6 +63,8 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         UserCard,
         BackButton,
         OwnedCollections,
+        LogoutIcon,
+        CreditCardIcon,
     },
     name: "settings-view",
 })

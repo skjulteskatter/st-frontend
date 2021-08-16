@@ -1,18 +1,18 @@
 <template>
 	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="showTooltip">
-		<span class="w-4 h-4 rounded-full border border-secondary text-secondary text-sm flex justify-center items-center cursor-default dark:text-gray-300 dark:border-gray-300">?</span>
+		<QuestionMarkCircleIcon class="w-4 h-4 text-secondary dark:text-white" />
 		<transition-root
 			:show="open"
 			as="div"
 			id="tooltip"
 			class="mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white"
 			:class="positionClasses"
-			enter="transition"
-			enter-from="opacity-0 translate-y-1"
-			enter-to="opacity-100 translate-y-0"
-			leave="transition"
-			leave-from="opacity-100 translate-y-0"
-			leave-to="opacity-0 translate-y-1"
+			enter="transition duration-100"
+			enter-from="opacity-0"
+			enter-to="opacity-100"
+			leave="transition duration-100"
+			leave-from="opacity-100"
+			leave-to="opacity-0"
 		>
 			<span
 				class="bg-secondary w-2 h-2 rotate-45 absolute -bottom-0.5 dark:bg-white"
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { TransitionRoot } from "@headlessui/vue";
+import { QuestionMarkCircleIcon } from "@heroicons/vue/solid";
 
 @Options({
 	name: "tooltip",
@@ -37,6 +38,7 @@ import { TransitionRoot } from "@headlessui/vue";
 	},
 	components: {
 		TransitionRoot,
+		QuestionMarkCircleIcon,
 	},
 })
 export default class Tooltip extends Vue {

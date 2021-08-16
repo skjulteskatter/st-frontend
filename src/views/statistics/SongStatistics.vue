@@ -1,6 +1,6 @@
 <template>
 	<div class="p-4 md:p-8">
-		<back-button class="md:hidden mb-4" />
+		<back-button class="mb-4" />
 		<header class="flex flex-col mb-4">
 			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
@@ -17,12 +17,14 @@
 				>{{ $t('statistics.update') }}</base-button>
 			</div>
 			<base-card>
-				<h3 class="font-bold text-xl mb-2">{{ $t('statistics.total') }}</h3>
+				<template #header>
+					<h3 class="font-bold text-xl">{{ $t('statistics.total') }}</h3>
+				</template>
 				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
 			</base-card>
 			<line-chart :series="Series" class="md:col-span-2" />
 			<country-list :analytics="analytics" />
-			<base-card class="md:col-span-2">
+			<!-- <base-card class="md:col-span-2">
 				<h1 class="font-bold text-xl mb-4">Mest åpnede sanger</h1>
 				<ol class="divide-y divide-gray-200">
 					<li v-for="(song, i) in MostViewed" :key="song.id" class="px-2 py-2 sm:py-4 flex justify-between">
@@ -35,7 +37,7 @@
 						>{{i + 1}}. {{song.getName(languageKey)}} ({{mostViewed[song.id]}})</router-link>
 					</li>
 				</ol>
-			</base-card>
+			</base-card> -->
 		</div>
 	</div>
 </template>

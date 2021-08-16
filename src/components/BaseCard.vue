@@ -1,21 +1,13 @@
 <template>
-    <div class="bg-white rounded-lg shadow-md dark:bg-secondary" :class="{ 'border border-gray-300': border, 'bg-transparent': secondary }">
-        <div
-            v-if="image"
-            class="cover"
-            :style="{ backgroundImage: `url(${image})` }"
-        ></div>
-        <div class="p-4 border-b border-gray-300 dark:border-gray-500" v-if="header">
+    <div class="bg-white rounded-lg shadow-md dark:bg-secondary flex flex-col">
+        <div class="p-4 border-b border-black/10 dark:border-white/10" v-if="$slots.header">
             <slot name="header" />
-            <icon
-                class="cursor-pointer"
-                v-if="toggleable && !disableContent"
-                :name="isClosed ? 'arrowDown' : 'arrowUp'"
-                @click="isClosed = !isClosed"
-            />
         </div>
-        <div v-if="!disableContent" class="p-4 h-full" v-show="!(header && isClosed)">
+        <div class="p-4 flex-grow">
             <slot name="default" />
+        </div>
+        <div class="p-4 border-t border-black/10 dark:border-white/10" v-if="$slots.footer">
+            <slot name="footer" />
         </div>
     </div>
 </template>
@@ -24,49 +16,7 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-    props: {
-        border: {
-            type: Boolean,
-            default: false,
-        },
-        image: {
-            type: String,
-            default: "",
-        },
-        header: {
-            type: Boolean,
-            default: false,
-        },
-        toggleable: {
-            type: Boolean,
-            default: false,
-        },
-        closed: {
-            type: Boolean,
-            default: false,
-        },
-        disableContent: {
-            type: Boolean,
-            default: false,
-        },
-        secondary: {
-            type: Boolean,
-            default: false,
-        },
-    },
     name: "base-card",
 })
-export default class Card extends Vue {
-    public border?: boolean;
-    public header?: boolean;
-    public image?: string;
-    public toggleable?: boolean;
-    public closed?: boolean;
-    public disableContent?: boolean;
-    public secondary?: boolean;
-
-    public get isClosed() {
-        return this.closed == true;
-    }
-}
+export default class Card extends Vue {}
 </script>

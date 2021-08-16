@@ -5,18 +5,7 @@
         :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
     >
         <b class="text-sm">{{ verse.name }}</b>
-        <div class="flex gap-8 items-center">
-            <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
-            <!-- <button 
-                class="px-2 py-1 text-sm bg-opacity-10 hover:bg-opacity-20 rounded"
-                :class="{'bg-green-800': copied, 'bg-black': !copied}"
-                v-if="hoverVerses[verse.name]"
-                @click="!copied ? shareText(verse.content.join('\n')) : undefined"
-            >
-                <icon name="share" size="12" class="mr-1" />
-                {{ $t('common.share') }}
-            </button> -->
-        </div>
+        <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
     </div>
 </template>
 
@@ -40,65 +29,12 @@ import { Song } from "@/classes";
 export default class LyricsViewer extends Vue {
     public store = useStore();
     public song?: Song;
-    public copied = false;
-    public hoverVerses: {
-        [verse: string]: boolean;
-    } = {};
-
-    public shareText(text: string) {
-        this.copy(this.formattedText(text));
-        this.copied = true;
-        setTimeout(() => this.copied = false, 2000);
-    }
-
-    public formattedText(text: string) {
-        return `${this.song?.getName(this.languageKey)}
-${this.collection?.getName(this.languageKey)} ${this.song?.getNumber(this.song.collectionIds[0])}
-            
-"${text}"
-
-${this.$t("copyright.title")}`;
-    }
-
-    public copy(text: string) {
-        navigator.clipboard.writeText(text);
-    }
-
-    public closeCopied() {
-        this.copied = false;
-    }
 
     public get text() {
-        const verses: { name: string; content: string[] }[] = [];
-
-        const types: {
-            [key: string]: string;
-        } = {
-            "[Chorus]": "chorus",
-            "[Bridge]": "bridge",
-        };
-
-        if (this.lyrics) {
-            for (const key of Object.keys(this.lyrics.content)) {
-                const verse: Verse = {
-                    name: (this.lyrics.content as JsonContent)[key].name,
-                    content: (this.lyrics.content as JsonContent)[key].content,
-                    type:
-                        types[(this.lyrics.content as JsonContent)[key].name] ??
-                        "verse",
-                };
-
-                if (verse.type == "chorus") {
-                    verse.name = this.$t("song.chorus");
-                } else if (verse.type == "bridge") {
-                    verse.name = this.$t("song.bridge");
-                }
-
-                verses.push(verse);
-            }
-        }
-
-        return verses;
+        return this.lyrics?.getText({
+            chorus: this.$t("song.chorus"),
+            bridge: this.$t("song.bridge"),
+        }) ?? [];
     }
 
     public get lyrics() {

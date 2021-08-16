@@ -2,11 +2,9 @@
     <div class="w-full bg-white p-4 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-2 sticky left-0 bottom-0 z-30 dark:bg-secondary dark:border-gray-500" 
         v-if="audio && audio.directUrl && Song"
     >
-        <icon
-            class="md:hidden absolute top-4 right-2"
-            name="error"
-            @click="closePlayer"
-        />
+        <button class="md:hidden absolute top-4 right-2" @click="closePlayer">
+            <XIcon class="w-4 h-4" />
+        </button>
         <div class="flex flex-col items-center md:items-start">    
             <b>{{ audio.name }}</b>
             <small class=""
@@ -56,10 +54,14 @@ import Plyr from "plyr";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
+import { XIcon } from "@heroicons/vue/solid";
 
 
 @Options({
     name: "audio-player",
+    components: {
+        XIcon,
+    },
 })
 export default class AudioPlayer extends Vue {
     public store = useStore();

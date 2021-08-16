@@ -1,39 +1,41 @@
 <template>
 	<loader :loading="!(user && initialized)">
-		<the-navbar />
-		<main>
-			<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-				<router-view />
-				<copyright class="mt-8" />
-			</div>
-
-			<!-- OSMD -->
-			<div
-				class="sticky bottom-0 md:overflow-y-auto"
-				:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
-			>
-				<open-sheet-music-display
-					v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
-					:options="sheetMusicOptions"
-					:relativeKey="user?.settings?.defaultTransposition"
-					@startLoading="osmdLoading = true"
-					@finishLoading="osmdLoading = false"
-				/>
-				<div id="osmd-canvas" class="bg-white"></div>
-				<loader :loading="osmdLoading" />
-			</div>
-			<div 
-				class="w-full h-full flex flex-col"
-				:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
-			>
-				<div class="p-4 flex justify-end bg-white w-full">
-					<base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+		<div class="flex flex-col h-full">
+			<the-navbar />
+			<main class="flex-grow">
+				<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+					<router-view />
 				</div>
-				<object :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
-			</div>
-
-			<audio-player />
-		</main>
+				<!-- OSMD -->
+				<div
+					class="sticky bottom-0 md:overflow-y-auto"
+					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
+				>
+					<open-sheet-music-display
+						v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
+						:options="sheetMusicOptions"
+						:relativeKey="user?.settings?.defaultTransposition"
+						@startLoading="osmdLoading = true"
+						@finishLoading="osmdLoading = false"
+					/>
+					<div id="osmd-canvas" class="bg-white"></div>
+					<loader :loading="osmdLoading" />
+				</div>
+				<div
+					class="w-full h-full flex flex-col fixed top-20"
+					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
+				>
+					<div class="p-4 flex justify-end bg-white w-full">
+						<base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+					</div>
+					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
+				</div>
+				<audio-player />
+			</main>
+			<footer>
+				<copyright />
+			</footer>
+		</div>
 
 		<!-- Modals -->
 		<privacy-policy-accept />

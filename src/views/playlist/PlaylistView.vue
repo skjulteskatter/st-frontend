@@ -1,12 +1,15 @@
 <template>
     <div v-if="playlist">
-        <back-button class="md:hidden mb-4" />
+        <back-button class="mb-4" />
         <header class="flex justify-between items-start mb-4">
             <span>
-                <h1 class="font-bold text-xl">
+                <h1 class="font-bold text-xl flex gap-2 items-center">
                     <span v-if="!editName">{{ playlist.name }}</span>
                     <input type="text" v-else v-model="newPlaylistName" :placeholder="playlist.name" @keydown.enter="saveName" />
-                    <icon @click="saveName" class="ml-2 cursor-pointer opacity-50" :name="editName ? 'check' : 'pencil'" v-if="playlist.userId == userId" />
+                    <button @click="saveName" v-if="playlist.userId == userId" class="cursor-pointer opacity-50">
+                        <CheckIcon v-if="editName" class="w-5 h-5" />
+                        <PencilIcon v-else class="w-5 h-5" />
+                    </button>
                 </h1>
                 <span class="text-gray-500">
                     {{ playlist.entries.length }}
@@ -15,14 +18,19 @@
             </span>
             <div class="flex gap-2 md:gap-4">
                 <base-button
-                    icon="share"
                     v-if="playlist.userId == userId"
                     @click="toggleSharePlaylist()"
                     :loading="loading['share']"
                 >
+                    <template #icon>
+                        <ShareIcon class="w-4 h-4" />
+                    </template>
                     {{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}
                 </base-button>
-                <base-button icon="trash" theme="error" @click="deletePlaylist">
+                <base-button theme="error" @click="deletePlaylist">
+                    <template #icon>
+                        <TrashIcon class="w-4 h-4" />
+                    </template>
                     {{ $t("common.delete") }}
                 </base-button>
             </div>
@@ -47,14 +55,19 @@
                 />
             </template>
         </draggable>
-        <base-button class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" icon="save" v-if="entryOrderEdited">{{$t('common.save')}}</base-button>
+        <base-button class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" v-if="entryOrderEdited">
+            <template #icon>
+                <SaveIcon class="w-4 h-4" />
+            </template>
+            {{$t('common.save')}}
+        </base-button>
         <base-modal
-            :show="showModal['share'] == true"
-            @close="showModal['share'] = false"
+            :show="Show"
+            @close="hideModal()"
         >
             <div class="relative w-72">
-                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="showModal.share = false">
-                    <icon name="error" size="20" />
+                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="hideModal()">
+                    <XIcon class="w-4 h-4" />
                 </button>
                 <h3 class="font-bold mb-4">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
                 <div class="flex flex-col gap-2">
@@ -74,16 +87,19 @@
                             <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
                             <base-button
                                 theme="error"
-                                icon="trash"
                                 :disabled="deleted[key.key]"
                                 :loading="loading[key.key]"
                                 @click="deleteKey(key)"
                                 :content="false"
                                 class="px-3"
-                            />
+                            >
+                                <template #icon>
+                                    <TrashIcon class="w-4 h-4" />
+                                </template>
+                            </base-button>
                         </span>
                         <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
-                            <icon name="warning" size="16" />
+                            <ExclamationIcon class="w-4 h-4" />
                             {{ $t('playlist.notValid') }}
                         </small>
                         <small class="block text-gray-400" v-else>{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
@@ -102,7 +118,9 @@
                             />
                             <small>{{ u.displayName }}</small>
                         </span>
-                        <icon class="text-red-700 cursor-pointer" name="error" :disabled="deleted[u.id]" :loading="loading[u.id]" @click="deleteUser(u)" />
+                        <button class="text-red-700 cursor-pointer" :disabled="deleted[u.id]" @click="deleteUser(u)">
+                            <XIcon class="w-4 h-4" />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -121,7 +139,8 @@ import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
-import { Icon } from "@/components/icon"; 
+import { ShareIcon, TrashIcon, SaveIcon, ExclamationIcon, XIcon } from "@heroicons/vue/solid";
+import { PencilIcon, CheckIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
@@ -132,7 +151,13 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         BackButton,
         PlaylistSongCard,
         BaseModal,
-        Icon,
+        ShareIcon,
+        TrashIcon,
+        SaveIcon,
+        ExclamationIcon,
+        XIcon,
+        PencilIcon,
+        CheckIcon,
         Draggable,
     },
 })
@@ -144,12 +169,7 @@ export default class PlaylistView extends Vue {
         [key: string]: string[];
     } = {};
     public newPlaylistName = "";
-    public showModal: {
-        [key: string]: boolean;
-    } = {
-        sharedWith: false,
-        share: false,
-    };
+    public show = false;
 
     public get originalEntryOrder(): string[] {
         if (!this.playlist) return [];
@@ -193,6 +213,18 @@ export default class PlaylistView extends Vue {
         return this.users ?? [];
     }
 
+    public get Show() {
+        return this.show;
+    }
+
+    public showModal() {
+        this.show = true;
+    }
+
+    public hideModal() {
+        this.show = false;
+    }
+
     public getLink(key: string) {
         return `https://${window.location.host}/sharing?token=${key}`;
     }
@@ -211,25 +243,16 @@ export default class PlaylistView extends Vue {
 
     public async toggleSharePlaylist() {
         this.loading["share"] = true;
-        if (!this.showModal["share"]) {
+        if (!this.show) {
             if (keys.value == undefined && this.playlist) {
                 await this.loadKeys();
                 this.users = this.users ?? await playlists.getUsers(this.playlist.id);
             }
-            this.showModal["share"] = true;
+            this.showModal();
         } else {
-            this.showModal["share"] = false;
+            this.hideModal();
         }
         this.loading["share"] = false;
-    }
-
-    public async toggleSharedWith() {
-        if (!this.showModal["sharedWith"]) {
-            if (this.playlist)
-            this.showModal["sharedWith"] = true;
-        } else {
-            this.showModal["sharedWith"] = false;
-        }
     }
 
     public async loadKeys() {

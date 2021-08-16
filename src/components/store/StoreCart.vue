@@ -1,7 +1,7 @@
 <template>
-    <base-dropdown v-if="cartItems.length" origin="right" class="text-sm" icon="buy" :show="show">
+    <base-dropdown v-if="cartItems.length" origin="right" class="text-sm" :show="show">
         <template #button>
-            <icon name="buy" class="relative opacity-50" />
+            <ShoppingCartIcon class="w-6 h-6 relative opacity-50" />
             <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
 				{{ cartItems.length }}
 			</span>
@@ -39,8 +39,8 @@
                         <span>{{ i.getName(languageKey) }}</span>
                         <price-div class="opacity-50 text-xs" :product="i" :country="country" />
                     </div>
-                    <button class="ml-auto cursor-pointer text-gray-500" @click="removeProduct(i.id)">
-                        <icon name="error" size="16" />
+                    <button class="ml-auto cursor-pointer opacity-50" @click="removeProduct(i.id)">
+                        <XIcon class="w-4 h-4" />
                     </button>
                 </div>
             </div>
@@ -51,7 +51,10 @@
                 <span>{{ $t("store.total") }}:</span>
                 <span>{{ totalPrice }}</span>
             </p>
-            <base-button theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" icon="arrowRight" :loading="checkingOut" class="w-full">
+            <base-button theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
+                <template #icon>
+                    <ArrowRightIcon class="w-4 h-4" />
+                </template>
                 {{ $t("store.checkout") }}
             </base-button>
         </div>
@@ -65,6 +68,8 @@ import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Options, Vue } from "vue-class-component";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
+import { ShoppingCartIcon } from "@heroicons/vue/outline";
+import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "store-cart",
@@ -73,6 +78,9 @@ import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
         SwitchGroup,
         Switch,
         SwitchLabel,
+        ShoppingCartIcon,
+        XIcon,
+        ArrowRightIcon,
     },
 })
 export default class StoreCart extends Vue {

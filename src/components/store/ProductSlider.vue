@@ -1,5 +1,5 @@
 <template>
-    <div class="gap-4 grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <div class="gap-6 grid sm:grid-cols-2 lg:grid-cols-3">
         <product-card
             v-for="product in Products"
             :key="product.id"

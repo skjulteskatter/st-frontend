@@ -1,48 +1,50 @@
 <template>
     <base-card
-        v-if="song && (song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)"
-        header
+        v-if="song"
     >
         <template #header>
             <div class="flex items-center gap-4">
-                <h4 class="font-bold">
+                <h3 class="font-bold">
                     {{ $t("song.media") }}
-                </h4>
+                </h3>
                 <tooltip :text="$t('tooltip.songFiles')" />
             </div>
         </template>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4" v-if="(song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)">
             <div
                 v-if="song.sheetMusic.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t("song.sheetmusic") }}
                 </p>
-                <media-list-item :files="song.sheetMusic" :callback="selectSheetMusic" icon="book" />
+                <media-list-item :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
             </div>
             <div
                 v-if="song.audioFiles.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t('song.audioFiles') }}
                 </p>
-                <media-list-item :files="song.audioFiles" :callback="selectAudio" icon="music" />
+                <media-list-item :files="song.audioFiles" :callback="selectAudio" type="audio" />
             </div>
             <div
                 v-if="song.videoFiles.length"
             >
-                <p class="text-sm mb-2">
+                <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t('song.videos') }}
                 </p>
                 <div class="flex flex-wrap gap-2">
                     <button
-                        class="flex-grow text-sm text-left p-2 rounded border border-gray-300 hover:border-gray-500 dark:border-gray-500 dark:hover:border-gray-400"
+                        class="flex-grow flex items-center text-sm text-left p-2 rounded border border-gray-300 hover:border-gray-500 dark:border-gray-500 dark:hover:border-gray-400"
                         v-for="video in song.videoFiles"
                         :key="'video-' + video.id"
                         @click="setActiveVideo(video.directUrl)"
                     >
-                        <icon name="play" size="16" class="mr-2 text-gray-500 dark:text-gray-300" />
-                        <span>{{ $t(`types.${video.category}`) + (video.languageKey ? ` (${video.languageKey})` : '') }}</span>
+                        <PlayIcon class="w-4 h-4 mr-2 opacity-50 inline" />
+                        <div class="flex-grow inline-flex gap-4 justify-between items-center">
+                            <span>{{ $t(`types.${video.category}`) }}</span>
+                            <span v-if="video.languageKey" class="text-xs uppercase tracking-wider opacity-50 ml-auto">{{ video.languageKey }}</span>
+                        </div>
                     </button>
                 </div>
                 <base-modal
@@ -62,12 +64,14 @@
                 </base-modal>
             </div>
         </div>
+        <p v-else class="text-sm opacity-50 text-center p-2">{{ $t('song.noFiles') }}</p>
     </base-card>
 </template>
 
 <script lang="ts">
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
+import { PlayIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -80,6 +84,7 @@ import { logs } from "@/services/logs";
     components: {
         BaseModal,
         MediaListItem,
+        PlayIcon,
     },
     props: {
         song: {

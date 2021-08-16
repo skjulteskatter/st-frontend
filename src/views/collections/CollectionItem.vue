@@ -1,6 +1,6 @@
 <template>
     <div>
-        <back-button class="flex md:hidden mb-4" />
+        <back-button class="mb-4" />
         <div class="flex flex-col gap-4 md:flex-row" v-if="product">
             <img
                 class="rounded-md shadow-md object-cover"
@@ -17,19 +17,20 @@
                 <div class="mb-4">
                     <base-button
                         theme="secondary"
-                        icon="buy"
                         :disabled="inCart || !collections[0].enabled"
                         v-if="!product.owned"
                         @click="addToCart()"
                     >
+                        <template #icon>
+                            <ShoppingCartIcon class="w-4 h-4" />
+                        </template>
                         {{ $t("store.addToCart") }}
                     </base-button>
                     <span class="opacity-50" v-else>
                         {{ $t("store.alreadyOwned") }}
                     </span>
                 </div>
-                <hr class="mb-4 dark:opacity-20" v-if="details" />
-                <h3 class="font-bold text-lg" v-if="details">{{ $t('store.about') }}</h3>
+                <h3 class="font-bold text-lg mt-8" v-if="details">{{ $t('store.about') }}</h3>
                 <div v-html="details" class="flex flex-col gap-2 text-sm"></div>
             </base-card>
         </div>
@@ -44,30 +45,19 @@ import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { appSession } from "@/services/session";
 import http from "@/services/http";
 import {Price as PriceDiv} from "@/components/store";
-// import { notify } from "@/services/notify";
+import { ShoppingCartIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         BackButton,
         PriceDiv,
+        ShoppingCartIcon,
     },
     name: "collection-item",
 })
 export default class StoreItem extends Vue {
     private store = useStore();
     public loading = false;
-
-    // public async checkout(product: Product) {
-    //     this.loading = true;
-    //     await this.store?.dispatch(NotificationActionTypes.ADD_NOTIFICATION, {
-    //         type: "primary",
-    //         icon: "shop",
-    //         title: this.$t("notification.redirecting"),
-    //     });
-    //     await this.store.dispatch(StripeActionTypes.START_SESSION);
-    //     this.loading = false;
-    // }
-
     public country = "";
 
     public async mounted() {
@@ -80,8 +70,6 @@ export default class StoreItem extends Vue {
                 StripeMutationTypes.CART_ADD_PRODUCT,
                 this.product.id,
             );
-
-        // notify("success", "shop",this.$t("store.addedToCart"));
     }
 
     public get discounted() {

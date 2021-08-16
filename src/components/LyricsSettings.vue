@@ -75,6 +75,7 @@
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
 import Modal from "@/components/Modal.vue";
+import { control } from "@/classes/presentation/control";
 
 @Options({
     components: {
@@ -124,6 +125,7 @@ export default class LyricsSettings extends Vue {
     public lineSize = 2;
 
     public mounted() {
+        control.init();
         window.addEventListener("keydown", this.keydownEvent);
         window.addEventListener("storage", this.storageEvent);
         this.load();

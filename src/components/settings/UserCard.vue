@@ -1,7 +1,7 @@
 <template>
     <base-card v-if="user">
         <div class="h-full flex gap-4 items-center justify-start md:flex-col md:justify-center">
-            <img class="w-16 h-16 md:h-32 md:w-32 rounded-full object-cover" :src="user.image" alt="user portrait" />
+            <img class="w-16 h-16 md:h-32 md:w-32 rounded-full object-cover" :src="image" alt="user portrait" />
             <div class="md:text-center">
                 <h2 class="font-bold text-lg">{{ user.displayName }}</h2>
                 <p class="text-gray-500 dark:text-gray-400">{{ user.email }}</p>
@@ -24,6 +24,10 @@ import { useStore } from "@/store";
 })
 export default class UserCard extends Vue {
     private store = useStore();
+
+    public get image() {
+        return this.user?.image ?? "/img/portrait-placeholder.png";
+    }
 
     public get user() {
         return this.store.getters.user;
