@@ -1,62 +1,60 @@
 <template>
-    <div id="lyrics-wrapper">
-        <div class="lyrics">
-            <div class="lyrics__credits gap-x" v-if="song">
-                <h1 class="lyrics__number" v-if="song.number">
-                    {{ song.number }}
-                </h1>
-                <div>
-                    <h3 class="lyrics__title">{{ song.getName() }}</h3>
-                    <p
-                        class="lyrics__credits__author"
-                        v-if="song.Authors.length > 0"
-                    >
-                        {{ $t("song.author") }}:
-                        <span v-for="author in song.Authors" :key="author.id">
-                            {{ author.name }}
-                        </span>
-                    </p>
-                    <p
-                        class="lyrics__credits__composer"
-                        v-if="song.Composers.length > 0"
-                    >
-                        {{ $t("song.composer") }}:
-                        <span
-                            v-for="composer in song.Composers"
-                            :key="composer.id"
-                        >
-                            {{ composer.name }}
-                        </span>
-                    </p>
-                    <p class="lyrics__credits__composer" v-if="melodyOrigin">
-                        {{ $t("song.melody") }}: {{ melodyOrigin }}
-                    </p>
-                    <p class="lyrics__credits__composer">
-                        {{ song.yearWritten }}
-                    </p>
-                </div>
-            </div>
-            <div id="text-wrapper" v-if="verses">
-                <div
-                    class="lyrics__verse"
-                    :class="{ 'lyrics__verse-chorus': verse.type == 'chorus' }"
-                    v-for="(verse, i) in verses"
-                    :key="i + '_' + verse"
+    <div class="text-black text-3xl">
+        <div class="flex gap-4 px-10 py-4 border-b border-black/20 dark:border-white/20" v-if="song">
+            <h1 class="font-bold" v-if="song.number">
+                {{ song.number }}
+            </h1>
+            <div>
+                <h3 class="mb-2">{{ song.getName() }}</h3>
+                <p
+                    class="text-base tracking-wide opacity-50"
+                    v-if="song.Authors.length > 0"
                 >
+                    {{ $t("song.author") }}:
+                    <span v-for="author in song.Authors" :key="author.id">
+                        {{ author.name }}
+                    </span>
+                </p>
+                <p
+                    class="text-base tracking-wide opacity-50"
+                    v-if="song.Composers.length > 0"
+                >
+                    {{ $t("song.composer") }}:
                     <span
-                        class="lyrics__verse__number"
-                        v-if="verse.type != 'chorus'"
-                        >{{ verse.name }}</span
+                        v-for="composer in song.Composers"
+                        :key="composer.id"
                     >
-                    <p
-                        class="lyrics__verse__line"
-                        :class="{ fade: line.trim()[0] == '(' }"
-                        v-for="(line, i) in verse.content"
-                        :key="i + '_' + line"
-                    >
-                        {{ line }}
-                    </p>
-                </div>
+                        {{ composer.name }}
+                    </span>
+                </p>
+                <p class="text-base tracking-wide opacity-50" v-if="melodyOrigin">
+                    {{ $t("song.melody") }}: {{ melodyOrigin }}
+                </p>
+                <p class="text-base tracking-wide opacity-50">
+                    {{ song.yearWritten }}
+                </p>
+            </div>
+        </div>
+        <div class="ml-80 mt-10" v-if="verses">
+            <div
+                class="relative mb-6 text-5xl"
+                :class="{ 'italic border-l-4 border-black/10 dark:border-white/10 pl-4': verse.type == 'chorus' }"
+                v-for="(verse, i) in verses"
+                :key="i + '_' + verse"
+            >
+                <span
+                    class="absolute -left-20 font-semibold"
+                    v-if="verse.type != 'chorus'"
+                    >{{ verse.name }}</span
+                >
+                <p
+                    class="my-4 tracking-wide"
+                    :class="{ 'opacity-50': line.trim()[0] == '(' }"
+                    v-for="(line, i) in verse.content"
+                    :key="i + '_' + line"
+                >
+                    {{ line }}
+                </p>
             </div>
         </div>
     </div>
@@ -110,71 +108,3 @@ export default class PresentationView extends Vue {
     }
 }
 </script>
-<style lang="scss">
-#text-wrapper {
-    margin-left: 10em;
-}
-
-.lyrics {
-    --double-spacing: calc(var(--st-spacing) * 2);
-
-    font-size: 2.2em;
-
-    &__credits {
-        width: 100%;
-        border-bottom: 1px solid var(--st-color-border);
-        padding-left: 2em;
-        margin-bottom: 50px;
-        margin-top: 25px;
-        padding-bottom: 0.5em;
-        display: flex;
-        align-items: center;
-        gap: var(--double-spacing);
-
-        &__composer,
-        &__author {
-            margin: 0;
-            font-size: 0.7em;
-            opacity: 0.6;
-        }
-    }
-
-    &__title {
-        margin: 0;
-    }
-
-    &__number {
-        opacity: 0.6;
-        margin: 0;
-    }
-
-    &__verse {
-        margin-bottom: 1.5em;
-        position: relative;
-        line-height: 1em;
-        font-size: 1.5em;
-
-        &-chorus {
-            font-style: italic;
-            border-left: 5px solid var(--st-color-border);
-            padding-left: var(--st-spacing);
-        }
-
-        &__number {
-            position: absolute;
-            top: 0;
-            left: -1.5em;
-            font-weight: bold;
-        }
-
-        &__line {
-            margin: 0.5em 0;
-
-            &.fade {
-                opacity: 0.5;
-                font-size: 0.8em;
-            }
-        }
-    }
-}
-</style>
