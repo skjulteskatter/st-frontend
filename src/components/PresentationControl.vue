@@ -2,9 +2,12 @@
     <div class="flex flex-col gap-4" v-if="song && lyrics">
         <base-card class="ring-1 ring-primary">
             <template #header>
-                <h3 class="font-bold">
-                    {{ $t("song.viewer") }}
-                </h3>
+                <div class="flex gap-4 items-center justify-between">
+                    <h3 class="font-bold">
+                        {{ $t("song.viewer") }}
+                    </h3>
+                    <span class="tracking-wider text-xs p-1 rounded text-green-600 bg-green-500/20">BETA</span>
+                </div>
             </template>
             <div class="flex flex-col items-center gap-2 py-4">
                 <base-button
