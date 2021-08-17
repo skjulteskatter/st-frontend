@@ -34,13 +34,13 @@
                     </small>
                 </div>
             </div>
-            <small
-                class="text-red-700 cursor-pointer hover:underline dark:text-red-400"
+            <button
+                class="text-xs text-red-700 px-2 py-1 rounded-md bg-red-500/10 cursor-pointer hover:bg-red-500/20 dark:text-red-400"
                 v-if="playlist?.userId == userId"
                 @click="removeFromPlaylist"
             >
                 {{ $t("playlist.remove") }}
-            </small>
+            </button>
         </div>
     </base-card>
 </template>
