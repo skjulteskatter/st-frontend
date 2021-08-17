@@ -23,8 +23,13 @@ const lanKey = localStorage.getItem("languageKey") ?? "en";
 let currentTranslation = validLanguages.includes(lanKey) ? lanKey : "en";
 
 export async function setLocale(locale: string) {
-    translations = await (await fetch(`/translations/${locale}.json`)).json();
-    i18n.global.setLocaleMessage("current", translations);
+    try {
+        translations = await (await fetch(`/translations/${locale}.json`)).json();
+        i18n.global.setLocaleMessage("current", translations);
+    }
+    catch {
+        //
+    }
     currentTranslation = locale;
 }
 
@@ -34,7 +39,12 @@ export async function ensureLanguageIsFetched() {
     const lan = useStore().getters.languageKey;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     if (!englishIsFetched) {
-        countries.registerLocale(await countryInMyLanguage("en"));
+        try {
+            countries.registerLocale(await countryInMyLanguage("en"));
+        }
+        catch {
+            //
+        }
         // countries.getNames(lan);
         englishIsFetched = true;
         const result = await api.items.getTranslations(["en"]);
@@ -47,7 +57,12 @@ export async function ensureLanguageIsFetched() {
         i18n.global.setLocaleMessage("en", english);
     }
     if (!translations || currentTranslation !== lan) {
-        countries.registerLocale(await countryInMyLanguage(lan));
+        try {
+            countries.registerLocale(await countryInMyLanguage(lan));
+        }
+        catch {
+            //
+        }
         await setLocale(lan);
     }
 }
