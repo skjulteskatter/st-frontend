@@ -2,9 +2,12 @@
     <div class="flex flex-col gap-4" v-if="song && lyrics">
         <base-card class="ring-1 ring-primary">
             <template #header>
-                <h3 class="font-bold">
-                    {{ $t("song.viewer") }}
-                </h3>
+                <div class="flex gap-4 items-center justify-between">
+                    <h3 class="font-bold">
+                        {{ $t("song.viewer") }}
+                    </h3>
+                    <span class="tracking-wider text-xs p-1 rounded text-green-600 bg-green-500/20">BETA</span>
+                </div>
             </template>
             <div class="flex flex-col items-center gap-2 py-4">
                 <base-button
@@ -23,7 +26,7 @@
                     {{ $t("song.updateviewer") }}
                 </base-button>
             </div>
-            <template #footer>
+            <template #footer v-if="showButtons">
                 <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
                     {{ $t("song.controlpanel") }}
                 </h4>
@@ -135,6 +138,7 @@ export default class PresentationControl extends Vue {
     public lyrics?: Lyrics;
     public languageKey?: string;
     public song?: Song;
+    public showButtons = false;
 
     public lineSize = 2;
 
@@ -143,6 +147,7 @@ export default class PresentationControl extends Vue {
     }
 
     public open() {
+        this.showButtons = true;
         this.refresh();
         window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
     }
@@ -167,98 +172,3 @@ export default class PresentationControl extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-.lyrics-settings {
-    --half-spacing: calc(var(--st-spacing) * 0.5);
-    flex-shrink: 0;
-
-    display: flex;
-    flex-direction: column;
-    gap: var(--st-spacing);
-
-    &__viewer {
-        &__title {
-            margin-top: 0;
-        }
-
-        &__buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: calc(var(--st-spacing)/2);
-        }
-    }
-
-    &__controls {
-        .card__content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--st-spacing);
-        }
-
-        &__verses {
-            margin-top: var(--st-spacing);
-        }
-
-        &__buttons {
-            display: flex;
-            gap: calc(var(--st-spacing)/2);
-        }
-
-        &__title {
-            margin: 0;
-        }
-    }
-
-    &__verses {
-        .card__content {
-            width: 100%;
-        }
-
-        &__select {
-            width: 100%;
-            display: flex;
-
-            label {
-                flex-grow: 1;
-            }
-        }
-
-        &__title {
-            margin: 0 0 calc(var(--st-spacing)/2) 0;
-        }
-
-        &__input {
-            border-radius: var(--st-border-radius);
-            overflow: hidden;
-            font-size: 1.1em;
-
-            display: flex;
-            flex-direction: column;
-            //align-items: center;
-            gap: var(--st-spacing);
-
-            &__check {
-                display: none;
-
-                &:checked + span {
-                    color: white;
-                    background: var(--st-color-primary);
-                }
-            }
-
-            &__label {
-                padding: var(--half-spacing);
-                background: var(--st-color-background);
-                color: var(--st-text-color);
-                user-select: none;
-            }
-
-            &:not(:last-child) {
-                margin-bottom: 0.5em;
-            }
-        }
-    }
-}
-</style>

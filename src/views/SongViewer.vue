@@ -35,7 +35,7 @@
                             />
                         </div>
                     </base-modal>
-                    <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics && (isExtended || isAdmin)">
+                    <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics">
                         <SwitchLabel class="text-xs tracking-wide">{{ $t("song.viewer") }}</SwitchLabel>
                         <Switch
                             :disabled="view == 'transpose'"
@@ -46,7 +46,7 @@
                         >
                             <div
                                 class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
-                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-black/40'"
+                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
                             >
                                 <span
                                     :class="switchExtended ? 'translate-x-5' : 'translate-x-1'"
@@ -327,10 +327,10 @@ export default class SongViewer extends Vue {
     }
 
     public extend() {
-        if (this.isAdmin)
+        if (this.isAdmin || this.isExtended)
             this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
         else {
-            this.store.commit(SessionMutationTypes.SPLASH, {show: true, title: "In Development", content: "This feature is still in development and will be available soon."});
+            this.store.commit(SessionMutationTypes.SPLASH, {show: true, title: "In development", content: "This feature is still in development and will be available soon."});
         }
     }
 

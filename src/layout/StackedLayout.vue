@@ -30,11 +30,11 @@
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
-				<audio-player />
 			</main>
 			<footer>
 				<copyright />
 			</footer>
+			<audio-player />
 		</div>
 
 		<!-- Modals -->
@@ -45,15 +45,17 @@
 			:show="show && splash != undefined"
 			@close="closeSplash()"
 		>
-			<h3 class="text-lg uppercase">{{splash?.title}}</h3>
-			<hr/>
-			<p class="mt-2">{{splash?.content}}</p>
-			<br/>
-			<div v-if="splash?.callback" class="flex">
-				<base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
-				<base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
-			</div>
-			<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
+			<template #header>
+				<h3 class="text-lg font-bold">{{splash?.title}}</h3>
+			</template>
+			<p>{{splash?.content}}</p>
+			<template #footer>
+				<div v-if="splash?.callback" class="flex gap-2">
+					<base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
+					<base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
+				</div>
+				<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
+			</template>
 		</base-modal>
 	</loader>
 </template>
