@@ -166,6 +166,15 @@ class Auth {
         }
     }
 
+    public async forgotPassword(email: string) {
+        if (!a) {
+            notInitialized();
+        }
+
+        await a().sendPasswordResetEmail(email);
+        notify("success", "Forgot Password", "success", "Check your email for the reset-link.");
+    }
+
     public async loginWithEmailAndPassword(email: string, password: string, stayLoggedIn: boolean) {
         if (!a) {
             notInitialized();

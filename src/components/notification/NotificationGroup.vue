@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 right-0 p-4 md:p-8 flex flex-col gap-4 items-end z-20">
+    <div class="fixed bottom-0 right-0 p-4 md:p-8 flex flex-col gap-4 items-end">
         <notification
             v-for="notification in notifications"
             :key="notification.title"
