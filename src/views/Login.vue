@@ -66,9 +66,31 @@
                     >
                         Sign in
                     </base-button>
+                    <a class="cursor-pointer hover:underline" @click="forgotPassword = true">Forgot password?</a>
                 </form>
             </div>
         </base-card>
+        <base-modal :show="forgotPassword" @close="forgotPassword = false">
+            <div class="flex flex-col items-center gap-4">
+                <h1 class="text-xl font-bold md:text-2xl">Forgot password</h1>
+                <form @submit.prevent="sendForgotEmail()" class="flex flex-col gap-4">
+                    <base-input
+                        type="email"
+                        label="Email"
+                        v-model="form.email"
+                        required
+                        @keydown.enter="sendForgotEmail()"
+                    />
+                    <base-button 
+                        theme="secondary" 
+                        type="submit"
+                        formaction="submit"
+                        :disabled="forgotPasswordSent"
+                    >Send</base-button>
+                </form>
+                <div v-if="forgotPasswordSent">Email sent</div>
+            </div>
+        </base-modal>
         <base-modal :show="createUserModal" @close="createUserModal = false">
             <div class="flex flex-col items-center gap-4">
                 <h1 class="text-xl font-bold md:text-2xl">Register account</h1>
@@ -130,6 +152,8 @@ export default class Login extends Vue {
     } = {};
 
     public createUserModal = false;
+    public forgotPassword = false;
+    public forgotPasswordSent = false;
 
     public mounted() {
         if (this.user) {
@@ -158,6 +182,13 @@ export default class Login extends Vue {
             }
         }
         this.loading.login = false;
+    }
+
+    public async sendForgotEmail() {
+        if (!this.forgotPasswordSent && this.form.email) {
+            this.forgotPasswordSent = true;
+            await auth.forgotPassword(this.form.email);
+        }
     }
 
     public createUser() {

@@ -12,12 +12,12 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '14.x'
   displayName: 'Install Node.js'
-
 - script: |
     npm install
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Prepare and Build'
 - script: |
     npm run deploy -- --token $(firebaseToken)
+  displayName: 'Deploy to Firebase'
