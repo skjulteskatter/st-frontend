@@ -12,7 +12,7 @@
                 >
                     {{ collection.getName(Language) }}
                 </router-link>
-                <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
+                <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
                     {{ $t('song.seeStatistics') }}
                     <ArrowSmRightIcon class="w-4 h-4" />
                 </router-link>
@@ -49,7 +49,7 @@
                     v-if="song.hasLyrics && song.Authors.length"
                 >
                     <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                    <span v-for="i in song.Authors" :key="i.id" class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400">
+                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30">
                         <router-link
                             :to="{
                                 name: 'contributor',
@@ -71,7 +71,7 @@
                         v-for="i in song.Composers"
                         :key="i.id"
                         :label="i.name"
-                        class="px-1 rounded bg-gray-200 border hover:border-gray-400 dark:bg-white dark:bg-opacity-20 dark:text-white dark:border-gray-500 dark:hover:border-gray-400"
+                        class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30"
                     >
                         <router-link
                             :to="{
