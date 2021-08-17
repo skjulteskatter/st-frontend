@@ -46,7 +46,7 @@
                         >
                             <div
                                 class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
-                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-black/40'"
+                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
                             >
                                 <span
                                     :class="switchExtended ? 'translate-x-5' : 'translate-x-1'"
