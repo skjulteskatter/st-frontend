@@ -30,11 +30,11 @@
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
-				<audio-player />
 			</main>
 			<footer>
 				<copyright />
 			</footer>
+			<audio-player />
 		</div>
 
 		<!-- Modals -->
