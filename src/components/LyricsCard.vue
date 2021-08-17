@@ -103,7 +103,7 @@
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
             <component
                 :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
-                :song="song"
+                :song="type == 'default' ? song : undefined"
                 :lyrics="type == 'transpose' ? lyrics : undefined"
             />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
