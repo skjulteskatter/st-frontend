@@ -15,10 +15,10 @@
         <transition-root 
             :show="Show"
             as="template"
-            enter="transition transform"
+            enter="transition"
             enter-from="-translate-y-2 opacity-0"
             enter-to="translate-y-0 opacity-100"
-            leave="transition transform"
+            leave="transition"
             leave-from="translate-y-0 opacity-100"
             leave-to="translate-y-2 opacity-0"
         >
