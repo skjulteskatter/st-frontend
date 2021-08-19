@@ -253,6 +253,10 @@ export default class SongViewer extends Vue {
         this.lyricsLoading = false;
     }
 
+    public get user() {
+        return this.store.getters.user;
+    }
+
     public get admin() {
         return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
     }
@@ -303,7 +307,7 @@ export default class SongViewer extends Vue {
     }
 
     public get playlists() {
-        return this.store.state.session.playlists;
+        return this.store.state.session.playlists.filter(p => p.userId == this.user?.id);
     }
 
     public get extended() {
