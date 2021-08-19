@@ -23,7 +23,13 @@
             leave-to="translate-y-2 opacity-0"
         >
             <base-card :class="`z-10 absolute top-11 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
+                <template #header v-if="$slots.header">
+                    <slot name="header" />
+                </template>
                 <slot name="default"></slot>
+                <template #footer v-if="$slots.footer">
+                    <slot name="footer" />
+                </template>
             </base-card>
         </transition-root>
     </div>
