@@ -18,7 +18,7 @@
 import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
-import Notification from "./Notification.vue";
+import Notification from "./NotificationItem.vue";
 
 @Options({
     name: "notification-group",

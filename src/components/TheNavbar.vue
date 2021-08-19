@@ -103,7 +103,7 @@ import {
 	MenuItem,
 	MenuItems,
 } from "@headlessui/vue";
-import { NotificationList } from "@/components/notification";
+import NotificationList from "@/components/notification/NotificationList.vue";
 import Feedback from "@/components/feedback/Feedback.vue";
 import { LockClosedIcon } from "@heroicons/vue/solid";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -119,8 +119,8 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 		MenuButton,
 		MenuItem,
 		MenuItems,
-		NotificationList,
 		Feedback,
+		NotificationList,
 		LockClosedIcon,
 	},
 	name: "the-navbar",

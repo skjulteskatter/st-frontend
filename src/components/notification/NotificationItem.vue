@@ -22,7 +22,7 @@
             <button @click="remove()" class="float-right">
                 <XIcon class="w-4 h-4" />
             </button>
-        </div>
+        </div>z
     </transition-root>
 </template>
 
@@ -33,7 +33,7 @@ import { TransitionRoot } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/solid";
 
 @Options({
-    name: "notification",
+    name: "notification-item",
     props: {
         id: {
             type: String,
@@ -66,7 +66,7 @@ import { XIcon } from "@heroicons/vue/solid";
         XIcon,
     },
 })
-export default class Notification extends Vue {
+export default class NotificationItem extends Vue {
     public id = "";
     public type?: string;
     public icon?: string;
