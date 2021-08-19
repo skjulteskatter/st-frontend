@@ -27,7 +27,9 @@
                     <Switch
                         @click="transposeToggle()"
                         v-model="chordsEnabled"
+                        :disabled="isExtended"
                         class="focus:outline-none"
+                        :class="{ 'opacity-50 cursor-not-allowed': isExtended }"
                     >
                         <div
                             class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
@@ -160,6 +162,10 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
+
+    public get isExtended() {
+        return this.store.state.session.extend;
+    }
 
     public get chordsEnabled() {
         return this.lyrics?.format == "html";
