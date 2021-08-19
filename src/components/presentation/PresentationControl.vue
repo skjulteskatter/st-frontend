@@ -26,7 +26,7 @@
                     {{ $t("song.updateviewer") }}
                 </base-button>
             </div>
-            <template #footer v-if="showButtons">
+            <template #footer>
                 <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
                     {{ $t("song.controlpanel") }}
                 </h4>
@@ -138,7 +138,6 @@ export default class PresentationControl extends Vue {
     public lyrics?: Lyrics;
     public languageKey?: string;
     public song?: Song;
-    public showButtons = false;
 
     public lineSize = 2;
 
@@ -147,7 +146,6 @@ export default class PresentationControl extends Vue {
     }
 
     public open() {
-        this.showButtons = true;
         this.refresh();
         window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
     }
