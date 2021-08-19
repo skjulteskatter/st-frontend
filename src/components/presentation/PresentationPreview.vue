@@ -1,12 +1,8 @@
 <template>
     <base-card v-if="song" class="overflow-visible">
         <template #header>
-            <div class="w-full flex items-center gap-2">
-                <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
-                <!-- <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/> -->
-                <!-- <print-button class="hidden md:flex" /> -->
-            </div>
-            <div class="flex gap-2 items-end flex-wrap">
+            <h3 class="font-bold mb-2">{{ $t("song.lyrics") }}</h3>
+            <div class="flex justify-between gap-2">
                 <select
                     class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
@@ -22,21 +18,29 @@
                         {{ l.name }}
                     </option>
                 </select>
+                <base-button @click="toggleAll">{{ $t(!unset ? 'unset' : 'set') }}</base-button>
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
-            <base-button @click="toggleAll">{{$t(!unset ? 'unset' : 'set')}}</base-button>
             <div
-                class="w-full whitespace-pre-line mb-4"
-                :class="{
-                    'text-lg': currentVerses.includes((i + 1).toString()),
-                }"
-                :style="availableVerses.includes((i + 1).toString()) ? '' : 'color: red'"
+                class="w-full cursor-pointer whitespace-pre-line mb-2 hover:bg-black/5 dark:hover:bg-white/10 p-2"
                 v-for="(verse, i) in text"
                 :key="lyrics?.languageKey + verse.name + verse.content[0] + i"
+                :class="{
+                    'border-l-2 border-primary bg-primary/10': currentVerses.includes((i + 1).toString()),
+                    'bg-red-500/10': !availableVerses.includes((i + 1).toString()),
+                }"
+                @click="toggleVerse((i + 1).toString())"
             >
-                <b class="text-sm">{{ verse.name }}</b>
-                <p class="leading-7 w-max cursor-pointer" @click="toggleVerse((i + 1).toString())">{{ verse.content.join("\n") }}</p>
+                <b class="text-sm mb-1 flex items-center gap-2">
+                    <CheckCircleIcon v-if="availableVerses.includes((i + 1).toString())" class="w-5 h-5 text-green-500" />
+                    <MinusCircleIcon v-else class="w-5 h-5 text-red-500" />
+                    {{ verse.name }}
+                </b>
+                <p
+                    class="leading-7"
+                    :class="{ 'opacity-50 italic': !availableVerses.includes((i + 1).toString()) }"
+                >{{ verse.content.join("\n") }}</p>
             </div>
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
@@ -57,6 +61,8 @@ import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { SongChanger } from "@/components/songs";
 import { PresentationControl } from "@/classes/presentation/control";
+import { CheckCircleIcon } from "@heroicons/vue/solid";
+import { MinusCircleIcon } from "@heroicons/vue/outline";
 
 @Options({
     components: {
@@ -65,6 +71,8 @@ import { PresentationControl } from "@/classes/presentation/control";
         LyricsViewer,
         PrintButton,
         SongChanger,
+        CheckCircleIcon,
+        MinusCircleIcon,
     },
     props: {
         lyrics: {
