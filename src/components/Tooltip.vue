@@ -16,7 +16,7 @@
 		>
 			<span
 				class="bg-secondary w-2 h-2 rotate-45 absolute -bottom-0.5 dark:bg-white"
-				:class="{ 'right-3': position == 'right', 'left-3': position == 'left' }"
+				:class="{ 'right-3': position == 'right', 'left-3': position == 'left', 'left-1/2 -translate-x-1/2': position == 'center' }"
 			></span>
 			<small class="text-white font-normal whitespace-nowrap dark:text-secondary">{{ text }}</small>
 		</transition-root>
@@ -52,13 +52,24 @@ export default class Tooltip extends Vue {
 				return "-left-2";
 			case "right":
 				return "-right-2";
+			case "center":
+				return "left-1/2 -translate-x-1/2";
 			default:
-				return "right-1/2 -translate-x-1/2";
+				return "left-1/2 -translate-x-1/2";
 		}
 	}
 
 	public handlePosition(e: MouseEvent) {
-		this.position = (e.clientX < window.innerWidth / 2) ? "left" : "right";
+		const left = window.innerWidth / 2 - window.innerWidth / 6;
+		const right = (window.innerWidth - window.innerWidth / 2) + window.innerWidth / 6;
+
+		if(e.clientX < left) {
+			this.position = "left";
+		} else if(e.clientX > right) {
+			this.position = "right";
+		} else {
+			this.position = "center";
+		}
 	}
 
 	public showTooltip(e: MouseEvent) {
