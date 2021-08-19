@@ -5,7 +5,9 @@ import { Lyrics } from "../lyrics";
 
 export type Settings = {
     size: number;
-    availableVerses: string[];
+    availableVerses: {
+        [key: string]: boolean;
+    };
     currentIndex: number;
 }
 
@@ -82,11 +84,11 @@ export class PresentationBase {
         [key: string]: Function;
     } = {};
 
-    public registerCallback(key: Key, callback: Function) {
+    public registerCallback(key: Key | "control", callback: Function) {
         this.callbacks[key] = callback;
     }
 
-    private executeCallback(key: Key) {
+    private executeCallback(key: Key | "control") {
         this.callbacks[key]?.();
     }
 
@@ -120,14 +122,6 @@ export class PresentationBase {
                 }
 
                 if (this.type == "viewer") {
-                    // VIEWER events
-                    // if (e.key.endsWith("song")) {
-                    //     this.song = JSON.parse(item);
-                    // }
-
-                    // if (e.key.endsWith("contributors")) {
-                    //     this.contributors = JSON.parse(item);
-                    // }
 
                     if (key.endsWith("lyrics")) {
                         this.lyrics = JSON.parse(item);
@@ -155,22 +149,58 @@ export class PresentationBase {
         return i ? JSON.parse(i) as KeyEntry<K> : undefined;
     }
 
+    public toggleVerse(index: string) {
+        const settings = this.settings;
+        if (settings) {
+
+            settings.availableVerses[index] = !settings.availableVerses[index];
+
+            this.settings = settings;
+        }
+    }
+
+    public get AvailableVerses() {
+        return Object.entries(this.settings?.availableVerses ?? {}).filter(i => i[1] == true).map(i => i[0]);
+    }
+
+    public get currentVerses() {
+        const verses: string[] = [];
+        if (this.Settings) {
+            const index = this.Settings.currentIndex;
+            const size = this.Settings.size;
+
+            const verse = this.AvailableVerses[index];
+            
+            if (verse) {
+                verses.push(verse);
+                
+                if (size > 1) {
+                    const verse2 = this.AvailableVerses[index + 1];
+
+                    if (verse2) {
+                        verses.push(verse2);
+                    }
+                }
+            }
+        }
+        return verses;
+    }
+
     public next() {
-        console.log("NEXT");
         if (this.settings) {
             const index = this.settings.currentIndex + this.settings.size;
-            if (index <= this.settings.availableVerses.length) {
+            if (index <= this.AvailableVerses.length) {
                 this.settings = {
                     availableVerses: this.settings.availableVerses,
                     size: this.settings.size,
                     currentIndex: this.settings.currentIndex + this.settings.size,
                 };
+                this.executeCallback("control");
             }
         }
     }
 
     public previous() {
-        console.log("PREVIOUS");
         if (this.settings) {
             const index = this.settings.currentIndex - this.settings.size;
             if (index >= 0) {
@@ -179,6 +209,7 @@ export class PresentationBase {
                     size: this.settings.size,
                     currentIndex: index,
                 };
+                this.executeCallback("control");
             }
         }
     }

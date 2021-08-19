@@ -85,7 +85,7 @@ export class Lyrics implements ApiLyrics {
     public getText(translations: {
         chorus: string;
         bridge: string;
-    }) {
+    }, presentation = false) {
         const verses: { name: string; content: string[] }[] = [];
 
         const types: {
@@ -95,13 +95,15 @@ export class Lyrics implements ApiLyrics {
             "[Bridge]": "bridge",
         };
 
-        if (this.content) {
-            for (const key of Object.keys(this.content)) {
+        const content = presentation ? this.verses : this.content as JsonContent;
+
+        if (content) {
+            for (const key of Object.keys(content)) {
                 const verse: Verse = {
-                    name: (this.content as JsonContent)[key].name,
-                    content: (this.content as JsonContent)[key].content,
+                    name: (content as JsonContent)[key].name,
+                    content: (content as JsonContent)[key].content,
                     type:
-                        types[(this.content as JsonContent)[key].name] ??
+                        types[(content as JsonContent)[key].name] ??
                         "verse",
                 };
 

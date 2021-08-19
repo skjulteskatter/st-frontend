@@ -18,16 +18,19 @@
 			>{{ $t('common.remove') }}</button>
 		</div>
 		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">
-			<notification
+			<div
 				v-for="n in notifications"
 				:key="n.id"
-				:body="n.content"
-				:icon="n.icon"
-				:id="n.id"
-				:title="n.title"
-				:type="n.type"
-				:persist="true"
-			/>
+			>
+				<!-- <notification-item
+					:body="n.content"
+					:icon="n.icon"
+					:id="n.id"
+					:title="n.title"
+					:type="n.type"
+					:persist="true"
+				/> -->
+			</div>
 		</div>
 		<p v-else class="p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications.noNotifications') }}</p>
 	</base-dropdown>
@@ -35,7 +38,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Notification from "./Notification.vue";
+import NotificationItem from "./NotificationItem.vue";
 import { BellIcon } from "@heroicons/vue/outline";
 import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
@@ -43,12 +46,12 @@ import { useStore } from "@/store";
 @Options({
 	name: "notification-list",
 	components: {
-		Notification,
 		BellIcon,
+		NotificationItem,
 	},
 })
 export default class NotificationList extends Vue {
-    public store = useStore();
+    private store = useStore();
 
 	public get notifications() {
         return this.store.getters.notifications.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);

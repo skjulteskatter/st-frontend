@@ -1,5 +1,5 @@
 <template>
-    <base-card class="border hover:border-gray-400 dark:border-gray-500 dark:hover:border-gray-400">
+    <base-card v-if="collection && song && playlist" class="hover:ring-2 hover:ring-gray-400">
         <div class="flex gap-4 items-center">
             <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
             <router-link
@@ -8,8 +8,8 @@
                 :to="{
                     name: 'song',
                     params: {
-                        collection: collection?.key,
-                        number: song?.number,
+                        collection: collection.key,
+                        number: song.number,
                     },
                 }"
             >
@@ -18,8 +18,8 @@
                         {{ entryName }}
                     </span>
                     <small class="text-gray-500 dark:text-gray-400">
-                        {{ collection?.getName(languageKey) }}
-                        {{ song?.number }}
+                        {{ collection.getName(languageKey) }}
+                        {{ song.number }}
                     </small>
                 </div>
             </router-link>
@@ -29,14 +29,14 @@
                         {{ entryName }}
                     </span>
                     <small class="text-gray-500 dark:text-gray-400">
-                        {{ collection?.getName(languageKey) }}
-                        {{ song?.number }}
+                        {{ collection.getName(languageKey) }}
+                        {{ song.number }}
                     </small>
                 </div>
             </div>
             <button
                 class="text-xs text-red-700 px-2 py-1 rounded-md bg-red-500/10 cursor-pointer hover:bg-red-500/20 dark:text-red-400"
-                v-if="playlist?.userId == userId"
+                v-if="playlist.userId == userId"
                 @click="removeFromPlaylist"
             >
                 {{ $t("playlist.remove") }}
