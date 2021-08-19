@@ -1,4 +1,3 @@
-import api from "@/services/api";
 import { useStore } from "@/store";
 import { createI18n } from "vue-i18n";
 import countries from "i18n-iso-countries";
@@ -47,13 +46,10 @@ export async function ensureLanguageIsFetched() {
         }
         // countries.getNames(lan);
         englishIsFetched = true;
-        const result = await api.items.getTranslations(["en"]);
         const english: {
             [key: string]: string;
-        } = countries.getNames(lan);
-        for (const l of Object.keys(result)) {
-            english[l] = result[l]["en"];
-        }
+        } = await (await fetch("/translations/en.json")).json();
+
         i18n.global.setLocaleMessage("en", english);
     }
     if (!translations || currentTranslation !== lan) {
