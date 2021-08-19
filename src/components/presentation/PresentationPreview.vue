@@ -146,8 +146,6 @@ export default class LyricsCard extends Vue {
         });
 
         this.availableVerses = this.control.AvailableVerses;
-
-        console.log(this.availableVerses)
     }
 
     public get text() {
