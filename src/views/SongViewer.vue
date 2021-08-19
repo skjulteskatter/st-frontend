@@ -74,11 +74,16 @@
                         :collection="collection"
                     />
                     <presentation-preview
-                        v-if="song.hasLyrics && isExtended"
-                        :song="song"
-                        :lyrics="lyrics"
-                        :collection="collection"
-                        :control="control"
+                        v-if="song.hasLyrics && isExtended && lyrics"
+                        :text="lyrics?.getText({
+                            chorus: this.$t('song.chorus'),
+                            bridge: this.$t('song.bridge'),
+                        }, true) ?? []"
+                        :availableVerses="control.AvailableVerses"
+                        :currentVerses="control.currentVerses"
+                        @mounted="setLyrics"
+                        @toggleAll="toggleAll()"
+                        @toggle="toggleVerse"
                     />
                 </div>
                 <aside>
@@ -91,11 +96,10 @@
                     />
                     <presentation-control-panel
                         v-else
-                        :control="control"
-                        :song="song"
-                        :lyrics="lyrics ?? undefined"
-                        :languageKey="languageKey ?? undefined"
                         class="sticky top-20"
+                        @refresh="refresh()"
+                        @next="next()"
+                        @previous="previous()"
                     />
                 </aside>
             </div>
@@ -188,12 +192,52 @@ export default class SongViewer extends Vue {
     public lyricsLoading = true;
     private songViewCount: number | null = null;
     public show = false;
+    public unset = false;
+
+    public setLyrics() {
+        if (this.lyrics)
+            this.control.setLyrics(this.lyrics);
+    }
 
     public set switchExtended(v) {
         //
     }
     public get switchExtended() {
         return this.isExtended;
+    }
+
+    /// PRESENTATION VIEW
+    public toggleVerse(index: string) {
+        this.control.toggleVerse(index);
+        this.control.AvailableVerses;
+    }
+
+    public toggleAll() {
+        if (this.lyrics) {
+            if (this.unset) {
+                this.control.resetSettings(this.lyrics);
+                this.unset = false;
+            } else {
+                for (const i of this.control.AvailableVerses) {
+                    this.toggleVerse(i);
+                    this.unset = true;
+                }
+            }
+        }
+    }
+
+    public refresh() {
+        if (this.lyrics) {
+            this.control.commit();
+        }
+    }
+
+    public next() {
+        this.control.next();
+    }
+
+    public previous() {
+        this.control.previous();
     }
     
     public get viewCount() {
@@ -356,6 +400,10 @@ export default class SongViewer extends Vue {
     }
 
     public extend() {
+        if (!this.control.Initialized) {
+            this.control.init();
+            this.refresh();
+        }
         this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
         // else {
         //     this.store.commit(SessionMutationTypes.SPLASH, {show: true, title: "In development", content: "This feature is still in development and will be available soon."});

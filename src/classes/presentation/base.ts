@@ -34,12 +34,6 @@ export class PresentationBase {
 
     // Set lyrics in cache and storage.
     protected set lyrics(v) {
-        if (this.type == "control") {
-            if (v)
-                this.setKey("lyrics", v);
-            else
-                this.removeKey("lyrics");
-        }
         this.executeCallback("lyrics");
         this._lyrics = v;
     }
@@ -49,6 +43,15 @@ export class PresentationBase {
         if (!this._lyrics)
             this._lyrics = this.getKey("lyrics");
         return this._lyrics;
+    }
+
+    public commit() {
+        if (this.type === "control") {
+            if (this.lyrics)
+                this.setKey("lyrics", this.lyrics);
+            if (this.settings)
+                this.setKey("settings", this.settings);
+        }
     }
 
     public get Lyrics() {
@@ -65,13 +68,8 @@ export class PresentationBase {
     }
 
     protected set settings(v) {
-        if (v) {
-            if (this.type == "control") {
-                this.setKey("settings", v);
-            }
-        } else {
+        if (!v)
             this.removeKey("settings");
-        }
         this._settings = v;
     }
 
@@ -163,7 +161,7 @@ export class PresentationBase {
     }
 
     public get AvailableVerses() {
-        return Object.entries(this.settings?.availableVerses ?? {}).filter(i => i[1] == true).map(i => i[0]);
+        return Object.entries(this.settings?.availableVerses ?? {}).filter(i => i[1] === true).map(i => i[0]);
     }
 
     public get currentVerses() {
@@ -192,13 +190,14 @@ export class PresentationBase {
     public next() {
         if (this.settings) {
             const index = this.settings.currentIndex + this.settings.size;
-            if (index <= this.AvailableVerses.length) {
+            if (index < this.AvailableVerses.length) {
                 this.settings = {
                     availableVerses: this.settings.availableVerses,
                     size: this.settings.size,
                     currentIndex: this.settings.currentIndex + this.settings.size,
                 };
                 this.executeCallback("control");
+                this.commit();
             }
         }
     }
@@ -207,11 +206,10 @@ export class PresentationBase {
         if (this.settings) {
             const index = this.settings.currentIndex - this.settings.size;
             if (index >= 0) {
-                this.settings = {
-                    availableVerses: this.settings.availableVerses,
-                    size: this.settings.size,
-                    currentIndex: index,
-                };
+                const settings = Object.assign({}, this.settings);
+                settings.currentIndex = index;
+                this.settings = settings;
+                this.commit();
                 this.executeCallback("control");
             }
         }
