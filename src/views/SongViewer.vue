@@ -177,7 +177,13 @@ export default class SongViewer extends Vue {
     public lyricsLoading = true;
     private songViewCount: number | null = null;
     public show = false;
-    public switchExtended = false;
+
+    public set switchExtended(v) {
+        //
+    }
+    public get switchExtended() {
+        return this.isExtended;
+    }
     
     public get viewCount() {
         return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
