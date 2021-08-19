@@ -8,7 +8,8 @@ import Copyright from "./Copyright.vue";
 
 import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
-import PresentationControl from "./PresentationControl.vue";
+import PresentationControl from "./presentation/PresentationControl.vue";
+import PresentationPreview from "./presentation/PresentationPreview.vue";
 
 import SettingsCard from "./SettingsCard.vue";
 import CollectionCard from "./CollectionCard.vue";
@@ -25,6 +26,7 @@ export {
     Loader,
     LyricsSettings,
     PresentationControl,
+    PresentationPreview,
     SettingsCard,
     CollectionCard,
     LyricsCard,

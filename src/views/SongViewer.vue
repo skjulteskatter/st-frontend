@@ -68,7 +68,13 @@
                     />
                     <lyrics-card
                         :class="{ 'hidden': sheetMusicOptions?.show }"
-                        v-if="song.hasLyrics"
+                        v-if="song.hasLyrics && !isExtended"
+                        :song="song"
+                        :lyrics="lyrics"
+                        :collection="collection"
+                    />
+                    <presentation-preview
+                        v-if="song.hasLyrics && isExtended"
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
@@ -119,6 +125,7 @@ import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
     PresentationControl,
+    PresentationPreview,
     LyricsCard,
     BackButton,
     Modal,
@@ -141,6 +148,7 @@ import { appSession } from "@/services/session";
 @Options({
     components: {
         PresentationControl,
+        PresentationPreview,
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
