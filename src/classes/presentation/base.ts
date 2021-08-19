@@ -40,7 +40,7 @@ export class PresentationBase {
             else
                 this.removeKey("lyrics");
         }
-
+        this.executeCallback("lyrics");
         this._lyrics = v;
     }
 
@@ -72,7 +72,6 @@ export class PresentationBase {
         } else {
             this.removeKey("settings");
         }
-
         this._settings = v;
     }
 
@@ -84,11 +83,11 @@ export class PresentationBase {
         [key: string]: Function;
     } = {};
 
-    public registerCallback(key: Key | "control", callback: Function) {
+    public registerCallback(key: Key | "control" | "preview", callback: Function) {
         this.callbacks[key] = callback;
     }
 
-    private executeCallback(key: Key | "control") {
+    private executeCallback(key: Key | "control" | "preview") {
         this.callbacks[key]?.();
     }
 
@@ -125,7 +124,7 @@ export class PresentationBase {
 
                     if (key.endsWith("lyrics")) {
                         this.lyrics = JSON.parse(item);
-                        this.executeCallback("lyrics");
+                        // this.executeCallback("lyrics");
                     }
                     if (key.endsWith("settings")) {
                         this.settings = JSON.parse(item);
@@ -147,6 +146,10 @@ export class PresentationBase {
     protected getKey<K extends Key>(key: K) {
         const i = localStorage.getItem("viewer_" + key);
         return i ? JSON.parse(i) as KeyEntry<K> : undefined;
+    }
+
+    public preview() {
+        this.executeCallback("preview");
     }
 
     public toggleVerse(index: string) {
