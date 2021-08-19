@@ -1,5 +1,5 @@
 import { Lyrics } from "../lyrics";
-import { PresentationBase, Settings } from "./base";
+import { PresentationBase } from "./base";
 
 class PresentationControl extends PresentationBase {
     public init() {
@@ -17,9 +17,25 @@ class PresentationControl extends PresentationBase {
         this.initialize("control");
     }
 
-    public setLyrics(lyrics: Lyrics, settings: Settings) {
+    public setLyrics(lyrics: Lyrics) {
         this.lyrics = lyrics.raw;
-        this.settings = settings;
+        this.settings = {
+            size: lyrics.size <= 5 ? 2 : 1,
+            availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                [key: string]: boolean;
+            }),
+            currentIndex: 0,
+        };
+    }
+
+    public resetSettings(lyrics: Lyrics) {
+        this.settings = {
+            size: lyrics.size <= 5 ? 2 : 1,
+            availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                [key: string]: boolean;
+            }),
+            currentIndex: 0,
+        };
     }
 }
 

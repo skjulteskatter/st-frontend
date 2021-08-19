@@ -3,8 +3,8 @@
         <template #header>
             <div class="w-full flex items-center gap-2">
                 <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
-                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
-                <print-button class="hidden md:flex" />
+                <!-- <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/> -->
+                <!-- <print-button class="hidden md:flex" /> -->
             </div>
             <div class="flex gap-2 items-end flex-wrap">
                 <select
@@ -25,7 +25,7 @@
             </div>
         </template>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
-            <base-button @click="toggleAll">Unset</base-button>
+            <base-button @click="toggleAll">{{$t(!unset ? 'unset' : 'set')}}</base-button>
             <div
                 class="w-full whitespace-pre-line mb-4"
                 :class="{
@@ -87,22 +87,28 @@ export default class LyricsCard extends Vue {
     public collection?: Collection;
     public selectedLanguage = "";
     public loaded = false;
+    public unset = false;
 
-    public availableVerses = this.control.AvailableVerses;
+    public availableVerses: string[] = [];
     public currentVerses = this.control.currentVerses;
 
     public toggleVerse(index: string) {
         this.control.toggleVerse(index);
-        if (this.availableVerses.includes(index)) {
-            this.availableVerses = this.availableVerses.filter(i => i != index);
-        } else {
-            this.availableVerses.push(index);
-        }
+        this.availableVerses = this.control.AvailableVerses;
     }
 
     public toggleAll() {
-        for (const v of this.availableVerses) {
-            this.control.toggleVerse(v);
+        if (this.lyrics) {
+            if (this.unset) {
+                this.control.resetSettings(this.lyrics);
+                this.unset = false;
+                this.availableVerses = this.control.AvailableVerses;
+            } else {
+                for (const i of this.availableVerses) {
+                    this.toggleVerse(i);
+                    this.unset = true;
+                }
+            }
         }
     }
 
@@ -132,6 +138,16 @@ export default class LyricsCard extends Vue {
         this.control.registerCallback("settings", () => {
             this.availableVerses = this.control.AvailableVerses;
         });
+        this.control.registerCallback("lyrics", () => {
+            this.availableVerses = this.control.AvailableVerses;
+        });
+        this.control.registerCallback("preview", () => {
+            this.currentVerses = this.control.currentVerses;
+        });
+
+        this.availableVerses = this.control.AvailableVerses;
+
+        console.log(this.availableVerses)
     }
 
     public get text() {
