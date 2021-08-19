@@ -68,7 +68,7 @@
                     />
                     <lyrics-card
                         :class="{ 'hidden': sheetMusicOptions?.show }"
-                        v-if="song.hasLyrics"
+                        v-if="song.hasLyrics && !isExtended"
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
