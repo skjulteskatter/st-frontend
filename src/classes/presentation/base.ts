@@ -156,7 +156,6 @@ export class PresentationBase {
     }
 
     public next() {
-        console.log("NEXT");
         if (this.settings) {
             const index = this.settings.currentIndex + this.settings.size;
             if (index <= this.settings.availableVerses.length) {
@@ -170,7 +169,6 @@ export class PresentationBase {
     }
 
     public previous() {
-        console.log("PREVIOUS");
         if (this.settings) {
             const index = this.settings.currentIndex - this.settings.size;
             if (index >= 0) {
