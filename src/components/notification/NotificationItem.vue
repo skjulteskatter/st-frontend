@@ -22,7 +22,7 @@
             <button @click="remove()" class="float-right">
                 <XIcon class="w-4 h-4" />
             </button>
-        </div>z
+        </div>
     </transition-root>
 </template>
 
