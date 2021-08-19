@@ -1,7 +1,7 @@
 <template>
     <base-card class="overflow-visible">
         <template #header>
-            <h3 class="font-bold mb-2">{{ $t("song.lyrics") }}</h3>
+            <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
         </template>
         <div
             class="w-full cursor-pointer whitespace-pre-line mb-2 hover:bg-black/5 dark:hover:bg-white/10 p-2"
