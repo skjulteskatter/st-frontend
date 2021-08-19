@@ -10,12 +10,13 @@ import LyricsCard from "./LyricsCard.vue";
 import LyricsSettings from "./LyricsSettings.vue";
 
 export * from "./presentation";
+export * from "./store";
+export * from "./admin";
 
 import SettingsCard from "./SettingsCard.vue";
 import CollectionCard from "./CollectionCard.vue";
 import BackButton from "./BackButton.vue";
 
-import UsersList from "./UsersList.vue";
 import Tooltip from "./Tooltip.vue";
 
 export {
@@ -29,7 +30,6 @@ export {
     CollectionCard,
     LyricsCard,
     BackButton,
-    UsersList,
     Tooltip,
     Copyright,
 };

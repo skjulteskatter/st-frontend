@@ -1,7 +1,7 @@
-import PresentationControl from "./PresentationControl.vue";
+import PresentationControlPanel from "./PresentationControlPanel.vue";
 import PresentationPreview from "./PresentationPreview.vue";
 
 export {
-    PresentationControl,
+    PresentationControlPanel,
     PresentationPreview,
 };

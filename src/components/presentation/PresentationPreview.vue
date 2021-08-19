@@ -56,7 +56,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { SongChanger } from "@/components/songs";
-import { control } from "@/classes/presentation/control";
+import { PresentationControl } from "@/classes/presentation/control";
 
 @Options({
     components: {
@@ -76,12 +76,19 @@ import { control } from "@/classes/presentation/control";
         collection: {
             type: Object,
         },
+        control: {
+            type: Object,
+        },
     },
     name: "lyrics-card",
 })
 export default class LyricsCard extends Vue {
     private store = useStore();
-    private control = control;
+    public control?: PresentationControl;
+    public get Control() {
+        return this.control ?? new PresentationControl();
+    }
+
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
@@ -90,19 +97,19 @@ export default class LyricsCard extends Vue {
     public unset = false;
 
     public availableVerses: string[] = [];
-    public currentVerses = this.control.currentVerses;
+    public currentVerses = this.Control.currentVerses;
 
     public toggleVerse(index: string) {
-        this.control.toggleVerse(index);
-        this.availableVerses = this.control.AvailableVerses;
+        this.Control.toggleVerse(index);
+        this.availableVerses = this.Control.AvailableVerses;
     }
 
     public toggleAll() {
         if (this.lyrics) {
             if (this.unset) {
-                this.control.resetSettings(this.lyrics);
+                this.Control.resetSettings(this.lyrics);
                 this.unset = false;
-                this.availableVerses = this.control.AvailableVerses;
+                this.availableVerses = this.Control.AvailableVerses;
             } else {
                 for (const i of this.availableVerses) {
                     this.toggleVerse(i);
@@ -132,20 +139,20 @@ export default class LyricsCard extends Vue {
                 ?? this.languageKey;
         }
 
-        this.control.registerCallback("control", () => {
-            this.currentVerses = this.control.currentVerses;
+        this.Control.registerCallback("control", () => {
+            this.currentVerses = this.Control.currentVerses;
         });
-        this.control.registerCallback("settings", () => {
-            this.availableVerses = this.control.AvailableVerses;
+        this.Control.registerCallback("settings", () => {
+            this.availableVerses = this.Control.AvailableVerses;
         });
-        this.control.registerCallback("lyrics", () => {
-            this.availableVerses = this.control.AvailableVerses;
+        this.Control.registerCallback("lyrics", () => {
+            this.availableVerses = this.Control.AvailableVerses;
         });
-        this.control.registerCallback("preview", () => {
-            this.currentVerses = this.control.currentVerses;
+        this.Control.registerCallback("preview", () => {
+            this.currentVerses = this.Control.currentVerses;
         });
 
-        this.availableVerses = this.control.AvailableVerses;
+        this.availableVerses = this.Control.AvailableVerses;
     }
 
     public get text() {

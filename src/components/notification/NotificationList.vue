@@ -38,7 +38,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import NotificationItem from "./NotificationItem.vue";
 import { BellIcon } from "@heroicons/vue/outline";
 import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
@@ -47,7 +46,6 @@ import { useStore } from "@/store";
 	name: "notification-list",
 	components: {
 		BellIcon,
-		NotificationItem,
 	},
 })
 export default class NotificationList extends Vue {

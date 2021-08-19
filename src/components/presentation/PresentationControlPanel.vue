@@ -60,7 +60,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics, Song } from "@/classes";
-import { control } from "@/classes/presentation/control";
+import { PresentationControl } from "@/classes/presentation/control";
 import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 
 @Options({
@@ -80,10 +80,14 @@ import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/s
         song: {
             type: Object,
         },
+        control: {
+            type: Object,
+        },
     },
-    name: "presentation-control",
+    name: "presentation-controlpanel",
 })
-export default class PresentationControl extends Vue {
+export default class PresentationControlPanel extends Vue {
+    public control?: PresentationControl;
     public selectVerses: {
         [key: string]: boolean;
     } = {};
@@ -95,8 +99,12 @@ export default class PresentationControl extends Vue {
 
     public lineSize = 2;
 
+    public get Control() {
+        return this.control ?? new PresentationControl();
+    }
+
     public mounted() {
-        control.init();
+        this.Control.init();
     }
 
     public open() {
@@ -106,17 +114,17 @@ export default class PresentationControl extends Vue {
 
     public refresh() {
         if (this.lyrics) {
-            control.setLyrics(this.lyrics);
-            control.preview();
+            this.Control.setLyrics(this.lyrics);
+            this.Control.preview();
         }
     }
 
     public next() {
-        control.next();
+        this.Control.next();
     }
 
     public previous() {
-        control.previous();
+        this.Control.previous();
     }
 }
 </script>
