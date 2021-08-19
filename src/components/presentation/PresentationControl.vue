@@ -54,52 +54,6 @@
                 </div>
             </template>
         </base-card>
-        <!-- <base-card
-            v-if="song.type == 'lyrics'"
-            class="lyrics-settings__controls"
-        >
-            <h4 class="lyrics-settings__controls__title">
-                {{ $t("song.controlpanel") }}
-            </h4>
-            <div class="lyrics-settings__controls__buttons">
-                <base-button
-                    class="lyrcis-settings__controls__previous"
-                    icon="arrowLeft"
-                    @click="previous"
-                    theme="secondary"
-                >
-                    {{ $t("common.previous") }}
-                </base-button>
-                <base-button
-                    class="lyrcis-settings__controls__next"
-                    @click="next"
-                    theme="secondary"
-                    icon="arrowRight"
-                >
-                    {{ $t("common.next") }}
-                </base-button>
-            </div> -->
-            <!-- <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
-                <h5 class="lyrics-settings__verses__title">
-                    {{ $t("common.show") }} / {{ $t('common.hide') }}
-                </h5>
-                <div
-                    class="lyrics-settings__verses__select gap-x"
-                    v-for="key in verseSelect"
-                    :key="key"
-                >
-                    <input
-                        v-model="selectVerses[key]"
-                        type="checkbox"
-                        :name="key"
-                        :id="key"
-                    />
-                    <label :for="key">
-                        {{ verses[key]?.name }}
-                    </label>
-                </div>
-            </div> -->
-        <!-- </base-card> -->
     </div>
 </template>
 
@@ -155,7 +109,9 @@ export default class PresentationControl extends Vue {
             
             control.setLyrics(this.lyrics, {
                 size: this.lyrics.size <= 5 ? 2 : 1,
-                availableVerses: Object.keys(this.lyrics.verses),
+                availableVerses: Object.keys(this.lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                    [key: string]: boolean;
+                }),
                 currentIndex: 0,
             });
         }
