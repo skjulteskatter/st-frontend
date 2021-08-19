@@ -78,11 +78,20 @@
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
+                        :control="control"
                     />
                 </div>
                 <aside>
-                    <component
-                        :is="isExtended ? 'PresentationControl' : 'SongMediaCard'"
+                    <song-media-card
+                        v-if="!isExtended"
+                        :song="song"
+                        :lyrics="lyrics ?? undefined"
+                        :languageKey="languageKey ?? undefined"
+                        class="sticky top-20"
+                    />
+                    <presentation-control-panel
+                        v-else
+                        :control="control"
                         :song="song"
                         :lyrics="lyrics ?? undefined"
                         :languageKey="languageKey ?? undefined"
@@ -124,7 +133,7 @@
 import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
-    PresentationControl,
+    PresentationControlPanel,
     PresentationPreview,
     LyricsCard,
     BackButton,
@@ -144,10 +153,11 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
+import { control } from "@/classes/presentation/control";
 
 @Options({
     components: {
-        PresentationControl,
+        PresentationControlPanel,
         PresentationPreview,
         LyricsCard,
         SongInfoCard,
@@ -171,6 +181,7 @@ import { appSession } from "@/services/session";
 })
 export default class SongViewer extends Vue {
     private store = useStore();
+    public control = control;
     public number: number | string = 0;
     public selectedLanguage = this.languageKey;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;

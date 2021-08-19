@@ -1,7 +1,7 @@
 import { Lyrics } from "../lyrics";
 import { PresentationBase } from "./base";
 
-class PresentationControl extends PresentationBase {
+export class PresentationControl extends PresentationBase {
     public init() {
         if (!this.initialized) {
             addEventListener("keydown", (e) => {
