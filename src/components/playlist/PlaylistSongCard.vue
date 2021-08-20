@@ -35,7 +35,7 @@
                 </div>
             </div>
             <button
-                class="text-xs text-red-700 px-2 py-1 rounded-md bg-red-500/10 cursor-pointer hover:bg-red-500/20 dark:text-red-400"
+                class="text-xs tracking-wide text-red-700 px-2 py-1 rounded-md bg-red-500/10 cursor-pointer hover:bg-red-500/20 dark:text-red-400"
                 v-if="playlist.userId == userId"
                 @click="removeFromPlaylist"
             >
