@@ -23,9 +23,11 @@
                         {{ $t('common.addTo') + ' ' + $t('common.collection').toLowerCase() }}
                     </base-button>
                     <base-modal :show="show" @close="closeAdder()">
-                        <h3 class="mt-0 font-bold mb-4">
-                            {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
-                        </h3>
+                        <template #header>
+                            <h3 class="font-bold">
+                                {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
+                            </h3>
+                        </template>
                         <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
                                 v-for="playlist in playlists"
