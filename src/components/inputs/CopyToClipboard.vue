@@ -1,15 +1,12 @@
 <template>
 	<div class="flex gap-2 items-center">
-		<base-button
-			class="px-2 py-1 mr-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20"
+		<button
+			class="text-sm px-2 py-1 flex items-center gap-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20"
 			@click="copy()"
-			:content="label != undefined"
 		>
-			<template #icon>
-				<ClipboardCopyIcon class="w-4 h-4" />
-			</template>
+			<ClipboardCopyIcon class="w-4 h-4" />
 			{{ label }}
-		</base-button>
+		</button>
 		<TransitionRoot
 			:show="copied"
 			as="small"
