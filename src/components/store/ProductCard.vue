@@ -12,9 +12,9 @@
         </div>
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between items-start mb-4">
-                <h4 class="font-bold">
+                <h2 class="font-bold">
                     {{ product.getName(languageKey) }}
-                </h4>
+                </h2>
                 <price class="text-gray-400 flex-shrink-0" v-if="!product.owned" :product="product" :country="languageKey" />
             </div>
             <div class="flex flex-col gap-2 lg:flex-row">

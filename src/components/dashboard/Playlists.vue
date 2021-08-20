@@ -8,7 +8,7 @@
                     </h2>
                     <tooltip :text="$t('tooltip.myCollections')" />
                 </span>
-                <button class="text-sm py-1 px-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10" @click="openCreatePlaylist">
+                <button aria-label="Create new personal collection" class="text-sm py-1 px-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10" @click="openCreatePlaylist">
                     <PlusIcon class="w-4 h-4" />
                 </button>
                 <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
