@@ -32,7 +32,7 @@
             </form>
             <template #footer>
                 <div v-if="Tags.length">
-                    <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small>
+                    <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small> -->
                     <ul class="flex flex-wrap gap-1">
                         <li 
                             class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center cursor-pointer" 
