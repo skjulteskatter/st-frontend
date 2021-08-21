@@ -102,6 +102,7 @@
                         @refresh="refresh()"
                         @next="next()"
                         @previous="previous()"
+                        @mute="control.mute()"
                     />
                 </aside>
             </div>
@@ -195,6 +196,10 @@ export default class SongViewer extends Vue {
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
+
+    public unmounted() {
+        this.control.mute();
+    }
 
     public setLyrics() {
         if (this.lyrics)

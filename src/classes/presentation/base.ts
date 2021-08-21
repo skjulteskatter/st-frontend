@@ -9,6 +9,7 @@ export type Settings = {
         [key: string]: boolean;
     };
     currentIndex: number;
+    muted: boolean;
 }
 
 type KeyTypes = {
@@ -191,11 +192,9 @@ export class PresentationBase {
         if (this.settings) {
             const index = this.settings.currentIndex + this.settings.size;
             if (index < this.AvailableVerses.length) {
-                this.settings = {
-                    availableVerses: this.settings.availableVerses,
-                    size: this.settings.size,
-                    currentIndex: this.settings.currentIndex + this.settings.size,
-                };
+                const settings = Object.assign({}, this.settings);
+                settings.currentIndex = settings.currentIndex + this.settings.size;
+                this.settings = settings;
                 this.executeCallback("control");
                 this.commit();
             }
@@ -213,5 +212,12 @@ export class PresentationBase {
                 this.executeCallback("control");
             }
         }
+    }
+
+    public mute() {
+        const settings = Object.assign({}, this.settings);
+        settings.muted = !settings.muted;
+        this.settings = settings;
+        this.commit();
     }
 }

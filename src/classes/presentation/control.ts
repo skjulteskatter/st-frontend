@@ -29,6 +29,7 @@ export class PresentationControl extends PresentationBase {
                 [key: string]: boolean;
             }),
             currentIndex: 0,
+            muted: false,
         };
     }
 
@@ -39,6 +40,7 @@ export class PresentationControl extends PresentationBase {
                 [key: string]: boolean;
             }),
             currentIndex: 0,
+            muted: false,
         };
     }
 }
