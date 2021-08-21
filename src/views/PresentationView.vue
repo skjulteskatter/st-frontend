@@ -1,6 +1,6 @@
 <template>
-    <div class="text-white bg-black text-3xl h-full" :class="{'hidden': muted}">
-        <div class="flex gap-4 px-10 py-4 border-b border-black/20 dark:border-white/20" v-if="song">
+    <div class="text-white bg-black text-3xl h-full">
+        <div :class="{'hidden': muted}" class="flex gap-4 px-10 py-4 border-b border-black/20 dark:border-white/20" v-if="song">
             <h1 class="font-bold" v-if="song.number">
                 {{ song.number }}
             </h1>
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="ml-80 mt-10" v-if="verses">
+        <div :class="{'hidden': muted}" class="ml-80 mt-10" v-if="verses">
             <div
                 class="relative mb-16 text-5xl"
                 :class="{ 'italic border-l-4 border-white/10 dark:border-black/10 pl-4': verse.type == 'chorus' }"
