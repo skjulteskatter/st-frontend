@@ -25,6 +25,12 @@
                     </template>
                     {{ $t("song.updateviewer") }}
                 </base-button>
+                <base-button
+                    theme="tertiary"
+                    @click="$emit('mute')"
+                >
+                    {{ $t("mute") }}
+                </base-button>
             </div>
             <template #footer>
                 <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
@@ -72,6 +78,7 @@ import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/s
         "next",
         "previous",
         "refresh",
+        "mute",
     ],
 })
 export default class PresentationControlPanel extends Vue {

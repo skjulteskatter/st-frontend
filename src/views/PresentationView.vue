@@ -1,5 +1,5 @@
 <template>
-    <div class="text-black text-3xl">
+    <div class="text-white bg-black text-3xl h-full" :class="{'hidden': muted}">
         <div class="flex gap-4 px-10 py-4 border-b border-black/20 dark:border-white/20" v-if="song">
             <h1 class="font-bold" v-if="song.number">
                 {{ song.number }}
@@ -33,12 +33,38 @@
                 <p class="text-base tracking-wide opacity-50">
                     {{ song.yearWritten }}
                 </p>
+                <small
+                    class="flex gap-2 text-base tracking-wide opacity-50"
+                    v-if="
+                        song.copyright.melody &&
+                        song.copyright.text &&
+                        identicalCopyright
+                    "
+                >
+                    © {{ getLocaleString(song.copyright.melody.name) }}
+                </small>
+                <div v-else class="text-base tracking-wide opacity-50">
+                    <small
+                        class="flex gap-2"
+                        v-if="song.copyright.text"
+                    >
+                        {{ $t("song.text") }} ©:
+                        {{ getLocaleString(song.copyright.text.name) }}
+                    </small>
+                    <small
+                        class="flex gap-2"
+                        v-if="song.copyright.melody"
+                    >
+                        {{ $t("song.melody") }} ©:
+                        {{ getLocaleString(song.copyright.melody.name) }}
+                    </small>
+                </div>
             </div>
         </div>
         <div class="ml-80 mt-10" v-if="verses">
             <div
                 class="relative mb-16 text-5xl"
-                :class="{ 'italic border-l-4 border-black/10 dark:border-white/10 pl-4': verse.type == 'chorus' }"
+                :class="{ 'italic border-l-4 border-white/10 dark:border-black/10 pl-4': verse.type == 'chorus' }"
                 v-for="(verse, i) in verses"
                 :key="i + '_' + verse"
             >
@@ -72,6 +98,7 @@ export default class PresentationView extends Vue {
     public lyrics: Lyrics | null = null;
     public song: Song | null = null;
     public verses: Verse[] | null = null;
+    public muted = false;
 
     public async mounted() {
         await appSession.init();
@@ -87,6 +114,7 @@ export default class PresentationView extends Vue {
 
         viewer.registerCallback("settings", () => {
             this.verses = viewer.Verses;
+            this.muted = viewer.Settings?.muted === true;
         });
 
         addEventListener("keydown", (e) => {
@@ -105,6 +133,19 @@ export default class PresentationView extends Vue {
         const melodyOrigin = this.song?.melodyOrigin;
 
         return melodyOrigin?.description[this.store.getters.languageKey] ?? melodyOrigin?.description.no;
+    }
+
+    public getLocaleString(dictionary: { [key: string]: string }) {
+        if (!dictionary) return "";
+        return (
+            dictionary[this.store.getters.languageKey] ??
+            dictionary.en ??
+            dictionary[Object.keys(dictionary)[0]]
+        );
+    }
+
+    public get identicalCopyright() {
+        return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
     }
 }
 </script>
