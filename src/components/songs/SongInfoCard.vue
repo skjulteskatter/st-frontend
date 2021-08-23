@@ -49,7 +49,7 @@
                     v-if="song.hasLyrics && song.Authors.length"
                 >
                     <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30">
+                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
                         <router-link
                             :to="{
                                 name: 'contributor',
@@ -71,7 +71,7 @@
                         v-for="i in song.Composers"
                         :key="i.id"
                         :label="i.name"
-                        class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30"
+                        class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
                     >
                         <router-link
                             :to="{
