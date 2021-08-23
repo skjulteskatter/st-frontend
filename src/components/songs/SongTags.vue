@@ -1,6 +1,6 @@
 <template>
     <div class="flex gap-2 flex-wrap">
-        <span v-for="tag in Song.tags" :key="tag.id" class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center">
+        <span v-for="tag in Song.tags" :key="tag.id" class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-500 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20">
             <router-link
                 :to="{
                     name: 'tag',
@@ -17,7 +17,7 @@
         </span>
         <base-dropdown class="flex-grow">
             <template #button>
-                <button aria-label="Add category" class="cursor-pointer text-gray-500 text-sm flex items-center gap-2">
+                <button aria-label="Add category" class="my-auto cursor-pointer text-gray-500 text-sm flex items-center gap-2">
                     <PlusIcon class="w-4 h-4" />
                     {{ $t('song.addCategory') }}
                 </button>
@@ -35,7 +35,7 @@
                     <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small> -->
                     <ul class="flex flex-wrap gap-1">
                         <li 
-                            class="px-2 rounded-full text-sm text-gray-500 border-gray-500 border flex gap-1 items-center cursor-pointer" 
+                            class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-500 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20 cursor-pointer" 
                             v-for="tag in Tags" 
                             :key="tag.id" 
                             @click="addToTag(tag.id)">{{tag.getName()}}</li>
