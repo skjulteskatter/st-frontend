@@ -17,6 +17,7 @@
                     :to="a.getRouterLink(collections)"
                 >
                     <img
+                        loading="lazy"
                         alt="Activity thumbnail"
                         :src="a.getImage(collections)"
                         class="mr-2 max-h-10 grayscale rounded border"

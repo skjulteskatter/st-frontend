@@ -4,6 +4,7 @@
         <CheckCircleIcon v-else-if="collection.available" class="w-5 h-5 text-green-700 z-10 absolute top-4 left-4" />
         <div class="overflow-hidden min-h-[250px] bg-white dark:bg-secondary">
             <img
+                loading="lazy"
                 class="w-full object-cover cursor-pointer transition transform hover:scale-105"
                 :src="image"
                 @click="goToCollection"

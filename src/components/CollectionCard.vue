@@ -7,6 +7,7 @@
         @click="selectCollection()"
     >
         <img
+            loading="lazy"
             :src="image"
             :alt="name"
             class="max-h-10 rounded border"

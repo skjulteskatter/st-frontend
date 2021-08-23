@@ -38,7 +38,7 @@
             />
             <span
                 v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-xs song-details-transition dark:text-gray-400 dark:border-gray-400"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-xs dark:text-gray-400 dark:border-gray-400"
             >
                 {{ song.verses }}
                 {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
@@ -49,7 +49,7 @@
                     v-if="song.hasLyrics && song.Authors.length"
                 >
                     <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30">
+                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
                         <router-link
                             :to="{
                                 name: 'contributor',
@@ -71,7 +71,7 @@
                         v-for="i in song.Composers"
                         :key="i.id"
                         :label="i.name"
-                        class="px-2 rounded-md bg-black/10 hover:bg-black/20 dark:bg-white/20 dark:text-white dark:hover:bg-white/30"
+                        class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
                     >
                         <router-link
                             :to="{
@@ -133,8 +133,8 @@
                 class="absolute bg-gradient-to-t from-white to-transparent dark:from-secondary bottom-0 w-full h-full" 
                 v-if="!showDescription"
             >
-                <button aria-label="Show song details" @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-                    <ArrowDownIcon class="w-5 h-5" />
+                <button aria-label="Show song details" @click="showDescription = !showDescription" class="border border-black/20 dark:border-white/20 shadow-md bg-white dark:bg-secondary dark:text-white p-2 rounded-full absolute bottom-2 left-1/2 transform -translate-x-1/2">
+                    <ArrowDownIcon class="w-4 h-4" />
                 </button>
             </span>
         </div>
@@ -244,29 +244,8 @@ export default class SongInfoCard extends Vue {
 }
 </script>
 
-<style lang="scss">
-@keyframes slideInFromLeft {
-    0% {
-        transform: translateX(-50px);
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
+<style scoped>
 [v-cloak] {
     display: none;
-}
-
-.song-details-transition {
-    animation: 0.5s ease-out 0s 1 slideInFromLeft;
-}
-
-.song-details__metadata {
-    &__info {
-        animation: 0.5s ease-out 0s 1 slideInFromLeft;
-    }
 }
 </style>
