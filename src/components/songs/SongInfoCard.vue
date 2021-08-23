@@ -133,8 +133,8 @@
                 class="absolute bg-gradient-to-t from-white to-transparent dark:from-secondary bottom-0 w-full h-full" 
                 v-if="!showDescription"
             >
-                <button aria-label="Show song details" @click="showDescription = !showDescription" class="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-                    <ArrowDownIcon class="w-5 h-5" />
+                <button aria-label="Show song details" @click="showDescription = !showDescription" class="border border-black/20 dark:border-white/20 shadow-md bg-white dark:bg-secondary dark:text-white p-2 rounded-full absolute bottom-2 left-1/2 transform -translate-x-1/2">
+                    <ArrowDownIcon class="w-4 h-4" />
                 </button>
             </span>
         </div>
