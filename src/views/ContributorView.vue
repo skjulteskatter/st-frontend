@@ -17,9 +17,13 @@
                                 v-if="isEditor"
                                 @click="goToEditPage()"
                                 theme="tertiary"
-                                icon="pencil"
-                                class="mb-4 hidden xl:block"
-                            >Edit</base-button>
+                                class="mb-4 hidden lg:flex"
+                            >
+                                <template #icon>
+                                    <PencilAltIcon class="w-4 h-4" />
+                                </template>
+                                {{ $t('common.edit') }}
+                            </base-button>
                             <p class="text-primary">
                                 {{ $t("song.contributor") }}
                             </p>
@@ -79,11 +83,13 @@ import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { appSession } from "@/services/session";
+import { PencilAltIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         SongListCard,
         BackButton,
+        PencilAltIcon,
     },
     name: "contributor-view",
 })
