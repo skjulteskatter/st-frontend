@@ -38,7 +38,7 @@
             />
             <span
                 v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-xs song-details-transition dark:text-gray-400 dark:border-gray-400"
+                class="p-1 rounded border border-gray-500 text-gray-500 text-xs dark:text-gray-400 dark:border-gray-400"
             >
                 {{ song.verses }}
                 {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
@@ -244,29 +244,8 @@ export default class SongInfoCard extends Vue {
 }
 </script>
 
-<style lang="scss">
-@keyframes slideInFromLeft {
-    0% {
-        transform: translateX(-50px);
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
+<style scoped>
 [v-cloak] {
     display: none;
-}
-
-.song-details-transition {
-    animation: 0.5s ease-out 0s 1 slideInFromLeft;
-}
-
-.song-details__metadata {
-    &__info {
-        animation: 0.5s ease-out 0s 1 slideInFromLeft;
-    }
 }
 </style>
