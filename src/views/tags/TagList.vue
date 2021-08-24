@@ -6,7 +6,7 @@
         </header>
         <div class="flex gap-2 flex-wrap mb-4 md:mb-8">
             <span
-                class="px-3 rounded-full border border-gray-400 text-gray-400 hover:border-gray-500 hover:text-gray-500"
+                class="tracking-wide px-3 py-1 rounded-full bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400 hover:bg-black/20 dark:hover:bg-white/20"
                 v-for="tag in Tags" 
                 :key="tag.id"
             >
@@ -20,7 +20,7 @@
         <h3 class="mb-2" v-if="CustomTags.length">{{ $t('common.your') }} {{ $t('common.categories').toLocaleLowerCase() }}</h3>
         <div class="flex gap-2 flex-wrap mb-4" v-if="CustomTags.length">
             <span
-                class="px-3 rounded-full border border-gray-400 text-gray-400 hover:border-gray-500 hover:text-gray-500"
+                class="tracking-wide px-3 py-1 rounded-full bg-black/10 dark:bg-white/10 text-gray-500 dark:text-gray-400 hover:bg-black/20 dark:hover:bg-white/20"
                 v-for="tag in CustomTags" 
                 :key="tag.id"
             >
