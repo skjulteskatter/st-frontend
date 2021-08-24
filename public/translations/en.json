@@ -119,6 +119,7 @@
   "policies.privacyPolicy": "Privacy Policy",
   "policies.termsOfService": "Terms of Service",
   "presentation.chooseVerses": "Choose verses",
+  "presentation.toggleAllVerses": "Toggle all verses",
   "settings.changePassword": "Change password",
   "settings.general": "General",
   "settings.goToSettings": "Go to settings",
