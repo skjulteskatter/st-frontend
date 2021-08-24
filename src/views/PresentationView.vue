@@ -152,7 +152,7 @@ export default class PresentationView extends Vue {
 
 <style>
 .verses {
-    margin-left: clamp(5rem, 10vw, 30%);
+    margin-left: clamp(4rem, 10vw + 2rem, 20vw);
     font-size: clamp(1rem, 3vw + 1rem, 4rem);
 }
 .verse {
