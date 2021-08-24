@@ -197,10 +197,6 @@ export default class SongViewer extends Vue {
     public show = false;
     public unset = false;
 
-    public unmounted() {
-        this.control.mute();
-    }
-
     public setLyrics() {
         if (this.lyrics)
             this.control.setLyrics(this.lyrics);
