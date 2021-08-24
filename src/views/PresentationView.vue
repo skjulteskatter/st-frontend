@@ -61,21 +61,21 @@
                 </div>
             </div>
         </div>
-        <div :class="{'hidden': muted}" class="ml-80 mt-10" v-if="verses">
+        <div :class="{'hidden': muted}" class="mt-10 verses" v-if="verses">
             <div
-                class="relative mb-16 text-5xl"
+                class="relative verse"
                 :class="{ 'italic border-l-4 border-white/10 dark:border-black/10 pl-4': verse.type == 'chorus' }"
                 v-for="(verse, i) in verses"
                 :key="i + '_' + verse"
             >
                 <span
-                    class="absolute -left-20 font-semibold"
+                    class="absolute font-semibold verse-name"
                     v-if="verse.type != 'chorus'"
                     >{{ verse.name }}</span
                 >
                 <p
-                    class="my-4 tracking-wide"
-                    :class="{ 'opacity-30 mt-8 text-4xl': line.trim()[0] == '(' }"
+                    class="tracking-wide line"
+                    :class="{ 'opacity-50 mt-8 text-4xl': line.trim()[0] == '(' }"
                     v-for="(line, i) in verse.content"
                     :key="i + '_' + line"
                 >
@@ -149,3 +149,19 @@ export default class PresentationView extends Vue {
     }
 }
 </script>
+
+<style>
+.verses {
+    margin-left: clamp(5rem, 10vw, 30%);
+    font-size: clamp(1rem, 3vw + 1rem, 4rem);
+}
+.verse {
+    margin-bottom: clamp(2rem, 5vw, 32rem);
+}
+.line {
+    margin-bottom: clamp(.5rem, 2vw, 2rem);
+}
+.verse-name {
+    left: calc(clamp(3rem, 6vw, 20rem) * -1);
+}
+</style>
