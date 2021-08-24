@@ -1,7 +1,10 @@
 <template>
     <base-card class="overflow-visible">
         <template #header>
-            <h3 class="font-bold">{{ $t("presentation.chooseVerses") }}</h3>
+            <div class="flex gap-4 justify-between">
+                <h3 class="font-bold">{{ $t("presentation.chooseVerses") }}</h3>
+                <span class="px-2 py-1 rounded bg-green-500/20 text-green-600 tracking-wider text-xs">BETA</span>
+            </div>
         </template>
         <div class="flex flex-col gap-4">
             <div
