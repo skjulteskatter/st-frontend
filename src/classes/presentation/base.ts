@@ -123,7 +123,7 @@ export class PresentationBase {
 
                     if (key.endsWith("lyrics")) {
                         this.lyrics = JSON.parse(item);
-                        // this.executeCallback("lyrics");
+                        this.executeCallback("lyrics");
                     }
                     if (key.endsWith("settings")) {
                         this.settings = JSON.parse(item);
