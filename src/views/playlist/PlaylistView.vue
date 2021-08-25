@@ -108,7 +108,7 @@
                 </div>
                 <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
                     <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
-                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded p-2 bg-black bg-opacity-10 dark:bg-opacity-20">
+                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded-md p-2 border border-black/10 dark:border-white/10">
                         <span class="flex gap-2 items-center">
                             <img
                                 :src="
@@ -118,7 +118,7 @@
                             />
                             <small>{{ u.displayName }}</small>
                         </span>
-                        <button class="text-red-700 cursor-pointer" :disabled="deleted[u.id]" @click="deleteUser(u)">
+                        <button class="rounded p-1 text-red-500 cursor-pointer hover:bg-red-500/10" :disabled="deleted[u.id]" @click="deleteUser(u)">
                             <XIcon class="w-4 h-4" />
                         </button>
                     </div>
