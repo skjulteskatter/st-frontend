@@ -10,6 +10,7 @@ export type Settings = {
     };
     currentIndex: number;
     muted: boolean;
+    theme: "dark" | "light";
 }
 
 type KeyTypes = {
@@ -211,6 +212,13 @@ export class PresentationBase {
                 this.commit();
                 this.executeCallback("control");
             }
+        }
+    }
+
+    public setTheme(theme: "dark" | "light") {
+        if (this.settings) {
+            this.settings.theme = theme;
+            this.commit();
         }
     }
 
