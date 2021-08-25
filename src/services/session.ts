@@ -1,8 +1,7 @@
 import { Collection, CollectionItem, Song } from "@/classes";
+import { Category } from "@/classes/category";
 import { Tag } from "@/classes/tag";
-import { useStore } from "@/store";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
-import { reactive } from "vue";
 import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -15,6 +14,7 @@ export class Session {
     public contributors: CollectionItem<ApiContributor>[] = [];
 
     public themes: Theme[] = [];
+    public categories: Category[] = [];
     public tags: Tag[] = [];
     public countries: Country[] = [];
     public genres: Genre[] = [];
@@ -22,7 +22,7 @@ export class Session {
     public languages: Language[] = [];
 
     public get Tags() {
-        return reactive(this.tags);
+        return this.tags;
     }
 
     public get initialized() {
@@ -175,10 +175,7 @@ export class Session {
 
         const t = await cache.getOrCreateAsync("tags", () => items.getTags(), expiry) ?? [];
 
-        this.tags = t.map(i => new Tag({
-            id: i.id,
-            name: i.name[useStore().getters.languageKey] ?? Object.values(i.name)[0],
-        }, false));
+        this.categories = t.map(i => new Category(i));
 
         const ts = await tags.getAll();
         for (const tag of ts) {
@@ -187,7 +184,7 @@ export class Session {
                 song?.tagIds.push(tag.id);
             }
         }
-        this.tags = [...ts.map(i => new Tag(i, true)), ...this.tags];
+        this.tags = ts.map(i => new Tag(i));
 
         this.languages = await items.getLanguages();
 
