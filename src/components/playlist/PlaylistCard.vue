@@ -11,7 +11,7 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
             <template #footer v-if="playlist?.sharedWithIds.length">
-                <small class="opacity-50 ml-auto flex gap-1 items-center">
+                <small class="ml-auto w-max opacity-50 flex gap-1 items-center">
                     <ShareIcon class="w-4 h-4" />
                     {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
                 </small>
