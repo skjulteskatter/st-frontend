@@ -11,9 +11,10 @@
                     {{ $t("common.songs").toLowerCase() }}
                 </small>
             <template #footer v-if="playlist?.sharedWithIds.length">
-                <small class="opacity-50 ml-auto flex gap-1 items-center">
+                <small class="ml-auto w-max flex gap-2 items-center" :class="[userId != playlist?.userId ? 'text-primary' : 'opacity-50']">
                     <ShareIcon class="w-4 h-4" />
-                    {{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}
+                    <span v-if="userId != playlist?.userId">{{ $t('playlist.sharedWithYou') }}</span>
+                    <span v-else>{{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
                 </small>
             </template>
         </base-card>
