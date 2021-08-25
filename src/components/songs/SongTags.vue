@@ -23,7 +23,7 @@
                 </button>
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
-                <base-input v-model="tagFilter" type="text" :placeholder="$t('song.category')" class="w-full"/>
+                <base-input v-model="tagFilter" type="text" :placeholder="$t('tag')" class="w-full"/>
                 <base-button type="submit" theme="primary" :content="false">
                     <template #icon>
                         <PlusIcon class="w-4 h-4" />
