@@ -1,6 +1,9 @@
 <template>
-    <div class="text-white bg-black text-3xl h-full">
-        <div :class="{'hidden': muted}" class="flex gap-4 px-10 py-4 border-b border-black/20 dark:border-white/20" v-if="song">
+    <div
+        class="text-3xl h-full"
+        :class="[theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']"
+    >
+        <div :class="{'hidden': muted}" class="flex gap-4 px-10 py-4" v-if="song">
             <h1 class="font-bold" v-if="song.number">
                 {{ song.number }}
             </h1>
