@@ -123,7 +123,7 @@
                     ></song-list-card>
                 </div>
 
-                <div
+                <!-- <div
                     class="song-list__songs"
                     v-if="listType == 'tags'"
                 >
@@ -137,7 +137,23 @@
                             )
                         "
                         :title="tag?.name"
-                        :class="{'border border-primary bg-yellow-50': tag.item.userDefined}"
+                        class="mb-4"
+                    ></song-list-card>
+                </div> -->
+                <div
+                    class="song-list__songs"
+                    v-if="listType == 'categories'"
+                >
+                    <song-list-card
+                        v-for="i in collection.categories"
+                        :collection="collection"
+                        :key="i.item.id"
+                        :songs="
+                            filteredSongs.filter((s) =>
+                                i?.songIds.includes(s.id)
+                            )
+                        "
+                        :title="i?.name"
                         class="mb-4"
                     ></song-list-card>
                 </div>
@@ -263,13 +279,15 @@ export default class SongList extends Vue {
     }
 
     private async loadCollection() {
-        this.cId = this.$route.params.collection as string;
-        await this.store.dispatch(
-            SongsActionTypes.SELECT_COLLECTION,
-            this.$route.params.collection as string,
-        );
-        if (!this.buttons.find((b) => b.value == this.listType)) {
-            this.listType = "default";
+        this.cId = this.$route.params.collection as string; 
+        if (!this.collection?.getKeys().includes(this.cId)) {
+            await this.store.dispatch(
+                SongsActionTypes.SELECT_COLLECTION,
+                this.$route.params.collection as string,
+            );
+            if (!this.buttons.find((b) => b.value == this.listType)) {
+                this.listType = "default";
+            }
         }
     }
 
@@ -480,8 +498,8 @@ export default class SongList extends Vue {
             },
             {
                 label: this.$t("song.category"),
-                value: "tags",
-                selected: this.listType == "tags",
+                value: "categories",
+                selected: this.listType == "categories",
                 hidden: !this.collection?.hasTags,
             },
             {
