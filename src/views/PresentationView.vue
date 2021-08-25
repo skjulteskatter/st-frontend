@@ -99,6 +99,7 @@ export default class PresentationView extends Vue {
     public song: Song | null = null;
     public verses: Verse[] | null = null;
     public muted = false;
+    public theme: "dark" | "light" = "dark";
 
     public async mounted() {
         await appSession.init();
@@ -115,6 +116,7 @@ export default class PresentationView extends Vue {
         viewer.registerCallback("settings", () => {
             this.verses = viewer.Verses;
             this.muted = viewer.Settings?.muted === true;
+            this.theme = viewer.Settings?.theme ?? "dark";
         });
 
         addEventListener("keydown", (e) => {

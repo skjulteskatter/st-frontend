@@ -103,7 +103,7 @@
                             @previous="previous()"
                             @mute="control.mute()"
                         />
-                        <theme-selector />
+                        <theme-selector :theme="control.Settings?.theme" @setTheme="setTheme" />
                     </div>
                 </aside>
             </div>
@@ -203,6 +203,10 @@ export default class SongViewer extends Vue {
     public setLyrics() {
         if (this.lyrics)
             this.control.setLyrics(this.lyrics);
+    }
+
+    public setTheme(theme: "dark" | "light") {
+        this.control.setTheme(theme);
     }
 
     public set switchExtended(v) {

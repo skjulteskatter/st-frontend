@@ -8,19 +8,19 @@
 		</template>
 		<div class="grid grid-cols-2 gap-4">
 			<button
-				v-for="theme in themes"
-				:key="theme"
+				v-for="i in themes"
+				:key="i"
 				class="text-left p-2 rounded-md"
 				:class="{
-					'ring-2 ring-green-500': selectedTheme == theme,
-					'bg-white text-black border border-black/20': theme == 'light',
-					'bg-black text-white': theme == 'dark',
+					'ring-2 ring-green-500': i === theme,
+					'bg-white text-black border border-black/20': i === 'light',
+					'bg-black text-white': i === 'dark',
 				}"
-				@click="selectTheme(theme)"
+				@click="selectTheme(i)"
 			>
 				<span class="block font-bold text-xs uppercase tracking-wider flex justify-between">
-					{{ $t(`common.${theme}`) }}
-					<CheckCircleIcon class="w-4 h-4 text-green-500" v-if="selectedTheme == theme" />
+					{{ $t(`common.${i}`) }}
+					<CheckCircleIcon class="w-4 h-4 text-green-500" v-if="i === theme" />
 				</span>
 				<small clas="block tracking-wide leading-tight">Lorem ipsum dolor sit amet.</small>
 			</button>
@@ -37,14 +37,18 @@ import { CheckCircleIcon } from "@heroicons/vue/solid";
 	components: {
 		CheckCircleIcon,
 	},
+	props: {
+		theme: {
+			type: String,
+		},
+	},
 	emits: ["setTheme"],
 })
 export default class ThemeSelector extends Vue {
 	public themes = ["dark", "light"];
-	public selectedTheme = "dark";
+	public theme?: string;
 
 	public selectTheme(theme: string) {
-		this.selectedTheme = theme;
 		this.$emit("setTheme", theme);
 	}
 }
