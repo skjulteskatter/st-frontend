@@ -11,7 +11,7 @@
             >
                 {{ tag.getName() }}
             </router-link>
-            <button aria-label="Remove category" v-if="tag.userDefined" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
+            <button aria-label="Remove category" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
                 <XIcon class="w-4 h-4" />
             </button>
         </span>
@@ -19,11 +19,11 @@
             <template #button>
                 <button aria-label="Add category" class="py-1 text-gray-500 text-xs flex items-center gap-2">
                     <PlusIcon class="w-4 h-4" />
-                    {{ $t('song.addCategory') }}
+                    {{ $t('song.addTag') }}
                 </button>
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
-                <base-input v-model="tagFilter" type="text" :placeholder="$t('song.category')" class="w-full"/>
+                <base-input v-model="tagFilter" type="text" :placeholder="$t('tag')" class="w-full"/>
                 <base-button type="submit" theme="primary" :content="false">
                     <template #icon>
                         <PlusIcon class="w-4 h-4" />
@@ -78,7 +78,7 @@ export default class SongTags extends Vue {
         }
         const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
 
-        appSession.tags.push(new Tag(newTag, true));
+        appSession.tags.push(new Tag(newTag));
         this.Song.tagIds.push(newTag.id);
 
         this.tagFilter = "";
@@ -104,8 +104,7 @@ export default class SongTags extends Vue {
     }
 
     public get Tags() {
-        const tags = appSession.tags.filter(t => t.userDefined);
-        return tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName().toLowerCase().includes(this.tagFilter.toLowerCase())));
+        return appSession.tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName().toLowerCase().includes(this.tagFilter.toLowerCase())));
     }
 
     public get Song() {

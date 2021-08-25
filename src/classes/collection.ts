@@ -9,6 +9,7 @@ import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Tag } from "./tag";
+import { Category } from "./category";
 
 type CollectionSettings = {
     offline: boolean;
@@ -77,8 +78,7 @@ export class Collection extends BaseClass implements ApiCollection {
     private _themes?: CollectionItem<Theme>[];
     private _loadingThemes = false;
 
-    private _tags?: CollectionItem<Tag>[];
-    private _loadingTags = false;
+    private _categories?: CollectionItem<Category>[];
 
     private _genres: CollectionItem<Genre>[] = [];
 
@@ -372,16 +372,15 @@ export class Collection extends BaseClass implements ApiCollection {
                 return cItem;
             }).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
         }
-        if (value == "tags") {
-            if (!this._tags) {
-                this._loadingTags = true;
+        if (value == "categories") {
+            if (!this._categories) {
 
-                const tags = appSession.tags;
+                const items = appSession.categories;
 
-                this._tags = [];
+                this._categories = [];
 
-                for (const tag of tags) {
-                    this._tags.push(new CollectionItem<Tag>({
+                for (const tag of items) {
+                    this._categories.push(new CollectionItem<Category>({
                         songIds: this.songs.filter(s => s.tagIds.includes(tag.id)).map(s => s.id),
                         fileIds: [],
                         id: tag.id,
@@ -389,8 +388,7 @@ export class Collection extends BaseClass implements ApiCollection {
                     }));
                 }
 
-                this._loadingTags = false;
-                return this._tags.length;
+                return this._categories.length;
             }
         }
 
@@ -450,8 +448,8 @@ export class Collection extends BaseClass implements ApiCollection {
         return this._themes ?? [];
     }
 
-    public get tags(): CollectionItem<Tag>[] {
-        return this._tags ?? [];
+    public get categories(): CollectionItem<Category>[] {
+        return this._categories ?? [];
     }
 
     public get genres() {

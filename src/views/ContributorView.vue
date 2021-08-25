@@ -3,11 +3,11 @@
         <div v-if="contributor">
             <back-button class="mb-4" />
             <div class="grid gap-4 md:grid-cols-4">
-                <div class="flex flex-col gap-4 col-span-1">
+                <div class="col-span-1">
                     <img
                         :src="portrait"
                         id="contributor-biography-image"
-                        class="w-full rounded-lg filter grayscale"
+                        class="rounded-lg filter grayscale"
                     />
                 </div>
                 <base-card class="md:col-span-3">
