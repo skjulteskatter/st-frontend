@@ -164,4 +164,7 @@ export default class PresentationView extends Vue {
 .verse-name {
     left: calc(clamp(3rem, 6vw, 20rem) * -1);
 }
+::-webkit-scrollbar {
+    display: none;
+}
 </style>
