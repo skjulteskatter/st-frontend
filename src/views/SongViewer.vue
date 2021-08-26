@@ -96,14 +96,16 @@
                         :languageKey="languageKey ?? undefined"
                         class="sticky top-20"
                     />
-                    <presentation-control-panel
-                        v-else
-                        class="sticky top-20"
-                        @refresh="refresh()"
-                        @next="next()"
-                        @previous="previous()"
-                        @mute="control.mute()"
-                    />
+                    <div v-else class="sticky top-20 flex flex-col gap-4">
+                        <presentation-control-panel
+                            @refresh="refresh()"
+                            @next="next()"
+                            @previous="previous()"
+                            @mute="control.mute()"
+                        />
+                        <theme-selector :theme="control.Settings?.theme" @setTheme="setTheme" />
+                        <song-selector :songs="collection?.songs" @setSong="setSong" />
+                    </div>
                 </aside>
             </div>
         </div>
@@ -142,6 +144,8 @@ import { Options, Vue } from "vue-class-component";
 import {
     PresentationControlPanel,
     PresentationPreview,
+    ThemeSelector,
+    SongSelector,
     LyricsCard,
     BackButton,
     Modal,
@@ -166,6 +170,8 @@ import { control } from "@/classes/presentation/control";
     components: {
         PresentationControlPanel,
         PresentationPreview,
+        ThemeSelector,
+        SongSelector,
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
@@ -197,9 +203,22 @@ export default class SongViewer extends Vue {
     public show = false;
     public unset = false;
 
+    public setSong(songId: string) {
+        this.$router.push({
+            name: "song",
+            params: {
+                number: songId,
+            },
+        });
+    }
+
     public setLyrics() {
         if (this.lyrics)
             this.control.setLyrics(this.lyrics);
+    }
+
+    public setTheme(theme: "dark" | "light") {
+        this.control.setTheme(theme);
     }
 
     public set switchExtended(v) {
