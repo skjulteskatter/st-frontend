@@ -8,7 +8,6 @@ import { CollectionItem } from "./collectionItem";
 import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { Tag } from "./tag";
 import { Category } from "./category";
 
 type CollectionSettings = {
