@@ -30,6 +30,7 @@ export class PresentationControl extends PresentationBase {
             }),
             currentIndex: 0,
             muted: false,
+            theme: this.settings?.theme ?? "dark",
         };
     }
 
@@ -41,6 +42,7 @@ export class PresentationControl extends PresentationBase {
             }),
             currentIndex: 0,
             muted: false,
+            theme: this.settings?.theme ?? "dark",
         };
     }
 }
