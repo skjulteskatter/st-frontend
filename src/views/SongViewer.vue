@@ -104,6 +104,7 @@
                             @mute="control.mute()"
                         />
                         <theme-selector :theme="control.Settings?.theme" @setTheme="setTheme" />
+                        <song-selector :songs="collection?.songs" @setSong="setSong" />
                     </div>
                 </aside>
             </div>
@@ -144,6 +145,7 @@ import {
     PresentationControlPanel,
     PresentationPreview,
     ThemeSelector,
+    SongSelector,
     LyricsCard,
     BackButton,
     Modal,
@@ -169,6 +171,7 @@ import { control } from "@/classes/presentation/control";
         PresentationControlPanel,
         PresentationPreview,
         ThemeSelector,
+        SongSelector,
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
@@ -199,6 +202,15 @@ export default class SongViewer extends Vue {
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
+
+    public setSong(songId: string) {
+        this.$router.push({
+            name: "song",
+            params: {
+                number: songId,
+            },
+        });
+    }
 
     public setLyrics() {
         if (this.lyrics)
