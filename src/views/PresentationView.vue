@@ -9,32 +9,35 @@
             </h1>
             <div>
                 <h3 class="mb-2">{{ song.getName() }}</h3>
-                <p
-                    class="text-base tracking-wide opacity-50"
-                    v-if="song.Authors.length > 0"
+                <p 
+                    class="text-base tracking-wide opacity-50 flex gap-1" 
+                    v-if="song.Authors.length"
                 >
-                    {{ $t("song.author") }}:
-                    <span v-for="author in song.Authors" :key="author.id">
-                        {{ author.name }}
+                    <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+                    <span v-for="i in song.Authors" :key="i.id" class="rounded-md bg-black/5 dark:bg-white/10 dark:text-white">
+                        {{ i.name }}
                     </span>
                 </p>
                 <p
-                    class="text-base tracking-wide opacity-50"
                     v-if="song.Composers.length > 0"
+                    class="text-base tracking-wide opacity-50 flex gap-1"
                 >
-                    {{ $t("song.composer") }}:
+                    <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
                     <span
-                        v-for="composer in song.Composers"
-                        :key="composer.id"
+                        v-for="i in song.Composers"
+                        :key="i.id"
+                        :label="i.name"
+                        class="rounded-md bg-black/5 dark:bg-white/10 dark:text-white"
                     >
-                        {{ composer.name }}
+                        {{ i.name }}
                     </span>
                 </p>
                 <p class="text-base tracking-wide opacity-50" v-if="melodyOrigin">
                     {{ $t("song.melody") }}: {{ melodyOrigin }}
                 </p>
-                <p class="text-base tracking-wide opacity-50">
+                <p class="text-base tracking-wide opacity-50" v-if="song.yearWritten">
                     {{ song.yearWritten }}
+                    <span v-if="song.originCountry"> - {{ song.originCountry }}</span>
                 </p>
                 <small
                     class="flex gap-2 text-base tracking-wide opacity-50"
