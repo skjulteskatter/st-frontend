@@ -2,6 +2,11 @@ import config from "../config";
 import auth from "./auth";
 import { notify } from "./notify";
 
+type ResultError = {
+    status: number;
+    value: string;
+};
+
 class Http {
     public async getCountry(): Promise<string> {
         let entry = localStorage.getItem("country");
@@ -204,7 +209,8 @@ class Http {
             return result;
         }
         catch (e) {
-            notify("error", e.status, "warning", e.value);
+            const error = e as ResultError;
+            notify("error", error.status.toString(), "warning", error.value);
         }
     }
 
@@ -227,7 +233,8 @@ class Http {
             return result;
         }
         catch (e) {
-            notify("error", e.status, "warning", e.value);
+            const error = e as ResultError;
+            notify("error", error.status.toString(), "warning", error.value);
         }
     }
 }

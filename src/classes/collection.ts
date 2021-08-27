@@ -202,7 +202,9 @@ export class Collection extends BaseClass implements ApiCollection {
                     await cache.set("config", key, new Date(now.getTime() - 172800).toISOString());
                 }
                 catch(e) {
-                    notify("error", "Error occured", "warning", e);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const error = e as any;
+                    notify("error", "Error occured", "warning", error);
                     this.lyrics = await api.songs.getAllLyrics(this, language, "json", 0);
                 }
             }
