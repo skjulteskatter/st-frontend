@@ -128,8 +128,8 @@ export const songs = {
     getSongById(songId: string, expand?: string) {
         return http.get<ApiSong>("api/Songs/Id/" + songId + (expand ? "?expand=" + expand : ""));
     },
-    async getCollections() {
-        return (await http.get<ApiCollection[]>("api/Collections")).map(c => new Collection(c));
+    getCollections() {
+        return http.get<ApiCollection[]>("api/Collections");
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
