@@ -2,7 +2,7 @@
 	<base-card>
 		<template #header>
 			<div class="flex gap-4 items-center justify-between">
-				<h4 class="text-sm font-bold tracking-wide">{{ $t('common.color') }}{{ $t('common.theme').toLocaleLowerCase() }}</h4>
+				<h4 class="font-bold tracking-wide">{{ $t('common.color') }}{{ $t('common.theme').toLocaleLowerCase() }}</h4>
 				<span class="text-xs tracking-wider bg-green-500/20 text-green-600 rounded px-2 py-1">BETA</span>
 			</div>
 		</template>
@@ -10,7 +10,7 @@
 			<button
 				v-for="i in themes"
 				:key="i"
-				class="text-left p-2 rounded-md"
+				class="p-4 rounded-md"
 				:class="{
 					'ring-2 ring-green-500': i === theme,
 					'bg-white text-black border border-black/20': i === 'light',
@@ -22,7 +22,6 @@
 					{{ $t(`common.${i}`) }}
 					<CheckCircleIcon class="w-4 h-4 text-green-500" v-if="i === theme" />
 				</span>
-				<small clas="block tracking-wide leading-tight">Lorem ipsum dolor sit amet.</small>
 			</button>
 		</div>
 	</base-card>
