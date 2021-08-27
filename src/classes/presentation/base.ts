@@ -155,8 +155,15 @@ export class PresentationBase {
     public toggleVerse(index: string) {
         const settings = this.settings;
         if (settings) {
-
             settings.availableVerses[index] = !settings.availableVerses[index];
+            const verse = this.Lyrics?.verses[index];
+            if (verse?.type === "verse") {
+                const nextIndex = (parseInt(index) + 1).toString();
+                const nextVerse = this.Lyrics?.verses[nextIndex];
+                if (nextVerse?.type === "chorus") {
+                    settings.availableVerses[nextIndex] = false;
+                }
+            }
 
             this.settings = settings;
         }
