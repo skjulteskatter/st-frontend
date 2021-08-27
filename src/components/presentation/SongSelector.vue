@@ -1,21 +1,26 @@
 <template>
 	<base-card>
 		<template #header>
-			<div class="flex gap-4 items-center justify-between">
-				<h4 class="text-sm font-bold tracking-wide">{{ $t('common.change') }} {{ $t('common.song').toLowerCase() }}</h4>
-				<span class="text-xs tracking-wider bg-green-500/20 text-green-600 rounded px-2 py-1">BETA</span>
+			<div class="flex gap-4 items-center">
+				<h4 class="font-bold leading-tight tracking-wide">{{ $t('common.change') }} {{ $t('common.song').toLowerCase() }}</h4>
+				<tooltip text="Skriv inn nummeret på sangen du bytter til" />
+				<span class="ml-auto text-xs tracking-wider bg-green-500/20 text-green-600 rounded px-2 py-1">BETA</span>
 			</div>
 		</template>
 		<div class="grid gap-4">
-            <input v-model="number" type="number" />
+            <input
+				class="text-sm rounded-md bg-transparent border-black/20 dark:border-white/20 focus:border-transparent focus:ring focus:ring-primary"
+				v-model="number"
+				type="number"
+			/>
             <button 
-                v-for="i in filteredSongs" 
+                v-for="i in filteredSongs"
                 :key="i.id"
-				class="text-left p-2 rounded-md bg-white text-black border border-black/20"
+				class="text-left text-sm p-3 rounded-md border border-black/10 dark:border-white/10 hover:ring-2 hover:ring-gray-400"
                 @click="selectSong(i.id)"
             >
-                <b>{{i.number}}</b>
-                <div>{{i.getName()}}</div>
+                <b>{{ i.number }}</b>
+                <p>{{ i.getName() }}</p>
             </button>
 		</div>
 	</base-card>
