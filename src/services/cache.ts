@@ -144,28 +144,32 @@ class CacheService {
     }
 
     public async getOrCreateAsync<T>(key: string, factory: () => Promise<T>, expiry: number) {
-        const tx = await this.tx("general", true);
-
-        const r = (await tx.objectStore("general").get?.(key)) as Entry<"general"> | null;
-
-        await tx.done;
-
-        if (r && r.expiry > new Date().getTime()) {
-            return JSON.parse(r.item) as T;
-        }
-
         try {
-            const item = await factory();
+            const tx = await this.tx("general", true);
+
+            const r = (await tx.objectStore("general").get?.(key)) as Entry<"general"> | null;
     
-            await this.set("general", key, {
-                expiry,
-                item: JSON.stringify(item),
-            });
+            await tx.done;
     
-            return item;
-        }
-        catch {
-            return null;
+            if (r && r.expiry > new Date().getTime()) {
+                return JSON.parse(r.item) as T;
+            }
+    
+            try {
+                const item = await factory();
+        
+                await this.set("general", key, {
+                    expiry,
+                    item: JSON.stringify(item),
+                });
+        
+                return item;
+            }
+            catch {
+                return null;
+            }
+        } catch {
+            return await factory();
         }
     }
 }
