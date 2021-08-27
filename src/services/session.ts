@@ -107,7 +107,9 @@ export class Session {
                     await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
             } catch(e) {
-                notify("error", "Error fetching files", "warning", e);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const error = e as any;
+                notify("error", "Error fetching files", "warning", error);
                 this.files = (await songs.getFiles(ownedCols)).result;
             }
 
@@ -132,7 +134,9 @@ export class Session {
                 }
             }
             catch(e) {
-                notify("error", "Error occured", "warning", e);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const error = e as any;
+                notify("error", "Error occured", "warning", error);
                 this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
             }
             
@@ -160,7 +164,9 @@ export class Session {
             }
         }
         catch(e) {
-            notify("error", "Error occured", "warning", e);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error = e as any;
+            notify("error", "Error occured", "warning", error);
             this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
         }
 
