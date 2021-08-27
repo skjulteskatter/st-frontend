@@ -1,6 +1,7 @@
 import { useStore } from "@/store";
+import { ApiCategory } from "dmb-api";
 
-export class Category implements SongTag {
+export class Category implements ApiCategory {
     protected store = useStore();
     public id;
     public name: LocaleString = {};
@@ -10,7 +11,7 @@ export class Category implements SongTag {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.[0]];
     }
 
-    constructor(props: SongTag) {
+    constructor(props: ApiCategory) {
         this.id = props.id;
         this.name = props.name;
     }

@@ -163,11 +163,6 @@ declare module "dmb-api" {
         song?: ApiSong;
     }
 
-    interface ApiCopyright {
-        id: string;
-        name: LocaleString;
-    }
-
     interface IndexedSong {
         id: string;
         number: number;
@@ -212,27 +207,25 @@ declare module "dmb-api" {
         displayName: string;
         image: string;
     }
-}
 
-interface Copyright {
-    id: string;
-    name: LocaleString;
-}
+    interface ApiItem {
+        id: string;
+        name: LocaleString;
+    }
 
-interface Theme {
-    id: string;
-    name: LocaleString;
-}
+    type ApiCopyright = ApiItem;
 
-interface SongTag {
-    id: string;
-    name: LocaleString;
-}
+    type ApiTheme = ApiItem;
 
-interface Genre {
-    id: string;
-    name: LocaleString;
-    description: LocaleString;
+    interface ApiCountry extends ApiItem {
+        countryCode: string;
+    }
+
+    interface ApiGenre extends ApiItem {
+        description: LocaleString;
+    }
+
+    type ApiCategory = ApiItem;
 }
 
 interface JsonContent {

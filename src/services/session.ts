@@ -1,5 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import { Category } from "@/classes/category";
+import { Genre, Theme, Country, Copyright } from "@/classes/items";
 import { Tag } from "@/classes/tag";
 import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
 import { analytics, items, sharing, songs, tags } from "./api";
@@ -38,7 +39,7 @@ export class Session {
         }
 
         this._initialized = false;
-        this.collections = (await songs.getCollections()).map(c => new Collection(c));
+        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
 
         const lastCacheClear = await cache.get("config", "last_cache_clear") as number | undefined;
 
@@ -174,16 +175,13 @@ export class Session {
 
         const expiry = new Date().getTime() + 3600000;
         
-        this.countries = await cache.getOrCreateAsync("countries", () => items.getCountries(), expiry) ?? [];
-        this.themes = await cache.getOrCreateAsync("themes", () => items.getThemes(), expiry) ?? [];
-        this.copyrights = await cache.getOrCreateAsync("copyrights", () => items.getCopyrights(), expiry) ?? [];
-        this.genres = await cache.getOrCreateAsync("genres", () => items.getGenres(), expiry) ?? [];
+        this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
+        this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
+        this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
+        this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
+        this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
 
-        const t = await cache.getOrCreateAsync("tags", () => items.getTags(), expiry) ?? [];
-
-        this.categories = t.map(i => new Category(i));
-
-        const ts = await tags.getAll();
+        const ts = await cache.getOrCreateAsync("user_tags", tags.getAll, new Date().getTime() + 60000) ?? [];
         for (const tag of ts) {
             for (const sId of tag.songIds) {
                 const song = this.songs.find(s => s.id == sId);

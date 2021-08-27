@@ -1,8 +1,7 @@
 import { useStore } from "@/store";
-import { ApiCollectionItem, ApiContributor } from "dmb-api";
-import { Tag } from "./tag";
+import { ApiCategory, ApiCollectionItem, ApiContributor, ApiCountry, ApiTheme } from "dmb-api";
 
-export class CollectionItem<T extends (ApiContributor | Country | Theme | Tag)> implements ApiCollectionItem<T> {
+export class CollectionItem<T extends (ApiContributor | ApiCountry | ApiTheme | ApiCategory)> implements ApiCollectionItem<T> {
     private store = useStore();
 
     public id;

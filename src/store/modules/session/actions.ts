@@ -12,6 +12,7 @@ import { State } from "./state";
 import { SongsMutationTypes } from "../songs/mutation-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
+import { cache } from "@/services/cache";
 
 
 
@@ -33,18 +34,16 @@ const ts: {
 };
 
 async function init(state: State, commit: Commit): Promise<void> {
-    const user = await api.session.getCurrentUser();
-    if (user) {
-        analytics.setUserId(user.id);
-        user.displayName = auth.user?.displayName ?? user.displayName;
-    }
-    
-    api.playlists.getPlaylists().then(p => {
-        commit(SessionMutationTypes.SET_PLAYLISTS, p);
-    });
+    const expiry = new Date().getTime() + 10000;
 
-    api.tags.getAll().then(t => {
-        commit(SessionMutationTypes.SET_TAGS, t);
+    const user = await cache.getOrCreateAsync("user", api.session.getCurrentUser, expiry);
+    if (!user) return;
+
+    analytics.setUserId(user.id);
+    user.displayName = auth.user?.displayName ?? user.displayName;
+    
+    cache.getOrCreateAsync("playlists", api.playlists.getPlaylists, expiry).then(p => {
+        commit(SessionMutationTypes.SET_PLAYLISTS, p);
     });
 
     const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
@@ -55,13 +54,14 @@ async function init(state: State, commit: Commit): Promise<void> {
         });
     }
 
-    api.activity.getActivities().then(a => {
+    cache.getOrCreateAsync("activities", api.activity.getActivities, expiry).then(a => {
         commit(SessionMutationTypes.SET_LOG_ITEMS, a);
     });
 
     commit(SessionMutationTypes.SET_USER, user);
     try {
         await appSession.init();
+        commit(SessionMutationTypes.SET_TAGS, appSession.tags);
     } catch (e) {
         //console.log(e);
     }

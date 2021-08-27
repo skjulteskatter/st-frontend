@@ -19,14 +19,6 @@ interface Origin {
     description: LocaleString;
 }
 
-interface Country {
-    id: string;
-    name: {
-        [key: string]: string;
-    };
-    countryCode: string;
-}
-
 type SheetMusicOptions = {
     show: boolean;
     url?: string;

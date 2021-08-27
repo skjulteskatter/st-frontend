@@ -123,23 +123,6 @@
                     ></song-list-card>
                 </div>
 
-                <!-- <div
-                    class="song-list__songs"
-                    v-if="listType == 'tags'"
-                >
-                    <song-list-card
-                        v-for="tag in collection.tags"
-                        :collection="collection"
-                        :key="tag.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                tag?.songIds.includes(s.id)
-                            )
-                        "
-                        :title="tag?.name"
-                        class="mb-4"
-                    ></song-list-card>
-                </div> -->
                 <div
                     class="song-list__songs"
                     v-if="listType == 'categories'"
@@ -248,6 +231,7 @@ import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
+import { Country, Theme } from "@/classes/items";
 
 @Options({
     components: {
@@ -485,11 +469,6 @@ export default class SongList extends Vue {
                 selected: this.listType == "composer",
                 hidden: !this.collection?.hasComposers,
             },
-            // {
-            //     label: this.$t("song.theme"),
-            //     value: "themes",
-            //     selected: this.listType == "themes",
-            // },
             {
                 label: this.$t("song.genre"),
                 value: "genre",
@@ -507,11 +486,6 @@ export default class SongList extends Vue {
                 value: "views",
                 selected: this.listType == "views",
             },
-            // {
-            //     label: this.$t("common.country"),
-            //     value: "countries",
-            //     selected: this.listType == "countries",
-            // },
         ].filter(
             (b) =>
                 b.hidden != true,
