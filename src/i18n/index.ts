@@ -24,6 +24,10 @@ let currentTranslation = validLanguages.includes(lanKey) ? lanKey : "en";
 export async function setLocale(locale: string) {
     try {
         translations = await (await fetch(`/translations/${locale}.json`)).json();
+        const cs = countries.getNames(locale);
+        for (const e of Object.entries(cs)) {
+            translations[e[0]] = e[1];
+        }
         i18n.global.setLocaleMessage("current", translations);
     }
     catch {
@@ -44,11 +48,15 @@ export async function ensureLanguageIsFetched() {
         catch {
             //
         }
-        // countries.getNames(lan);
         englishIsFetched = true;
         const english: {
             [key: string]: string;
         } = await (await fetch("/translations/en.json")).json();
+
+        const cs = countries.getNames("en");
+        for (const e of Object.entries(cs)) {
+            english[e[0]] = e[1];
+        }
 
         i18n.global.setLocaleMessage("en", english);
     }
