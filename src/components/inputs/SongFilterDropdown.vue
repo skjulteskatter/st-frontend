@@ -66,6 +66,7 @@ import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import CheckboxGroup from "./CheckboxGroup.vue";
+import { Theme } from "@/classes/items";
 
 @Options({
     name: "song-filter-dropdown",

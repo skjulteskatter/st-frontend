@@ -9,6 +9,7 @@ import { appSession } from "@/services/session";
 import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Category } from "./category";
+import { Country, Genre, Theme } from "./items";
 
 type CollectionSettings = {
     offline: boolean;
@@ -79,7 +80,7 @@ export class Collection extends BaseClass implements ApiCollection {
 
     private _categories?: CollectionItem<Category>[];
 
-    private _genres: CollectionItem<Genre>[] = [];
+    private _genres?: CollectionItem<Genre>[];
 
     private _authors: CollectionItem<ApiContributor>[] = [];
     private _composers: CollectionItem<ApiContributor>[] = [];
@@ -342,9 +343,19 @@ export class Collection extends BaseClass implements ApiCollection {
         if (value == "countries") {
             if (!this._countries) {
                 this._loadingCountries = true;
-                const countries = await api.songs.getAllCountries(this);
 
-                this._countries = countries.map(c => new CollectionItem(c));
+                await new Promise(r => setTimeout(r, 10));
+
+                const songs = this.songs.filter(s => s.origins.some(o => o.type === "text"));
+
+                this._countries = appSession.countries.map(i => 
+                    new CollectionItem({
+                        id: i.id,
+                        item: i,
+                        songIds: songs.filter(s => s.origins.some(o => o.country === i.countryCode)).map(s => s.id),
+                        fileIds: [],
+                    }),
+                );
 
                 this._loadingCountries = false;
                 return this._countries?.length;
@@ -354,40 +365,50 @@ export class Collection extends BaseClass implements ApiCollection {
             if (!this._themes) {
                 this._loadingThemes = true;
 
-                const themes = await api.songs.getAllThemes(this);
+                await new Promise(r => setTimeout(r, 10));
 
-                this._themes = themes.map(t => new CollectionItem(t));
+                const songs = this.songs.filter(i => i.themeIds.length);
+
+                this._themes = appSession.themes.map(i => 
+                    new CollectionItem({
+                        id: i.id,
+                        item: i,
+                        songIds: songs.filter(s => s.themeIds.includes(i.id)).map(s => s.id),
+                        fileIds: [],
+                    }),
+                );
 
                 this._loadingThemes = false;
                 return this._themes.length;
             }
         }
         if (value == "genre") {
-            this._genres = appSession.genres.map(i => {
-                const cItem = new CollectionItem<Genre>({
-                    songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
-                    id: i.id,
-                    item: i,
-                    fileIds: [],
-                });
-                return cItem;
-            }).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
+            if (!this._genres) {
+
+                this._genres = appSession.genres.map(i => 
+                    new CollectionItem<Genre>({
+                        songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
+                        id: i.id,
+                        item: i,
+                        fileIds: [],
+                    }),
+                ).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
+
+                return this._genres.length;
+            }
         }
         if (value == "categories") {
             if (!this._categories) {
+                const songs = this.songs.filter(i => i.tagIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
 
-                const items = appSession.categories;
-
-                this._categories = [];
-
-                for (const tag of items) {
-                    this._categories.push(new CollectionItem<Category>({
-                        songIds: this.songs.filter(s => s.tagIds.includes(tag.id)).map(s => s.id),
+                this._categories = appSession.categories.map(i => 
+                    new CollectionItem({
+                        id: i.id,
+                        item: i,
+                        songIds: songs.filter(s => s.tagIds.includes(i.id)).map(s => s.id),
                         fileIds: [],
-                        id: tag.id,
-                        item: tag,
-                    }));
-                }
+                    }),
+                );
 
                 return this._categories.length;
             }
@@ -454,7 +475,7 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public get genres() {
-        return this._genres;
+        return this._genres ?? [];
     }
 
     public getContributors(type: string) {

@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCollection, ApiCollectionItem, ApiContributor, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -59,19 +59,19 @@ export const session = {
 
 export const items = {
     getThemes() {
-        return http.get<Theme[]>("api/Themes");
+        return http.get<ApiTheme[]>("api/Themes");
     },
     getCountries() {
-        return http.get<Country[]>("api/Countries");
+        return http.get<ApiCountry[]>("api/Countries");
     },
     getCopyrights() {
-        return http.get<Copyright[]>("api/Copyrights");
+        return http.get<ApiCopyright[]>("api/Copyrights");
     },
-    getTags() {
-        return http.get<SongTag[]>("api/SongTags");
+    getCategories() {
+        return http.get<ApiCategory[]>("api/SongTags");
     },
     getGenres() {
-        return http.get<Genre[]>("api/Genres");
+        return http.get<ApiGenre[]>("api/Genres");
     },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
@@ -155,15 +155,6 @@ export const songs = {
     },
     getContributors(lastUpdated?: string) {
         return http.getWithResult<ApiCollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
-    },
-    getAllThemes(collection: ApiCollection) {
-        return http.get<ApiCollectionItem<Theme>[]>(`api/Themes/${collection.id}`); //).map(ci => new ThemeCollectionItem(ci));
-    },
-    getAllCountries(collection: ApiCollection) {
-        return http.get<ApiCollectionItem<Country>[]>(`api/Countries/${collection.id}`); //).map(ci => new CountryCollectionItem(ci));
-    },
-    getAllTags(collection: ApiCollection) {
-        return http.get<ApiCollectionItem<SongTag>[]>(`api/SongTags/${collection.id}`); //).map(ci => new CountryCollectionItem(ci));
     },
     searchCollections(query: string, collectionId?: string) {
         return http.post<(IndexedSong | IndexedContributor)[], unknown>("api/Songs/Search", {query, collectionId});
