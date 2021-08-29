@@ -100,16 +100,19 @@ export default class PresentationView extends Vue {
     public verses: Verse[] | null = null;
     public muted = false;
     public theme: "dark" | "light" = "dark";
+    public verseCount = 0;
 
     public async mounted() {
         await appSession.init();
         viewer.init();
         this.lyrics = viewer.Lyrics;
+        this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
         this.song = viewer.Song ?? null;
         this.verses = viewer.Verses;
 
         viewer.registerCallback("lyrics", () => {
             this.lyrics = viewer.Lyrics;
+            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
             this.song = viewer.Song ?? null;
         });
 

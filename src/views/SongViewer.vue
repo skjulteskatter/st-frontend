@@ -236,14 +236,11 @@ export default class SongViewer extends Vue {
 
     public toggleAll() {
         if (this.lyrics) {
-            if (this.unset) {
-                this.control.resetSettings(this.lyrics);
+            this.control.toggleAll();
+            if (this.control.AvailableVerses.length) {
                 this.unset = false;
             } else {
-                for (const i of this.control.AvailableVerses) {
-                    this.toggleVerse(i);
-                    this.unset = true;
-                }
+                this.unset = true;
             }
         }
     }
