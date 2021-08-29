@@ -169,6 +169,18 @@ export class PresentationBase {
         }
     }
 
+    public toggleAll() {
+        const settings = Object.assign({}, this.settings);
+        if (this.AvailableVerses.length) {
+            settings.availableVerses = {};
+        } else {
+            settings.availableVerses = Object.keys(this.Lyrics?.verses ?? {}).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                [key: string]: boolean;
+            });
+        }
+        this.settings = settings;
+    }
+
     public get AvailableVerses() {
         return Object.entries(this.settings?.availableVerses ?? {}).filter(i => i[1] === true).map(i => i[0]);
     }
