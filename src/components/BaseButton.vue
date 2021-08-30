@@ -123,18 +123,8 @@ export default class BaseButton extends Vue {
     }
 
     &-tertiary {
-        background-color: transparent;
-        border: 1px solid var(--st-color-primary);
-        color: var(--st-color-primary);
-
-        &:hover {
-            background-color: var(--st-color-primary);
-            color: var(--st-color-text-dm);
-
-            &:after {
-                background: transparent;
-            }
-        }
+        @apply text-primary;
+        @apply hover:bg-primary/20;
     }
 
     &-warning {
