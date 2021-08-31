@@ -18,7 +18,7 @@
                 </h2>
                 <price class="text-gray-400 flex-shrink-0" v-if="!product.owned" :product="product" :country="languageKey" />
             </div>
-            <div class="flex flex-col gap-2 lg:flex-row">
+            <div class="grid gap-2 lg:grid-cols-2">
                 <base-button
                     class="flex-grow"
                     theme="secondary"

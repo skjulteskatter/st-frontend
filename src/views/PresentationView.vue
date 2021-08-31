@@ -3,12 +3,12 @@
         class="text-3xl h-full"
         :class="[theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']"
     >
-        <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/20' : 'border-black/20']" class="flex items-end gap-6 px-10 py-4 border-b" v-if="song">
-            <h1 class="font-bold" v-if="song.number">
+        <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/20' : 'border-black/20']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
+            <h1 class="font-bold text-4xl" v-if="song.number">
                 {{ song.number }}
             </h1>
-            <h3 class="font-light">{{ song.getName() }}</h3>
-            <div class="ml-auto flex gap-6 text-base tracking-wide">
+            <h3 class="font-light text-4xl">{{ song.getName() }}</h3>
+            <div class="ml-auto flex gap-6 text-lg tracking-wide">
                 <div>
                     <p
                         v-if="song.Authors.length > 0"
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div :class="{'hidden': muted}" class="mt-10 verses" v-if="verses">
+        <div :class="{'hidden': muted}" class="mt-16 verses" v-if="verses">
             <div
                 class="relative verse"
                 :class="{ 'italic border-l-4 border-white/10 dark:border-black/10 pl-4': verse.type == 'chorus' }"
