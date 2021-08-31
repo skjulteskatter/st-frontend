@@ -12,6 +12,10 @@
                     </template>
                     {{ $t('store.buy') }}
                 </base-button>
+                <button @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
+                    <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
+                    <ViewBoardsIcon class="w-5 h-5" v-else />
+                </button>
             </div>
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
                 <div class="flex flex-col gap-1 text-sm">
@@ -51,7 +55,7 @@
                     @search="search"
                 />
             </div>
-            <div v-if="searchQuery == '' && !loading">
+            <div v-if="searchQuery == '' && !loading && viewType == 'boards'">
                 <div
                     class="song-list__contributors"
                     v-if="listType == 'composer'"
@@ -204,6 +208,17 @@
                 </div>
             </div>
 
+            <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+                <button
+                    v-for="s in songs"
+                    :key="s?.id ?? Math.random()"
+                    class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
+                    @click="s.view()"
+                >
+                    {{ s.number }}
+                </button>
+            </div>
+
             <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
                 No results
             </h1>
@@ -232,6 +247,7 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
 import { Country, Theme } from "@/classes/items";
+import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
@@ -242,6 +258,8 @@ import { Country, Theme } from "@/classes/items";
         BackButton,
         SearchInput,
         ShoppingCartIcon,
+        ViewGridIcon,
+        ViewBoardsIcon,
     },
     name: "song-list",
 })
@@ -253,6 +271,11 @@ export default class SongList extends Vue {
 
     public cId = "";
     private songsPerCard = 50;
+    public viewType: "grid" | "boards" = "boards"
+
+    public toggleViewType() {
+        this.viewType = this.viewType == "boards" ? "grid" : "boards";
+    }
 
     public search() {
         this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
