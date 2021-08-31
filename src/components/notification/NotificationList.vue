@@ -23,11 +23,10 @@
 			<div
 				v-for="n in notifications"
 				:key="n.id"
-				class="p-2 rounded-md bg-white shadow-md max-w-sm relative flex gap-4 border border-l-4 dark:text-gray-800"
-				:class="{ 'border-green-700': n.type == 'success', 'border-red-700': n.type == 'error' }" 
+				class="p-2 rounded-md bg-white max-w-sm relative flex gap-2 border border-black/20 dark:border-white/10 dark:bg-secondary"
 				@click="n.callback?.()"
 			>
-				<icon v-if="n.icon" :name="n.icon" size="18" />
+				<icon v-if="n.icon" :name="n.icon" size="18" :class="{ 'text-green-700': n.type == 'success', 'text-red-700': n.type == 'error' }" />
 				<div class="flex-grow text-xs">
 					<strong class="block">{{ n.title }} </strong>
 					<span v-if="n.content" style="">{{ n.content }}</span>
