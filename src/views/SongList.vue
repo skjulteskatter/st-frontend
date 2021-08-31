@@ -12,7 +12,7 @@
                     </template>
                     {{ $t('store.buy') }}
                 </base-button>
-                <button @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
+                <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                     <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                     <ViewBoardsIcon class="w-5 h-5" v-else />
                 </button>
@@ -214,6 +214,8 @@
                     :key="s?.id ?? Math.random()"
                     class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
                     @click="s.view()"
+                    aria-label="Open song"
+                    title="Open song"
                 >
                     {{ s.number }}
                 </button>
