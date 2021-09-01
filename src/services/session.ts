@@ -178,39 +178,40 @@ export class Session {
         const fetchAll = [fetchContributors()];
 
         if (ownedCols.length) {
-            await fetchFiles();
-            fetchAll.push(fetchSongs());
+            fetchAll.push(fetchSongs(), fetchFiles());
         }
 
         const expiry = new Date().getTime() + 3600000;
-        
-        const fetchCountries = async () => {
-            this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
-        };
-        const fetchCopyrights = async () => {
-            this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
-        };
-        const fetchThemes = async () => {
-            this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
-        };
-        const fetchGenres = async () => {
-            this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
-        };
-        const fetchCategories = async () => {
-            this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
-        };
-        const fetchLanguages = async () => {
-            this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, expiry)) ?? [];
-        };
-        const fetchTags = async () => {
-            const obj: {
-                [key: string]: ApiTag;
-            } = {};
-            const getTags = async () => (await tags.getAll()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
-            this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
-        };
 
-        fetchAll.push(fetchCountries(), fetchCopyrights(), fetchThemes(), fetchGenres(), fetchCategories(), fetchLanguages(), fetchTags());
+        for (const f of [
+            async () => {
+                this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
+            },
+            async () => {
+                this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
+            },
+            async () => {
+                this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
+            },
+            async () => {
+                this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
+            },
+            async () => {
+                this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
+            },
+            async () => {
+                this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, expiry)) ?? [];
+            },
+            async () => {
+                const obj: {
+                    [key: string]: ApiTag;
+                } = {};
+                const getTags = async () => (await tags.getAll()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
+                this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
+            },
+        ]) {
+            fetchAll.push(f());
+        }
 
         await Promise.all(fetchAll);
 

@@ -48,11 +48,25 @@ export class Song extends BaseClass implements ApiSong {
     public yearWritten;
     public yearComposed;
 
-    public files?: MediaFile[];
+    private _files?: MediaFile[];
 
-    public audioFiles: MediaFile[] = [];
-    public videoFiles: MediaFile[] = [];
-    public sheetMusic: MediaFile[] = [];
+    public get files(): MediaFile[] {
+        if (!this._files) {
+            this._files = appSession.files.filter(f => f.songId == this.id);
+        }
+        return this._files;
+    }
+
+    public get audioFiles(): MediaFile[] {
+        return this.files.filter(f => f.type === "audio");
+    }
+    public get videoFiles(): MediaFile[] {
+        return this.files.filter(f => f.type === "video");
+    }
+    public get sheetMusic(): MediaFile[] {
+        return this.files.filter(f => f.type.startsWith("sheetmusic"));
+    }
+
     public details: LocaleString;
     public hasLyrics: boolean;
     public hasChords;
@@ -72,10 +86,6 @@ export class Song extends BaseClass implements ApiSong {
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
         this.yearWritten = song.yearWritten;
         this.yearComposed = song.yearComposed;
-        this.files = appSession.files.filter(f => f.songId == this.id);
-        this.audioFiles = this.files.filter(f => f.type == "audio") ?? [];
-        this.videoFiles = this.files.filter(f => f.type == "video") ?? [];
-        this.sheetMusic = this.files.filter(f => f.type.startsWith("sheetmusic")) ?? [];
         this.details = song.details ?? {};
         this.copyrights = song.copyrights;
         this.type = song.type;
@@ -108,7 +118,8 @@ export class Song extends BaseClass implements ApiSong {
         return this.collections.map(c => c.id);
     }
 
-    public anotherLanguage(lan: string) {
+    public anotherLanguage(lan?: string) {
+        lan = lan ?? this.store.getters.languageKey;
         return !Object.keys(this.name).includes(lan) && this.type == "lyrics";
     }
         

@@ -71,7 +71,6 @@ declare module "dmb-api" {
         details?: LocaleString;
         newMelody: boolean;
         newMelodies: string[];
-        files?: MediaFile[];
     }
 
     interface ApiLyrics {
@@ -153,7 +152,7 @@ declare module "dmb-api" {
         id: string;
         songId: string;
         name: string;
-        type: string;
+        type: "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
         collectionIds: string[];
         category: string;
         number: number;
