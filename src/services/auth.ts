@@ -171,7 +171,7 @@ class Auth {
             notInitialized();
         }
 
-        await a().sendPasswordResetEmail(email);
+        await session.resetPassword(email);
         notify("success", "Forgot Password", "success", "Check your email for the reset-link.");
     }
 

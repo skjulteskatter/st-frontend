@@ -55,6 +55,9 @@ export const session = {
     verifyEmail() {
         return http.get("api/Session/VerifyEmail");
     },
+    resetPassword(email: string) {
+        return http.get("api/Session/ResetPassword/" + email);
+    },
 };
 
 export const items = {
