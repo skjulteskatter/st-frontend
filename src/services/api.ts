@@ -55,6 +55,9 @@ export const session = {
     verifyEmail() {
         return http.get("api/Session/VerifyEmail");
     },
+    resetPassword(email: string) {
+        return http.get("api/Session/ResetPassword/" + email);
+    },
 };
 
 export const items = {
@@ -245,20 +248,16 @@ export const tags = {
     create(name: string, color: string, songId: string) {
         return http.post<ApiTag, unknown>("api/Tags", {name, color, songId});
     },
-    update(id: string, name?: string, color?: string) {
+    update(id: string, name?: string, color?: string, addIds?: string[], removeIds?: string[]) {
         return http.patch("api/Tags/" + id, {
             name,
             color,
+            addIds,
+            removeIds,
         });
     },
     delete(id: string){
         return http.delete(`api/Tags/${id}`);
-    },
-    addToTag(id: string, songId: string) {
-        return http.post<ApiTag>(`api/Tags/${id}/${songId}`);
-    },
-    removeFromTag(id: string, songId: string) {
-        return http.delete<ApiTag>(`api/Tags/${id}/${songId}`);
     },
 };
 

@@ -68,7 +68,7 @@ export class Collection extends BaseClass implements ApiCollection {
     public hasComposers = false;
     public hasCountries = false;
     public hasThemes = false;
-    public hasTags = false;
+    public hasCategories = false;
     public hasGenres = false;
 
     public themeTypes: Theme[] = [];
@@ -153,7 +153,7 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasComposers = this.hasComposers || this.songs.some(s => s.participants.some(p => p.type == "composer"));
             this.hasThemes = this.hasThemes || this.songs.some(s => s.themeIds.length > 0);
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
-            this.hasTags = this.hasTags || this.songs.some(s => s.tagIds.length > 0);
+            this.hasCategories = this.hasCategories || this.songs.some(s => s.categoryIds.length > 0);
             this.hasGenres = this.hasGenres || this.songs.some(s => s.genreIds.length > 0);
 
             this._authors = appSession.contributors.map(c => {
@@ -401,13 +401,13 @@ export class Collection extends BaseClass implements ApiCollection {
         }
         if (value == "categories") {
             if (!this._categories) {
-                const songs = this.songs.filter(i => i.tagIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                const songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
 
                 this._categories = appSession.categories.map(i => 
                     new CollectionItem({
                         id: i.id,
                         item: i,
-                        songIds: songs.filter(s => s.tagIds.includes(i.id)).map(s => s.id),
+                        songIds: songs.filter(s => s.categoryIds.includes(i.id)).map(s => s.id),
                         fileIds: [],
                     }),
                 );

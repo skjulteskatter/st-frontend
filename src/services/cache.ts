@@ -1,5 +1,5 @@
 import { Lyrics } from "@/classes";
-import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile } from "dmb-api";
+import { ApiCollectionItem, ApiContributor, ApiPlaylist, ApiSong, ApiTag, MediaFile } from "dmb-api";
 import { openDB } from "idb";
 import { Notification } from "songtreasures";
 
@@ -18,9 +18,11 @@ type StoreTypes = {
         expiry: number;
         item: string;
     };
+    tags: ApiTag;
+    collections: ApiPlaylist;
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general" | "tags" | "collections";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -35,8 +37,9 @@ class CacheService {
         "files",
         "notifications",
         "general",
+        "tags",
     ];
-    private version = 23;
+    private version = 24;
 
     private db() {
         const v = this.version;
@@ -78,7 +81,7 @@ class CacheService {
 
     public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
         const tx = await this.tx(store, true);
-
+        
         await tx.objectStore(store).put?.(value, key);
 
         await tx.done;
@@ -102,7 +105,7 @@ class CacheService {
     public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {
         const tx = await this.tx(store);
 
-        const result = await tx.objectStore(store).getAll();
+        const result = await tx.store.getAll();
 
         await tx.done;
         if (store == "lyrics") {
@@ -170,6 +173,33 @@ class CacheService {
             }
         } catch {
             return await factory();
+        }
+    }
+
+    public async getOrCreateHashAsync<S extends Store>(module: S, factory: () => Promise<{[key: string]: Entry<S>}>, expiration: number): Promise<Entry<S>[]> {
+        try {
+            const expiry = await this.get("config", module + "_expiry") as number | undefined;
+
+            const tx = await this.tx(module, true);
+
+            if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
+                tx.store.clear?.();
+
+                const items = await factory();
+
+                for (const i of Object.entries(items)) {
+                    await tx.store.put?.(i[1], i[0]);
+                }
+
+                await this.set("config", module + "_expiry", expiration);
+
+                return Object.values(items);
+            }
+
+            return await tx.store.getAll() as Entry<S>[];
+        }
+        catch {
+            return Object.values(await factory());
         }
     }
 }
