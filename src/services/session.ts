@@ -2,7 +2,7 @@ import { Collection, CollectionItem, Song } from "@/classes";
 import { Category } from "@/classes/category";
 import { Genre, Theme, Country, Copyright } from "@/classes/items";
 import { Tag } from "@/classes/tag";
-import { ApiCollectionItem, ApiContributor, ApiSong, MediaFile, ShareKey } from "dmb-api";
+import { ApiCollectionItem, ApiContributor, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
 import { analytics, items, sharing, songs, tags } from "./api";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -21,10 +21,6 @@ export class Session {
     public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
-
-    public get Tags() {
-        return this.tags;
-    }
 
     public get initialized() {
         return this._initialized === true;
@@ -207,14 +203,11 @@ export class Session {
             this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, expiry)) ?? [];
         };
         const fetchTags = async () => {
-            const ts = await cache.getOrCreateAsync("user_tags", tags.getAll, new Date().getTime() + 60000) ?? [];
-            for (const tag of ts) {
-                for (const sId of tag.songIds) {
-                    const song = this.songs.find(s => s.id == sId);
-                    song?.tagIds.push(tag.id);
-                }
-            }
-            this.tags = ts.map(i => new Tag(i));
+            const obj: {
+                [key: string]: ApiTag;
+            } = {};
+            const getTags = async () => (await tags.getAll()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
+            this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
         };
 
         fetchAll.push(fetchCountries(), fetchCopyrights(), fetchThemes(), fetchGenres(), fetchCategories(), fetchLanguages(), fetchTags());

@@ -4,7 +4,7 @@
         <header class="mb-4 flex flex-col md:flex-row md:items-center gap-4">
             <h1 class="font-bold text-2xl md:text-3xl">{{ $t('common.tags') }}</h1>
             <span class="flex-grow flex gap-4 items-center justify-between">
-                <p class="text-gray-500 bg-black/10 dark:bg-white/10 dark:text-gray-400 rounded-full px-3 py-1 text-sm tracking-wide">{{ tag.getName() }}</p>
+                <p class="text-gray-500 bg-black/10 dark:bg-white/10 dark:text-gray-400 rounded-full px-3 py-1 text-sm tracking-wide">{{ tag.name }}</p>
                 <router-link :to="{ name: 'tags' }" class="px-3 py-1 text-gray-500 dark:text-gray-400 rounded-md flex gap-2 items-center hover:bg-black/10 dark:hover:bg-white/10">
                     <TagIcon class="w-4 h-4" />
                     <span>{{ $t('playlist.seeall') }} {{ $t('common.tags').toLocaleLowerCase() }}</span>
@@ -19,7 +19,7 @@
                 @click="$router.push({
                     name: 'song',
                     params: {
-                        collection: song.collectionIds[0],
+                        collection: song.Collections[0].key,
                         number: song.number
                     }
                 })"
@@ -51,7 +51,7 @@ export default class TagVue extends Vue {
     public async beforeMount() {
         this.tag = appSession.tags.find(t => t.id == this.$route.params.id);
 
-        this.songs = appSession.songs.filter(t => t.tagIds.includes(this.tag?.id ?? ""));
+        this.songs = appSession.songs.filter(i => this.tag?.songIds.includes(i.id));
     }
 
     public get languageKey() {

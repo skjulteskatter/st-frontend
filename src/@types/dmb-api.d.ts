@@ -54,7 +54,7 @@ declare module "dmb-api" {
         hasChords: boolean;
         themeIds: string[];
         genreIds: string[];
-        tagIds: string[];
+        categoryIds: string[];
         copyrights: {
             type: string;
             copyrightId?: string;
@@ -118,7 +118,7 @@ declare module "dmb-api" {
         type: "composer" | "author" | "arranger" | "artist";
     }
 
-    interface ApiPlaylist {
+    interface ApiCustomCollection {
         id: string;
         type: "playlist";
         name: string;
@@ -127,6 +127,8 @@ declare module "dmb-api" {
         sharedWithIds: string[];
         shareKey: string;
     }
+
+    type ApiPlaylist = ApiCustomCollection;
 
     interface ApiPlaylistEntry {
         id: string;

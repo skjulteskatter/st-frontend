@@ -1,6 +1,6 @@
 <template>
     <div class="flex gap-2 flex-wrap">
-        <span v-for="tag in Song.tags" :key="tag.id" class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-600 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20">
+        <span v-for="tag in songTags" :key="tag.id" class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-600 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20">
             <router-link
                 :to="{
                     name: 'tag',
@@ -9,7 +9,7 @@
                     },
                 }"
             >
-                {{ tag.getName() }}
+                {{ tag.name }}
             </router-link>
             <button aria-label="Remove category" @click="removeFromTag(tag.id)" class="cursor-pointer hover:text-red-800">
                 <XIcon class="w-4 h-4" />
@@ -31,14 +31,14 @@
                 </base-button>
             </form>
             <template #footer>
-                <div v-if="Tags.length">
+                <div v-if="tags.length">
                     <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small> -->
                     <ul class="flex flex-wrap gap-1">
                         <li 
                             class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-600 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20 cursor-pointer" 
-                            v-for="tag in Tags" 
+                            v-for="tag in tags" 
                             :key="tag.id" 
-                            @click="addToTag(tag.id)">{{tag.getName()}}</li>
+                            @click="addToTag(tag.id)">{{tag.name}}</li>
                     </ul>
                 </div>
             </template>
@@ -70,41 +70,47 @@ export default class SongTags extends Vue {
     private store = useStore();
     private song?: Song;
 
+    public tags: Tag[] = [];
+    public songTags: Tag[] = [];
+
+    public mounted() {
+        this.loadTags();
+    }
+
+    private loadTags() {
+        this.tags = appSession.tags.filter(t => !t.songIds.includes(this.Song.id) && (!this.tagFilter || t.name.toLowerCase().includes(this.tagFilter.toLowerCase())));
+        this.songTags = this.Song.Tags;
+    }
+
     public tagFilter = "";
 
     public async createTag() {
-        if (this.tagFilter == "" || this.Tags.find(t => t.name == this.tagFilter)) {
+        if (this.tagFilter == "" || this.tags.find(t => t.name == this.tagFilter)) {
             return;
         }
         const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
 
         appSession.tags.push(new Tag(newTag));
-        this.Song.tagIds.push(newTag.id);
 
         this.tagFilter = "";
     }
 
     public async addToTag(id: string) {
-        const tag = this.Tags.find(t => t.id == id);
+        const tag = this.tags.find(t => t.id === id);
 
         if (tag) {
-            await tags.addToTag(tag.id, this.Song.id);
-
-            this.Song.tagIds.push(tag.id);
+            await tag.addSongsToTag([this.Song.id]);
+            this.loadTags();
         }
     }
 
     public async removeFromTag(id: string) {
-        const tag = this.Song.tags.find(t => t.id == id);
+        const tag = this.Song.Tags.find(t => t.id === id);
 
         if (tag) {
-            await tags.removeFromTag(tag.id, this.Song.id);
-            this.Song.tagIds = this.Song.tagIds.filter(t => t != tag.id);
+            await tag.removeSongsFromTag([this.Song.id]);
+            this.loadTags();
         }
-    }
-
-    public get Tags() {
-        return appSession.tags.filter(t => !this.Song.tagIds.includes(t.id) && (!this.tagFilter || t.getName().toLowerCase().includes(this.tagFilter.toLowerCase())));
     }
 
     public get Song() {

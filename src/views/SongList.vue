@@ -504,7 +504,7 @@ export default class SongList extends Vue {
                 label: this.$t("song.category"),
                 value: "categories",
                 selected: this.listType == "categories",
-                hidden: !this.collection?.hasTags,
+                hidden: !this.collection?.hasCategories,
             },
             {
                 label: this.$t("common.views"),

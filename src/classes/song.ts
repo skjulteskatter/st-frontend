@@ -41,7 +41,7 @@ export class Song extends BaseClass implements ApiSong {
     }[];
 
     public themeIds: string[];
-    public tagIds: string[];
+    public categoryIds: string[];
     public genreIds: string[];
 
     public participants: Participant[] = [];
@@ -88,7 +88,7 @@ export class Song extends BaseClass implements ApiSong {
 
         this.origins = song.origins ?? [];
         this.themeIds = song.themeIds ?? [];
-        this.tagIds = song.tagIds ?? [];
+        this.categoryIds = song.categoryIds ?? [];
         this.genreIds = song.genreIds ?? [];
 
         this.collections = song.collections;
@@ -100,9 +100,8 @@ export class Song extends BaseClass implements ApiSong {
         return this.themeIds.length ? appSession.themes.filter(t => this.themeIds.includes(t.id)) : [];
     }
 
-    public get tags() {
-        const tags = this.tagIds.length ? appSession.Tags.filter(t => this.tagIds.includes(t.id)) : [];
-        return tags;
+    public get categories() {
+        return this.categoryIds.length ? appSession.categories.filter(i => this.categoryIds.includes(i.id)) : [];
     }
 
     public get collectionIds() {
@@ -230,4 +229,12 @@ export class Song extends BaseClass implements ApiSong {
             
     //     } 
     // }
+
+    public get Tags() {
+        return appSession.tags.filter(i => i.songIds.includes(this.id));
+    }
+
+    public get Collections() {
+        return appSession.collections.filter(i => this.collections.some(c => c.id === i.id));
+    }
 }
