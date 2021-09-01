@@ -17,8 +17,8 @@
                 @click="viewSong(song)"
                 class="flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
-                    'text-red-700': song.available && song.anotherLanguage(languageKey),
-                    'text-green-700': song.available && !song.sheetMusic.length,
+                    'text-red-700': song.available && song.anotherLanguage(),
+                    'text-green-700': song.available && !this.songsWithSheetMusic.includes(song.id),
                     'opacity-40': !song.available,
                 }"
             >
@@ -26,7 +26,7 @@
                     {{ song.number }}
                 </b>
                 <span>
-                    {{ song.getName(languageKey) }}
+                    {{ song.getName() }}
                 </span>
                 <div class="flex-grow flex items-center">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
@@ -123,18 +123,16 @@ export default class SongListCard extends Vue {
         this.showCTA = false;
     }
 
-    public get languageKey() {
-        return this.store.getters.languageKey;
+    public get songsWithAudioFiles() {
+        return appSession.files.filter(i => i.type === "audio").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
     }
 
-    public get anotherLanguage() {
-        return this.Songs.filter(
-            (s) => s.type == "lyrics" && !s.name[this.languageKey],
-        );
+    public get songsWithVideoFiles() {
+        return appSession.files.filter(i => i.type === "video").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
     }
-
-    public available(n: number) {
-        return this.collection?.available || (this.collection?.freeSongs && n <= 5);
+    
+    public get songsWithSheetMusic() {
+        return appSession.files.filter(i => ["sheetmusic", "sheetmusic-pdf"].includes(i.type)).map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
     }
 }
 </script>

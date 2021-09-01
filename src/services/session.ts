@@ -178,8 +178,7 @@ export class Session {
         const fetchAll = [fetchContributors()];
 
         if (ownedCols.length) {
-            await fetchFiles();
-            fetchAll.push(fetchSongs());
+            fetchAll.push(fetchSongs(), fetchFiles());
         }
 
         const expiry = new Date().getTime() + 3600000;
