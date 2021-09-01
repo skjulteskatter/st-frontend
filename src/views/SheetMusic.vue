@@ -68,6 +68,7 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 import { MediaListItem } from "@/components/media";
+import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -99,6 +100,7 @@ export default class SheetMusic extends Vue {
 
         if (token) {
             http.setToken(token);
+            await appSession.init();
 
             this.user = await session.getCurrentUser();
 
@@ -227,11 +229,6 @@ export default class SheetMusic extends Vue {
     height: 100vh;
     max-width: 1600px;
     margin: auto;
-    //padding: calc(var(--st-spacing) * 2);
-
-    //@include breakpoint("medium") {
-    //    padding: var(--st-spacing);
-    //}
 
     &__info {
         margin-bottom: var(--st-spacing);
@@ -277,74 +274,9 @@ export default class SheetMusic extends Vue {
     height: 90%;
 }
 
-// .sheetmusic-content {
-//     max-width: 1200px;
-//     margin: auto;
-// }
-
 #pb-canvas {
     width: 100%;
     text-align: center;
-}
-
-.playback-buttons {
-    display: none;
-    // position: fixed;
-    // bottom: 10px;
-    // width: 100%;
-    // left: 0;
-
-    // .reset-button {
-    //     position: relative;
-
-    //     &:before {
-    //         content: "";
-    //         position: absolute;
-    //         top: 0;
-    //         left: 0;
-    //         width: 100%;
-    //         height: 100%;
-
-    //         background-color: var(--st-color-primary);
-    //         border-radius: var(--st-border-radius);
-    //     }
-
-    //     &:after {
-    //         content: url("./sheetmusic/reset.svg");
-    //         position: absolute;
-    //         top: 50%;
-    //         left: 50%;
-    //         width: 1.5em;
-    //         height: 1.5em;
-    //         transform: translate(-50%, -50%);
-    //     }
-    // }
-
-    // .playpause-button {
-    //     position: relative;
-
-    //     &:before {
-    //         content: "";
-    //         position: absolute;
-    //         top: 0;
-    //         left: 0;
-    //         width: 100%;
-    //         height: 100%;
-
-    //         background-color: var(--st-color-primary);
-    //         border-radius: var(--st-border-radius);
-    //     }
-
-    //     &:after {
-    //         content: url("./sheetmusic/play.svg");
-    //         position: absolute;
-    //         top: 50%;
-    //         left: 50%;
-    //         width: 1.5em;
-    //         height: 1.5em;
-    //         transform: translate(-50%, -50%);
-    //     }
-    // }
 }
 
 .pbcontrol-toggle {
