@@ -11,6 +11,7 @@ import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { notify } from "./notify";
 import { firebaseConfig } from "@/config";
 import http from "./http";
+import { cache } from "./cache";
 
 firebase.initializeApp(firebaseConfig);
 
@@ -266,6 +267,7 @@ class Auth {
     public async logout() {
         await a().signOut();
         localStorage.clear();
+        cache.clearCache();
         window.location.replace("/");
     }
 
