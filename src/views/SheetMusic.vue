@@ -68,7 +68,6 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 import { MediaListItem } from "@/components/media";
-import { appSession } from "@/services/session";
 
 @Options({
     components: {
@@ -100,13 +99,12 @@ export default class SheetMusic extends Vue {
 
         if (token) {
             http.setToken(token);
-            await appSession.init();
 
             this.user = await session.getCurrentUser();
-
-            const song = new Song(await songs.getSongById(this.$route.params.id as string, "files"));
+            
+            const song = new Song(await songs.getSongById(this.$route.params.id as string));
             this.song = song;
-            this.files = song.files?.filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
+            this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
             if (this.files.length == 1) {
                 this.setFile(this.files[0]);
             }
