@@ -137,6 +137,8 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._initialized) {
             this._initialized = true;
 
+            await new Promise(r => setTimeout(r, 10));
+
             await appSession.init();
 
             if (this.available) {

@@ -61,31 +61,6 @@ export class Song extends BaseClass implements ApiSong {
 
     public raw;
 
-    // public get raw(): ApiSong {
-    //     return {
-    //         id: this.id,
-    //         available: this.available,
-    //         collections: this.collections,
-    //         copyrights: this.copyrights,
-    //         genreIds: this.genreIds,
-    //         hasChords: this.hasChords,
-    //         hasLyrics: this.hasLyrics,
-    //         name: this.name,
-    //         newMelodies: this.newMelodies,
-    //         newMelody: this.newMelody,
-    //         originalKey: this.originalKey,
-    //         origins: this.origins,
-    //         participants: this.participants,
-    //         tagIds: this.tagIds,
-    //         themeIds: this.themeIds,
-    //         type: this.type,
-    //         verses: this.verses,
-    //         details: this.details,
-    //         yearComposed: this.yearComposed,
-    //         yearWritten: this.yearWritten,
-    //     };
-    // }
-
     constructor(song: ApiSong) {
         super();
         this.raw = song;
@@ -119,8 +94,6 @@ export class Song extends BaseClass implements ApiSong {
         this.collections = song.collections;
         this.newMelody = song.newMelody;
         this.newMelodies = song.newMelodies;
-
-        this.files = song.files;
     }
 
     public get themes() {
