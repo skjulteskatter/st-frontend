@@ -27,12 +27,12 @@ export class Session {
     }
 
     public get initialized() {
-        return this._initialized == true;
+        return this._initialized === true;
     }
 
     public async init() {
-        if (this._initialized == false) {
-            while(this._initialized == false) {
+        if (this._initialized === false) {
+            while(this._initialized === false) {
                 await new Promise(r => setTimeout(r, 100));
             }
             return;
