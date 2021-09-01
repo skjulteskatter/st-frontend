@@ -82,7 +82,7 @@ export default class AudioPlayer extends Vue {
     }
 
     public get Song() {
-        return appSession.songs.find(s => s.id == this.audio?.songId);
+        return appSession.songs.find(s => s.id == this.audio?.songId) ?? this.store.getters.collection?.songs.find(s => s.id == this.audio?.songId);
     }
 
     public get collection(): string | undefined {
