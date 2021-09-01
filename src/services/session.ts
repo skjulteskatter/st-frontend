@@ -37,6 +37,8 @@ export class Session {
             }
             return;
         }
+        if (this.initialized)
+            return;
 
         this._initialized = false;
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
@@ -88,33 +90,7 @@ export class Session {
 
         await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
         
-        if (ownedCols.length) {
-            try {
-                const key = "last_updated_files";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
-
-                const now = new Date();
-
-                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
-
-                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: MediaFile;
-                    }));
-                    
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
-                }
-            } catch(e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error fetching files", "warning", error);
-                this.files = (await songs.getFiles(ownedCols)).result;
-            }
-
-            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+        const fetchSongs = async () => {
             try {
                 const key = "last_updated_songs";
                 const lastUpdated = await cache.get("config", key) as string | undefined;
@@ -142,55 +118,108 @@ export class Session {
             }
             
             this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-
-        }
+        };
         
-        try {
-            const key = "last_updated_contributors";
-            const lastUpdated = await cache.get("config", key) as string | undefined;
+        const fetchFiles = async () => {
+            try {
+                const key = "last_updated_files";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
 
-            const now = new Date();
+                const now = new Date();
 
-            if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                const updateItems = await songs.getContributors(lastUpdated);
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
 
-                await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: ApiCollectionItem<ApiContributor>;
-                }));
-
-                await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
+                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: MediaFile;
+                    }));
+                    
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
+                }
+            } catch(e) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const error = e as any;
+                notify("error", "Error fetching files", "warning", error);
+                this.files = (await songs.getFiles(ownedCols)).result;
             }
-        }
-        catch(e) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const error = e as any;
-            notify("error", "Error occured", "warning", error);
-            this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
-        }
 
-        this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+        };
+        
+        const fetchContributors = async () => {
+            try {
+                const key = "last_updated_contributors";
+                const lastUpdated = await cache.get("config", key) as string | undefined;
+    
+                const now = new Date();
+    
+                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
+                    const updateItems = await songs.getContributors(lastUpdated);
+    
+                    await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
+                        a[b.id] = b;
+                        return a;
+                    }, {} as {
+                        [id: string]: ApiCollectionItem<ApiContributor>;
+                    }));
+    
+                    await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
+                }
+            }
+            catch(e) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const error = e as any;
+                notify("error", "Error occured", "warning", error);
+                this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
+            }
+    
+            this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+        };
+
+        const fetchAll = [fetchContributors()];
+
+        if (ownedCols.length) {
+            await fetchFiles();
+            fetchAll.push(fetchSongs());
+        }
 
         const expiry = new Date().getTime() + 3600000;
         
-        this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
-        this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
-        this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
-        this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
-        this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
-
-        const ts = await cache.getOrCreateAsync("user_tags", tags.getAll, new Date().getTime() + 60000) ?? [];
-        for (const tag of ts) {
-            for (const sId of tag.songIds) {
-                const song = this.songs.find(s => s.id == sId);
-                song?.tagIds.push(tag.id);
+        const fetchCountries = async () => {
+            this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
+        };
+        const fetchCopyrights = async () => {
+            this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
+        };
+        const fetchThemes = async () => {
+            this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
+        };
+        const fetchGenres = async () => {
+            this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
+        };
+        const fetchCategories = async () => {
+            this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
+        };
+        const fetchLanguages = async () => {
+            this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, expiry)) ?? [];
+        };
+        const fetchTags = async () => {
+            const ts = await cache.getOrCreateAsync("user_tags", tags.getAll, new Date().getTime() + 60000) ?? [];
+            for (const tag of ts) {
+                for (const sId of tag.songIds) {
+                    const song = this.songs.find(s => s.id == sId);
+                    song?.tagIds.push(tag.id);
+                }
             }
-        }
-        this.tags = ts.map(i => new Tag(i));
+            this.tags = ts.map(i => new Tag(i));
+        };
 
-        this.languages = await items.getLanguages();
+        fetchAll.push(fetchCountries(), fetchCopyrights(), fetchThemes(), fetchGenres(), fetchCategories(), fetchLanguages(), fetchTags());
+
+        await Promise.all(fetchAll);
 
         await this.getViews();
 

@@ -54,10 +54,6 @@ async function init(state: State, commit: Commit): Promise<void> {
         });
     }
 
-    cache.getOrCreateAsync("activities", api.activity.getActivities, expiry).then(a => {
-        commit(SessionMutationTypes.SET_LOG_ITEMS, a);
-    });
-
     commit(SessionMutationTypes.SET_USER, user);
     try {
         await appSession.init();
@@ -65,6 +61,10 @@ async function init(state: State, commit: Commit): Promise<void> {
     } catch (e) {
         //console.log(e);
     }
+
+    cache.getOrCreateAsync("activities", api.activity.getActivities, expiry).then(a => {
+        commit(SessionMutationTypes.SET_LOG_ITEMS, a);
+    });
 
     if (router.currentRoute.value.name == "login") {
         router.push(state.redirect ?? "/");
