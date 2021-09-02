@@ -5,20 +5,20 @@
                 <h1 class="font-bold text-lg">
                     {{ song.getName(languageKey) }}
                 </h1>
-                <small class="text-gray-400 text-xs tracking-wide" v-if="song.Authors.length">
+                <small class="text-gray-400 text-xs tracking-wide" v-if="Authors.length">
                     <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
                     <span
-                        v-for="c in song.Authors"
+                        v-for="c in Authors"
                         :key="c.id"
                         class="mr-1"
                     >
                         {{ c.name }}
                     </span>
                 </small>
-                <small class="text-gray-400 text-xs tracking-wide" v-if="song.Composers.length">
+                <small class="text-gray-400 text-xs tracking-wide" v-if="Composers.length">
                     <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
                     <span
-                        v-for="c in song.Composers"
+                        v-for="c in Composers"
                         :key="c.id"
                         class="mr-1"
                     >
@@ -67,7 +67,7 @@
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
 import { MediaFile } from "dmb-api";
-import { SheetMusicTypes, Song } from "@/classes";
+import { Contributor, SheetMusicTypes, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
@@ -114,7 +114,7 @@ export default class SheetMusic extends Vue {
 
             this.user = await session.getCurrentUser();
             
-            const song = new Song(await songs.getSongById(this.$route.params.id as string));
+            const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));
             this.song = song;
             this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
             if (this.files.length == 1) {
@@ -152,6 +152,15 @@ export default class SheetMusic extends Vue {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
         this.loaded = true;
     }
+
+    public get Authors() {
+        return this.song?.participants.filter(i => i.type === "author").map(i => i.contributor as Contributor) ?? [];
+    }
+
+    public get Composers() {
+        return this.song?.participants.filter(i => i.type === "composer").map(i => i.contributor as Contributor) ?? [];
+    }
+
 
     public get options() {
         return this.store.state.songs.sheetMusic;
