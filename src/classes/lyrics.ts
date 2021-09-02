@@ -142,9 +142,11 @@ export class Lyrics implements ApiLyrics {
         return this.content as string;
     }
 
-    public get currentKey() {
-        
+    public get performanceView() {
+        return this.content as unknown as {name: string; key: string; content: string}[];
+    }
 
+    public get currentKey() {
         return "";
     }
 

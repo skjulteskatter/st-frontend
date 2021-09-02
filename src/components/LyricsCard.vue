@@ -101,11 +101,12 @@
                 </Switch>
             </SwitchGroup>
         </div>
-        <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
+        <loader :loading="collection?.loadingLyrics || !plyrics" position="local">
             <component
-                :is="type == 'transpose' && lyrics?.format == 'html' ? 'TransposedLyricsViewer' : 'LyricsViewer'"
-                :song="type == 'default' ? song : undefined"
-                :lyrics="type == 'transpose' ? lyrics : undefined"
+                :is="type == 'transpose' && plyrics?.format === 'html' ? 'TransposedLyricsViewer' 
+                : (plyrics?.format === 'performance' ? 'PerformanceViewer'
+                : 'LyricsViewer')"
+                :lyrics="plyrics"
             />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
@@ -119,6 +120,7 @@ import {
     LyricsViewer,
     TransposeDropdown,
     PrintButton,
+    PerformanceViewer,
 } from "./lyrics";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -133,6 +135,7 @@ import { PencilAltIcon } from "@heroicons/vue/solid";
     components: {
         TransposedLyricsViewer,
         TransposeDropdown,
+        PerformanceViewer,
         LyricsViewer,
         PrintButton,
         Switch,
@@ -162,6 +165,8 @@ export default class LyricsCard extends Vue {
     public selectedLanguage = "";
     public loaded = false;
 
+    public plyrics?: Lyrics | null = null;
+
     public get isExtended() {
         return this.store.state.session.extend;
     }
@@ -189,7 +194,10 @@ export default class LyricsCard extends Vue {
     }
 
     public get Lyrics() {
-        return this.lyrics;
+        if (!this.plyrics) {
+            throw new Error("Lyrics not found");
+        }
+        return this.plyrics;
     }
 
     public async mounted() {
@@ -215,6 +223,8 @@ export default class LyricsCard extends Vue {
                     : fallbackLanguage) 
                 ?? this.languageKey;
         }
+
+        this.plyrics = await this.song?.getLyrics("no", "performance", 0);
     }
 
     public get selectedTransposition() {

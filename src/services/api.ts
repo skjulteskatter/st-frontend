@@ -2,7 +2,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, Format, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -145,6 +145,9 @@ export const songs = {
     },
     getSongFiles(songId: string) {
         return http.get<MediaFile[]>(`api/Files?songId=${songId}&type=sheetmusic-pdf`);
+    },
+    getSongLyrics(songId: string, language: string, format: Format, transpose: number, transcode: string, newMelody = false) {
+        return http.get<ApiLyrics>(`api/Songs/${songId}/Lyrics?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`);
     },
     async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string, newMelody = false) {
         return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`));

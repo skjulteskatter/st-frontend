@@ -68,6 +68,8 @@ class CacheService {
             const tx = await this.tx(store, true);
 
             await tx.objectStore(store).clear?.();
+
+            await tx.done;
         }
     }
 
@@ -108,12 +110,8 @@ class CacheService {
         const result = await tx.store.getAll();
 
         await tx.done;
-        if (store == "lyrics") {
-            return result.map(l => new Lyrics(l)) as Entry<S>[];
-        } else if (store == "contributors") {
-            return result as Entry<S>[];
-        }
-        return result;
+
+        return result as Entry<S>[];
     }
 
     public async setAll<S extends Store>(store: S, entries: Entry<S>[]): Promise<void> {

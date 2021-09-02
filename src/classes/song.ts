@@ -1,9 +1,12 @@
-import { ApiCollection, ApiSong, MediaFile } from "dmb-api";
+import { ApiCollection, ApiSong, Format, MediaFile } from "dmb-api";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
 import i18n from "@/i18n";
 import { appSession } from "@/services/session";
 import router from "@/router";
+import { Lyrics } from "./lyrics";
+import { songs } from "@/services/api";
+import { logs } from "@/services/logs";
 
 export enum SheetMusicTypes {
     PDF = "sheetmusic-pdf",
@@ -136,6 +139,26 @@ export class Song extends BaseClass implements ApiSong {
                     number: this.getNumber(col.id) ?? this.id,
                 },
             });
+    }
+
+    public async getLyrics(language: string, format: Format, transposition?: number) {
+        try {
+            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === format);
+            if (!lyrics) {
+                lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, format, transposition ?? 0, "common"));
+                appSession.lyrics.push(lyrics);
+            }
+            logs.event("lyrics_view", {
+                "collection_id": this.store.getters.collection?.id,
+                "song_id": this.id,
+                "lyrics_language": language,
+                "lyrics_id": lyrics.id,
+            });
+            return lyrics;
+        }
+        finally {
+            //
+        }
     }
 
     private get collection () {

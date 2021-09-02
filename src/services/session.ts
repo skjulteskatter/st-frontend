@@ -1,4 +1,4 @@
-import { Collection, CollectionItem, Song } from "@/classes";
+import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 import { Category } from "@/classes/category";
 import { Genre, Theme, Country, Copyright } from "@/classes/items";
 import { Tag } from "@/classes/tag";
@@ -21,6 +21,8 @@ export class Session {
     public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
+
+    public lyrics: Lyrics[] = [];
 
     public get initialized() {
         return this._initialized === true;
@@ -214,6 +216,23 @@ export class Session {
         await Promise.all(fetchAll);
 
         await this.getViews();
+
+        try {
+            const key = "lyrics_expiry";
+            const expiry = await cache.get("config", key) as number | undefined;
+
+            if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
+                await cache.clearStore("lyrics");
+
+                await cache.set("config", key, new Date().getTime() + 86400000);
+            } else {
+                this.lyrics = (await cache.getAll("lyrics")).map(i => new Lyrics(i));
+            }
+        }
+        catch {
+            // ignore the errors
+        }
+
 
         this._initialized = true;
     }

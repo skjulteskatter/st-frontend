@@ -1,5 +1,4 @@
 declare module "dmb-api" {
-
     type ApiActivity = {
         id?: string;
         type: "contributor";
@@ -15,6 +14,8 @@ declare module "dmb-api" {
     }
 
     type Sort = "title" | "number" | "composer" | "author" | "genre";
+
+    type Format = "json" | "html" | "performance";
 
     interface ApiCollection {
         id: string;
@@ -80,7 +81,7 @@ declare module "dmb-api" {
         collectionIds: string[];
         languageKey: string;
         content: JsonContent | string;
-        format: "json" | "html";
+        format: Format;
         hasChords: boolean;
         originalKey: string;
         transposedToKey: string;
