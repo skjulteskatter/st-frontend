@@ -20,7 +20,7 @@
                     <span
                         v-for="c in song.Composers"
                         :key="c.id"
-                        class="px-1"
+                        class="mr-1"
                     >
                         {{ c.name }}
                     </span>
