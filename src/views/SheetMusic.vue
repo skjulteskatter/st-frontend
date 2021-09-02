@@ -1,22 +1,22 @@
 <template>
     <div class="sheetmusic-viewer">
-        <div v-if="song" class="mb-4 p-4 bg-white">
+        <div v-if="song" class="mb-2 p-4 bg-white">
             <div class="flex flex-col">
-                <h2 class="font-bold">
+                <h1 class="font-bold text-lg">
                     {{ song.getName(languageKey) }}
-                </h2>
-                <small class="opacity-50" v-if="song.Authors.length">
-                    <span>{{ $t("song.author") }}: </span>
+                </h1>
+                <small class="text-gray-400 text-xs tracking-wide" v-if="song.Authors.length">
+                    <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
                     <span
                         v-for="c in song.Authors"
                         :key="c.id"
-                        class="px-1"
+                        class="mr-1"
                     >
                         {{ c.name }}
                     </span>
                 </small>
-                <small class="opacity-50" v-if="song.Composers.length">
-                    <span>{{ $t('song.composer') }}: </span>
+                <small class="text-gray-400 text-xs tracking-wide" v-if="song.Composers.length">
+                    <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
                     <span
                         v-for="c in song.Composers"
                         :key="c.id"
@@ -27,8 +27,14 @@
                 </small>
             </div>
 
-            <small class="text-gray-500 mt-4" v-if="files.length > 1">{{ $t('song.sheetmusic') }}</small>
-            <media-list-item v-if="files.length > 1" :files="files" :callback="setFile" />
+            <div v-if="files.length > 1" class="mt-3 rounded-md border p-1">
+                <button @click="showFiles = !showFiles" class="px-1 w-full flex gap-2 justify-between items-center text-gray-500 text-sm tracking-wide uppercase">
+                    <small>{{ $t('song.sheetmusic') }}</small>
+                    <ChevronUpIcon class="w-4 h-4" v-if="showFiles" />
+                    <ChevronDownIcon class="w-4 h-4" v-else />
+                </button>
+                <media-list-item :files="files" :callback="setFile" v-if="showFiles" class="mt-2" />
+            </div>
         </div>
 
         <div class="sheetmusic-wrapper">
@@ -48,6 +54,7 @@
                 type="application/pdf"
                 width="100%"
                 height="100%"
+                class="bg-white"
             >
                 <p>Couldn't load PDF</p>
             </object>
@@ -68,11 +75,14 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 import { MediaListItem } from "@/components/media";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 @Options({
     components: {
         OpenSheetMusicDisplay,
         MediaListItem,
+        ChevronUpIcon,
+        ChevronDownIcon,
     },
     name: "sheet-music",
 })
@@ -84,6 +94,8 @@ export default class SheetMusic extends Vue {
     public files: MediaFile[] = [];
     public song: Song | null = null;
     public user?: User;
+
+    public showFiles = true;
 
     public get languageKey() {
         return this.user?.settings?.languageKey;
