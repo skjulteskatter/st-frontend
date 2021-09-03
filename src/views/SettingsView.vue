@@ -15,7 +15,25 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
         <div>
-            <user-card />
+            <div class="flex flex-col py-2 bg-white rounded-lg shadow-md dark:bg-secondary">
+                <button
+                    class="text-left px-4 py-2 flex gap-2 items-center"
+                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'general' }"
+                    @click="category = 'general'"
+                >
+                    <CogIcon class="w-5 h-5 opacity-50" />
+                    {{ $t('settings.general') }}
+                </button>
+                <button
+                    class="text-left px-4 py-2 flex gap-2 items-center"
+                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'user' }"
+                    @click="category = 'user'"
+                >
+                    <UserIcon class="w-5 h-5 opacity-50" />
+                    {{ $t('common.user') }}
+                </button>
+            </div>
+            <!-- <user-card /> -->
             <base-card class="mt-4" v-if="collections.length">
                 <template #header>
                     <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
@@ -40,7 +58,7 @@
             </base-card>
         </div>
         <div class="md:col-span-3">
-            <settings-card />
+            <settings-card :category="category" />
         </div>
     </div>
 </template>
@@ -51,7 +69,7 @@ import { SettingsCard, BackButton } from "@/components";
 import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
 import { OwnedCollections } from "@/components/dashboard";
-import { LogoutIcon, CreditCardIcon } from "@heroicons/vue/solid";
+import { LogoutIcon, CreditCardIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
@@ -65,12 +83,15 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
         OwnedCollections,
         LogoutIcon,
         CreditCardIcon,
+        UserIcon,
+        CogIcon,
     },
     name: "settings-view",
 })
 export default class SettingsView extends Vue {
     private store = useStore();
     public loading = false;
+    public category: "general" | "user" = "general";
 
     public logout() {
         this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
