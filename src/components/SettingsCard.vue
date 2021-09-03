@@ -38,7 +38,7 @@
             <div class="relative">
                 <label class="block uppercase text-xs tracking-wide mb-1" for="transposition-key">{{ $t("song.key") }}</label>
                 <select
-                    class="pl-10 w-full rounded-md border border-black/20 border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
