@@ -63,7 +63,7 @@
                 <div>
                     <label class="block uppercase tracking-wide text-xs mb-1" for="display-name">{{ $t("common.name") }}</label>
                     <input
-                        class="w-full rounded-md border border-black/20 border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                        class="w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                         id="display-name"
                         type="text"
                         v-model="newDisplayName"
