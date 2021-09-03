@@ -5,7 +5,7 @@
         :key="i"
     >
         <b class="text-sm">{{ verse.name }}</b>
-        <p class="leading-7 w-max">{{ verse.content.join("\n") }}</p>
+        <p class="leading-7 w-max">{{ verse.content?.join("\n") }}</p>
     </div>
 </template>
 

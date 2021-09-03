@@ -25,7 +25,7 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.SET_SONG](state: S, payload: Song): void;
     [SongsMutationTypes.SET_FILTER](state: S, payload: SongFilter): void;
     [SongsMutationTypes.SET_AUDIO](state: S, payload: AudioTrack): void;
-    [SongsMutationTypes.SET_VIEW](state: S, payload: "transpose" | "default" | "loading"): void;
+    [SongsMutationTypes.SET_VIEW](state: S, payload: "transpose" | "default" | "loading" | "performance"): void;
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state: S, payload: SheetMusicOptions): void;
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;

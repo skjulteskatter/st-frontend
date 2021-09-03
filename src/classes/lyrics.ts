@@ -5,7 +5,6 @@ export class Lyrics implements ApiLyrics {
     id: string;
     songId: string;
     collectionIds;
-    number: number;
     content: LyricsContent | LyricsChordContent[] | string;
     format;
     hasChords;
@@ -22,7 +21,6 @@ export class Lyrics implements ApiLyrics {
         this.raw = lyrics;
         this.id = lyrics.id;
         this.songId = lyrics.songId;
-        this.number = lyrics.number;
         this.collectionIds = lyrics.collectionIds;
         this.content = lyrics.content;
         this.format = lyrics.format;
@@ -117,7 +115,7 @@ export class Lyrics implements ApiLyrics {
         const lines = [];
 
         if (typeof(this.content) == typeof("")) {
-            throw new Error(`Number ${this.number} is bugged. Check with system admin.`);
+            throw new Error(`${this.id} is bugged. Check with system admin.`);
         }
         
         const keys = Object.keys(this.content ?? {}) ?? [];

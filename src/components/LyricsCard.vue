@@ -22,7 +22,7 @@
                 class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                 id="language"
                 name="language"
-                v-model="selectedLanguage"
+                v-model="SelectedLanguage"
                 @change="translateTo()"
             >
                 <option
@@ -36,11 +36,9 @@
             <SwitchGroup as="div" class="flex flex-col gap-1 cursor-pointer" v-if="song.hasChords">
                 <SwitchLabel class="text-xs tracking-wide">{{ $t("song.chords") }}</SwitchLabel>
                 <Switch
-                    @click="transposeToggle()"
+                    @click="setView(chordsEnabled ? 'default' : 'transpose')"
                     v-model="chordsEnabled"
-                    :disabled="isExtended"
                     class="focus:outline-none"
-                    :class="{ 'opacity-50 cursor-not-allowed': isExtended }"
                 >
                     <div
                         class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
@@ -103,7 +101,7 @@
         </div>
         <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
             <component
-                :is="type == 'transpose' && lyrics?.format === 'html' ? 'TransposedLyricsViewer' 
+                :is="lyrics?.format === 'html' ? 'TransposedLyricsViewer' 
                 : (lyrics?.format === 'performance' ? 'PerformanceViewer'
                 : 'LyricsViewer')"
                 :lyrics="lyrics"
@@ -123,7 +121,6 @@ import {
     PerformanceViewer,
 } from "./lyrics";
 import { useStore } from "@/store";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
@@ -156,21 +153,30 @@ import { PencilAltIcon } from "@heroicons/vue/solid";
         },
     },
     name: "lyrics-card",
+    emits: [
+        "translate",
+        "transpose",
+        "setView",
+    ],
 })
 export default class LyricsCard extends Vue {
     private store = useStore();
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
-    public selectedLanguage = "";
+    private selectedLanguage = "";
     public loaded = false;
 
-    public get isExtended() {
-        return this.store.state.session.extend;
+    public get SelectedLanguage() {
+        return this.lyrics?.languageKey ?? "";
+    }
+
+    public set SelectedLanguage(v) {
+        this.selectedLanguage = v;
     }
 
     public get chordsEnabled() {
-        return this.lyrics?.format == "html";
+        return this.lyrics?.format === "html";
     }
 
     public set chordsEnabled(v) {
@@ -191,44 +197,8 @@ export default class LyricsCard extends Vue {
         return ts;
     }
 
-    public get Lyrics() {
-        if (!this.lyrics) {
-            throw new Error("Lyrics not found");
-        }
-        return this.lyrics;
-    }
-
-    public async mounted() {
-        const t = transposer.getRelativeTransposition(this.store.getters.user?.settings?.defaultTransposition ?? "C");
-
-        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, t);
-
-        if (this.type == "transpose") {
-            this.newMelodyView = false;
-            if (this.song?.hasLyrics && this.song?.hasChords) {
-                this.transposeView();
-            } else {
-                this.store.commit(SongsMutationTypes.SET_VIEW, "default");
-            }
-        }
-
-        const fallbackLanguage = this.languages.find(l => l.key == "en")?.key ?? this.languages[0]?.key;
-
-
-        if (this.song) {
-            this.selectedLanguage = (Object.keys(this.song.name).includes(this.languageKey)
-                    ? this.languageKey
-                    : fallbackLanguage) 
-                ?? this.languageKey;
-        }
-    }
-
     public get selectedTransposition() {
         return this.store.state.songs.transposition ?? 0;
-    }
-
-    public set selectedTransposition(v) {
-        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
     }
 
     public get newMelodyView() {
@@ -250,19 +220,7 @@ export default class LyricsCard extends Vue {
     }
 
     public async translateTo() {
-        if (this.song) {
-            await this.collection?.getLyrics(
-                this.song,
-                this.selectedLanguage
-            );
-            this.store.commit(
-                SongsMutationTypes.LANGUAGE,
-                this.selectedLanguage,
-            );
-            if (this.type === "transpose") {
-                await this.transpose();
-            }
-        }
+        this.$emit("translate", this.selectedLanguage);
     }
 
     public async transpose(n?: number) {
@@ -271,33 +229,12 @@ export default class LyricsCard extends Vue {
             while(n > 0 && !Object.values(this.relativeTranspositions).some(i => i.value == n)) {
                 n -= 12;
             }
-            this.selectedTransposition = n;
         }
-
-        if (this.song) {
-            await this.collection?.transposeLyrics(
-                this.song.number,
-                this.selectedTransposition,
-                this.store.state.songs.language,
-                undefined,
-                this.newMelodyView
-            );
-        }
+        this.$emit("transpose", n);
     }
 
-    public transposeToggle() {
-        if (this.type === "transpose") {
-            this.store.commit(SongsMutationTypes.SET_VIEW, "default");
-        } else {
-            this.transposeView();
-        }
-    }
-
-    public async transposeView() {
-        this.store.commit(SongsMutationTypes.SET_VIEW, "loading");
-        this.store.commit(SessionMutationTypes.EXTEND, false);
-        await this.transpose(transposer.getRelativeTransposition(this.defaultTransposition));
-        this.store.commit(SongsMutationTypes.SET_VIEW, "transpose");
+    public setView(type: "default" | "transpose" | "performance") {
+        this.$emit("setView", type);
     }
 
     public async newMelody() {

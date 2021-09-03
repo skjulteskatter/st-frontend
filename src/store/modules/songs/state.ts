@@ -23,7 +23,7 @@ export type State = {
     contributorItem?: CollectionItem<ApiContributor>;
     filter: SongFilter;
     audio?: AudioTrack;
-    view: "transpose" | "default" | "loading";
+    view: "transpose" | "default" | "loading" | "performance";
     sheetMusic?: SheetMusicOptions;
     search?: string;
     searchResult: (IndexedSong | IndexedContributor)[];

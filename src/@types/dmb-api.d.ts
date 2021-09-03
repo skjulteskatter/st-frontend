@@ -77,7 +77,6 @@ declare module "dmb-api" {
     interface ApiLyrics {
         id: string;
         songId: string;
-        number: number;
         collectionIds: string[];
         languageKey: string;
         content: LyricsContent | LyricsChordContent[] | string;
