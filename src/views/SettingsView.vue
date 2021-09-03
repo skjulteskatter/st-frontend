@@ -18,7 +18,7 @@
             <div class="flex flex-col py-2 bg-white rounded-lg shadow-md dark:bg-secondary">
                 <button
                     class="text-left px-4 py-2 flex gap-2 items-center"
-                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'general' }"
+                    :class="{ 'bg-black/5 dark:bg-white/10': category == 'general' }"
                     @click="category = 'general'"
                 >
                     <CogIcon class="w-5 h-5 opacity-50" />
@@ -26,7 +26,7 @@
                 </button>
                 <button
                     class="text-left px-4 py-2 flex gap-2 items-center"
-                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'user' }"
+                    :class="{ 'bg-black/5 dark:bg-white/10': category == 'user' }"
                     @click="category = 'user'"
                 >
                     <UserIcon class="w-5 h-5 opacity-50" />
