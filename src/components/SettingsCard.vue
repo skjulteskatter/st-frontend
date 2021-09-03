@@ -1,17 +1,10 @@
 <template>
     <base-card v-if="user">
-        <div class="flex flex-col gap-2 mb-4">
-            <h3 class="font-bold flex justify-between">
-                {{ $t("settings.general") }}
-                <!-- <base-button
-                    @click="cache.clearCache()"
-                    theme="error"
-                >Clear cache</base-button> -->
-            </h3>
-            <div class="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="theme-mode">{{ $t("common.theme") }}</label>
+        <div class="grid md:grid-cols-2 gap-6" v-show="category == 'general'">
+            <div class="relative">
+                <label class="block uppercase text-xs tracking-wide mb-1" for="theme-mode">{{ $t('common.color') }}{{ $t("common.theme") }}</label>
                 <select
-                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -21,11 +14,12 @@
                         {{ $t(`common.${t}`) }}
                     </option>
                 </select>
+                <ColorSwatchIcon class="opacity-50 w-4 h-4 absolute left-3 bottom-3" />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="language">{{ $t("common.language") }}</label>
+            <div class="relative">
+                <label class="block uppercase text-xs tracking-wide mb-1" for="language">{{ $t("common.language") }}</label>
                 <select
-                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -39,11 +33,12 @@
                         {{ lang.name }}
                     </option>
                 </select>
+                <TranslateIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
             </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="transposition-key">{{ $t("song.key") }}</label>
+            <div class="relative">
+                <label class="block uppercase text-xs tracking-wide mb-1" for="transposition-key">{{ $t("song.key") }}</label>
                 <select
-                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -53,51 +48,63 @@
                         {{ k }}
                     </option>
                 </select>
+                <MusicNoteIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
             </div>
         </div>
-        <div class="flex flex-col gap-2 mb-4">
-            <h3 class="font-bold">
-                {{ $t("common.user") }}
-            </h3>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="display-name">{{ $t("common.name") }}</label>
-                <input
-                    class="rounded-md border border-gray-300 dark:border-gray-500 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
-                    id="display-name"
-                    type="text"
-                    v-model="newDisplayName"
-                    :placeholder="user.displayName"
-                />
+        <div class="flex flex-col gap-2" v-show="category == 'user'">
+            <div class="flex gap-6 items-center p-4">
+                <img :src="image" alt="Profile picture" class="rounded-full">
+                <div>
+                    <h3 class="text-xl">{{ user.displayName }}</h3>
+                    <span :class="[user.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2 mt-1']">{{ user.roles[0] }}</span>
+                </div>
             </div>
-            <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="gender">{{ $t("common.gender") }}</label>
-                <select
-                    class="rounded-mdborder border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
-                    id="gender"
-                    name="gender"
-                    v-model="gender"
-                >
-                    <option value="unknown" key="male">Not set</option>
-                    <option value="male" key="male">Male</option>
-                    <option value="male" key="male">Female</option>
-                </select>
-            </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="birthDay">{{ $t("common.birthDay") }}</label>
-                <input type="date" v-model="birthDay" class="bg-transparent rounded-md border-gray-300" />
-            </div> -->
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label for="image">{{ $t("common.image") }}</label>
-                <input
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    @change="handleImage"
-                />
-            </div>
-            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                <label>{{ $t("common.password") }}</label>
-                <change-password />
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block uppercase tracking-wide text-xs mb-1" for="display-name">{{ $t("common.name") }}</label>
+                    <input
+                        class="w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                        id="display-name"
+                        type="text"
+                        v-model="newDisplayName"
+                        :placeholder="user.displayName"
+                    />
+                </div>
+                <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                    <label for="gender">{{ $t("common.gender") }}</label>
+                    <select
+                        class="rounded-mdborder border-black/20 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                        id="gender"
+                        name="gender"
+                        v-model="gender"
+                    >
+                        <option value="unknown" key="male">Not set</option>
+                        <option value="male" key="male">Male</option>
+                        <option value="male" key="male">Female</option>
+                    </select>
+                </div>
+                <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
+                    <label for="birthDay">{{ $t("common.birthDay") }}</label>
+                    <input type="date" v-model="birthDay" class="bg-transparent rounded-md border-black/20" />
+                </div> -->
+                <label>
+                    <span class="block text-xs uppercase tracking-wide mb-1">{{ $t("common.image") }}</span>
+                    <div class="flex gap-2 items-center py-2 px-3 rounded-md border border-black/20 dark:border-white/20">
+                        <PhotographIcon class="opacity-50 w-4 h-4" />
+                        {{ $t('common.change') }}
+                    </div>
+                    <input
+                        class="hidden"
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        @change="handleImage"
+                    />
+                </label>
+                <div>
+                    <label class="block text-xs uppercase tracking-wide mb-1">{{ $t("common.password") }}</label>
+                    <change-password />
+                </div>
             </div>
         </div>
         <template #footer>
@@ -125,7 +132,13 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
-import { CheckIcon } from "@heroicons/vue/solid";
+import { 
+    CheckIcon,
+    ColorSwatchIcon,
+    TranslateIcon,
+    MusicNoteIcon,
+    PhotographIcon,
+} from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
@@ -134,10 +147,20 @@ import { session } from "@/services/api";
     components: {
         ChangePassword,
         CheckIcon,
+        ColorSwatchIcon,
+        TranslateIcon,
+        MusicNoteIcon,
+        PhotographIcon,
+    },
+    props: {
+        category: {
+            type: String,
+        },
     },
     name: "settings-card",
 })
 export default class SettingsCard extends Vue {
+    public category?: string;
     public cache = cache;
     public selectedLanguage: Language = {} as Language;
     public selectedKey = "";
@@ -173,6 +196,10 @@ export default class SettingsCard extends Vue {
         "nashville",
         "roman",
     ];
+
+    public get image() {
+        return this.user?.image ?? "/img/portrait-placeholder.png";
+    }
 
     private get initDate() {
         return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
