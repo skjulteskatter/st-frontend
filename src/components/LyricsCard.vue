@@ -26,7 +26,7 @@
                 @change="translateTo()"
             >
                 <option
-                    v-for="l in (type == 'transpose' ? newMelodyView ? newMelodyLanguages : transposeLanguages : languages)"
+                    v-for="l in (chordsEnabled ? newMelodyView ? newMelodyLanguages : transposeLanguages : languages)"
                     :value="l.key"
                     :key="l.key"
                 >
@@ -81,7 +81,7 @@
                     </button>
                 </div>
             </base-dropdown>
-            <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="type == 'transpose' && song.newMelody && song.newMelodies.includes(languageKey)">
+            <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="chordsEnabled && song.newMelody && song.newMelodies.includes(languageKey)">
                 <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.newMelody") }}</SwitchLabel>
                 <Switch
                     @click="newMelody()"
@@ -244,10 +244,6 @@ export default class LyricsCard extends Vue {
 
     public get OriginalKey() {
         return this.lyrics?.originalKey ?? this.song?.originalKey ?? "C";
-    }
-
-    public get type() {
-        return this.store.state.songs.view;
     }
 
     public get defaultTransposition() {

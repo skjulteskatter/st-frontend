@@ -9,7 +9,6 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTION](state: S, payload: string): void;
     [SongsMutationTypes.COLLECTIONS](state: S, payload: Collection[]): void;
     [SongsMutationTypes.LANGUAGE](state: S, payload: string): void;
-    [SongsMutationTypes.TRANSCODE](state: S, payload: string): void;
     [SongsMutationTypes.CONTRIBUTOR](state: S, payload: CollectionItem<ApiContributor> | undefined): void;
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
@@ -18,14 +17,12 @@ export type Mutations<S = State> = {
     // [SongsMutationTypes.SET_LYRICS](state: S, payload: Lyrics): void;
     // [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state: S, payload: Lyrics): void;
 
-    [SongsMutationTypes.SET_VERSES](state: S, payload: Verse[]): void;
     [SongsMutationTypes.SET_TRANSPOSITION](state: S, payload: number): void;
     [SongsMutationTypes.SET_NEW_MELODY](state: S, payload: boolean): void;
     [SongsMutationTypes.SET_LINES](state: S, payload: string[]): void;
     [SongsMutationTypes.SET_SONG](state: S, payload: Song): void;
     [SongsMutationTypes.SET_FILTER](state: S, payload: SongFilter): void;
     [SongsMutationTypes.SET_AUDIO](state: S, payload: AudioTrack): void;
-    [SongsMutationTypes.SET_VIEW](state: S, payload: "transpose" | "default" | "loading" | "performance"): void;
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state: S, payload: SheetMusicOptions): void;
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
@@ -44,9 +41,6 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SongsMutationTypes.LANGUAGE](state, language) {
         state.language = language;
-    },
-    [SongsMutationTypes.TRANSCODE](state, transcode) {
-        state.transcode = transcode;
     },
     [SongsMutationTypes.SET_NEW_MELODY](state, payload) {
         state.newMelody = payload;
@@ -69,9 +63,6 @@ export const mutations: MutationTree<State> & Mutations = {
     // [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state, lyrics: Lyrics): void {
     //     state.transposedLyrics = lyrics;
     // },
-    [SongsMutationTypes.SET_VERSES](state, verses: Verse[]): void {
-        state.verses = verses;
-    },
     [SongsMutationTypes.SET_TRANSPOSITION](state, transposition: number): void {
         state.transposition = transposition;
     },
@@ -86,9 +77,6 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SongsMutationTypes.SET_AUDIO](state, audio: AudioTrack): void {
         state.audio = audio;
-    },
-    [SongsMutationTypes.SET_VIEW](state, view): void {
-        state.view = view;
     },
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state, o: SheetMusicOptions): void {

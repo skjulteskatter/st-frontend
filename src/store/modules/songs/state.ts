@@ -10,12 +10,10 @@ export type AudioTrack = {
 export type State = {
     collectionId?: string;
     language: string;
-    transcode: string;
     song?: Song;
     songId?: string;
     transposition?: number;
     newMelody: boolean;
-    verses: Verse[];
     lines: string[];
     collections: Collection[];
     initialized: boolean;
@@ -23,7 +21,6 @@ export type State = {
     contributorItem?: CollectionItem<ApiContributor>;
     filter: SongFilter;
     audio?: AudioTrack;
-    view: "transpose" | "default" | "loading" | "performance";
     sheetMusic?: SheetMusicOptions;
     search?: string;
     searchResult: (IndexedSong | IndexedContributor)[];
@@ -31,7 +28,6 @@ export type State = {
 
 export const state: State = {
     collections: [],
-    verses: [],
     lines: [],
     initialized: false,
     list: "default",
@@ -49,7 +45,5 @@ export const state: State = {
         hasVideoFiles: false,
     },
     language: "en",
-    view: "default",
-    transcode: "common",
     searchResult: [],
 };

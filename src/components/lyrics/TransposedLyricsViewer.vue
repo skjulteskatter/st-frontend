@@ -8,8 +8,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Collection, Lyrics } from "@/classes";
-import { useStore } from "@/store";
+import { Lyrics } from "@/classes";
 
 @Options({
     name: "transposed-lyrics-viewer",
@@ -20,20 +19,7 @@ import { useStore } from "@/store";
     },
 })
 export default class TransposedLyricsViewer extends Vue {
-    private store = useStore();
     public lyrics?: Lyrics;
-
-    public get languageKey() {
-        return this.store.state.songs.language;
-    }
-
-    public get transcode() {
-        return this.store.state.songs.transcode;
-    }
-
-    public get collection(): Collection | undefined {
-        return this.store.getters.collection;
-    }
 }
 </script>
 

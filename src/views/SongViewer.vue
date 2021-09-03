@@ -40,11 +40,11 @@
                     <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics">
                         <SwitchLabel class="text-xs tracking-wide">{{ $t("song.viewer") }}</SwitchLabel>
                         <Switch
-                            :disabled="view == 'transpose'"
+                            :disabled="lyrics?.format === 'html'"
                             @click="extend()"
                             v-model="switchExtended"
                             class="focus:outline-none"
-                            :class="{ 'opacity-50 cursor-not-allowed': view == 'transpose' }"
+                            :class="{ 'opacity-50 cursor-not-allowed': lyrics?.format === 'html' }"
                         >
                             <div
                                 class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
@@ -316,7 +316,7 @@ export default class SongViewer extends Vue {
 
         if (this.song?.hasLyrics && this.collection)
         {
-            if (this.view == "transpose") {
+            if (this.lyrics?.format === "html") {
                 this.lyrics = await this.song?.transposeLyrics( 
                     this.store.state.songs.transposition ?? 0,
                     this.selectedLanguage,
@@ -351,10 +351,6 @@ export default class SongViewer extends Vue {
 
     public get admin() {
         return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
-    }
-
-    public get view() {
-        return this.store.state.songs.view;
     }
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
