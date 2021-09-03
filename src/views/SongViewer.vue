@@ -83,7 +83,7 @@
                         }, true) ?? []"
                         :availableVerses="control.AvailableVerses"
                         :currentVerses="control.currentVerses"
-                        @mounted="setLyrics"
+                        @updated="setLyrics"
                         @toggleAll="toggleAll()"
                         @toggle="toggleVerse"
                     />
