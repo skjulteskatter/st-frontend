@@ -75,7 +75,7 @@ import { MinusCircleIcon } from "@heroicons/vue/outline";
     emits: [
         "toggleAll",
         "toggle",
-        "updated",
+        "mounted",
     ],
 })
 export default class LyricsCard extends Vue {
@@ -85,11 +85,7 @@ export default class LyricsCard extends Vue {
     }[];
 
     public mounted() {
-        this.$emit("updated");
-    }
-
-    public updated() {
-        this.$emit("updated");
+        this.$emit("mounted");
     }
 
     public toggleAll() {

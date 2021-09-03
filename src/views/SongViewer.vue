@@ -83,7 +83,7 @@
                         }, true) ?? []"
                         :availableVerses="control.AvailableVerses"
                         :currentVerses="control.currentVerses"
-                        @updated="setLyrics"
+                        @mounted="setLyrics"
                         @toggleAll="toggleAll()"
                         @toggle="toggleVerse"
                     />
@@ -213,7 +213,7 @@ export default class SongViewer extends Vue {
     }
 
     public setLyrics() {
-        if (this.lyrics)
+        if (this.lyrics && this.lyrics?.id !== this.control.Lyrics?.id)
             this.control.setLyrics(this.lyrics);
     }
 
@@ -339,6 +339,7 @@ export default class SongViewer extends Vue {
         };
         setTimeout(log, 5000);
         this.lyricsLoading = false;
+        this.setLyrics();
     }
 
     public get user() {
