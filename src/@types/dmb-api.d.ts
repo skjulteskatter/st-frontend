@@ -80,7 +80,7 @@ declare module "dmb-api" {
         number: number;
         collectionIds: string[];
         languageKey: string;
-        content: JsonContent | string;
+        content: LyricsContent | LyricsChordContent[] | string;
         format: Format;
         hasChords: boolean;
         originalKey: string;
@@ -229,12 +229,21 @@ declare module "dmb-api" {
     }
 
     type ApiCategory = ApiItem;
-}
 
-interface JsonContent {
-    [key: string]: {
+    type LyricsContent = {
+        [key: string]: {
+            name: string;
+            content: string[];
+        };
+    }
+    
+    type LyricsChordContent = {
+        key: string;
         name: string;
-        content: string[];
+        content: {
+            chords: string[];
+            parts: string[];
+        }[];
     };
 }
 

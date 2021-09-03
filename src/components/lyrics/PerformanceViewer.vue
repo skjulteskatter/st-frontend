@@ -6,9 +6,18 @@
         <button @click="currentVerseIndex > 0 ? currentVerseIndex-- : undefined">Previous</button>
         <button @click="lyrics && currentVerseIndex < lyrics.performanceView.length -1 ? currentVerseIndex++ : undefined">Next</button>
         <div class="song">
-            <div class="verse" v-for="(v, i) in currentVerses" :key="i">
-                <span class="verse-title">{{v.name}}</span>
-                <div class="content"  v-html="v.content"></div>
+            <div v-for="(v, i) in currentVerses" :class="v.key.split('_')[0]" :key="i">
+                <span :class="v.key.split('_')[0] + '-title'">{{v.name}}</span>
+                <div class="content">
+                    <table class="songline" v-for="(line, i) in v.content" :key="i">
+                        <tr class="chords">
+                            <td v-for="(chord, i) in line.chords" :key="i">{{chord + ' '}}</td>
+                        </tr>
+                        <tr class="lyrics">
+                            <td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -17,7 +26,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics } from "@/classes";
-import { useStore } from "@/store";
 
 @Options({
     name: "transposed-lyrics-viewer",
@@ -28,7 +36,6 @@ import { useStore } from "@/store";
     },
 })
 export default class TransposedLyricsViewer extends Vue {
-    private store = useStore();
     private currentVerseIndex = 0;
     public lyrics?: Lyrics;
 

@@ -101,12 +101,12 @@
                 </Switch>
             </SwitchGroup>
         </div>
-        <loader :loading="collection?.loadingLyrics || !plyrics" position="local">
+        <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
             <component
-                :is="type == 'transpose' && plyrics?.format === 'html' ? 'TransposedLyricsViewer' 
-                : (plyrics?.format === 'performance' ? 'PerformanceViewer'
+                :is="type == 'transpose' && lyrics?.format === 'html' ? 'TransposedLyricsViewer' 
+                : (lyrics?.format === 'performance' ? 'PerformanceViewer'
                 : 'LyricsViewer')"
-                :lyrics="plyrics"
+                :lyrics="lyrics"
             />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
         </loader>
@@ -165,8 +165,6 @@ export default class LyricsCard extends Vue {
     public selectedLanguage = "";
     public loaded = false;
 
-    public plyrics?: Lyrics | null = null;
-
     public get isExtended() {
         return this.store.state.session.extend;
     }
@@ -194,10 +192,10 @@ export default class LyricsCard extends Vue {
     }
 
     public get Lyrics() {
-        if (!this.plyrics) {
+        if (!this.lyrics) {
             throw new Error("Lyrics not found");
         }
-        return this.plyrics;
+        return this.lyrics;
     }
 
     public async mounted() {
@@ -223,8 +221,6 @@ export default class LyricsCard extends Vue {
                     : fallbackLanguage) 
                 ?? this.languageKey;
         }
-
-        this.plyrics = await this.song?.getLyrics("no", "performance", 0);
     }
 
     public get selectedTransposition() {

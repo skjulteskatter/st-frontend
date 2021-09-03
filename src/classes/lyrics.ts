@@ -1,19 +1,12 @@
-import { ApiLyrics } from "dmb-api";
+import { ApiLyrics, LyricsChordContent, LyricsContent } from "dmb-api";
 import { transposer } from "./transposer";
-
-type Content = {
-    [key: string]: {
-        name: string;
-        content: string[];
-    };
-}
 
 export class Lyrics implements ApiLyrics {
     id: string;
     songId: string;
     collectionIds;
     number: number;
-    content: Content | string;
+    content: LyricsContent | LyricsChordContent[] | string;
     format;
     hasChords;
     languageKey;
@@ -58,8 +51,8 @@ export class Lyrics implements ApiLyrics {
             const type = key.split("_")[0];
 
             const verse: Verse = {
-                name: (this.content as JsonContent)[key].name,
-                content: (this.content as JsonContent)[key].content,
+                name: (this.content as LyricsContent)[key].name,
+                content: (this.content as LyricsContent)[key].content,
                 type,
             };
 
@@ -95,15 +88,15 @@ export class Lyrics implements ApiLyrics {
             "[Bridge]": "bridge",
         };
 
-        const content = presentation ? this.verses : this.content as JsonContent;
+        const content = presentation ? this.verses : this.content as LyricsContent;
 
         if (content) {
             for (const key of Object.keys(content)) {
                 const verse: Verse = {
-                    name: (content as JsonContent)[key].name,
-                    content: (content as JsonContent)[key].content,
+                    name: (content as LyricsContent)[key].name,
+                    content: (content as LyricsContent)[key].content,
                     type:
-                        types[(content as JsonContent)[key].name] ??
+                        types[(content as LyricsContent)[key].name] ??
                         "verse",
                 };
 
@@ -130,7 +123,7 @@ export class Lyrics implements ApiLyrics {
         const keys = Object.keys(this.content ?? {}) ?? [];
 
         for (const key of keys) {
-            for (const line of (this.content as JsonContent)[key].content) {
+            for (const line of (this.content as LyricsContent)[key].content) {
                 lines.push(line);
             }
         }
@@ -143,7 +136,22 @@ export class Lyrics implements ApiLyrics {
     }
 
     public get performanceView() {
-        return this.content as unknown as {name: string; key: string; content: string}[];
+        const verses: LyricsChordContent[] = [];
+
+        let chorus;
+
+        for (const v of this.content as LyricsChordContent[]) {
+            if (v.key.startsWith("chorus")) {
+                chorus = v;
+            } else if(chorus && !verses.last()?.key.startsWith("chorus")) {
+                verses.push(chorus);
+            }
+            verses.push(v);
+        }
+        if(chorus && !verses.last()?.key.startsWith("chorus")) {
+            verses.push(chorus);
+        }
+        return verses;
     }
 
     public get currentKey() {
@@ -152,7 +160,7 @@ export class Lyrics implements ApiLyrics {
 
     public get lines() {
         const ls: string[] = [];
-        const content = this.content as Content;
+        const content = this.content as LyricsContent;
         for (const key of Object.keys(content)) {
             content[key].content.forEach(s => ls.push(s));
         }
@@ -162,6 +170,6 @@ export class Lyrics implements ApiLyrics {
     public get size() {
         if (this.format !== "json")
             throw new Error("Invalid format for .size");
-        return Object.values(this.content as Content)[0].content.length;
+        return Object.values(this.content as LyricsContent)[0].content.length;
     }
 }
