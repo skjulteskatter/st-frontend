@@ -1,14 +1,11 @@
 <template>
-	<base-modal
-		ref="create-playlist-modal"
-		:show="show"
-	>
-		<template #header>
-			<h2 class="font-bold text-lg">{{ $t('playlist.createnew') }}</h2>
+	<base-modal :show="show">
+		<template #title>
+			<h2 class="font-bold">{{ $t('playlist.createnew') }}</h2>
 		</template>
-		<form @submit.prevent="createPlaylist" class="flex flex-col gap-2">
+		<form @submit.prevent="createPlaylist" class="flex flex-col gap-4">
 			<base-input
-				class="border border-gray-300"
+				class="border border-gray-300 flex-shrink-0"
 				:label="$t('common.name')"
 				v-model="playlistName"
 				required

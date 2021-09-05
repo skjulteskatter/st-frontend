@@ -123,20 +123,16 @@
                 </small>
             </div>
         </div>
-        <div v-if="description" class="flex flex-col gap-4 mt-4 pt-4 relative border-t border-black/10 dark:border-white/10">
+        <div v-if="description" class="flex flex-col gap-4 relative">
             <div
-                class="text-sm"
-                :class="{ 'h-12 overflow-hidden': !showDescription }"
+                class="mt-8 text-sm"
+                :class="{ 'hidden': !showDescription }"
                 v-html="description"
             ></div>
-            <span 
-                class="absolute bg-gradient-to-t from-white to-transparent dark:from-secondary bottom-0 w-full h-full" 
-                v-if="!showDescription"
-            >
-                <button aria-label="Show song details" @click="showDescription = !showDescription" class="border border-black/20 dark:border-white/20 shadow-md bg-white dark:bg-secondary dark:text-white p-2 rounded-full absolute bottom-2 left-1/2 transform -translate-x-1/2">
-                    <ArrowDownIcon class="w-4 h-4" />
-                </button>
-            </span>
+            <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
+                <InformationCircleIcon class="w-4 h-4" />
+                <span class="text-sm">{{ $t('common.show') }} {{ $t('song.biography').toLocaleLowerCase() }}</span>
+            </button>
         </div>
     </base-card>
 </template>
@@ -145,12 +141,12 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
-import { ArrowDownIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
+import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         Modal,
-        ArrowDownIcon,
+        InformationCircleIcon,
         ArrowSmRightIcon,
     },
     props: {
