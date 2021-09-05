@@ -4,7 +4,7 @@
             <div class="flex justify-between">
                 <back-button />
                 <div class="flex gap-2 items-center ml-auto">
-                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded-md hidden xl:block">{{ song.id }}</span>
+                    <span v-if="isAdmin" class="bg-black/10 dark:bg-white/10 text-sm py-2 px-3 rounded-md hidden xl:block">{{ song.id }}</span>
                     <base-button
                         v-if="isAdmin"
                         @click="goToEditPage()"
