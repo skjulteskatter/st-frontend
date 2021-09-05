@@ -45,7 +45,7 @@
 			:show="show && splash != undefined"
 			@close="closeSplash()"
 		>
-			<template #header>
+			<template #title>
 				<h3 class="text-lg font-bold">{{splash?.title}}</h3>
 			</template>
 			<p>{{splash?.content}}</p>

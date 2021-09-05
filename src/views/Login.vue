@@ -71,8 +71,10 @@
             </div>
         </base-card>
         <base-modal :show="forgotPassword" @close="forgotPassword = false">
-            <div class="flex flex-col items-center gap-4">
+            <template #title>
                 <h1 class="text-xl font-bold md:text-2xl">Forgot password</h1>
+            </template>
+            <div class="flex flex-col items-center gap-4">
                 <form @submit.prevent="sendForgotEmail()" class="flex flex-col gap-4">
                     <base-input
                         type="email"
@@ -92,8 +94,10 @@
             </div>
         </base-modal>
         <base-modal :show="createUserModal" @close="createUserModal = false">
-            <div class="flex flex-col items-center gap-4">
+            <template #title>
                 <h1 class="text-xl font-bold md:text-2xl">Register account</h1>
+            </template>
+            <div class="flex flex-col items-center gap-4">
                 <small>Register with</small>
                 <div class="flex flex-col">
                     <div class="flex gap-3 justify-center">

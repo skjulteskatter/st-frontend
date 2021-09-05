@@ -8,7 +8,7 @@
 		@close="hideModal"
 		class="change-password"
 	>
-		<template #header>
+		<template #title>
 			<h3 class="font-bold text-xl">{{ $t("settings.changePassword") }}</h3>
 		</template>
 		<form @submit="resetPassword" class="flex flex-col gap-2">

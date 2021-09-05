@@ -23,7 +23,7 @@
                         {{ $t('common.addTo') + ' ' + $t('common.collection').toLowerCase() }}
                     </base-button>
                     <base-modal :show="show" @close="closeAdder()">
-                        <template #header>
+                        <template #title>
                             <h3 class="font-bold">
                                 {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
                             </h3>
@@ -110,9 +110,7 @@
             </div>
         </div>
     </loader>
-    <base-modal
-        :show="song ? !song.available : false"
-    >
+    <base-modal :show="song ? !song.available : false">
         <div class="flex flex-col items-center">
             <LockClosedIcon class="w-10 h-10 text-primary my-4" />
             <h2 class="text-2xl font-bold">{{ $t('store.limitedAccess') }}</h2>
