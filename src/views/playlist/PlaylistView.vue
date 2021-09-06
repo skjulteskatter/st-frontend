@@ -123,6 +123,9 @@
             </div>
         </base-modal>
         <base-modal :show="showDelete" @close="showDelete = false">
+            <template #icon>
+                <ExclamationIcon class="w-6 h-6 text-red-500" />
+            </template>
             <template #title>
                 <h3 class="font-bold">{{ $t('playlist.deleteConfirmation') }}</h3>
             </template>

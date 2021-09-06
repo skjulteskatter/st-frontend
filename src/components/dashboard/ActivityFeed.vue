@@ -24,9 +24,9 @@
                     />
                     <span class="flex flex-col justify-center flex-1">
                         <small class="opacity-50 tracking-wide">{{ $t(`song.${a.type}`) }}</small>
-                        <strong>
+                        <p class="text-xs font-medium">
                             {{ a.name }}
-                        </strong>
+                        </p>
                     </span>
                     <small class="opacity-50 absolute top-2 right-2">
                         {{ a.timeSince() }}

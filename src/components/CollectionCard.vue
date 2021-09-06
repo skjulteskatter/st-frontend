@@ -12,7 +12,7 @@
             :alt="name"
             class="max-h-10 rounded border"
         />
-        <span class="text-xs font-semibold tracking-wide w-full flex justify-between items-center">
+        <span class="text-xs font-medium tracking-wide w-full flex justify-between items-center">
             {{ name }}
         </span>
     </button>
