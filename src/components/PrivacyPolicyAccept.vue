@@ -1,6 +1,6 @@
 <template>
     <base-modal
-        :show="true"
+        :show="!policyAccepted"
     >
         <template #icon>
             <InformationCircleIcon class="w-6 h-6 opacity-50" />
