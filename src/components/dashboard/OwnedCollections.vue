@@ -15,7 +15,7 @@
 			</div>
 		</template>
 		<div class="flex flex-col gap-2 h-full">
-			<div v-if="collections?.length" class="flex flex-col">
+			<div v-if="collections?.length" class="flex flex-col gap-2">
 				<collection-card
 					v-for="c in collections"
 					:key="c.id"
