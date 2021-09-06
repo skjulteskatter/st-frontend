@@ -1,8 +1,8 @@
 <template>
     <loader :loading="checkingOut" position="global">
         <base-modal :show="Show" @close="cancel = true">
-            <div class="flex flex-col gap-4">
-                <div class="flex justify-between gap-4">
+            <template #title>
+                <div class="flex gap-4 justify-between w-full">
                     <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
                     <SwitchGroup as="div" class="flex items-center gap-2 cursor-pointer">
                         <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("store.buyYearly") }}</SwitchLabel>
@@ -12,7 +12,7 @@
                             class="focus:outline-none"
                         >
                             <div
-                                class="relative inline-flex items-center h-4 w-8 rounded-full transition-colors my-1"
+                                class="relative inline-flex items-center h-5 w-8 rounded-full transition-colors my-1"
                                 :class="yearlySub ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
                             >
                                 <span
@@ -23,24 +23,25 @@
                         </Switch>
                     </SwitchGroup>
                 </div>
-                
-                <div class="flex flex-col gap-2 divide-y divide-gray-200">
-                    <div
-                        v-for="p in Products"
-                        :key="p.id"
-                        class="py-4 flex items-center"
+            </template>
+            <div class="flex flex-col gap-2 items-center py-2">
+                <div
+                    v-for="p in Products"
+                    :key="p.id"
+                    class="flex items-center"
+                >
+                    <img
+                        :src="p.collections[0].image"
+                        alt="collection image"
+                        class="rounded h-12 w-12 mr-4 border"
                     >
-                        <img
-                            :src="p.collections[0].image"
-                            alt="collection image"
-                            class="rounded h-12 w-12 mr-4"
-                        >
-                        <span>
-                            <p class="text-base">{{ p.getName() }}</p>
-                            <price-div class="opacity-50 text-sm" :product="p"/>
-                        </span>
-                    </div>
+                    <span>
+                        <p class="text-base">{{ p.getName() }}</p>
+                        <price-div class="opacity-50 text-sm" :product="p"/>
+                    </span>
                 </div>
+            </div>
+            <template #footer>
                 <div class="flex gap-4 justify-end">
                     <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
                     <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store.allItems')}}</base-button>
@@ -51,7 +52,7 @@
                         {{$t('store.checkout')}}
                     </base-button>
                 </div>
-            </div>
+            </template>
         </base-modal>
     </loader>
 </template>
