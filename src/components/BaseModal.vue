@@ -25,13 +25,18 @@
                 leave-to="opacity-0"
             >
                 <base-card class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
-                    <template #header v-if="$slots.title || $slots.description">
-                        <DialogTitle>
-                            <slot name="title" />
-                        </DialogTitle>
-                        <DialogDescription>
-                            <slot name="description" />
-                        </DialogDescription>
+                    <template #header v-if="$slots.title || $slots.description || $slots.icon">
+                        <div class="flex gap-4">
+                            <slot name="icon" />
+                            <div>
+                                <DialogTitle>
+                                    <slot name="title" />
+                                </DialogTitle>
+                                <DialogDescription>
+                                    <slot name="description" />
+                                </DialogDescription>
+                            </div>
+                        </div>
                     </template>
                     <slot name="default" />
                     <template #footer v-if="$slots.footer">
