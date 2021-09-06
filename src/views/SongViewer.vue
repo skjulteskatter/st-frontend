@@ -24,10 +24,14 @@
                     </base-button>
                     <base-modal :show="show" @close="closeAdder()">
                         <template #title>
-                            <h3 class="font-bold">
-                                {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
-                            </h3>
+                            <div class="flex gap-4 items-center flex-grow">
+                                <h3 class="font-bold">
+                                    {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
+                                </h3>
+                                <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">+</button>
+                            </div>
                         </template>
+                        <create-playlist-modal :show="showPlaylistModal" @close="showPlaylistModal = false" />
                         <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
                                 v-for="playlist in playlists"
@@ -149,7 +153,7 @@ import {
     Modal,
     BaseModal,
 } from "@/components";
-import { PlaylistAddToCard } from "@/components/playlist";
+import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection } from "@/classes";
@@ -178,6 +182,7 @@ import { control } from "@/classes/presentation/control";
         Modal,
         BaseModal,
         PlaylistCard: PlaylistAddToCard,
+        CreatePlaylistModal,
         FolderAddIcon,
         DesktopComputerIcon,
         LockClosedIcon,
@@ -200,6 +205,7 @@ export default class SongViewer extends Vue {
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
+    public showPlaylistModal = false;
 
     public setSong(songId: string) {
         this.$router.push({
