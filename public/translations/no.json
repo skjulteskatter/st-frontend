@@ -233,5 +233,8 @@
   "types.studio": "Studio",
   "types.track": "Track",
   "types.video": "Video",
+  "view.chords": "Akkorder",
+  "view.default": "Standard",
+  "view.performance": "Fremføring",
   "year": "År"
 }

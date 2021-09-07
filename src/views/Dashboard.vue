@@ -34,7 +34,7 @@ import {
 export default class Dashboard extends Vue {
     public store = useStore();
 
-    public get user(): User | undefined {
+    public get user() {
         return this.store.getters.user;
     }
 }

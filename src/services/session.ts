@@ -1,14 +1,30 @@
-import { Collection, CollectionItem, Song } from "@/classes";
+import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
 import { Category } from "@/classes/category";
 import { Genre, Theme, Country, Copyright } from "@/classes/items";
 import { Tag } from "@/classes/tag";
-import { ApiCollectionItem, ApiContributor, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
-import { analytics, items, sharing, songs, tags } from "./api";
+import { User } from "@/classes/user";
+import { ApiCollectionItem, ApiContributor, ApiCustomCollection, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
+import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
+import { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 
 export class Session {
     private _initialized?: boolean;
+
+    private _user?: User;
+
+    public get user() {
+        if (!this._user) {
+            throw new Error("User isn't set");
+        }
+        return this._user;
+    }
+
+    public set user(v) {
+        this._user = v;
+    }
+
     public songs: Song[] = [];
     public collections: Collection[] = [];
     public files: MediaFile[] = [];
@@ -17,10 +33,13 @@ export class Session {
     public themes: Theme[] = [];
     public categories: Category[] = [];
     public tags: Tag[] = [];
+    public customCollections: ApiCustomCollection[] = [];
     public countries: Country[] = [];
     public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
+
+    public lyrics: Lyrics[] = [];
 
     public get initialized() {
         return this._initialized === true;
@@ -35,6 +54,16 @@ export class Session {
         }
         if (this.initialized)
             return;
+
+
+        const user = await cache.getOrCreateAsync("user", session.getCurrentUser, new Date().getTime() + 10000);
+        
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        this.user = new User(user);
+        googleAnalytics.setUserId(this.user.id);
 
         this._initialized = false;
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
@@ -207,6 +236,13 @@ export class Session {
                 const getTags = async () => (await tags.getAll()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
                 this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
             },
+            async () => {
+                const obj: {
+                    [key: string]: ApiCustomCollection;
+                } = {};
+                const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
+                this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, expiry) ?? []);
+            },
         ]) {
             fetchAll.push(f());
         }
@@ -214,6 +250,23 @@ export class Session {
         await Promise.all(fetchAll);
 
         await this.getViews();
+
+        try {
+            const key = "lyrics_expiry";
+            const expiry = await cache.get("config", key) as number | undefined;
+
+            if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
+                await cache.clearStore("lyrics");
+
+                await cache.set("config", key, new Date().getTime() + 86400000);
+            } else {
+                this.lyrics = (await cache.getAll("lyrics")).map(i => new Lyrics(i));
+            }
+        }
+        catch {
+            // ignore the errors
+        }
+
 
         this._initialized = true;
     }

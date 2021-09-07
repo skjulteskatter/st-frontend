@@ -30,7 +30,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
         }
 
         commit(SongsMutationTypes.LANGUAGE, getters.languageKey);
-        commit(SongsMutationTypes.TRANSCODE,getters.user?.settings?.defaultTranscode ?? "common");
         commit(SongsMutationTypes.COLLECTION, id);
         const collection = getters.collection as Collection;
 

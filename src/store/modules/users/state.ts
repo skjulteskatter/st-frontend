@@ -1,3 +1,4 @@
+import { User } from "@/classes/user";
 
 
 export type State = {

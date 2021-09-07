@@ -1,12 +1,11 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor, ApiSong, Sort } from "dmb-api";
+import { ApiCollection, ApiContributor, Sort } from "dmb-api";
 import { Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 import { CollectionItem } from "./collectionItem";
 import { appSession } from "@/services/session";
-import { logs } from "@/services/logs";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Category } from "./category";
 import { Country, Genre, Theme } from "./items";
@@ -287,24 +286,6 @@ export class Collection extends BaseClass implements ApiCollection {
                     }
                 }
             }
-
-            for (const lyrics of this.lyrics) {
-                if (numbers.includes(lyrics.number)) continue;
-
-                const content = lyrics.rawContent.toLowerCase();
-                
-                if (content.includes(filter)) {
-                    numbers.push(lyrics.number);
-    
-                    const index = content.indexOf(filter);
-    
-                    const start = (index - 20) > 0 ? index - 20 : 0;
-    
-                    context[lyrics.number] = context[lyrics.number] ?? (start !== 0 ? "..." : "") + lyrics.rawContent.substr(start, filter.length + 40) + "...";
-    
-                    continue;
-                }
-            }
         }
 
         const {themes, audioFiles, videoFiles, origins, contentTypes, sheetMusicTypes } = songFilter;
@@ -417,51 +398,6 @@ export class Collection extends BaseClass implements ApiCollection {
         }
 
         return 1;
-    }
-
-    public async transposeLyrics(number: number, transpose: number, language?: string, transcode?: string, newMelody = false): Promise<Lyrics> {
-        this.loadingLyrics = true;
-        try {
-            const song = this.songs.find(s => s.getNumber(this.id) == number);
-            let lyrics = this.lyrics.find(l => l.number == number && l.languageKey == language && l.format == "html" && l.transposition.includes(transpose) && l.secondaryChords == newMelody);
-            if (!lyrics) {
-                lyrics = await api.songs.getLyrics(this, number, language ?? this._currentLanguage, "html", transpose, transcode ?? "common", newMelody);
-                this.lyrics.push(lyrics);
-            }
-            if (song)
-                logs.event("lyrics_transpose", {
-                    "collection_id": this.id,
-                    "song_id": song.id,
-                    "lyrics_id": lyrics.id,
-                    "lyrics_language": language ?? "en",
-                    "lyrics_transposition": transpose,
-                });
-            return lyrics;
-        }
-        finally {
-            this.loadingLyrics = false;
-        }
-    }
-
-    public async getLyrics(song: ApiSong, language: string): Promise<Lyrics> {
-        this.loadingLyrics = true;
-        try {
-            let lyrics = this.lyrics.find(l => l.songId == song.id && l.languageKey == language);
-            if (!lyrics) {
-                lyrics = new Lyrics(await api.songs.getLyrics(this, song.collections.find(c => c.id == this.id)?.number ?? 0, language, "json", 0, "common"));
-                this.lyrics.push(lyrics);
-            }
-            logs.event("lyrics_view", {
-                "collection_id": this.id,
-                "song_id": song.id,
-                "lyrics_language": language,
-                "lyrics_id": lyrics.id,
-            });
-            return lyrics;
-        }
-        finally {
-            this.loadingLyrics = false;
-        }
     }
 
     public get countries(): CollectionItem<Country>[] {

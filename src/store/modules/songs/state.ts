@@ -3,6 +3,8 @@ import SearchResult from "@/classes/search/searchResult";
 import { ApiContributor, MediaFile } from "dmb-api";
 
 
+export type SongViewType = "default" | "performance" | "chords";
+
 export type AudioTrack = {
     file: MediaFile;
     collection?: Collection;
@@ -11,12 +13,10 @@ export type AudioTrack = {
 export type State = {
     collectionId?: string;
     language: string;
-    transcode: string;
     song?: Song;
     songId?: string;
     transposition?: number;
     newMelody: boolean;
-    verses: Verse[];
     lines: string[];
     collections: Collection[];
     initialized: boolean;
@@ -24,15 +24,14 @@ export type State = {
     contributorItem?: CollectionItem<ApiContributor>;
     filter: SongFilter;
     audio?: AudioTrack;
-    view: "transpose" | "default" | "loading";
     sheetMusic?: SheetMusicOptions;
     search?: string;
     searchResult?: SearchResult;
+    view: SongViewType;
 }
 
 export const state: State = {
     collections: [],
-    verses: [],
     lines: [],
     initialized: false,
     list: "default",
@@ -51,5 +50,4 @@ export const state: State = {
     },
     language: "en",
     view: "default",
-    transcode: "common",
 };
