@@ -1,6 +1,7 @@
 <template>
     <base-card
         v-if="song"
+        class="border border-primary"
     >
         <template #header>
             <div class="flex items-center gap-4">

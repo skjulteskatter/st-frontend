@@ -20,7 +20,7 @@ export default class FullSearchInput extends Vue {
 
     public searchAll() {
         this.store.commit(SongsMutationTypes.SEARCH, this.query);
-        this.store.commit(SongsMutationTypes.SEARCH_RESULT, []);
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
 
         this.$router.push({
             name: "search",

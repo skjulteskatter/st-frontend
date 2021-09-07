@@ -1,5 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import { ApiContributor, IndexedContributor, IndexedSong } from "dmb-api";
+import SearchResult from "@/classes/search/searchResult";
+import { ApiContributor } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
@@ -31,7 +32,7 @@ export type Mutations<S = State> = {
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
 
     [SongsMutationTypes.SEARCH](state: S, payload?: string): void;
-    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: (IndexedSong | IndexedContributor)[]): void;
+    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: SearchResult): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {

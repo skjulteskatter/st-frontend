@@ -3,7 +3,7 @@
         <template #header>
             <div class="flex items-center">
                 <h2 class="font-bold mr-4">
-                    {{ $t("common.activity") }}
+                    {{ $t("activity.recentlyViewed") }}
                 </h2>
                 <tooltip :text="$t('tooltip.recentActivity')" />
             </div>
