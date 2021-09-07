@@ -186,6 +186,10 @@ export class Song extends BaseClass implements ApiSong {
         };
     }
 
+    public get Participants() {
+        return appSession.contributors.filter(c => this.participants.some(i => i.contributorId === c.id)).map(i => i.item);
+    }
+
     public get Authors() {
         return appSession.contributors.filter(c => this.participants.filter(p => p.type == "author").some(i => i.contributorId == c.id)).map(i => i.item);
     }

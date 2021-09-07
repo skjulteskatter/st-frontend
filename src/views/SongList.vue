@@ -281,7 +281,7 @@ export default class SongList extends Vue {
 
     public search() {
         this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
-        this.store.commit(SongsMutationTypes.SEARCH_RESULT, []);
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
         this.$router.push({
             name: "search",
         });
