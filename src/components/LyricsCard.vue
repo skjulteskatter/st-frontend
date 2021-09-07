@@ -96,7 +96,7 @@
                 </Switch>
             </SwitchGroup>
         </div>
-        <loader :loading="collection?.loadingLyrics || !lyrics" position="local">
+        <loader :loading="collection?.loadingLyrics || !lyrics || loading" position="local">
             <component
                 :is="lyrics?.format === 'html' ? 'TransposedLyricsViewer' 
                 : (lyrics?.format === 'performance' ? 'PerformanceViewer'
@@ -148,6 +148,9 @@ import { PencilAltIcon } from "@heroicons/vue/solid";
         collection: {
             type: Object,
         },
+        loading: {
+            type: Boolean,
+        },
     },
     name: "lyrics-card",
     emits: [
@@ -164,6 +167,8 @@ export default class LyricsCard extends Vue {
     private selectedLanguage = "";
     public selectedFormat: "default" | "performance" | "chords" = "default";
     public loaded = false;
+
+    public loading?: boolean;
 
     public get SelectedLanguage() {
         return this.lyrics?.languageKey ?? "";
@@ -217,7 +222,7 @@ export default class LyricsCard extends Vue {
         return languages.filter((l) => this.song?.name[l.key]);
     }
 
-    public async format() {
+    public format() {
         if (this.selectedFormat === "default") {
             this.setView("default");
         }
@@ -229,11 +234,11 @@ export default class LyricsCard extends Vue {
         }
     }
 
-    public async translateTo() {
+    public translateTo() {
         this.$emit("translate", this.selectedLanguage);
     }
 
-    public async transpose(n?: number) {
+    public transpose(n?: number) {
         if (n !== undefined) {
             n += (n > 0 ? 0 : 12);
             while(n > 0 && !Object.values(this.relativeTranspositions).some(i => i.value == n)) {
@@ -247,9 +252,9 @@ export default class LyricsCard extends Vue {
         this.$emit("setView", type);
     }
 
-    public async newMelody() {
+    public newMelody() {
         this.newMelodyView = !this.newMelodyView;
-        await this.transpose();
+        this.transpose();
     }
 
     public get OriginalKey() {

@@ -75,6 +75,7 @@
                     <lyrics-card
                         :class="{ 'hidden': sheetMusicOptions?.show }"
                         v-if="song.hasLyrics && !isExtended"
+                        :loading="loadingLyrics"
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
@@ -204,7 +205,6 @@ export default class SongViewer extends Vue {
     public number: number | string = 0;
     public selectedLanguage = this.languageKey;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
-    public lyricsLoading = true;
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
@@ -346,7 +346,6 @@ export default class SongViewer extends Vue {
             }
         };
         setTimeout(log, 5000);
-        this.lyricsLoading = false;
         this.setLyrics();
     }
 
@@ -418,7 +417,7 @@ export default class SongViewer extends Vue {
     }
 
     public get loadingLyrics() {
-        return this.collection?.loadingLyrics === true;
+        return this.song?.loadingLyrics === true;
     }
 
     public extend() {

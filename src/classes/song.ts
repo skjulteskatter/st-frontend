@@ -141,38 +141,52 @@ export class Song extends BaseClass implements ApiSong {
             });
     }
 
+    public loadingLyrics = false;
+
     public async getLyrics(language?: string) {
-        language = language ?? this.store.getters.languageKey;
-        let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === "json");
-        if (!lyrics) {
-            lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, "json", 0, "common"));
-            appSession.lyrics.push(lyrics);
+        this.loadingLyrics = true;
+        try {
+            language = language ?? this.store.getters.languageKey;
+            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === "json");
+            if (!lyrics) {
+                lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, "json", 0, "common"));
+                appSession.lyrics.push(lyrics);
+            }
+            logs.event("lyrics_view", {
+                "collection_id": this.store.getters.collection?.id,
+                "song_id": this.id,
+                "lyrics_language": language,
+                "lyrics_id": lyrics.id,
+            });
+            return lyrics;
         }
-        logs.event("lyrics_view", {
-            "collection_id": this.store.getters.collection?.id,
-            "song_id": this.id,
-            "lyrics_language": language,
-            "lyrics_id": lyrics.id,
-        });
-        return lyrics;
+        finally {
+            this.loadingLyrics = false;
+        }
     }
 
     public async transposeLyrics(transpose: number, language?: string, transcode?: string, newMelody = false, format: Format = "html"): Promise<Lyrics> {
-        language = language ?? this.store.getters.languageKey;
-        let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === format && l.transposition.includes(transpose) && l.secondaryChords === newMelody);
-        if (!lyrics) {
-            lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, format, transpose, transcode ?? "common", newMelody));
-            appSession.lyrics.push(lyrics);
+        this.loadingLyrics = true;
+        try {
+            language = language ?? this.store.getters.languageKey;
+            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === format && l.transposition.includes(transpose) && l.secondaryChords === newMelody);
+            if (!lyrics) {
+                lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, format, transpose, transcode ?? "common", newMelody));
+                appSession.lyrics.push(lyrics);
+            }
+            if (lyrics)
+                logs.event("lyrics_transpose", {
+                    "collection_id": this.store.getters.collection?.id,
+                    "song_id": this.id,
+                    "lyrics_id": lyrics.id,
+                    "lyrics_language": language,
+                    "lyrics_transposition": transpose,
+                });
+            return lyrics;
         }
-        if (lyrics)
-            logs.event("lyrics_transpose", {
-                "collection_id": this.store.getters.collection?.id,
-                "song_id": this.id,
-                "lyrics_id": lyrics.id,
-                "lyrics_language": language,
-                "lyrics_transposition": transpose,
-            });
-        return lyrics;
+        finally {
+            this.loadingLyrics = false;
+        }
     }
 
     private get collection () {

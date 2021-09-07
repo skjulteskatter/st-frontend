@@ -1,15 +1,13 @@
 <template>
     <div
         v-if="lyrics"
-        class="transposed-lyrics"
+        class="performance-viewer"
     >
-        <button @click="currentVerseIndex > 0 ? currentVerseIndex-- : undefined">Previous</button>
-        <button @click="lyrics && currentVerseIndex < lyrics.performanceView.length -1 ? currentVerseIndex++ : undefined">Next</button>
         <div class="song">
             <div v-for="(v, i) in currentVerses" :class="v.key.split('_')[0]" :key="i">
                 <span :class="v.key.split('_')[0] + '-title'">{{v.name}}</span>
                 <div class="content">
-                    <table class="songline" v-for="(line, i) in v.content" :key="i">
+                    <table class="songline mb-4" v-for="(line, i) in v.content" :key="i">
                         <tr class="chords">
                             <td v-for="(chord, i) in line.chords" :key="i">{{chord + ' '}}</td>
                         </tr>
@@ -19,6 +17,10 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div class="flex mt-2">
+            <base-button @click="previous">{{ $t('common.previous') }}</base-button>
+            <base-button class="ml-2" @click="next">{{$t('common.next')}}</base-button>
         </div>
     </div>
 </template>
@@ -42,11 +44,21 @@ export default class TransposedLyricsViewer extends Vue {
     public get currentVerses() {
         return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + 1) ?? [];
     }
+
+    public next() {
+        if (this.lyrics && this.currentVerseIndex < this.lyrics.performanceView.length -1)
+            this.currentVerseIndex++;
+    }
+
+    public previous() {
+        if (this.currentVerseIndex > 0)
+            this.currentVerseIndex--;
+    }
 }
 </script>
 
 <style lang="scss">
-.transposed-lyrics {
+.performance-viewer {
     .song {
         --chord-size: 1em;
         line-height: 1.5em;
@@ -59,12 +71,11 @@ export default class TransposedLyricsViewer extends Vue {
 
         .content,
         .chorus {
-            &:not(:last-child) {
-                margin-bottom: calc(var(--st-spacing)*2);
-            }
+            // &:not(:last-child) {
+            //     margin-bottom: calc(var(--st-spacing)*2);
+            // }
 
             .songline {
-                margin: 0;
                 border-collapse: collapse;
                 white-space: pre;
 
