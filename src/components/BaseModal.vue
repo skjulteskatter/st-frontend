@@ -1,39 +1,50 @@
 <template>
     <transition-root
-        class="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-30"
-        as="div"
+        as="template"
         :show="show"
-        @click="closeIfOutside"
-        enter="transition-opacity"
-        enter-from="opacity-0"
-        enter-to="opacity-100"
-        leave="transition-opacity"
-        leave-from="opacity-100"
-        leave-to="opacity-0"
     >
-        <transition-child
-            as="div"
-            class="max-w-xl"
-            enter="transition"
-            enter-from="scale-90"
-            enter-to="scale-100"
-            leave="transition"
-            leave-from="translate-y-0"
-            leave-to="translate-y-4"
-        >
-            <base-card
-                @mouseover="mouseOverCard = true"
-                @mouseleave="mouseOverCard = false"
+        <Dialog as="div" @close="closeModal">
+            <transition-child
+                as="template"
+                enter="duration-200 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-100 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
             >
-                <template #header v-if="$slots.header">
-                    <slot name="header" />
-                </template>
-                <slot/>
-                <template #footer v-if="$slots.footer">
-                    <slot name="footer" />
-                </template>
-            </base-card>
-        </transition-child>
+                <DialogOverlay class="fixed inset-0 bg-black/50 z-40" />
+            </transition-child>
+            <transition-child
+                as="template"
+                enter="duration-200 ease-out"
+                enter-from="opacity-0 scale-95"
+                enter-to="opacity-100 scale-100"
+                leave="duration-100 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+            >
+                <base-card class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
+                    <template #header v-if="$slots.title || $slots.description || $slots.icon">
+                        <div class="flex gap-4">
+                            <slot name="icon" />
+                            <div>
+                                <DialogTitle>
+                                    <slot name="title" />
+                                </DialogTitle>
+                                <DialogDescription>
+                                    <slot name="description" />
+                                </DialogDescription>
+                            </div>
+                        </div>
+                    </template>
+                    <slot name="default" />
+                    <template #footer v-if="$slots.footer">
+                        <slot name="footer" />
+                    </template>
+                </base-card>
+            </transition-child>
+        </Dialog>
     </transition-root>
 </template>
 
@@ -42,12 +53,20 @@ import { Options, Vue } from "vue-class-component";
 import { 
     TransitionRoot, 
     TransitionChild,
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
 } from "@headlessui/vue";
 
 @Options({
     components: {
         TransitionRoot,
         TransitionChild,
+        Dialog,
+        DialogOverlay,
+        DialogTitle,
+        DialogDescription,
     },
     props: {
         show: {

@@ -1,9 +1,9 @@
 <template>
-    <button class="cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 p-4 flex gap-2 w-full rounded-md focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:border-gray-500 dark:hover:border-gray-400">
+    <button class="cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 p-4 flex gap-2 w-full rounded-md focus:outline-none focus:border focus:border-primary ring-offset-2 dark:border-gray-500 dark:hover:border-gray-400">
         <FolderIcon class="w-5 h-5 opacity-50" />
         <div class="flex flex-col">
-            <strong class="font-bold">{{ playlist?.name }}</strong>
-            <small class="text-gray-500 text-left dark:text-gray-400">
+            <p class="font-semibold">{{ playlist?.name }}</p>
+            <small class="text-gray-500 tracking-wide text-left dark:text-gray-400">
                 {{ playlist?.entries.length }}
                 {{ $t("common.songs").toLowerCase() }}
             </small>

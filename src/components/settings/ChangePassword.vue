@@ -1,5 +1,5 @@
 <template>
-	<button @click="showModal" class="text-sm px-3 py-2 rounded-md bg-black bg-opacity-10 hover:bg-opacity-20">
+	<button @click="showModal" class="text-sm px-3 py-2 rounded-md bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20">
 		<KeyIcon class="inline w-4 h-4 mr-2" />
 		<span>{{ $t('settings.changePassword') }}</span>
 	</button>
@@ -8,7 +8,7 @@
 		@close="hideModal"
 		class="change-password"
 	>
-		<template #header>
+		<template #title>
 			<h3 class="font-bold text-xl">{{ $t("settings.changePassword") }}</h3>
 		</template>
 		<form @submit="resetPassword" class="flex flex-col gap-2">

@@ -2,9 +2,16 @@
     <base-modal
         :show="!termsAccepted && cart.length > 0"
     >
+        <template #icon>
+            <InformationCircleIcon class="w-6 h-6 opacity-50 flex-shrink-0" />
+        </template>
+        <template #title>
+            <h1 class="text-xl font-bold mb-2">{{$t('policies.termsOfService')}}</h1>
+        </template>
+        <template #description>
+            <p class="max-w-sm text-sm opacity-50">{{$t('policies.acceptTOS')}}</p>
+        </template>
         <div class="flex flex-col gap-4 items-center text-center">
-            <h1 class="text-xl font-bold">{{$t('policies.termsOfService')}}</h1>
-            <p class="max-w-sm">{{$t('policies.acceptTOS')}}</p>
             <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
             <base-button
                 :loading="loading"
@@ -21,10 +28,12 @@ import { session } from "@/services/api";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from ".";
+import { InformationCircleIcon } from "@heroicons/vue/outline";
 
 @Options({
     components: {
         BaseModal,
+        InformationCircleIcon,
     },
 })
 export default class PolicyAccepter extends Vue {

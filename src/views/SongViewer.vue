@@ -4,7 +4,7 @@
             <div class="flex justify-between">
                 <back-button />
                 <div class="flex gap-2 items-center ml-auto">
-                    <span v-if="isAdmin" class="text-sm text-gray-400 border border-gray-400 p-2 rounded-md hidden xl:block">{{ song.id }}</span>
+                    <span v-if="isAdmin" class="bg-black/10 dark:bg-white/10 text-sm py-2 px-3 rounded-md hidden xl:block">{{ song.id }}</span>
                     <base-button
                         v-if="isAdmin"
                         @click="goToEditPage()"
@@ -23,11 +23,15 @@
                         {{ $t('common.addTo') + ' ' + $t('common.collection').toLowerCase() }}
                     </base-button>
                     <base-modal :show="show" @close="closeAdder()">
-                        <template #header>
-                            <h3 class="font-bold">
-                                {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
-                            </h3>
+                        <template #title>
+                            <div class="flex gap-4 items-center flex-grow">
+                                <h3 class="font-bold">
+                                    {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
+                                </h3>
+                                <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">+</button>
+                            </div>
                         </template>
+                        <create-playlist-modal :show="showPlaylistModal" @close="showPlaylistModal = false" />
                         <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
                             <playlist-card
                                 v-for="playlist in playlists"
@@ -110,9 +114,7 @@
             </div>
         </div>
     </loader>
-    <base-modal
-        :show="song ? !song.available : false"
-    >
+    <base-modal :show="song ? !song.available : false">
         <div class="flex flex-col items-center">
             <LockClosedIcon class="w-10 h-10 text-primary my-4" />
             <h2 class="text-2xl font-bold">{{ $t('store.limitedAccess') }}</h2>
@@ -151,7 +153,7 @@ import {
     Modal,
     BaseModal,
 } from "@/components";
-import { PlaylistAddToCard } from "@/components/playlist";
+import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection } from "@/classes";
@@ -180,6 +182,7 @@ import { control } from "@/classes/presentation/control";
         Modal,
         BaseModal,
         PlaylistCard: PlaylistAddToCard,
+        CreatePlaylistModal,
         FolderAddIcon,
         DesktopComputerIcon,
         LockClosedIcon,
@@ -202,6 +205,7 @@ export default class SongViewer extends Vue {
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
+    public showPlaylistModal = false;
 
     public setSong(songId: string) {
         this.$router.push({

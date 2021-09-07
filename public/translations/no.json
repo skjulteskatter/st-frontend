@@ -1,5 +1,5 @@
 {
-  "activity.recentlyOpened": "Nylig åpnet",
+  "activity.recentlyViewed": "Nylig vist",
   "admin.clearcache": "Slett cache",
   "admin.email": "E-post",
   "admin.noaccess": "Du har ikke tilgang til denne siden",
@@ -102,6 +102,8 @@
   "playlist.copyLink": "Kopiér lenken",
   "playlist.createnew": "Opprett en ny samling",
   "playlist.createShareLink": "Lag delingslenke",
+  "playlist.deleteConfirmation": "Er du sikker på at du vil slette denne?",
+  "playlist.deleteDescription": "Denne handlingen er irreversibel",
   "playlist.deletedplaylist": "Slettet spilleliste",
   "playlist.newplaylist": "Ny spilleliste",
   "playlist.noplaylists": "Ingen spillelister",
