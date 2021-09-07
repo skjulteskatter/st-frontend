@@ -111,6 +111,10 @@ export class Lyrics implements ApiLyrics {
         return verses;
     }
 
+    public get ContainsChords() {
+        return this.format === "html" || this.format === "performance";
+    }
+
     public get rawContent() {
         const lines = [];
 

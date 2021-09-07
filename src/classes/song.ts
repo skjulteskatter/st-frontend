@@ -159,7 +159,7 @@ export class Song extends BaseClass implements ApiSong {
 
     public async transposeLyrics(transpose: number, language?: string, transcode?: string, newMelody = false, format: Format = "html"): Promise<Lyrics> {
         language = language ?? this.store.getters.languageKey;
-        let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey == language && l.format == format && l.transposition.includes(transpose) && l.secondaryChords == newMelody);
+        let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === format && l.transposition.includes(transpose) && l.secondaryChords === newMelody);
         if (!lyrics) {
             lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, format, transpose, transcode ?? "common", newMelody));
             appSession.lyrics.push(lyrics);

@@ -33,24 +33,21 @@
                     {{ l.name }}
                 </option>
             </select>
-            <SwitchGroup as="div" class="flex flex-col gap-1 cursor-pointer" v-if="song.hasChords">
-                <SwitchLabel class="text-xs tracking-wide">{{ $t("song.chords") }}</SwitchLabel>
-                <Switch
-                    @click="setView(chordsEnabled ? 'default' : 'transpose')"
-                    v-model="chordsEnabled"
-                    class="focus:outline-none"
+            <select
+                class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
+                id="format"
+                name="format"
+                v-model="selectedFormat"
+                @change="format()"
+            >
+                <option
+                    v-for="f in [ 'default', 'chords', 'performance']"
+                    :value="f"
+                    :key="f"
                 >
-                    <div
-                        class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
-                        :class="chordsEnabled ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
-                    >
-                        <span
-                            :class="chordsEnabled ? 'translate-x-5' : 'translate-x-1'"
-                            class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
-                        />
-                    </div>
-                </Switch>
-            </SwitchGroup>
+                    {{ $t('view.' + f) }}
+                </option>
+            </select>
             <base-dropdown
                 origin="left"
                 :label="
@@ -165,6 +162,7 @@ export default class LyricsCard extends Vue {
     public lyrics?: Lyrics;
     public collection?: Collection;
     private selectedLanguage = "";
+    public selectedFormat: "default" | "performance" | "chords" = "default";
     public loaded = false;
 
     public get SelectedLanguage() {
@@ -176,7 +174,7 @@ export default class LyricsCard extends Vue {
     }
 
     public get chordsEnabled() {
-        return this.lyrics?.format === "html";
+        return this.lyrics?.ContainsChords === true;
     }
 
     public set chordsEnabled(v) {
@@ -217,6 +215,18 @@ export default class LyricsCard extends Vue {
         const languages = appSession.languages;
 
         return languages.filter((l) => this.song?.name[l.key]);
+    }
+
+    public async format() {
+        if (this.selectedFormat === "default") {
+            this.setView("default");
+        }
+        if (this.selectedFormat === "performance") {
+            this.setView("performance");
+        }
+        if (this.selectedFormat === "chords") {
+            this.setView("transpose");
+        }
     }
 
     public async translateTo() {
