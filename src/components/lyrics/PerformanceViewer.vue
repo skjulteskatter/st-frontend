@@ -39,14 +39,33 @@ import { Lyrics } from "@/classes";
 })
 export default class TransposedLyricsViewer extends Vue {
     private currentVerseIndex = 0;
+    private length = 0;
     public lyrics?: Lyrics;
+
+    private eventListener = (e: KeyboardEvent) => {
+        if (e.key === "ArrowLeft") {
+            this.previous();
+        }
+        if (e.key === "ArrowRight") {
+            this.next();
+        }
+    }
+
+    public mounted() {
+        this.length = this.lyrics?.performanceView.length ?? 0;
+        window.addEventListener("keydown", this.eventListener);
+    }
+
+    public unmounted() {
+        window.removeEventListener("keydown", this.eventListener);
+    }
 
     public get currentVerses() {
         return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + 1) ?? [];
     }
 
     public next() {
-        if (this.lyrics && this.currentVerseIndex < this.lyrics.performanceView.length -1)
+        if (this.currentVerseIndex < this.length -1)
             this.currentVerseIndex++;
     }
 
