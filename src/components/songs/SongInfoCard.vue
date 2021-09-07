@@ -130,7 +130,7 @@
             ></div>
             <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
                 <InformationCircleIcon class="w-4 h-4" />
-                <span class="text-sm">{{ $t('common.show') }} {{ $t('song.biography').toLocaleLowerCase() }}</span>
+                <span class="text-sm">{{ $t('store.learnMore') }}</span>
             </button>
         </div>
     </base-card>

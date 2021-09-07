@@ -2,8 +2,8 @@ import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, Format, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import { ApiSearchResult } from "songtreasures/search";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -23,10 +23,10 @@ export const activity = {
 
 export const session = {
     async getCurrentUser() {
-        return await http.get<User>("api/Session");
+        return await http.get<ApiUser>("api/Session");
     },
-    saveUser(settings: UserSettings) {
-        return http.patch<User>("api/Session", settings);
+    saveUser(settings: ApiSettings) {
+        return http.patch<ApiUser>("api/Session", settings);
     },
     createUser(displayName: string) {
         return http.put("api/Session", { displayName });
@@ -45,7 +45,7 @@ export const session = {
             country: string;
         };
     }) {
-        return http.patch<User>("api/Session/Profile", options);
+        return http.patch<ApiUser>("api/Session/Profile", options);
     },
     acceptPrivacyPolicy() {
         return http.get("api/Session/AcceptPolicies?privacyPolicy=true");
@@ -91,19 +91,19 @@ export const items = {
 
 export const admin = {
     async getAllSubscriptions() {
-        return await http.get<Subscription[]>("api/Admin/Subscriptions");
+        return await http.get<ApiSubscription[]>("api/Admin/Subscriptions");
     },
     getUsers(query: string) {
-        return http.get<User[]>("api/Admin/Users?query=" + query);
+        return http.get<ApiUser[]>("api/Admin/Users?query=" + query);
     },
     getUser(uid: string) {
-        return http.get<User>("api/Admin/User/" + uid);
+        return http.get<ApiUser>("api/Admin/User/" + uid);
     },
     createSubscription(uid: string, options: {
         collectionIds: string[];
         validTo: string;
     }) {
-        return http.post<Subscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
+        return http.post<ApiSubscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
     },
     deleteSubcription(uid: string, subscriptionId: string) {
         return http.delete(`api/Admin/User/${uid}/Subscriptions/${subscriptionId}`);  
@@ -111,8 +111,8 @@ export const admin = {
     getRoles() {
         return http.get<string[]>("api/Admin/Roles");
     },
-    setRoles(user: User, roles: string[]) {
-        return http.patch<User>(`api/Admin/User/${user.id}/Roles`, roles);
+    setRoles(user: ApiUser, roles: string[]) {
+        return http.patch<ApiUser>(`api/Admin/User/${user.id}/Roles`, roles);
     },
     clearCache(collectionId: string) {
         return http.get<string>(`api/Admin/ClearCache/${collectionId}`);

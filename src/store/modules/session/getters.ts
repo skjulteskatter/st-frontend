@@ -5,6 +5,7 @@ import { State } from "./state";
 import { ApiActivity, ApiPlaylist } from "dmb-api";
 import { Activity } from "@/classes/activity";
 import { appSession } from "@/services/session";
+import { User } from "@/classes/user";
 
 
 export type Getters = {
