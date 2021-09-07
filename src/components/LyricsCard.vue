@@ -37,7 +37,7 @@
                 class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                 id="format"
                 name="format"
-                v-model="selectedFormat"
+                v-model="SelectedFormat"
                 @change="format()"
             >
                 <option
@@ -124,6 +124,7 @@ import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
 import { PencilAltIcon } from "@heroicons/vue/solid";
+import { SongViewType } from "@/store/modules/songs/state";
 
 @Options({
     components: {
@@ -165,7 +166,16 @@ export default class LyricsCard extends Vue {
     public lyrics?: Lyrics;
     public collection?: Collection;
     private selectedLanguage = "";
-    public selectedFormat: "default" | "performance" | "chords" = "default";
+
+    private selectedFormat: SongViewType = "default";
+
+    public get SelectedFormat() {
+        return this.store.state.songs.view;
+    }
+    public set SelectedFormat(v) {
+        this.selectedFormat = v;
+    }
+
     public loaded = false;
 
     public loading?: boolean;
@@ -223,15 +233,7 @@ export default class LyricsCard extends Vue {
     }
 
     public format() {
-        if (this.selectedFormat === "default") {
-            this.setView("default");
-        }
-        if (this.selectedFormat === "performance") {
-            this.setView("performance");
-        }
-        if (this.selectedFormat === "chords") {
-            this.setView("transpose");
-        }
+        this.setView(this.selectedFormat);
     }
 
     public translateTo() {
@@ -248,7 +250,7 @@ export default class LyricsCard extends Vue {
         this.$emit("transpose", n);
     }
 
-    public setView(type: "default" | "transpose" | "performance") {
+    public setView(type: SongViewType) {
         this.$emit("setView", type);
     }
 

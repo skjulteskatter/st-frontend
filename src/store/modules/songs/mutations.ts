@@ -4,7 +4,7 @@ import { ApiContributor } from "dmb-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
-import { AudioTrack } from "./state";
+import { AudioTrack, SongViewType } from "./state";
 
 export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTION](state: S, payload: string): void;
@@ -14,6 +14,8 @@ export type Mutations<S = State> = {
 
     [SongsMutationTypes.SET_LIST](state: S, payload: string): void;
     [SongsMutationTypes.SET_SONG_ID](state: S, payload: string | undefined): void;
+
+    [SongsMutationTypes.VIEW](state: S, payload: SongViewType): void;
 
     // [SongsMutationTypes.SET_LYRICS](state: S, payload: Lyrics): void;
     // [SongsMutationTypes.SET_LYRICS_TRANSPOSED](state: S, payload: Lyrics): void;
@@ -57,7 +59,9 @@ export const mutations: MutationTree<State> & Mutations = {
         state.songId = id;
         // state.lyrics = undefined;
     },
-
+    [SongsMutationTypes.VIEW](state, t: SongViewType) {
+        state.view = t;
+    },
     // [SongsMutationTypes.SET_LYRICS](state, lyrics: Lyrics): void {
     //     state.lyrics = lyrics;
     // },

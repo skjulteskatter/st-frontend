@@ -171,6 +171,7 @@ import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
+import { SongViewType } from "@/store/modules/songs/state";
 
 @Options({
     components: {
@@ -222,7 +223,7 @@ export default class SongViewer extends Vue {
     }
 
     public setLyrics() {
-        if (this.lyrics && this.lyrics?.id !== this.control.Lyrics?.id)
+        if (this.lyrics && this.lyrics.format === "json" && this.lyrics?.id !== this.control.Lyrics?.id)
             this.control.setLyrics(this.lyrics);
     }
 
@@ -347,6 +348,7 @@ export default class SongViewer extends Vue {
         };
         setTimeout(log, 5000);
         this.setLyrics();
+        this.setView(this.store.state.songs.view);
     }
 
     public get user() {
@@ -466,8 +468,10 @@ export default class SongViewer extends Vue {
         }
     }
 
-    public async setView(type: "default" | "transpose" | "performance") {
-        if (type === "transpose") {
+    public async setView(type: SongViewType) {
+        if (this.store.state.songs.view !== type)
+            this.store.commit(SongsMutationTypes.VIEW, type);
+        if (type === "chords") {
             this.lyrics = await this.getTransposedLyrics();
         } else if(type === "performance") {
             this.lyrics = await this.getTransposedLyrics(undefined, "performance");

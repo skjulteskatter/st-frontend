@@ -3,6 +3,8 @@ import SearchResult from "@/classes/search/searchResult";
 import { ApiContributor, MediaFile } from "dmb-api";
 
 
+export type SongViewType = "default" | "performance" | "chords";
+
 export type AudioTrack = {
     file: MediaFile;
     collection?: Collection;
@@ -25,6 +27,7 @@ export type State = {
     sheetMusic?: SheetMusicOptions;
     search?: string;
     searchResult?: SearchResult;
+    view: SongViewType;
 }
 
 export const state: State = {
@@ -46,4 +49,5 @@ export const state: State = {
         hasVideoFiles: false,
     },
     language: "en",
+    view: "default",
 };
