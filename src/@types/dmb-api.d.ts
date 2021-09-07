@@ -1,16 +1,43 @@
 declare module "dmb-api" {
+    interface ApiUser {
+        id: string;
+        displayName: string;
+        image: string;
+        email: string;
+        subscriptions: ApiSubscription[];
+        roles: string[];
+        address: {};
+        birthDay: string;
+        gender: "male" | "female" | "unknown";
+        settings?: ApiSettings;
+        lastLogin: Date;
+        privacyPolicy: boolean;
+        termsAndConditions: boolean;
+    }
+
+    type ApiSettings = {
+        languageKey?: string;
+        defaultTransposition?: string;
+        defaultTranscode?: string;
+    }
+
+    type ApiSubscription = {
+        id: string;
+        productIds: string[];
+        collectionIds: string[];
+        validTo: Date;
+        valid: boolean;
+    }
 
     type ApiActivity = {
         id?: string;
         type: "contributor";
         itemId: string;
-        // item?: ApiContributor;
         loggedDate: string;
     } | {
         id?: string;
         type: "song";
         itemId: string;
-        // item?: ApiSong;
         loggedDate: string;
     }
 

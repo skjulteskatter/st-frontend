@@ -1,3 +1,4 @@
+import { User } from "@/classes/user";
 import { useStore } from "@/store";
 import api from "./api";
 
@@ -23,7 +24,7 @@ export class AdminService {
     }
 
     public async getUsers(query: string) {
-        this.users = await api.admin.getUsers(query);
+        this.users = (await api.admin.getUsers(query)).map(i => new User(i));
     }
 
     public async getUser(id: string) {

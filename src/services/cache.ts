@@ -19,10 +19,10 @@ type StoreTypes = {
         item: string;
     };
     tags: ApiTag;
-    collections: ApiPlaylist;
+    custom_collections: ApiPlaylist;
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general" | "tags" | "collections";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general" | "tags" | "custom_collections";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -38,6 +38,7 @@ class CacheService {
         "notifications",
         "general",
         "tags",
+        "custom_collections",
     ];
     private version = 25;
 

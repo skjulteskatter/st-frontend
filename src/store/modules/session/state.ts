@@ -1,3 +1,4 @@
+import { User } from "@/classes/user";
 import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 
 export type State = {

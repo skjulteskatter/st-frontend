@@ -316,7 +316,7 @@ export default class SettingsCard extends Vue {
         return appSession.languages || [];
     }
 
-    public get user(): User | undefined {
+    public get user() {
         return this.store.getters.user;
     }
 
