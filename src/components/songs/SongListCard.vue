@@ -30,7 +30,10 @@
                 </span>
                 <div class="flex-grow flex items-center">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
-                    <span class="ml-auto opacity-50">({{ songViews(song) }})</span>
+                    <span class="ml-auto opacity-50 flex items-center gap-1">
+                        {{ songViews(song) }}
+                        <EyeIcon class="w-3 h-3 opacity-50" />
+                    </span>
                 </div>
             </li>
         </ul>
@@ -61,7 +64,7 @@ import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { BaseModal } from "@/components";
-import { StarIcon, LockClosedIcon, CheckIcon } from "@heroicons/vue/solid";
+import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/solid";
 
 @Options({
     props: {
@@ -87,6 +90,7 @@ import { StarIcon, LockClosedIcon, CheckIcon } from "@heroicons/vue/solid";
         StarIcon,
         LockClosedIcon,
         CheckIcon,
+        EyeIcon,
     },
     name: "song-list-card",
 })

@@ -23,9 +23,9 @@
             >
                 <icon name="playlist" class="mr-2 text-gray-500 dark:text-gray-400" />
                 <div>
-                    <strong>
+                    <span class="text-xs font-medium">
                         {{ p.name }}
-                    </strong>
+                    </span>
                     <small class="text-gray-400 block tracking-wider">
                         {{ p.entries.length || $t('common.no-amount') }}
                         {{ $t("common.songs").toLowerCase() }}

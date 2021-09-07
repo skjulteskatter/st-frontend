@@ -6,12 +6,15 @@
         </header>
         <section class="mb-4">
             <base-card v-if="step == 1">
-                <h2 class="font-semibold mb-4">Choose song</h2>
+                <template #header>
+                    <h2 class="font-semibold">Choose song</h2>
+                </template>
                 <div class="flex flex-col gap-4">
-                    <label class="text-xs flex flex-col gap-1">
+                    <label class="text-xs flex flex-col gap-1 relative">
                         {{ $t('common.collection') }}
+                        <BookOpenIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
                         <select
-                            class="rounded border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
+                            class="pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring focus:ring-primary ring-offset-2 dark:bg-secondary"
                             id="collection"
                             name="collection"
                             v-model="collection"
@@ -20,15 +23,19 @@
                             <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
                         </select>
                     </label>
-                    <base-input :label="$t('song.number')" v-model="number" type="number" :placeholder="$t('song.number')"/>
+                    <label class="text-xs flex flex-col gap-1 relative">
+                        {{ $t('song.number') }}
+                        <HashtagIcon class="w-4 h-4 opacity-50 absolute bottom-3 left-3" />
+                        <input type="number" v-model="number" :placeholder="$t('song.number')" class="pl-10 rounded-md border-black/20 dark:border-white/20" />
+                    </label>
                 </div>
             </base-card>
             <base-card v-if="step == 2">
                 <div v-if="song">
                     <div class="flex flex-col mb-4">
                         <h2 class="font-bold text-lg">{{ song.getName(Language) }}</h2>
-                        <small>{{ $t('song.author') }}: {{ song.Authors[0]?.name }}</small>
-                        <small>{{ $t('song.composer') }}: {{ song.Composers[0]?.name }}</small>
+                        <small class="opacity-50">{{ $t('song.author') }}: {{ song.Authors[0]?.name }}</small>
+                        <small class="opacity-50">{{ $t('song.composer') }}: {{ song.Composers[0]?.name }}</small>
                     </div>
                     <input ref="file" type="file" id="credit-file-input" accept="audio/mpeg"/>
                 </div>
@@ -63,7 +70,7 @@ import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { Song } from "@/classes";
-import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon } from "@heroicons/vue/solid";
+import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon } from "@heroicons/vue/solid";
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
     let binary = "";
@@ -95,6 +102,8 @@ const saveByteArray = (function () {
         ArrowRightIcon,
         ArrowLeftIcon,
         DownloadIcon,
+        BookOpenIcon,
+        HashtagIcon,
     },
 })
 export default class CreditSongView extends Vue {

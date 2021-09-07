@@ -2,7 +2,8 @@ import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, Format, IndexedContributor, IndexedSong, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSong, ApiTag, ApiTheme, Format, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiSearchResult } from "songtreasures/search";
 import http from "./http";
 
 export const activity = {
@@ -162,9 +163,6 @@ export const songs = {
     getContributors(lastUpdated?: string) {
         return http.getWithResult<ApiCollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
     },
-    searchCollections(query: string, collectionId?: string) {
-        return http.post<(IndexedSong | IndexedContributor)[], unknown>("api/Songs/Search", {query, collectionId});
-    },
     creditSong(collectionId: string, number: number, language: string, content: string) {
         return http.uploadAndDownload(`api/Songs/Credit?collectionId=${collectionId}&number=${number}&language=${language}`, content);
     },
@@ -294,6 +292,15 @@ export const stripe = {
     },
 };
 
+export const search = {
+    search(query: string, collectionIds?: string[]) {
+        return http.post<ApiSearchResult, unknown>("api/Search", {
+            query,
+            collectionIds,
+        });
+    },
+};
+
 const api = {
     session,
     admin,
@@ -304,6 +311,7 @@ const api = {
     activity,
     tags,
     analytics,
+    search,
 };
 
 export default api;

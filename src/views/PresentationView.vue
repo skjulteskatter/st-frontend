@@ -7,9 +7,9 @@
             <h1 class="font-bold text-4xl" v-if="song.number">
                 {{ song.number }}
             </h1>
-            <h3 class="font-light text-4xl">{{ song.getName() }}</h3>
-            <div class="ml-auto flex gap-6 text-lg tracking-wide">
-                <div>
+            <!-- <h3 class="font-light text-4xl">{{ song.getName() }}</h3> -->
+            <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
+                <div class="flex gap-4">
                     <p
                         v-if="song.Authors.length > 0"
                     >
@@ -18,6 +18,7 @@
                             {{ author.name }}
                         </span>
                     </p>
+                    <span v-if="song.Authors.length && song.Composers.length">&#8226;</span>
                     <p
                         v-if="song.Composers.length > 0"
                     >
@@ -29,42 +30,48 @@
                             {{ composer.name }}
                         </span>
                     </p>
+                    <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&#8226;</span>
                     <p v-if="melodyOrigin">
                         {{ $t("song.melody") }}: {{ melodyOrigin }}
                     </p>
                 </div>
-                <p
-                    class="flex gap-2 text-base tracking-wide"
-                    v-if="
-                        song.copyright.melody &&
-                        song.copyright.text &&
-                        identicalCopyright
-                    "
-                >
-                    © {{ getLocaleString(song.copyright.melody.name) }}
-                </p>
-                <div v-else>
+                <div class="flex gap-4">
+                    <span>{{ song.originalKey }}</span>
+                    <span v-if="song.copyright.text || song.copyright.melody">&#8226;</span>
+                    <span>{{ song.verses }}</span>
+                    <span v-if="song.copyright.text || song.copyright.melody">&#8226;</span>
                     <p
-                        class="flex gap-2"
-                        v-if="song.copyright.text"
+                        class="text-base tracking-wide"
+                        v-if="
+                            song.copyright.melody &&
+                            song.copyright.text &&
+                            identicalCopyright
+                        "
                     >
-                        {{ $t("song.text") }} ©:
-                        {{ getLocaleString(song.copyright.text.name) }}
+                        © {{ getLocaleString(song.copyright.melody.name) }}
                     </p>
-                    <p
-                        class="flex gap-2"
-                        v-if="song.copyright.melody"
-                    >
-                        {{ $t("song.melody") }} ©:
-                        {{ getLocaleString(song.copyright.melody.name) }}
-                    </p>
+                    <div v-else class="flex gap-4">
+                        <p
+                            v-if="song.copyright.text"
+                        >
+                            {{ $t("song.text") }} ©
+                            {{ getLocaleString(song.copyright.text.name) }}
+                        </p>
+                        <span v-if="song.copyright.text && song.copyright.melody">&#8226;</span>
+                        <p
+                            v-if="song.copyright.melody"
+                        >
+                            {{ $t("song.melody") }} ©
+                            {{ getLocaleString(song.copyright.melody.name) }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
         <div :class="{'hidden': muted}" class="mt-16 verses" v-if="verses">
             <div
                 class="relative verse"
-                :class="{ 'italic border-l-4 border-white/10 dark:border-black/10 pl-4': verse.type == 'chorus' }"
+                :class="{ 'italic': verse.type == 'chorus' }"
                 v-for="(verse, i) in verses"
                 :key="i + '_' + verse"
             >

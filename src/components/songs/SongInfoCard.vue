@@ -18,125 +18,120 @@
                 </router-link>
             </span>
         </template>
-        <h2 class="flex text-xl font-bold mb-2">
-            <span class="text-gray-400 mr-4">
+        <div class="flex items-start gap-4">
+            <span class="text-gray-400 text-xl font-bold">
                 {{ song.number }}
             </span>
-            <span class="mr-4">
-                {{ title }}
-            </span>
-            <span v-if="viewCount != null" class="opacity-50 font-normal">
-                ({{ viewCount }})
-            </span>
-        </h2>
-        <div class="flex items-start gap-2">
-            <img
-                id="song-details-image"
-                class="rounded"
-                v-if="song.image"
-                height="100"
-            />
-            <span
-                v-if="song.verses && imageLoaded"
-                class="p-1 rounded border border-gray-500 text-gray-500 text-xs dark:text-gray-400 dark:border-gray-400"
-            >
-                {{ song.verses }}
-                {{ song.verses > 1 ? $t("song.verses").toLocaleLowerCase() : $t("song.verse").toLocaleLowerCase() }}
-            </span>
-            <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" v-if="imageLoaded">
-                <small 
-                    class="flex gap-2" 
-                    v-if="song.hasLyrics && song.Authors.length"
-                >
-                    <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                    <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
-                        <router-link
-                            :to="{
-                                name: 'contributor',
-                                params: {
-                                    contributor: i.id,
-                                },
-                            }"
-                        >
-                            {{ i.name }}
-                        </router-link>
+            <div class="flex-grow">
+                <h2 class="flex items-start text-xl font-bold mb-2">
+                    <span class="mr-4">
+                        {{ title }}
                     </span>
-                </small>
-                <small
-                    v-if="song.Composers.length > 0"
-                    class="flex gap-2"
-                >
-                    <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
-                    <span
-                        v-for="i in song.Composers"
-                        :key="i.id"
-                        :label="i.name"
-                        class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
-                    >
-                        <router-link
-                            :to="{
-                                name: 'contributor',
-                                params: {
-                                    contributor: i.id,
-                                },
-                            }"
-                        >
-                            {{ i.name }}
-                        </router-link>
+                    <span v-if="viewCount != null" class="ml-auto flex items-center gap-1 font-normal text-gray-400">
+                        {{ viewCount }}
+                        <EyeIcon class="w-5 h-5" />
                     </span>
-                </small>
-                <small
-                    class="flex gap-2"
-                    v-if="
-                        song.copyright.melody &&
-                        song.copyright.text &&
-                        identicalCopyright
-                    "
-                >
-                    © {{ getLocaleString(song.copyright.melody.name) }}
-                </small>
-                <div v-else>
+                </h2>
+                <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" v-if="imageLoaded">
+                    <img
+                        id="song-details-image"
+                        class="rounded"
+                        v-if="song.image"
+                        height="100"
+                    />
                     <small
                         class="flex gap-2"
-                        v-if="song.copyright.text"
+                        v-if="song.hasLyrics && song.Authors.length"
                     >
-                        {{ $t("song.text") }} ©:
-                        {{ getLocaleString(song.copyright.text.name) }}
+                        <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+                        <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
+                            <router-link
+                                :to="{
+                                    name: 'contributor',
+                                    params: {
+                                        contributor: i.id,
+                                    },
+                                }"
+                            >
+                                {{ i.name }}
+                            </router-link>
+                        </span>
+                    </small>
+                    <small
+                        v-if="song.Composers.length > 0"
+                        class="flex gap-2"
+                    >
+                        <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
+                        <span
+                            v-for="i in song.Composers"
+                            :key="i.id"
+                            :label="i.name"
+                            class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'contributor',
+                                    params: {
+                                        contributor: i.id,
+                                    },
+                                }"
+                            >
+                                {{ i.name }}
+                            </router-link>
+                        </span>
                     </small>
                     <small
                         class="flex gap-2"
-                        v-if="song.copyright.melody"
+                        v-if="
+                            song.copyright.melody &&
+                            song.copyright.text &&
+                            identicalCopyright
+                        "
                     >
-                        {{ $t("song.melody") }} ©:
-                        {{ getLocaleString(song.copyright.melody.name) }}
+                        © {{ getLocaleString(song.copyright.melody.name) }}
+                    </small>
+                    <div v-else>
+                        <small
+                            class="flex gap-2"
+                            v-if="song.copyright.text"
+                        >
+                            {{ $t("song.text") }} ©:
+                            {{ getLocaleString(song.copyright.text.name) }}
+                        </small>
+                        <small
+                            class="flex gap-2"
+                            v-if="song.copyright.melody"
+                        >
+                            {{ $t("song.melody") }} ©:
+                            {{ getLocaleString(song.copyright.melody.name) }}
+                        </small>
+                    </div>
+                    <small
+                        class="flex gap-2"
+                        v-if="melodyOrigin"
+                    >
+                        {{ melodyOrigin }}
+                    </small>
+                    <small class="flex gap-2">
+                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
+                        <span v-if="song.originCountry">&bull;</span>
+                        <span v-if="song.originalKey">{{ song.originalKey }}</span>
+                        <span v-if="song.originalKey">&bull;</span>
+                        <span v-if="song.verses">{{ song.verses }}</span>
                     </small>
                 </div>
-                <small
-                    class="flex gap-2"
-                    v-if="melodyOrigin"
-                >
-                    {{ melodyOrigin }}
-                </small>
-                <small class="flex gap-2">
-                    <span v-if="song.originCountry">{{ song.originCountry }}</span>
-                    <span v-if="song.originalKey">({{ song.originalKey }})</span>
-                </small>
             </div>
         </div>
-        <div v-if="description" class="flex flex-col gap-4 mt-4 pt-4 relative border-t border-black/10 dark:border-white/10">
+        <div v-if="description" class="flex flex-col gap-4 relative">
             <div
-                class="text-sm"
-                :class="{ 'h-12 overflow-hidden': !showDescription }"
+                class="mt-8 text-sm"
+                :class="{ 'hidden': !showDescription }"
                 v-html="description"
             ></div>
-            <span 
-                class="absolute bg-gradient-to-t from-white to-transparent dark:from-secondary bottom-0 w-full h-full" 
-                v-if="!showDescription"
-            >
-                <button aria-label="Show song details" @click="showDescription = !showDescription" class="border border-black/20 dark:border-white/20 shadow-md bg-white dark:bg-secondary dark:text-white p-2 rounded-full absolute bottom-2 left-1/2 transform -translate-x-1/2">
-                    <ArrowDownIcon class="w-4 h-4" />
-                </button>
-            </span>
+            <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
+                <InformationCircleIcon class="w-4 h-4" />
+                <span class="text-sm">{{ $t('common.show') }} {{ $t('song.biography').toLocaleLowerCase() }}</span>
+            </button>
         </div>
     </base-card>
 </template>
@@ -145,13 +140,15 @@ import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { Modal } from "@/components";
 import { useStore } from "@/store";
-import { ArrowDownIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
+import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
+import { EyeIcon } from "@heroicons/vue/outline";
 
 @Options({
     components: {
         Modal,
-        ArrowDownIcon,
+        InformationCircleIcon,
         ArrowSmRightIcon,
+        EyeIcon,
     },
     props: {
         languageKey: {

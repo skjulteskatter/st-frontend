@@ -165,24 +165,6 @@ declare module "dmb-api" {
         song?: ApiSong;
     }
 
-    interface IndexedSong {
-        id: string;
-        number: number;
-        collectionIds: string[];
-        name: LocaleString;
-        yearWritten: number;
-        lyrics: LocaleString;
-        contributors: string[];
-    }
-
-    interface IndexedContributor {
-        id: string;
-        name: string;
-        biography: LocaleString;
-        subtitle: string;
-        country: string;
-    }
-
     interface CreditSong {
         id: string;
         name: LocaleString;
@@ -281,4 +263,18 @@ interface AnalyticsItem {
         dateHour: Date;
         count: string;
     }[];
+}
+
+declare module "songtreasures/search" {
+    interface ApiSearchResultItem {
+        id: string;
+        context: {
+            [key: string]: string;
+        };
+    }
+
+    interface ApiSearchResult {
+        songs: ApiSearchResultItem[];
+        contributors: ApiSearchResultItem[];
+    }
 }

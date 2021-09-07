@@ -27,7 +27,7 @@
                     </template>
                     {{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}
                 </base-button>
-                <base-button theme="error" @click="deletePlaylist">
+                <base-button theme="error" @click="showDelete = true">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
@@ -65,64 +65,83 @@
             :show="Show"
             @close="hideModal()"
         >
-            <div class="relative w-72">
-                <button class="absolute top-0 right-0 text-gray-400 flex justify-center items-center" @click="hideModal()">
-                    <XIcon class="w-4 h-4" />
-                </button>
-                <h3 class="font-bold mb-4">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
-                <div class="flex flex-col gap-2">
-                    <div
-                        v-for="key in Keys" :key="key.key"
-                        class="flex flex-col gap-2"
-                    >
-                        <span class="w-full flex gap-2 justify-between">
-                            <input 
-                                type="text"
-                                ref="shareLink"
-                                :value="getLink(key.key)"
-                                class="p-2 border-gray-300 rounded-md text-sm flex-grow bg-transparent"
-                                :disabled="new Date() > new Date(key.validTo)"
-                                :class="{'text-gray-400 cursor-not-allowed border-red-700': new Date() > new Date(key.validTo) }"
-                            >
-                            <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
-                            <base-button
-                                theme="error"
-                                :disabled="deleted[key.key]"
-                                :loading="loading[key.key]"
-                                @click="deleteKey(key)"
-                                :content="false"
-                                class="px-3"
-                            >
-                                <template #icon>
-                                    <TrashIcon class="w-4 h-4" />
-                                </template>
-                            </base-button>
-                        </span>
-                        <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
-                            <ExclamationIcon class="w-4 h-4" />
-                            {{ $t('playlist.notValid') }}
-                        </small>
-                        <small class="block text-gray-400" v-else>{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
-                    </div>
-                    <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
+            <template #title>
+                <h3 class="font-bold">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
+            </template>
+            <div class="flex flex-col gap-2">
+                <div
+                    v-for="key in Keys" :key="key.key"
+                    class="flex flex-col gap-2"
+                >
+                    <span class="w-full flex gap-2 justify-between">
+                        <input 
+                            type="text"
+                            ref="shareLink"
+                            :value="getLink(key.key)"
+                            class="p-2 border-gray-300 rounded-md text-sm flex-grow bg-transparent"
+                            :disabled="new Date() > new Date(key.validTo)"
+                            :class="{'text-gray-400 cursor-not-allowed border-red-700': new Date() > new Date(key.validTo) }"
+                        >
+                        <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
+                        <base-button
+                            theme="error"
+                            :disabled="deleted[key.key]"
+                            :loading="loading[key.key]"
+                            @click="deleteKey(key)"
+                            :content="false"
+                            class="px-3"
+                        >
+                            <template #icon>
+                                <TrashIcon class="w-4 h-4" />
+                            </template>
+                        </base-button>
+                    </span>
+                    <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
+                        <ExclamationIcon class="w-4 h-4" />
+                        {{ $t('playlist.notValid') }}
+                    </small>
+                    <small class="block text-gray-400" v-else>{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
                 </div>
-                <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
-                    <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
-                    <div v-for="u in Users" :key="u.id" class="flex justify-between rounded-md p-2 border border-black/10 dark:border-white/10">
-                        <span class="flex gap-2 items-center">
-                            <img
-                                :src="
-                                    u.image ?? '/img/portrait-placeholder.png'
-                                "
-                                class="w-6 h-6 object-cover rounded-full"
-                            />
-                            <small>{{ u.displayName }}</small>
-                        </span>
-                        <button class="rounded p-1 text-red-500 cursor-pointer hover:bg-red-500/10" :disabled="deleted[u.id]" @click="deleteUser(u)">
-                            <XIcon class="w-4 h-4" />
-                        </button>
-                    </div>
+                <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
+            </div>
+            <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
+                <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
+                <div v-for="u in Users" :key="u.id" class="flex justify-between rounded-md p-2 border border-black/10 dark:border-white/10">
+                    <span class="flex gap-2 items-center">
+                        <img
+                            :src="
+                                u.image ?? '/img/portrait-placeholder.png'
+                            "
+                            class="w-6 h-6 object-cover rounded-full"
+                        />
+                        <small>{{ u.displayName }}</small>
+                    </span>
+                    <button class="rounded p-1 text-red-500 cursor-pointer hover:bg-red-500/10" :disabled="deleted[u.id]" @click="deleteUser(u)">
+                        <XIcon class="w-4 h-4" />
+                    </button>
                 </div>
+            </div>
+        </base-modal>
+        <base-modal :show="showDelete" @close="showDelete = false">
+            <template #icon>
+                <ExclamationIcon class="w-6 h-6 text-red-500" />
+            </template>
+            <template #title>
+                <h3 class="font-bold">{{ $t('playlist.deleteConfirmation') }}</h3>
+            </template>
+            <template #description>
+                <small class="opacity-50 tracking-wide">{{ $t('playlist.deleteDescription') }}</small>
+            </template>
+            <div class="flex gap-4 justify-end">
+                <base-button theme="tertiary" @click="showDelete = false">
+                    {{ $t('cancel') }}
+                </base-button>
+                <base-button theme="error" @click="deletePlaylist">
+                    <template #icon>
+                        <TrashIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t('common.delete') }}
+                </base-button>
             </div>
         </base-modal>
     </div>
@@ -170,6 +189,7 @@ export default class PlaylistView extends Vue {
     } = {};
     public newPlaylistName = "";
     public show = false;
+    public showDelete = false;
 
     public get originalEntryOrder(): string[] {
         if (!this.playlist) return [];
