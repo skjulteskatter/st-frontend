@@ -2,7 +2,7 @@
     <div class="flex relative border-none p-0 bg-transparent">
         <input
             type="search"
-            class="pl-8 py-1 rounded-md border-gray-300 w-full focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-gray-500 dark:bg-secondary dark:text-white dark:placeholder-gray-400"
+            class="pl-8 py-1 rounded-md bg-black/10 border-none w-full focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:ring-offset-secondary dark:bg-white/10 dark:text-white dark:placeholder-gray-400"
             :class="{ 'cursor-not-allowed opacity-50': disabled }"
             :disabled="disabled"
             :placeholder="placeholder ?? $t('common.search')"
