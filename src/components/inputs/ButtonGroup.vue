@@ -3,7 +3,7 @@
         <button
             v-for="(button, i) in Buttons"
             :key="button.label"
-            class="p-2 bg-white border-gray-300 dark:bg-secondary dark:border-gray-500"
+            class="p-2 bg-white border-gray-300 dark:bg-secondary dark:border-gray-500 focus:bg-gray-100"
             :class="{ 
                 'border-l': i > 0, 
                 'bg-primary dark:bg-primary text-white': button.selected, 
