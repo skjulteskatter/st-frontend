@@ -1,7 +1,7 @@
 <template>
     <div v-if="playlist">
         <back-button class="mb-4" />
-        <header class="flex justify-between items-start mb-4">
+        <header class="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
             <span>
                 <h1 class="font-bold text-xl flex gap-2 items-center">
                     <span v-if="!editName">{{ playlist.name }}</span>

@@ -1,16 +1,8 @@
 <template>
-    <header class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-xl md:text-2xl">
-            {{ $t("common.your") }}
-            {{ $t("common.collections").toLowerCase() }}
-        </h1>
-        <base-button @click="openCreatePlaylist" theme="secondary" class="sm:hidden">
-            <template #icon>
-                <FolderIcon class="w-4 h-4" />
-            </template>
-            {{$t('playlist.createnew')}}
-        </base-button>
-    </header>
+    <h1 class="font-bold text-xl md:text-2xl mb-4">
+        {{ $t("common.your") }}
+        {{ $t("common.collections").toLowerCase() }}
+    </h1>
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         <playlist-card
             v-for="playlist in playlists"
