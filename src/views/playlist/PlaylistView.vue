@@ -132,7 +132,7 @@
             <template #description>
                 <small class="opacity-50 tracking-wide">{{ $t('playlist.deleteDescription') }}</small>
             </template>
-            <div class="flex gap-4 justify-end">
+            <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
                 <base-button theme="tertiary" @click="showDelete = false">
                     {{ $t('cancel') }}
                 </base-button>
@@ -158,8 +158,8 @@ import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
-import { ShareIcon, TrashIcon, SaveIcon, ExclamationIcon, XIcon } from "@heroicons/vue/solid";
-import { PencilIcon, CheckIcon } from "@heroicons/vue/outline";
+import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
+import { PencilIcon, CheckIcon, ExclamationIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});

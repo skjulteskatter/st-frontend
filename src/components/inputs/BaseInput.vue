@@ -2,7 +2,7 @@
     <label class="border-none p-0 bg-transparent">
         <small class="block tracking-wide" v-if="label">{{ label }}</small>
         <input
-            class="rounded-md border-gray-300 placeholder-gray-500 focus:ring focus:ring-primary focus:ring-offset-2 focus:border-primary w-full dark:border-gray-500 dark:bg-secondary"
+            class="px-2 py-1 text-base rounded-md border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:border-primary w-full dark:border-gray-500 dark:bg-secondary"
             v-bind="$attrs"
             :value="modelValue"
             :disabled="disabled"
