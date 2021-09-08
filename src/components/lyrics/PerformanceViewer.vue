@@ -18,9 +18,19 @@
                 </div>
             </div>
         </div>
-        <div class="flex mt-2">
-            <base-button @click="previous">{{ $t('common.previous') }}</base-button>
-            <base-button class="ml-2" @click="next">{{$t('common.next')}}</base-button>
+        <div class="flex gap-2 mt-4">
+            <base-button @click="previous">
+                <template #icon>
+                    <ArrowLeftIcon class="w-4 h-4" />
+                </template>
+                {{ $t('common.previous') }}
+            </base-button>
+            <base-button @click="next">
+                <template #icon>
+                    <ArrowRightIcon class="w-4 h-4" />
+                </template>
+                {{$t('common.next')}}
+            </base-button>
         </div>
     </div>
 </template>
@@ -28,6 +38,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics } from "@/classes";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "transposed-lyrics-viewer",
@@ -35,6 +46,10 @@ import { Lyrics } from "@/classes";
         lyrics: {
             type: Object,
         },
+    },
+    components: {
+        ArrowRightIcon,
+        ArrowLeftIcon,
     },
 })
 export default class TransposedLyricsViewer extends Vue {

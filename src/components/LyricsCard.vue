@@ -54,7 +54,7 @@
                     </option>
                 </select>
             </label>
-            <div class="flex flex-col gap-1" v-if="chordsEnabled">
+            <div class="flex flex-col gap-1" v-show="chordsEnabled">
                 <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song.key') }}</span>
                 <base-dropdown
                     origin="left"
