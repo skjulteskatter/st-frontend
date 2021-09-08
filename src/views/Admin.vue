@@ -61,7 +61,7 @@
         </div>
     </div>
     <div v-else>
-        <h1>{{ $t("admin.noaccess") }}</h1>
+        <h1>{{ $t("admin.noAccess") }}</h1>
     </div>
 </template>
 

@@ -27,14 +27,14 @@
                         {{ p.name }}
                     </span>
                     <small class="opacity-50 block tracking-wider">
-                        {{ p.entries.length || $t('common.no-amount') }}
+                        {{ p.entries.length || $t('common.noAmount') }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
                 </div>
             </router-link>
         </div>
         <p class="p-4 opacity-50 text-center" v-else>
-            {{ $t("common.no-amount") }} {{ $t('common.collections').toLocaleLowerCase() }}
+            {{ $t("common.noAmount") }} {{ $t('common.collections').toLocaleLowerCase() }}
         </p>
     </base-card>
 </template>

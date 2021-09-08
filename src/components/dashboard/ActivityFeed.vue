@@ -34,7 +34,7 @@
                 </router-link>
             </div>
             <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
-                {{ $t("dashboard.noactivity") }}
+                {{ $t("dashboard.noActivity") }}
             </p>
         </loader>
     </base-card>

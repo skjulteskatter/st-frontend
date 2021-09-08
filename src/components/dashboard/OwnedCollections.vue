@@ -24,9 +24,9 @@
 			</div>
 			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md flex flex-col items-center">
 				<CollectionIcon class="w-10 h-10 mb-4 opacity-50" />
-				<small class="text-xs tracking-wide text-center">{{$t('dashboard.nocollections')}}</small>
+				<small class="text-xs tracking-wide text-center">{{$t('dashboard.noCollections')}}</small>
 				<p class="font-semibold flex gap-2 items-center">
-					{{ $t('dashboard.gotocollections') }}
+					{{ $t('dashboard.goToCollections') }}
 					<ArrowRightIcon class="w-4 h-4" />
 				</p>
 			</router-link>
