@@ -83,6 +83,8 @@ import { useStore } from "@/store";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
+import { User } from "@/classes/user";
+import { ApiSubscription } from "dmb-api";
 
 @Options({
 	name: "edit-user",
@@ -135,11 +137,11 @@ export default class EditUser extends Vue {
         this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
     }
 
-    public getCollections(subscription: Subscription) {
+    public getCollections(subscription: ApiSubscription) {
         return this.store.getters.collections.filter(i => subscription.collectionIds.includes(i.id));
     }
 
-    public getUnownedCollections(subscriptions: Subscription[]) {
+    public getUnownedCollections(subscriptions: ApiSubscription[]) {
         return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds.includes(i.id)));
     }
 
@@ -164,7 +166,7 @@ export default class EditUser extends Vue {
             
     }
 
-    public async deleteSub(user: User, subscription: Subscription) {
+    public async deleteSub(user: User, subscription: ApiSubscription) {
         await api.admin.deleteSubcription(user.id, subscription.id);
         user.subscriptions = user.subscriptions.filter(i => i.id != subscription.id);
     }

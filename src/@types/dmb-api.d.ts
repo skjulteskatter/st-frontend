@@ -1,20 +1,49 @@
 declare module "dmb-api" {
+    interface ApiUser {
+        id: string;
+        displayName: string;
+        image: string;
+        email: string;
+        subscriptions: ApiSubscription[];
+        roles: string[];
+        address: {};
+        birthDay: string;
+        gender: "male" | "female" | "unknown";
+        settings?: ApiSettings;
+        lastLogin: Date;
+        privacyPolicy: boolean;
+        termsAndConditions: boolean;
+    }
+
+    type ApiSettings = {
+        languageKey?: string;
+        defaultTransposition?: string;
+        defaultTranscode?: string;
+    }
+
+    type ApiSubscription = {
+        id: string;
+        productIds: string[];
+        collectionIds: string[];
+        validTo: Date;
+        valid: boolean;
+    }
 
     type ApiActivity = {
         id?: string;
         type: "contributor";
         itemId: string;
-        // item?: ApiContributor;
         loggedDate: string;
     } | {
         id?: string;
         type: "song";
         itemId: string;
-        // item?: ApiSong;
         loggedDate: string;
     }
 
     type Sort = "title" | "number" | "composer" | "author" | "genre";
+
+    type Format = "json" | "html" | "performance";
 
     interface ApiCollection {
         id: string;
@@ -76,11 +105,10 @@ declare module "dmb-api" {
     interface ApiLyrics {
         id: string;
         songId: string;
-        number: number;
         collectionIds: string[];
         languageKey: string;
-        content: JsonContent | string;
-        format: "json" | "html";
+        content: LyricsContent | LyricsChordContent[] | string;
+        format: Format;
         hasChords: boolean;
         originalKey: string;
         transposedToKey: string;
@@ -210,12 +238,21 @@ declare module "dmb-api" {
     }
 
     type ApiCategory = ApiItem;
-}
 
-interface JsonContent {
-    [key: string]: {
+    type LyricsContent = {
+        [key: string]: {
+            name: string;
+            content: string[];
+        };
+    }
+    
+    type LyricsChordContent = {
+        key: string;
         name: string;
-        content: string[];
+        content: {
+            chords: string[];
+            parts: string[];
+        }[];
     };
 }
 

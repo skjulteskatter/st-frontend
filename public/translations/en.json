@@ -232,5 +232,8 @@
   "types.studio": "Studio",
   "types.track": "Track",
   "types.video": "Video",
+  "view.chords": "Chords",
+  "view.default": "Default",
+  "view.performance": "Performance",
   "year": "Year"
 }

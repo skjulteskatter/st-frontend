@@ -1,7 +1,7 @@
 <template>
-	<article class="bg-white p-8" v-if="song && collection && verses">
+	<article class="bg-white p-8">
 		<back-button class="back-button" />
-		<header class="mb-8 py-4 border-b border-gray-300 flex justify-between items-end">
+		<header class="mb-8 py-4 border-b border-gray-300 flex justify-between items-end" v-if="collection && song">
 			<div>
 				<p class="text-primary">{{ collection.getName(languageKey) }}</p>
 				<h1 class="text-2xl flex gap-4">
@@ -74,19 +74,23 @@
 </template>
 
 <script lang="ts">
-import { Collection } from "@/classes";
+import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
+import { LyricsContent } from "dmb-api";
 import { Vue } from "vue-class-component";
 
 export default class PrintView extends Vue {
 	public store = useStore();
 	public printed = false;
 
-	public mounted() {
+	public lyrics: Lyrics | null = null;
+
+	public async mounted() {
 		const imageElement = document.getElementById("st-logo-print") as HTMLImageElement;
 
 		if(this.song){
 			document.title = this.formattedTitle;
+			this.lyrics = await this.song.getLyrics(this.store.state.songs.language);
 		}
 
 		imageElement.onload = () => {
@@ -119,12 +123,8 @@ export default class PrintView extends Vue {
         return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
     }
 
-	public get lyrics() {
-		return this.store.getters.lyrics;
-	}
-
 	public get verses() {
-		return this.lyrics?.content as object;
+		return (this.lyrics?.content ?? {}) as LyricsContent;
 	}
 
     public getLocaleString(dictionary: { [key: string]: string }) {

@@ -1,6 +1,6 @@
 import router from "@/router";
 import api from "@/services/api";
-import auth, { analytics } from "@/services/auth";
+import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
 import { ApiActivity, ApiContributor, ApiSong } from "dmb-api";
@@ -13,6 +13,7 @@ import { SongsMutationTypes } from "../songs/mutation-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
+import { User } from "@/classes/user";
 
 
 
@@ -36,15 +37,11 @@ const ts: {
 async function init(state: State, commit: Commit): Promise<void> {
     const expiry = new Date().getTime() + 10000;
 
-    const user = await cache.getOrCreateAsync("user", api.session.getCurrentUser, expiry);
-    if (!user) return;
+    await appSession.init();
 
-    analytics.setUserId(user.id);
-    user.displayName = auth.user?.displayName ?? user.displayName;
+    const user = appSession.user;
     
-    cache.getOrCreateAsync("playlists", api.playlists.getPlaylists, expiry).then(p => {
-        commit(SessionMutationTypes.SET_PLAYLISTS, p);
-    });
+    commit(SessionMutationTypes.SET_PLAYLISTS, appSession.customCollections);
 
     const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
@@ -166,8 +163,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
     async [SessionActionTypes.SESSION_SAVE_SETTINGS]({ state, commit }): Promise<void> {
         if (state.currentUser?.settings) {
-            const user = await api.session.saveUser(state.currentUser.settings);
-            commit(SessionMutationTypes.SET_USER, user);
+            appSession.user = new User(await api.session.saveUser(state.currentUser.settings));
+            commit(SessionMutationTypes.SET_USER, appSession.user);
             await ensureLanguageIsFetched();
         }
     },

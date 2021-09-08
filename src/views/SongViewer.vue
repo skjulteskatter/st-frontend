@@ -44,11 +44,11 @@
                     <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics">
                         <SwitchLabel class="text-xs tracking-wide">{{ $t("song.viewer") }}</SwitchLabel>
                         <Switch
-                            :disabled="view == 'transpose'"
+                            :disabled="lyrics?.format === 'html'"
                             @click="extend()"
                             v-model="switchExtended"
                             class="focus:outline-none"
-                            :class="{ 'opacity-50 cursor-not-allowed': view == 'transpose' }"
+                            :class="{ 'opacity-50 cursor-not-allowed': lyrics?.format === 'html' }"
                         >
                             <div
                                 class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
@@ -75,9 +75,13 @@
                     <lyrics-card
                         :class="{ 'hidden': sheetMusicOptions?.show }"
                         v-if="song.hasLyrics && !isExtended"
+                        :loading="loadingLyrics"
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
+                        @translate="translate"
+                        @transpose="transpose"
+                        @setView="setView"
                     />
                     <presentation-preview
                         v-if="song.hasLyrics && isExtended && lyrics"
@@ -156,8 +160,8 @@ import {
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
-import { Collection } from "@/classes";
-import { ApiPlaylist, MediaFile } from "dmb-api";
+import { Lyrics, transposer } from "@/classes";
+import { ApiPlaylist, Format, MediaFile } from "dmb-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -167,6 +171,7 @@ import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
+import { SongViewType } from "@/store/modules/songs/state";
 
 @Options({
     components: {
@@ -201,11 +206,12 @@ export default class SongViewer extends Vue {
     public number: number | string = 0;
     public selectedLanguage = this.languageKey;
     public selectedSheetMusic?: MediaFile = {} as MediaFile;
-    public lyricsLoading = true;
     private songViewCount: number | null = null;
     public show = false;
     public unset = false;
     public showPlaylistModal = false;
+
+    public lyrics?: Lyrics | null = null;
 
     public setSong(songId: string) {
         this.$router.push({
@@ -217,7 +223,7 @@ export default class SongViewer extends Vue {
     }
 
     public setLyrics() {
-        if (this.lyrics && this.lyrics?.id !== this.control.Lyrics?.id)
+        if (this.lyrics && this.lyrics.format === "json" && this.lyrics?.id !== this.control.Lyrics?.id)
             this.control.setLyrics(this.lyrics);
     }
 
@@ -315,15 +321,14 @@ export default class SongViewer extends Vue {
 
         if (this.song?.hasLyrics && this.collection)
         {
-            if (this.store.state.songs.view == "transpose") {
-                await this.collection?.transposeLyrics(
-                    this.song.collections.find(s => s.id == this.collection?.id)?.number ?? 0, 
+            if (this.lyrics?.format === "html") {
+                this.lyrics = await this.song?.transposeLyrics( 
                     this.store.state.songs.transposition ?? 0,
                     this.selectedLanguage,
                 );
             }
             else {
-                await this.collection?.getLyrics(this.song, this.store.state.songs.language);
+                this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);
             }  
         }
 
@@ -342,8 +347,8 @@ export default class SongViewer extends Vue {
             }
         };
         setTimeout(log, 5000);
-        this.lyricsLoading = false;
         this.setLyrics();
+        this.setView(this.store.state.songs.view);
     }
 
     public get user() {
@@ -352,14 +357,6 @@ export default class SongViewer extends Vue {
 
     public get admin() {
         return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
-    }
-
-    public get lyrics() {
-        return this.store.getters.lyrics;
-    }
-
-    public get view() {
-        return this.store.state.songs.view;
     }
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
@@ -422,7 +419,7 @@ export default class SongViewer extends Vue {
     }
 
     public get loadingLyrics() {
-        return this.collection?.loadingLyrics === true;
+        return this.song?.loadingLyrics === true;
     }
 
     public extend() {
@@ -444,8 +441,71 @@ export default class SongViewer extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get collection(): Collection | undefined {
+    public get collection() {
         return this.store.getters.collection;
+    }
+
+    private getTransposedLyrics(language?: string, format?: Format) {
+        return this.song?.transposeLyrics(transposer.getRelativeTransposition(this.defaultTransposition), language ?? this.store.state.songs.language, undefined, this.store.state.songs.newMelody, format ?? "html");
+    }
+
+    public async translate(language: string) {
+        if (this.song) {
+            switch(this.lyrics?.format) {
+                case "html":
+                    this.lyrics = await this.getTransposedLyrics(language);
+                    break;
+                case "performance":
+                    this.lyrics = await this.getTransposedLyrics(language, "performance");
+                    break;
+                default:
+                    this.lyrics = await this.song.getLyrics(language);
+            }
+            this.store.commit(
+                SongsMutationTypes.LANGUAGE,
+                language,
+            );
+        }
+    }
+
+    public async setView(type: SongViewType) {
+        if (this.store.state.songs.view !== type)
+            this.store.commit(SongsMutationTypes.VIEW, type);
+        if (type === "chords") {
+            this.lyrics = await this.getTransposedLyrics();
+        } else if(type === "performance") {
+            this.lyrics = await this.getTransposedLyrics(undefined, "performance");
+        } else {
+            this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);
+        }
+    }
+    
+    public get defaultTransposition() {
+        return this.store.getters.user?.settings?.defaultTransposition ?? "C";
+    }
+
+    public get selectedTransposition() {
+        return this.store.state.songs.transposition ?? 0;
+    }
+
+    public set selectedTransposition(v) {
+        this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
+    }
+
+    public async transpose(n?: number) {
+        if (n !== undefined) {
+            this.selectedTransposition = n;
+        }
+
+        if (this.song) {
+            this.lyrics = await this.song?.transposeLyrics(
+                this.selectedTransposition,
+                this.store.state.songs.language,
+                undefined,
+                this.store.state.songs.newMelody,
+                this.lyrics?.format
+            );
+        }
     }
 }
 </script>
