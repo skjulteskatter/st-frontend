@@ -164,6 +164,7 @@
   "song.key": "Toneart",
   "song.leadSheet": "Leadsheet",
   "song.lyrics": "Tekst",
+  "song.lyricsType": "Teksttype",
   "song.media": "Media",
   "song.melody": "Melodi",
   "song.newMelody": "Ny Melodi",
@@ -233,5 +234,8 @@
   "types.studio": "Studio",
   "types.track": "Track",
   "types.video": "Video",
+  "view.chords": "Akkorder",
+  "view.default": "Standard",
+  "view.performance": "Fremføring",
   "year": "År"
 }

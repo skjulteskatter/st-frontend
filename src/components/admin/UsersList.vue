@@ -74,6 +74,7 @@ import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
 import api from "@/services/api";
+import { User } from "@/classes/user";
 
 @Options({
     name: "users-list",
@@ -110,7 +111,7 @@ export default class UsersList extends Vue {
     public async searchUser() {
         this.loading["search"] = true;
         if (this.userQuery) {
-            this.store.commit(UsersMutationTypes.SET_USERS, await api.admin.getUsers(this.userQuery));
+            this.store.commit(UsersMutationTypes.SET_USERS, (await api.admin.getUsers(this.userQuery)).map(i => new User(i)));
         }
         this.loading["search"] = false;
     }
@@ -129,7 +130,7 @@ export default class UsersList extends Vue {
         return this.users ?? [];
     }
 
-    public get User(): User | undefined {
+    public get User() {
         return this.currentUser;
     }
 

@@ -4,7 +4,7 @@
             <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
             <router-link
                 v-if="!disabled"
-                class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
                 :to="{
                     name: 'song',
                     params: {

@@ -163,6 +163,7 @@
   "song.key": "Key",
   "song.leadSheet": "Leadsheet",
   "song.lyrics": "Lyrics",
+  "song.lyricsType": "Lyrics type",
   "song.media": "Media",
   "song.melody": "Melody",
   "song.newMelody": "New Melody",
@@ -232,5 +233,8 @@
   "types.studio": "Studio",
   "types.track": "Track",
   "types.video": "Video",
+  "view.chords": "Chords",
+  "view.default": "Default",
+  "view.performance": "Performance",
   "year": "Year"
 }
