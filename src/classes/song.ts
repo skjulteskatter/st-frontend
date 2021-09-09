@@ -283,6 +283,12 @@ export class Song extends BaseClass implements ApiSong {
         return this.origins.find(o => o.type == "melody");
     }
 
+    public get Description() {
+        const description = this.getTranslatedProperty(this.details, this.store.getters.languageKey);
+
+        return description?.replace(/<p>/g, "<p class='mb-2'>");
+    }
+
     // public getRelativeTranspositions(t: string) {
     //     const ts = transposer.getTranspositions(this.originalKey) ?? {};
 

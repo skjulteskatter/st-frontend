@@ -41,44 +41,17 @@
                     />
                     <small
                         class="flex gap-2"
-                        v-if="song.hasLyrics && song.Authors.length"
+                        v-if="song.Authors.length"
                     >
                         <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
-                        <span v-for="i in song.Authors" :key="i.id" class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
-                            <router-link
-                                :to="{
-                                    name: 'contributor',
-                                    params: {
-                                        contributor: i.id,
-                                    },
-                                }"
-                            >
-                                {{ i.name }}
-                            </router-link>
-                        </span>
+                        <contributor-info :contributors="song.Authors" />
                     </small>
                     <small
-                        v-if="song.Composers.length > 0"
+                        v-if="song.Composers.length"
                         class="flex gap-2"
                     >
                         <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
-                        <span
-                            v-for="i in song.Composers"
-                            :key="i.id"
-                            :label="i.name"
-                            class="px-2 rounded-md bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
-                        >
-                            <router-link
-                                :to="{
-                                    name: 'contributor',
-                                    params: {
-                                        contributor: i.id,
-                                    },
-                                }"
-                            >
-                                {{ i.name }}
-                            </router-link>
-                        </span>
+                        <contributor-info :contributors="song.Composers" />
                     </small>
                     <small
                         class="flex gap-2"
@@ -122,11 +95,11 @@
                 </div>
             </div>
         </div>
-        <div v-if="description" class="flex flex-col gap-4 relative">
+        <div v-if="song.Description" class="flex flex-col gap-4 relative">
             <div
-                class="mt-8 text-sm"
+                class="mt-8 text-sm song-description"
                 :class="{ 'hidden': !showDescription }"
-                v-html="description"
+                v-html="song.Description"
             ></div>
             <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
                 <InformationCircleIcon class="w-4 h-4" />
@@ -138,14 +111,14 @@
 <script lang="ts">
 import { Collection, Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
-import { Modal } from "@/components";
 import { useStore } from "@/store";
 import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 import { EyeIcon } from "@heroicons/vue/outline";
+import ContributorInfo from "./ContributorInfo.vue";
 
 @Options({
     components: {
-        Modal,
+        ContributorInfo,
         InformationCircleIcon,
         ArrowSmRightIcon,
         EyeIcon,
