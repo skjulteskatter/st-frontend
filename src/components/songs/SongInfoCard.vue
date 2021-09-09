@@ -193,13 +193,6 @@ export default class SongInfoCard extends Vue {
         );
     }
 
-    public get description() {
-        return this.song?.getTranslatedProperty(
-            this.song.details,
-            this.Language
-        );
-    }
-
     public get melodyOrigin() {
         return (
             this.song?.melodyOrigin?.description?.[this.Language] ??
