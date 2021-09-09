@@ -6,7 +6,7 @@
                 <span>
                     <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                     <small class="opacity-50 block">
-                        {{ playlist?.entries.length || $t('common.no-amount') }}
+                        {{ playlist?.entries.length || $t('common.noAmount') }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
                 </span>
