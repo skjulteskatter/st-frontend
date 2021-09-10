@@ -3,7 +3,7 @@
         class="text-3xl h-full"
         :class="[theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']"
     >
-        <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/20' : 'border-black/20']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
+        <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
             <h1 class="font-bold text-4xl" v-if="song.number">
                 {{ song.number }}
             </h1>
@@ -164,14 +164,14 @@ export default class PresentationView extends Vue {
 
 <style>
 .verses {
-    margin-left: clamp(4rem, 10vw + 2rem, 20vw);
-    font-size: clamp(1rem, 3vw + 1rem, 4rem);
+    margin-left: clamp(1rem, 10vw + 1rem, 20vw);
+    font-size: clamp(1rem, 3vw + 1rem, 3.5rem);
 }
 .verse {
     margin-bottom: clamp(2rem, 5vw, 32rem);
 }
 .line {
-    line-height: clamp(2rem, 3vh + 2vw + .5rem, 20rem);
+    line-height: clamp(1rem, 3vh + 2vw + .5rem, 3.8rem);
 }
 .verse-name {
     left: calc(clamp(3rem, 6vw, 20rem) * -1);
