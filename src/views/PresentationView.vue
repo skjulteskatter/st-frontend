@@ -5,6 +5,7 @@
     >
         <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
             <h1 class="font-bold text-4xl" v-if="song.number">
+                {{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}
                 {{ song.number }}
             </h1>
             <!-- <h3 class="font-light text-4xl">{{ song.getName() }}</h3> -->
