@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" v-if="product && collection">
-        <LockClosedIcon v-if="!collection.available" class="w-5 h-5 text-secondary z-10 absolute top-4 left-4" />
-        <CheckCircleIcon v-else-if="collection.available" class="w-5 h-5 text-green-700 z-10 absolute top-4 left-4" />
+        <LockClosedIcon v-if="!collection.available" class="w-8 h-8 text-red-800 z-10 absolute top-4 left-4 p-2 rounded-full bg-red-500/20" />
+        <CheckIcon v-else-if="collection.available" class="w-8 h-8 text-green-700 z-10 absolute top-4 left-4 p-2 rounded-full bg-green-500/20" />
         <div class="overflow-hidden min-h-[250px] bg-white dark:bg-secondary">
             <img
                 loading="lazy"
@@ -50,7 +50,7 @@ import { Product } from "@/classes/product";
 import { useStore } from "@/store";
 
 import Price from "./Price.vue";
-import { ShoppingCartIcon, CheckCircleIcon, LockClosedIcon } from "@heroicons/vue/solid";
+import { ShoppingCartIcon, CheckIcon, LockClosedIcon } from "@heroicons/vue/solid";
 
 import { appSession } from "@/services/session";
 
@@ -58,7 +58,7 @@ import { appSession } from "@/services/session";
     components: {
         Price,
         ShoppingCartIcon,
-        CheckCircleIcon,
+        CheckIcon,
         LockClosedIcon,
     },
     name: "product-card",
