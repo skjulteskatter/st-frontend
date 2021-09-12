@@ -18,66 +18,74 @@
             </div>
         </template>
         <div class="flex gap-2 items-center mb-4">
-            <select
-                class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
-                id="language"
-                name="language"
-                v-model="SelectedLanguage"
-                @change="translateTo()"
-            >
-                <option
-                    v-for="l in (chordsEnabled ? newMelodyView ? newMelodyLanguages : transposeLanguages : languages)"
-                    :value="l.key"
-                    :key="l.key"
+            <label class="flex flex-col gap-1">
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('common.language') }}</span>
+                <select
+                    class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
+                    id="language"
+                    name="language"
+                    v-model="SelectedLanguage"
+                    @change="translateTo()"
                 >
-                    {{ l.name }}
-                </option>
-            </select>
-            <select
-                class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
-                id="format"
-                name="format"
-                v-model="SelectedFormat"
-                @change="format()"
-            >
-                <option
-                    v-for="f in [ 'default', 'chords', 'performance']"
-                    :value="f"
-                    :key="f"
-                >
-                    {{ $t('view.' + f) }}
-                </option>
-            </select>
-            <base-dropdown
-                origin="left"
-                :label="
-                    relativeTranspositions.find(
-                        (r) => r.value == selectedTransposition
-                    )?.view ?? 'Transpose'
-                "
-                :class="{ 'hidden': !chordsEnabled }"
-            >
-                <div class="overflow-y-auto max-h-64">
-                    <button
-                        :class="{
-                            'bg-gray-200 dark:bg-gray-800': lyrics?.originalKey == t.original && selectedTransposition != t.value,
-                            'bg-primary text-white': selectedTransposition == t.value,
-                        }"
-                        class="py-1 px-2 w-full rounded flex justify-between gap-4"
-                        v-for="t in relativeTranspositions"
-                        :key="t.key"
-                        :disabled="selectedTransposition == t.value"
-                        @click="transpose(t.value)"
+                    <option
+                        v-for="l in (chordsEnabled ? newMelodyView ? newMelodyLanguages : transposeLanguages : languages)"
+                        :value="l.key"
+                        :key="l.key"
                     >
-                        <span class="font-semibold">
-                            {{ t.key }}
-                        </span>
-                        <span class="opacity-50">
-                            ({{ t.original }})
-                        </span>
-                    </button>
-                </div>
-            </base-dropdown>
+                        {{ l.name }}
+                    </option>
+                </select>
+            </label>
+            <label class="flex flex-col gap-1">
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song.lyricsType') }}</span>
+                <select
+                    class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
+                    id="format"
+                    name="format"
+                    v-model="SelectedFormat"
+                    @change="format()"
+                >
+                    <option
+                        v-for="f in [ 'default', 'chords', 'performance']"
+                        :value="f"
+                        :key="f"
+                    >
+                        {{ $t('view.' + f) }}
+                    </option>
+                </select>
+            </label>
+            <div class="flex flex-col gap-1" v-if="chordsEnabled">
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song.key') }}</span>
+                <base-dropdown
+                    origin="left"
+                    :label="
+                        relativeTranspositions.find(
+                            (r) => r.value == selectedTransposition
+                        )?.view ?? 'Transpose'
+                    "
+                >
+                    <div class="overflow-y-auto max-h-64">
+                        <button
+                            :class="{
+                                'bg-gray-200 dark:bg-gray-800': lyrics?.originalKey == t.original && selectedTransposition != t.value,
+                                'bg-primary text-white': selectedTransposition == t.value,
+                            }"
+                            class="py-1 px-2 w-full rounded flex justify-between gap-4"
+                            v-for="t in relativeTranspositions"
+                            :key="t.key"
+                            :disabled="selectedTransposition == t.value"
+                            @click="transpose(t.value)"
+                        >
+                            <span class="font-semibold">
+                                {{ t.key }}
+                            </span>
+                            <span class="opacity-50">
+                                ({{ t.original }})
+                            </span>
+                        </button>
+                    </div>
+                </base-dropdown>
+            </div>
             <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="chordsEnabled && song.newMelody && song.newMelodies.includes(languageKey)">
                 <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.newMelody") }}</SwitchLabel>
                 <Switch

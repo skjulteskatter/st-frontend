@@ -6,7 +6,7 @@
         <div class="flex gap-4 items-center">
             <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
             <div
-                class="flex-grow rounded focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
             >
                 <div class="flex flex-col">
                     <span class="font-semibold">

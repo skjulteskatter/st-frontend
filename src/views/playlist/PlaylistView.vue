@@ -1,7 +1,7 @@
 <template>
     <div v-if="playlist">
         <back-button class="mb-4" />
-        <header class="flex justify-between items-start mb-4">
+        <header class="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
             <span>
                 <h1 class="font-bold text-xl flex gap-2 items-center">
                     <span v-if="!editName">{{ playlist.name }}</span>
@@ -133,7 +133,7 @@
             <template #description>
                 <small class="opacity-50 tracking-wide">{{ $t('playlist.deleteDescription') }}</small>
             </template>
-            <div class="flex gap-4 justify-end">
+            <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
                 <base-button theme="tertiary" @click="showDelete = false">
                     {{ $t('cancel') }}
                 </base-button>
@@ -159,8 +159,8 @@ import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
-import { ShareIcon, TrashIcon, SaveIcon, ExclamationIcon, XIcon } from "@heroicons/vue/solid";
-import { PencilIcon, CheckIcon } from "@heroicons/vue/outline";
+import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
+import { PencilIcon, CheckIcon, ExclamationIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});

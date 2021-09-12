@@ -16,24 +16,24 @@
         </template>
         <div class="flex flex-col gap-2" v-if="playlists.length">
             <router-link
-                class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring focus:ring-primary ring-offset-2"
+                class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"
             >
-                <icon name="playlist" class="mr-2 text-gray-500 dark:text-gray-400" />
+                <FolderIcon class="w-4 h-4 mr-2 opacity-40" />
                 <div>
                     <span class="text-xs font-medium">
                         {{ p.name }}
                     </span>
-                    <small class="text-gray-400 block tracking-wider">
+                    <small class="opacity-50 block tracking-wider">
                         {{ p.entries.length || $t('common.no-amount') }}
                         {{ $t("common.songs").toLowerCase() }}
                     </small>
                 </div>
             </router-link>
         </div>
-        <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
+        <p class="p-4 opacity-50 text-center" v-else>
             {{ $t("common.no-amount") }} {{ $t('common.collections').toLocaleLowerCase() }}
         </p>
     </base-card>
@@ -44,13 +44,14 @@ import { Options, Vue } from "vue-class-component";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ApiPlaylist } from "dmb-api";
-import { PlusIcon } from "@heroicons/vue/solid";
+import { PlusIcon, FolderIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "dashboard-playlists",
     components: {
         CreatePlaylistModal,
         PlusIcon,
+        FolderIcon,
     },
 })
 export default class Playlists extends Vue {

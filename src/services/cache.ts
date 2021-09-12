@@ -40,7 +40,7 @@ class CacheService {
         "tags",
         "custom_collections",
     ];
-    private version = 25;
+    private version = 26;
 
     private db() {
         const v = this.version;

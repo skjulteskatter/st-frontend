@@ -26,7 +26,7 @@
             >
                 <base-card class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
                     <template #header v-if="$slots.title || $slots.description || $slots.icon">
-                        <div class="flex gap-4">
+                        <div class="flex flex-col sm:flex-row gap-4">
                             <slot name="icon" />
                             <div>
                                 <DialogTitle>
