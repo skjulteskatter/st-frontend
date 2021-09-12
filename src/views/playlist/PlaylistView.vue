@@ -41,17 +41,18 @@
         <draggable
             class="flex flex-col gap-4"
             v-else
-            v-model="playlist.entries"
+            :list="entries"
             group="entries"
-            @start="drag=true"
-            @end="drag=false"
+            delay="200"
+            delay-on-touch-only="true"
             item-key="id"
             ghost-class="opacity-50"
         >
             <template #item="{element}">
                 <playlist-song-card
                     :entry="element"
-                    :playlist="playlist"
+                    :canEdit="canEdit"
+                    @remove="removeEntry"
                 />
             </template>
         </draggable>
@@ -190,6 +191,19 @@ export default class PlaylistView extends Vue {
     public newPlaylistName = "";
     public show = false;
     public showDelete = false;
+
+    public get entries() {
+        return this.playlist?.entries ?? [];
+    }
+
+    public set entries(v) {
+        if (this.playlist)
+            this.playlist.entries = v;
+    }
+
+    public get canEdit() {
+        return this.playlist?.userId === this.store.getters.user?.id;
+    }
 
     public get originalEntryOrder(): string[] {
         if (!this.playlist) return [];
@@ -352,6 +366,19 @@ export default class PlaylistView extends Vue {
             }
             this.loading["entryOrder"] = false;
         }
+    }
+
+    public async removeEntry(id: string) {
+        const title = this.$t("playlist.removed");
+        const content = this.$t("notification.removedsong");
+
+        if (!this.playlist?.id || !id) return;
+        await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
+            playlistId: this.playlist.id,
+            entryId: id,
+        });
+
+        notify("success", title, "trash", content);
     }
 }
 </script>
