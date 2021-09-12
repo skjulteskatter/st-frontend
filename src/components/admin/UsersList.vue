@@ -24,10 +24,10 @@
                     <thead>
                         <tr>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.name") }}</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Email</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.role") }}</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Last Login</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">Id</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Email</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">{{ $t("common.role") }}</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Last Login</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Id</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider"><span class="sr-only">{{$t('common.edit')}}</span></th>
                         </tr>
                     </thead>
@@ -42,16 +42,16 @@
                                 />
                                 <span>{{ u.displayName }}</span>
                             </td>
-                            <td class="px-4 py-3 whitespace-nowrap">{{ u.email }}</td>
-                            <td class="px-4 py-3 whitespace-nowrap">
+                            <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">{{ u.email }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
                                 <span v-if="u.roles[0]" :class="[u.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2']">
                                     {{ u.roles[0] }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 whitespace-nowrap">
+                            <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
                                 {{ new Date(u.lastLogin).toLocaleString() }}
                             </td>
-                            <td class="px-4 py-3 whitespace-nowrap">{{ u.id }}</td>
+                            <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">{{ u.id }}</td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <edit-user v-if="u.id != User?.id" :user="u" @save="saveRoles(u)" />
                             </td>
