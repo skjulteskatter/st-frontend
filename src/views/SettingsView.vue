@@ -15,18 +15,18 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
         <div>
-            <div class="flex flex-col py-2 bg-white rounded-lg shadow-md dark:bg-secondary">
+            <div class="flex flex-col">
                 <button
-                    class="text-left px-4 py-2 flex gap-2 items-center"
-                    :class="{ 'bg-black/5 dark:bg-white/10': category == 'general' }"
+                    class="text-left px-4 py-3 flex gap-2 items-center rounded-md"
+                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'general' }"
                     @click="category = 'general'"
                 >
                     <CogIcon class="w-5 h-5 opacity-50" />
                     {{ $t('settings.general') }}
                 </button>
                 <button
-                    class="text-left px-4 py-2 flex gap-2 items-center"
-                    :class="{ 'bg-black/5 dark:bg-white/10': category == 'user' }"
+                    class="text-left px-4 py-3 flex gap-2 items-center rounded-md"
+                    :class="{ 'bg-black/10 dark:bg-white/10': category == 'user' }"
                     @click="category = 'user'"
                 >
                     <UserIcon class="w-5 h-5 opacity-50" />
