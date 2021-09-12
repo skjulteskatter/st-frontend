@@ -5,8 +5,8 @@
             <span>
                 <h1 class="font-bold text-xl flex gap-2 items-center">
                     <span v-if="!editName">{{ playlist.name }}</span>
-                    <input type="text" v-else v-model="newPlaylistName" :placeholder="playlist.name" @keydown.enter="saveName" />
-                    <button @click="saveName" v-if="playlist.userId == userId" class="cursor-pointer opacity-50">
+                    <input type="text" v-else v-model="newPlaylistName" :placeholder="playlist.name" @keydown.enter="saveName" class="rounded-md border-none px-2 py-0 bg-black/10 dark:bg-white/10 text-lg" />
+                    <button @click="saveName" v-if="playlist.userId == userId" class="cursor-pointer opacity-50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <CheckIcon v-if="editName" class="w-5 h-5" />
                         <PencilIcon v-else class="w-5 h-5" />
                     </button>
