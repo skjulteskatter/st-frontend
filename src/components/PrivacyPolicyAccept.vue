@@ -6,20 +6,20 @@
             <InformationCircleIcon class="w-6 h-6 opacity-50" />
         </template>
         <template #title>
-            <h1 class="text-xl font-bold mb-2">{{$t('policies.privacyPolicy')}}</h1>
+            <h1 class="text-xl font-bold mb-2">{{$t('policies_privacyPolicy')}}</h1>
         </template>
         <template #description>
-            <p class="max-w-sm text-sm opacity-50">{{$t('policies.acceptPrivacyPolicy')}}</p>
+            <p class="max-w-sm text-sm opacity-50">{{$t('policies_acceptPrivacyPolicy')}}</p>
         </template>
         <div class="flex flex-col gap-4 items-center text-center">
-            <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common.readHere')}}</a>
+            <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common_readHere')}}</a>
             <base-button
                 :loading="loading"
                 :disabled="disabled"
                 @click="acceptPrivacyPolicy"
                 icon="check"
                 theme="secondary"
-            >{{$t('policies.agree')}}</base-button>
+            >{{$t('policies_agree')}}</base-button>
         </div>
     </base-modal>
 </template>

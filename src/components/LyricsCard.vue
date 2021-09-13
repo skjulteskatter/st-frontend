@@ -2,7 +2,7 @@
     <base-card v-if="song" class="overflow-visible">
         <template #header>
             <div class="w-full flex items-center gap-2">
-                <h3 class="font-bold">{{ $t("song.lyrics") }}</h3>
+                <h3 class="font-bold">{{ $t("song_lyrics") }}</h3>
                 <base-button
                     v-if="editor"
                     theme="tertiary"
@@ -11,15 +11,15 @@
                     <template #icon>
                         <PencilAltIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('common.edit') }}
+                    {{ $t('common_edit') }}
                 </base-button>
-                <song-changer class="ml-auto" :label="$t('song.changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
+                <song-changer class="ml-auto" :label="$t('song_changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
                 <print-button class="hidden md:flex" />
             </div>
         </template>
         <div class="flex gap-2 items-center mb-4">
             <label class="flex flex-col gap-1">
-                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('common.language') }}</span>
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('common_language') }}</span>
                 <select
                     class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="language"
@@ -37,7 +37,7 @@
                 </select>
             </label>
             <label class="flex flex-col gap-1">
-                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song.lyricsType') }}</span>
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song_lyricsType') }}</span>
                 <select
                     class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
                     id="format"
@@ -50,12 +50,12 @@
                         :value="f"
                         :key="f"
                     >
-                        {{ $t('view.' + f) }}
+                        {{ $t('view_' + f) }}
                     </option>
                 </select>
             </label>
             <div class="flex flex-col gap-1" v-show="chordsEnabled">
-                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song.key') }}</span>
+                <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song_key') }}</span>
                 <base-dropdown
                     origin="left"
                     :label="
@@ -87,7 +87,7 @@
                 </base-dropdown>
             </div>
             <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="chordsEnabled && song.newMelody && song.newMelodies.includes(languageKey)">
-                <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song.newMelody") }}</SwitchLabel>
+                <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song_newMelody") }}</SwitchLabel>
                 <Switch
                     @click="newMelody()"
                     class="focus:outline-none"

@@ -41,10 +41,10 @@
 							<transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
 								<MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-secondary ring-1 ring-black ring-opacity-5 focus:outline-none">
 									<MenuItem v-slot="{ active }">
-										<router-link to="/settings" :class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']">{{ $t('common.settings') }}</router-link>
+										<router-link to="/settings" :class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']">{{ $t('common_settings') }}</router-link>
 									</MenuItem>
 									<MenuItem>
-										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-500/10">{{ $t('common.logout') }}</button>
+										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-500/10">{{ $t('common_logout') }}</button>
 									</MenuItem>
 								</MenuItems>
 							</transition>
@@ -81,8 +81,8 @@
 					<notification-list class="ml-auto" />
 				</div>
 				<div class="mt-3 px-2 space-y-1">
-					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common.settings') }}</router-link>
-					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-500/10 text-red-500" @click="logout()">{{ $t('common.logout') }}</button>
+					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common_settings') }}</router-link>
+					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-500/10 text-red-500" @click="logout()">{{ $t('common_logout') }}</button>
 				</div>
 			</div>
 		</DisclosurePanel>
@@ -138,17 +138,17 @@ export default class TheNavbar extends Vue {
 	private get links() {
 		return [
 			{
-				name: this.$t("common.home"),
+				name: this.$t("common_home"),
 				path: "/",
 				condition: true,
 			},
 			{
-				name: this.$t("common.collections"),
+				name: this.$t("common_collections"),
 				path: "/collections",
 				condition: true,
 			},
 			{
-				name: `${this.$t("common.your")} ${this.$t("common.collections").toLocaleLowerCase()}`,
+				name: `${this.$t("common_your")} ${this.$t("common_collections").toLocaleLowerCase()}`,
 				path: "/playlists",
 				condition: true,
 			},

@@ -13,7 +13,7 @@
                 </h1>
                 <span class="text-gray-500">
                     {{ playlist.entries.length }}
-                    {{ $t("common.songs").toLowerCase() }}
+                    {{ $t("common_songs").toLowerCase() }}
                 </span>
             </span>
             <div class="flex gap-2 md:gap-4">
@@ -25,18 +25,18 @@
                     <template #icon>
                         <ShareIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}
+                    {{ $t('common_share') }} {{ $t('common_collection').toLocaleLowerCase() }}
                 </base-button>
                 <base-button theme="error" @click="showDelete = true">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
-                    {{ $t("common.delete") }}
+                    {{ $t("common_delete") }}
                 </base-button>
             </div>
         </header>
         <h2 v-if="!playlist.entries.length" class="opacity-50">
-            {{ $t("playlist.nosongs") }}
+            {{ $t("playlist_nosongs") }}
         </h2>
         <draggable
             class="flex flex-col gap-4"
@@ -60,14 +60,14 @@
             <template #icon>
                 <SaveIcon class="w-4 h-4" />
             </template>
-            {{$t('common.save')}}
+            {{$t('common_save')}}
         </base-button>
         <base-modal
             :show="Show"
             @close="hideModal()"
         >
             <template #title>
-                <h3 class="font-bold">{{ $t('common.share') }} {{ $t('common.collection').toLocaleLowerCase() }}</h3>
+                <h3 class="font-bold">{{ $t('common_share') }} {{ $t('common_collection').toLocaleLowerCase() }}</h3>
             </template>
             <div class="flex flex-col gap-2">
                 <div
@@ -83,7 +83,7 @@
                             :disabled="new Date() > new Date(key.validTo)"
                             :class="{'text-gray-400 cursor-not-allowed border-red-700': new Date() > new Date(key.validTo) }"
                         >
-                        <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist.copyLink') }}</base-button> -->
+                        <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist_copyLink') }}</base-button> -->
                         <base-button
                             theme="error"
                             :disabled="deleted[key.key]"
@@ -99,14 +99,14 @@
                     </span>
                     <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
                         <ExclamationIcon class="w-4 h-4" />
-                        {{ $t('playlist.notValid') }}
+                        {{ $t('playlist_notValid') }}
                     </small>
-                    <small class="block text-gray-400" v-else>{{ $t('playlist.validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
+                    <small class="block text-gray-400" v-else>{{ $t('playlist_validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
                 </div>
-                <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist.createShareLink') }}</base-button>
+                <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist_createShareLink') }}</base-button>
             </div>
             <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
-                <h3 class="text-xs font-bold">{{ $t('playlist.sharedWith') }}</h3>
+                <h3 class="text-xs font-bold">{{ $t('playlist_sharedWith') }}</h3>
                 <div v-for="u in Users" :key="u.id" class="flex justify-between rounded-md p-2 border border-black/10 dark:border-white/10">
                     <span class="flex gap-2 items-center">
                         <img
@@ -128,10 +128,10 @@
                 <ExclamationIcon class="w-6 h-6 text-red-500" />
             </template>
             <template #title>
-                <h3 class="font-bold">{{ $t('playlist.deleteConfirmation') }}</h3>
+                <h3 class="font-bold">{{ $t('playlist_deleteConfirmation') }}</h3>
             </template>
             <template #description>
-                <small class="opacity-50 tracking-wide">{{ $t('playlist.deleteDescription') }}</small>
+                <small class="opacity-50 tracking-wide">{{ $t('playlist_deleteDescription') }}</small>
             </template>
             <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
                 <base-button theme="tertiary" @click="showDelete = false">
@@ -141,7 +141,7 @@
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('common.delete') }}
+                    {{ $t('common_delete') }}
                 </base-button>
             </div>
         </base-modal>
@@ -272,7 +272,7 @@ export default class PlaylistView extends Vue {
         );
         this.$router.push("/playlists");
 
-        notify("success",  this.$t("playlist.deletedplaylist"), "trash", `${this.$t("playlist.deletedplaylist")} "${name}"`);
+        notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${name}"`);
     }
 
     public async toggleSharePlaylist() {
@@ -369,8 +369,8 @@ export default class PlaylistView extends Vue {
     }
 
     public async removeEntry(id: string) {
-        const title = this.$t("playlist.removed");
-        const content = this.$t("notification.removedsong");
+        const title = this.$t("playlist_removed");
+        const content = this.$t("notification_removedsong");
 
         if (!this.playlist?.id || !id) return;
         await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {

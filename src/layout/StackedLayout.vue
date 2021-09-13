@@ -26,7 +26,7 @@
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
 				>
 					<div class="p-4 flex justify-end bg-white w-full">
-						<base-button icon="error" theme="error" @click="close()">{{$t('common.close')}}</base-button>
+						<base-button icon="error" theme="error" @click="close()">{{$t('common_close')}}</base-button>
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
@@ -54,7 +54,7 @@
 					<base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
 					<base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
 				</div>
-				<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common.close')}}</base-button>
+				<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common_close')}}</base-button>
 			</template>
 		</base-modal>
 	</loader>

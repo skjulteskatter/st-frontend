@@ -11,7 +11,7 @@
                         class="lyrics__credits__author"
                         v-if="song.Authors.length > 0"
                     >
-                        {{ $t("song.author") }}:
+                        {{ $t("song_author") }}:
                         <span v-for="author in song.Authors" :key="author.id">
                             {{ author.name }}
                         </span>
@@ -20,7 +20,7 @@
                         class="lyrics__credits__composer"
                         v-if="song.Composers.length > 0"
                     >
-                        {{ $t("song.composer") }}:
+                        {{ $t("song_composer") }}:
                         <span
                             v-for="composer in song.Composers"
                             :key="composer.id"
@@ -29,7 +29,7 @@
                         </span>
                     </p>
                     <p class="lyrics__credits__composer" v-if="melodyOrigin">
-                        {{ $t("song.melody") }}: {{ melodyOrigin }}
+                        {{ $t("song_melody") }}: {{ melodyOrigin }}
                     </p>
                     <p class="lyrics__credits__composer">
                         {{ song.yearWritten }}

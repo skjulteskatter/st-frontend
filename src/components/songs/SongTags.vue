@@ -19,7 +19,7 @@
             <template #button>
                 <button aria-label="Add category" class="py-1 text-gray-500 text-xs flex items-center gap-2">
                     <PlusIcon class="w-4 h-4" />
-                    {{ $t('song.addTag') }}
+                    {{ $t('song_addTag') }}
                 </button>
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
@@ -32,7 +32,7 @@
             </form>
             <template #footer>
                 <div v-if="tags.length">
-                    <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common.your') }} {{ $t('song.categories').toLocaleLowerCase() }}</small> -->
+                    <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common_your') }} {{ $t('song_categories').toLocaleLowerCase() }}</small> -->
                     <ul class="flex flex-wrap gap-1">
                         <li 
                             class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-600 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20 cursor-pointer" 

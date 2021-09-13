@@ -31,7 +31,7 @@
                 <div class="flex-grow flex items-center">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
                     <span class="ml-auto opacity-50 flex items-center gap-1">
-                        {{ songViews(song) }}
+                        {{ song.Views }}
                         <EyeIcon class="w-3 h-3 opacity-50" />
                     </span>
                 </div>
@@ -44,8 +44,8 @@
             <div class="flex flex-col gap-4 items-center">
                 <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
                 <span class="text-center">
-                    <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
-                    <p>{{ $t('store.gainAccess') }}</p>
+                    <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
+                    <p>{{ $t('store_gainAccess') }}</p>
                 </span>
                 <base-button theme="secondary" @click="closeCTA">
                     <template #icon>
@@ -60,11 +60,10 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Collection, Song } from "@/classes";
-import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { BaseModal } from "@/components";
 import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/solid";
+import { Song } from "@/classes";
 
 @Options({
     props: {
@@ -81,9 +80,6 @@ import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/sol
         action: {
             type: Function,
         },
-        collection: {
-            type: Object,
-        },
     },
     components: {
         BaseModal,
@@ -95,21 +91,15 @@ import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/sol
     name: "song-list-card",
 })
 export default class SongListCard extends Vue {
-    private store = useStore();
     public songs?: Song[];
     public title?: string;
     public count?: boolean;
     public action?: Function;
-    public collection?: Collection;
     
     public showCTA = false;
 
     public get Songs() {
         return this.songs ?? [];
-    }
-
-    public songViews(song: Song) {
-        return appSession.Views[song.id] ?? 0;
     }
 
     public viewSong(song: Song) {

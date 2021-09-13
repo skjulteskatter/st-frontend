@@ -34,7 +34,7 @@
                 v-if="canEdit"
                 @click="remove"
             >
-                {{ $t("playlist.remove") }}
+                {{ $t("playlist_remove") }}
             </button>
         </div>
     </base-card>

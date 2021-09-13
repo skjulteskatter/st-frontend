@@ -37,7 +37,7 @@
 				class="text-sm rounded-md bg-black bg-opacity-10 px-3 py-2 hover:bg-opacity-20 flex items-center"
 			>
 				<icon name="settings" size="18" class="mr-2" />
-				<span>{{ $t('settings.goToSettings') }}</span>
+				<span>{{ $t('settings_goToSettings') }}</span>
 			</router-link>
             <base-button
                 theme="error"
@@ -45,7 +45,7 @@
                 @click="logout"
                 class="settings-page__logout"
             >
-                {{ $t("common.logout") }}
+                {{ $t("common_logout") }}
             </base-button>
 		</div>
 	</base-dropdown>

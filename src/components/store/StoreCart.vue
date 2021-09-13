@@ -8,9 +8,9 @@
         </template>
         <div class="w-max" @mouseenter="mouseOn = true" @mouseleave="mouseOn = false">
             <div class="flex gap-4 justify-between items-center mb-4">
-                <h3 class="font-bold text-base">{{ $t("store.inCart") }}</h3>
+                <h3 class="font-bold text-base">{{ $t("store_inCart") }}</h3>
                 <SwitchGroup as="div" class="flex items-center gap-2 cursor-pointer">
-                    <SwitchLabel class="text-xs text-gray-500 dark:text-gray-400">{{ $t("store.buyYearly") }}</SwitchLabel>
+                    <SwitchLabel class="text-xs text-gray-500 dark:text-gray-400">{{ $t("store_buyYearly") }}</SwitchLabel>
                     <Switch
                         @click="toggleType()"
                         v-model="yearlySub"
@@ -45,17 +45,17 @@
                 </div>
             </div>
             <p v-else class="p-2 text-center mb-4 text-gray-400">
-                {{ $t('store.noItems') }}
+                {{ $t('store_noItems') }}
             </p>
             <p class="py-4 text-primary tracking-wider flex justify-between dark:text-white">
-                <span>{{ $t("store.total") }}:</span>
+                <span>{{ $t("store_total") }}:</span>
                 <span>{{ totalPrice }}</span>
             </p>
             <base-button theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
-                {{ $t("store.checkout") }}
+                {{ $t("store_checkout") }}
             </base-button>
         </div>
     </base-dropdown>

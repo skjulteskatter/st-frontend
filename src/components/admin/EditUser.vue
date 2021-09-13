@@ -1,6 +1,6 @@
 <template>
-	<base-button theme="tertiary" class="px-2 py-1" @click="showModal()">{{ $t('common.edit') }}</base-button>
-	<slide-panel :open="show" @close="hideModal()" :title="`${$t('common.edit')} ${$t('common.user').toLocaleLowerCase()}`">
+	<base-button theme="tertiary" class="px-2 py-1" @click="showModal()">{{ $t('common_edit') }}</base-button>
+	<slide-panel :open="show" @close="hideModal()" :title="`${$t('common_edit')} ${$t('common_user').toLocaleLowerCase()}`">
 		<loader :loading="loading" position="local">
 			<div class="flex flex-col gap-4">
 				<div class="flex gap-4 items-center">
@@ -20,7 +20,7 @@
 				</div>
 				<div class="flex flex-col">
 					<div class="flex flex-col gap-1 py-4">
-						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common.roles')}}</small>
+						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common_roles')}}</small>
 						<label
 
 							v-for="role in roles"
@@ -40,7 +40,7 @@
 						</label>
 					</div>
 					<div class="flex flex-col py-4">
-						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common.collections')}}</small>
+						<small class="mb-2 opacity-50 text-xs font-medium uppercase tracking-wider">{{$t('common_collections')}}</small>
 						<div v-for="i in User.subscriptions" :key="i.id" class="relative p-2 rounded-md border border-gray-300 mb-2">
 							<b class="text-sm">{{i.id}}</b>
 							<button class="cursor-pointer text-red-700 absolute right-2 top-2" @click="deleteSub(User, i)" v-if="i.id.startsWith('custom')">
@@ -68,7 +68,7 @@
 					theme="secondary"
 					@click="$emit('save')"
 					:loading="loading"
-					>{{ $t("common.save") }}</base-button
+					>{{ $t("common_save") }}</base-button
 				>
 			</div>
 		</loader>

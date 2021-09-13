@@ -41,7 +41,7 @@
         <div class="hidden md:block">
             <base-button theme="tertiary" @click="closePlayer" icon="error">
                 <span>
-                    {{ $t("common.close") }}
+                    {{ $t("common_close") }}
                 </span>
             </base-button>
         </div>

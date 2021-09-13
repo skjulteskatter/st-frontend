@@ -7,13 +7,19 @@ import { notify } from "@/services/notify";
 import { CollectionItem } from "./collectionItem";
 import { appSession } from "@/services/session";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { Category } from "./category";
-import { Country, Genre, Theme } from "./items";
+import router from "@/router";
 
 type CollectionSettings = {
     offline: boolean;
     lastSynced?: string;
 }
+
+export type ListEntry = {
+    title: string;
+    songs: Song[];
+    action?: () => void;
+    count: boolean;
+};
 
 let closeId: string | null = null;
 
@@ -70,34 +76,16 @@ export class Collection extends BaseClass implements ApiCollection {
     public hasCategories = false;
     public hasGenres = false;
 
-    public themeTypes: Theme[] = [];
-
-    public loadingLyrics = false;
-
-    private _themes?: CollectionItem<Theme>[];
-    private _loadingThemes = false;
-
-    private _categories?: CollectionItem<Category>[];
-
-    private _genres?: CollectionItem<Genre>[];
-
-    private _authors: CollectionItem<ApiContributor>[] = [];
-    private _composers: CollectionItem<ApiContributor>[] = [];
-
-    public get authors() {
-        return this._authors;
-    }
-
-    public get composers() {
-        return this._composers;
-    }
-
-    private _countries?: CollectionItem<Country>[];
-    private _loadingCountries = false;
-
-    private _currentLanguage = "";
-
     public contributors: CollectionItem<ApiContributor>[] = [];
+
+    public listType: Sort;
+    public viewType: "boards" | "grid" = "boards";
+
+    public buttons: {
+        label: string;
+        value: string;
+        selected: () => boolean;
+    }[] = [];
 
     constructor(collection: ApiCollection) {
         super();
@@ -107,6 +95,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
         this._defaultSort = collection.defaultSort;
+        this.listType = this.defaultSort;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
@@ -155,26 +144,50 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasCategories = this.hasCategories || this.songs.some(s => s.categoryIds.length > 0);
             this.hasGenres = this.hasGenres || this.songs.some(s => s.genreIds.length > 0);
 
-            this._authors = appSession.contributors.map(c => {
-                const cItem = new CollectionItem<ApiContributor>({
-                    songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "author")).map(s => s.id),
-                    id: c.id,
-                    fileIds: c.fileIds,
-                    item: c.item,
-                });
-                return cItem;
-            }).filter(i => i.songIds.length);
-            
-            
-            this._composers = appSession.contributors.map(c => {
-                const cItem = new CollectionItem<ApiContributor>({
-                    songIds: this.songs.filter(s => s.participants.find(p => p.contributorId == c.id && p.type == "composer")).map(s => s.id),
-                    id: c.id,
-                    fileIds: c.fileIds,
-                    item: c.item,
-                });
-                return cItem;
-            }).filter(i => i.songIds.length);
+            this.buttons = [
+                {
+                    label: "common_number",
+                    value: "number",
+                    selected: () => this.listType == "number",
+                },
+                {
+                    label: "common_title",
+                    value: "title",
+                    selected: () => this.listType == "title",
+                },
+                {
+                    label: "song_author",
+                    value: "author",
+                    selected: () => this.listType == "author",
+                    hidden: !this.hasAuthors,
+                },
+                {
+                    label: "song_composer",
+                    value: "composer",
+                    selected: () => this.listType == "composer",
+                    hidden: !this.hasComposers,
+                },
+                {
+                    label: "song_genre",
+                    value: "genre",
+                    selected: () => this.listType == "genre",
+                    hidden: !this.hasGenres,
+                },
+                {
+                    label: "song_category",
+                    value: "categories",
+                    selected: () => this.listType == "categories",
+                    hidden: !this.hasCategories,
+                },
+                {
+                    label: "common_views",
+                    value: "views",
+                    selected: () => this.listType == "views",
+                },
+            ].filter(
+                (b) =>
+                    b.hidden != true,
+            );
 
             this.contributors = appSession.contributors.filter(i => this.songs.some(s => i.songIds.includes(s.id)));
         }
@@ -218,7 +231,7 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public get loading() {
-        return this._loading || this._loadingThemes || this._loadingCountries;
+        return this._loading;
     }
 
     public get product() {
@@ -244,7 +257,7 @@ export class Collection extends BaseClass implements ApiCollection {
             closeId = this.id;
 
             setTimeout(() => {
-                if (closeId != null && closeId == this.id) {
+                if (closeId !== null && closeId === this.id) {
                     this.store.commit(StripeMutationTypes.CART_SHOW, false);
                     closeId = null;
                 }
@@ -257,57 +270,7 @@ export class Collection extends BaseClass implements ApiCollection {
     }
 
     public getSong(number: number) {
-        return this.songs.find(s => s.number == number);
-    }
-
-    public filteredSongs(filter: string, songFilter: SongFilter) {
-        filter = filter.toLowerCase();
-
-        const context: {
-            [key: string]: string;
-        } = {};
-
-        const number = parseInt(filter);
-
-        let numbers: number[] = [];
-        
-        if (number) {
-            numbers = this.songs.filter(s => s.number == number || s.number.toString().includes(number.toString())).map(s => s.number);
-        } else {
-            for (const song of this.songs) {
-                if (!numbers.includes(song.number)) {
-                    if (song.names.find(n => n.toLowerCase().includes(filter)) || song.id.toLowerCase().includes(filter)) {
-                        numbers.push(song.number);
-                        continue;
-                    }
-                    if (song.Authors.find(a => a.name.toLowerCase().includes(filter)) || song.Composers.find(c => c.name.toLowerCase().includes(filter))) {
-                        numbers.push(song.number);
-                        continue;
-                    }
-                }
-            }
-        }
-
-        const {themes, audioFiles, videoFiles, origins, contentTypes, sheetMusicTypes } = songFilter;
-
-        const songs = this.songs.filter(s => 
-            (numbers.includes(s.number) || s.rawContributorNames.includes(filter)) 
-            && (themes.length == 0 || s.themes.filter(t => themes.includes(t.id)).length)
-            && (origins.length == 0 || (s.melodyOrigin != null && origins.includes(s.melodyOrigin.country)))
-            && (audioFiles.length == 0 || s.audioFiles.filter(a => audioFiles.includes(a.category)).length)
-            && (videoFiles.length == 0 || s.videoFiles.filter(v => videoFiles.includes(v.category)).length)
-            && (contentTypes.length == 0 || (contentTypes.includes("lyrics") 
-                && s.hasLyrics) || (contentTypes.includes("audio") 
-                && s.audioFiles.length > 0) || (contentTypes.includes("video") 
-                && s.videoFiles.length > 0) || (contentTypes.includes("sheetmusic") 
-                && s.sheetMusic.length > 0) )
-            && (sheetMusicTypes.length == 0 || s.sheetMusic.find(sm => sheetMusicTypes.includes(sm.category))),
-        );
-
-        return {
-            songs,
-            context,
-        };
+        return this.songs.find(s => s.getNumber(this.id) === number);
     }
 
     public get origins() {
@@ -322,107 +285,166 @@ export class Collection extends BaseClass implements ApiCollection {
         return origins;
     }
 
-    public async getList(value: string) {
-        if (value == "countries") {
-            if (!this._countries) {
-                this._loadingCountries = true;
+    private _lists: {
+        [key: string]: ListEntry[];
+    } = {};
 
-                await new Promise(r => setTimeout(r, 10));
+    public get Lists(): {
+        [key: string]: (filter?: string) => ListEntry[]; 
+    }{
+        const f = (key: string, filter?: string) => {
+            return this._lists[key].map(i => {
+                return {
+                    title: i.title,
+                    count: i.count,
+                    action: i.action,
+                    songs: filter ? i.songs.filter(s => s.getNumber(this.id).toString().includes(filter)) : i.songs,
+                };
+            }).filter(i => i.songs.length);
+        };
 
-                const songs = this.songs.filter(s => s.origins.some(o => o.type === "text"));
+        return Object.keys(this._lists).reduce((a, b) => {
+            a[b] = (filter?: string) => f(b, filter);
+            return a;
+        }, {} as {
+            [key: string]: (filter?: string) => ListEntry[]; 
+        });
+    }
 
-                this._countries = appSession.countries.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.origins.some(o => o.country === i.countryCode)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
+    public async getList(value: Sort): Promise<ListEntry[]> {
+        this.listType = value;
+        const songsPerCard = 50;
+        let songs: Song[] = [];
+        if (!this._lists[value]) {
+            switch (value) {
+                case "number":
+                    this._lists.number = this.songs.reduce((a, b) => {
+                        const number = Math.floor((b.getNumber(this.id) - 1) / songsPerCard);
+                        let entry = a[number];
+                        if (!entry) {
+                            entry = {
+                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                songs: [],
+                                count: false,
+                            };
+                            a.push(entry);
+                        }
+                        entry.songs.push(b);
 
-                this._loadingCountries = false;
-                return this._countries?.length;
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "title":
+                    songs = this.songs.sort((a, b) => a.getName() > b.getName() ? 1 : -1);
+            
+                    this._lists[value] = songs.reduce((a, b) => {
+                        const letter = b.getName()
+                            .replace(/[\W]/g, "")[0]
+                            .toUpperCase();
+                        if (letter) {
+                            let entry = a.find(i => i.title === letter);
+                            if (!entry) {
+                                entry = {
+                                    title: letter,
+                                    songs: [],
+                                    count: true,
+                                };
+                                a.push(entry);
+                            }
+                            entry.songs.push(b);
+                        }
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "views":
+                    songs = this.songs.sort((a, b) => a.Views > b.Views ? -1 : 1);
+
+                    this._lists[value] = songs.reduce((a, b, i) => {
+                        const number = Math.floor((i)/songsPerCard);
+
+                        let entry = a[number];
+                        if (!entry) {
+                            entry = {
+                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                songs: [],
+                                count: false,
+                            };
+                            a.push(entry);
+                        }
+                        entry.songs.push(b);
+
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "countries":
+                    songs = this.songs.filter(s => s.origins.some(o => o.type === "text")).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists[value] = appSession.countries.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.origins.some(o => o.type === "text" && o.country === i.countryCode)),
+                            };
+                        },
+                    );
+                    break;
+                case "themes":
+                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists[value] = appSession.themes.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(i => i.themeIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "genre":
+                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists.genres = appSession.genres.map(i =>
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.themeIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "categories":
+                    songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+
+                    this._lists.categories = appSession.categories.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.categoryIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "author":
+                case "composer":
+                    this._lists[value] = this.contributors.map(i => {
+                        return {
+                            title: i.name,
+                            count: true,
+                            songs: this.songs.filter(s => s.participants.some(p => p.type === value && p.contributorId === i.id)),
+                            action: () => router.push({
+                                name: "contributor",
+                                params: {
+                                    id: i.id,
+                                },
+                            }),
+                        };
+                    });
+                    break;
+                default:
+                    return this.getList(this.defaultSort);
             }
         }
-        if (value == "themes") {
-            if (!this._themes) {
-                this._loadingThemes = true;
-
-                await new Promise(r => setTimeout(r, 10));
-
-                const songs = this.songs.filter(i => i.themeIds.length);
-
-                this._themes = appSession.themes.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.themeIds.includes(i.id)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
-
-                this._loadingThemes = false;
-                return this._themes.length;
-            }
-        }
-        if (value == "genre") {
-            if (!this._genres) {
-
-                this._genres = appSession.genres.map(i => 
-                    new CollectionItem<Genre>({
-                        songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
-                        id: i.id,
-                        item: i,
-                        fileIds: [],
-                    }),
-                ).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
-
-                return this._genres.length;
-            }
-        }
-        if (value == "categories") {
-            if (!this._categories) {
-                const songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
-
-                this._categories = appSession.categories.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.categoryIds.includes(i.id)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
-
-                return this._categories.length;
-            }
-        }
-
-        return 1;
-    }
-
-    public get countries(): CollectionItem<Country>[] {
-        return this._countries ?? [];
-    }
-
-    public get themes(): CollectionItem<Theme>[] {
-        return this._themes ?? [];
-    }
-
-    public get categories(): CollectionItem<Category>[] {
-        return this._categories ?? [];
-    }
-
-    public get genres() {
-        return this._genres ?? [];
-    }
-
-    public getContributors(type: string) {
-        if (type == "author") {
-            return this.authors;
-        } else if (type == "composer") {
-            return this.composers;
-        } else {
-            return [];
-        }
+        return this._lists[value];
     }
 }

@@ -6,7 +6,7 @@
                     {{ song.getName(languageKey) }}
                 </h1>
                 <small class="text-gray-400 text-xs tracking-wide" v-if="Authors.length">
-                    <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+                    <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
                     <span
                         v-for="c in Authors"
                         :key="c.id"
@@ -16,7 +16,7 @@
                     </span>
                 </small>
                 <small class="text-gray-400 text-xs tracking-wide" v-if="Composers.length">
-                    <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
+                    <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
                     <span
                         v-for="c in Composers"
                         :key="c.id"
@@ -29,7 +29,7 @@
 
             <div v-if="files.length > 1" class="mt-3 rounded-md border p-1">
                 <button @click="showFiles = !showFiles" class="px-1 w-full flex gap-2 justify-between items-center text-gray-500 text-sm tracking-wide uppercase">
-                    <small>{{ $t('song.sheetmusic') }}</small>
+                    <small>{{ $t('song_sheetmusic') }}</small>
                     <ChevronUpIcon class="w-4 h-4" v-if="showFiles" />
                     <ChevronDownIcon class="w-4 h-4" v-else />
                 </button>

@@ -1,12 +1,12 @@
 <template>
 	<base-modal :show="show">
 		<template #title>
-			<h2 class="font-bold">{{ $t('playlist.createnew') }}</h2>
+			<h2 class="font-bold">{{ $t('playlist_createnew') }}</h2>
 		</template>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-4">
 			<base-input
 				class="border border-black/20 dark:border-white/20 flex-shrink-0"
-				:label="$t('common.name')"
+				:label="$t('common_name')"
 				v-model="playlistName"
 				required
 			/>
@@ -57,7 +57,7 @@ export default class CreatePlaylistModal extends Vue {
             name: this.playlistName,
         });
 
-        notify("success", this.$t("playlist.newplaylist"), "check", `${this.$t("playlist.newplaylist")} "${this.playlistName}"`);
+        notify("success", this.$t("playlist_newplaylist"), "check", `${this.$t("playlist_newplaylist")} "${this.playlistName}"`);
 
         this.playlistName = "";
 		this.loading = false;

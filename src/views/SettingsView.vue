@@ -1,7 +1,7 @@
 <template>
     <back-button class="mb-4" />
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common.settings") }}</h1>
+        <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common_settings") }}</h1>
         <base-button
             theme="error"
             @click="logout"
@@ -10,7 +10,7 @@
             <template #icon>
                 <LogoutIcon class="w-4 h-4" />
             </template>
-            {{ $t("common.logout") }}
+            {{ $t("common_logout") }}
         </base-button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
@@ -22,7 +22,7 @@
                     @click="category = 'general'"
                 >
                     <CogIcon class="w-5 h-5 opacity-50" />
-                    {{ $t('settings.general') }}
+                    {{ $t('settings_general') }}
                 </button>
                 <button
                     class="text-left px-4 py-3 flex gap-2 items-center rounded-md"
@@ -30,13 +30,13 @@
                     @click="category = 'user'"
                 >
                     <UserIcon class="w-5 h-5 opacity-50" />
-                    {{ $t('common.user') }}
+                    {{ $t('common_user') }}
                 </button>
             </div>
             <!-- <user-card /> -->
             <base-card class="mt-4" v-if="collections.length">
                 <template #header>
-                    <h3 class="text-lg font-bold">{{`${$t('common.my')} ${$t('common.collections').toLowerCase()}`}}</h3>
+                    <h3 class="text-lg font-bold">{{`${$t('common_my')} ${$t('common_collections').toLowerCase()}`}}</h3>
                 </template>
                 <div class="flex flex-col gap-2">
                     <p v-for="col in collections" :key="col.id">{{col.getName()}}</p>
@@ -50,8 +50,8 @@
                         <template #icon>
                             <CreditCardIcon class="w-4 h-4" />
                         </template>
-                        {{ $t("common.manage") }}
-                        {{ $t("common.subscriptions").toLowerCase() }}
+                        {{ $t("common_manage") }}
+                        {{ $t("common_subscriptions").toLowerCase() }}
                     </base-button>
                 </template>
             <!-- <owned-collections /> -->

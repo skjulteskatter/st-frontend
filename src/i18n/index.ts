@@ -11,6 +11,11 @@ const i18n = createI18n({
     silentTranslationWarn: true,
 });
 
+const version = 1;
+const fetchTranslations = async (language: string) => (await (await fetch(`/translations/v${version}/${language}.json`)).json()) as {
+    [key: string]: string;
+};
+
 const validLanguages = ["en", "no"];
 
 let translations: {
@@ -23,7 +28,7 @@ let currentTranslation = validLanguages.includes(lanKey) ? lanKey : "en";
 
 export async function setLocale(locale: string) {
     try {
-        translations = await (await fetch(`/translations/${locale}.json`)).json();
+        translations = await fetchTranslations(locale);
         const cs = countries.getNames(locale);
         for (const e of Object.entries(cs)) {
             translations[e[0]] = e[1];
@@ -49,9 +54,7 @@ export async function ensureLanguageIsFetched() {
             //
         }
         englishIsFetched = true;
-        const english: {
-            [key: string]: string;
-        } = await (await fetch("/translations/en.json")).json();
+        const english = await fetchTranslations("en");
 
         const cs = countries.getNames("en");
         for (const e of Object.entries(cs)) {

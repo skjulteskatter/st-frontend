@@ -11,11 +11,11 @@
 			</div>
 			<div class="text-gray-500 leading-none">
 				<small class="flex gap-1 whitespace-nowrap" v-if="song.hasLyrics && song.Authors.length">
-					<span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+					<span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
 					<span v-for="author in song.Authors" :key="author.id">{{ author.name }}</span>
 				</small>
 				<small class="flex gap-1 whitespace-nowrap" v-if="song.Composers.length">
-					<span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
+					<span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
 					<span v-for="composer in song.Composers" :key="composer.id">{{ composer.name }}</span>
 				</small>
                 <small
@@ -33,14 +33,14 @@
                         class="flex gap-2"
                         v-if="song.copyright.text"
                     >
-                        {{ $t("song.text") }} ©:
+                        {{ $t("song_text") }} ©:
                         {{ getLocaleString(song.copyright.text.name) }}
                     </small>
                     <small
                         class="flex gap-2"
                         v-if="song.copyright.melody"
                     >
-                        {{ $t("song.melody") }} ©:
+                        {{ $t("song_melody") }} ©:
                         {{ getLocaleString(song.copyright.melody.name) }}
                     </small>
                 </div>

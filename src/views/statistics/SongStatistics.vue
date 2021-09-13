@@ -2,23 +2,23 @@
 	<div class="p-4 md:p-8">
 		<back-button class="mb-4" />
 		<header class="flex flex-col mb-4">
-			<h1 class="font-bold text-3xl">{{ $t('song.song') }} {{ $t('common.statistics').toLocaleLowerCase() }}</h1>
+			<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 		</header>
 		<loader :loading="loading" />
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<div class="md:col-span-2 rounded-md border border-gray-400 p-2 flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4 lg:p-4">
-				<base-input type="date" v-model="fromDate" :label="$t('statistics.startDate')" />
-				<base-input type="date" v-model="toDate" :label="$t('statistics.endDate')" />
+				<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
+				<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
 				<base-button
 					theme="secondary"
 					@click="getAnalytics"
 					icon="refresh"
-				>{{ $t('statistics.update') }}</base-button>
+				>{{ $t('statistics_update') }}</base-button>
 			</div>
 			<base-card>
 				<template #header>
-					<h3 class="font-bold text-xl">{{ $t('statistics.total') }}</h3>
+					<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
 				</template>
 				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
 			</base-card>
@@ -160,7 +160,7 @@ export default class SongStatistics extends Vue {
 
 		return [
 			{
-				name: this.$t("statistics.views"),
+				name: this.$t("statistics_views"),
 				data: this.analytics?.activity?.map(a => ({
 					x: a.dateHour,
 					y: a.count ?? 0,

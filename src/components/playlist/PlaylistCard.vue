@@ -6,16 +6,16 @@
                 <span>
                     <strong class="font-bold md:max-w-md md:overflow-x-hidden md:overflow-ellipsis md:whitespace-nowrap">{{ playlist?.name }}</strong>
                     <small class="opacity-50 block">
-                        {{ playlist?.entries.length || $t('common.noAmount') }}
-                        {{ $t("common.songs").toLowerCase() }}
+                        {{ playlist?.entries.length || $t('common_noAmount') }}
+                        {{ $t("common_songs").toLowerCase() }}
                     </small>
                 </span>
             </div>
             <template #footer v-if="playlist?.sharedWithIds.length">
                 <small class="ml-auto w-max flex gap-2 items-center" :class="[userId != playlist?.userId ? 'text-primary' : 'opacity-50']">
                     <ShareIcon class="w-3 h-3" />
-                    <span v-if="userId != playlist?.userId">{{ $t('playlist.sharedWithYou') }}</span>
-                    <span v-else>{{ `${$t('playlist.sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
+                    <span v-if="userId != playlist?.userId">{{ $t('playlist_sharedWithYou') }}</span>
+                    <span v-else>{{ `${$t('playlist_sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
                 </small>
             </template>
         </base-card>

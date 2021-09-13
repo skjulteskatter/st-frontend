@@ -20,11 +20,10 @@ export interface Actions {
     [SongsActionTypes.SELECT_COLLECTION](context: AugmentedActionContext, payload: string): Promise<void>;
     [SongsActionTypes.SELECT_SONG](context: AugmentedActionContext, payload: number | string): Promise<void>;
     [SongsActionTypes.SELECT_CONTRIBUTOR](context: AugmentedActionContext, payload: string): Promise<void>;
-    [SongsActionTypes.SET_LIST](context: AugmentedActionContext, payload: string): Promise<void>;
 }
 
 export const actions: ActionTree<State, RootState> & Actions = {
-    async [SongsActionTypes.SELECT_COLLECTION]({ dispatch, state, commit, getters }, id: string): Promise<void> {
+    async [SongsActionTypes.SELECT_COLLECTION]({ state, commit, getters }, id: string): Promise<void> {
         if (!state.initialized) {
             commit(SongsMutationTypes.COLLECTIONS, getters.collections);
         }
@@ -35,8 +34,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         if (collection) {
             await collection.load(state.language);
-
-            await dispatch(SongsActionTypes.SET_LIST, collection.defaultSort);
 
             // console.log(collection.authors);
         }
@@ -79,14 +76,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
             });
 
             commit(SongsMutationTypes.CONTRIBUTOR, contributor);
-        }
-    },
-    async [SongsActionTypes.SET_LIST]({ commit, getters }, value: string): Promise<void> {
-        const r = await (getters.collection as Collection).getList(value);
-        if (r == 0) {
-            commit(SongsMutationTypes.SET_LIST, "default");
-        } else {
-            commit(SongsMutationTypes.SET_LIST, value);
         }
     },
 };

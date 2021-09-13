@@ -10,7 +10,7 @@
                     <template #icon>
                         <ShoppingCartIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('store.buy') }}
+                    {{ $t('store_buy') }}
                 </base-button>
                 <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                     <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
@@ -20,7 +20,7 @@
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
                 <div class="flex flex-col gap-1 text-sm">
                     <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
-                        {{ $t("song.sortby") }}
+                        {{ $t("song_sortby") }}
                     </label>
                     <button-group
                         :buttons="buttons"
@@ -43,194 +43,57 @@
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ $t("song.filterByContent") }}
+                        {{ $t("song_filterByContent") }}
                     </label>
                     <song-filter-dropdown />
                 </div>
                 <search-input
                     class="max-w-sm"
                     type="text"
-                    :placeholder="$t('common.search')"
+                    :placeholder="$t('common_search')"
                     v-model="searchString"
                     @search="search"
                 />
             </div>
-            <div v-if="searchQuery == '' && !loading && viewType == 'boards'">
+            <loader :loading="loadingList" v-if="!loading">
                 <div
-                    class="song-list__contributors"
-                    v-if="listType == 'composer'"
+                    class="song-list song-list__items"
+                    v-if="list?.length && viewType === 'boards'"
                 >
                     <song-list-card
                         :collection="collection"
-                        v-for="ci in collection.composers"
-                        :key="ci.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                ci.songIds.includes(s.id)
-                            )
-                        "
-                        :title="ci.item.name"
-                        :action="() => gotoContributor(ci.item)"
+                        v-for="(e, i) in collection.Lists[listType](searchNumber)"
+                        :key="i"
+                        :songs="e.songs"
+                        :title="e.title"
+                        :action="e.action"
+                        :count="e.count"
                         class="mb-4"
                     ></song-list-card>
                 </div>
-                <div
-                    class="song-list__contributors"
-                    v-if="listType == 'author'"
-                >
-                    <song-list-card
-                        :collection="collection"
-                        v-for="ci in collection.authors"
-                        :key="ci.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                ci.songIds.includes(s.id)
-                            )
-                        "
-                        :title="ci.item.name"
-                        :action="() => gotoContributor(ci.item)"
-                        class="mb-4"
-                    ></song-list-card>
+                <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+                    <button
+                        v-for="s in songs"
+                        :key="s?.id ?? Math.random()"
+                        class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
+                        @click="s.view()"
+                        aria-label="Open song"
+                        title="Open song"
+                    >
+                        {{ s.number }}
+                    </button>
                 </div>
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'themes'"
-                >
-                    <song-list-card
-                        v-for="theme in collection.themes"
-                        :collection="collection"
-                        :key="theme.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                theme?.songIds.includes(s.id)
-                            )
-                        "
-                        :title="theme?.name"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'genre'"
-                >
-                    <song-list-card
-                        v-for="i in collection.genres"
-                        :collection="collection"
-                        :key="i.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                i?.songIds.includes(s.id)
-                            )
-                        "
-                        :title="i?.name"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'categories'"
-                >
-                    <song-list-card
-                        v-for="i in collection.categories"
-                        :collection="collection"
-                        :key="i.item.id"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                i?.songIds.includes(s.id)
-                            )
-                        "
-                        :title="i?.name"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'countries'"
-                >
-                    <song-list-card
-                        v-for="country in collection.countries"
-                        :collection="collection"
-                        :key="country?.item.countryCode ?? Math.random()"
-                        :songs="
-                            filteredSongs.filter((s) =>
-                                country?.songIds.includes(s.id)
-                            )
-                        "
-                        :title="country?.name"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'number' && songsByNumber.length"
-                >
-                    <song-list-card
-                        v-for="s in songsByNumber"
-                        :collection="collection"
-                        :key="s?.title ?? Math.random()"
-                        :songs="s?.songs ?? []"
-                        :title="s?.title ?? ''"
-                        :count="false"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'title' && songsByTitle.length"
-                >
-                    <song-list-card
-                        v-for="s in songsByTitle"
-                        :collection="collection"
-                        :key="s?.title ?? Math.random()"
-                        :songs="s?.songs ?? []"
-                        :title="s?.title ?? ''"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-
-                <div
-                    class="song-list__songs"
-                    v-if="listType == 'views' && songsByViews.length"
-                >
-                    <song-list-card
-                        v-for="s in songsByViews"
-                        :collection="collection"
-                        :key="s?.title ?? Math.random()"
-                        :songs="s?.songs ?? []"
-                        :title="s?.title ?? ''"
-                        :count="false"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-            </div>
-
-            <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
-                <button
-                    v-for="s in songs"
-                    :key="s?.id ?? Math.random()"
-                    class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
-                    @click="s.view()"
-                    aria-label="Open song"
-                    title="Open song"
-                >
-                    {{ s.number }}
-                </button>
-            </div>
-
-            <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
-                No results
-            </h1>
+                <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
+                    No results
+                </h1>
+            </loader>
         </div>
     </loader>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
+import { CollectionItem, ListEntry, Song } from "@/classes";
 
 import {
     SongListItemCard,
@@ -243,11 +106,10 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
-import { ApiContributor } from "dmb-api";
+import { ApiContributor, Sort } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { appSession } from "@/services/session";
 import { Country, Theme } from "@/classes/items";
 import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 
@@ -268,15 +130,33 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 export default class SongList extends Vue {
     private store = useStore();
 
-    public searchQuery = "";
     public searchString = "";
 
+    public get searchNumber() {
+        return this.searchString.replace(/[^0-9]/g, "");
+    }
+
+    public list: ListEntry[] = [];
+
+    public get List() {
+        return this.list ?? [];
+    }
+
     public cId = "";
-    private songsPerCard = 50;
-    public viewType: "grid" | "boards" = "boards"
+
+    public get viewType() {
+        return this.collection?.viewType ?? "boards";
+    }
+
+    public set viewType(v) {
+        if (this.collection)
+            this.collection.viewType = v;
+    }
+
+    public loadingList = false;
 
     public toggleViewType() {
-        this.viewType = this.viewType == "boards" ? "grid" : "boards";
+        this.viewType = this.viewType === "boards" ? "grid" : "boards";
     }
 
     public search() {
@@ -294,10 +174,8 @@ export default class SongList extends Vue {
                 SongsActionTypes.SELECT_COLLECTION,
                 this.$route.params.collection as string,
             );
-            if (!this.buttons.find((b) => b.value == this.listType)) {
-                this.listType = "default";
-            }
         }
+        this.list = await this.collection?.getList(this.listType) ?? [];
     }
 
     public async mounted() {
@@ -311,43 +189,27 @@ export default class SongList extends Vue {
     }
 
     public get loading() {
-        return this.collection?.loading;
+        return this.collection?.loading === true;
+    }
+    
+    public get buttons() {
+        return this.collection?.buttons.map(i => {
+            const r = Object.assign({}, i);
+            r.label = this.$t(i.label);
+            return r;
+        }) ?? [];
     }
 
-    public set listType(value: string) {
-        this.store.dispatch(SongsActionTypes.SET_LIST, value);
+    public set listType(value: Sort) {
+        if (this.collection)
+            this.collection.listType = value;
     }
 
     public get listType() {
-        return this.store.state.songs.list;
+        return this.collection?.listType ?? "title";
     }
 
-    public get allLyrics(): Lyrics[] {
-        return this.store.getters.collection?.lyrics ?? [];
-    }
-
-    public get context() {
-        return this.filteredObjects.context;
-    }
-
-    // Filtered songs. Returns all songs if no filters are applied.
-    public get filteredObjects() {
-        return (
-            this.collection?.filteredSongs(
-                this.searchQuery,
-                this.store.state.songs.filter
-            ) ?? {
-                songs: [],
-                context: {},
-            }
-        );
-    }
-
-    public get filteredSongs() {
-        return this.filteredObjects.songs.sort((a, b) => a.number - b.number);
-    }
-
-    public get collection(): Collection | undefined {
+    public get collection() {
         return this.store.getters.collection;
     }
 
@@ -355,91 +217,16 @@ export default class SongList extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get songs(): Song[] {
+    public get songs() {
         return this.collection?.songs ?? [];
     }
 
-    public get songsByNumber(): {
-        title: string;
-        songs: Song[];
-    }[] {
-        const songs: {
-            title: string;
-            songs: Song[];
-        }[] = [];
-
-        for (const song of this.filteredSongs) {
-            const number = Math.floor((song.number - 1) / this.songsPerCard);
-
-            songs[number] = songs[number] ?? {
-                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
-                songs: [],
-            };
-
-            songs[number].songs.push(song);
+    public get filteredSongs() {
+        
+        if (parseInt(this.searchString)) {
+            return this.songs.filter(i => i.number.toString().includes(this.searchString));
         }
-        return songs;
-    }
-
-    public get songsByViews(): {
-        title: string;
-        songs: Song[];
-    }[] {
-        const songs: {
-            title: string;
-            songs: Song[];
-        }[] = [];
-        const views = appSession.Views;
-
-        const filteredSongs = this.filteredSongs.sort((a, b) => ((views[a.id] ?? 0) > (views[b.id] ?? 0)) ? -1 : 1);
-
-        for (let i = 0; i < filteredSongs.length; i++) {
-            const song = filteredSongs[i];
-
-            const number = Math.floor((i)/this.songsPerCard);
-            
-            songs[number] = songs[number] ?? {
-                title: `${number * this.songsPerCard + 1}-${number * this.songsPerCard + this.songsPerCard}`,
-                songs: [],
-            };
-
-            songs[number].songs.push(song);
-        }
-
-        return songs;
-    }
-
-    public get songsByTitle(): {
-        title: string;
-        songs: Song[];
-    }[] {
-        const songs: {
-            [key: string]: {
-                title: string;
-                songs: Song[];
-            };
-        } = {};
-
-        for (const song of Object.assign([] as Song[], this.filteredSongs).sort((a, b) =>
-            a.getName(this.languageKey) > b.getName(this.languageKey) ? 1 : -1,
-        )) {
-            const letter = song
-                .getName(this.languageKey)
-                ?.replace(/[\W]/g, "")[0]
-                .toUpperCase();
-            if (!letter) continue;
-
-            songs[letter] = songs[letter] ?? {
-                title: letter,
-                songs: [],
-            };
-
-            songs[letter].songs.push(song);
-        }
-
-        return Object.keys(songs)
-            .map((k) => songs[k])
-            .sort((a, b) => (a.title > b.title ? 1 : -1));
+        return this.songs;
     }
 
     public themeSongs(theme: CollectionItem<Theme>) {
@@ -466,55 +253,13 @@ export default class SongList extends Vue {
         }
     }
 
-    public async setListType(value: string) {
-        await this.store.dispatch(SongsActionTypes.SET_LIST, value);
-    }
-
-    public get buttons() {
-        return [
-            {
-                label: this.$t("common.number"),
-                value: "number",
-                selected: this.listType == "number",
-            },
-            {
-                label: this.$t("common.title"),
-                value: "title",
-                selected: this.listType == "title",
-            },
-            {
-                label: this.$t("song.author"),
-                value: "author",
-                selected: this.listType == "author",
-                hidden: !this.collection?.hasAuthors,
-            },
-            {
-                label: this.$t("song.composer"),
-                value: "composer",
-                selected: this.listType == "composer",
-                hidden: !this.collection?.hasComposers,
-            },
-            {
-                label: this.$t("song.genre"),
-                value: "genre",
-                selected: this.listType == "genre",
-                hidden: !this.collection?.hasGenres,
-            },
-            {
-                label: this.$t("song.category"),
-                value: "categories",
-                selected: this.listType == "categories",
-                hidden: !this.collection?.hasCategories,
-            },
-            {
-                label: this.$t("common.views"),
-                value: "views",
-                selected: this.listType == "views",
-            },
-        ].filter(
-            (b) =>
-                b.hidden != true,
-        );
+    public async setListType(value: Sort) {
+        if (this.collection && this.collection.listType !== value) {
+            this.loadingList = true;
+            await new Promise(r => setTimeout(r, 100));
+            this.list = await this.collection.getList(value);
+            this.loadingList = false;
+        }
     }
 }
 </script>
@@ -522,14 +267,25 @@ export default class SongList extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: unset;}
+}
+
 .song-list {
+    animation: fade-in 0.1s linear;
+
     &__contributors {
         columns: 325px;
         column-gap: var(--st-spacing);
     }
-    &__songs {
+    &__items {
         columns: 325px;
         column-gap: var(--st-spacing);
     }
+}
+
+.song-list.faded {
+    opacity: 0;
 }
 </style>

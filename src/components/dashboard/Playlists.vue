@@ -4,9 +4,9 @@
             <div class="flex justify-between items-center">
                 <span class="flex items-center">
                     <h2 class="font-bold mr-4">
-                        {{ $t("common.my") + " " + $t("common.collections").toLowerCase() }}
+                        {{ $t("common_my") + " " + $t("common_collections").toLowerCase() }}
                     </h2>
-                    <tooltip :text="$t('tooltip.myCollections')" />
+                    <tooltip :text="$t('tooltip_myCollections')" />
                 </span>
                 <button aria-label="Create new personal collection" class="text-sm py-1 px-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10" @click="openCreatePlaylist">
                     <PlusIcon class="w-4 h-4" />
@@ -27,14 +27,14 @@
                         {{ p.name }}
                     </span>
                     <small class="opacity-50 block tracking-wider">
-                        {{ p.entries.length || $t('common.noAmount') }}
-                        {{ $t("common.songs").toLowerCase() }}
+                        {{ p.entries.length || $t('common_noAmount') }}
+                        {{ $t("common_songs").toLowerCase() }}
                     </small>
                 </div>
             </router-link>
         </div>
         <p class="p-4 opacity-50 text-center" v-else>
-            {{ $t("common.noAmount") }} {{ $t('common.collections').toLocaleLowerCase() }}
+            {{ $t("common_noAmount") }} {{ $t('common_collections').toLocaleLowerCase() }}
         </p>
     </base-card>
 </template>

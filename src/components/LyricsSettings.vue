@@ -2,7 +2,7 @@
     <div class="lyrics-settings" v-if="song && lyrics">
         <base-card class="lyrics-settings__viewer">
             <h4 class="lyrics-settings__viewer__title">
-                {{ $t("song.viewer") }}
+                {{ $t("song_viewer") }}
             </h4>
             <div class="lyrics-settings__viewer__buttons">
                 <base-button
@@ -10,7 +10,7 @@
                     theme="tertiary"
                     @click="openLyricsWindow('lyrics')"
                 >
-                    {{ $t("song.openviewer") }}
+                    {{ $t("song_openviewer") }}
                 </base-button>
                 <base-button
                     class="lyrics-settings__controls__update"
@@ -18,7 +18,7 @@
                     icon="refresh"
                     @click="updateLyrics"
                 >
-                    {{ $t("song.updateviewer") }}
+                    {{ $t("song_updateviewer") }}
                 </base-button>
             </div>
         </base-card>
@@ -27,7 +27,7 @@
             class="lyrics-settings__controls"
         >
             <h4 class="lyrics-settings__controls__title">
-                {{ $t("song.controlpanel") }}
+                {{ $t("song_controlpanel") }}
             </h4>
             <div class="lyrics-settings__controls__buttons">
                 <base-button
@@ -36,7 +36,7 @@
                     @click="previous"
                     theme="secondary"
                 >
-                    {{ $t("common.previous") }}
+                    {{ $t("common_previous") }}
                 </base-button>
                 <base-button
                     class="lyrcis-settings__controls__next"
@@ -44,12 +44,12 @@
                     theme="secondary"
                     icon="arrowRight"
                 >
-                    {{ $t("common.next") }}
+                    {{ $t("common_next") }}
                 </base-button>
             </div>
             <div v-if="song.type == 'lyrics'" class="lyrics-settings__controls__verses">
                 <h5 class="lyrics-settings__verses__title">
-                    {{ $t("common.show") }} / {{ $t('common.hide') }}
+                    {{ $t("common_show") }} / {{ $t('common_hide') }}
                 </h5>
                 <div
                     class="lyrics-settings__verses__select gap-x"
