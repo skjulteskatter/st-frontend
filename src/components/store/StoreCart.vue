@@ -17,7 +17,7 @@
                         class="focus:outline-none"
                     >
                         <div
-                            class="relative inline-flex items-center h-4 w-8 rounded-full transition-colors my-1"
+                            class="relative inline-flex items-center h-5 w-8 rounded-full transition-colors my-1"
                             :class="yearlySub ? 'bg-primary' : 'bg-gray-300 dark:bg-black dark:bg-opacity-40'"
                         >
                             <span

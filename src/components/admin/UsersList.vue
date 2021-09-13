@@ -1,17 +1,17 @@
 <template>
     <base-card>
         <template #header>
-            <div class="flex gap-4 justify-between items-center">
+            <div class="flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
                 <h3 class="font-bold">{{ $t("admin_users") }}</h3>
                 <div class="flex gap-2 items-center">
-                    <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
+                    <search-input class="flex-grow" v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
                     <base-button
                         :class="{ disabled: disableButton }"
                         @click="refreshUsers"
                         :loading="loading['refresh']"
                         :content="false"
                         icon="refresh"
-                        theme="primary"
+                        theme="tertiary"
                     >
                         {{ $t("common_update") }}
                     </base-button>
