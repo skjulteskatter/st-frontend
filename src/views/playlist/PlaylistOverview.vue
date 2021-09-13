@@ -1,7 +1,7 @@
 <template>
     <h1 class="font-bold text-xl md:text-2xl mb-4">
-        {{ $t("common.your") }}
-        {{ $t("common.collections").toLowerCase() }}
+        {{ $t("common_your") }}
+        {{ $t("common_collections").toLowerCase() }}
     </h1>
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         <playlist-card
@@ -11,7 +11,7 @@
         />
         <button @click="openCreatePlaylist" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-transparent dark:border-white/5 dark:hover:bg-white/5 dark:hover:border-transparent">
             <FolderAddIcon class="w-8 h-8 opacity-50" />
-            <p class="tracking-wide">{{ $t('playlist.createnew') }}</p>
+            <p class="tracking-wide">{{ $t('playlist_createnew') }}</p>
         </button>
     </div>
     <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />

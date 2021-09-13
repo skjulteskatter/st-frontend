@@ -1,7 +1,7 @@
 <template>
 	<base-card>
 		<template #header>
-			<h3 class="font-bold text-xl">{{ $t('statistics.viewsPerCountry') }}</h3>
+			<h3 class="font-bold text-xl">{{ $t('statistics_viewsPerCountry') }}</h3>
 		</template>
 		<ol class="list-decimal overflow-y-auto">
 			<li

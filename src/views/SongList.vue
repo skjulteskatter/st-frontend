@@ -10,7 +10,7 @@
                     <template #icon>
                         <ShoppingCartIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('store.buy') }}
+                    {{ $t('store_buy') }}
                 </base-button>
                 <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                     <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
@@ -20,7 +20,7 @@
             <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
                 <div class="flex flex-col gap-1 text-sm">
                     <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
-                        {{ $t("song.sortby") }}
+                        {{ $t("song_sortby") }}
                     </label>
                     <button-group
                         :buttons="buttons"
@@ -43,14 +43,14 @@
                 </div>
                 <div class="flex flex-col gap-1">
                     <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ $t("song.filterByContent") }}
+                        {{ $t("song_filterByContent") }}
                     </label>
                     <song-filter-dropdown />
                 </div>
                 <search-input
                     class="max-w-sm"
                     type="text"
-                    :placeholder="$t('common.search')"
+                    :placeholder="$t('common_search')"
                     v-model="searchString"
                     @search="search"
                 />

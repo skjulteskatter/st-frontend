@@ -2,7 +2,7 @@
     <section>
         <back-button class="mb-4" />
         <header class="flex gap-4 mb-4">
-            <h1 class="font-bold text-3xl">{{ $t('credits.songCredit') }}</h1>
+            <h1 class="font-bold text-3xl">{{ $t('credits_songCredit') }}</h1>
         </header>
         <section class="mb-4">
             <base-card v-if="step == 1">
@@ -11,7 +11,7 @@
                 </template>
                 <div class="flex flex-col gap-4">
                     <label class="text-xs flex flex-col gap-1 relative">
-                        {{ $t('common.collection') }}
+                        {{ $t('common_collection') }}
                         <BookOpenIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
                         <select
                             class="pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
@@ -19,14 +19,14 @@
                             name="collection"
                             v-model="collection"
                         >
-                            <option value="" key="">{{ $t('common.collection') }}</option>
+                            <option value="" key="">{{ $t('common_collection') }}</option>
                             <option v-for="collection in Collections" :key="collection.id" :value="collection.id">{{collection.getName(Language)}}</option>
                         </select>
                     </label>
                     <label class="text-xs flex flex-col gap-1 relative">
-                        {{ $t('song.number') }}
+                        {{ $t('song_number') }}
                         <HashtagIcon class="w-4 h-4 opacity-50 absolute bottom-3 left-3" />
-                        <input type="number" v-model="number" :placeholder="$t('song.number')" class="pl-10 rounded-md border-black/20 dark:border-white/20" />
+                        <input type="number" v-model="number" :placeholder="$t('song_number')" class="pl-10 rounded-md border-black/20 dark:border-white/20" />
                     </label>
                 </div>
             </base-card>
@@ -34,8 +34,8 @@
                 <div v-if="song">
                     <div class="flex flex-col mb-4">
                         <h2 class="font-bold text-lg">{{ song.getName(Language) }}</h2>
-                        <small class="opacity-50">{{ $t('song.author') }}: {{ song.Authors[0]?.name }}</small>
-                        <small class="opacity-50">{{ $t('song.composer') }}: {{ song.Composers[0]?.name }}</small>
+                        <small class="opacity-50">{{ $t('song_author') }}: {{ song.Authors[0]?.name }}</small>
+                        <small class="opacity-50">{{ $t('song_composer') }}: {{ song.Composers[0]?.name }}</small>
                     </div>
                     <input ref="file" type="file" id="credit-file-input" accept="audio/mpeg"/>
                 </div>
@@ -47,19 +47,19 @@
                 <template #icon>
                     <ArrowLeftIcon class="w-4 h-4" />
                 </template>
-                {{ $t('common.previous') }}
+                {{ $t('common_previous') }}
             </base-button>
             <base-button theme="secondary" :disabled="!(collection && number)" @click="nextStep()" v-if="step < 2">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
-                {{ $t('common.next') }}
+                {{ $t('common_next') }}
             </base-button>
             <base-button theme="secondary" :loading="loading" :disabled="!downloadReady" @click="creditSong()" v-if="step == 2">
                 <template #icon>
                     <DownloadIcon class="w-4 h-4" />
                 </template>
-                {{ $t('credits.creditAndDownload') }}
+                {{ $t('credits_creditAndDownload') }}
             </base-button>
         </div>
     </section>

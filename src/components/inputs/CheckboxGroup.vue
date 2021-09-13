@@ -15,7 +15,7 @@
 				class="border-gray-300 rounded text-primary focus:ring-primary"
 				@change="action"
 			/>
-			{{ $t(`types.${label}`) }}
+			{{ $t(`types_${label}`) }}
 		</label>
 	</div>
 </template>

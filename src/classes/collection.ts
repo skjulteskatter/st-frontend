@@ -146,41 +146,41 @@ export class Collection extends BaseClass implements ApiCollection {
 
             this.buttons = [
                 {
-                    label: "common.number",
+                    label: "common_number",
                     value: "number",
                     selected: () => this.listType == "number",
                 },
                 {
-                    label: "common.title",
+                    label: "common_title",
                     value: "title",
                     selected: () => this.listType == "title",
                 },
                 {
-                    label: "song.author",
+                    label: "song_author",
                     value: "author",
                     selected: () => this.listType == "author",
                     hidden: !this.hasAuthors,
                 },
                 {
-                    label: "song.composer",
+                    label: "song_composer",
                     value: "composer",
                     selected: () => this.listType == "composer",
                     hidden: !this.hasComposers,
                 },
                 {
-                    label: "song.genre",
+                    label: "song_genre",
                     value: "genre",
                     selected: () => this.listType == "genre",
                     hidden: !this.hasGenres,
                 },
                 {
-                    label: "song.category",
+                    label: "song_category",
                     value: "categories",
                     selected: () => this.listType == "categories",
                     hidden: !this.hasCategories,
                 },
                 {
-                    label: "common.views",
+                    label: "common_views",
                     value: "views",
                     selected: () => this.listType == "views",
                 },

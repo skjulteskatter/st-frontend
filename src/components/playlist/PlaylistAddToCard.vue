@@ -5,7 +5,7 @@
             <p class="font-semibold">{{ playlist?.name }}</p>
             <small class="text-gray-500 tracking-wide text-left dark:text-gray-400">
                 {{ playlist?.entries.length }}
-                {{ $t("common.songs").toLowerCase() }}
+                {{ $t("common_songs").toLowerCase() }}
             </small>
         </div>
     </button>

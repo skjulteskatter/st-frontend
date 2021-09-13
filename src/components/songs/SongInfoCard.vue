@@ -13,7 +13,7 @@
                     {{ collection.getName(Language) }}
                 </router-link>
                 <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
-                    {{ $t('song.seeStatistics') }}
+                    {{ $t('song_seeStatistics') }}
                     <ArrowSmRightIcon class="w-4 h-4" />
                 </router-link>
             </span>
@@ -43,14 +43,14 @@
                         class="flex gap-2"
                         v-if="song.Authors.length"
                     >
-                        <span>{{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}</span>
+                        <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
                         <contributor-info :contributors="song.Authors" />
                     </small>
                     <small
                         v-if="song.Composers.length"
                         class="flex gap-2"
                     >
-                        <span>{{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}</span>
+                        <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
                         <contributor-info :contributors="song.Composers" />
                     </small>
                     <small
@@ -68,14 +68,14 @@
                             class="flex gap-2"
                             v-if="song.copyright.text"
                         >
-                            {{ $t("song.text") }} ©:
+                            {{ $t("song_text") }} ©:
                             {{ getLocaleString(song.copyright.text.name) }}
                         </small>
                         <small
                             class="flex gap-2"
                             v-if="song.copyright.melody"
                         >
-                            {{ $t("song.melody") }} ©:
+                            {{ $t("song_melody") }} ©:
                             {{ getLocaleString(song.copyright.melody.name) }}
                         </small>
                     </div>
@@ -103,7 +103,7 @@
             ></div>
             <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
                 <InformationCircleIcon class="w-4 h-4" />
-                <span class="text-sm">{{ $t('store.learnMore') }}</span>
+                <span class="text-sm">{{ $t('store_learnMore') }}</span>
             </button>
         </div>
     </base-card>

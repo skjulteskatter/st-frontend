@@ -1,7 +1,7 @@
 <template>
 	<base-card>
 		<template #header>
-			<h2 class="font-bold text-xl">{{ $t('statistics.viewsOverTime') }}</h2>
+			<h2 class="font-bold text-xl">{{ $t('statistics_viewsOverTime') }}</h2>
 		</template>
 		<chart
 			width="100%"

@@ -4,7 +4,7 @@
             <template #header>
                 <div class="flex gap-4 items-center justify-between">
                     <h3 class="font-bold">
-                        {{ $t("song.viewer") }}
+                        {{ $t("song_viewer") }}
                     </h3>
                     <span class="tracking-wider text-xs py-1 px-2 rounded text-green-600 bg-green-500/20">BETA</span>
                 </div>
@@ -14,7 +14,7 @@
                     theme="primary"
                     @click="open()"
                 >
-                    {{ $t("song.openviewer") }}
+                    {{ $t("song_openviewer") }}
                 </base-button>
                 <base-button
                     theme="tertiary"
@@ -23,7 +23,7 @@
                     <template #icon>
                         <RefreshIcon class="w-4 h-4" />
                     </template>
-                    {{ $t("song.updateviewer") }}
+                    {{ $t("song_updateviewer") }}
                 </base-button>
                 <base-button
                     theme="tertiary"
@@ -34,7 +34,7 @@
             </div>
             <template #footer>
                 <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
-                    {{ $t("song.controlpanel") }}
+                    {{ $t("song_controlpanel") }}
                 </h4>
                 <div class="flex gap-2">
                     <base-button
@@ -45,7 +45,7 @@
                         <template #icon>
                             <ArrowSmLeftIcon class="w-4 h-4" />
                         </template>
-                        {{ $t("common.previous") }} {{ $t('song.verse').toLocaleLowerCase() }}
+                        {{ $t("common_previous") }} {{ $t('song_verse').toLocaleLowerCase() }}
                     </base-button>
                     <base-button
                         class="flex-grow"
@@ -55,7 +55,7 @@
                         <template #icon>
                             <ArrowSmRightIcon class="w-4 h-4" />
                         </template>
-                        {{ $t("common.next") }} {{ $t('song.verse').toLocaleLowerCase() }}
+                        {{ $t("common_next") }} {{ $t('song_verse').toLocaleLowerCase() }}
                     </base-button>
                 </div>
             </template>

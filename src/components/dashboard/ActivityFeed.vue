@@ -3,9 +3,9 @@
         <template #header>
             <div class="flex items-center">
                 <h2 class="font-bold mr-4">
-                    {{ $t("activity.recentlyViewed") }}
+                    {{ $t("activity_recentlyViewed") }}
                 </h2>
-                <tooltip :text="$t('tooltip.recentActivity')" />
+                <tooltip :text="$t('tooltip_recentActivity')" />
             </div>
         </template>
         <loader :loading="activitiesInitialized === false">
@@ -23,7 +23,7 @@
                         class="mr-2 max-h-10 grayscale rounded border"
                     />
                     <span class="flex flex-col justify-center flex-1">
-                        <small class="opacity-50 tracking-wide">{{ $t(`song.${a.type}`) }}</small>
+                        <small class="opacity-50 tracking-wide">{{ $t(`song_${a.type}`) }}</small>
                         <p class="text-xs font-medium">
                             {{ a.name }}
                         </p>
@@ -34,7 +34,7 @@
                 </router-link>
             </div>
             <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
-                {{ $t("dashboard.noActivity") }}
+                {{ $t("dashboard_noActivity") }}
             </p>
         </loader>
     </base-card>

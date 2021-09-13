@@ -11,12 +11,12 @@
 		</template>
 		<template #header>
 			<div class="flex justify-between items-center gap-4">
-				<b>{{ $t('common.notifications') }}</b>
+				<b>{{ $t('common_notifications') }}</b>
 				<button 
 					v-if="notifications.length"
 					@click="clearNotifications()"
 					class="text-xs tracking-wide text-red-500 py-1 px-2 rounded-md bg-red-500/10 hover:text-red-700 hover:bg-red-500/20"
-				>{{ $t('common.remove') }}</button>
+				>{{ $t('common_remove') }}</button>
 			</div>
 		</template>
 		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">

@@ -20,7 +20,7 @@
                             theme="error"
                             icon="trash"
                         >
-                            {{ $t("admin.clearcache") }}
+                            {{ $t("admin_clearcache") }}
                         </base-button>
                     </base-card>
                     <base-button
@@ -61,7 +61,7 @@
         </div>
     </div>
     <div v-else>
-        <h1>{{ $t("admin.noAccess") }}</h1>
+        <h1>{{ $t("admin_noAccess") }}</h1>
     </div>
 </template>
 
@@ -136,7 +136,7 @@ export default class Subscriptions extends Vue {
 
     public async syncFiles() {
         this.loadingSync = true;
-        notify("error", this.$t("notification.syncingfiles"), "trash");
+        notify("error", this.$t("notification_syncingfiles"), "trash");
         try {
             notify("success", (await api.admin.sync()).result, "refresh");
         } finally {

@@ -2,8 +2,8 @@
     <div class="mb-4 flex justify-between items-center">
         <div class="flex justify-between w-full">
             <div class="flex items-center">
-                <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common.collections") }}</h1>
-                <tooltip :text="$t('store.currencyDescription')" />
+                <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common_collections") }}</h1>
+                <tooltip :text="$t('store_currencyDescription')" />
             </div>
             <store-cart class="md:hidden" />
         </div>
@@ -17,7 +17,7 @@
                 <template #icon>
                     <RefreshIcon class="h-4 w-4" />
                 </template>
-                {{ $t("common.refreshSubscriptions") }}
+                {{ $t("common_refreshSubscriptions") }}
             </base-button>
             <base-button
                 v-if="productIds.length"
@@ -30,8 +30,8 @@
                     <CreditCardIcon class="w-4 h-4" />
                 </template>
                 <span class="whitespace-nowrap">
-                    {{ $t("common.manage") }}
-                    {{ $t("common.subscriptions").toLowerCase() }}
+                    {{ $t("common_manage") }}
+                    {{ $t("common_subscriptions").toLowerCase() }}
                 </span>
             </base-button>
         </div>
@@ -105,7 +105,7 @@ export default class StoreHome extends Vue {
         await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
         this.loadingSubs = false;
 
-        notify("success", this.$t("common.subscriptionsRefreshed"), "check");
+        notify("success", this.$t("common_subscriptionsRefreshed"), "check");
     }
 }
 </script>

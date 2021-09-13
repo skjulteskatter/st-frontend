@@ -25,7 +25,7 @@
                     <b>{{
                         item.Contributor.name
                     }}</b>
-                    <small class="block text-xs text-primary">{{$t('song.contributor')}}</small>
+                    <small class="block text-xs text-primary">{{$t('song_contributor')}}</small>
                 </div>
                 <div class="text-sm text-gray-400 flex flex-col">
                     <small v-if="item.Contributor.subtitle">{{ item.Contributor.subtitle }}</small>

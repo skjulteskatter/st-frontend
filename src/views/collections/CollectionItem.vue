@@ -24,13 +24,13 @@
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
-                        {{ $t("store.addToCart") }}
+                        {{ $t("store_addToCart") }}
                     </base-button>
                     <span class="opacity-50" v-else>
-                        {{ $t("store.alreadyOwned") }}
+                        {{ $t("store_alreadyOwned") }}
                     </span>
                 </div>
-                <h3 class="font-bold text-lg mt-8" v-if="details">{{ $t('store.about') }}</h3>
+                <h3 class="font-bold text-lg mt-8" v-if="details">{{ $t('store_about') }}</h3>
                 <div v-html="details" class="flex flex-col gap-2 text-sm"></div>
             </base-card>
         </div>

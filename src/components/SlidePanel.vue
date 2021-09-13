@@ -11,7 +11,7 @@
               <TransitionChild as="template" enter="ease-in-out duration-200" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-200" leave-from="opacity-100" leave-to="opacity-0">
                 <div class="absolute top-0 left-0 -ml-8 pt-4 pr-2 flex sm:-ml-10 sm:pr-4">
                   <button class="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white" @click="$emit('close')">
-                    <span class="sr-only">{{ $t('common.close') }}</span>
+                    <span class="sr-only">{{ $t('common_close') }}</span>
                     <icon class="h-6 w-6" name="error" />
                   </button>
                 </div>

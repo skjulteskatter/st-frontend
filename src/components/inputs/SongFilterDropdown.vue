@@ -6,7 +6,7 @@
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types.lyrics')" origin="left">
+                <base-dropdown :label="$t('types_lyrics')" origin="left">
                     <div class="w-72">
                         <label class="font-bold">
                             <input
@@ -17,7 +17,7 @@
                                 class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
                                 @change="apply()"
                             />
-                            {{ $t("types.lyrics") }}
+                            {{ $t("types_lyrics") }}
                         </label>
                     </div>
                 </base-dropdown>
@@ -27,9 +27,9 @@
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types.video')" origin="left">
+                <base-dropdown :label="$t('types_video')" origin="left">
                     <div class="w-72" >
-                        <checkbox-group :name="$t('types.video')" :labels="videoTypes" :values="videoValues" :action="apply" />
+                        <checkbox-group :name="$t('types_video')" :labels="videoTypes" :values="videoValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
@@ -38,9 +38,9 @@
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types.sheetmusic')" origin="left">
+                <base-dropdown :label="$t('types_sheetmusic')" origin="left">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types.sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
+                        <checkbox-group :name="$t('types_sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
@@ -49,14 +49,14 @@
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types.audio')" origin="right">
+                <base-dropdown :label="$t('types_audio')" origin="right">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types.audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
+                        <checkbox-group :name="$t('types_audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
                     </div>
                 </base-dropdown>
             </div>
         </div>
-        <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common.remove') }}</button>
+        <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common_remove') }}</button>
     </div>
 </template>
 

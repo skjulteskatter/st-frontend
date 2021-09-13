@@ -32,8 +32,8 @@ export default class LyricsViewer extends Vue {
 
     public get text() {
         return this.lyrics?.getText({
-            chorus: this.$t("song.chorus"),
-            bridge: this.$t("song.bridge"),
+            chorus: this.$t("song_chorus"),
+            bridge: this.$t("song_bridge"),
         }) ?? [];
     }
 }

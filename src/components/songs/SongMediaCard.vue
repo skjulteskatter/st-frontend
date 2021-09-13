@@ -6,9 +6,9 @@
         <template #header>
             <div class="flex items-center gap-4">
                 <h3 class="font-bold">
-                    {{ $t("song.media") }}
+                    {{ $t("song_media") }}
                 </h3>
-                <tooltip :text="$t('tooltip.songFiles')" />
+                <tooltip :text="$t('tooltip_songFiles')" />
             </div>
         </template>
         <div class="flex flex-col gap-4" v-if="(song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)">
@@ -16,7 +16,7 @@
                 v-if="song.sheetMusic.length"
             >
                 <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
-                    {{ $t("song.sheetmusic") }}
+                    {{ $t("song_sheetmusic") }}
                 </p>
                 <media-list-item :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
             </div>
@@ -24,7 +24,7 @@
                 v-if="song.audioFiles.length"
             >
                 <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
-                    {{ $t('song.audioFiles') }}
+                    {{ $t('song_audioFiles') }}
                 </p>
                 <media-list-item :files="song.audioFiles" :callback="selectAudio" type="audio" />
             </div>
@@ -32,7 +32,7 @@
                 v-if="song.videoFiles.length"
             >
                 <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
-                    {{ $t('song.videos') }}
+                    {{ $t('song_videos') }}
                 </p>
                 <div class="flex flex-wrap gap-2">
                     <button
@@ -43,7 +43,7 @@
                     >
                         <PlayIcon class="w-4 h-4 mr-2 opacity-50 inline" />
                         <div class="flex-grow inline-flex gap-4 justify-between items-center">
-                            <span>{{ $t(`types.${video.category}`) }}</span>
+                            <span>{{ $t(`types_${video.category}`) }}</span>
                             <span v-if="video.languageKey" class="text-xs uppercase tracking-wider opacity-50 ml-auto">{{ video.languageKey }}</span>
                         </div>
                     </button>
@@ -65,7 +65,7 @@
                 </base-modal>
             </div>
         </div>
-        <p v-else class="text-sm opacity-50 text-center p-2">{{ $t('song.noFiles') }}</p>
+        <p v-else class="text-sm opacity-50 text-center p-2">{{ $t('song_noFiles') }}</p>
     </base-card>
 </template>
 

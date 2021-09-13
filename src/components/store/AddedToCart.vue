@@ -3,9 +3,9 @@
         <base-modal :show="Show" @close="cancel = true">
             <template #title>
                 <div class="flex gap-4 justify-between w-full">
-                    <h3 class="text-lg font-bold">{{$t('store.addedToCart')}}</h3>
+                    <h3 class="text-lg font-bold">{{$t('store_addedToCart')}}</h3>
                     <SwitchGroup as="div" class="flex items-center gap-2 cursor-pointer">
-                        <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("store.buyYearly") }}</SwitchLabel>
+                        <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("store_buyYearly") }}</SwitchLabel>
                         <Switch
                             @click="toggleType()"
                             v-model="yearlySub"
@@ -43,13 +43,13 @@
             </div>
             <template #footer>
                 <div class="flex gap-4 justify-end">
-                    <base-button theme="tertiary" @click="cancel = true">{{$t('store.continue')}}</base-button>
-                    <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store.allItems')}}</base-button>
+                    <base-button theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</base-button>
+                    <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store_allItems')}}</base-button>
                     <base-button theme="secondary" @click="checkout" :loading="checkingOut">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
-                        {{$t('store.checkout')}}
+                        {{$t('store_checkout')}}
                     </base-button>
                 </div>
             </template>

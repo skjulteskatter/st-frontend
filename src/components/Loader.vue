@@ -3,7 +3,7 @@
         :class="['loader', position == 'global' ? 'loader--global' : '']"
         v-if="Loading"
     >
-        <strong class="loader__text">{{ $t("common.loading") }}</strong>
+        <strong class="loader__text">{{ $t("common_loading") }}</strong>
     </div>
     <slot class="whatat" v-else />
 </template>

@@ -22,10 +22,10 @@
                                 <template #icon>
                                     <PencilAltIcon class="w-4 h-4" />
                                 </template>
-                                {{ $t('common.edit') }}
+                                {{ $t('common_edit') }}
                             </base-button>
                             <p class="text-primary">
-                                {{ $t("song.contributor") }}
+                                {{ $t("song_contributor") }}
                             </p>
                             <h1 class="font-bold text-2xl">
                                 {{ contributor.name }}
@@ -51,7 +51,7 @@
                     <div class="contributor__songs__wrapper">
                         <song-list-card
                             :collection="c"
-                            :title="$t('song.author')"
+                            :title="$t('song_author')"
                             :songs="
                                 authorSongs.filter((s) =>
                                     s.collectionIds.some(col => col == c.id)
@@ -60,7 +60,7 @@
                         ></song-list-card>
                         <song-list-card
                             :collection="c"
-                            :title="$t('song.composer')"
+                            :title="$t('song_composer')"
                             :songs="
                                 composerSongs.filter((s) =>
                                     s.collectionIds.some(col => col == c.id)

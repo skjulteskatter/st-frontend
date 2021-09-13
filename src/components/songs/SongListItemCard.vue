@@ -5,12 +5,12 @@
             <div>
                 <b>{{ song.getName(languageKey) }}</b>
                 <small class="text-xs text-primary flex gap-2 mb-2">
-                    <span>{{ song.verses }} {{ $t('song.verses').toLocaleLowerCase() }}</span>
+                    <span>{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</span>
                     <span>({{ song.originalKey }})</span>
                 </small>
                 <div class="text-gray-500 text-sm leading-tight">
                     <div v-if="song.Authors.length">
-                        <small>{{ $t("song.author") }}: </small>
+                        <small>{{ $t("song_author") }}: </small>
                         <small
                             v-for="author in song.Authors"
                             :key="author.id"
@@ -18,7 +18,7 @@
                         >
                     </div>
                     <div v-if="song.Composers.length">
-                        <small>{{ $t("song.composer") }}: </small>
+                        <small>{{ $t("song_composer") }}: </small>
                         <small
                             v-for="composer in song.Composers"
                             :key="composer.id"

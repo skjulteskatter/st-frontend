@@ -2,9 +2,9 @@
     <base-card>
         <template #header>
             <div class="flex gap-4 justify-between items-center">
-                <h3 class="font-bold">{{ $t("admin.users") }}</h3>
+                <h3 class="font-bold">{{ $t("admin_users") }}</h3>
                 <div class="flex gap-2 items-center">
-                    <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common.search')} ${$t('admin.email').toLocaleLowerCase()}`" />
+                    <search-input v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
                     <base-button
                         :class="{ disabled: disableButton }"
                         @click="refreshUsers"
@@ -13,7 +13,7 @@
                         icon="refresh"
                         theme="primary"
                     >
-                        {{ $t("common.update") }}
+                        {{ $t("common_update") }}
                     </base-button>
                 </div>
             </div>
@@ -23,12 +23,12 @@
                 <table class="min-w-full" v-if="Users.length">
                     <thead>
                         <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common.name") }}</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider">{{ $t("common_name") }}</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Email</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">{{ $t("common.role") }}</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">{{ $t("common_role") }}</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Last Login</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider hidden sm:table-cell">Id</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider"><span class="sr-only">{{$t('common.edit')}}</span></th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium opacity-50 uppercase tracking-wider"><span class="sr-only">{{$t('common_edit')}}</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,7 +121,7 @@ export default class UsersList extends Vue {
         this.disableButton = true;
         await this.searchUser();
 
-        notify("success", this.$t("notification.fetchedusers"), "check");
+        notify("success", this.$t("notification_fetchedusers"), "check");
         this.loading["refresh"] = false;
         this.disableButton = false;
     }
@@ -141,7 +141,7 @@ export default class UsersList extends Vue {
     public async saveRoles(user: User) {
         this.loading["save"] = true;
         await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
-        notify("success", this.$t("notification.saved"), "check");
+        notify("success", this.$t("notification_saved"), "check");
         this.loading["save"] = false;
     }
 }

@@ -2,7 +2,7 @@
     <base-card v-if="user">
         <div class="grid md:grid-cols-2 gap-6" v-show="category == 'general'">
             <div class="relative">
-                <label class="block uppercase text-xs tracking-wide mb-1" for="theme-mode">{{ $t('common.color') }}{{ $t("common.theme") }}</label>
+                <label class="block uppercase text-xs tracking-wide mb-1" for="theme-mode">{{ $t('common_color') }}{{ $t("common_theme") }}</label>
                 <select
                     class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
@@ -11,13 +11,13 @@
                     @change="themes.setTheme(theme)"
                 >
                     <option :value="t" v-for="t in themes.keys" :key="t">
-                        {{ $t(`common.${t}`) }}
+                        {{ $t(`common_${t}`) }}
                     </option>
                 </select>
                 <ColorSwatchIcon class="opacity-50 w-4 h-4 absolute left-3 bottom-3" />
             </div>
             <div class="relative">
-                <label class="block uppercase text-xs tracking-wide mb-1" for="language">{{ $t("common.language") }}</label>
+                <label class="block uppercase text-xs tracking-wide mb-1" for="language">{{ $t("common_language") }}</label>
                 <select
                     class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
@@ -36,7 +36,7 @@
                 <TranslateIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
             </div>
             <div class="relative">
-                <label class="block uppercase text-xs tracking-wide mb-1" for="transposition-key">{{ $t("song.key") }}</label>
+                <label class="block uppercase text-xs tracking-wide mb-1" for="transposition-key">{{ $t("song_key") }}</label>
                 <select
                     class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
@@ -61,7 +61,7 @@
             </div>
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block uppercase tracking-wide text-xs mb-1" for="display-name">{{ $t("common.name") }}</label>
+                    <label class="block uppercase tracking-wide text-xs mb-1" for="display-name">{{ $t("common_name") }}</label>
                     <input
                         class="w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
                         id="display-name"
@@ -71,7 +71,7 @@
                     />
                 </div>
                 <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                    <label for="gender">{{ $t("common.gender") }}</label>
+                    <label for="gender">{{ $t("common_gender") }}</label>
                     <select
                         class="rounded-mdborder border-black/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
                         id="gender"
@@ -84,14 +84,14 @@
                     </select>
                 </div>
                 <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
-                    <label for="birthDay">{{ $t("common.birthDay") }}</label>
+                    <label for="birthDay">{{ $t("common_birthDay") }}</label>
                     <input type="date" v-model="birthDay" class="bg-transparent rounded-md border-black/20" />
                 </div> -->
                 <label>
-                    <span class="block text-xs uppercase tracking-wide mb-1">{{ $t("common.image") }}</span>
+                    <span class="block text-xs uppercase tracking-wide mb-1">{{ $t("common_image") }}</span>
                     <div class="flex gap-2 items-center py-2 px-3 rounded-md border border-black/20 dark:border-white/20">
                         <PhotographIcon class="opacity-50 w-4 h-4" />
-                        {{ $t('common.change') }}
+                        {{ $t('common_change') }}
                     </div>
                     <input
                         class="hidden"
@@ -102,7 +102,7 @@
                     />
                 </label>
                 <div>
-                    <label class="block text-xs uppercase tracking-wide mb-1">{{ $t("common.password") }}</label>
+                    <label class="block text-xs uppercase tracking-wide mb-1">{{ $t("common_password") }}</label>
                     <change-password />
                 </div>
             </div>
@@ -117,7 +117,7 @@
                 <template #icon>
                     <CheckIcon class="w-4 h-4" />
                 </template>
-                {{ $t("common.save") }}
+                {{ $t("common_save") }}
             </base-button>
         </template>
     </base-card>
@@ -268,7 +268,7 @@ export default class SettingsCard extends Vue {
         }
 
         // Fire a success notification
-        notify("success", this.$t("notification.saved"), "check");
+        notify("success", this.$t("notification_saved"), "check");
         this.loading = false;
     }
 

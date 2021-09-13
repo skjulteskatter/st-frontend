@@ -14,7 +14,7 @@
                     <p
                         v-if="song.Authors.length > 0"
                     >
-                        {{ (song.yearWritten ? $t("song.writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song.writtenBy")).replace('$authors', '') }}
+                        {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
                         <span v-for="author in song.Authors" :key="author.id">
                             {{ author.name }}
                         </span>
@@ -23,7 +23,7 @@
                     <p
                         v-if="song.Composers.length > 0"
                     >
-                        {{ (song.yearComposed ? $t("song.composedInBy").replace('$year', song.yearComposed.toString()) : $t("song.composedBy")).replace('$composers', '') }}
+                        {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
                         <span
                             v-for="composer in song.Composers"
                             :key="composer.id"
@@ -33,7 +33,7 @@
                     </p>
                     <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&bull;</span>
                     <p v-if="melodyOrigin">
-                        {{ $t("song.melody") }}: {{ melodyOrigin }}
+                        {{ $t("song_melody") }}: {{ melodyOrigin }}
                     </p>
                 </div>
                 <div class="flex gap-4">
@@ -57,14 +57,14 @@
                         <p
                             v-if="song.copyright.text"
                         >
-                            {{ $t("song.text") }} ©
+                            {{ $t("song_text") }} ©
                             {{ getLocaleString(song.copyright.text.name) }}
                         </p>
                         <span v-if="song.copyright.text && song.copyright.melody">&#8226;</span>
                         <p
                             v-if="song.copyright.melody"
                         >
-                            {{ $t("song.melody") }} ©
+                            {{ $t("song_melody") }} ©
                             {{ getLocaleString(song.copyright.melody.name) }}
                         </p>
                     </div>

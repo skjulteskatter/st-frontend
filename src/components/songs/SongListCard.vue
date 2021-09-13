@@ -44,8 +44,8 @@
             <div class="flex flex-col gap-4 items-center">
                 <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
                 <span class="text-center">
-                    <h3 class="font-bold text-xl">{{ $t('store.limitedAccess') }}</h3>
-                    <p>{{ $t('store.gainAccess') }}</p>
+                    <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
+                    <p>{{ $t('store_gainAccess') }}</p>
                 </span>
                 <base-button theme="secondary" @click="closeCTA">
                     <template #icon>

@@ -29,14 +29,14 @@
                     <template #icon>
                         <ShoppingCartIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('store.addToCart') }}
+                    {{ $t('store_addToCart') }}
                 </base-button>
                 <base-button
                     class="flex-grow"
                     theme="tertiary"
                     @click="goToItem"
                 >
-                    {{ $t("store.learnMore") }}
+                    {{ $t("store_learnMore") }}
                 </base-button>
             </div>
         </div>

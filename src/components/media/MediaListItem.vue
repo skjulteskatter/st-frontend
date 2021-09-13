@@ -16,7 +16,7 @@
                         {{ file.type.endsWith("sibelius") ? "Sibelius" : ""}}
                     </span>
                 </p>
-                <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types.${file.category}`) }}</span>
+                <span class="opacity-50" v-if="file.category && file.category != 'probackmusic'">{{ $t(`types_${file.category}`) }}</span>
             </small>
         </button>
     </div>

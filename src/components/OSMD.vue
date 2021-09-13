@@ -6,11 +6,11 @@
                     <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                     <div>
                         <small v-if="collection.name" class="text-gray-500">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
-                        <small v-if="song.verses" class="text-gray-400 rounded p-1 border border-gray-400 ml-4">{{ song.verses }} {{ $t('song.verses').toLocaleLowerCase() }}</small>
+                        <small v-if="song.verses" class="text-gray-400 rounded p-1 border border-gray-400 ml-4">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
                     </div>
                     <div class="flex flex-col mt-2">
-                        <small v-if="song.Authors.length">{{(song.yearWritten ? $t('song.writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song.writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
-                        <small v-if="song.Composers.length">{{(song.yearComposed ? $t('song.composedInBy').replace('$year', song.yearComposed.toString()) : $t('song.composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
+                        <small v-if="song.Authors.length">{{(song.yearWritten ? $t('song_writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song_writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
+                        <small v-if="song.Composers.length">{{(song.yearComposed ? $t('song_composedInBy').replace('$year', song.yearComposed.toString()) : $t('song_composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
                     </div>
                     <div class="text-gray-600" v-if="melodyOrigin">
                         <small>{{melodyOrigin}}</small>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="flex gap-4">
                     <label class="flex flex-col">
-                        <span class="text-sm text-gray-500">{{ $t('song.key') }}</span>
+                        <span class="text-sm text-gray-500">{{ $t('song_key') }}</span>
                         <base-dropdown
                             origin="left"
                             :label="
@@ -51,7 +51,7 @@
                         </base-dropdown>
                     </label>
                     <label class="flex flex-col">
-                        <span class="text-sm text-gray-500">{{ $t('song.clef') }}</span>
+                        <span class="text-sm text-gray-500">{{ $t('song_clef') }}</span>
                         <base-dropdown
                             origin="left"
                             :label="options?.clef"
@@ -98,7 +98,7 @@
                         </base-dropdown>
                     </label>
                     <label class="flex flex-col">
-                        <span class="text-sm text-gray-500">{{ $t('common.size') }}</span>
+                        <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
                         <select
                             class="p-2 rounded-md border-gray-300 pr-8"
                             name="zoom"
@@ -116,7 +116,7 @@
                         </select>
                     </label>
                     <label class="flex flex-col">
-                        <small class="text-sm text-gray-500">{{ $t('song.octave') }}</small>
+                        <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
                         <song-changer :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()" />
                     </label>
                     <button

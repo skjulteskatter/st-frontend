@@ -14,19 +14,19 @@
                         <template #icon>
                             <PencilAltIcon class="w-4 h-4" />
                         </template>
-                        {{ $t('common.edit') }}
+                        {{ $t('common_edit') }}
                     </base-button>
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
                             <FolderAddIcon class="w-4 h-4" />
                         </template>
-                        {{ $t('common.addTo') + ' ' + $t('common.collection').toLowerCase() }}
+                        {{ $t('common_addTo') + ' ' + $t('common_collection').toLowerCase() }}
                     </base-button>
                     <base-modal :show="show" @close="closeAdder()">
                         <template #title>
                             <div class="flex gap-4 items-center flex-grow">
                                 <h3 class="font-bold">
-                                    {{ $t('common.select') }} {{ $t("common.collection").toLocaleLowerCase() }}
+                                    {{ $t('common_select') }} {{ $t("common_collection").toLocaleLowerCase() }}
                                 </h3>
                                 <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">+</button>
                             </div>
@@ -42,7 +42,7 @@
                         </div>
                     </base-modal>
                     <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics">
-                        <SwitchLabel class="text-xs tracking-wide">{{ $t("song.viewer") }}</SwitchLabel>
+                        <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
                         <Switch
                             :disabled="lyrics?.format === 'html'"
                             @click="extend()"
@@ -86,8 +86,8 @@
                     <presentation-preview
                         v-if="song.hasLyrics && isExtended && lyrics"
                         :text="lyrics?.getText({
-                            chorus: this.$t('song.chorus'),
-                            bridge: this.$t('song.bridge'),
+                            chorus: this.$t('song_chorus'),
+                            bridge: this.$t('song_bridge'),
                         }, true) ?? []"
                         :availableVerses="control.AvailableVerses"
                         :currentVerses="control.currentVerses"
@@ -121,8 +121,8 @@
     <base-modal :show="song ? !song.available : false">
         <div class="flex flex-col items-center">
             <LockClosedIcon class="w-10 h-10 text-primary my-4" />
-            <h2 class="text-2xl font-bold">{{ $t('store.limitedAccess') }}</h2>
-            <p class="text-center">{{ $t('store.gainAccess') }}</p>
+            <h2 class="text-2xl font-bold">{{ $t('store_limitedAccess') }}</h2>
+            <p class="text-center">{{ $t('store_gainAccess') }}</p>
             <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
                 <img class="max-h-12 rounded" :src="collection.image" :alt="collection.getName(languageKey)">
                 <p>{{ collection.getName(languageKey) }}</p>
@@ -132,13 +132,13 @@
                     <template #icon>
                         <ArrowLeftIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('common.back') }}
+                    {{ $t('common_back') }}
                 </base-button>
                 <base-button theme="secondary" @click="addToCart">
                     <template #icon>
                         <ShoppingCartIcon class="w-4 h-4" />
                     </template>
-                    {{ $t('store.addToCart') }}
+                    {{ $t('store_addToCart') }}
                 </base-button>
             </div>
         </div>

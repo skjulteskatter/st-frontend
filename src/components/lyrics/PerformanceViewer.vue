@@ -23,13 +23,13 @@
                 <template #icon>
                     <ArrowLeftIcon class="w-4 h-4" />
                 </template>
-                {{ $t('common.previous') }}
+                {{ $t('common_previous') }}
             </base-button>
             <base-button @click="next">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
-                {{$t('common.next')}}
+                {{$t('common_next')}}
             </base-button>
         </div>
     </div>

@@ -2,7 +2,7 @@
 	<base-card>
 		<template #header>
 			<div class="flex gap-4 items-center">
-				<h4 class="font-bold leading-tight tracking-wide">{{ $t('common.change') }} {{ $t('common.song').toLowerCase() }}</h4>
+				<h4 class="font-bold leading-tight tracking-wide">{{ $t('common_change') }} {{ $t('common_song').toLowerCase() }}</h4>
 				<tooltip text="Skriv inn nummeret på sangen du bytter til" />
 				<span class="ml-auto text-xs tracking-wider bg-green-500/20 text-green-600 rounded px-2 py-1">BETA</span>
 			</div>
