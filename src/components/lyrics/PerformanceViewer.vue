@@ -4,19 +4,11 @@
         class="performance-viewer"
     >
         <div class="song">
-            <div v-for="(v, i) in currentVerses" :class="v.key.split('_')[0]" :key="i">
-                <span :class="v.key.split('_')[0] + '-title'">{{v.name}}</span>
-                <div class="content">
-                    <table class="songline mb-4" v-for="(line, i) in v.content" :key="i">
-                        <tr class="chords">
-                            <td v-for="(chord, i) in line.chords" :key="i">{{chord + ' '}}</td>
-                        </tr>
-                        <tr class="lyrics">
-                            <td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <verse-view 
+                v-for="(v, i) in currentVerses"
+                :key="i"
+                :verse="v"
+            />
         </div>
         <div class="flex gap-2 mt-4">
             <base-button @click="previous">
@@ -39,9 +31,10 @@
 import { Options, Vue } from "vue-class-component";
 import { Lyrics } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
+import VerseView from "./VerseView.vue";
 
 @Options({
-    name: "transposed-lyrics-viewer",
+    name: "performance-viewer",
     props: {
         lyrics: {
             type: Object,
@@ -50,11 +43,13 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
     components: {
         ArrowRightIcon,
         ArrowLeftIcon,
+        VerseView,
     },
 })
 export default class TransposedLyricsViewer extends Vue {
     private currentVerseIndex = 0;
     private length = 0;
+    private size = 2;
     public lyrics?: Lyrics;
 
     private eventListener = (e: KeyboardEvent) => {
@@ -67,7 +62,10 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public mounted() {
-        this.length = this.lyrics?.performanceView.length ?? 0;
+        if (this.lyrics) {
+            this.length = this.lyrics.performanceView.length ?? 0;
+            this.size = this.lyrics.performanceView[0].content.length > 5 ? 1 : 2;
+        }
         window.addEventListener("keydown", this.eventListener);
     }
 
@@ -76,59 +74,17 @@ export default class TransposedLyricsViewer extends Vue {
     }
 
     public get currentVerses() {
-        return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + 1) ?? [];
+        return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + this.size) ?? [];
     }
 
     public next() {
-        if (this.currentVerseIndex < this.length -1)
-            this.currentVerseIndex++;
+        if (this.currentVerseIndex < this.length - this.size)
+            this.currentVerseIndex += this.size;
     }
 
     public previous() {
         if (this.currentVerseIndex > 0)
-            this.currentVerseIndex--;
+            this.currentVerseIndex -= this.size;
     }
 }
 </script>
-
-<style lang="scss">
-.performance-viewer {
-    .song {
-        --chord-size: 1em;
-        line-height: 1.5em;
-
-        .verse-title,
-        .chorus-title {
-            font-weight: bold;
-            font-size: .9em;
-        }
-
-        .content,
-        .chorus {
-            // &:not(:last-child) {
-            //     margin-bottom: calc(var(--st-spacing)*2);
-            // }
-
-            .songline {
-                border-collapse: collapse;
-                white-space: pre;
-
-                td {
-                    padding: 0;
-                }
-
-                .indent:before {
-                    content: " ";
-                }
-            }
-
-            .chords {
-                color: var(--st-color-primary);
-                font-weight: bold;
-                font-size: var(--chord-size);
-                line-height: var(--chord-size);
-            }
-        }
-    }
-}
-</style>

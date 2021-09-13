@@ -133,10 +133,6 @@ export class Lyrics implements ApiLyrics {
         return lines.join(" ").replace(/[^A-Za-z0-9æøå ,.]/g, "").replace("  ", " ");
     }
 
-    public get transposedContent() {
-        return this.content as string;
-    }
-
     public get performanceView() {
         const verses: LyricsChordContent[] = [];
 
@@ -154,6 +150,10 @@ export class Lyrics implements ApiLyrics {
             verses.push(chorus);
         }
         return verses;
+    }
+
+    public get versesWithChords() {
+        return this.content as LyricsChordContent[];
     }
 
     public get currentKey() {

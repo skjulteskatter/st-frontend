@@ -2,16 +2,21 @@
     <div
         v-if="lyrics"
         class="transposed-lyrics"
-        v-html="lyrics.transposedContent"
-    ></div>
+    >
+        <verse-view v-for="(v, i) in lyrics.versesWithChords" :verse="v" :key="i" />
+    </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { Lyrics } from "@/classes";
+import VerseView from "./VerseView.vue";
 
 @Options({
     name: "transposed-lyrics-viewer",
+    components: {
+        VerseView,
+    },
     props: {
         lyrics: {
             type: Object,
