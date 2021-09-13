@@ -1,7 +1,6 @@
 import { ApiCollection, ApiSong, Format, MediaFile } from "dmb-api";
 import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
-import i18n from "@/i18n";
 import { appSession } from "@/services/session";
 import router from "@/router";
 import { Lyrics } from "./lyrics";
@@ -253,38 +252,13 @@ export class Song extends BaseClass implements ApiSong {
         return appSession.contributors.filter(c => this.participants.filter(p => p.type == "composer").some(i => i.contributorId == c.id)).map(i => i.item);
     }
 
-
-    public get rawContributorNames() {
-        const names: string[] = [];
-
-        this.Authors.forEach(a => {
-            names.push(a.name.toLowerCase());
-        });
-
-        this.Composers.forEach(c => {
-            names.push(c.name.toLowerCase());
-        });
-
-        return names.join("").replace(/[^0-9a-zA-Z]/g, "");
-    }
-
-    public get names() {
-        const names: string[] = [];
-
-        for (const key of Object.keys(this.name)) {
-            names.push(this.name[key]);
-        }
-
-        return names;
-    }
-
     public get originCountry() {
-        const country = this.origins.find(o => o.type == "text")?.country;
-        return country ? i18n.global.t(country.toUpperCase()) : undefined;
+        const country = this.origins.find(o => o.type === "text")?.country;
+        return country?.toUpperCase();
     }
 
     public get melodyOrigin() {
-        return this.origins.find(o => o.type == "melody");
+        return this.origins.find(o => o.type === "melody");
     }
 
     public get Description() {
@@ -292,19 +266,6 @@ export class Song extends BaseClass implements ApiSong {
 
         return description?.replace(/<p>/g, "<p class='mb-2'>");
     }
-
-    // public getRelativeTranspositions(t: string) {
-    //     const ts = transposer.getTranspositions(this.originalKey) ?? {};
-
-    //     const transpositions: {
-    //         key: string;
-    //         value: string;
-    //     }[][] = [];
-
-    //     for (const k of Object.keys(ts)) {
-            
-    //     } 
-    // }
 
     public get Tags() {
         return appSession.tags.filter(i => i.songIds.includes(this.id));

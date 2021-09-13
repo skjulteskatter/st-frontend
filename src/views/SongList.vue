@@ -143,7 +143,15 @@ export default class SongList extends Vue {
     }
 
     public cId = "";
-    public viewType: "grid" | "boards" = "boards"
+
+    public get viewType() {
+        return this.collection?.viewType ?? "boards";
+    }
+
+    public set viewType(v) {
+        if (this.collection)
+            this.collection.viewType = v;
+    }
 
     public loadingList = false;
 
@@ -166,8 +174,8 @@ export default class SongList extends Vue {
                 SongsActionTypes.SELECT_COLLECTION,
                 this.$route.params.collection as string,
             );
-            this.list = await this.collection?.getList(this.listType) ?? [];
         }
+        this.list = await this.collection?.getList(this.listType) ?? [];
     }
 
     public async mounted() {
