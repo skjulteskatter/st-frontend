@@ -1,7 +1,7 @@
 <template>
-    <div class="relative">
-        <div class="cursor-pointer" @click="openDropdown">
-            <button class="bg-white p-2 rounded-md border border-gray-300 flex items-center gap-2 dark:bg-secondary dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:ring-offset-secondary" v-if="label">
+    <Popover class="relative">
+        <PopoverButton class="cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:ring-offset-secondary">
+            <div class="bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 dark:bg-secondary dark:border-white/20" v-if="label">
                 <span>{{ label }}</span>
                 <icon
                     :name="icon"
@@ -9,35 +9,35 @@
                     v-if="icon"
                 />
                 <ChevronDownIcon v-else class="w-4 h-4" />
-            </button>
+            </div>
             <slot name="button" v-else></slot>
-        </div>
-        <transition-root 
-            :show="Show"
-            as="template"
-            enter="transition"
-            enter-from="-translate-y-2 opacity-0"
-            enter-to="translate-y-0 opacity-100"
-            leave="transition"
-            leave-from="translate-y-0 opacity-100"
-            leave-to="translate-y-2 opacity-0"
+        </PopoverButton>
+        <transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="-translate-y-2 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-2 opacity-0"
         >
-            <base-card :class="`z-10 absolute top-11 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
-                <template #header v-if="$slots.header">
-                    <slot name="header" />
-                </template>
-                <slot name="default"></slot>
-                <template #footer v-if="$slots.footer">
-                    <slot name="footer" />
-                </template>
-            </base-card>
-        </transition-root>
-    </div>
+            <PopoverPanel>
+                <base-card :class="`z-10 absolute mt-2 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
+                    <template #header v-if="$slots.header">
+                        <slot name="header" />
+                    </template>
+                    <slot name="default"></slot>
+                    <template #footer v-if="$slots.footer">
+                        <slot name="footer" />
+                    </template>
+                </base-card>
+            </PopoverPanel>
+        </transition>
+    </Popover>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { TransitionRoot } from "@headlessui/vue";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 
 @Options({
@@ -58,7 +58,9 @@ import { ChevronDownIcon } from "@heroicons/vue/solid";
         },
     },
     components: {
-        TransitionRoot,
+        Popover,
+        PopoverButton,
+        PopoverPanel,
         ChevronDownIcon,
     },
 })

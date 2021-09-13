@@ -74,12 +74,12 @@
         <div :class="{'hidden': muted}" class="mt-16 verses" id="presentation-content">
             <div
                 class="relative verse"
-                :class="{ 'italic': verse.type == 'chorus' }"
+                :class="{ 'italic ml-16': verse.type == 'chorus' }"
                 v-for="(verse, i) in Verses"
                 :key="i + '_' + verse"
             >
                 <span
-                    class="absolute font-semibold verse-name"
+                    class="absolute top-3 font-semibold verse-name"
                     v-if="verse.type != 'chorus'"
                     >{{ verse.name }}</span
                 >

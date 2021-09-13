@@ -33,7 +33,7 @@
 				</div>
 			</div>
 		</div>
-		<p v-else class="p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications.noNotifications') }}</p>
+		<p v-else class="p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications_noNotifications') }}</p>
 	</base-dropdown>
 </template>
 
