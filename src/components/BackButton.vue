@@ -1,7 +1,7 @@
 <template>
     <button class="flex gap-2 items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 w-min focus:outline-none focus:ring-2 focus:ring-primary rounded-md py-1 px-2" @click="back">
         <ArrowLeftIcon class="w-4 h-4" />
-        <span>{{ previous ? $t("common.back") : $t("common.home") }}</span>
+        <span>{{ previous ? $t("common_back") : $t("common_home") }}</span>
     </button>
 </template>
 
