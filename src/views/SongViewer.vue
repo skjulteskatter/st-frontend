@@ -79,6 +79,7 @@
                         :song="song"
                         :lyrics="lyrics"
                         :collection="collection"
+                        :type="type"
                         @translate="translate"
                         @transpose="transpose"
                         @setView="setView"
@@ -134,7 +135,7 @@
                     </template>
                     {{ $t('common_back') }}
                 </base-button>
-                <base-button theme="secondary" @click="addToCart">
+                <base-button theme="secondary" @click="collection?.addToCart">
                     <template #icon>
                         <ShoppingCartIcon class="w-4 h-4" />
                     </template>
@@ -394,10 +395,6 @@ export default class SongViewer extends Vue {
         window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id}`);
     }
 
-    public addToCart() {
-        this.collection?.addToCart();
-    }
-
     public get playlists() {
         return this.store.state.session.playlists.filter(p => p.userId == this.user?.id);
     }
@@ -446,15 +443,13 @@ export default class SongViewer extends Vue {
     }
 
     private getTransposedLyrics(language?: string, format?: Format) {
-        return this.song?.transposeLyrics(transposer.getRelativeTransposition(this.defaultTransposition), language ?? this.store.state.songs.language, undefined, this.store.state.songs.newMelody, format ?? "html");
+        return this.song?.transposeLyrics(transposer.getRelativeTransposition(this.defaultTransposition), language ?? this.store.state.songs.language, undefined, this.store.state.songs.newMelody, format ?? "performance");
     }
 
     public async translate(language: string) {
         if (this.song) {
-            switch(this.lyrics?.format) {
-                case "html":
-                    this.lyrics = await this.getTransposedLyrics(language);
-                    break;
+            switch(this.store.state.songs.view) {
+                case "chords":
                 case "performance":
                     this.lyrics = await this.getTransposedLyrics(language, "performance");
                     break;
@@ -468,12 +463,14 @@ export default class SongViewer extends Vue {
         }
     }
 
+    public get type() {
+        return this.store.state.songs.view;
+    }
+
     public async setView(type: SongViewType) {
-        if (this.store.state.songs.view !== type)
+        if (this.type !== type)
             this.store.commit(SongsMutationTypes.VIEW, type);
-        if (type === "chords") {
-            this.lyrics = await this.getTransposedLyrics();
-        } else if(type === "performance") {
+        if (type === "chords" || type === "performance") {
             this.lyrics = await this.getTransposedLyrics(undefined, "performance");
         } else {
             this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);

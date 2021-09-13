@@ -104,11 +104,10 @@
                 </Switch>
             </SwitchGroup>
         </div>
-        <loader :loading="collection?.loadingLyrics || !lyrics || loading" position="local">
+        <loader :loading="!lyrics || loading" position="local">
             <component
-                :is="lyrics?.format === 'html' ? 'TransposedLyricsViewer' 
-                : (lyrics?.format === 'performance' ? 'PerformanceViewer'
-                : 'LyricsViewer')"
+                :is="lyrics?.format === 'performance' ? (type === 'chords' ? 'TransposedLyricsViewer' : 'PerformanceViewer') :
+                'LyricsViewer'"
                 :lyrics="lyrics"
             />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
@@ -160,6 +159,9 @@ import { SongViewType } from "@/store/modules/songs/state";
         loading: {
             type: Boolean,
         },
+        type: {
+            type: String,
+        },
     },
     name: "lyrics-card",
     emits: [
@@ -173,6 +175,7 @@ export default class LyricsCard extends Vue {
     public song?: Song;
     public lyrics?: Lyrics;
     public collection?: Collection;
+    public type?: SongViewType;
     private selectedLanguage = "";
 
     private selectedFormat: SongViewType = "default";

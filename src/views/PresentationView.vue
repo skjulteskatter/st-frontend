@@ -154,9 +154,7 @@ export default class PresentationView extends Vue {
         await new Promise(r => setTimeout(r, 100));
         const content = document.getElementById("presentation-content") as HTMLDivElement;
 
-        console.log(content.parentElement?.clientHeight, content.clientHeight);
         let currentFontSize = content.style.fontSize ? parseInt(content.style.fontSize.replace(/[^0-9]/g, "")) : 16;
-        console.log(currentFontSize);
         while (content.parentElement && content.clientHeight < content.parentElement?.clientHeight) {
             currentFontSize++;
             content.style.fontSize = currentFontSize + "px";

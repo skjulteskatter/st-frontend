@@ -1,11 +1,13 @@
 <template>
-    <div
-        class="w-full whitespace-pre-line mb-4"
-        v-for="(verse, i) in text"
-        :key="i"
-    >
-        <b class="text-sm">{{ verse.name }}</b>
-        <p class="leading-7 w-max">{{ verse.content?.join("\n") }}</p>
+    <div class="lyrics-content grid grid-flow-col md:grid-cols-2">
+        <div
+            class="flex-col w-full whitespace-pre-line mb-4"
+            v-for="(verse, i) in text"
+            :key="i"
+        >
+            <b class="text-sm">{{ verse.name }}</b>
+            <p class="leading-7" v-for="(line, i) in verse.content" :key="i">{{ line }}</p>
+        </div>
     </div>
 </template>
 
@@ -38,3 +40,12 @@ export default class LyricsViewer extends Vue {
     }
 }
 </script>
+<style lang="scss">
+.lyrics-content {
+	column-count: 2;
+}
+
+.lyrics-content > div {
+	break-inside: avoid;
+}
+</style>

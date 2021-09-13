@@ -275,17 +275,9 @@ export default class SongList extends Vue {
 .song-list {
     animation: fade-in 0.1s linear;
 
-    &__contributors {
-        columns: 325px;
-        column-gap: var(--st-spacing);
-    }
     &__items {
         columns: 325px;
         column-gap: var(--st-spacing);
     }
-}
-
-.song-list.faded {
-    opacity: 0;
 }
 </style>
