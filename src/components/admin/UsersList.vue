@@ -11,7 +11,7 @@
                         :loading="loading['refresh']"
                         :content="false"
                         icon="refresh"
-                        theme="primary"
+                        theme="tertiary"
                     >
                         {{ $t("common_update") }}
                     </base-button>
