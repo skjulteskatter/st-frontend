@@ -55,9 +55,9 @@
                     @search="search"
                 />
             </div>
-            <div v-if="searchQuery == '' && !loading && viewType == 'boards'">
+            <loader :loading="loadingList" v-if="!loading && viewType == 'boards'">
                 <div
-                    class="song-list__contributors"
+                    class="song-list song-list__contributors"
                     v-if="listType == 'composer'"
                 >
                     <song-list-card
@@ -75,7 +75,7 @@
                     ></song-list-card>
                 </div>
                 <div
-                    class="song-list__contributors"
+                    class="song-list song-list__contributors"
                     v-if="listType == 'author'"
                 >
                     <song-list-card
@@ -93,7 +93,7 @@
                     ></song-list-card>
                 </div>
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'themes'"
                 >
                     <song-list-card
@@ -110,7 +110,7 @@
                     ></song-list-card>
                 </div>
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'genre'"
                 >
                     <song-list-card
@@ -128,7 +128,7 @@
                 </div>
 
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'categories'"
                 >
                     <song-list-card
@@ -146,7 +146,7 @@
                 </div>
 
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'countries'"
                 >
                     <song-list-card
@@ -164,7 +164,7 @@
                 </div>
 
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'number' && songsByNumber.length"
                 >
                     <song-list-card
@@ -179,7 +179,7 @@
                 </div>
 
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'title' && songsByTitle.length"
                 >
                     <song-list-card
@@ -193,7 +193,7 @@
                 </div>
 
                 <div
-                    class="song-list__songs"
+                    class="song-list song-list__songs"
                     v-if="listType == 'views' && songsByViews.length"
                 >
                     <song-list-card
@@ -206,7 +206,7 @@
                         class="mb-4"
                     ></song-list-card>
                 </div>
-            </div>
+            </loader>
 
             <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
                 <button
@@ -230,7 +230,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
+import { CollectionItem, Song } from "@/classes";
 
 import {
     SongListItemCard,
@@ -243,7 +243,7 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
-import { ApiContributor } from "dmb-api";
+import { ApiContributor, Sort } from "dmb-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -268,15 +268,16 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 export default class SongList extends Vue {
     private store = useStore();
 
-    public searchQuery = "";
     public searchString = "";
 
     public cId = "";
     private songsPerCard = 50;
     public viewType: "grid" | "boards" = "boards"
 
+    public loadingList = false;
+
     public toggleViewType() {
-        this.viewType = this.viewType == "boards" ? "grid" : "boards";
+        this.viewType = this.viewType === "boards" ? "grid" : "boards";
     }
 
     public search() {
@@ -294,7 +295,7 @@ export default class SongList extends Vue {
                 SongsActionTypes.SELECT_COLLECTION,
                 this.$route.params.collection as string,
             );
-            if (!this.buttons.find((b) => b.value == this.listType)) {
+            if (!this.collection?.buttons.find((b) => b.value == this.listType)) {
                 this.listType = "default";
             }
         }
@@ -311,43 +312,27 @@ export default class SongList extends Vue {
     }
 
     public get loading() {
-        return this.collection?.loading;
+        return this.collection?.loading === true;
+    }
+    
+    public get buttons() {
+        return this.collection?.buttons.map(i => {
+            const r = Object.assign({}, i);
+            r.label = this.$t(i.label);
+            return r;
+        }) ?? [];
     }
 
-    public set listType(value: string) {
-        this.store.dispatch(SongsActionTypes.SET_LIST, value);
+    public set listType(value: Sort) {
+        if (this.collection)
+            this.collection.listType = value;
     }
 
     public get listType() {
-        return this.store.state.songs.list;
+        return this.collection?.listType ?? "title";
     }
 
-    public get allLyrics(): Lyrics[] {
-        return this.store.getters.collection?.lyrics ?? [];
-    }
-
-    public get context() {
-        return this.filteredObjects.context;
-    }
-
-    // Filtered songs. Returns all songs if no filters are applied.
-    public get filteredObjects() {
-        return (
-            this.collection?.filteredSongs(
-                this.searchQuery,
-                this.store.state.songs.filter
-            ) ?? {
-                songs: [],
-                context: {},
-            }
-        );
-    }
-
-    public get filteredSongs() {
-        return this.filteredObjects.songs.sort((a, b) => a.number - b.number);
-    }
-
-    public get collection(): Collection | undefined {
+    public get collection() {
         return this.store.getters.collection;
     }
 
@@ -355,8 +340,16 @@ export default class SongList extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get songs(): Song[] {
+    public get songs() {
         return this.collection?.songs ?? [];
+    }
+
+    public get filteredSongs() {
+        
+        if (parseInt(this.searchString)) {
+            return this.songs.filter(i => i.number.toString().includes(this.searchString));
+        }
+        return this.songs;
     }
 
     public get songsByNumber(): {
@@ -466,55 +459,13 @@ export default class SongList extends Vue {
         }
     }
 
-    public async setListType(value: string) {
-        await this.store.dispatch(SongsActionTypes.SET_LIST, value);
-    }
-
-    public get buttons() {
-        return [
-            {
-                label: this.$t("common.number"),
-                value: "number",
-                selected: this.listType == "number",
-            },
-            {
-                label: this.$t("common.title"),
-                value: "title",
-                selected: this.listType == "title",
-            },
-            {
-                label: this.$t("song.author"),
-                value: "author",
-                selected: this.listType == "author",
-                hidden: !this.collection?.hasAuthors,
-            },
-            {
-                label: this.$t("song.composer"),
-                value: "composer",
-                selected: this.listType == "composer",
-                hidden: !this.collection?.hasComposers,
-            },
-            {
-                label: this.$t("song.genre"),
-                value: "genre",
-                selected: this.listType == "genre",
-                hidden: !this.collection?.hasGenres,
-            },
-            {
-                label: this.$t("song.category"),
-                value: "categories",
-                selected: this.listType == "categories",
-                hidden: !this.collection?.hasCategories,
-            },
-            {
-                label: this.$t("common.views"),
-                value: "views",
-                selected: this.listType == "views",
-            },
-        ].filter(
-            (b) =>
-                b.hidden != true,
-        );
+    public async setListType(value: Sort) {
+        if (this.collection && this.collection.listType !== value) {
+            this.loadingList = true;
+            await new Promise(r => setTimeout(r, 100));
+            await this.collection.getList(value);
+            this.loadingList = false;
+        }
     }
 }
 </script>
@@ -522,7 +473,14 @@ export default class SongList extends Vue {
 <style lang="scss">
 @import "../style/mixins";
 
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: unset;}
+}
+
 .song-list {
+    animation: fade-in 0.1s linear;
+
     &__contributors {
         columns: 325px;
         column-gap: var(--st-spacing);
@@ -531,5 +489,9 @@ export default class SongList extends Vue {
         columns: 325px;
         column-gap: var(--st-spacing);
     }
+}
+
+.song-list.faded {
+    opacity: 0;
 }
 </style>

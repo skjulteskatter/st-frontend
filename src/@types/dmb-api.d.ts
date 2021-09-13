@@ -41,7 +41,7 @@ declare module "dmb-api" {
         loggedDate: string;
     }
 
-    type Sort = "title" | "number" | "composer" | "author" | "genre";
+    type Sort = "default" | "number" | "title" | "author" | "composer" | "genre" | "categories" | "views" | "countries" | "themes";
 
     type Format = "json" | "html" | "performance";
 

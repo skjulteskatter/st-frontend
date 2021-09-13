@@ -99,6 +99,14 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public contributors: CollectionItem<ApiContributor>[] = [];
 
+    public listType: Sort;
+
+    public buttons: {
+        label: string;
+        value: string;
+        selected: () => boolean;
+    }[] = [];
+
     constructor(collection: ApiCollection) {
         super();
         this._key = collection.key;
@@ -107,6 +115,7 @@ export class Collection extends BaseClass implements ApiCollection {
         this.keys = collection.keys ?? {};
         this.defaultType = collection.defaultType;
         this._defaultSort = collection.defaultSort;
+        this.listType = this.defaultSort;
         this.id = collection.id;
         this.name = collection.name;
         this.image = collection.image;
@@ -154,6 +163,51 @@ export class Collection extends BaseClass implements ApiCollection {
             this.hasCountries = this.hasCountries || this.songs.some(s => s.origins.some(o => o.type == "text"));
             this.hasCategories = this.hasCategories || this.songs.some(s => s.categoryIds.length > 0);
             this.hasGenres = this.hasGenres || this.songs.some(s => s.genreIds.length > 0);
+
+            this.buttons = [
+                {
+                    label: "common.number",
+                    value: "number",
+                    selected: () => this.listType == "number",
+                },
+                {
+                    label: "common.title",
+                    value: "title",
+                    selected: () => this.listType == "title",
+                },
+                {
+                    label: "song.author",
+                    value: "author",
+                    selected: () => this.listType == "author",
+                    hidden: !this.hasAuthors,
+                },
+                {
+                    label: "song.composer",
+                    value: "composer",
+                    selected: () => this.listType == "composer",
+                    hidden: !this.hasComposers,
+                },
+                {
+                    label: "song.genre",
+                    value: "genre",
+                    selected: () => this.listType == "genre",
+                    hidden: !this.hasGenres,
+                },
+                {
+                    label: "song.category",
+                    value: "categories",
+                    selected: () => this.listType == "categories",
+                    hidden: !this.hasCategories,
+                },
+                {
+                    label: "common.views",
+                    value: "views",
+                    selected: () => this.listType == "views",
+                },
+            ].filter(
+                (b) =>
+                    b.hidden != true,
+            );
 
             this._authors = appSession.contributors.map(c => {
                 const cItem = new CollectionItem<ApiContributor>({
@@ -322,7 +376,7 @@ export class Collection extends BaseClass implements ApiCollection {
         return origins;
     }
 
-    public async getList(value: string) {
+    public async getList(value: Sort) {
         if (value == "countries") {
             if (!this._countries) {
                 this._loadingCountries = true;
@@ -397,6 +451,8 @@ export class Collection extends BaseClass implements ApiCollection {
             }
         }
 
+        this.listType = value;
+
         return 1;
     }
 
@@ -414,15 +470,5 @@ export class Collection extends BaseClass implements ApiCollection {
 
     public get genres() {
         return this._genres ?? [];
-    }
-
-    public getContributors(type: string) {
-        if (type == "author") {
-            return this.authors;
-        } else if (type == "composer") {
-            return this.composers;
-        } else {
-            return [];
-        }
     }
 }

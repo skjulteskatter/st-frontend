@@ -6,8 +6,8 @@
             class="p-2 bg-white border-gray-300 dark:bg-secondary dark:border-gray-500"
             :class="{
                 'border-l': i > 0,
-                'bg-primary dark:bg-primary text-white': button.selected,
-                'hover:bg-gray-100': !button.selected,
+                'bg-primary dark:bg-primary text-white': button.selected(),
+                'hover:bg-gray-100': !button.selected(),
                 'bg-gray-200 cursor-wait': loading[button.value],
             }"
             @click="action ? clickButton(button.value) : undefined"
@@ -35,7 +35,7 @@ export default class ButtonGroup extends Vue {
     public buttons?: {
         label: string;
         value: string;
-        selected: boolean;
+        selected: () => boolean;
     }[];
     public action?: Function;
 
