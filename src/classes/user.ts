@@ -1,4 +1,3 @@
-import auth from "@/services/auth";
 import { ApiUser } from "dmb-api";
 
 export class User implements ApiUser {
@@ -20,7 +19,7 @@ export class User implements ApiUser {
         this.id = i.id;
         this.address = i.address;
         this.birthDay = i.birthDay;
-        this.displayName = auth.user?.displayName ?? i.displayName;
+        this.displayName = i.displayName;
         this.email = i.email;
         this.gender = i.gender;
         this.image = i.image;
