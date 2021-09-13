@@ -9,11 +9,19 @@ import { appSession } from "@/services/session";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { Category } from "./category";
 import { Country, Genre, Theme } from "./items";
+import router from "@/router";
 
 type CollectionSettings = {
     offline: boolean;
     lastSynced?: string;
 }
+
+export type ListEntry = {
+    title: string;
+    songs: Song[];
+    action?: () => void;
+    count: boolean;
+};
 
 let closeId: string | null = null;
 
@@ -376,84 +384,167 @@ export class Collection extends BaseClass implements ApiCollection {
         return origins;
     }
 
-    public async getList(value: Sort) {
-        if (value == "countries") {
-            if (!this._countries) {
-                this._loadingCountries = true;
+    private _lists: {
+        [key: string]: ListEntry[];
+    } = {};
 
-                await new Promise(r => setTimeout(r, 10));
+    public get Lists(): {
+        [key: string]: (filter?: string) => ListEntry[]; 
+    }{
+        const f = (key: string, filter?: string) => {
+            return this._lists[key].map(i => {
+                return {
+                    title: i.title,
+                    count: i.count,
+                    action: i.action,
+                    songs: filter ? i.songs.filter(s => s.getNumber(this.id).toString().includes(filter)) : i.songs,
+                };
+            }).filter(i => i.songs.length);
+        };
 
-                const songs = this.songs.filter(s => s.origins.some(o => o.type === "text"));
+        return Object.keys(this._lists).reduce((a, b) => {
+            a[b] = (filter?: string) => f(b, filter);
+            return a;
+        }, {} as {
+            [key: string]: (filter?: string) => ListEntry[]; 
+        });
+    }
 
-                this._countries = appSession.countries.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.origins.some(o => o.country === i.countryCode)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
-
-                this._loadingCountries = false;
-                return this._countries?.length;
-            }
-        }
-        if (value == "themes") {
-            if (!this._themes) {
-                this._loadingThemes = true;
-
-                await new Promise(r => setTimeout(r, 10));
-
-                const songs = this.songs.filter(i => i.themeIds.length);
-
-                this._themes = appSession.themes.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.themeIds.includes(i.id)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
-
-                this._loadingThemes = false;
-                return this._themes.length;
-            }
-        }
-        if (value == "genre") {
-            if (!this._genres) {
-
-                this._genres = appSession.genres.map(i => 
-                    new CollectionItem<Genre>({
-                        songIds: this.songs.filter(s => s.genreIds.includes(i.id)).map(s => s.id),
-                        id: i.id,
-                        item: i,
-                        fileIds: [],
-                    }),
-                ).filter(i => i.songIds.length).sort((a, b) => a.name > b.name ? 1 : -1);
-
-                return this._genres.length;
-            }
-        }
-        if (value == "categories") {
-            if (!this._categories) {
-                const songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
-
-                this._categories = appSession.categories.map(i => 
-                    new CollectionItem({
-                        id: i.id,
-                        item: i,
-                        songIds: songs.filter(s => s.categoryIds.includes(i.id)).map(s => s.id),
-                        fileIds: [],
-                    }),
-                );
-
-                return this._categories.length;
-            }
-        }
-
+    public async getList(value: Sort): Promise<ListEntry[]> {
         this.listType = value;
+        const songsPerCard = 50;
+        let songs: Song[] = [];
+        if (!this._lists[value]) {
+            switch (value) {
+                case "number":
+                    this._lists.number = this.songs.reduce((a, b) => {
+                        const number = Math.floor((b.getNumber(this.id) - 1) / songsPerCard);
+                        let entry = a[number];
+                        if (!entry) {
+                            entry = {
+                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                songs: [],
+                                count: false,
+                            };
+                            a.push(entry);
+                        }
+                        entry.songs.push(b);
 
-        return 1;
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "title":
+                    songs = this.songs.sort((a, b) => a.getName() > b.getName() ? 1 : -1);
+            
+                    this._lists[value] = songs.reduce((a, b) => {
+                        const letter = b.getName()
+                            .replace(/[\W]/g, "")[0]
+                            .toUpperCase();
+                        if (letter) {
+                            let entry = a.find(i => i.title === letter);
+                            if (!entry) {
+                                entry = {
+                                    title: letter,
+                                    songs: [],
+                                    count: true,
+                                };
+                                a.push(entry);
+                            }
+                            entry.songs.push(b);
+                        }
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "views":
+                    songs = this.songs.sort((a, b) => a.Views > b.Views ? -1 : 1);
+
+                    this._lists[value] = songs.reduce((a, b, i) => {
+                        const number = Math.floor((i)/songsPerCard);
+
+                        let entry = a[number];
+                        if (!entry) {
+                            entry = {
+                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                songs: [],
+                                count: false,
+                            };
+                            a.push(entry);
+                        }
+                        entry.songs.push(b);
+
+                        return a;
+                    }, [] as ListEntry[]);
+                    break;
+                case "countries":
+                    songs = this.songs.filter(s => s.origins.some(o => o.type === "text")).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists[value] = appSession.countries.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.origins.some(o => o.type === "text" && o.country === i.countryCode)),
+                            };
+                        },
+                    );
+                    break;
+                case "themes":
+                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists[value] = appSession.themes.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(i => i.themeIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "genre":
+                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists.genres = appSession.genres.map(i =>
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.themeIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "categories":
+                    songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+
+                    this._lists.categories = appSession.categories.map(i => 
+                        {
+                            return {
+                                title: i.getName(),
+                                count: true,
+                                songs: songs.filter(s => s.categoryIds.includes(i.id)),
+                            };
+                        },
+                    );
+                    break;
+                case "author":
+                case "composer":
+                    this._lists[value] = this.contributors.map(i => {
+                        return {
+                            title: i.name,
+                            count: true,
+                            songs: this.songs.filter(s => s.participants.some(p => p.type === value && p.contributorId === i.id)),
+                            action: () => router.push({
+                                name: "contributor",
+                                params: {
+                                    id: i.id,
+                                },
+                            }),
+                        };
+                    });
+                    break;
+                default:
+                    return this.getList(this.defaultSort);
+            }
+        }
+        return this._lists[value];
     }
 
     public get countries(): CollectionItem<Country>[] {

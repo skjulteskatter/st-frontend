@@ -141,6 +141,10 @@ export class Song extends BaseClass implements ApiSong {
             });
     }
 
+    public get Views() {
+        return appSession.Views[this.id];
+    }
+
     public loadingLyrics = false;
 
     public async getLyrics(language?: string) {
