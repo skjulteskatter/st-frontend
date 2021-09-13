@@ -19,7 +19,7 @@
                             {{ author.name }}
                         </span>
                     </p>
-                    <span v-if="song.Authors.length && song.Composers.length">&#8226;</span>
+                    <span v-if="song.Authors.length && song.Composers.length">&bull;</span>
                     <p
                         v-if="song.Composers.length > 0"
                     >
@@ -31,16 +31,18 @@
                             {{ composer.name }}
                         </span>
                     </p>
-                    <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&#8226;</span>
+                    <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&bull;</span>
                     <p v-if="melodyOrigin">
                         {{ $t("song.melody") }}: {{ melodyOrigin }}
                     </p>
                 </div>
                 <div class="flex gap-4">
+                    <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
+                    <span v-if="song.originCountry">&bull;</span>
                     <span>{{ song.originalKey }}</span>
-                    <span v-if="song.copyright.text || song.copyright.melody">&#8226;</span>
+                    <span v-if="song.copyright.text || song.copyright.melody">&bull;</span>
                     <span>{{ song.verses }}</span>
-                    <span v-if="song.copyright.text || song.copyright.melody">&#8226;</span>
+                    <span v-if="song.copyright.text || song.copyright.melody">&bull;</span>
                     <p
                         class="text-base tracking-wide"
                         v-if="
@@ -69,11 +71,11 @@
                 </div>
             </div>
         </div>
-        <div :class="{'hidden': muted}" class="mt-16 verses" v-if="verses">
+        <div :class="{'hidden': muted}" class="mt-16 verses" id="presentation-content">
             <div
                 class="relative verse"
                 :class="{ 'italic': verse.type == 'chorus' }"
-                v-for="(verse, i) in verses"
+                v-for="(verse, i) in Verses"
                 :key="i + '_' + verse"
             >
                 <span
@@ -83,7 +85,7 @@
                 >
                 <p
                     class="tracking-wide line"
-                    :class="{ 'opacity-50 mt-8 text-4xl': line.trim()[0] == '(' }"
+                    :class="{ 'opacity-50 mt-8': line.trim()[0] == '(' }"
                     v-for="(line, i) in verse.content"
                     :key="i + '_' + line"
                 >
@@ -110,6 +112,10 @@ export default class PresentationView extends Vue {
     public theme: "dark" | "light" = "dark";
     public verseCount = 0;
 
+    public get Verses() {
+        return this.verses ?? [];
+    }
+
     public async mounted() {
         await appSession.init();
         viewer.init();
@@ -117,6 +123,8 @@ export default class PresentationView extends Vue {
         this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
         this.song = viewer.Song ?? null;
         this.verses = viewer.Verses;
+
+        // this.rerender();
 
         viewer.registerCallback("lyrics", () => {
             this.lyrics = viewer.Lyrics;
@@ -140,6 +148,20 @@ export default class PresentationView extends Vue {
                 this.verses = viewer.Verses;
             }
         });
+    }
+
+    public async rerender() {
+        await new Promise(r => setTimeout(r, 100));
+        const content = document.getElementById("presentation-content") as HTMLDivElement;
+
+        console.log(content.parentElement?.clientHeight, content.clientHeight);
+        let currentFontSize = content.style.fontSize ? parseInt(content.style.fontSize.replace(/[^0-9]/g, "")) : 16;
+        console.log(currentFontSize);
+        while (content.parentElement && content.clientHeight < content.parentElement?.clientHeight) {
+            currentFontSize++;
+            content.style.fontSize = currentFontSize + "px";
+            content.style.lineHeight = currentFontSize + "px";
+        }
     }
 
     public get melodyOrigin() {
