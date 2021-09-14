@@ -95,10 +95,7 @@
 import { Options, Vue } from "vue-class-component";
 import { CollectionItem, ListEntry, Song } from "@/classes";
 
-import {
-    SongListItemCard,
-    SongListCard,
-} from "@/components/songs";
+import { SongListCard } from "@/components/songs";
 import {
     ButtonGroup,
     SongFilterDropdown,
@@ -115,7 +112,6 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
-        SongListItemCard,
         SongListCard,
         ButtonGroup,
         SongFilterDropdown,
