@@ -318,7 +318,7 @@ export class Collection extends BaseClass implements ApiCollection {
         if (!this._lists[value]) {
             switch (value) {
                 case "number":
-                    this._lists.number = this.songs.reduce((a, b) => {
+                    this._lists[value] = this.songs.reduce((a, b) => {
                         const number = Math.floor((b.getNumber(this.id) - 1) / songsPerCard);
                         let entry = a[number];
                         if (!entry) {
@@ -336,7 +336,6 @@ export class Collection extends BaseClass implements ApiCollection {
                     break;
                 case "title":
                     songs = this.songs.sort((a, b) => a.getName() > b.getName() ? 1 : -1);
-            
                     this._lists[value] = songs.reduce((a, b) => {
                         const letter = b.getName()
                             .replace(/[\W]/g, "")[0]
@@ -358,7 +357,6 @@ export class Collection extends BaseClass implements ApiCollection {
                     break;
                 case "views":
                     songs = this.songs.sort((a, b) => a.Views > b.Views ? -1 : 1);
-
                     this._lists[value] = songs.reduce((a, b, i) => {
                         const number = Math.floor((i)/songsPerCard);
 
@@ -401,21 +399,20 @@ export class Collection extends BaseClass implements ApiCollection {
                     );
                     break;
                 case "genre":
-                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
-                    this._lists.genres = appSession.genres.map(i =>
+                    songs = this.songs.filter(i => i.genreIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    this._lists[value] = appSession.genres.map(i =>
                         {
                             return {
                                 title: i.getName(),
                                 count: true,
-                                songs: songs.filter(s => s.themeIds.includes(i.id)),
+                                songs: songs.filter(s => s.genreIds.includes(i.id)),
                             };
                         },
                     );
                     break;
                 case "categories":
                     songs = this.songs.filter(i => i.categoryIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
-
-                    this._lists.categories = appSession.categories.map(i => 
+                    this._lists[value] = appSession.categories.map(i => 
                         {
                             return {
                                 title: i.getName(),
