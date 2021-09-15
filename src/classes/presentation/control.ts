@@ -2,6 +2,8 @@ import { Lyrics } from "../lyrics";
 import { PresentationBase, Settings } from "./base";
 
 export class PresentationControl extends PresentationBase {
+    private threshold = 6;
+
     public init() {
         if (!this.initialized) {
             addEventListener("keydown", (e) => {
@@ -24,7 +26,7 @@ export class PresentationControl extends PresentationBase {
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
         this.lyrics = lyrics.raw;
         this.settings = settings ?? {
-            size: lyrics.size <= 5 ? 2 : 1,
+            size: lyrics.size <= this.threshold ? 2 : 1,
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             }),
@@ -36,7 +38,7 @@ export class PresentationControl extends PresentationBase {
 
     public resetSettings(lyrics: Lyrics) {
         this.settings = {
-            size: lyrics.size <= 5 ? 2 : 1,
+            size: lyrics.size <= this.threshold ? 2 : 1,
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             }),
