@@ -10,6 +10,7 @@
                 <div class="flex flex-col mt-2">
                     <small v-if="song.Authors.length">{{(song.yearWritten ? $t('song_writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song_writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
                     <small v-if="song.Composers.length">{{(song.yearComposed ? $t('song_composedInBy').replace('$year', song.yearComposed.toString()) : $t('song_composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
+                    <small v-else>{{$t('song_unknownComposer')}}</small>
                 </div>
                 <div class="text-gray-600" v-if="melodyOrigin">
                     <small>{{melodyOrigin}}</small>

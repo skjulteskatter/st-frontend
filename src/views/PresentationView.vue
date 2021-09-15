@@ -19,7 +19,7 @@
                             {{ author.name }}
                         </span>
                     </p>
-                    <span v-if="song.Authors.length && song.Composers.length">&bull;</span>
+                    <span v-if="song.Authors.length">&bull;</span>
                     <p
                         v-if="song.Composers.length > 0"
                     >
@@ -30,6 +30,11 @@
                         >
                             {{ composer.name }}
                         </span>
+                    </p>
+                    <p
+                        v-else
+                    >
+                        {{$t("song_unknownComposer")}}
                     </p>
                     <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&bull;</span>
                     <p v-if="melodyOrigin">
