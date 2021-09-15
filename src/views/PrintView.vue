@@ -67,7 +67,7 @@
 			</div>
 		</main>
 		<footer class="mt-8 flex">
-			<img id="st-logo-print" src="/img/logo/dark.svg" alt="SongTreasures logo" class="max-h-12">
+			<img id="st-logo-print" src="/img/logo/dark.svg" alt="SongTreasures logo" class="max-h-12" height="48">
 			<a class="ml-auto mt-auto" href="https://songtreasures.org">songtreasures.org</a>
 		</footer>
 	</article>

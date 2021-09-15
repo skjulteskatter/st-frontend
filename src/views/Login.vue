@@ -5,6 +5,7 @@
                 src="/img/logo/icon.svg"
                 alt="SongTreasures logo"
                 class="max-h-16"
+                height="64"
             />
             <div class="flex flex-col items-center gap-3">
                 <h2 class="text-2xl font-bold md:text-3xl">Sign in to your account</h2>
@@ -22,6 +23,8 @@
                             alt="GOOGLE"
                             src="/img/google.svg" 
                             class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            width="80"
+                            height="80"
                             @click="login('google')"
                         />
                         <img
@@ -29,6 +32,8 @@
                             alt="APPLE"
                             src="/img/apple.svg" 
                             class="p-4 login-image cursor-pointer border border-gray-300 rounded hover:border-gray-400 h-20 w-20"
+                            width="80"
+                            height="80"
                             @click="login('apple')"
                         />
                     </div>

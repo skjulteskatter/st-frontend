@@ -11,6 +11,8 @@
             :src="image"
             :alt="name"
             class="max-h-10 rounded border"
+            width="40"
+            height="40"
         />
         <span class="text-xs font-medium tracking-wide w-full flex justify-between items-center">
             {{ name }}

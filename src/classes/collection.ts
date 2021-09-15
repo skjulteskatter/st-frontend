@@ -432,7 +432,7 @@ export class Collection extends BaseClass implements ApiCollection {
                             action: () => router.push({
                                 name: "contributor",
                                 params: {
-                                    id: i.id,
+                                    contributor: i.id,
                                 },
                             }),
                         };

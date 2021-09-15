@@ -14,7 +14,7 @@
 					<div class="flex gap-4 items-center justify-between h-16">
 						<div class="flex items-center">
 							<div class="flex-shrink-0">
-								<img class="h-8 w-8" src="/img/logo/icon.svg" alt="SongTreasures logo" />
+								<img class="h-8 w-8" src="/img/logo/icon.svg" alt="SongTreasures logo" width="32" height="32" />
 							</div>
 							<div class="hidden md:block">
 								<div class="ml-10 flex items-baseline space-x-8">
@@ -92,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-			<img class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse w-20 h-20 drop-shadow-lg" src="/img/logo/icon.svg" alt="SongTreasures logo">
+			<img class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse w-20 h-20 drop-shadow-lg" src="/img/logo/icon.svg" alt="SongTreasures logo" width="80" height="80">
 		</section>
 	</transition-root>
 </template>

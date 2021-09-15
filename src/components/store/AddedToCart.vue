@@ -34,6 +34,8 @@
                         :src="p.collections[0].image"
                         alt="collection image"
                         class="rounded h-12 w-12 mr-4 border"
+                        width="48"
+                        height="48"
                     >
                     <span>
                         <p class="text-base">{{ p.getName() }}</p>

@@ -38,7 +38,9 @@
                                     :src="
                                         u.image ?? '/img/portrait-placeholder.png'
                                     "
-                                    class="w-8 h-8 object-cover rounded-full"
+                                    class="w-8 h-8 object-cover rounded-full border border-black/20 dark:border-white/20"
+                                    width="32"
+                                    height="32"
                                 />
                                 <span>{{ u.displayName }}</span>
                             </td>

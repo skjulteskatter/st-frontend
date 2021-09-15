@@ -1,7 +1,7 @@
 <template>
 	<base-dropdown origin="right">
 		<template #button>
-			<img v-if="user && user.image" :src="user.image" class="w-6 h-6 rounded-full object-cover">
+			<img v-if="user && user.image" :src="user.image" class="w-6 h-6 rounded-full object-cover" width="24" height="24">
 			<icon name="user" v-else />
 		</template>
 		

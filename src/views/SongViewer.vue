@@ -41,29 +41,31 @@
                             />
                         </div>
                     </base-modal>
-                    <SwitchGroup as="div" class="hidden md:flex flex-col gap-1 cursor-pointer" v-if="song?.hasLyrics">
-                        <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
-                        <Switch
-                            :disabled="lyrics?.format === 'html'"
-                            @click="extend()"
-                            v-model="switchExtended"
-                            class="focus:outline-none"
-                            :class="{ 'opacity-50 cursor-not-allowed': lyrics?.format === 'html' }"
-                        >
-                            <div
-                                class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
-                                :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
-                            >
-                                <span
-                                    :class="switchExtended ? 'translate-x-5' : 'translate-x-1'"
-                                    class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
-                                />
-                            </div>
-                        </Switch>
-                    </SwitchGroup>
                 </div>
             </div>
-            <song-tags :song="song" />
+            <div class="flex justify-between">
+                <song-tags :song="song" />
+                <SwitchGroup as="div" class="hidden md:flex gap-2 items-center cursor-pointer" v-if="song?.hasLyrics">
+                    <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
+                    <Switch
+                        :disabled="lyrics?.format === 'html'"
+                        @click="extend()"
+                        v-model="switchExtended"
+                        class="focus:outline-none"
+                        :class="{ 'opacity-50 cursor-not-allowed': lyrics?.format === 'html' }"
+                    >
+                        <div
+                            class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
+                            :class="switchExtended ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
+                        >
+                            <span
+                                :class="switchExtended ? 'translate-x-5' : 'translate-x-1'"
+                                class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
+                            />
+                        </div>
+                    </Switch>
+                </SwitchGroup>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="flex flex-col gap-4 md:col-span-2">
                     <song-info-card
@@ -125,7 +127,7 @@
             <h2 class="text-2xl font-bold">{{ $t('store_limitedAccess') }}</h2>
             <p class="text-center">{{ $t('store_gainAccess') }}</p>
             <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
-                <img class="max-h-12 rounded" :src="collection.image" :alt="collection.getName(languageKey)">
+                <img class="max-h-12 rounded" height="48" :src="collection.image" :alt="collection.getName(languageKey)">
                 <p>{{ collection.getName(languageKey) }}</p>
             </div>
             <div class="flex gap-4 mt-8">

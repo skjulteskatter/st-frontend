@@ -21,6 +21,8 @@
                         alt="Activity thumbnail"
                         :src="a.getImage(collections)"
                         class="mr-2 max-h-10 grayscale rounded border"
+                        width="40"
+                        height="40"
                     />
                     <span class="flex flex-col justify-center flex-1">
                         <small class="opacity-50 tracking-wide">{{ $t(`song_${a.type}`) }}</small>

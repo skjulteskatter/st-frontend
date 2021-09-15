@@ -1,6 +1,6 @@
 <template>
     <div class="w-screen h-screen flex flex-col justify-center items-center gap-6 p-8">
-        <img src="/img/logo/icon.svg" alt="SongTreasures logo" class="max-h-16">
+        <img src="/img/logo/icon.svg" alt="SongTreasures logo" class="max-h-16" height="64">
         <h2 class="text-2xl md:text-3xl font-bold">Create account</h2>
         <base-card class="max-w-md w-full p-4">
             <div class="flex flex-col gap-4">
