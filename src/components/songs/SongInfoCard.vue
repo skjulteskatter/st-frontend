@@ -53,6 +53,12 @@
                         <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
                         <contributor-info :contributors="song.Composers" />
                     </small>
+                    <small 
+                        v-else
+                        class="flex gap-2"
+                    >
+                        <span>{{$t("song_unknownComposer")}}</span>
+                    </small>
                     <small
                         class="flex gap-2"
                         v-if="

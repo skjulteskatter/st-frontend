@@ -139,6 +139,7 @@
   "song_chords": "Chords",
   "song_chorus": "Chorus",
   "song_clef": "Clef",
+  "song_unknownComposer": "Unknown composer",
   "song_composedBy": "Composed by $composers",
   "song_composedInBy": "Composed in $year by $composers",
   "song_composer": "Composer",
