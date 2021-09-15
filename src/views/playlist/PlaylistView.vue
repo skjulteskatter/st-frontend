@@ -114,6 +114,8 @@
                                 u.image ?? '/img/portrait-placeholder.png'
                             "
                             class="w-6 h-6 object-cover rounded-full"
+                            width="24"
+                            height="24"
                         />
                         <small>{{ u.displayName }}</small>
                     </span>

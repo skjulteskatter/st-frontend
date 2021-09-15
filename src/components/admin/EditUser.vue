@@ -9,7 +9,9 @@
 							User.image ??
 							'/img/portrait-placeholder.png'
 						"
-						class="rounded-full w-20 h-20 object-cover"
+						class="rounded-full w-20 h-20 object-cover border border-black/20 dark:border-white/20"
+						width="80"
+						height="80"
 					/>
 					<span class="flex flex-col">
 						<h3 class="font-bold">

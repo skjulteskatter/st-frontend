@@ -53,7 +53,7 @@
         </div>
         <div class="flex flex-col gap-2" v-show="category == 'user'">
             <div class="flex gap-6 items-center p-4">
-                <img :src="image" alt="Profile picture" class="rounded-full">
+                <img :src="image" alt="Profile picture" class="rounded-full border border-black/20 dark:border-white/20" width="100" height="100">
                 <div>
                     <h3 class="text-xl">{{ user.displayName }}</h3>
                     <span :class="[user.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2 mt-1']">{{ user.roles[0] }}</span>

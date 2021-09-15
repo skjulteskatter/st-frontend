@@ -127,7 +127,7 @@
             <h2 class="text-2xl font-bold">{{ $t('store_limitedAccess') }}</h2>
             <p class="text-center">{{ $t('store_gainAccess') }}</p>
             <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
-                <img class="max-h-12 rounded" :src="collection.image" :alt="collection.getName(languageKey)">
+                <img class="max-h-12 rounded" height="48" :src="collection.image" :alt="collection.getName(languageKey)">
                 <p>{{ collection.getName(languageKey) }}</p>
             </div>
             <div class="flex gap-4 mt-8">
