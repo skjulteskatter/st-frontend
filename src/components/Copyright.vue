@@ -1,6 +1,6 @@
 <template>
     <div :class="{ 'hidden': hide }" class="w-full mb-4 text-center flex md:justify-center">
-        <span class="text-sm text-gray-500">© {{new Date().getFullYear()}} {{ $t('copyright_title')}} | All rights reserved.</span>
+        <small class="text-gray-500">Copyright {{new Date().getFullYear()}} © {{ $t('copyright_title')}}. All Rights Reserved</small>
     </div>
 </template>
 <script lang="ts">
