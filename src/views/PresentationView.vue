@@ -4,8 +4,8 @@
         :class="[theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']"
     >
         <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
-            <h1 class="font-bold text-4xl" v-if="song.number">
-                {{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}
+            <h1 class="font-bold text-5xl" v-if="song.number">
+                <!-- {{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }} -->
                 {{ song.number }}
             </h1>
             <!-- <h3 class="font-light text-4xl">{{ song.getName() }}</h3> -->
@@ -90,7 +90,7 @@
                 >
                 <p
                     class="tracking-wide line"
-                    :class="{ 'opacity-50 mt-8': line.trim()[0] == '(' }"
+                    :class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
                     v-for="(line, i) in verse.content"
                     :key="i + '_' + line"
                 >
@@ -197,7 +197,7 @@ export default class PresentationView extends Vue {
     margin-bottom: clamp(2rem, 5vw, 32rem);
 }
 .line {
-    line-height: clamp(1rem, 3vh + 2vw + .5rem, 3.8rem);
+    line-height: clamp(1rem, 3vh + 2vw, 3.85rem);
 }
 .verse-name {
     left: calc(clamp(3rem, 6vw, 20rem) * -1);
