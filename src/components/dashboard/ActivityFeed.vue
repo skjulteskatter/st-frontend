@@ -9,21 +9,22 @@
             </div>
         </template>
         <loader :loading="activitiesInitialized === false">
-            <div class="flex flex-col gap-2 relative" v-if="activities.length">
+            <div class="flex flex-col gap-2 border-l-2 border-gray-100 dark:border-white/5" v-if="activities.length">
                 <router-link
-                    class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+                    class="ml-2 flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"
                 >
-                    <img
+                    <!-- <img
                         loading="lazy"
                         alt="Activity thumbnail"
                         :src="a.getImage(collections)"
                         class="mr-2 max-h-10 grayscale rounded border"
                         width="40"
                         height="40"
-                    />
+                    /> -->
+                    <span class="w-2 h-2 bg-gray-200 rounded-full absolute -left-3 top-7 dark:bg-gray-500"></span>
                     <span class="flex flex-col justify-center flex-1">
                         <small class="opacity-50 tracking-wide">{{ $t(`song_${a.type}`) }}</small>
                         <p class="text-xs font-medium">

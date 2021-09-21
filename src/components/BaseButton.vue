@@ -1,13 +1,12 @@
 <template>
     <button
-        class="py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-        :class="[`button-${theme}`, { 'button-loading': loading, 'button-disabled cursor-not-allowed': disabled }]"
+        class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'cursor-not-allowed opacity-50': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <icon size="18" name="refresh" class="animate-spin inline-block" v-if="loading" />
-        <icon size="18" v-else-if="icon && !$slots.icon" :name="icon" class="inline-block" />
-        <span v-if="$slots.icon">
+        <icon size="18" v-if="icon && !$slots.icon" :name="icon" class="inline-block" />
+        <span v-else-if="$slots.icon">
             <slot name="icon" />
         </span>
         <span class="text-sm" v-if="content">
@@ -34,7 +33,7 @@ import { Options, Vue } from "vue-class-component";
                         "success",
                         "error",
                         "warning",
-                    ].indexOf(value) > -1
+                    ].includes(value)
                 );
             },
         },
@@ -89,54 +88,53 @@ export default class BaseButton extends Vue {
         }
     }
 
-    &--loading {
-        animation: buttonLoading 0.5s ease infinite alternate;
-
-        .spinner {
-            --st-loader-width: 2px;
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 100%;
-            margin-left: calc(var(--st-spacing) * 0.5);
-
-            border-top: var(--st-loader-width) solid currentColor;
-            border-right: var(--st-loader-width) solid currentColor;
-            border-bottom: var(--st-loader-width) solid currentColor;
-            border-left: var(--st-loader-width) solid transparent;
-
-            animation: loading 1s linear infinite;
-        }
-    }
-
-    &-disabled {
-        opacity: 0.5;
-    }
-
-    &-primary {
+    &--primary {
         background-color: var(--st-color-primary);
     }
 
-    &-secondary {
+    &--secondary {
         background-color: var(--st-color-secondary);
         color: var(--st-color-text-dm);
     }
 
-    &-tertiary {
+    &--tertiary {
         @apply text-primary;
         @apply hover:bg-primary/20;
     }
 
-    &-warning {
+    &--warning {
         background-color: var(--st-color-warning);
     }
 
-    &-success {
+    &--success {
         background-color: var(--st-color-success);
     }
 
-    &-error {
+    &--error {
         background-color: var(--st-color-error);
+    }
+
+    &--loading {
+        &:before {
+            content: "";
+            background-color: rgba(white, .5);
+
+            height: 5px;
+            width: 25%;
+            border-radius: 1em;
+
+            position: absolute;
+            bottom: 0;
+            left: -20%;
+
+            animation: buttonLoad 1s linear infinite;
+        }
+    }
+}
+
+@keyframes buttonLoad {
+    to {
+        transform: translateX(500%);
     }
 }
 </style>

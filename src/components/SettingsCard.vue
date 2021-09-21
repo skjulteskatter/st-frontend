@@ -56,7 +56,8 @@
                 <img :src="image" alt="Profile picture" class="rounded-full border border-black/20 dark:border-white/20" width="100" height="100">
                 <div>
                     <h3 class="text-xl">{{ user.displayName }}</h3>
-                    <span :class="[user.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2 mt-1']">{{ user.roles[0] }}</span>
+                    <span v-if="user.roles.length" :class="[user.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2 mt-1']">{{ user.roles[0] }}</span>
+                    <span v-else class="bg-black/5 text-gray-500 dark:bg-white/10 dark:text-white rounded-full text-xs tracking-wide py-1 px-2 mt-1">Standard</span>
                 </div>
             </div>
             <div class="grid md:grid-cols-2 gap-6">
@@ -106,19 +107,38 @@
                     <change-password />
                 </div>
             </div>
+            <div class="mt-6" v-if="collections.length">
+                <span class="block text-xs uppercase tracking-wide mb-1">{{`${$t('common_my')} ${$t('common_subscriptions').toLowerCase()}`}}</span>
+                <table class="flex flex-col rounded-md border border-black/20 dark:border-white/20">
+                    <tr class="px-3 py-2" :class="{ 'bg-black/5 dark:bg-white/5': i % 2 == 1 }" v-for="(col, i) in collections" :key="col.id">{{col.getName()}}</tr>
+                </table>
+            </div>
         </div>
         <template #footer>
-            <base-button
-                :loading="loading"
-                @click="save"
-                theme="secondary"
-                class="ml-auto"
-            >
-                <template #icon>
-                    <CheckIcon class="w-4 h-4" />
-                </template>
-                {{ $t("common_save") }}
-            </base-button>
+            <div class="flex justify-end gap-4">
+                <base-button
+                    v-if="category == 'user' && collections.length"
+                    @click="portal"
+                    :loading="loading['subscriptions']"
+                    theme="tertiary"
+                >
+                    <template #icon>
+                        <CreditCardIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t("common_manage") }}
+                    {{ $t("common_subscriptions").toLowerCase() }}
+                </base-button>
+                <base-button
+                    :loading="loading['save']"
+                    @click="save"
+                    theme="secondary"
+                >
+                    <template #icon>
+                        <CheckIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t("common_save") }}
+                </base-button>
+            </div>
         </template>
     </base-card>
 </template>
@@ -138,10 +158,12 @@ import {
     TranslateIcon,
     MusicNoteIcon,
     PhotographIcon,
+    CreditCardIcon,
 } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
+import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
     components: {
@@ -151,6 +173,7 @@ import { session } from "@/services/api";
         TranslateIcon,
         MusicNoteIcon,
         PhotographIcon,
+        CreditCardIcon,
     },
     props: {
         category: {
@@ -215,7 +238,9 @@ export default class SettingsCard extends Vue {
     public theme = localStorage.getItem("theme") ?? "dark";
     public token = localStorage.getItem("id_token");
 
-    public loading = false;
+    public loading: {
+        [key: string]: boolean;
+    } = {};
 
     public async mounted() {
         this.selectedLanguage =
@@ -237,7 +262,7 @@ export default class SettingsCard extends Vue {
     }
 
     public async save() {
-        this.loading = true;
+        this.loading["save"] = true;
         try {
             const gender = this.gender != this.user?.gender ? this.gender : undefined;
             const birthDay = this.birthDay != this.dateToString(this.initDate) ? this.birthDay : undefined;
@@ -269,7 +294,7 @@ export default class SettingsCard extends Vue {
 
         // Fire a success notification
         notify("success", this.$t("notification_saved"), "check");
-        this.loading = false;
+        this.loading["save"] = false;
     }
 
     public setOffline() {
@@ -343,6 +368,19 @@ export default class SettingsCard extends Vue {
             }
         };
         reader.readAsDataURL(file);
+    }
+
+    public async portal() {
+        this.loading["subscriptions"] = true;
+        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+            window.location = (result as unknown) as Location;
+        });
+        // this.loading["subscriptions"] = false;
+    }
+
+    public get collections() {
+        const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
+        return this.store.getters.collections.filter(i => colIds.includes(i.id));
     }
 }
 </script>

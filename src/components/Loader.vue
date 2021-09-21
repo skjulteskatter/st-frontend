@@ -50,16 +50,17 @@ export default class Loader extends Vue {
     z-index: 9;
 
     &:before {
-        --size: 40px;
+        --size: 2rem;
+        --thickness: .45rem;
         content: "";
         width: var(--size);
         height: var(--size);
 
         border-radius: 100%;
-        border-bottom: 10px solid var(--st-color-primary);
-        border-top: 10px solid var(--st-color-primary);
-        border-left: 10px solid var(--st-color-primary);
-        border-right: 10px solid transparent;
+        border-bottom: var(--thickness) solid var(--st-color-primary);
+        border-top: var(--thickness) solid var(--st-color-primary);
+        border-left: var(--thickness) solid var(--st-color-primary);
+        border-right: var(--thickness) solid rgba(white, .1);
 
         animation: loading 1s infinite ease-in-out;
     }
