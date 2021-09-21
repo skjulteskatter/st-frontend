@@ -1,13 +1,12 @@
 <template>
     <button
         class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-        :class="[`button-${theme} button`, { 'opacity-75 cursor-wait': loading, 'cursor-not-allowed opacity-50': disabled }]"
+        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'cursor-not-allowed opacity-50': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <span class="loader" v-if="loading" />
-        <icon size="18" v-else-if="icon && !$slots.icon" :name="icon" class="inline-block" />
-        <span v-if="$slots.icon">
+        <icon size="18" v-if="icon && !$slots.icon" :name="icon" class="inline-block" />
+        <span v-else-if="$slots.icon">
             <slot name="icon" />
         </span>
         <span class="text-sm" v-if="content">
@@ -34,7 +33,7 @@ import { Options, Vue } from "vue-class-component";
                         "success",
                         "error",
                         "warning",
-                    ].indexOf(value) > -1
+                    ].includes(value)
                 );
             },
         },
@@ -89,48 +88,53 @@ export default class BaseButton extends Vue {
         }
     }
 
-    &-primary {
+    &--primary {
         background-color: var(--st-color-primary);
     }
 
-    &-secondary {
+    &--secondary {
         background-color: var(--st-color-secondary);
         color: var(--st-color-text-dm);
     }
 
-    &-tertiary {
+    &--tertiary {
         @apply text-primary;
         @apply hover:bg-primary/20;
     }
 
-    &-warning {
+    &--warning {
         background-color: var(--st-color-warning);
     }
 
-    &-success {
+    &--success {
         background-color: var(--st-color-success);
     }
 
-    &-error {
+    &--error {
         background-color: var(--st-color-error);
     }
-}
 
-.loader {
-    background-color: rgba(white, .5);
-    height: 5px;
-    width: 50px;
-    position: absolute;
-    bottom: 0%;
-    animation: buttonLoad 1s linear infinite;
+    &--loading {
+        &:before {
+            content: "";
+            background-color: rgba(white, .5);
+
+            height: 5px;
+            width: 25%;
+            border-radius: 1em;
+
+            position: absolute;
+            bottom: 0;
+            left: -20%;
+
+            animation: buttonLoad 1s linear infinite;
+        }
+    }
 }
 
 @keyframes buttonLoad {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
+    to {
+        transform: translateX(500%);
     }
 }
 </style>
