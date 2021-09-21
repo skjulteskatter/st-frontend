@@ -33,29 +33,6 @@
                     {{ $t('common_user') }}
                 </button>
             </div>
-            <!-- <user-card /> -->
-            <base-card class="mt-4" v-if="collections.length">
-                <template #header>
-                    <h3 class="text-lg font-bold">{{`${$t('common_my')} ${$t('common_collections').toLowerCase()}`}}</h3>
-                </template>
-                <div class="flex flex-col gap-2">
-                    <p v-for="col in collections" :key="col.id">{{col.getName()}}</p>
-                </div>
-                <template #footer>
-                    <base-button 
-                        @click="portal"
-                        :loading="loading"
-                        :class="{'opacity-40': loading}"
-                    >
-                        <template #icon>
-                            <CreditCardIcon class="w-4 h-4" />
-                        </template>
-                        {{ $t("common_manage") }}
-                        {{ $t("common_subscriptions").toLowerCase() }}
-                    </base-button>
-                </template>
-            <!-- <owned-collections /> -->
-            </base-card>
         </div>
         <div class="md:col-span-3">
             <settings-card :category="category" />
@@ -66,23 +43,17 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { SettingsCard, BackButton } from "@/components";
-import { UserCard } from "@/components/settings";
 import { BaseInput } from "@/components/inputs";
-import { OwnedCollections } from "@/components/dashboard";
-import { LogoutIcon, CreditCardIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
+import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
 @Options({
     components: {
         SettingsCard,
         BaseInput,
-        UserCard,
         BackButton,
-        OwnedCollections,
         LogoutIcon,
-        CreditCardIcon,
         UserIcon,
         CogIcon,
     },
@@ -97,20 +68,6 @@ export default class SettingsView extends Vue {
         this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
             window.location.replace("/login");
         });
-    }
-
-    public get collections() {
-        const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
-        // console.log(colIds);
-        return this.store.getters.collections.filter(i => colIds.includes(i.id));
-    }
-    
-    public async portal() {
-        this.loading = true;
-        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
-            window.location = (result as unknown) as Location;
-        });
-        // this.loading = false;
     }
 }
 </script>
