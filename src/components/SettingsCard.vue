@@ -117,7 +117,7 @@
         <template #footer>
             <div class="flex justify-end gap-4">
                 <base-button
-                    v-if="category == 'user'"
+                    v-if="category == 'user' && collections.length"
                     @click="portal"
                     :loading="loading['subscriptions']"
                     theme="tertiary"
