@@ -1,11 +1,11 @@
 <template>
     <button
-        class="py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-        :class="[`button-${theme}`, { 'button-loading': loading, 'button-disabled cursor-not-allowed': disabled }]"
+        class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+        :class="[`button-${theme} button`, { 'saturate-50 cursor-wait': loading, 'cursor-not-allowed saturate-50': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <icon size="18" name="refresh" class="animate-spin inline-block" v-if="loading" />
+        <span class="loader" v-if="loading" />
         <icon size="18" v-else-if="icon && !$slots.icon" :name="icon" class="inline-block" />
         <span v-if="$slots.icon">
             <slot name="icon" />
@@ -89,30 +89,6 @@ export default class BaseButton extends Vue {
         }
     }
 
-    &--loading {
-        animation: buttonLoading 0.5s ease infinite alternate;
-
-        .spinner {
-            --st-loader-width: 2px;
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 100%;
-            margin-left: calc(var(--st-spacing) * 0.5);
-
-            border-top: var(--st-loader-width) solid currentColor;
-            border-right: var(--st-loader-width) solid currentColor;
-            border-bottom: var(--st-loader-width) solid currentColor;
-            border-left: var(--st-loader-width) solid transparent;
-
-            animation: loading 1s linear infinite;
-        }
-    }
-
-    &-disabled {
-        opacity: 0.5;
-    }
-
     &-primary {
         background-color: var(--st-color-primary);
     }
@@ -137,6 +113,24 @@ export default class BaseButton extends Vue {
 
     &-error {
         background-color: var(--st-color-error);
+    }
+}
+
+.loader {
+    background-color: rgba(white, .5);
+    height: 5px;
+    width: 50px;
+    position: absolute;
+    bottom: 0%;
+    animation: buttonLoad 1s linear infinite;
+}
+
+@keyframes buttonLoad {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
     }
 }
 </style>
