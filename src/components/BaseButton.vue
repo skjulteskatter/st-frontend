@@ -1,7 +1,7 @@
 <template>
     <button
         class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-        :class="[`button-${theme} button`, { 'saturate-50 cursor-wait': loading, 'cursor-not-allowed saturate-50': disabled }]"
+        :class="[`button-${theme} button`, { 'saturate-50 cursor-wait': loading, 'cursor-not-allowed opacity-50': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
