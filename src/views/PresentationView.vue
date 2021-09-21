@@ -198,6 +198,8 @@ export default class PresentationView extends Vue {
 }
 .line {
     line-height: clamp(1rem, 3vh + 2vw, 3.85rem);
+    text-indent: -1em;
+    margin-left: 1em;
 }
 .verse-name {
     left: calc(clamp(3rem, 6vw, 20rem) * -1);
