@@ -218,6 +218,9 @@ export class PresentationBase {
                 this.executeCallback("control");
                 this.commit();
             }
+            else if (index >= this.AvailableVerses.length && !this.settings.muted) {
+                this.mute();
+            }
         }
     }
 
@@ -225,6 +228,9 @@ export class PresentationBase {
         if (this.settings) {
             const index = this.settings.currentIndex - this.settings.size;
             if (index >= 0) {
+                if (this.settings.muted) {
+                    return this.mute();
+                }
                 const settings = Object.assign({}, this.settings);
                 settings.currentIndex = index;
                 this.settings = settings;
