@@ -114,7 +114,7 @@
                             @previous="previous()"
                             @mute="control.mute()"
                         />
-                        <theme-selector :theme="control.Settings?.theme" @setTheme="setTheme" />
+                        <theme-selector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
                         <song-selector :songs="collection?.songs" @setSong="setSong" />
                     </div>
                 </aside>
@@ -228,6 +228,10 @@ export default class SongViewer extends Vue {
     public setLyrics() {
         if (this.lyrics && this.lyrics.format === "json" && this.lyrics?.id !== this.control.Lyrics?.id)
             this.control.setLyrics(this.lyrics);
+    }
+
+    public toggleSidebar() {
+        this.control.toggleSidebar();
     }
 
     public setTheme(theme: "dark" | "light") {
