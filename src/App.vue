@@ -65,7 +65,7 @@ html {
         --st-color-text: var(--st-color-text-dm);
         --st-color-text-inverted: var(--st-color-text-lm);
 
-        .button-secondary {
+        .button--secondary {
             color: var(--st-color-text-lm);
         }
     }
