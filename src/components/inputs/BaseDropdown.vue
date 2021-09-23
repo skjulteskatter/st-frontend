@@ -13,12 +13,12 @@
             <slot name="button" v-else></slot>
         </PopoverButton>
         <transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="-translate-y-2 opacity-0"
+            enter-active-class="transition duration-150 ease-out"
+            enter-from-class="-translate-y-2 scale-95 opacity-0"
             enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition duration-200 ease-in"
+            leave-active-class="transition duration-100 ease-in"
             leave-from-class="translate-y-0 opacity-100"
-            leave-to-class="translate-y-2 opacity-0"
+            leave-to-class="-translate-y-2 opacity-0"
         >
             <PopoverPanel>
                 <base-card :class="`z-10 absolute mt-2 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
