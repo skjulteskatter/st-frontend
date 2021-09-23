@@ -1,101 +1,100 @@
 <template>
-    <div
-        class="text-3xl h-full"
-        :class="[theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']"
-    >
-        <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
-            <h1 class="font-bold text-5xl" v-if="song.number">
-                <!-- {{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }} -->
-                {{ song.number }}
-            </h1>
-            <!-- <h3 class="font-light text-4xl">{{ song.getName() }}</h3> -->
-            <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
-                <div class="flex gap-4">
-                    <p
-                        v-if="song.Authors.length > 0"
-                    >
-                        {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
-                        <span v-for="author in song.Authors" :key="author.id">
-                            {{ author.name }}
-                        </span>
-                    </p>
-                    <span v-if="song.Authors.length">&bull;</span>
-                    <p
-                        v-if="song.Composers.length > 0"
-                    >
-                        {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
-                        <span
-                            v-for="composer in song.Composers"
-                            :key="composer.id"
-                        >
-                            {{ composer.name }}
-                        </span>
-                    </p>
-                    <p
-                        v-else
-                    >
-                        {{$t("song_unknownComposer")}}
-                    </p>
-                    <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&bull;</span>
-                    <p v-if="melodyOrigin">
-                        {{ $t("song_melody") }}: {{ melodyOrigin }}
-                    </p>
-                </div>
-                <div class="flex gap-4">
-                    <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
-                    <span v-if="song.originCountry">&bull;</span>
-                    <span>{{ song.originalKey }}</span>
-                    <span v-if="song.copyright.text || song.copyright.melody">&bull;</span>
-                    <span>{{ song.verses }}</span>
-                    <span v-if="song.copyright.text || song.copyright.melody">&bull;</span>
-                    <p
-                        class="text-base tracking-wide"
-                        v-if="
-                            song.copyright.melody &&
-                            song.copyright.text &&
-                            identicalCopyright
-                        "
-                    >
-                        © {{ getLocaleString(song.copyright.melody.name) }}
-                    </p>
-                    <div v-else class="flex gap-4">
+    <div :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
+        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center', { 'hidden': muted }, theme == 'dark' ? 'bg-white/5' : 'bg-gray-100']">
+            <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90">{{ song?.Collections.find(c => c.id == song?.collectionIds[0])?.getName() }}</h2>
+        </aside>
+        <div class="text-3xl h-full flex-grow">
+            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
+                <span class="font-light text-2xl" v-if="!showSideBar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
+                <h1 class="font-bold text-5xl" v-if="song.number">{{ song.number }}</h1>
+                <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
+                    <div class="flex gap-4">
                         <p
-                            v-if="song.copyright.text"
+                            v-if="song.Authors.length > 0"
                         >
-                            {{ $t("song_text") }} ©
-                            {{ getLocaleString(song.copyright.text.name) }}
+                            {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
+                            <span v-for="author in song.Authors" :key="author.id">
+                                {{ author.name }}
+                            </span>
                         </p>
-                        <span v-if="song.copyright.text && song.copyright.melody">&#8226;</span>
+                        <span v-if="song.Authors.length">&middot;</span>
                         <p
-                            v-if="song.copyright.melody"
+                            v-if="song.Composers.length > 0"
                         >
-                            {{ $t("song_melody") }} ©
-                            {{ getLocaleString(song.copyright.melody.name) }}
+                            {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
+                            <span
+                                v-for="composer in song.Composers"
+                                :key="composer.id"
+                            >
+                                {{ composer.name }}
+                            </span>
                         </p>
+                        <p
+                            v-else
+                        >
+                            {{$t("song_unknownComposer")}}
+                        </p>
+                        <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&middot;</span>
+                        <p v-if="melodyOrigin">
+                            {{ $t("song_melody") }}: {{ melodyOrigin }}
+                        </p>
+                    </div>
+                    <div class="flex gap-4">
+                        <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
+                        <span v-if="song.originCountry">&middot;</span>
+                        <span>{{ song.originalKey }}</span>
+                        <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
+                        <span>{{ song.verses }}</span>
+                        <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
+                        <p
+                            class="text-base tracking-wide"
+                            v-if="
+                                song.copyright.melody &&
+                                song.copyright.text &&
+                                identicalCopyright
+                            "
+                        >
+                            © {{ getLocaleString(song.copyright.melody.name) }}
+                        </p>
+                        <div v-else class="flex gap-4">
+                            <p
+                                v-if="song.copyright.text"
+                            >
+                                {{ $t("song_text") }} ©
+                                {{ getLocaleString(song.copyright.text.name) }}
+                            </p>
+                            <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
+                            <p
+                                v-if="song.copyright.melody"
+                            >
+                                {{ $t("song_melody") }} ©
+                                {{ getLocaleString(song.copyright.melody.name) }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div :class="{'hidden': muted}" class="mt-16 verses" id="presentation-content">
-            <div
-                class="relative verse"
-                :class="{ 'italic ml-16': verse.type == 'chorus' }"
-                v-for="(verse, i) in Verses"
-                :key="i + '_' + verse"
-            >
-                <span
-                    class="absolute top-3 font-semibold verse-name"
-                    v-if="verse.type != 'chorus'"
-                    >{{ verse.name }}</span
+            <div :class="{'hidden': muted}" class="mt-16 verses" id="presentation-content">
+                <div
+                    class="relative verse"
+                    :class="{ 'italic ml-8': verse.type == 'chorus' }"
+                    v-for="(verse, i) in Verses"
+                    :key="i + '_' + verse"
                 >
-                <p
-                    class="tracking-wide line"
-                    :class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
-                    v-for="(line, i) in verse.content"
-                    :key="i + '_' + line"
-                >
-                    {{ line }}
-                </p>
+                    <span
+                        class="absolute top-3 font-semibold verse-name"
+                        v-if="verse.type != 'chorus'"
+                        >{{ verse.name }}</span
+                    >
+                    <p
+                        class="tracking-wide line"
+                        :class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
+                        v-for="(line, i) in verse.content"
+                        :key="i + '_' + line"
+                    >
+                        {{ line }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -115,6 +114,7 @@ export default class PresentationView extends Vue {
     public verses: Verse[] | null = null;
     public muted = false;
     public theme: "dark" | "light" = "dark";
+    public showSideBar = true;
     public verseCount = 0;
 
     public get Verses() {
@@ -128,6 +128,7 @@ export default class PresentationView extends Vue {
         this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
         this.song = viewer.Song ?? null;
         this.verses = viewer.Verses;
+        this.showSideBar = viewer.Settings?.showSideBar === true;
 
         // this.rerender();
 
@@ -141,6 +142,7 @@ export default class PresentationView extends Vue {
             this.verses = viewer.Verses;
             this.muted = viewer.Settings?.muted === true;
             this.theme = viewer.Settings?.theme ?? "dark";
+            this.showSideBar = viewer.Settings?.showSideBar === true;
         });
 
         addEventListener("keydown", (e) => {
