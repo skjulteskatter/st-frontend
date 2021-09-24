@@ -48,7 +48,7 @@
                 <SwitchGroup as="div" class="hidden md:flex gap-2 items-center cursor-pointer" v-if="song?.hasLyrics">
                     <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
                     <Switch
-                        :disabled="lyrics?.format === 'html'"
+                        :disabled="lyrics?.format === 'performance'"
                         @click="extend()"
                         v-model="switchExtended"
                         class="focus:outline-none"
