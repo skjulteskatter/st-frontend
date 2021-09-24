@@ -428,6 +428,8 @@ export default class SongViewer extends Vue {
     public extend() {
         if (!this.control.Initialized) {
             this.control.init();
+            if (this.lyrics)
+                this.control.setLyrics(this.lyrics);
             this.refresh();
         }
         this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
