@@ -4,15 +4,13 @@
 		<transition-root
 			:show="open"
 			as="div"
-			id="tooltip"
-			class="mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white"
-			:class="positionClasses"
-			enter="transition duration-100"
-			enter-from="opacity-0"
-			enter-to="opacity-100"
-			leave="transition duration-100"
+			:class="['mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white', positionClasses]"
+			enter="transition duration-100 ease-out"
+			enter-from="opacity-0 translate-y-1"
+			enter-to="opacity-100 translate-y-0"
+			leave="transition duration-100 ease-in"
 			leave-from="opacity-100"
-			leave-to="opacity-0"
+			leave-to="opacity-0 translate-y-1"
 		>
 			<span
 				class="bg-secondary w-2 h-2 rotate-45 absolute -bottom-0.5 dark:bg-white"

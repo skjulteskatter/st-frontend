@@ -1,43 +1,33 @@
 <template>
-    <base-card @click="goToSong" class="hover:ring-2 hover:ring-gray-400"
-        :class="{'cursor-pointer': !disabled}"
-        :style="disabled ? 'opacity: 0.5' : ''"   
+    <transition
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 translate-x-0"
+        leave-to-class="opacity-0 translate-x-2"
     >
-        <div class="flex gap-4 items-center">
-            <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
-            <div
-                class="flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-            >
-                <div class="flex flex-col">
-                    <span class="font-semibold">
-                        {{ song?.getName() }}
-                    </span>
-                    <small v-for="collection in Collections" :key="collection.id" class="text-gray-500 dark:text-gray-400">
-                        {{ collection.getName() }}
-                        {{ song?.getNumber(collection.id) }}
-                    </small>
+        <base-card :class="['hover:ring-2 hover:ring-gray-400', disabled ? 'opacity-50' : 'cursor-pointer']">
+            <div class="flex gap-4 items-center">
+                <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
+                <div @click="goToSong" class="flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2">
+                    <div class="flex flex-col">
+                        <span class="font-semibold">
+                            {{ song?.getName() }}
+                        </span>
+                        <small v-for="collection in Collections" :key="collection.id" class="text-gray-500 dark:text-gray-400">
+                            {{ collection.getName() }}
+                            {{ song?.getNumber(collection.id) }}
+                        </small>
+                    </div>
                 </div>
+                <button
+                    class="text-xs tracking-wide text-red-500 px-2 py-1 rounded-md hover:bg-red-500/10 cursor-pointer dark:text-red-400"
+                    v-if="canEdit"
+                    @click="remove"
+                >
+                    {{ $t("playlist_remove") }}
+                </button>
             </div>
-            <!-- <div v-else>
-                <div class="flex flex-col" style="opacity: 0.5">
-                    <span class="font-semibold">    
-                        {{ song?.getName() }}
-                    </span>
-                    <small v-for="collection in Collections" :key="collection.id" class="text-gray-500 dark:text-gray-400">
-                        {{ collection.getName() }}
-                        {{ song?.getNumber(collection.id) }}
-                    </small>
-                </div>
-            </div> -->
-            <button
-                class="text-xs tracking-wide text-red-500 px-2 py-1 rounded-md hover:bg-red-500/10 cursor-pointer dark:text-red-400"
-                v-if="canEdit"
-                @click="remove"
-            >
-                {{ $t("playlist_remove") }}
-            </button>
-        </div>
-    </base-card>
+        </base-card>
+    </transition>
 </template>
 
 <script lang="ts">
