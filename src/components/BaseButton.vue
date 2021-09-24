@@ -1,7 +1,7 @@
 <template>
     <button
         class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
-        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'cursor-not-allowed opacity-50': disabled }]"
+        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'button--disabled': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
@@ -128,6 +128,15 @@ export default class BaseButton extends Vue {
             left: -20%;
 
             animation: buttonLoad 1s linear infinite;
+        }
+    }
+
+    &--disabled {
+        @apply cursor-not-allowed bg-black/10 text-gray-400 dark:bg-white/20 dark:text-gray-400;
+
+        &:hover:after {
+            content: "";
+            display: none;
         }
     }
 }
