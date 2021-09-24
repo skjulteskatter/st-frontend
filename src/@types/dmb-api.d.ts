@@ -43,7 +43,7 @@ declare module "dmb-api" {
 
     type Sort = "default" | "number" | "title" | "author" | "composer" | "genre" | "categories" | "views" | "countries" | "themes";
 
-    type Format = "json" | "html" | "performance";
+    type Format = "json" | "performance";
 
     interface ApiCollection {
         id: string;

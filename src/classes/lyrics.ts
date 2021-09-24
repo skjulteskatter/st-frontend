@@ -112,7 +112,7 @@ export class Lyrics implements ApiLyrics {
     }
 
     public get ContainsChords() {
-        return this.format === "html" || this.format === "performance";
+        return this.format === "performance";
     }
 
     public get rawContent() {
@@ -170,7 +170,7 @@ export class Lyrics implements ApiLyrics {
     }
 
     public get size() {
-        if (this.format !== "json")
+        if (this.ContainsChords)
             throw new Error("Invalid format for .size");
         return Object.values(this.content as LyricsContent)[0].content.length;
     }

@@ -106,7 +106,7 @@
         </div>
         <loader :loading="!lyrics || loading" position="local">
             <component
-                :is="lyrics?.format === 'performance' ? (type === 'chords' ? 'TransposedLyricsViewer' : 'PerformanceViewer') :
+                :is="lyrics?.ContainsChords ? (type === 'chords' ? 'TransposedLyricsViewer' : 'PerformanceViewer') :
                 'LyricsViewer'"
                 :lyrics="lyrics"
             />

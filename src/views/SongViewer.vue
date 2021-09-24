@@ -48,11 +48,11 @@
                 <SwitchGroup as="div" class="hidden md:flex gap-2 items-center cursor-pointer" v-if="song?.hasLyrics">
                     <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
                     <Switch
-                        :disabled="lyrics?.format === 'performance'"
+                        :disabled="lyrics?.ContainsChords"
                         @click="extend()"
                         v-model="switchExtended"
                         class="focus:outline-none"
-                        :class="{ 'opacity-50 cursor-not-allowed': lyrics?.format === 'html' }"
+                        :class="{ 'opacity-50 cursor-not-allowed': lyrics?.ContainsChords }"
                     >
                         <div
                             class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
@@ -226,7 +226,7 @@ export default class SongViewer extends Vue {
     }
 
     public setLyrics() {
-        if (this.lyrics && this.lyrics.format === "json" && this.lyrics?.id !== this.control.Lyrics?.id)
+        if (this.lyrics && !this.lyrics.ContainsChords && this.lyrics?.id !== this.control.Lyrics?.id)
             this.control.setLyrics(this.lyrics);
     }
 
@@ -328,7 +328,7 @@ export default class SongViewer extends Vue {
 
         if (this.song?.hasLyrics && this.collection)
         {
-            if (this.lyrics?.format === "html") {
+            if (this.lyrics?.ContainsChords) {
                 this.lyrics = await this.song?.transposeLyrics( 
                     this.store.state.songs.transposition ?? 0,
                     this.selectedLanguage,
