@@ -16,6 +16,14 @@
                         </template>
                         {{ $t('common_edit') }}
                     </base-button>
+
+                    <base-button v-if="isAdmin" :loading="componentLoading['favorites']" @click="addToFavorites">
+                        <template #icon>
+                            <HeartIcon class="w-4 h-4" />
+                        </template>
+                        Add to favorites
+                    </base-button>
+
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
                             <FolderAddIcon class="w-4 h-4" />
@@ -161,7 +169,7 @@ import {
     BaseModal,
 } from "@/components";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
-import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon } from "@heroicons/vue/solid";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Lyrics, transposer } from "@/classes";
 import { ApiPlaylist, Format, MediaFile } from "dmb-api";
@@ -197,6 +205,7 @@ import { SongViewType } from "@/store/modules/songs/state";
         ShoppingCartIcon,
         ArrowLeftIcon,
         PencilAltIcon,
+        HeartIcon,
         SwitchGroup,
         Switch,
         SwitchLabel,
@@ -368,6 +377,24 @@ export default class SongViewer extends Vue {
 
     public get sheetMusicOptions(): SheetMusicOptions | undefined {
         return this.store.state.songs.sheetMusic;
+    }
+
+    public get favorites() {
+        return this.store.getters.favorites;
+    }
+
+    public async addToFavorites() {
+        const song = this.song;
+
+        if(song) {
+            if(this.favorites.find(f => f.songId == song.id)) return;
+
+            this.componentLoading["favorites"] = true;
+            await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, {
+                songId: song.id,
+            });
+            this.componentLoading["favorites"] = false;
+        }
     }
 
     public async addToPlaylist(playlist: ApiPlaylist) {

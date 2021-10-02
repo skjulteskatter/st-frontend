@@ -118,6 +118,13 @@ export interface Actions {
         entryId: string;
     }): Promise<void>;
 
+    [SessionActionTypes.FAVORITE_ADD]({ commit }: AugmentedActionContext, payload: {
+        songId: string;
+    }): Promise<void>;
+    [SessionActionTypes.FAVORITE_DELETE]({ commit }: AugmentedActionContext, payload: {
+        songId: string;
+    }): Promise<void>;
+
     [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
     [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }: AugmentedActionContext, payload: ApiContributor): Promise<void>;
     [SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX]({ commit }: AugmentedActionContext): Promise<void>;
@@ -202,6 +209,22 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
         if (res) {
             commit(SessionMutationTypes.UPDATE_PLAYLIST, res);
+        }
+    },
+
+    // FAVORITES RELATED ACTIONS
+    async [SessionActionTypes.FAVORITE_ADD]({ commit }, obj): Promise<void> {
+        const res = await api.favorites.addToFavorites(obj.songId);
+
+        if(res) {
+            commit(SessionMutationTypes.SET_FAVORITE, res);
+        }
+    },
+    async [SessionActionTypes.FAVORITE_DELETE]({ commit }, obj): Promise<void> {
+        const res = await api.favorites.removeFromFavorites(obj.songId);
+
+        if(res) {
+            commit(SessionMutationTypes.DELETE_FAVORITE, res.id);
         }
     },
 

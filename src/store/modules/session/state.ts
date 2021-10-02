@@ -1,5 +1,5 @@
 import { User } from "@/classes/user";
-import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
+import { ApiActivity, ApiFavorite, ApiPlaylist, ApiTag } from "dmb-api";
 
 export type State = {
     currentUser?: User;
@@ -15,6 +15,7 @@ export type State = {
         content: string;
         callback?: () => Promise<void>;
     };
+    favorites: ApiFavorite[];
 };
 
 export const state: State = {
@@ -23,4 +24,5 @@ export const state: State = {
     error: "",
     playlists: [],
     tags: [],
+    favorites: [],
 };

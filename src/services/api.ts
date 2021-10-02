@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey, ApiFavorite } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -206,6 +206,18 @@ export const playlists = {
     },
 };
 
+export const favorites = {
+    async getFavorites() {
+        return (await http.get<ApiFavorite[]>("api/Favorites"));
+    },
+    async addToFavorites(id: string) {
+        return (await http.post<ApiFavorite, unknown>("api/Favorites", {id}));
+    },
+    removeFromFavorites(id: string) {
+        return http.delete<ApiFavorite>("api/Favorites", {id});
+    },
+};
+
 export const sharing = {
     getKeys() {
         return http.get<ShareKey[]>("api/Sharing");
@@ -312,6 +324,7 @@ const api = {
     tags,
     analytics,
     search,
+    favorites,
 };
 
 export default api;
