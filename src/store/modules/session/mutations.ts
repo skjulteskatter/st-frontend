@@ -1,5 +1,5 @@
 import { User } from "@/classes/user";
-import { ApiActivity, ApiFavorite, ApiPlaylist, ApiSettings, ApiTag } from "dmb-api";
+import { ApiActivity, ApiPlaylist, ApiSettings, ApiTag } from "dmb-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";
@@ -17,7 +17,7 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.DELETE_PLAYLIST](state: S, payload: string): void;
     [SessionMutationTypes.UPDATE_PLAYLIST](state: S, payload: ApiPlaylist): void;
 
-    [SessionMutationTypes.SET_FAVORITE](state: S, payload: ApiFavorite): void;
+    [SessionMutationTypes.SET_FAVORITES](state: S, payload: string[]): void;
     [SessionMutationTypes.DELETE_FAVORITE](state: S, payload: string): void;
 
     [SessionMutationTypes.INITIALIZED](state: S): void;
@@ -84,14 +84,14 @@ export const mutations: MutationTree<State> & Mutations = {
         }
     },
 
-    [SessionMutationTypes.SET_FAVORITE](state, favorite: ApiFavorite): void {
-        state.favorites.push(favorite);
+    [SessionMutationTypes.SET_FAVORITES](state, songIds: string[]): void {
+        state.favorites = [...state.favorites, ...songIds];
     },
     [SessionMutationTypes.DELETE_FAVORITE](state, id: string): void {
-        const favorite = state.favorites.find(f => f.id == id);
-        if(!favorite) return;
+        const exists = state.favorites.includes(id);
+        if(!exists) return;
 
-        state.favorites.splice(state.favorites.indexOf(favorite), 1);
+        state.favorites.splice(state.favorites.indexOf(id), 1);
     },
 
     [SessionMutationTypes.INITIALIZED](state): void {

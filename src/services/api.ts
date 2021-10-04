@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey, ApiFavorite } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -208,13 +208,13 @@ export const playlists = {
 
 export const favorites = {
     async getFavorites() {
-        return (await http.get<ApiFavorite[]>("api/Favorites"));
+        return (await http.get<string[]>("api/Favorites"));
     },
-    async addToFavorites(id: string) {
-        return (await http.post<ApiFavorite, unknown>("api/Favorites", {id}));
+    async addToFavorites(songIds: string[]) {
+        return (await http.post<string[]>("api/Favorites", songIds));
     },
-    removeFromFavorites(id: string) {
-        return http.delete<ApiFavorite>("api/Favorites", {id});
+    removeFromFavorites(songIds: string[]) {
+        return http.delete<string[]>("api/Favorites", songIds);
     },
 };
 

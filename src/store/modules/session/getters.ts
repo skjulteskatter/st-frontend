@@ -2,7 +2,7 @@ import { Collection } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
-import { ApiActivity, ApiFavorite, ApiPlaylist } from "dmb-api";
+import { ApiActivity, ApiPlaylist } from "dmb-api";
 import { Activity } from "@/classes/activity";
 import { appSession } from "@/services/session";
 import { User } from "@/classes/user";
@@ -18,7 +18,7 @@ export type Getters = {
     extended(state: State): boolean;
     playlists(state: State): ApiPlaylist[];
     activities(state: State): Activity[];
-    favorites(state: State): ApiFavorite[];
+    favorites(state: State): string[];
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -68,7 +68,7 @@ export const getters: GetterTree<State, RootState> & Getters = {
             return new Activity(item);
         }) ?? [];
     },
-    favorites(state): ApiFavorite[] {
+    favorites(state): string[] {
         return state.favorites;
     },
 };

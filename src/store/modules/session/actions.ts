@@ -42,6 +42,7 @@ async function init(state: State, commit: Commit): Promise<void> {
     const user = appSession.user;
     
     commit(SessionMutationTypes.SET_PLAYLISTS, appSession.customCollections);
+    commit(SessionMutationTypes.SET_FAVORITES, appSession.favorites);
 
     const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
 
@@ -118,12 +119,8 @@ export interface Actions {
         entryId: string;
     }): Promise<void>;
 
-    [SessionActionTypes.FAVORITE_ADD]({ commit }: AugmentedActionContext, payload: {
-        songId: string;
-    }): Promise<void>;
-    [SessionActionTypes.FAVORITE_DELETE]({ commit }: AugmentedActionContext, payload: {
-        songId: string;
-    }): Promise<void>;
+    [SessionActionTypes.FAVORITE_ADD]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
+    [SessionActionTypes.FAVORITE_DELETE]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
 
     [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
     [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }: AugmentedActionContext, payload: ApiContributor): Promise<void>;
@@ -213,18 +210,18 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
 
     // FAVORITES RELATED ACTIONS
-    async [SessionActionTypes.FAVORITE_ADD]({ commit }, obj): Promise<void> {
-        const res = await api.favorites.addToFavorites(obj.songId);
+    async [SessionActionTypes.FAVORITE_ADD]({ commit }, id: string): Promise<void> {
+        const res = await api.favorites.addToFavorites([id]);
 
         if(res) {
-            commit(SessionMutationTypes.SET_FAVORITE, res);
+            commit(SessionMutationTypes.SET_FAVORITES, [id]);
         }
     },
-    async [SessionActionTypes.FAVORITE_DELETE]({ commit }, obj): Promise<void> {
-        const res = await api.favorites.removeFromFavorites(obj.songId);
+    async [SessionActionTypes.FAVORITE_DELETE]({ commit }, id: string): Promise<void> {
+        const res = await api.favorites.removeFromFavorites([id]);
 
         if(res) {
-            commit(SessionMutationTypes.DELETE_FAVORITE, res.id);
+            commit(SessionMutationTypes.DELETE_FAVORITE, id);
         }
     },
 

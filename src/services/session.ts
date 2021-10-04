@@ -4,7 +4,7 @@ import { Genre, Theme, Country, Copyright } from "@/classes/items";
 import { Tag } from "@/classes/tag";
 import { User } from "@/classes/user";
 import { ApiCollectionItem, ApiContributor, ApiCustomCollection, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
-import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
+import { analytics, favorites, items, playlists, session, sharing, songs, tags } from "./api";
 import { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
@@ -38,6 +38,7 @@ export class Session {
     public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
     public languages: Language[] = [];
+    public favorites: string[] = [];
 
     public lyrics: Lyrics[] = [];
 
@@ -242,6 +243,9 @@ export class Session {
                 } = {};
                 const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
                 this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, expiry) ?? []);
+            },
+            async () => {
+                this.favorites = (await cache.getOrCreateAsync("favorites", favorites.getFavorites, expiry)) ?? [];
             },
         ]) {
             fetchAll.push(f());

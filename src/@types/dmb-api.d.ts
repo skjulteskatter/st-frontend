@@ -166,12 +166,6 @@ declare module "dmb-api" {
         songId: string;
     }
 
-    interface ApiFavorite {
-        id: string;
-        userId: string;
-        songId: string;
-    }
-
     interface ApiTag {
         id: string;
         type: "tag";

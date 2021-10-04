@@ -17,7 +17,7 @@
                         {{ $t('common_edit') }}
                     </base-button>
 
-                    <base-button v-if="isAdmin" :loading="componentLoading['favorites']" @click="addToFavorites">
+                    <base-button v-if="isAdmin" :theme="favorites.includes(song?.id) ? 'primary' : 'tertiary'" :loading="componentLoading['favorites']" @click="toggleFavorite">
                         <template #icon>
                             <HeartIcon class="w-4 h-4" />
                         </template>
@@ -379,22 +379,32 @@ export default class SongViewer extends Vue {
         return this.store.state.songs.sheetMusic;
     }
 
+    // Favorites
     public get favorites() {
         return this.store.getters.favorites;
     }
 
-    public async addToFavorites() {
+    public async addToFavorites(id: string) {
+        await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, id);
+    }
+
+    public async removeFromFavorites(id: string) {
+        await this.store.dispatch(SessionActionTypes.FAVORITE_DELETE, id);
+    }
+
+    public async toggleFavorite() {
         const song = this.song;
+        this.componentLoading["favorites"] = true;
 
         if(song) {
-            if(this.favorites.find(f => f.songId == song.id)) return;
-
-            this.componentLoading["favorites"] = true;
-            await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, {
-                songId: song.id,
-            });
-            this.componentLoading["favorites"] = false;
+            if(this.favorites.includes(song.id)) {
+                await this.removeFromFavorites(song.id);
+            } else {
+                await this.addToFavorites(song.id);
+            }
         }
+
+        this.componentLoading["favorites"] = false;
     }
 
     public async addToPlaylist(playlist: ApiPlaylist) {
