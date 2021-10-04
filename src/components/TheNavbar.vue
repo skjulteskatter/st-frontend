@@ -153,6 +153,11 @@ export default class TheNavbar extends Vue {
 				condition: true,
 			},
 			{
+				name: "Favorites",
+				path: "/favorites",
+				condition: true,
+			},
+			{
 				name: "Admin",
 				path: "/admin",
 				condition: this.isAdmin,

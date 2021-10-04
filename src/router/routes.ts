@@ -98,6 +98,10 @@ const PrintView = () => import(/* webpackChunkName: 'printView' */ "../views/Pri
     window.location.reload();
 });
 
+const FavoritesView = () => import(/* webpackChunkName: 'favoritesView' */ "../views/Favorites.vue").catch(() => {
+    window.location.reload();
+});
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -207,6 +211,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: "sharing",
                 name: "sharing",
                 component: RedeemToken,
+            },
+            {
+                path: "/favorites",
+                name: "favorites",
+                component: FavoritesView,
             },
         ],
     },
