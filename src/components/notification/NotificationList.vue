@@ -67,8 +67,6 @@ export default class NotificationList extends Vue {
 
 .shadow-scroll {
     @include scrollShadow(white);
-    max-height: 400px;
-    overflow-y: auto;
 }
 
 .dark {
