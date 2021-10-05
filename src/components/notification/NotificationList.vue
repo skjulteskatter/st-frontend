@@ -19,11 +19,11 @@
 				>{{ $t('common_remove') }}</button>
 			</div>
 		</template>
-		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80" v-if="notifications.length">
+		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80 shadow-scroll" v-if="notifications.length">
 			<div
 				v-for="n in notifications"
 				:key="n.id"
-				class="p-2 rounded-md bg-white max-w-sm relative flex gap-2 border border-black/20 dark:border-white/10 dark:bg-secondary"
+				class="p-2 rounded-md bg-transparent max-w-sm relative flex gap-2 border border-black/10 dark:border-white/10"
 				@click="n.callback?.()"
 			>
 				<icon v-if="n.icon" :name="n.icon" size="18" :class="{ 'text-green-700': n.type == 'success', 'text-red-700': n.type == 'error' }" />
@@ -61,3 +61,19 @@ export default class NotificationList extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>
