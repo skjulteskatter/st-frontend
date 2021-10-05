@@ -274,7 +274,7 @@ export default class PlaylistView extends Vue {
         );
         this.$router.push("/playlists");
 
-        notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${name}"`);
+        notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${name}"`, undefined, undefined, false);
     }
 
     public async toggleSharePlaylist() {
@@ -380,7 +380,7 @@ export default class PlaylistView extends Vue {
             entryId: id,
         });
 
-        notify("success", title, "trash", content);
+        notify("success", title, "trash", content, undefined, undefined, false);
     }
 }
 </script>

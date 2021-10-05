@@ -293,7 +293,7 @@ export default class SettingsCard extends Vue {
         }
 
         // Fire a success notification
-        notify("success", this.$t("notification_saved"), "check");
+        notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
         this.loading["save"] = false;
     }
 

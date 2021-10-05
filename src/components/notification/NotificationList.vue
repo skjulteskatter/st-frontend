@@ -5,23 +5,23 @@
 				<span class="sr-only">View notifications</span>
 				<BellIcon class="w-6 h-6 opacity-50" />
 			</button>
-			<span v-if="notifications.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
-				{{ notifications.length }}
+			<span v-if="filteredNotifications.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
+				{{ filteredNotifications.length }}
 			</span>
 		</template>
 		<template #header>
 			<div class="flex justify-between items-center gap-4">
 				<b>{{ $t('common_notifications') }}</b>
 				<button 
-					v-if="notifications.length"
+					v-if="filteredNotifications.length"
 					@click="clearNotifications()"
 					class="text-xs tracking-wide text-red-500 py-1 px-2 rounded-md bg-red-500/10 hover:text-red-700 hover:bg-red-500/20"
 				>{{ $t('common_remove') }}</button>
 			</div>
 		</template>
-		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80 shadow-scroll" v-if="notifications.length">
+		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80 shadow-scroll" v-if="filteredNotifications.length">
 			<div
-				v-for="n in notifications"
+				v-for="n in filteredNotifications"
 				:key="n.id"
 				class="p-2 rounded-md bg-transparent max-w-sm relative flex gap-2 border border-black/10 dark:border-white/10"
 				@click="n.callback?.()"
@@ -55,6 +55,10 @@ export default class NotificationList extends Vue {
 	public get notifications() {
         return this.store.getters.notifications.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);
     }
+
+	public get filteredNotifications() {
+		return this.notifications.filter(n => n.store);
+	}
 
     public async clearNotifications() {
         await notifications.clear();
