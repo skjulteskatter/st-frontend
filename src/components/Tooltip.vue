@@ -8,9 +8,9 @@
 			enter="transition duration-100 ease-out"
 			enter-from="opacity-0 translate-y-1"
 			enter-to="opacity-100 translate-y-0"
-			leave="transition duration-100 ease-in"
+			leave="transition duration-50 ease-in"
 			leave-from="opacity-100"
-			leave-to="opacity-0 translate-y-1"
+			leave-to="opacity-0"
 		>
 			<span
 				class="bg-secondary w-2 h-2 rotate-45 absolute -bottom-0.5 dark:bg-white"
