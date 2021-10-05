@@ -14,7 +14,7 @@
                 <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
             </div>
         </template>
-        <div class="flex flex-col gap-2" v-if="playlists.length">
+        <div class="flex flex-col gap-2 shadow-scroll" v-if="playlists.length">
             <router-link
                 class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
                 v-for="p in playlists"
@@ -81,3 +81,19 @@ export default class Playlists extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>
