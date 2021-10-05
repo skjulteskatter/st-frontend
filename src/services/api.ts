@@ -214,7 +214,7 @@ export const favorites = {
         return (await http.post<string[]>("api/Favorites", songIds));
     },
     removeFromFavorites(songIds: string[]) {
-        return http.delete<string[]>("api/Favorites", songIds);
+        return http.delete("api/Favorites", songIds);
     },
 };
 

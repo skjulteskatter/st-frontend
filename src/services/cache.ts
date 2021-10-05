@@ -42,7 +42,7 @@ class CacheService {
         "custom_collections",
         "favorites",
     ];
-    private version = 26;
+    private version = 27;
 
     private db() {
         const v = this.version;

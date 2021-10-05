@@ -4,15 +4,15 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
+import { useStore } from "vuex";
 
 @Options({
 	name: "favorites-view",
 })
 export default class Favorites extends Vue {
 	public store = useStore();
-
+	
 	public get favorites() {
 		return this.store.getters.favorites;
 	}
