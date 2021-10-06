@@ -137,7 +137,7 @@
             </template>
             <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
                 <base-button theme="tertiary" @click="showDelete = false">
-                    {{ $t('cancel') }}
+                    {{ $t('common_cancel') }}
                 </base-button>
                 <base-button theme="error" @click="deletePlaylist">
                     <template #icon>

@@ -51,7 +51,7 @@
 			<p>{{splash?.content}}</p>
 			<template #footer>
 				<div v-if="splash?.callback" class="flex gap-2">
-					<base-button theme="tertiary" @click="closeSplash()">{{$t('cancel')}}</base-button>
+					<base-button theme="tertiary" @click="closeSplash()">{{$t('common_cancel')}}</base-button>
 					<base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
 				</div>
 				<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common_close')}}</base-button>
