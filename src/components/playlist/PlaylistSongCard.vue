@@ -4,10 +4,10 @@
         leave-from-class="opacity-100 translate-x-0"
         leave-to-class="opacity-0 translate-x-2"
     >
-        <base-card :class="['hover:ring-2 hover:ring-gray-400', disabled ? 'opacity-50' : 'cursor-pointer']">
+        <base-card :class="['group', disabled ? 'opacity-50' : 'cursor-pointer']">
             <div class="flex gap-4 items-center">
                 <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
-                <div @click="goToSong" class="flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2">
+                <button @click="goToSong" class="text-left flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2">
                     <div class="flex flex-col">
                         <span class="font-semibold">
                             {{ song?.getName() }}
@@ -17,13 +17,15 @@
                             {{ song?.getNumber(collection.id) }}
                         </small>
                     </div>
-                </div>
+                </button>
                 <button
-                    class="text-xs tracking-wide text-red-500 px-2 py-1 rounded-md hover:bg-red-500/10 cursor-pointer dark:text-red-400"
+                    :title="`${$t('playlist_remove')} ${$t('common_song').toLocaleLowerCase()}`"
+                    :aria-label="`${$t('playlist_remove')} ${$t('common_song').toLocaleLowerCase()}`"
+                    class="p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 invisible group-hover:visible"
                     v-if="canEdit"
                     @click="remove"
                 >
-                    {{ $t("playlist_remove") }}
+                    <TrashIcon class="h-4 w-4 opacity-50" />
                 </button>
             </div>
         </base-card>
@@ -37,7 +39,7 @@ import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { songs } from "@/services/api";
-import { SelectorIcon } from "@heroicons/vue/solid";
+import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "playlist-song-card",
@@ -52,6 +54,7 @@ import { SelectorIcon } from "@heroicons/vue/solid";
     },
     components: {
         SelectorIcon,
+        TrashIcon,
     },
     emits: [
         "remove",

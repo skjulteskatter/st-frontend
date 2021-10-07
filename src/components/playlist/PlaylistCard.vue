@@ -6,7 +6,7 @@
         enter-to-class="opacity-100 translate-y-0"
     >
         <button class="text-left rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 group" @click="goToPlaylist">
-            <base-card class="h-full cursor-pointer group-hover:ring-2 group-hover:ring-gray-400">
+            <base-card class="h-full cursor-pointer">
                 <div class="flex gap-4">
                     <FolderIcon class="w-6 h-6 opacity-50" />
                     <span>
@@ -25,6 +25,8 @@
                             <span v-else>{{ `${$t('playlist_sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
                         </small>
                         <button
+                            :title="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
+                            :aria-label="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
                             class="ml-auto rounded p-1 hover:bg-black/5 invisible group-hover:visible"
                             @mouseover="hover = true"
                             @mouseleave="hover = false"
