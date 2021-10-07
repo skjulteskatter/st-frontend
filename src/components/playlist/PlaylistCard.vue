@@ -5,8 +5,8 @@
         enter-from-class="opacity-0 translate-y-2"
         enter-to-class="opacity-100 translate-y-0"
     >
-        <button class="text-left rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2" @click="goToPlaylist">
-            <base-card class="h-full cursor-pointer hover:ring-2 hover:ring-gray-400">
+        <button class="text-left rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 group" @click="goToPlaylist">
+            <base-card class="h-full cursor-pointer">
                 <div class="flex gap-4">
                     <FolderIcon class="w-6 h-6 opacity-50" />
                     <span>
@@ -17,12 +17,24 @@
                         </small>
                     </span>
                 </div>
-                <template #footer v-if="playlist?.sharedWithIds.length">
-                    <small class="ml-auto w-max flex gap-2 items-center" :class="[userId != playlist?.userId ? 'text-primary' : 'opacity-50']">
-                        <ShareIcon class="w-3 h-3" />
-                        <span v-if="userId != playlist?.userId">{{ $t('playlist_sharedWithYou') }}</span>
-                        <span v-else>{{ `${$t('playlist_sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
-                    </small>
+                <template #footer>
+                    <div class="flex justify-between items-center gap-4">
+                        <small v-if="playlist?.sharedWithIds.length" class="w-max inline-flex gap-2 items-center" :class="[userId != playlist?.userId ? 'text-primary' : 'opacity-50']">
+                            <ShareIcon class="w-3 h-3" />
+                            <span v-if="userId != playlist?.userId">{{ $t('playlist_sharedWithYou') }}</span>
+                            <span v-else>{{ `${$t('playlist_sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
+                        </small>
+                        <button
+                            :title="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
+                            :aria-label="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
+                            class="ml-auto rounded p-1 hover:bg-black/5 invisible group-hover:visible"
+                            @mouseover="hover = true"
+                            @mouseleave="hover = false"
+                            @click="$emit('delete', { id: playlist?.id, name: playlist?.name })"
+                        >
+                            <TrashIcon class="w-4 h-4 opacity-50" />
+                        </button>
+                    </div>
                 </template>
             </base-card>
         </button>
@@ -33,8 +45,8 @@
 import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { useStore } from "@/store";
-import { FolderIcon } from "@heroicons/vue/outline";
-import { ShareIcon } from "@heroicons/vue/solid";
+import { FolderIcon, ExclamationIcon } from "@heroicons/vue/outline";
+import { ShareIcon, TrashIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "playlist-card",
@@ -44,17 +56,24 @@ import { ShareIcon } from "@heroicons/vue/solid";
             required: true,
         },
     },
+    emits: ["delete"],
     components: {
         FolderIcon,
+        ExclamationIcon,
         ShareIcon,
+        TrashIcon,
     },
 })
 export default class PlaylistCard extends Vue {
+    private store = useStore();
     public playlist?: ApiPlaylist;
-    public userId = useStore().getters.user?.id;
+    public userId = this.store.getters.user?.id;
+
+    public hover = false;
+    public showModal = false;
 
     public goToPlaylist() {
-        if (!this.playlist?.id) return;
+        if (!this.playlist?.id || this.hover) return;
 
         this.$router.push({
             name: "playlist-view",

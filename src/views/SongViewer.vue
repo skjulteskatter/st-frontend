@@ -32,7 +32,7 @@
                             </div>
                         </template>
                         <create-playlist-modal :show="showPlaylistModal" @close="showPlaylistModal = false" />
-                        <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto">
+                        <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto shadow-scroll">
                             <playlist-card
                                 v-for="playlist in playlists"
                                 :key="playlist.id"
@@ -514,3 +514,19 @@ export default class SongViewer extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>

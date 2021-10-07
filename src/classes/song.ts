@@ -150,7 +150,7 @@ export class Song extends BaseClass implements ApiSong {
         this.loadingLyrics = true;
         try {
             language = language ?? this.store.getters.languageKey;
-            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.ContainsChords);
+            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language);
             if (!lyrics) {
                 lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, "json", 0, "common"));
                 appSession.lyrics.push(lyrics);
