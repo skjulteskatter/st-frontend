@@ -73,7 +73,7 @@
                 </div>
                 <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
                     <button
-                        v-for="s in songs"
+                        v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
                         :key="s?.id ?? Math.random()"
                         class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
                         @click="s.view()"
