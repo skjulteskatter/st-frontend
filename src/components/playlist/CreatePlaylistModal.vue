@@ -57,7 +57,7 @@ export default class CreatePlaylistModal extends Vue {
             name: this.playlistName,
         });
 
-        notify("success", this.$t("playlist_newplaylist"), "check", `${this.$t("playlist_newplaylist")} "${this.playlistName}"`);
+        notify("success", this.$t("playlist_newplaylist"), "check", `${this.$t("playlist_newplaylist")} "${this.playlistName}"`, undefined, undefined, false);
 
         this.playlistName = "";
 		this.loading = false;

@@ -123,7 +123,7 @@ export default class UsersList extends Vue {
         this.disableButton = true;
         await this.searchUser();
 
-        notify("success", this.$t("notification_fetchedusers"), "check");
+        notify("success", this.$t("notification_fetchedusers"), "check", undefined, undefined, undefined, false);
         this.loading["refresh"] = false;
         this.disableButton = false;
     }
@@ -143,7 +143,7 @@ export default class UsersList extends Vue {
     public async saveRoles(user: User) {
         this.loading["save"] = true;
         await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
-        notify("success", this.$t("notification_saved"), "check");
+        notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
         this.loading["save"] = false;
     }
 }
