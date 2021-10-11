@@ -169,28 +169,28 @@ export const songs = {
 };
 
 export const playlists = {
-    async getPlaylists() {
-        return (await http.get<ApiPlaylist[]>("api/Playlists"));
+    getPlaylists() {
+        return http.get<ApiPlaylist[]>("api/Playlists");
     },
-    async getPlaylist(id: string) {
-        return (await http.get<ApiPlaylist>("api/Playlists/" + id));
+    getPlaylist(id: string) {
+        return http.get<ApiPlaylist>("api/Playlists/" + id);
     },
-    async createPlaylist(name: string) {
-        return await http.post<ApiPlaylist, unknown>("api/Playlists", {name});
+    createPlaylist(name: string) {
+        return http.post<ApiPlaylist, unknown>("api/Playlists", {name});
     },
     deletePlaylist(id: string): Promise<void> {
         return http.delete(`api/Playlists/${id}`);
     },
-    async addToPlaylist(playlistId: string, songId: string, transposition?: number) {
-        return await http.post<ApiPlaylistEntry[], unknown>(`api/Playlists/${playlistId}`, {
+    addToPlaylist(playlistId: string, songId: string, transposition?: number) {
+        return http.post<ApiPlaylistEntry[], unknown>(`api/Playlists/${playlistId}`, {
             songIds: [songId],
             transposition,
         });
     },
-    async removeEntryFromPlaylist(playlistId: string, entryId: string) {
-        return (await http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
+    removeEntryFromPlaylist(playlistId: string, entryId: string) {
+        return http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
             removeEntryIds: [entryId],
-        }));
+        });
     },
     getUsers(playlistId: string) {
         return http.get<PublicUser[]>("api/Playlists/" + playlistId + "/Users");
@@ -207,11 +207,11 @@ export const playlists = {
 };
 
 export const favorites = {
-    async getFavorites() {
-        return (await http.get<string[]>("api/Favorites"));
+    getFavorites() {
+        return http.get<string[]>("api/Favorites");
     },
-    async addToFavorites(songIds: string[]) {
-        return (await http.post<string[]>("api/Favorites", songIds));
+    addToFavorites(songIds: string[]) {
+        return http.post<string[]>("api/Favorites", songIds);
     },
     removeFromFavorites(songIds: string[]) {
         return http.delete("api/Favorites", songIds);
