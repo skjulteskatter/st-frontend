@@ -182,6 +182,8 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { SongViewType } from "@/store/modules/songs/state";
+import { cache } from "@/services/cache";
+import { StripeCardElementChangeEvent } from "@stripe/stripe-js";
 
 @Options({
     components: {
@@ -384,13 +386,28 @@ export default class SongViewer extends Vue {
         return this.store.getters.favorites;
     }
 
+    // public async setFavorites(id: string) {
+    //     let favorites;
+    //     if(this.favorites.includes(id)) {
+    //         favorites = this.favorites.filter(f => f != id);
+    //     } else {
+    //         favorites = [...this.favorites, id];
+    //     }
+    //     await cache.set("general", "favorites", {
+    //         expiry: new Date().getTime() + 60000,
+    //         item: JSON.stringify(favorites),
+    //     });
+    // }
+
     public async addToFavorites(id: string) {
         await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, id);
+        // await this.setFavorites(id);
         notify("success", "Added to favorites", "check", `Added "${this.song?.getName()}" to favorites`, undefined, undefined, false);
     }
 
     public async removeFromFavorites(id: string) {
         await this.store.dispatch(SessionActionTypes.FAVORITE_DELETE, id);
+        // await this.setFavorites(id);
         notify("success", "Removed from favorites", "check", `Removed "${this.song?.getName()}" from favorites`, undefined, undefined, false);
     }
 
