@@ -135,11 +135,13 @@ class Http {
      *
      * @param  {String} path
      * @param  {Object} query (optional)
+     * @param  {Object} content (optional)
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public async ["delete"]<T>(
+    public async ["delete"]<T, Y = T>(
         path: string,
+        content?: Y,
         options?: object,
     ): Promise<T> {
         const result = await this.apifetch(
@@ -147,6 +149,7 @@ class Http {
             Object.assign(
                 {
                     method: "DELETE",
+                    body: content ? JSON.stringify(content) : undefined,
                 },
                 options || {},
             ),

@@ -85,7 +85,8 @@ export const mutations: MutationTree<State> & Mutations = {
     },
 
     [SessionMutationTypes.SET_FAVORITES](state, songIds: string[]): void {
-        state.favorites = [...state.favorites, ...songIds];
+        const favorites = [...state.favorites, ...songIds];
+        state.favorites = favorites;
     },
     [SessionMutationTypes.DELETE_FAVORITE](state, id: string): void {
         const exists = state.favorites.includes(id);

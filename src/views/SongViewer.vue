@@ -17,12 +17,10 @@
                         {{ $t('common_edit') }}
                     </base-button>
 
-                    <base-button v-if="isAdmin" :theme="favorites.includes(song?.id) ? 'primary' : 'tertiary'" :loading="componentLoading['favorites']" @click="toggleFavorite">
-                        <template #icon>
-                            <HeartIcon class="w-4 h-4" />
-                        </template>
-                        Add to favorites
-                    </base-button>
+                    <button v-if="isAdmin" @click="toggleFavorite" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
+                        <HeartIcon class="w-6 h-6 text-red-500" v-if="favorites.includes(song?.id)" />
+                        <HeartOutline class="w-6 h-6 opacity-50" v-else />
+                    </button>
 
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
@@ -170,6 +168,7 @@ import {
 } from "@/components";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon } from "@heroicons/vue/solid";
+import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Lyrics, transposer } from "@/classes";
 import { ApiPlaylist, Format, MediaFile } from "dmb-api";
@@ -206,6 +205,7 @@ import { SongViewType } from "@/store/modules/songs/state";
         ArrowLeftIcon,
         PencilAltIcon,
         HeartIcon,
+        HeartOutline,
         SwitchGroup,
         Switch,
         SwitchLabel,
@@ -386,10 +386,12 @@ export default class SongViewer extends Vue {
 
     public async addToFavorites(id: string) {
         await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, id);
+        notify("success", "Added to favorites", "check", `Added "${this.song?.getName()}" to favorites`, undefined, undefined, false);
     }
 
     public async removeFromFavorites(id: string) {
         await this.store.dispatch(SessionActionTypes.FAVORITE_DELETE, id);
+        notify("success", "Removed from favorites", "check", `Removed "${this.song?.getName()}" from favorites`, undefined, undefined, false);
     }
 
     public async toggleFavorite() {

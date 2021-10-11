@@ -211,18 +211,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
 
     // FAVORITES RELATED ACTIONS
     async [SessionActionTypes.FAVORITE_ADD]({ commit }, id: string): Promise<void> {
-        const res = await api.favorites.addToFavorites([id]);
-
-        if(res) {
-            commit(SessionMutationTypes.SET_FAVORITES, [id]);
-        }
+        await api.favorites.addToFavorites([id]);
+        commit(SessionMutationTypes.SET_FAVORITES, [id]);
     },
     async [SessionActionTypes.FAVORITE_DELETE]({ commit }, id: string): Promise<void> {
         const res = await api.favorites.removeFromFavorites([id]);
 
-        if(res) {
+        if(res)
             commit(SessionMutationTypes.DELETE_FAVORITE, id);
-        }
     },
 
     // LOG ITEMS
