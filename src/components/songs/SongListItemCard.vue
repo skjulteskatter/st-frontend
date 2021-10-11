@@ -6,7 +6,8 @@
                 <b>{{ song.getName(languageKey) }}</b>
                 <small class="text-xs text-primary flex gap-2 mb-2">
                     <span>{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</span>
-                    <span>({{ song.originalKey }})</span>
+                    <span>&middot;</span>
+                    <span>{{ song.originalKey }}</span>
                 </small>
                 <div class="text-gray-500 text-sm leading-tight">
                     <div v-if="song.Authors.length">
