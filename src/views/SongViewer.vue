@@ -455,7 +455,7 @@ export default class SongViewer extends Vue {
     }
 
     public async translate(language: string) {
-        if (this.song) {
+        if (this.song?.hasLyrics === true) {
             switch(this.store.state.songs.view) {
                 case "chords":
                 case "performance":
