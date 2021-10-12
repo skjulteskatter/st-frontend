@@ -1,3 +1,4 @@
+import { cache } from "@/services/cache";
 import { appSession } from "@/services/session";
 
 type Theme = {
@@ -27,6 +28,11 @@ export class Themes {
         },
     }
 
+    private applyTheme(key?: "light" | "dark") {
+        if (key === "dark") document.documentElement.classList.add("dark");
+        else if (key === "light") document.documentElement.classList.remove("dark");
+    }
+
     public setTheme(key: "light" | "dark" = "light") {
         const theme = this.themes[key];
 
@@ -34,12 +40,9 @@ export class Themes {
             throw new Error("Theme not valid");
         }
 
-        // this.setThemeProperties(theme);
+        this.applyTheme(key);
 
-        // Add 'darkmode' class if user applies darkmode
-        if (key == "dark") document.documentElement.classList.add("dark");
-        else if (key == "light") document.documentElement.classList.remove("dark");
-
+        cache.set("config", "theme", key);
         if (appSession.user.settings) {
             appSession.user.settings.theme = key;
         }
@@ -64,7 +67,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(appSession.user.settings?.theme);
+        this.applyTheme(cache.get("config", "theme") as unknown as undefined | "dark" | "light");
     }
 
     public get keys() {
