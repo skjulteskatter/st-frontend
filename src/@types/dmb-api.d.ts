@@ -6,7 +6,6 @@ declare module "dmb-api" {
         email: string;
         subscriptions: ApiSubscription[];
         roles: string[];
-        address: {};
         birthDay: string;
         gender: "male" | "female" | "unknown";
         settings?: ApiSettings;
@@ -19,6 +18,7 @@ declare module "dmb-api" {
         languageKey?: string;
         defaultTransposition?: string;
         defaultTranscode?: string;
+        defaultClef?: "treble" | "bass" | "alto";
         theme?: "light" | "dark";
     }
 
