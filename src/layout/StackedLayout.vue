@@ -107,7 +107,6 @@ export default class StackedLayout extends Vue {
             "--st-color-primary",
             themes.default,
         );
-        themes.load();
 
         const route = this.$route.name;
         setTimeout(() => {
@@ -125,6 +124,7 @@ export default class StackedLayout extends Vue {
                 );
             }
             await appSession.init();
+			themes.load();
         }
     }
 
