@@ -1,3 +1,5 @@
+import { appSession } from "@/services/session";
+
 type Theme = {
     background: string;
     secondaryBackground: string;
@@ -25,7 +27,7 @@ export class Themes {
         },
     }
 
-    public setTheme(key: string) {
+    public setTheme(key: "light" | "dark" = "light") {
         const theme = this.themes[key];
 
         if (!theme) {
@@ -38,7 +40,9 @@ export class Themes {
         if (key == "dark") document.documentElement.classList.add("dark");
         else if (key == "light") document.documentElement.classList.remove("dark");
 
-        localStorage.setItem("theme", key);
+        if (appSession.user.settings) {
+            appSession.user.settings.theme = key;
+        }
     }
 
     public setThemeProperties(params: Theme) {
@@ -60,7 +64,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(localStorage.getItem("theme") ?? "light");
+        this.setTheme(appSession.user.settings?.theme);
     }
 
     public get keys() {
