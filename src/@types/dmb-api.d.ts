@@ -19,6 +19,7 @@ declare module "dmb-api" {
         languageKey?: string;
         defaultTransposition?: string;
         defaultTranscode?: string;
+        theme?: "light" | "dark";
     }
 
     type ApiSubscription = {

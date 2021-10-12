@@ -1,3 +1,4 @@
+import { session } from "@/services/api";
 import { ApiUser } from "dmb-api";
 
 export class User implements ApiUser {
@@ -29,5 +30,13 @@ export class User implements ApiUser {
         this.settings = i.settings;
         this.subscriptions = i.subscriptions;
         this.termsAndConditions = i.termsAndConditions;
+    }
+
+    public async saveSettings() {
+        await session.saveUser(this.settings ?? {});
+    }
+
+    public async saveProfile() {
+        await session.saveProfile({});
     }
 }
