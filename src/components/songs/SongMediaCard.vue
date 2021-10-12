@@ -52,6 +52,9 @@
                     :show="showVideo"
                     @close="closeVideo"
                 >
+                    <button class="absolute top-1 right-1" @click="closeVideo">
+                        <XIcon class="w-4 h-4" />
+                    </button>
                     <video
                         :src="activeVideo"
                         width="500"
@@ -72,7 +75,7 @@
 <script lang="ts">
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
-import { PlayIcon } from "@heroicons/vue/solid";
+import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -86,6 +89,7 @@ import { logs } from "@/services/logs";
         BaseModal,
         MediaListItem,
         PlayIcon,
+        XIcon,
     },
     props: {
         song: {

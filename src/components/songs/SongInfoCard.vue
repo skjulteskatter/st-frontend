@@ -93,9 +93,9 @@
                     </small>
                     <small class="flex gap-2">
                         <span v-if="song.originCountry">{{ $t(song.originCountry) }}</span>
-                        <span v-if="song.originCountry">&bull;</span>
+                        <span v-if="song.originCountry">&middot;</span>
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
-                        <span v-if="song.originalKey">&bull;</span>
+                        <span v-if="song.originalKey">&middot;</span>
                         <span v-if="song.verses">{{ song.verses }}</span>
                     </small>
                 </div>

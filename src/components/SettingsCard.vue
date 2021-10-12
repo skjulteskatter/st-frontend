@@ -235,7 +235,7 @@ export default class SettingsCard extends Vue {
     public fileName = "";
     private selectedImage?: string;
 
-    public theme = localStorage.getItem("theme") ?? "dark";
+    public theme = this.user?.settings?.theme;
     public token = localStorage.getItem("id_token");
 
     public loading: {

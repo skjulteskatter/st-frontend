@@ -1,7 +1,8 @@
 <template>
     <div :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
-        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center', { 'hidden': muted }, theme == 'dark' ? 'bg-white/5' : 'bg-gray-100']">
+        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? 'bg-white/5' : 'bg-gray-100']">
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90">{{ song?.Collections.find(c => c.id == song?.collectionIds[0])?.getName() }}</h2>
+            <!-- <img class="w-2/3 drop-shadow-sm" src="/img/collections/wotl.svg" /> -->
         </aside>
         <div class="text-3xl h-full flex-grow">
             <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
