@@ -20,7 +20,7 @@
                 <template #footer>
                     <div class="flex justify-between items-center gap-4">
                         <small v-if="playlist?.sharedWithIds.length" class="w-max inline-flex gap-2 items-center" :class="[userId != playlist?.userId ? 'text-primary' : 'opacity-50']">
-                            <ShareIcon class="w-3 h-3" />
+                            <UsersIcon class="w-3 h-3" />
                             <span v-if="userId != playlist?.userId">{{ $t('playlist_sharedWithYou') }}</span>
                             <span v-else>{{ `${$t('playlist_sharedWith')} ${playlist?.sharedWithIds.length}` }}</span>
                         </small>
@@ -46,7 +46,7 @@ import { Options, Vue } from "vue-class-component";
 import { ApiPlaylist } from "dmb-api";
 import { useStore } from "@/store";
 import { FolderIcon, ExclamationIcon } from "@heroicons/vue/outline";
-import { ShareIcon, TrashIcon } from "@heroicons/vue/solid";
+import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "playlist-card",
@@ -60,8 +60,8 @@ import { ShareIcon, TrashIcon } from "@heroicons/vue/solid";
     components: {
         FolderIcon,
         ExclamationIcon,
-        ShareIcon,
         TrashIcon,
+        UsersIcon,
     },
 })
 export default class PlaylistCard extends Vue {
