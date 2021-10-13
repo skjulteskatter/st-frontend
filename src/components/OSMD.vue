@@ -3,9 +3,10 @@
         <loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
             <div v-if="song && collection">
                 <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
-                <div>
-                    <small v-if="collection.name" class="text-gray-500">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
-                    <small v-if="song.verses" class="text-gray-400 rounded p-1 border border-gray-400 ml-4">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
+                <div class="flex gap-2 items-center opacity-50 tracking-wide">
+                    <small v-if="collection.name">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
+                    <span>&middot;</span>
+                    <small v-if="song.verses">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
                 </div>
                 <div class="flex flex-col mt-2">
                     <small v-if="song.Authors.length">{{(song.yearWritten ? $t('song_writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song_writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
