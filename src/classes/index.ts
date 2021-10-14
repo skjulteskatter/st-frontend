@@ -34,11 +34,11 @@ export {
     CollectionItem,
     Contributor,
     Favorites,
-    Tag,
     Lyrics,
-    Song,
     Participant,
     Product,
+    Tag,
+    Song,
     User,
     UserSettings,
 };
