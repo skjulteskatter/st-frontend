@@ -17,8 +17,8 @@
                         {{ $t('common_edit') }}
                     </base-button>
 
-                    <button v-if="isAdmin" @click="toggleFavorite" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
-                        <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.includes(song?.id)" />
+                    <button v-if="isAdmin" @click="favorites.toggle(song?.id)" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
+                        <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.has(song?.id)" />
                         <HeartOutline class="w-6 h-6 opacity-50" v-else />
                     </button>
 
@@ -182,8 +182,6 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { SongViewType } from "@/store/modules/songs/state";
-import { cache } from "@/services/cache";
-import { StripeCardElementChangeEvent } from "@stripe/stripe-js";
 
 @Options({
     components: {
@@ -224,6 +222,8 @@ export default class SongViewer extends Vue {
     public show = false;
     public unset = false;
     public showPlaylistModal = false;
+
+    public favorites = appSession.favorites;
 
     public lyrics?: Lyrics | null = null;
 
@@ -381,11 +381,6 @@ export default class SongViewer extends Vue {
         return this.store.state.songs.sheetMusic;
     }
 
-    // Favorites
-    public get favorites() {
-        return this.store.getters.favorites;
-    }
-
     // public async setFavorites(id: string) {
     //     let favorites;
     //     if(this.favorites.includes(id)) {
@@ -398,33 +393,6 @@ export default class SongViewer extends Vue {
     //         item: JSON.stringify(favorites),
     //     });
     // }
-
-    public async addToFavorites(id: string) {
-        await this.store.dispatch(SessionActionTypes.FAVORITE_ADD, id);
-        // await this.setFavorites(id);
-        notify("success", "Added to favorites", "check", `Added "${this.song?.getName()}" to favorites`, undefined, undefined, false);
-    }
-
-    public async removeFromFavorites(id: string) {
-        await this.store.dispatch(SessionActionTypes.FAVORITE_DELETE, id);
-        // await this.setFavorites(id);
-        notify("success", "Removed from favorites", "check", `Removed "${this.song?.getName()}" from favorites`, undefined, undefined, false);
-    }
-
-    public async toggleFavorite() {
-        const song = this.song;
-        this.componentLoading["favorites"] = true;
-
-        if(song) {
-            if(this.favorites.includes(song.id)) {
-                await this.removeFromFavorites(song.id);
-            } else {
-                await this.addToFavorites(song.id);
-            }
-        }
-
-        this.componentLoading["favorites"] = false;
-    }
 
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
