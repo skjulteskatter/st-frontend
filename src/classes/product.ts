@@ -1,5 +1,5 @@
 import { ApiProduct } from "checkout";
-import { BaseClass } from "./baseClass";
+import BaseClass from "./baseClass";
 import { Collection } from ".";
 
 const discountedCountries = [

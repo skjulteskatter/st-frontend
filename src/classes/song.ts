@@ -1,5 +1,5 @@
 import { ApiCollection, ApiSong, Format, MediaFile } from "dmb-api";
-import { BaseClass } from "./baseClass";
+import BaseClass from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";
 import { songs } from "@/services/api";

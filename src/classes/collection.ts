@@ -1,10 +1,9 @@
 import api from "@/services/api";
 import { ApiCollection, ApiContributor, Sort } from "dmb-api";
-import { ListEntry, Lyrics, Song } from ".";
-import { BaseClass } from "./baseClass";
+import { ListEntry, Lyrics, Song, CollectionItem } from ".";
+import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
-import { CollectionItem } from "./collectionItem";
 import { appSession } from "@/services/session";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import router from "@/router";

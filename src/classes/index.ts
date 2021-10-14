@@ -1,5 +1,7 @@
 import Category from "./category";
 import Collection from "./collection";
+import CollectionItem from "./collectionItem";
+import Contributor from "./contributor";
 import Favorites from "./favorites";
 import Lyrics from "./lyrics";
 import Participant from "./participant";
@@ -9,9 +11,6 @@ import Tag from "./tag";
 import User from "./user";
 import UserSettings from "./userSettings";
 
-export * from "./contributor";
-export * from "./themes";
-export * from "./collectionItem";
 export * from "./transposer";
 export * from "./base64";
 export * from "./search";
@@ -30,9 +29,11 @@ export type ListEntry = {
 };
 
 export {
-    Collection,
-    Favorites,
     Category,
+    Collection,
+    CollectionItem,
+    Contributor,
+    Favorites,
     Tag,
     Lyrics,
     Song,

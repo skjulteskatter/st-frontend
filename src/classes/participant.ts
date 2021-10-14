@@ -1,5 +1,5 @@
 import { ApiParticipant } from "dmb-api";
-import { Contributor } from "./contributor";
+import { Contributor } from ".";
 
 export default class Participant implements ApiParticipant {
     public contributorId;
