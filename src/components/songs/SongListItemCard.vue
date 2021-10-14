@@ -9,7 +9,7 @@
                     <span>&middot;</span>
                     <span>{{ song.originalKey }}</span>
                 </small>
-                <div class="text-gray-500 text-sm leading-tight">
+                <div class="opacity-50 text-sm leading-tight">
                     <div v-if="song.Authors.length">
                         <small>{{ $t("song_author") }}: </small>
                         <small
