@@ -17,9 +17,6 @@ export type Mutations<S = State> = {
     [SessionMutationTypes.DELETE_PLAYLIST](state: S, payload: string): void;
     [SessionMutationTypes.UPDATE_PLAYLIST](state: S, payload: ApiPlaylist): void;
 
-    [SessionMutationTypes.SET_FAVORITES](state: S, payload: string[]): void;
-    [SessionMutationTypes.DELETE_FAVORITE](state: S, payload: string): void;
-
     [SessionMutationTypes.INITIALIZED](state: S): void;
     [SessionMutationTypes.REDIRECT](state: S, payload: string): void;
     [SessionMutationTypes.EXTEND](state: S, payload: boolean): void;
@@ -82,17 +79,6 @@ export const mutations: MutationTree<State> & Mutations = {
             pl.entries = playlist.entries;
             pl.name = playlist.name;
         }
-    },
-
-    [SessionMutationTypes.SET_FAVORITES](state, songIds: string[]): void {
-        const favorites = [...state.favorites, ...songIds];
-        state.favorites = favorites;
-    },
-    [SessionMutationTypes.DELETE_FAVORITE](state, id: string): void {
-        const exists = state.favorites.includes(id);
-        if(!exists) return;
-
-        state.favorites.splice(state.favorites.indexOf(id), 1);
     },
 
     [SessionMutationTypes.INITIALIZED](state): void {

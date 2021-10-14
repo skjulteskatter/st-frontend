@@ -15,7 +15,6 @@ export type State = {
         content: string;
         callback?: () => Promise<void>;
     };
-    favorites: string[];
 };
 
 export const state: State = {
@@ -24,5 +23,4 @@ export const state: State = {
     error: "",
     playlists: [],
     tags: [],
-    favorites: [],
 };

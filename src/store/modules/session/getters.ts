@@ -17,7 +17,6 @@ export type Getters = {
     extended(state: State): boolean;
     playlists(state: State): ApiPlaylist[];
     activities(state: State): Activity[];
-    favorites(state: State): string[];
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
@@ -66,8 +65,5 @@ export const getters: GetterTree<State, RootState> & Getters = {
             };
             return new Activity(item);
         }) ?? [];
-    },
-    favorites(state): string[] {
-        return state.favorites;
     },
 };

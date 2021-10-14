@@ -134,11 +134,11 @@ class Http {
      * API DELETE request
      *
      * @param  {String} path
-     * @param  {Object} content (optional)
+     * @param  {Object} query (optional)
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public async ["delete"]<T, Y = T>(
+    public async ["delete"]<T>(
         path: string,
         content?: unknown,
         options?: object,
@@ -149,9 +149,6 @@ class Http {
                 {
                     method: "DELETE",
                     body: content ? JSON.stringify(content) : undefined,
-                    headers: content ? {
-                        "Content-Type": "application/json",
-                    } : undefined,
                 },
                 options || {},
             ),
