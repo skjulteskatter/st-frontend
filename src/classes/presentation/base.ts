@@ -1,7 +1,7 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { ApiContributor, ApiLyrics, ApiSong } from "dmb-api";
-import { Lyrics } from "../lyrics";
+import { Lyrics } from "@/classes";
 
 export type Settings = {
     size: number;

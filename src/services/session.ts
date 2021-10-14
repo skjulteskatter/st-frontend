@@ -1,8 +1,4 @@
-import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
-import { Category } from "@/classes/category";
-import { Genre, Theme, Country, Copyright } from "@/classes/items";
-import { Tag } from "@/classes/tag";
-import { User } from "@/classes/user";
+import { Category, Collection, CollectionItem, Copyright, Country, Favorites, Genre, Lyrics, Song, Theme, Tag, User } from "@/classes";
 import { ApiCollectionItem, ApiContributor, ApiCustomCollection, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
 import { analytics as googleAnalytics } from "./auth";
@@ -29,6 +25,8 @@ export class Session {
     public collections: Collection[] = [];
     public files: MediaFile[] = [];
     public contributors: CollectionItem<ApiContributor>[] = [];
+
+    public favorites = new Favorites();
 
     public themes: Theme[] = [];
     public categories: Category[] = [];

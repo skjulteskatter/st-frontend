@@ -1,4 +1,4 @@
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 
 export type State = {

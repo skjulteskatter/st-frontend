@@ -6,7 +6,7 @@ import { RootState } from "../..";
 import { UsersActionTypes } from "./action-types";
 import api from "@/services/api";
 import { UsersMutationTypes } from "./mutation-types";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 type AugmentedActionContext = {
     commit<K extends keyof Mutations>(

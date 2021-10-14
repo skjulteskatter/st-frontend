@@ -47,7 +47,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { Product } from "@/classes/product";
+import { Product } from "@/classes";
 import { useStore } from "@/store";
 
 import Price from "./Price.vue";

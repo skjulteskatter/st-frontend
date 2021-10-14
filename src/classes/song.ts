@@ -1,18 +1,12 @@
 import { ApiCollection, ApiSong, Format, MediaFile } from "dmb-api";
-import { Participant } from "./participant";
 import { BaseClass } from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";
-import { Lyrics } from "./lyrics";
 import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
+import { Lyrics, Participant } from ".";
 
-export enum SheetMusicTypes {
-    PDF = "sheetmusic-pdf",
-    XML = "sheetmusic"
-}
-
-export class Song extends BaseClass implements ApiSong {
+export default class Song extends BaseClass implements ApiSong {
     public id: string;
     public type: string;
     public available: boolean;

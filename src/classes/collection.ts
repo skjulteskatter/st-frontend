@@ -1,6 +1,6 @@
 import api from "@/services/api";
 import { ApiCollection, ApiContributor, Sort } from "dmb-api";
-import { Lyrics, Song } from ".";
+import { ListEntry, Lyrics, Song } from ".";
 import { BaseClass } from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
@@ -14,16 +14,9 @@ type CollectionSettings = {
     lastSynced?: string;
 }
 
-export type ListEntry = {
-    title: string;
-    songs: Song[];
-    action?: () => void;
-    count: boolean;
-};
-
 let closeId: string | null = null;
 
-export class Collection extends BaseClass implements ApiCollection {
+export default class Collection extends BaseClass implements ApiCollection {
     public id;
     private _key;
     public enabled;

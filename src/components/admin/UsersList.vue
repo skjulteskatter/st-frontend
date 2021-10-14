@@ -76,7 +76,7 @@ import { UsersActionTypes } from "@/store/modules/users/action-types";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
 import api from "@/services/api";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 @Options({
     name: "users-list",

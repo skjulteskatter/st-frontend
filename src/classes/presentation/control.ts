@@ -1,4 +1,4 @@
-import { Lyrics } from "../lyrics";
+import { Lyrics } from "@/classes";
 import { PresentationBase, Settings } from "./base";
 
 export class PresentationControl extends PresentationBase {
