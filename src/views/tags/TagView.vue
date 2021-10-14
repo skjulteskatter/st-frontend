@@ -28,8 +28,7 @@
     </div>
 </template>
 <script lang="ts">
-import { Song } from "@/classes";
-import { Tag } from "@/classes/tag";
+import { Song, Tag } from "@/classes";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";

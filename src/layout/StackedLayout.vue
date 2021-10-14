@@ -3,7 +3,7 @@
 		<div class="flex flex-col h-full">
 			<the-navbar />
 			<main class="flex-grow">
-				<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+				<div class="h-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 					<router-view />
 				</div>
 				<!-- OSMD -->

@@ -1,13 +1,22 @@
-import { Collection, CollectionItem, Lyrics, Song } from "@/classes";
-import { Category } from "@/classes/category";
-import { Genre, Theme, Country, Copyright } from "@/classes/items";
-import { Tag } from "@/classes/tag";
-import { User } from "@/classes/user";
+import {
+    Category,
+    Collection,
+    CollectionItem,
+    Copyright,
+    Country,
+    Genre,
+    Lyrics,
+    Song,
+    Theme,
+    Tag,
+    User,
+} from "@/classes";
 import { ApiCollectionItem, ApiContributor, ApiCustomCollection, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
 import { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
+import Favorites from "@/classes/favorites";
 
 export class Session {
     private _initialized?: boolean;
@@ -30,6 +39,8 @@ export class Session {
     public files: MediaFile[] = [];
     public contributors: CollectionItem<ApiContributor>[] = [];
 
+    public favorites = new Favorites();
+
     public themes: Theme[] = [];
     public categories: Category[] = [];
     public tags: Tag[] = [];
@@ -47,7 +58,7 @@ export class Session {
 
     public async init() {
         if (this._initialized === false) {
-            while(this._initialized === false) {
+            while (this._initialized === false) {
                 await new Promise(r => setTimeout(r, 100));
             }
             return;
@@ -55,9 +66,11 @@ export class Session {
         if (this.initialized)
             return;
 
+        await this.favorites.init();
+
 
         const user = await cache.getOrCreateAsync("user", session.getCurrentUser, new Date().getTime() + 10000);
-        
+
         if (!user) {
             throw new Error("User not authenticated");
         }
@@ -82,7 +95,7 @@ export class Session {
 
         if (previousCols) {
             const fetchSongs = ownedCols.filter(c => !(JSON.parse(previousCols as string) as string[]).some(i => i == c));
-            
+
             if (fetchSongs.length) {
                 const s = await songs.getAllSongs(fetchSongs);
 
@@ -114,7 +127,7 @@ export class Session {
         }
 
         await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
-        
+
         const fetchSongs = async () => {
             try {
                 const key = "last_updated_songs";
@@ -135,16 +148,16 @@ export class Session {
                     await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
             }
-            catch(e) {
+            catch (e) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const error = e as any;
                 notify("error", "Error occured", "warning", error);
                 this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
             }
-            
+
             this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
         };
-        
+
         const fetchFiles = async () => {
             try {
                 const key = "last_updated_files";
@@ -161,10 +174,10 @@ export class Session {
                     }, {} as {
                         [id: string]: MediaFile;
                     }));
-                    
+
                     await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
                 }
-            } catch(e) {
+            } catch (e) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const error = e as any;
                 notify("error", "Error fetching files", "warning", error);
@@ -173,34 +186,34 @@ export class Session {
 
             this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
         };
-        
+
         const fetchContributors = async () => {
             try {
                 const key = "last_updated_contributors";
                 const lastUpdated = await cache.get("config", key) as string | undefined;
-    
+
                 const now = new Date();
-    
+
                 if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
                     const updateItems = await songs.getContributors(lastUpdated);
-    
+
                     await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
                         a[b.id] = b;
                         return a;
                     }, {} as {
                         [id: string]: ApiCollectionItem<ApiContributor>;
                     }));
-    
+
                     await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
                 }
             }
-            catch(e) {
+            catch (e) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const error = e as any;
                 notify("error", "Error occured", "warning", error);
                 this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
             }
-    
+
             this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
         };
 
@@ -233,14 +246,14 @@ export class Session {
                 const obj: {
                     [key: string]: ApiTag;
                 } = {};
-                const getTags = async () => (await tags.getAll()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
+                const getTags = async () => (await tags.getAll()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
                 this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
             },
             async () => {
                 const obj: {
                     [key: string]: ApiCustomCollection;
                 } = {};
-                const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => {a[b.id] = b; return a;}, obj);
+                const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
                 this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, expiry) ?? []);
             },
         ]) {
@@ -285,7 +298,7 @@ export class Session {
         if (this.views) {
             const date = new Date();
             date.setSeconds(date.getSeconds() - 10);
-            
+
             if (this.lastUpdated && this.lastUpdated < date) {
                 analytics.getTotalViews().then(r => {
                     this.views = r;

@@ -85,7 +85,7 @@ import { useStore } from "@/store";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 import { ApiSubscription } from "dmb-api";
 
 @Options({
@@ -140,7 +140,7 @@ export default class EditUser extends Vue {
     }
 
     public getCollections(subscription: ApiSubscription) {
-        return this.store.getters.collections.filter(i => subscription.collectionIds.includes(i.id));
+        return this.store.getters.collections.filter(i => subscription.collectionIds?.includes(i.id));
     }
 
     public getUnownedCollections(subscriptions: ApiSubscription[]) {

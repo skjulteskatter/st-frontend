@@ -2,7 +2,7 @@ import { ApiContributor } from "dmb-api";
 import { Converter } from "showdown";
 const converter = new Converter();
 
-export class Contributor implements ApiContributor {
+export default class Contributor implements ApiContributor {
     public id;
     public biography;
     public birthYear = 0;

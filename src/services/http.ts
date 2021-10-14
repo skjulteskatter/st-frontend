@@ -84,7 +84,7 @@ class Http {
      * @param  {Object} options (optional)
      * @return {Promise}
      */
-    public async post<T, Y = T>(
+    public async post<T, Y = unknown>(
         path: string,
         content?: Y,
         options?: object,
@@ -140,6 +140,7 @@ class Http {
      */
     public async ["delete"]<T>(
         path: string,
+        content?: unknown,
         options?: object,
     ): Promise<T> {
         const result = await this.apifetch(
@@ -147,6 +148,10 @@ class Http {
             Object.assign(
                 {
                     method: "DELETE",
+                    body: content ? JSON.stringify(content) : undefined,
+                    headers: content ? {
+                        "Content-Type": "application/json",
+                    } : undefined,
                 },
                 options || {},
             ),

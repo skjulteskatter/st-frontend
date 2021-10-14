@@ -75,7 +75,7 @@ import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 @Options({
     components: {

@@ -1,6 +1,6 @@
 import { useStore } from "@/store";
 
-export class BaseClass {
+export default class BaseClass {
     protected store = useStore();
     public name: LocaleString = {};
 

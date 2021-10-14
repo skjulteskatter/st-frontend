@@ -2,8 +2,8 @@ import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { ApiActivity } from "dmb-api";
 import { RouteLocationRaw } from "vue-router";
-import { Collection } from "./collection";
-import { Song } from "./song";
+import { Collection } from ".";
+import { Song } from ".";
 
 
 export class Activity {

@@ -2,7 +2,7 @@ import { tags } from "@/services/api";
 import { cache } from "@/services/cache";
 import { ApiTag } from "dmb-api";
 
-export class Tag implements ApiTag {
+export default class Tag implements ApiTag {
     public id;
     public userId;
     public canEdit;

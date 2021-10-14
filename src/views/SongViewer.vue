@@ -16,6 +16,12 @@
                         </template>
                         {{ $t('common_edit') }}
                     </base-button>
+
+                    <button v-if="isAdmin" @click="favorites.toggle(song?.id)" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
+                        <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.has(song?.id)" />
+                        <HeartOutline class="w-6 h-6 opacity-50" v-else />
+                    </button>
+
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
                             <FolderAddIcon class="w-4 h-4" />
@@ -161,7 +167,8 @@ import {
     BaseModal,
 } from "@/components";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
-import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon } from "@heroicons/vue/solid";
+import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Lyrics, transposer } from "@/classes";
 import { ApiPlaylist, Format, MediaFile } from "dmb-api";
@@ -197,6 +204,8 @@ import { SongViewType } from "@/store/modules/songs/state";
         ShoppingCartIcon,
         ArrowLeftIcon,
         PencilAltIcon,
+        HeartIcon,
+        HeartOutline,
         SwitchGroup,
         Switch,
         SwitchLabel,
@@ -213,6 +222,8 @@ export default class SongViewer extends Vue {
     public show = false;
     public unset = false;
     public showPlaylistModal = false;
+
+    public favorites = appSession.favorites;
 
     public lyrics?: Lyrics | null = null;
 
@@ -370,6 +381,19 @@ export default class SongViewer extends Vue {
         return this.store.state.songs.sheetMusic;
     }
 
+    // public async setFavorites(id: string) {
+    //     let favorites;
+    //     if(this.favorites.includes(id)) {
+    //         favorites = this.favorites.filter(f => f != id);
+    //     } else {
+    //         favorites = [...this.favorites, id];
+    //     }
+    //     await cache.set("general", "favorites", {
+    //         expiry: new Date().getTime() + 60000,
+    //         item: JSON.stringify(favorites),
+    //     });
+    // }
+
     public async addToPlaylist(playlist: ApiPlaylist) {
         // Add song to playlist with ID
         const song = this.song;
@@ -455,7 +479,7 @@ export default class SongViewer extends Vue {
     }
 
     public async translate(language: string) {
-        if (this.song) {
+        if (this.song?.hasLyrics === true) {
             switch(this.store.state.songs.view) {
                 case "chords":
                 case "performance":

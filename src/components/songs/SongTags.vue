@@ -46,8 +46,7 @@
     </div>
 </template>
 <script lang="ts">
-import { Song } from "@/classes";
-import { Tag } from "@/classes/tag";
+import { Song, Tag } from "@/classes";
 import { tags } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";

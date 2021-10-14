@@ -5,7 +5,7 @@
     >
         <strong class="loader__text">{{ $t("common_loading") }}</strong>
     </div>
-    <slot class="whatat" v-else />
+    <slot v-else />
 </template>
 
 <script lang="ts">
@@ -51,7 +51,7 @@ export default class Loader extends Vue {
 
     &:before {
         --size: 2rem;
-        --thickness: .45rem;
+        --thickness: .4rem;
         content: "";
         width: var(--size);
         height: var(--size);
@@ -62,7 +62,7 @@ export default class Loader extends Vue {
         border-left: var(--thickness) solid var(--st-color-primary);
         border-right: var(--thickness) solid rgba(white, .1);
 
-        animation: loading 1s infinite ease-in-out;
+        animation: loading .7s infinite linear;
     }
 
     &--global {

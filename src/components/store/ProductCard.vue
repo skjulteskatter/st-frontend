@@ -13,33 +13,33 @@
             />
         </div>
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
-            <div class="flex justify-between items-start mb-4">
-                <h2 class="font-bold">
-                    {{ product.getName(languageKey) }}
-                </h2>
-                <price class="text-gray-400 flex-shrink-0" v-if="!product.owned" :product="product" :country="languageKey" />
-            </div>
-            <div class="grid gap-2 lg:grid-cols-2">
-                <base-button
-                    class="flex-grow"
-                    theme="secondary"
-                    :disabled="inCart || !collection.enabled"
-                    v-if="!product.owned"
-                    @click="addToCart()"
-                >
-                    <template #icon>
-                        <ShoppingCartIcon class="w-4 h-4" />
-                    </template>
-                    {{ $t('store_addToCart') }}
-                </base-button>
-                <base-button
-                    class="flex-grow"
-                    theme="tertiary"
+            <div class="flex justify-between gap-2 items-start mb-4">
+                <span>
+                    <h2 class="font-bold leading-tight mb-2">
+                        {{ product.getName(languageKey) }}
+                    </h2>
+                    <price class="opacity-50" v-if="!product.owned" :product="product" :country="languageKey" />
+                </span>
+                <button
+                    :title="$t('store_learnMore')"
+                    :aria-label="$t('store_learnMore')"
+                    class="rounded-md p-2 hover:bg-black/5 dark:hover:bg-white/10"
                     @click="goToItem"
                 >
-                    {{ $t("store_learnMore") }}
-                </base-button>
+                    <InformationCircleIcon class="w-4 h-4" />
+                </button>
             </div>
+            <base-button
+                theme="secondary"
+                :disabled="inCart || !collection.enabled"
+                v-if="!product.owned"
+                @click="addToCart()"
+            >
+                <template #icon>
+                    <ShoppingCartIcon class="w-4 h-4" />
+                </template>
+                {{ $t('store_addToCart') }}
+            </base-button>
         </div>
     </div>
 </template>
@@ -47,11 +47,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-import { Product } from "@/classes/product";
+import { Product } from "@/classes";
 import { useStore } from "@/store";
 
 import Price from "./Price.vue";
 import { ShoppingCartIcon, CheckIcon, LockClosedIcon } from "@heroicons/vue/solid";
+import { InformationCircleIcon } from "@heroicons/vue/outline";
 
 import { appSession } from "@/services/session";
 
@@ -61,6 +62,7 @@ import { appSession } from "@/services/session";
         ShoppingCartIcon,
         CheckIcon,
         LockClosedIcon,
+        InformationCircleIcon,
     },
     name: "product-card",
     props: {

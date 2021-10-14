@@ -1,5 +1,5 @@
 <template>
-    <div class="gap-6 grid sm:grid-cols-2 lg:grid-cols-3">
+    <div class="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <product-card
             v-for="product in Products"
             :key="product.id"
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { Product } from "@/classes/product";
+import { Product } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import ProductCard from "./ProductCard.vue";
 
