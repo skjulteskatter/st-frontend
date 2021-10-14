@@ -1,4 +1,4 @@
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 import { useStore } from "@/store";
 import api from "./api";
 

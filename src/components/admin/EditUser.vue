@@ -85,7 +85,7 @@ import { useStore } from "@/store";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 import { ApiSubscription } from "dmb-api";
 
 @Options({

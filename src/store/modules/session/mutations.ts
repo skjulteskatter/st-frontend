@@ -1,5 +1,4 @@
-import { User } from "@/classes/user";
-import UserSettings from "@/classes/userSettings";
+import { User, UserSettings } from "@/classes";
 import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";

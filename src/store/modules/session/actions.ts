@@ -13,7 +13,7 @@ import { SongsMutationTypes } from "../songs/mutation-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 
 

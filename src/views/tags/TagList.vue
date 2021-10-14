@@ -23,7 +23,7 @@
 <script lang="ts">
 import { appSession } from "@/services/session";
 import { Options, Vue } from "vue-class-component";
-import { Tag } from "@/classes/tag";
+import { Tag } from "@/classes";
 import { useStore } from "@/store";
 
 @Options({

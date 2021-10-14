@@ -2,7 +2,7 @@ import { session } from "@/services/api";
 import { ApiUser } from "dmb-api";
 import UserSettings from "./userSettings";
 
-export class User implements ApiUser {
+export default class User implements ApiUser {
     public id;
     public birthDay;
     public displayName;

@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
 import { ApiCategory, ApiCollectionItem, ApiContributor, ApiCountry, ApiTheme } from "dmb-api";
 
-export class CollectionItem<T extends (ApiContributor | ApiCountry | ApiTheme | ApiCategory)> implements ApiCollectionItem<T> {
+export default class CollectionItem<T extends (ApiContributor | ApiCountry | ApiTheme | ApiCategory)> implements ApiCollectionItem<T> {
     private store = useStore();
 
     public id;

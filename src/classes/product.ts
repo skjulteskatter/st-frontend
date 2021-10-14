@@ -1,6 +1,6 @@
 import { ApiProduct } from "checkout";
-import { BaseClass } from "./baseClass";
-import { Collection } from "./collection";
+import BaseClass from "./baseClass";
+import { Collection } from ".";
 
 const discountedCountries = [
     "AR",
@@ -47,7 +47,7 @@ const discountedCountries = [
     "ZW",
 ];
 
-export class Product extends BaseClass implements ApiProduct {
+export default class Product extends BaseClass implements ApiProduct {
     public id;
     private _collections?: Collection[];
     public prices;

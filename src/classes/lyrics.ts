@@ -1,7 +1,7 @@
 import { ApiLyrics, LyricsChordContent, LyricsContent } from "dmb-api";
 import { transposer } from "./transposer";
 
-export class Lyrics implements ApiLyrics {
+export default class Lyrics implements ApiLyrics {
     id: string;
     songId: string;
     collectionIds;

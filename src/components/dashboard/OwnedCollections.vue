@@ -1,5 +1,5 @@
 <template>
-	<base-card class="xl:col-span-2">
+	<base-card class="2xl:col-span-2">
 		<template #header>
 			<div class="flex items-center">
 				<h2 class="font-bold mr-4">{{ $t('common_collections') }}</h2>

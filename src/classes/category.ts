@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
 import { ApiCategory } from "dmb-api";
 
-export class Category implements ApiCategory {
+export default class Category implements ApiCategory {
     protected store = useStore();
     public id;
     public name: LocaleString = {};

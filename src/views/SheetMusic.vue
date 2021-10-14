@@ -67,7 +67,7 @@
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
 import { MediaFile } from "dmb-api";
-import { Contributor, SheetMusicTypes, Song } from "@/classes";
+import { Contributor, SheetMusicTypes, Song, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
@@ -76,7 +76,6 @@ import { session, songs } from "@/services/api";
 // import { SheetMusicOptions } from "@/store/songs";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
-import { User } from "@/classes/user";
 
 @Options({
     components: {

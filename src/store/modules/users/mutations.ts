@@ -1,7 +1,7 @@
 import { MutationTree } from "vuex";
 import { State } from "./state";
 import { UsersMutationTypes } from "./mutation-types";
-import { User } from "@/classes/user";
+import { User } from "@/classes";
 
 export type Mutations<S = State> = {
     [UsersMutationTypes.SET_USERS](state: S, payload: User[]): void;
