@@ -34,7 +34,7 @@
 			<div class="flex-grow w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 				<div class="rounded-md bg-gray-300 animate-pulse h-8 w-80 mb-6"></div>
 				<div class="grid gap-4 md:gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-					<div class="flex flex-col gap-4 p-6 rounded-lg bg-white xl:col-span-2">
+					<div class="flex flex-col gap-4 p-6 rounded-lg bg-white 2xl:col-span-2">
 						<span class="mb-2 h-4 w-20 rounded-md bg-gray-200 animate-pulse"></span>
 						<div class="p-1 flex gap-4 items-center">
 							<span class="w-10 h-10 rounded-md bg-gray-200 animate-pulse"></span>
