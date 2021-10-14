@@ -140,7 +140,7 @@ export default class EditUser extends Vue {
     }
 
     public getCollections(subscription: ApiSubscription) {
-        return this.store.getters.collections.filter(i => subscription.collectionIds.includes(i.id));
+        return this.store.getters.collections.filter(i => subscription.collectionIds?.includes(i.id));
     }
 
     public getUnownedCollections(subscriptions: ApiSubscription[]) {

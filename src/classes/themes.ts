@@ -1,3 +1,6 @@
+import { cache } from "@/services/cache";
+import { appSession } from "@/services/session";
+
 type Theme = {
     background: string;
     secondaryBackground: string;
@@ -25,20 +28,24 @@ export class Themes {
         },
     }
 
-    public setTheme(key: string) {
+    private applyTheme(key?: "light" | "dark") {
+        if (key === "dark") document.documentElement.classList.add("dark");
+        else if (key === "light") document.documentElement.classList.remove("dark");
+    }
+
+    public setTheme(key: "light" | "dark" = "light") {
         const theme = this.themes[key];
 
         if (!theme) {
             throw new Error("Theme not valid");
         }
 
-        // this.setThemeProperties(theme);
+        this.applyTheme(key);
 
-        // Add 'darkmode' class if user applies darkmode
-        if (key == "dark") document.documentElement.classList.add("dark");
-        else if (key == "light") document.documentElement.classList.remove("dark");
-
-        localStorage.setItem("theme", key);
+        cache.set("config", "theme", key);
+        if (appSession.user.settings) {
+            appSession.user.settings.theme = key;
+        }
     }
 
     public setThemeProperties(params: Theme) {
@@ -60,7 +67,7 @@ export class Themes {
     }
 
     public load() {
-        this.setTheme(localStorage.getItem("theme") ?? "light");
+        this.applyTheme(cache.get("config", "theme") as unknown as undefined | "dark" | "light");
     }
 
     public get keys() {
