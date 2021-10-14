@@ -1,5 +1,5 @@
 <template>
-    <div v-if="playlist">
+    <div v-if="playlist" class="flex flex-col h-full">
         <back-button class="mb-4" />
         <header class="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
             <span>
@@ -35,9 +35,12 @@
                 </base-button>
             </div>
         </header>
-        <h2 v-if="!playlist.entries.length" class="opacity-50">
-            {{ $t("playlist_nosongs") }}
-        </h2>
+        <div v-if="!playlist.entries.length" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center gap-4 opacity-50">
+            <span class="rounded-full p-4 bg-black/10 dark:bg-white/10">
+                <BookOpenIcon class="w-8 h-8" />
+            </span>
+            <h2>{{ $t("playlist_nosongs") }}</h2>
+        </div>
         <draggable
             class="flex flex-col gap-4"
             v-else
@@ -162,7 +165,7 @@ import { appSession } from "@/services/session";
 import { PublicUser, ShareKey } from "dmb-api";
 import { reactive } from "@vue/reactivity";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
-import { PencilIcon, CheckIcon, ExclamationIcon } from "@heroicons/vue/outline";
+import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
@@ -180,6 +183,7 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         XIcon,
         PencilIcon,
         CheckIcon,
+        BookOpenIcon,
         Draggable,
     },
 })
