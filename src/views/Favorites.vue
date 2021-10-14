@@ -3,18 +3,25 @@
 	<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" v-if="songs.length">
 		<song-list-item-card v-for="song in songs" :key="song.id" :song="song" @click="song.view()" />
 	</div>
-    <div v-else>{{$t('favorites_none')}}</div>
+    <div v-else class="opacity-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center">
+		<span class="rounded-full p-4 bg-black/10 dark:bg-white/10">
+			<HeartIcon class="w-8 h-8" />
+		</span>
+		<h2>{{ $t('favorites_none') }}</h2>
+	</div>
 </template>
 
 <script lang="ts">
 import { appSession } from "@/services/session";
 import { Options, Vue } from "vue-class-component";
 import { SongListItemCard } from "@/components/songs";
+import { HeartIcon } from "@heroicons/vue/outline";
 
 @Options({
 	name: "favorites-view",
 	components: {
 		SongListItemCard,
+		HeartIcon,
 	},
 })
 export default class Favorites extends Vue {
