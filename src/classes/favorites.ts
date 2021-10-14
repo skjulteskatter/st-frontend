@@ -1,20 +1,19 @@
-import { favorites } from "@/services/api";
+import { favorites as api } from "@/services/api";
 import { cache } from "@/services/cache";
 
-const expiry = () => new Date().getTime() + 60000;
-
 export default class Favorites {
+    private expiry = () => new Date().getTime() + 60000;
     private favorites: string[] | null = null;
 
     public async init() {
         if (this.favorites === null) {
-            this.favorites = await cache.getOrCreateAsync("favorites", () => favorites.get(), expiry());
+            this.favorites = await cache.getOrCreateAsync("favorites", () => api.get(), this.expiry());
         }
     }
 
     private save() {
         cache.set("general", "favorites", {
-            expiry: expiry(),
+            expiry: this.expiry(),
             item: JSON.stringify(this.favorites),
         });
     }
@@ -23,7 +22,7 @@ export default class Favorites {
         if (songIds.some(i => this.favorites?.includes(i) === true)) {
             throw new Error("Cannot add songs which are already there.");
         }
-        await favorites.add(songIds);
+        await api.add(songIds);
         this.favorites?.push(...songIds);
 
         this.save();
@@ -33,7 +32,7 @@ export default class Favorites {
         if (!songIds.every(i => this.favorites?.includes(i) === true)) {
             throw new Error("Trying to remove songs that aren't found");
         }
-        await favorites.delete(songIds);
+        await api.delete(songIds);
 
         for (const id of songIds) {
             this.favorites?.splice(this.favorites.indexOf(id), 1);

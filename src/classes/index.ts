@@ -16,7 +16,6 @@ export * from "./transposer";
 export * from "./base64";
 export * from "./search";
 export * from "./items";
-export * from "./collection";
 
 export enum SheetMusicTypes {
     PDF = "sheetmusic-pdf",
@@ -31,6 +30,7 @@ export type ListEntry = {
 };
 
 export {
+    Collection,
     Favorites,
     Category,
     Tag,
@@ -39,6 +39,5 @@ export {
     Participant,
     Product,
     User,
-    Collection,
     UserSettings,
 };
