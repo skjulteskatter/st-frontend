@@ -39,7 +39,7 @@ export class Session {
     public files: MediaFile[] = [];
     public contributors: CollectionItem<ApiContributor>[] = [];
 
-    public favorites;
+    public favorites = new Favorites();
 
     public themes: Theme[] = [];
     public categories: Category[] = [];
@@ -51,10 +51,6 @@ export class Session {
     public languages: Language[] = [];
 
     public lyrics: Lyrics[] = [];
-
-    constructor() {
-        this.favorites = new Favorites();
-    }
 
     public get initialized() {
         return this._initialized === true;
@@ -69,6 +65,8 @@ export class Session {
         }
         if (this.initialized)
             return;
+
+        await this.favorites.init();
 
 
         const user = await cache.getOrCreateAsync("user", session.getCurrentUser, new Date().getTime() + 10000);

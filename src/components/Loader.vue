@@ -5,7 +5,7 @@
     >
         <strong class="loader__text">{{ $t("common_loading") }}</strong>
     </div>
-    <slot class="whatat" v-else />
+    <slot v-else />
 </template>
 
 <script lang="ts">

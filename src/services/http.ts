@@ -149,6 +149,9 @@ class Http {
                 {
                     method: "DELETE",
                     body: content ? JSON.stringify(content) : undefined,
+                    headers: content ? {
+                        "Content-Type": "application/json",
+                    } : undefined,
                 },
                 options || {},
             ),
