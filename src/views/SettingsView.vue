@@ -33,12 +33,12 @@
                     {{ $t('common_user') }}
                 </button>
                 <div class="rounded-lg p-4 text-sm opacity-50 flex flex-col">
-                    <router-link
+                    <!-- <router-link
                         to="/credit"
                         class="tracking-wide leading-normal hover:underline"
                     >
                         {{ $t('credits_songCredit') }}
-                    </router-link>
+                    </router-link> -->
                     <a
                         target="_blank"
                         href="https://docs.google.com/forms/d/e/1FAIpQLSd9Sqcxox4B4UbSm2WPCD_jERcX0fiQ_d6Nw13sq8T0eXr36w/viewform"
