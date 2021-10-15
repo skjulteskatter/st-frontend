@@ -1,13 +1,15 @@
 <template>
     <div>
         <back-button class="mb-4" />
-        <div class="flex flex-col gap-4 md:flex-row" v-if="product">
-            <img
-                class="rounded-md shadow-md object-cover"
-                :src="image"
-                :alt="product.getName(languageKey)"
-            />
-            <base-card class="p-4">
+        <div class="grid gap-4 lg:grid-cols-3" v-if="product">
+            <div>
+                <img
+                    class="rounded-md shadow-lg w-full"
+                    :src="image"
+                    :alt="product.getName(languageKey)"
+                />
+            </div>
+            <base-card class="p-4 lg:col-span-2">
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
