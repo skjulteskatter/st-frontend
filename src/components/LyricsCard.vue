@@ -64,7 +64,7 @@
                         )?.view ?? 'Transpose'
                     "
                 >
-                    <div class="overflow-y-auto max-h-64">
+                    <div class="overflow-y-auto max-h-64 shadow-scroll">
                         <button
                             :class="{
                                 'bg-gray-200 dark:bg-gray-800': lyrics?.originalKey == t.original && selectedTransposition != t.value,
@@ -303,3 +303,17 @@ export default class LyricsCard extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>
