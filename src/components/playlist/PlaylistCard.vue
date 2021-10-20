@@ -27,7 +27,7 @@
                         <button
                             :title="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
                             :aria-label="`${$t('common_delete')} ${$t('common_collection').toLocaleLowerCase()}`"
-                            class="ml-auto rounded p-1 hover:bg-black/5 invisible group-hover:visible"
+                            class="ml-auto rounded p-1 hover:bg-black/5 dark:hover:bg-white/5 invisible group-hover:visible"
                             @mouseover="hover = true"
                             @mouseleave="hover = false"
                             @click="$emit('delete', { id: playlist?.id, name: playlist?.name })"

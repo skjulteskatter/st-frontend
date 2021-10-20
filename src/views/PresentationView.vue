@@ -1,13 +1,13 @@
 <template>
-    <div :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
+    <div id="presentation-view" :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
         <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? 'bg-white/5' : 'bg-gray-100']">
-            <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90">{{ song?.Collections.find(c => c.id == song?.collectionIds[0])?.getName() }}</h2>
-            <!-- <img class="w-2/3 drop-shadow-sm" src="/img/collections/wotl.svg" /> -->
+            <img class="w-full drop-shadow-sm" :src="`/img/collections/wotl/${logoLanguageKey}.png`" v-if="Collection?.key == 'HV'" />
+            <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
         <div class="text-3xl h-full flex-grow">
             <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSideBar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
-                <h1 class="font-bold text-5xl" v-if="song.number">{{ song.number }}</h1>
+                <h1 class="text-6xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
                     <div class="flex gap-4">
                         <p
@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <div :class="{'hidden': muted}" class="mt-16 verses" id="presentation-content">
+            <div :class="{'hidden': muted}" class="verses" id="presentation-content">
                 <div
                     class="relative verse"
                     :class="{ 'italic ml-8': verse.type == 'chorus' }"
@@ -83,12 +83,12 @@
                     :key="i + '_' + verse"
                 >
                     <span
-                        class="absolute top-3 font-semibold verse-name"
+                        class="absolute verse-name"
                         v-if="verse.type != 'chorus'"
                         >{{ verse.name }}</span
                     >
                     <p
-                        class="tracking-wide line"
+                        class="line"
                         :class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
                         v-for="(line, i) in verse.content"
                         :key="i + '_' + line"
@@ -118,8 +118,19 @@ export default class PresentationView extends Vue {
     public showSideBar = true;
     public verseCount = 0;
 
+    public get logoLanguageKey() {
+        if(!this.lyrics?.languageKey) return "en";
+
+        const languages = ["dk", "en", "es", "fi", "fr", "nl", "no", "pl", "ro", "ru", "un"];
+        return languages.includes(this.lyrics.languageKey) ? this.lyrics.languageKey : "en";
+    }
+
     public get Verses() {
         return this.verses ?? [];
+    }
+
+    public get Collection() {
+        return this.song?.Collections.find(c => c.id == this.song?.collectionIds[0]);
     }
 
     public async mounted() {
@@ -192,20 +203,32 @@ export default class PresentationView extends Vue {
 </script>
 
 <style>
-.verses {
-    margin-left: clamp(1rem, 10vw + 1rem, 20vw);
-    font-size: clamp(1rem, 3vw + 1rem, 3.5rem);
+
+:root {
+    --header-size: .5em;
+    --header-height: .56em;
+
+    --verse-size: .95em;
+    --verse-height: 1.07em;
 }
-.verse {
-    margin-bottom: clamp(2rem, 5vw, 32rem);
+
+.verses {
+    margin-left: 3em;
+    margin-top: 1em;
+    max-width: max-content;
+    font-size: clamp(var(--verse-size), 3.5vw, 3em);
+}
+.verse:not(:last-child) {
+    margin-bottom: 1em;
 }
 .line {
-    line-height: clamp(1rem, 3vh + 2vw, 3.85rem);
     text-indent: -1em;
     margin-left: 1em;
+    line-height: var(--verse-height);
 }
 .verse-name {
-    left: calc(clamp(3rem, 6vw, 20rem) * -1);
+    left: -1.5em;
+    line-height: var(--verse-height);
 }
 ::-webkit-scrollbar {
     display: none;
