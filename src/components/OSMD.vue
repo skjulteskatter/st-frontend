@@ -29,7 +29,7 @@
                         "
                         class="flex flex-col"
                     >
-                        <div class="max-h-64 overflow-y-auto">
+                        <div class="max-h-64 overflow-y-auto shadow-scroll">
                             <button
                                 :class="{
                                     'bg-primary text-white': transposition == t.value,
@@ -58,7 +58,7 @@
                         :label="options?.clef"
                         class="flex flex-col"
                     >
-                        <div class="max-h-64 overflow-y-auto">
+                        <div class="max-h-64 overflow-y-auto shadow-scroll">
                             <button
                                 :class="{
                                     'bg-primary text-white': options?.clef == 'bass',
@@ -283,3 +283,17 @@ export default class OSMD extends Vue {
     }
 }
 </script>
+
+<style lang="scss">
+@import "../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>
