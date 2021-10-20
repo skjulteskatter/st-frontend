@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, ApiUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, IUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
 import http from "./http";
 
 export const activity = {
@@ -23,10 +23,10 @@ export const activity = {
 
 export const session = {
     async getCurrentUser() {
-        return await http.get<ApiUser>("api/Session");
+        return await http.get<IUser>("api/Session");
     },
     saveUser(settings: ApiSettings) {
-        return http.patch<ApiUser>("api/Session", settings);
+        return http.patch<IUser>("api/Session", settings);
     },
     createUser(displayName: string) {
         return http.put("api/Session", { displayName });
@@ -45,7 +45,7 @@ export const session = {
             country: string;
         };
     }) {
-        return http.patch<ApiUser>("api/Session/Profile", options);
+        return http.patch<IUser>("api/Session/Profile", options);
     },
     acceptPrivacyPolicy() {
         return http.get("api/Session/AcceptPolicies?privacyPolicy=true");
@@ -94,10 +94,10 @@ export const admin = {
         return await http.get<ApiSubscription[]>("api/Admin/Subscriptions");
     },
     getUsers(query: string) {
-        return http.get<ApiUser[]>("api/Admin/Users?query=" + query);
+        return http.get<IUser[]>("api/Admin/Users?query=" + query);
     },
     getUser(uid: string) {
-        return http.get<ApiUser>("api/Admin/User/" + uid);
+        return http.get<IUser>("api/Admin/User/" + uid);
     },
     createSubscription(uid: string, options: {
         collectionIds: string[];
@@ -111,8 +111,8 @@ export const admin = {
     getRoles() {
         return http.get<string[]>("api/Admin/Roles");
     },
-    setRoles(user: ApiUser, roles: string[]) {
-        return http.patch<ApiUser>(`api/Admin/User/${user.id}/Roles`, roles);
+    setRoles(user: IUser, roles: string[]) {
+        return http.patch<IUser>(`api/Admin/User/${user.id}/Roles`, roles);
     },
     clearCache(collectionId: string) {
         return http.get<string>(`api/Admin/ClearCache/${collectionId}`);

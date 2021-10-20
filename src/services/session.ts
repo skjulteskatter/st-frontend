@@ -23,6 +23,45 @@ export class Session {
 
     private _user?: User;
 
+    private get expiry() {
+        return new Date().getTime() + 3600000;
+    }
+
+    private _preFetch = [
+        async () => {
+            this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, this.expiry) ?? []).map(i => new Country(i));
+        },
+        async () => {
+            this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, this.expiry) ?? []).map(i => new Copyright(i));
+        },
+        async () => {
+            this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, this.expiry) ?? []).map(i => new Theme(i));
+        },
+        async () => {
+            this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, this.expiry) ?? []).map(i => new Genre(i));
+        },
+        async () => {
+            this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, this.expiry) ?? []).map(i => new Category(i));
+        },
+        async () => {
+            this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, this.expiry)) ?? [];
+        },
+        async () => {
+            const obj: {
+                [key: string]: ApiTag;
+            } = {};
+            const getTags = async () => (await tags.getAll()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
+            this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
+        },
+        async () => {
+            const obj: {
+                [key: string]: ApiCustomCollection;
+            } = {};
+            const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
+            this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, new Date().getTime() + 60000) ?? []);
+        },
+    ];
+
     public get user() {
         if (!this._user) {
             throw new Error("User isn't set");
@@ -221,42 +260,7 @@ export class Session {
 
         fetchAll.push(fetchSongs(), fetchFiles());
 
-        const expiry = new Date().getTime() + 3600000;
-
-        for (const f of [
-            async () => {
-                this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, expiry) ?? []).map(i => new Country(i));
-            },
-            async () => {
-                this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, expiry) ?? []).map(i => new Copyright(i));
-            },
-            async () => {
-                this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, expiry) ?? []).map(i => new Theme(i));
-            },
-            async () => {
-                this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, expiry) ?? []).map(i => new Genre(i));
-            },
-            async () => {
-                this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, expiry) ?? []).map(i => new Category(i));
-            },
-            async () => {
-                this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, expiry)) ?? [];
-            },
-            async () => {
-                const obj: {
-                    [key: string]: ApiTag;
-                } = {};
-                const getTags = async () => (await tags.getAll()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
-                this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
-            },
-            async () => {
-                const obj: {
-                    [key: string]: ApiCustomCollection;
-                } = {};
-                const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
-                this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, expiry) ?? []);
-            },
-        ]) {
+        for (const f of this._preFetch) {
             fetchAll.push(f());
         }
 
