@@ -14,7 +14,7 @@
     </div>
 </template>
 <script lang="ts">
-import { LyricsChordContent } from "dmb-api";
+import { LyricsChordContent } from "songtreasures";
 import { Options, Vue } from "vue-class-component";
 
 @Options({

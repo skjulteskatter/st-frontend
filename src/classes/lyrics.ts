@@ -1,7 +1,7 @@
-import { ApiLyrics, LyricsChordContent, LyricsContent } from "dmb-api";
+import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures";
 import { transposer } from "./transposer";
 
-export default class Lyrics implements ApiLyrics {
+export default class Lyrics implements ILyrics {
     id: string;
     songId: string;
     collectionIds;
@@ -17,7 +17,7 @@ export default class Lyrics implements ApiLyrics {
 
     public raw;
 
-    constructor(lyrics: ApiLyrics) {
+    constructor(lyrics: ILyrics) {
         this.raw = lyrics;
         this.id = lyrics.id;
         this.songId = lyrics.songId;

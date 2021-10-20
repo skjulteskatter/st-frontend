@@ -98,8 +98,7 @@ export default class BaseButton extends Vue {
     }
 
     &--tertiary {
-        @apply text-primary;
-        @apply hover:bg-primary/20;
+        @apply text-primary hover:bg-primary/20 dark:hover:bg-transparent;
     }
 
     &--warning {

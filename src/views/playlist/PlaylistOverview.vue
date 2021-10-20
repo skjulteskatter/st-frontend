@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { ApiPlaylist } from "dmb-api";
+import { ICustomCollection } from "songtreasures";
 
 import { BaseModal } from "@/components";
 import { BaseInput } from "@/components/inputs";
@@ -101,7 +101,7 @@ export default class PlaylistOverview extends Vue {
         this.createPlaylist = true;
     }
 
-    public get playlists(): ApiPlaylist[] {
+    public get playlists(): ICustomCollection[] {
         return this.store.getters.playlists;
     }
 }

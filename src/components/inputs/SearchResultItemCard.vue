@@ -40,7 +40,7 @@ import { Options, Vue } from "vue-class-component";
 import { UserCircleIcon } from "@heroicons/vue/outline";
 import SearchResultItem from "@/classes/search/searchResultItem";
 import { CollectionItem, Song } from "@/classes";
-import { ApiContributor } from "dmb-api";
+import { ApiContributor } from "songtreasures";
 
 @Options({
     props: {

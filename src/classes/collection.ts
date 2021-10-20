@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor, Sort } from "dmb-api";
+import { ICollection, ApiContributor, Sort } from "songtreasures";
 import { ListEntry, Lyrics, Song, CollectionItem } from ".";
 import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";
@@ -15,7 +15,7 @@ type CollectionSettings = {
 
 let closeId: string | null = null;
 
-export default class Collection extends BaseClass implements ApiCollection {
+export default class Collection extends BaseClass implements ICollection {
     public id;
     private _key;
     public enabled;
@@ -79,7 +79,7 @@ export default class Collection extends BaseClass implements ApiCollection {
         selected: () => boolean;
     }[] = [];
 
-    constructor(collection: ApiCollection) {
+    constructor(collection: ICollection) {
         super();
         this._key = collection.key;
         this.enabled = collection.enabled;

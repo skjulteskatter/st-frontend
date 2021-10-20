@@ -66,7 +66,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
-import { MediaFile } from "dmb-api";
+import { MediaFile } from "songtreasures";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";

@@ -1,12 +1,12 @@
-import { ApiParticipant } from "dmb-api";
+import { IParticipant } from "songtreasures";
 import { Contributor } from ".";
 
-export default class Participant implements ApiParticipant {
+export default class Participant implements IParticipant {
     public contributorId;
     public type;
     public contributor;
 
-    constructor(p: ApiParticipant) {
+    constructor(p: IParticipant) {
         this.contributorId = p.contributorId;
         this.contributor = p.contributor ? new Contributor(p.contributor) : undefined;
         this.type = p.type;

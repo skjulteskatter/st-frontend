@@ -84,7 +84,7 @@ import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 import { Options, Vue } from "vue-class-component";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { MediaFile } from "dmb-api";
+import { MediaFile } from "songtreasures";
 import { useStore } from "@/store";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";

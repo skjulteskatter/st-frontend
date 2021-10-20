@@ -1,8 +1,8 @@
 import { session } from "@/services/api";
-import { ApiUser } from "dmb-api";
+import { IUser } from "songtreasures";
 import UserSettings from "./userSettings";
 
-export default class User implements ApiUser {
+export default class User implements IUser {
     public id;
     public birthDay;
     public displayName;
@@ -16,7 +16,7 @@ export default class User implements ApiUser {
     public subscriptions;
     public termsAndConditions;
 
-    constructor(i: ApiUser) {
+    constructor(i: IUser) {
         this.id = i.id;
         this.birthDay = i.birthDay;
         this.displayName = i.displayName;

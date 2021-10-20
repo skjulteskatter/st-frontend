@@ -171,7 +171,7 @@ import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, A
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Lyrics, transposer } from "@/classes";
-import { ApiPlaylist, Format, MediaFile } from "dmb-api";
+import { ICustomCollection, Format, MediaFile } from "songtreasures";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -394,7 +394,7 @@ export default class SongViewer extends Vue {
     //     });
     // }
 
-    public async addToPlaylist(playlist: ApiPlaylist) {
+    public async addToPlaylist(playlist: ICustomCollection) {
         // Add song to playlist with ID
         const song = this.song;
 

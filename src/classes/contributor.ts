@@ -1,4 +1,4 @@
-import { ApiContributor } from "dmb-api";
+import { ApiContributor } from "songtreasures";
 import { Converter } from "showdown";
 const converter = new Converter();
 
