@@ -11,7 +11,7 @@ import {
     Tag,
     User,
 } from "@/classes";
-import { ApiCollectionItem, ApiContributor, ApiCustomCollection, ApiSong, ApiTag, MediaFile, ShareKey } from "dmb-api";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, ShareKey } from "songtreasures";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
 import { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
@@ -48,14 +48,14 @@ export class Session {
         },
         async () => {
             const obj: {
-                [key: string]: ApiTag;
+                [key: string]: ITag;
             } = {};
             const getTags = async () => (await tags.getAll()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
             this.tags = (await cache.getOrCreateHashAsync("tags", getTags, new Date().getTime() + 60000)).map(i => new Tag(i)) ?? [];
         },
         async () => {
             const obj: {
-                [key: string]: ApiCustomCollection;
+                [key: string]: ICustomCollection;
             } = {};
             const getCustomCollections = async () => (await playlists.getPlaylists()).reduce((a, b) => { a[b.id] = b; return a; }, obj);
             this.customCollections = (await cache.getOrCreateHashAsync("custom_collections", getCustomCollections, new Date().getTime() + 60000) ?? []);
@@ -83,7 +83,7 @@ export class Session {
     public themes: Theme[] = [];
     public categories: Category[] = [];
     public tags: Tag[] = [];
-    public customCollections: ApiCustomCollection[] = [];
+    public customCollections: ICustomCollection[] = [];
     public countries: Country[] = [];
     public genres: Genre[] = [];
     public copyrights: Copyright[] = [];
@@ -142,7 +142,7 @@ export class Session {
                     a[b.id] = b;
                     return a;
                 }, {} as {
-                    [id: string]: ApiSong;
+                    [id: string]: ISong;
                 }));
 
                 const f = await songs.getFiles(fetchSongs);
@@ -160,7 +160,7 @@ export class Session {
                     a[b.id] = b;
                     return a;
                 }, {} as {
-                    [id: string]: ApiCollectionItem<ApiContributor>;
+                    [id: string]: ICollectionItem<ApiContributor>;
                 }));
             }
         }
@@ -181,7 +181,7 @@ export class Session {
                         a[b.id] = b;
                         return a;
                     }, {} as {
-                        [id: string]: ApiSong;
+                        [id: string]: ISong;
                     }));
 
                     await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
@@ -240,7 +240,7 @@ export class Session {
                         a[b.id] = b;
                         return a;
                     }, {} as {
-                        [id: string]: ApiCollectionItem<ApiContributor>;
+                        [id: string]: ICollectionItem<ApiContributor>;
                     }));
 
                     await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());

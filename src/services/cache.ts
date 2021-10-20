@@ -1,11 +1,11 @@
 import { Lyrics } from "@/classes";
-import { ApiCollectionItem, ApiContributor, ApiPlaylist, ApiSong, ApiTag, MediaFile } from "dmb-api";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile } from "songtreasures";
 import { openDB } from "idb";
 import { Notification } from "songtreasures";
 
 type StoreTypes = {
-    songs: ApiSong;
-    contributors: ApiCollectionItem<ApiContributor>;
+    songs: ISong;
+    contributors: ICollectionItem<ApiContributor>;
     lyrics: Lyrics;
     config: string | number | boolean | undefined;
     items: {
@@ -18,8 +18,8 @@ type StoreTypes = {
         expiry: number;
         item: string;
     };
-    tags: ApiTag;
-    custom_collections: ApiPlaylist;
+    tags: ITag;
+    custom_collections: ICustomCollection;
 }
 
 type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general" | "tags" | "custom_collections";

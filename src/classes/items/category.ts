@@ -1,8 +1,8 @@
-import { ApiCategory } from "dmb-api";
+import { ICategory } from "songtreasures";
 import BaseItem from "./base";
 
-export default class Category extends BaseItem implements ApiCategory {
-    constructor(i: ApiCategory) {
+export default class Category extends BaseItem implements ICategory {
+    constructor(i: ICategory) {
         super(i);
     }
 }

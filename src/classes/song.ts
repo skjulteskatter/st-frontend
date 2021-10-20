@@ -1,4 +1,4 @@
-import { ApiCollection, ApiSong, Format, MediaFile } from "dmb-api";
+import { ICollection, ISong, Format, MediaFile } from "songtreasures";
 import BaseClass from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";
@@ -6,7 +6,7 @@ import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
 import { Lyrics, Participant } from ".";
 
-export default class Song extends BaseClass implements ApiSong {
+export default class Song extends BaseClass implements ISong {
     public id: string;
     public type: string;
     public available: boolean;
@@ -20,7 +20,7 @@ export default class Song extends BaseClass implements ApiSong {
     }
     public collections: {
         id: string;
-        collection?: ApiCollection;
+        collection?: ICollection;
         number?: number;
     }[];
     public copyrights;
@@ -71,7 +71,7 @@ export default class Song extends BaseClass implements ApiSong {
 
     public raw;
 
-    constructor(song: ApiSong) {
+    constructor(song: ISong) {
         super();
         this.raw = song;
 

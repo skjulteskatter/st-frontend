@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { ApiPlaylistEntry } from "dmb-api";
+import { ICustomCollectionEntry } from "songtreasures";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
@@ -62,7 +62,7 @@ import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
 })
 export default class PlaylistSongCard extends Vue {
     private store = useStore();
-    public entry?: ApiPlaylistEntry;
+    public entry?: ICustomCollectionEntry;
     public song: Song | null = null;
     public canEdit?: boolean;
 

@@ -103,7 +103,7 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
-import { ApiContributor, Sort } from "dmb-api";
+import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";

@@ -1,15 +1,15 @@
 import { User } from "@/classes";
-import { ApiActivity, ApiPlaylist, ApiTag } from "dmb-api";
+import { IActivity, ICustomCollection, ITag } from "songtreasures";
 
 export type State = {
     currentUser?: User;
     initialized: boolean;
     extend: boolean;
     error: string;
-    playlists: ApiPlaylist[];
-    activities?: ApiActivity[];
+    playlists: ICustomCollection[];
+    activities?: IActivity[];
     redirect?: string;
-    tags: ApiTag[];
+    tags: ITag[];
     splash?: {
         title: string;
         content: string;

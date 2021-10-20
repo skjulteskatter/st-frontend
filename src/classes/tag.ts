@@ -1,8 +1,8 @@
 import { tags } from "@/services/api";
 import { cache } from "@/services/cache";
-import { ApiTag } from "dmb-api";
+import { ITag } from "songtreasures";
 
-export default class Tag implements ApiTag {
+export default class Tag implements ITag {
     public id;
     public userId;
     public canEdit;
@@ -11,9 +11,9 @@ export default class Tag implements ApiTag {
     public type;
     public color;
 
-    private saved: ApiTag;
+    private saved: ITag;
 
-    constructor(i: ApiTag) {
+    constructor(i: ITag) {
         this.saved = i;
 
         this.id = i.id;

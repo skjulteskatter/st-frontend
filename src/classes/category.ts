@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
-import { ApiCategory } from "dmb-api";
+import { ICategory } from "songtreasures";
 
-export default class Category implements ApiCategory {
+export default class Category implements ICategory {
     protected store = useStore();
     public id;
     public name: LocaleString = {};
@@ -11,7 +11,7 @@ export default class Category implements ApiCategory {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.[0]];
     }
 
-    constructor(props: ApiCategory) {
+    constructor(props: ICategory) {
         this.id = props.id;
         this.name = props.name;
     }

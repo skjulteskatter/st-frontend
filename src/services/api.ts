@@ -3,15 +3,15 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { ApiActivity, ApiCategory, ApiCollection, ApiCollectionItem, ApiContributor, ApiCopyright, ApiCountry, ApiGenre, ApiLyrics, ApiPlaylist, ApiPlaylistEntry, ApiSettings, ApiSong, ApiSubscription, Format, ApiTag, ApiTheme, IUser, MediaFile, PublicUser, ShareKey } from "dmb-api";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, MediaFile, PublicUser, ShareKey } from "songtreasures";
 import http from "./http";
 
 export const activity = {
     async getActivities() {
-        return await http.get<ApiActivity[]>("api/Activity?limit=20");
+        return await http.get<IActivity[]>("api/Activity?limit=20");
     },
-    async pushActivities(activities: ApiActivity[]) {
-        return await http.post<ApiActivity[]>("api/Activity", activities.map(a => {
+    async pushActivities(activities: IActivity[]) {
+        return await http.post<IActivity[]>("api/Activity", activities.map(a => {
             return {
                 type: a.type,
                 itemId: a.itemId,
@@ -25,7 +25,7 @@ export const session = {
     async getCurrentUser() {
         return await http.get<IUser>("api/Session");
     },
-    saveUser(settings: ApiSettings) {
+    saveUser(settings: ISettings) {
         return http.patch<IUser>("api/Session", settings);
     },
     createUser(displayName: string) {
@@ -63,19 +63,19 @@ export const session = {
 
 export const items = {
     getThemes() {
-        return http.get<ApiTheme[]>("api/Themes");
+        return http.get<ITheme[]>("api/Themes");
     },
     getCountries() {
-        return http.get<ApiCountry[]>("api/Countries");
+        return http.get<ICountry[]>("api/Countries");
     },
     getCopyrights() {
-        return http.get<ApiCopyright[]>("api/Copyrights");
+        return http.get<ICopyright[]>("api/Copyrights");
     },
     getCategories() {
-        return http.get<ApiCategory[]>("api/SongTags");
+        return http.get<ICategory[]>("api/SongTags");
     },
     getGenres() {
-        return http.get<ApiGenre[]>("api/Genres");
+        return http.get<IGenre[]>("api/Genres");
     },
     getLanguages() {
         return http.get<Language[]>("api/Languages");
@@ -91,7 +91,7 @@ export const items = {
 
 export const admin = {
     async getAllSubscriptions() {
-        return await http.get<ApiSubscription[]>("api/Admin/Subscriptions");
+        return await http.get<ISubscription[]>("api/Admin/Subscriptions");
     },
     getUsers(query: string) {
         return http.get<IUser[]>("api/Admin/Users?query=" + query);
@@ -103,7 +103,7 @@ export const admin = {
         collectionIds: string[];
         validTo: string;
     }) {
-        return http.post<ApiSubscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
+        return http.post<ISubscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
     },
     deleteSubcription(uid: string, subscriptionId: string) {
         return http.delete(`api/Admin/User/${uid}/Subscriptions/${subscriptionId}`);  
@@ -130,13 +130,13 @@ export const admin = {
 
 export const songs = {
     getSongById(songId: string, expand?: string) {
-        return http.get<ApiSong>("api/Songs/Id/" + songId + (expand ? "?expand=" + expand : ""));
+        return http.get<ISong>("api/Songs/Id/" + songId + (expand ? "?expand=" + expand : ""));
     },
     getCollections() {
-        return http.get<ApiCollection[]>("api/Collections");
+        return http.get<ICollection[]>("api/Collections");
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<ApiSong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
@@ -148,20 +148,20 @@ export const songs = {
         return http.get<MediaFile[]>(`api/Files?songId=${songId}&type=sheetmusic-pdf`);
     },
     getSongLyrics(songId: string, language: string, format: Format, transpose: number, transcode: string, newMelody = false) {
-        return http.get<ApiLyrics>(`api/Songs/${songId}/Lyrics?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`);
+        return http.get<ILyrics>(`api/Songs/${songId}/Lyrics?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`);
     },
-    async getLyrics(collection: ApiCollection, number: number, language: string, format: string, transpose: number, transcode: string, newMelody = false) {
-        return new Lyrics(await http.get<ApiLyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`));
+    async getLyrics(collection: ICollection, number: number, language: string, format: string, transpose: number, transcode: string, newMelody = false) {
+        return new Lyrics(await http.get<ILyrics>(`api/Lyrics/${collection.id}/${number}?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`));
     },
-    async getAllLyrics(collection: ApiCollection, language: string, format: string, transpose: number, lastUpdated?: string) {
+    async getAllLyrics(collection: ICollection, language: string, format: string, transpose: number, lastUpdated?: string) {
         const uri = `api/Lyrics/${collection.id}?language=${language}&format=${format}&transpose=${transpose}` + (lastUpdated ? `&updatedAt=${lastUpdated}` : "");
-        return (await http.get<ApiLyrics[]>(uri)).map(l => new Lyrics(l));
+        return (await http.get<ILyrics[]>(uri)).map(l => new Lyrics(l));
     },
     async getContributor(id: string) {
-        return new CollectionItem((await http.get<ApiCollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
+        return new CollectionItem((await http.get<ICollectionItem<ApiContributor>>(`api/Contributor/${id}?expand=item/biography,songs/collection`)));
     },
     getContributors(lastUpdated?: string) {
-        return http.getWithResult<ApiCollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<ICollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
     },
     creditSong(collectionId: string, number: number, language: string, content: string) {
         return http.uploadAndDownload(`api/Songs/Credit?collectionId=${collectionId}&number=${number}&language=${language}`, content);
@@ -182,25 +182,25 @@ export const favorites = {
 
 export const playlists = {
     async getPlaylists() {
-        return (await http.get<ApiPlaylist[]>("api/Playlists"));
+        return (await http.get<ICustomCollection[]>("api/Playlists"));
     },
     async getPlaylist(id: string) {
-        return (await http.get<ApiPlaylist>("api/Playlists/" + id));
+        return (await http.get<ICustomCollection>("api/Playlists/" + id));
     },
     async createPlaylist(name: string) {
-        return await http.post<ApiPlaylist, unknown>("api/Playlists", {name});
+        return await http.post<ICustomCollection, unknown>("api/Playlists", {name});
     },
     deletePlaylist(id: string): Promise<void> {
         return http.delete(`api/Playlists/${id}`);
     },
     async addToPlaylist(playlistId: string, songId: string, transposition?: number) {
-        return await http.post<ApiPlaylistEntry[], unknown>(`api/Playlists/${playlistId}`, {
+        return await http.post<ICustomCollectionEntry[], unknown>(`api/Playlists/${playlistId}`, {
             songIds: [songId],
             transposition,
         });
     },
     async removeEntryFromPlaylist(playlistId: string, entryId: string) {
-        return (await http.post<ApiPlaylist, unknown>(`api/Playlists/${playlistId}`, {
+        return (await http.post<ICustomCollection, unknown>(`api/Playlists/${playlistId}`, {
             removeEntryIds: [entryId],
         }));
     },
@@ -232,7 +232,7 @@ export const sharing = {
         return http.delete("api/Sharing/" + key);
     },
     activateKey(key: string) {
-        return http.post<ApiPlaylist | ApiTag>("api/Sharing/" + key);
+        return http.post<ICustomCollection | ITag>("api/Sharing/" + key);
     },
 };
 
@@ -253,13 +253,13 @@ export const analytics = {
 
 export const tags = {
     getAll() {
-        return http.get<ApiTag[]>("api/Tags");
+        return http.get<ITag[]>("api/Tags");
     },
     get(id: string) {
-        return http.get<ApiTag>("api/Tags/" + id);
+        return http.get<ITag>("api/Tags/" + id);
     },
     create(name: string, color: string, songId: string) {
-        return http.post<ApiTag, unknown>("api/Tags", {name, color, songId});
+        return http.post<ITag, unknown>("api/Tags", {name, color, songId});
     },
     update(id: string, name?: string, color?: string, addIds?: string[], removeIds?: string[]) {
         return http.patch("api/Tags/" + id, {

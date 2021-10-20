@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
-import { ApiItem } from "dmb-api";
+import { IItem } from "songtreasures";
 
-export default class BaseItem implements ApiItem {
+export default class BaseItem implements IItem {
     public id;
     public name;
 
@@ -12,7 +12,7 @@ export default class BaseItem implements ApiItem {
         return this.name[language] ?? this.name.en ?? this.name[Object.keys(this.name)?.[0]];
     }
 
-    constructor(i: ApiItem) {
+    constructor(i: IItem) {
         this.id = i.id;
         this.name = i.name;
     }
