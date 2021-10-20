@@ -1,14 +1,9 @@
 <template>
     <base-card class="hover:ring-2 hover:ring-gray-400 cursor-pointer">
         <div class="flex gap-2" v-if="song">
-            <b class="text-gray-400">{{ song.number }}</b>
+            <b class="text-gray-400 leading-snug">{{ song.number }}</b>
             <div>
-                <b>{{ song.getName(languageKey) }}</b>
-                <small class="text-xs text-primary flex gap-2 mb-2">
-                    <span>{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</span>
-                    <span>&middot;</span>
-                    <span>{{ song.originalKey }}</span>
-                </small>
+                <p class="font-bold leading-snug mb-2">{{ song.getName(languageKey) }}</p>
                 <div class="opacity-50 text-sm leading-tight">
                     <div v-if="song.Authors.length">
                         <small>{{ $t("song_author") }}: </small>
@@ -26,6 +21,11 @@
                             >{{ composer.name }}</small
                         >
                     </div>
+                    <small class="mt-1 flex gap-2">
+                        <span>{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</span>
+                        <span>&middot;</span>
+                        <span>{{ song.originalKey }}</span>
+                    </small>
                     <p class="mt-4 text-gray-400">{{ context }}</p>
                 </div>
             </div>

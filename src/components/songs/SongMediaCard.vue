@@ -9,6 +9,11 @@
                     {{ $t("song_media") }}
                 </h3>
                 <tooltip :text="$t('tooltip_songFiles')" />
+                <a
+                    target="_blank"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSd9Sqcxox4B4UbSm2WPCD_jERcX0fiQ_d6Nw13sq8T0eXr36w/viewform"
+                    class="ml-auto text-sm rounded-md py-1 px-2 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10"
+                >{{ $t('common_contribute') }}</a>
             </div>
         </template>
         <div class="flex flex-col gap-4" v-if="(song.audioFiles.length || song.videoFiles.length || song.sheetMusic.length)">

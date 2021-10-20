@@ -67,7 +67,7 @@
 import { Options, Vue } from "vue-class-component";
 import { osmd } from "@/services/osmd";
 import { MediaFile } from "dmb-api";
-import { Contributor, SheetMusicTypes, Song, User } from "@/classes";
+import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
@@ -112,7 +112,6 @@ export default class SheetMusic extends Vue {
         if (token) {
             http.setToken(token);
 
-            
             const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));
             this.user = new User(await session.getCurrentUser());
 
@@ -146,7 +145,7 @@ export default class SheetMusic extends Vue {
             originalKey: this.song?.originalKey ?? "C",
             url: file.directUrl,
             type: file.type,
-            transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined),
+            transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true),
             zoom: this.zoom,
             clef: "treble",
         };
