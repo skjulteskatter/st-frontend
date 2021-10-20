@@ -1,4 +1,4 @@
-import { ApiContributor } from "dmb-api";
+import { ApiContributor } from "songtreasures";
 import { ApiSearchResult } from "songtreasures/search";
 import { CollectionItem, Song } from "..";
 import SearchResultItem from "./searchResultItem";

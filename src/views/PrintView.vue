@@ -76,7 +76,7 @@
 <script lang="ts">
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
-import { LyricsContent } from "dmb-api";
+import { LyricsContent } from "songtreasures";
 import { Vue } from "vue-class-component";
 
 export default class PrintView extends Vue {

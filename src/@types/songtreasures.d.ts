@@ -1,20 +1,21 @@
-declare module "dmb-api" {
-    interface ApiUser {
+/* eslint-disable @typescript-eslint/interface-name-prefix */
+declare module "songtreasures" {
+    interface IUser {
         id: string;
         displayName: string;
         image: string;
         email: string;
-        subscriptions: ApiSubscription[];
+        subscriptions: ISubscription[];
         roles: string[];
         birthDay: string;
         gender: "male" | "female" | "unknown";
-        settings?: ApiSettings;
+        settings?: ISettings;
         lastLogin: Date;
         privacyPolicy: boolean;
         termsAndConditions: boolean;
     }
 
-    type ApiSettings = {
+    type ISettings = {
         languageKey?: string;
         defaultTransposition?: string;
         defaultTranscode?: string;
@@ -22,7 +23,7 @@ declare module "dmb-api" {
         theme?: "light" | "dark";
     }
 
-    type ApiSubscription = {
+    type ISubscription = {
         id: string;
         productIds: string[];
         collectionIds: string[];
@@ -30,7 +31,7 @@ declare module "dmb-api" {
         valid: boolean;
     }
 
-    type ApiActivity = {
+    type IActivity = {
         id?: string;
         type: "contributor";
         itemId: string;
@@ -46,7 +47,7 @@ declare module "dmb-api" {
 
     type Format = "json" | "performance";
 
-    interface ApiCollection {
+    interface ICollection {
         id: string;
         enabled: boolean;
         defaultType: string;
@@ -65,18 +66,18 @@ declare module "dmb-api" {
         };
     }
 
-    interface ApiSong {
+    interface ISong {
         id: string;
         available: boolean;
         collections: {
             id: string;
-            collection?: ApiCollection;
+            collection?: ICollection;
             number?: number;
         }[];
         type: string;
         image?: string;
         name: LocaleString;
-        participants: ApiParticipant[];
+        participants: IParticipant[];
         yearWritten?: number;
         yearComposed?: number;
         originalKey: string;
@@ -103,7 +104,7 @@ declare module "dmb-api" {
         newMelodies: string[];
     }
 
-    interface ApiLyrics {
+    interface ILyrics {
         id: string;
         songId: string;
         collectionIds: string[];
@@ -132,34 +133,34 @@ declare module "dmb-api" {
         };
     }
     
-    interface ApiCollectionItem<T> {
+    interface ICollectionItem<T> {
         id: string;
         item: T;
         songIds: string[];
-        songs?: ApiSong[];
+        songs?: ISong[];
         fileIds: string[];
         files?: MediaFile[];
     }
 
-    interface ApiParticipant {
+    interface IParticipant {
         contributorId: string;
         contributor?: ApiContributor;
         type: "composer" | "author" | "arranger" | "artist";
     }
 
-    interface ApiCustomCollection {
+    interface ICustomCollection {
         id: string;
         type: "playlist";
         name: string;
         userId: string;
-        entries: ApiPlaylistEntry[];
+        entries: ICustomCollectionEntry[];
         sharedWithIds: string[];
         shareKey: string;
     }
 
-    type ApiPlaylist = ApiCustomCollection;
+    type IPlaylist = ICustomCollection;
 
-    interface ApiPlaylistEntry {
+    interface ICustomCollectionEntry {
         id: string;
         type: string;
         addedAt: string;
@@ -167,14 +168,14 @@ declare module "dmb-api" {
         songId: string;
     }
 
-    interface ApiTag {
+    interface ITag {
         id: string;
         type: "tag";
         name: string;
         color: string;
         userId: string;
         songIds: string[];
-        songs?: ApiSong[];
+        songs?: ISong[];
         canEdit: boolean;
     }
 
@@ -190,8 +191,8 @@ declare module "dmb-api" {
         transposition: string;
         information: string;
         directUrl: string;
-        participants: ApiParticipant[];
-        song?: ApiSong;
+        participants: IParticipant[];
+        song?: ISong;
     }
 
     interface CreditSong {
@@ -221,24 +222,24 @@ declare module "dmb-api" {
         image: string;
     }
 
-    interface ApiItem {
+    interface IItem {
         id: string;
         name: LocaleString;
     }
 
-    type ApiCopyright = ApiItem;
+    type ICopyright = IItem;
 
-    type ApiTheme = ApiItem;
+    type ITheme = IItem;
 
-    interface ApiCountry extends ApiItem {
+    interface ICountry extends IItem {
         countryCode: string;
     }
 
-    interface ApiGenre extends ApiItem {
+    interface IGenre extends IItem {
         description: LocaleString;
     }
 
-    type ApiCategory = ApiItem;
+    type ICategory = IItem;
 
     type LyricsContent = {
         [key: string]: {

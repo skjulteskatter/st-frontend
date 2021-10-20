@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
 import { Lyrics } from "@/classes";
-import { ApiLyrics } from "dmb-api";
+import { ILyrics } from "songtreasures";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -25,7 +25,7 @@ export default class PerformanceView extends Vue {
     private lyrics?: Lyrics;
 
     public get Lyrics() {
-        return this.lyrics ?? new Lyrics({} as ApiLyrics);
+        return this.lyrics ?? new Lyrics({} as ILyrics);
     }
 
     public get CurrentVerses() {

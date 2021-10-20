@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { ApiPlaylist } from "dmb-api";
+import { ICustomCollection } from "songtreasures";
 import { useStore } from "@/store";
 import { FolderIcon, ExclamationIcon } from "@heroicons/vue/outline";
 import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
@@ -66,7 +66,7 @@ import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
 })
 export default class PlaylistCard extends Vue {
     private store = useStore();
-    public playlist?: ApiPlaylist;
+    public playlist?: ICustomCollection;
     public userId = this.store.getters.user?.id;
 
     public hover = false;

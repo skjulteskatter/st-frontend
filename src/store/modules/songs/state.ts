@@ -1,6 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SearchResult from "@/classes/search/searchResult";
-import { ApiContributor, MediaFile } from "dmb-api";
+import { ApiContributor, MediaFile } from "songtreasures";
 
 
 export type SongViewType = "default" | "performance" | "chords";

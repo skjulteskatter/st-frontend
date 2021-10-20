@@ -1,10 +1,10 @@
-import { ApiGenre } from "dmb-api";
+import { IGenre } from "songtreasures";
 import BaseItem from "./base";
 
-export default class Genre extends BaseItem implements ApiGenre {
+export default class Genre extends BaseItem implements IGenre {
     public description;
 
-    constructor(i: ApiGenre) {
+    constructor(i: IGenre) {
         super(i);
         this.description = i.description;
     }

@@ -1,6 +1,6 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { ApiContributor, ApiLyrics, ApiSong } from "dmb-api";
+import { ApiContributor, ILyrics, ISong } from "songtreasures";
 import { Lyrics } from "@/classes";
 
 export type Settings = {
@@ -15,8 +15,8 @@ export type Settings = {
 }
 
 type KeyTypes = {
-    song: ApiSong;
-    lyrics: ApiLyrics;
+    song: ISong;
+    lyrics: ILyrics;
     contributors: ApiContributor[];
     settings: Settings;
 }
@@ -33,7 +33,7 @@ export class PresentationBase {
         return appSession.songs.find(i => i.id == this.Lyrics?.songId);
     }
 
-    private _lyrics?: ApiLyrics;
+    private _lyrics?: ILyrics;
 
     // Set lyrics in cache and storage.
     protected set lyrics(v) {
