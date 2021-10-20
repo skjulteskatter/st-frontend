@@ -502,6 +502,10 @@ export default class SongViewer extends Vue {
     public async setView(type: SongViewType) {
         if (this.type !== type)
             this.store.commit(SongsMutationTypes.VIEW, type);
+
+        if (!this.song?.hasLyrics)
+            return;
+
         if (type === "chords" || type === "performance") {
             this.lyrics = await this.getTransposedLyrics(undefined, "performance");
         } else {
