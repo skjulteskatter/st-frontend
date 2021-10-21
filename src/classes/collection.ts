@@ -313,7 +313,7 @@ export default class Collection extends BaseClass implements ICollection {
         });
     }
 
-    public async getList(value: Sort): Promise<ListEntry[]> {
+    public getList(value: Sort): ListEntry[] {
         this.listType = value;
         const songsPerCard = 50;
         let songs: Song[] = [];
@@ -334,7 +334,10 @@ export default class Collection extends BaseClass implements ICollection {
                         entry.songs.push(b);
 
                         return a;
-                    }, [] as ListEntry[]);
+                    }, [] as ListEntry[]).map(i => {
+                        i.songs = i.songs.sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
+                        return i;
+                    });
                     break;
                 case "title":
                     songs = this.songs.sort((a, b) => a.getName() > b.getName() ? 1 : -1);
