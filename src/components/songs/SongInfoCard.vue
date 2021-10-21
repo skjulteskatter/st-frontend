@@ -32,13 +32,17 @@
                         <EyeIcon class="w-5 h-5" />
                     </span>
                 </h2>
-                <img
-                    id="song-details-image"
-                    class="rounded"
+                <div 
+                    class="flex flex-col"
                     v-if="song.image"
-                    height="100"
-                />
-                <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" v-if="imageLoaded">
+                >
+                    <img
+                        id="song-details-image"
+                        class="flex gap-2 rounded"
+                        height="100"
+                    />
+                </div>
+                <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" :style="{'display': imageLoaded ? '' : 'none'}">
                     <small
                         class="flex gap-2"
                         v-if="song.Authors.length"
