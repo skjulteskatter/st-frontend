@@ -314,7 +314,6 @@ export default class SongViewer extends Vue {
     public async load() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
-            loaded: false,
             clef: "treble",
             originalKey: "C",
         });

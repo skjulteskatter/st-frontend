@@ -29,19 +29,6 @@ type SheetMusicOptions = {
     clef: "bass" | "treble" | "alto";
 }
 
-type SongFilter = {
-    themes: string[];
-    origins: string[];
-    videoFiles: string[];
-    audioFiles: string[];
-    contentTypes: string[];
-    sheetMusicTypes: string[];
-    hasLyrics: boolean;
-    hasAudioFiles: boolean;
-    hasVideoFiles: boolean;
-    hasSheetMusic: boolean;
-}
-
 declare module "songtreasures" {
     interface Notification {
         id?: string;

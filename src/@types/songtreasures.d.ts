@@ -66,6 +66,8 @@ declare module "songtreasures" {
         };
     }
 
+    type SongType = "lyrics" | "sheetMusic" | "audio";
+
     interface ISong {
         id: string;
         available: boolean;

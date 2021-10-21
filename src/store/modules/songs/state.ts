@@ -1,5 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SearchResult from "@/classes/search/searchResult";
+import SongFilter from "@/classes/songFilter";
 import { ApiContributor, MediaFile } from "songtreasures";
 
 
@@ -36,7 +37,7 @@ export const state: State = {
     initialized: false,
     list: "default",
     newMelody: false,
-    filter: {
+    filter: new SongFilter({
         themes: [],
         videoFiles: [],
         audioFiles: [],
@@ -47,7 +48,7 @@ export const state: State = {
         hasLyrics: false,
         hasSheetMusic: false,
         hasVideoFiles: false,
-    },
+    }),
     language: "en",
     view: "default",
 };
