@@ -58,10 +58,16 @@
                         <contributor-info :contributors="song.Composers" />
                     </small>
                     <small 
-                        v-else
+                        v-if="!song.Composers.length && !melodyOrigin"
                         class="flex gap-2"
                     >
                         <span>{{$t("song_unknownComposer")}}</span>
+                    </small>
+                    <small
+                        class="flex gap-2"
+                        v-if="melodyOrigin"
+                    >
+                        {{ melodyOrigin }}
                     </small>
                     <small
                         class="flex gap-2"
@@ -89,12 +95,6 @@
                             {{ getLocaleString(song.copyright.melody.name) }}
                         </small>
                     </div>
-                    <small
-                        class="flex gap-2"
-                        v-if="melodyOrigin"
-                    >
-                        {{ melodyOrigin }}
-                    </small>
                     <small class="flex gap-2">
                         <span v-if="song.originCountry">{{ $t(song.originCountry) }}</span>
                         <span v-if="song.originCountry">&middot;</span>
