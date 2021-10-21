@@ -34,7 +34,7 @@
                 </h2>
                 <div 
                     class="flex flex-col"
-                    v-if="song.image"
+                    v-if="song.image && song.type == 'track'"
                 >
                     <img
                         id="song-details-image"
