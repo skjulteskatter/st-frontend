@@ -51,7 +51,6 @@ export default class SongFilterSelect extends Vue {
 
 		this.store.commit(SongsMutationTypes.SET_FILTER, filter);
         this.$emit("apply");
-		console.log(audio, video, sheetMusic, types);
 	}
 }
 </script>
