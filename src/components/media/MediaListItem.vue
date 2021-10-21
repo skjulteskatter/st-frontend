@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { useStore } from "@/store";
-import { MediaFile } from "dmb-api";
+import { MediaFile } from "songtreasures";
 import { Options, Vue } from "vue-class-component";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 

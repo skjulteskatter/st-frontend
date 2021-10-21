@@ -81,6 +81,9 @@ import { Theme } from "@/classes/items";
     components: {
         CheckboxGroup,
     },
+    emits: [
+        "apply",
+    ],
 })
 export default class SongFilterDropdown extends Vue {
     private store = useStore();
@@ -152,7 +155,7 @@ export default class SongFilterDropdown extends Vue {
             (t) => this.typeValues[t] == true,
         );
 
-        const filter = Object.assign({}, this.store.state.songs.filter);
+        const filter = this.store.state.songs.filter;
 
         filter.videoFiles = videos;
         filter.audioFiles = audio;
@@ -162,6 +165,7 @@ export default class SongFilterDropdown extends Vue {
         );
 
         this.store.commit(SongsMutationTypes.SET_FILTER, filter);
+        this.$emit("apply");
     }
 
     public get filtersActive() {

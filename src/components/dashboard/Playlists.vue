@@ -43,7 +43,7 @@
 import { Options, Vue } from "vue-class-component";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
-import { ApiPlaylist } from "dmb-api";
+import { ICustomCollection } from "songtreasures";
 import { PlusIcon, FolderIcon } from "@heroicons/vue/solid";
 
 @Options({
@@ -67,7 +67,7 @@ export default class Playlists extends Vue {
         this.createPlaylist = false;
     }
 
-    public playlistLink(playlist: ApiPlaylist) {
+    public playlistLink(playlist: ICustomCollection) {
         return {
             name: "playlist-view",
             params: {
@@ -76,7 +76,7 @@ export default class Playlists extends Vue {
         };
     }
 
-    public get playlists(): ApiPlaylist[] {
+    public get playlists(): ICustomCollection[] {
         return this.store.state.session.playlists;
     }
 }

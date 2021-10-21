@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
-import { ApiCategory, ApiCollectionItem, ApiContributor, ApiCountry, ApiTheme } from "dmb-api";
+import { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures";
 
-export default class CollectionItem<T extends (ApiContributor | ApiCountry | ApiTheme | ApiCategory)> implements ApiCollectionItem<T> {
+export default class CollectionItem<T extends (ApiContributor | ICountry | ITheme | ICategory)> implements ICollectionItem<T> {
     private store = useStore();
 
     public id;
@@ -11,7 +11,7 @@ export default class CollectionItem<T extends (ApiContributor | ApiCountry | Api
     public fileIds;
     public files?;
 
-    constructor(item: ApiCollectionItem<T>) {
+    constructor(item: ICollectionItem<T>) {
         this.id = item.id;
         this.item = item.item;
         this.songIds = item.songIds;

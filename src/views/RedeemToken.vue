@@ -14,7 +14,7 @@
 import { sharing } from "@/services/api";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { ApiPlaylist, ApiTag } from "dmb-api";
+import { ICustomCollection, ITag } from "songtreasures";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -24,7 +24,7 @@ export default class RedeemToken extends Vue {
     private searchParams = new URLSearchParams(window.location.search);
     private store = useStore();
 
-    public result: ApiPlaylist | ApiTag | null = null;
+    public result: ICustomCollection | ITag | null = null;
 
     public async mounted() {
         if (this.token) {

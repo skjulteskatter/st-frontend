@@ -14,7 +14,7 @@
     </router-link>
 </template>
 <script lang="ts">
-import { ApiContributor } from "dmb-api";
+import { ApiContributor } from "songtreasures";
 import { Options, Vue } from "vue-class-component";
 
 @Options({

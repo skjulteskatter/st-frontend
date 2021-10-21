@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ApiCollection, ApiContributor, Sort } from "dmb-api";
+import { ICollection, ApiContributor, Sort } from "songtreasures";
 import { ListEntry, Lyrics, Song, CollectionItem } from ".";
 import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";
@@ -7,6 +7,7 @@ import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import router from "@/router";
+import SongFilter from "./songFilter";
 
 type CollectionSettings = {
     offline: boolean;
@@ -15,7 +16,7 @@ type CollectionSettings = {
 
 let closeId: string | null = null;
 
-export default class Collection extends BaseClass implements ApiCollection {
+export default class Collection extends BaseClass implements ICollection {
     public id;
     private _key;
     public enabled;
@@ -79,7 +80,7 @@ export default class Collection extends BaseClass implements ApiCollection {
         selected: () => boolean;
     }[] = [];
 
-    constructor(collection: ApiCollection) {
+    constructor(collection: ICollection) {
         super();
         this._key = collection.key;
         this.enabled = collection.enabled;
@@ -282,21 +283,30 @@ export default class Collection extends BaseClass implements ApiCollection {
     } = {};
 
     public get Lists(): {
-        [key: string]: (filter?: string) => ListEntry[]; 
+        [key: string]: (filterString?: string, filter?: SongFilter) => ListEntry[]; 
     }{
-        const f = (key: string, filter?: string) => {
+        const f = (key: string, filterString?: string, filter?: SongFilter) => {
             return this._lists[key].map(i => {
+                let songs = i.songs;
+
+                filter = filter ?? this.store.state.songs.filter;
+
+                if (filter) {
+                    filter.SetSongs(songs);
+                    songs = filter.GetSongs();
+                }
+
                 return {
                     title: i.title,
                     count: i.count,
                     action: i.action,
-                    songs: filter ? i.songs.filter(s => s.getNumber(this.id).toString().includes(filter)) : i.songs,
+                    songs: filterString ? songs.filter(s => s.getNumber(this.id).toString().includes(filterString)) : songs,
                 };
             }).filter(i => i.songs.length);
         };
 
         return Object.keys(this._lists).reduce((a, b) => {
-            a[b] = (filter?: string) => f(b, filter);
+            a[b] = (filterString?: string, filter?: SongFilter) => f(b, filterString, filter);
             return a;
         }, {} as {
             [key: string]: (filter?: string) => ListEntry[]; 

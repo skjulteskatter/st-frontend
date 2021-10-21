@@ -1,6 +1,7 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SearchResult from "@/classes/search/searchResult";
-import { ApiContributor } from "dmb-api";
+import SongFilter from "@/classes/songFilter";
+import { ApiContributor } from "songtreasures";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";

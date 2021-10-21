@@ -1,16 +1,16 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { ApiActivity } from "dmb-api";
+import { IActivity } from "songtreasures";
 import { RouteLocationRaw } from "vue-router";
 import { Collection } from ".";
 import { Song } from ".";
 
 
 export class Activity {
-    private activity: ApiActivity;
+    private activity: IActivity;
     private store = useStore();
 
-    constructor(activity: ApiActivity) {
+    constructor(activity: IActivity) {
         this.activity = activity;
     }
 

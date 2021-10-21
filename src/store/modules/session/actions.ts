@@ -3,7 +3,7 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
-import { ApiActivity, ApiContributor, ApiSong } from "dmb-api";
+import { IActivity, ApiContributor, ISong } from "songtreasures";
 import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";
@@ -43,7 +43,7 @@ async function init(state: State, commit: Commit): Promise<void> {
     
     commit(SessionMutationTypes.SET_PLAYLISTS, appSession.customCollections);
 
-    const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+    const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as IActivity[];
 
     if (items.length) {
         api.activity.pushActivities(items).then(() => {
@@ -118,7 +118,7 @@ export interface Actions {
         entryId: string;
     }): Promise<void>;
 
-    [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ApiSong): Promise<void>;
+    [SessionActionTypes.LOG_SONG_ITEM]({ commit }: AugmentedActionContext, payload: ISong): Promise<void>;
     [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit }: AugmentedActionContext, payload: ApiContributor): Promise<void>;
     [SessionActionTypes.ADMIN_IMPORT_FROM_LANDAX]({ commit }: AugmentedActionContext): Promise<void>;
 }
@@ -206,14 +206,14 @@ export const actions: ActionTree<State, RootState> & Actions = {
     },
 
     // LOG ITEMS
-    async [SessionActionTypes.LOG_SONG_ITEM]({ commit, state }, item: ApiSong): Promise<void> {
-        const items = state.activities ?? JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+    async [SessionActionTypes.LOG_SONG_ITEM]({ commit, state }, item: ISong): Promise<void> {
+        const items = state.activities ?? JSON.parse(localStorage.getItem("activities") ?? "[]") as IActivity[];
 
         if (items?.find(a => a.itemId == item.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
             return;
         }
 
-        const i: ApiActivity = {
+        const i: IActivity = {
             loggedDate: new Date().toISOString(),
             type: "song",
             itemId: item.id,
@@ -236,13 +236,13 @@ export const actions: ActionTree<State, RootState> & Actions = {
         commit(SessionMutationTypes.SET_LOG_ITEMS, [i]);
     },
     async [SessionActionTypes.LOG_CONTRIBUTOR_ITEM]({ commit, state }, item: ApiContributor): Promise<void> {
-        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as ApiActivity[];
+        const items = JSON.parse(localStorage.getItem("activities") ?? "[]") as IActivity[];
 
         if (state.activities?.find(a => a.itemId == item.id && new Date(a.loggedDate).getTime() > (new Date().getTime() - 60000))) {
             return;
         }
 
-        const i: ApiActivity = {
+        const i: IActivity = {
             loggedDate: new Date().toISOString(),
             type: "contributor",
             itemId: item.id,

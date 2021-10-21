@@ -45,7 +45,9 @@
                     <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
                         {{ $t("song_filterByContent") }}
                     </label>
-                    <song-filter-dropdown />
+                    <song-filter-dropdown
+                        @apply="loadList" 
+                    />
                 </div>
                 <search-input
                     class="max-w-sm"
@@ -62,7 +64,7 @@
                 >
                     <song-list-card
                         :collection="collection"
-                        v-for="(e, i) in collection.Lists[listType](searchNumber)"
+                        v-for="(e, i) in list"
                         :key="i"
                         :songs="e.songs"
                         :title="e.title"
@@ -83,7 +85,7 @@
                         {{ s.number }}
                     </button>
                 </div>
-                <h1 class="opacity-50" v-if="!filteredSongs.length && !loading">
+                <h1 class="opacity-50" v-if="!songs.length && !loading">
                     No results
                 </h1>
             </loader>
@@ -103,7 +105,7 @@ import {
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
-import { ApiContributor, Sort } from "dmb-api";
+import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -127,18 +129,17 @@ export default class SongList extends Vue {
     private store = useStore();
 
     public searchString = "";
+    public cId = "";
+    public list: ListEntry[] = [];
+    public loadingList = false;
 
     public get searchNumber() {
         return this.searchString.replace(/[^0-9]/g, "");
     }
 
-    public list: ListEntry[] = [];
-
-    public get List() {
-        return this.list ?? [];
+    public get songs() {
+        return this.list.reduce((a, b) => [...a, ...b.songs], [] as Song[]);
     }
-
-    public cId = "";
 
     public get viewType() {
         return this.collection?.viewType ?? "boards";
@@ -147,41 +148,6 @@ export default class SongList extends Vue {
     public set viewType(v) {
         if (this.collection)
             this.collection.viewType = v;
-    }
-
-    public loadingList = false;
-
-    public toggleViewType() {
-        this.viewType = this.viewType === "boards" ? "grid" : "boards";
-    }
-
-    public search() {
-        this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
-        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
-        this.$router.push({
-            name: "search",
-        });
-    }
-
-    private async loadCollection() {
-        this.cId = this.$route.params.collection as string; 
-        if (!this.collection?.getKeys().includes(this.cId)) {
-            await this.store.dispatch(
-                SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
-            );
-        }
-        this.list = await this.collection?.getList(this.listType) ?? [];
-    }
-
-    public async mounted() {
-        await this.loadCollection();
-    }
-
-    public updated() {
-        if (this.$route.params.collection !== this.cId) {
-            this.loadCollection();
-        }
     }
 
     public get loading() {
@@ -213,26 +179,64 @@ export default class SongList extends Vue {
         return this.store.getters.languageKey;
     }
 
-    public get songs() {
-        return this.collection?.songs ?? [];
+    public toggleViewType() {
+        this.viewType = this.viewType === "boards" ? "grid" : "boards";
     }
 
-    public get filteredSongs() {
-        
-        if (parseInt(this.searchString)) {
-            return this.songs.filter(i => i.number.toString().includes(this.searchString));
+    public search() {
+        this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
+        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
+        this.$router.push({
+            name: "search",
+        });
+    }
+
+    private async loadCollection() {
+        this.cId = this.$route.params.collection as string; 
+        if (!this.collection?.getKeys().includes(this.cId)) {
+            await this.store.dispatch(
+                SongsActionTypes.SELECT_COLLECTION,
+                this.$route.params.collection as string,
+            );
         }
-        return this.songs;
+        await this.loadList();
+    }
+
+    public async mounted() {
+        await this.loadCollection();
+    }
+
+    public updated() {
+        if (this.$route.params.collection !== this.cId) {
+            this.loadCollection();
+        }
+    }
+
+    public async setListType(value: Sort) {
+        if (this.listType !== value) {
+            this.listType = value;
+            await this.loadList();
+        }
+    }
+
+    public async loadList() {
+        this.loadingList = true;
+        if (this.collection) {
+            await new Promise(r => setTimeout(r, 100));
+            await this.collection?.getList(this.listType);
+            this.list = this.collection.Lists[this.listType](this.searchNumber);
+        }
+        this.loadingList = false;
     }
 
     public themeSongs(theme: CollectionItem<Theme>) {
-        return this.filteredSongs.filter((s: Song) =>
+        return this.songs.filter((s: Song) =>
             theme?.songIds.includes(s.id),
         );
     }
 
     public countrySongs(country: CollectionItem<Country>) {
-        return this.filteredSongs.filter((s: Song) =>
+        return this.songs.filter((s: Song) =>
             country?.songIds.includes(s.id),
         );
     }
@@ -246,15 +250,6 @@ export default class SongList extends Vue {
                     contributor: contributor.id,
                 },
             });
-        }
-    }
-
-    public async setListType(value: Sort) {
-        if (this.collection && this.collection.listType !== value) {
-            this.loadingList = true;
-            await new Promise(r => setTimeout(r, 100));
-            this.list = await this.collection.getList(value);
-            this.loadingList = false;
         }
     }
 }

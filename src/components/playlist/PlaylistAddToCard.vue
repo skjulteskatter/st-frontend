@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { ApiPlaylist } from "dmb-api";
+import { ICustomCollection } from "songtreasures";
 import { FolderIcon } from "@heroicons/vue/outline";
 
 @Options({
@@ -29,7 +29,7 @@ import { FolderIcon } from "@heroicons/vue/outline";
     },
 })
 export default class PlaylistCard extends Vue {
-    public playlist?: ApiPlaylist;
+    public playlist?: ICustomCollection;
 
     public goToPlaylist() {
         if (!this.playlist?.id) return;

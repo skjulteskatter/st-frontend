@@ -171,7 +171,7 @@ import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, A
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Lyrics, transposer } from "@/classes";
-import { ApiPlaylist, Format, MediaFile } from "dmb-api";
+import { ICustomCollection, Format, MediaFile } from "songtreasures";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -314,7 +314,6 @@ export default class SongViewer extends Vue {
     public async load() {
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
-            loaded: false,
             clef: "treble",
             originalKey: "C",
         });
@@ -394,7 +393,7 @@ export default class SongViewer extends Vue {
     //     });
     // }
 
-    public async addToPlaylist(playlist: ApiPlaylist) {
+    public async addToPlaylist(playlist: ICustomCollection) {
         // Add song to playlist with ID
         const song = this.song;
 
@@ -502,6 +501,10 @@ export default class SongViewer extends Vue {
     public async setView(type: SongViewType) {
         if (this.type !== type)
             this.store.commit(SongsMutationTypes.VIEW, type);
+
+        if (!this.song?.hasLyrics)
+            return;
+
         if (type === "chords" || type === "performance") {
             this.lyrics = await this.getTransposedLyrics(undefined, "performance");
         } else {
