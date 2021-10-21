@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col sm:flex-row gap-2 text-sm" v-if="collection && !loading">
-        <div class="flex gap-2">
+    <div class="hidden md:flex flex-col sm:flex-row gap-2 text-sm" v-if="collection && !loading">
+        <div class="gap-2 flex">
             <div class="relative">
                 <div v-if="typeValues.lyrics">
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
