@@ -226,7 +226,7 @@ export default class SongList extends Vue {
         this.loadingList = true;
         if (this.collection) {
             await new Promise(r => setTimeout(r, 100));
-            await this.collection?.getList(this.listType);
+            this.collection.getList(this.listType);
             this.list = this.collection.Lists[this.listType](this.searchNumber);
         }
         this.loadingList = false;
