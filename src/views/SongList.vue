@@ -28,7 +28,7 @@
                         class="hidden md:flex"
                     ></button-group>
                     <select
-                        class="p-2 bg-white border border-gray-300 rounded block md:hidden dark:bg-secondary dark:border-gray-500"
+                        class="p-2 bg-white border border-black/20 rounded-md block md:hidden dark:bg-secondary dark:border-white/20"
                         @input="setListType($event.target.value)"
                     >
                         <option
@@ -46,8 +46,9 @@
                         {{ $t("song_filterByContent") }}
                     </label>
                     <song-filter-dropdown
-                        @apply="loadList" 
+                        @apply="loadList"
                     />
+                    <song-filter-select @apply="loadList" />
                 </div>
                 <search-input
                     class="max-w-sm"
@@ -102,6 +103,7 @@ import {
     ButtonGroup,
     SongFilterDropdown,
     SearchInput,
+    SongFilterSelect,
 } from "@/components/inputs";
 import { BackButton } from "@/components";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
@@ -117,6 +119,7 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
         SongListCard,
         ButtonGroup,
         SongFilterDropdown,
+        SongFilterSelect,
         BackButton,
         SearchInput,
         ShoppingCartIcon,

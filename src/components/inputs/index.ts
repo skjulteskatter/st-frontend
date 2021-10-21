@@ -6,6 +6,7 @@ import SearchResultItemCard from "./SearchResultItemCard.vue";
 import FullSearchInput from "./FullSearchInput.vue";
 import BaseInput from "./BaseInput.vue";
 import CopyToClipboard from "./CopyToClipboard.vue";
+import SongFilterSelect from "./SongFilterSelect.vue";
 
 export {
     ButtonGroup,
@@ -16,4 +17,5 @@ export {
     FullSearchInput,
     BaseInput,
     CopyToClipboard,
+    SongFilterSelect,
 };
