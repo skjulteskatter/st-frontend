@@ -78,15 +78,7 @@
                     class="flex flex-col gap-2"
                 >
                     <span class="w-full flex gap-2 justify-between">
-                        <input 
-                            type="text"
-                            ref="shareLink"
-                            :value="getLink(key.key)"
-                            class="p-2 border-gray-300 rounded-md text-sm flex-grow bg-transparent"
-                            :disabled="new Date() > new Date(key.validTo)"
-                            :class="{'text-gray-400 cursor-not-allowed border-red-700': new Date() > new Date(key.validTo) }"
-                        >
-                        <!-- <base-button @click="copyLink" theme="tertiary" class="flex-grow">{{ $t('playlist_copyLink') }}</base-button> -->
+                        <CopyToClipboard label="Kopiér delingslenke" :content="getLink(key.key)" />
                         <base-button
                             theme="error"
                             :disabled="deleted[key.key]"
@@ -100,7 +92,7 @@
                             </template>
                         </base-button>
                     </span>
-                    <small v-if="new Date() > new Date(key.validTo)" class="text-red-700">
+                    <small v-if="new Date() > new Date(key.validTo)" class="text-red-700 gap-2 flex items-center">
                         <ExclamationIcon class="w-4 h-4" />
                         {{ $t('playlist_notValid') }}
                     </small>
@@ -167,6 +159,7 @@ import { reactive } from "@vue/reactivity";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
+import { CopyToClipboard } from "@/components/inputs";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
@@ -185,6 +178,7 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         CheckIcon,
         BookOpenIcon,
         Draggable,
+        CopyToClipboard,
     },
 })
 export default class PlaylistView extends Vue {
