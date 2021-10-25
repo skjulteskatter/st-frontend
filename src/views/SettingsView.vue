@@ -1,5 +1,4 @@
 <template>
-    <back-button class="mb-4" />
     <div class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common_settings") }}</h1>
         <base-button
@@ -57,7 +56,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { SettingsCard, BackButton } from "@/components";
+import { SettingsCard } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { LogoutIcon, UserIcon, CogIcon, TagIcon, MicrophoneIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
@@ -67,7 +66,6 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
     components: {
         SettingsCard,
         BaseInput,
-        BackButton,
         LogoutIcon,
         UserIcon,
         CogIcon,
