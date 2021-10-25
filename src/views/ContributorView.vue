@@ -7,7 +7,7 @@
                     <img
                         :src="portrait"
                         id="contributor-biography-image"
-                        class="rounded-lg grayscale border border-black/20 dark:border-white/20"
+                        class="w-full rounded-lg grayscale border border-black/20 dark:border-white/20"
                     />
                 </div>
                 <base-card class="md:col-span-3">
