@@ -1,7 +1,7 @@
 <template>
     <loader :loading="loading">
         <div v-if="collection">
-            <back-button class="mb-4" />
+            <back-button class="mb-4" to="/collections" />
             <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                 <h1 class="font-bold text-2xl md:text-3xl">
                     {{ collection.name[languageKey] }}

@@ -2,7 +2,7 @@
     <loader :loading="loading">
         <div v-if="song" class="flex flex-col gap-4">
             <div class="flex justify-between">
-                <back-button />
+                <back-button :to="`/songs/${collection?.key}`" />
                 <div class="flex gap-2 items-center ml-auto">
                     <span v-if="isAdmin" class="bg-black/10 dark:bg-white/10 text-sm py-2 px-3 rounded-md hidden xl:block">{{ song.id }}</span>
                     <base-button
