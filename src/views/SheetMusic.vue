@@ -1,30 +1,35 @@
 <template>
     <div class="sheetmusic-viewer">
         <div v-if="song" class="mb-2 p-4 bg-white">
-            <div class="flex flex-col">
-                <h1 class="font-bold text-lg">
-                    {{ song.getName(languageKey) }}
-                </h1>
-                <small class="text-gray-400 text-xs tracking-wide" v-if="Authors.length">
-                    <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
-                    <span
-                        v-for="c in Authors"
-                        :key="c.id"
-                        class="mr-1"
-                    >
-                        {{ c.name }}
+            <div class="flex gap-2 items-baseline">
+                <span class="opacity-50 text-lg">{{ song.getNumber(song.collectionIds[0]) }}</span>
+                <div class="flex flex-col">
+                    <h1 class="font-bold text-lg mb-1">{{ song.getName(languageKey) }}</h1>
+                    <span class="text-gray-400 text-sm tracking-wide leading-snug flex flex-col">
+                        <small v-if="Authors.length">
+                            <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
+                            <span
+                                v-for="c in Authors"
+                                :key="c.id"
+                                class="mr-1"
+                            >
+                                {{ c.name }}
+                            </span>
+                        </small>
+                        <small v-if="Composers.length">
+                            <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
+                            <span
+                                v-for="c in Composers"
+                                :key="c.id"
+                                class="mr-1"
+                            >
+                                {{ c.name }}
+                            </span>
+                        </small>
+                        <small v-else>{{ $t("song_unknownComposer") }}</small>
+                        <small v-if="song.verses">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
                     </span>
-                </small>
-                <small class="text-gray-400 text-xs tracking-wide" v-if="Composers.length">
-                    <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
-                    <span
-                        v-for="c in Composers"
-                        :key="c.id"
-                        class="mr-1"
-                    >
-                        {{ c.name }}
-                    </span>
-                </small>
+                </div>
             </div>
 
             <div v-if="files.length > 1" class="mt-3 rounded-md border p-1">
