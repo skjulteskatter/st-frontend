@@ -3,7 +3,7 @@
 		<template #header>
 			<h3 class="font-bold text-xl">{{ $t('statistics_viewsPerCountry') }}</h3>
 		</template>
-		<ol class="list-decimal overflow-y-auto">
+		<ol class="list-decimal shadow-scroll">
 			<li
 				class="px-2 py-2 rounded-md hover:bg-black/5 flex justify-between"
 				v-for="(country, i) in sortedCountries"
@@ -62,3 +62,19 @@ export default class CountryList extends Vue {
 	}
 }
 </script>
+
+<style lang="scss">
+@import "../../style/mixins";
+
+.shadow-scroll {
+    @include scrollShadow(white);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.dark {
+    .shadow-scroll {
+        @include scrollShadow(#213F47);
+    }
+}
+</style>
