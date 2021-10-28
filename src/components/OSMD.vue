@@ -17,8 +17,8 @@
                     <small>{{melodyOrigin}}</small>
                 </div>
             </div>
-            <div class="flex gap-4">
-                <label class="flex flex-col">
+            <div class="flex overflow-x-auto">
+                <label class="flex flex-col mr-4">
                     <span class="text-sm text-gray-500">{{ $t('song_key') }}</span>
                     <base-dropdown
                         origin="left"
@@ -51,7 +51,7 @@
                         </div>
                     </base-dropdown>
                 </label>
-                <label class="flex flex-col">
+                <label class="flex flex-col mr-4">
                     <span class="text-sm text-gray-500">{{ $t('song_clef') }}</span>
                     <base-dropdown
                         origin="left"
@@ -98,7 +98,7 @@
                         </div>
                     </base-dropdown>
                 </label>
-                <label class="flex flex-col">
+                <label class="flex flex-col mr-4">
                     <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
                     <select
                         class="p-2 rounded-md border-gray-300 pr-8"
