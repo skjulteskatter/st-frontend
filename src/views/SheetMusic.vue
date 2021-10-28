@@ -1,10 +1,10 @@
 <template>
     <div class="sheetmusic-viewer">
         <div v-if="song" class="mb-2 p-4 bg-white">
-            <div class="flex gap-2 items-baseline">
-                <span class="opacity-50 text-lg">{{ song.getNumber(song.collectionIds[0]) }}</span>
+            <div class="flex items-baseline">
+                <span class="opacity-50 text-lg mr-2">{{ song.getNumber(song.collectionIds[0]) }}</span>
                 <div class="flex flex-col">
-                    <h1 class="font-bold text-lg mb-1">{{ song.getName(languageKey) }}</h1>
+                    <h1 class="font-bold text-lg mb-1 leading-tight">{{ song.getName(languageKey) }}</h1>
                     <span class="text-gray-400 text-sm tracking-wide leading-snug flex flex-col">
                         <small v-if="Authors.length">
                             <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
