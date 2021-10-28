@@ -1,12 +1,21 @@
 <template>
-    <div class="w-full h-full flex justify-center items-center">
-        <div class="flex flex-col gap-4 p-8 rounded-md bg-white shadow-md">
-            <h1 class="text-xl font-bold">
+    <div class="w-full h-full flex flex-col justify-center items-center">
+        <base-card>
+            <h1 class="text-2xl font-bold">
                 A verification link has been sent to your email.
             </h1>
-            <base-button @click="sendVerificationEmail" :disabled="sentEmail || verificationEmailSent">Resend</base-button>
-            <base-button @click="$router.push({name: 'login'})">Login</base-button>
-        </div>
+            <template #footer>
+                <div class="flex flex-col gap-2">
+                    <base-button class="flex-grow" theme="tertiary" @click="sendVerificationEmail" :disabled="sentEmail || verificationEmailSent">Resend email</base-button>
+                    <base-button class="flex-grow" theme="secondary" @click="$router.push({name: 'login'})">
+                        <template #icon>
+                            <CheckIcon class="w-4 h-4" />
+                        </template>
+                        Login
+                    </base-button>
+                </div>
+            </template>
+        </base-card>
     </div>
 </template>
 
@@ -15,11 +24,13 @@ import auth from "@/services/auth";
 import { Options, Vue } from "vue-class-component";
 
 import { BaseButton } from "@/components";
+import { CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "verify-email",
     components: {
         BaseButton,
+        CheckIcon,
     },
 })
 export default class VerifyEmail extends Vue {

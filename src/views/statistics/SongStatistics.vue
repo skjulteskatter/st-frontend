@@ -1,44 +1,33 @@
 <template>
-	<div class="p-4 md:p-8">
-		<back-button class="mb-4" />
-		<header class="flex flex-col mb-4">
+	<back-button class="mb-4" />
+	<header class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
+		<div>
 			<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
 			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
-		</header>
-		<loader :loading="loading" />
-		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-			<div class="md:col-span-2 rounded-md border border-gray-400 p-2 flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4 lg:p-4">
-				<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
-				<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
-				<base-button
-					theme="secondary"
-					@click="getAnalytics"
-					icon="refresh"
-				>{{ $t('statistics_update') }}</base-button>
-			</div>
-			<base-card>
-				<template #header>
-					<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
-				</template>
-				<p class="text-gray-400 text-3xl">{{ viewCount }}</p>
-			</base-card>
-			<line-chart :series="Series" class="md:col-span-2" />
-			<country-list :analytics="analytics" />
-			<!-- <base-card class="md:col-span-2">
-				<h1 class="font-bold text-xl mb-4">Mest åpnede sanger</h1>
-				<ol class="divide-y divide-gray-200">
-					<li v-for="(song, i) in MostViewed" :key="song.id" class="px-2 py-2 sm:py-4 flex justify-between">
-						<router-link
-							:to="{name: 'song', params: 
-							{
-								number: song.number,
-								collection: collections.find(c => song.collectionIds.includes(c.id))?.key
-							}}"
-						>{{i + 1}}. {{song.getName(languageKey)}} ({{mostViewed[song.id]}})</router-link>
-					</li>
-				</ol>
-			</base-card> -->
 		</div>
+		<div class="flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4">
+			<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
+			<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
+			<base-button
+				theme="secondary"
+				@click="getAnalytics"
+				icon="refresh"
+			>{{ $t('statistics_update') }}</base-button>
+		</div>
+	</header>
+	<loader :loading="loading" />
+	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:grid-rows-3">
+		<line-chart :series="Series" class="md:col-span-2 md:row-span-3" />
+		<base-card>
+			<template #header>
+				<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
+			</template>
+			<div class="text-gray-400 text-4xl w-full h-full flex justify-center items-center gap-4">
+				{{ viewCount }}
+				<EyeIcon class="w-8 h-8 opacity-50" />
+			</div>
+		</base-card>
+		<country-list :analytics="analytics" class="md:row-span-2" />
 	</div>
 </template>
 
@@ -48,12 +37,14 @@ import { Options, Vue } from "vue-class-component";
 import { analytics } from "@/services/api";
 import { LineChart, CountryList } from "@/components/statistics";
 import { appSession } from "@/services/session";
+import { EyeIcon } from "@heroicons/vue/outline";
 
 @Options({ 
 	name: "song-statistics",
 	components: {
 		LineChart,
 		CountryList,
+		EyeIcon,
 	},
 })
 export default class SongStatistics extends Vue {

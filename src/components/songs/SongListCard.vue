@@ -22,13 +22,13 @@
                     'opacity-40': !song.available,
                 }"
             >
-                <b class="w-6 mr-2 text-right">
+                <b class="w-6 flex-shrink-0 mr-2 text-right">
                     {{ song.number }}
                 </b>
                 <span>
                     {{ song.getName() }}
                 </span>
-                <div class="flex-grow flex items-center">
+                <div class="flex-grow flex items-center ml-2">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
                     <span class="ml-auto opacity-50 flex items-center gap-1">
                         {{ song.Views }}

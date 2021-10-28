@@ -1,6 +1,6 @@
 <template>
 	<transition
-		leave-active-class="transition duration-200"
+		leave-active-class="transition duration-300 ease-in"
 		leave-from-class="opacity-100"
 		leave-to-class="opacity-0"
 	>

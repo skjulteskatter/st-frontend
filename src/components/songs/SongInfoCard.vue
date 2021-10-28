@@ -42,7 +42,7 @@
                         height="100"
                     />
                 </div>
-                <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" :style="{'display': imageLoaded ? '' : 'none'}">
+                <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" :class="{'hidden': !imageLoaded }">
                     <small
                         class="flex gap-2"
                         v-if="song.Authors.length"
