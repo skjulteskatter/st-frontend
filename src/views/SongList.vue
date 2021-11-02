@@ -1,97 +1,99 @@
 <template>
-    <loader :loading="loading">
-        <div v-if="collection">
-            <back-button class="mb-4" to="/collections" />
-            <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
-                <h1 class="font-bold text-2xl md:text-3xl">
-                    {{ collection.name[languageKey] }}
-                </h1>
-                <base-button theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
-                    <template #icon>
-                        <ShoppingCartIcon class="w-4 h-4" />
-                    </template>
-                    {{ $t('store_buy') }}
-                </base-button>
-                <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
-                    <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
-                    <ViewBoardsIcon class="w-5 h-5" v-else />
-                </button>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
-                <div class="flex flex-col gap-1 text-sm">
-                    <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
-                        {{ $t("song_sortby") }}
-                    </label>
-                    <button-group
-                        :buttons="buttons"
-                        :action="setListType"
-                        class="hidden md:flex"
-                    ></button-group>
-                    <select
-                        class="p-2 bg-white border border-black/20 rounded-md block md:hidden dark:bg-secondary dark:border-white/20"
-                        @input="setListType($event.target.value)"
-                    >
-                        <option
-                            v-for="category in buttons"
-                            :key="category.value"
-                            :value="category.value"
-                            :selected="category.value == listType"
-                        >
-                            {{ category.label }}
-                        </option>
-                    </select>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ $t("song_filterByContent") }}
-                    </label>
-                    <song-filter-dropdown
-                        @apply="loadList"
-                    />
-                    <song-filter-select @apply="loadList" />
-                </div>
-                <search-input
-                    class="max-w-sm"
-                    type="text"
-                    :placeholder="$t('common_search')"
-                    v-model="searchString"
-                    @search="search"
-                />
-            </div>
-            <loader :loading="loadingList" v-if="!loading">
-                <div
-                    class="song-list song-list__items"
-                    v-if="list?.length && viewType === 'boards'"
-                >
-                    <song-list-card
-                        :collection="collection"
-                        v-for="(e, i) in list"
-                        :key="i"
-                        :songs="e.songs"
-                        :title="e.title"
-                        :action="e.action"
-                        :count="e.count"
-                        class="mb-4"
-                    ></song-list-card>
-                </div>
-                <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
-                    <button
-                        v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
-                        :key="s?.id ?? Math.random()"
-                        class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
-                        @click="s.view()"
-                        aria-label="Open song"
-                        title="Open song"
-                    >
-                        {{ s.number }}
+    <div>
+        <loader :loading="loading">
+            <div v-if="collection">
+                <back-button class="mb-4" to="/collections" />
+                <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
+                    <h1 class="font-bold text-2xl md:text-3xl">
+                        {{ collection.name[languageKey] }}
+                    </h1>
+                    <base-button theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                        <template #icon>
+                            <ShoppingCartIcon class="w-4 h-4" />
+                        </template>
+                        {{ $t('store_buy') }}
+                    </base-button>
+                    <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
+                        <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
+                        <ViewBoardsIcon class="w-5 h-5" v-else />
                     </button>
                 </div>
-                <h1 class="opacity-50" v-if="!songs.length && !loading">
-                    No results
-                </h1>
-            </loader>
-        </div>
-    </loader>
+                <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
+                    <div class="flex flex-col gap-1 text-sm">
+                        <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
+                            {{ $t("song_sortby") }}
+                        </label>
+                        <button-group
+                            :buttons="buttons"
+                            :action="setListType"
+                            class="hidden md:flex"
+                        ></button-group>
+                        <select
+                            class="p-2 bg-white border border-black/20 rounded-md block md:hidden dark:bg-secondary dark:border-white/20"
+                            @input="setListType($event.target.value)"
+                        >
+                            <option
+                                v-for="category in buttons"
+                                :key="category.value"
+                                :value="category.value"
+                                :selected="category.value == listType"
+                            >
+                                {{ category.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
+                            {{ $t("song_filterByContent") }}
+                        </label>
+                        <song-filter-dropdown
+                            @apply="loadList"
+                        />
+                        <song-filter-select @apply="loadList" />
+                    </div>
+                    <search-input
+                        class="max-w-sm"
+                        type="text"
+                        :placeholder="$t('common_search')"
+                        v-model="searchString"
+                        @search="search"
+                    />
+                </div>
+                <loader :loading="loadingList" v-if="!loading">
+                    <div
+                        class="song-list song-list__items"
+                        v-if="list?.length && viewType === 'boards'"
+                    >
+                        <song-list-card
+                            :collection="collection"
+                            v-for="(e, i) in list"
+                            :key="i"
+                            :songs="e.songs"
+                            :title="e.title"
+                            :action="e.action"
+                            :count="e.count"
+                            class="mb-4"
+                        ></song-list-card>
+                    </div>
+                    <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+                        <button
+                            v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
+                            :key="s?.id ?? Math.random()"
+                            class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
+                            @click="s.view()"
+                            aria-label="Open song"
+                            title="Open song"
+                        >
+                            {{ s.number }}
+                        </button>
+                    </div>
+                    <h1 class="opacity-50" v-if="!songs.length && !loading">
+                        No results
+                    </h1>
+                </loader>
+            </div>
+        </loader>
+    </div>
 </template>
 
 <script lang="ts">

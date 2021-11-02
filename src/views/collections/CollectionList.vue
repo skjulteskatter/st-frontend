@@ -1,42 +1,44 @@
 <template>
-    <div class="mb-4 flex justify-between items-center">
-        <div class="flex justify-between w-full">
-            <div class="flex items-center">
-                <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common_collections") }}</h1>
-                <tooltip :text="$t('store_currencyDescription')" />
+    <div>
+        <div class="mb-4 flex justify-between items-center">
+            <div class="flex justify-between w-full">
+                <div class="flex items-center">
+                    <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common_collections") }}</h1>
+                    <tooltip :text="$t('store_currencyDescription')" />
+                </div>
+                <store-cart class="md:hidden" />
             </div>
-            <store-cart class="md:hidden" />
+            <div class="flex gap-2">
+                <base-button
+                    theme="tertiary"
+                    @click="refreshSubscriptions"
+                    class="refresh-button hidden"
+                    :loading="loadingSubs"
+                >
+                    <template #icon>
+                        <RefreshIcon class="h-4 w-4" />
+                    </template>
+                    {{ $t("common_refreshSubscriptions") }}
+                </base-button>
+                <base-button
+                    v-if="productIds.length"
+                    @click="portal"
+                    theme="tertiary"
+                    :loading="loading"
+                    class="manage-button"
+                >
+                    <template #icon>
+                        <CreditCardIcon class="w-4 h-4" />
+                    </template>
+                    <span class="whitespace-nowrap">
+                        {{ $t("common_manage") }}
+                        {{ $t("common_subscriptions").toLowerCase() }}
+                    </span>
+                </base-button>
+            </div>
         </div>
-        <div class="flex gap-2">
-            <base-button
-                theme="tertiary"
-                @click="refreshSubscriptions"
-                class="refresh-button hidden"
-                :loading="loadingSubs"
-            >
-                <template #icon>
-                    <RefreshIcon class="h-4 w-4" />
-                </template>
-                {{ $t("common_refreshSubscriptions") }}
-            </base-button>
-            <base-button
-                v-if="productIds.length"
-                @click="portal"
-                theme="tertiary"
-                :loading="loading"
-                class="manage-button"
-            >
-                <template #icon>
-                    <CreditCardIcon class="w-4 h-4" />
-                </template>
-                <span class="whitespace-nowrap">
-                    {{ $t("common_manage") }}
-                    {{ $t("common_subscriptions").toLowerCase() }}
-                </span>
-            </base-button>
-        </div>
+        <product-slider class="mb-4" :products="products" v-if="products.length" />
     </div>
-    <product-slider class="mb-4" :products="products" v-if="products.length" />
 </template>
 
 <script lang="ts">
