@@ -16,12 +16,10 @@
                         </template>
                         {{ $t('common_edit') }}
                     </base-button>
-
                     <button v-if="isAdmin" @click="favorites.toggle(song?.id)" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
                         <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.has(song?.id)" />
                         <HeartOutline class="w-6 h-6 opacity-50" v-else />
                     </button>
-
                     <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                         <template #icon>
                             <FolderAddIcon class="w-4 h-4" />
