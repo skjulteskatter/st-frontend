@@ -8,7 +8,6 @@
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
-                    @change="themes.setTheme(theme)"
                 >
                     <option :value="t" v-for="t in themes.keys" :key="t">
                         {{ $t(`common_${t}`) }}
