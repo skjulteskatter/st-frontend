@@ -284,8 +284,8 @@ export default class SettingsCard extends Vue {
         catch {
             //
         }
-        await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.themes.setTheme(this.theme);
+        await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
         this.submitImage();
         if (this.newDisplayName) {
             this.setDisplayName();

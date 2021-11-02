@@ -20,8 +20,9 @@ export class Themes {
         }
     }
 
-    public load() {
-        this.applyTheme(cache.get("config", "theme") as unknown as undefined | Theme);
+    public async load() {
+        const theme = await cache.get("config", "theme");
+        this.applyTheme(theme as unknown as undefined | Theme);
     }
 
     public get keys() {
