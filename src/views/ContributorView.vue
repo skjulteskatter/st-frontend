@@ -1,77 +1,78 @@
 <template>
-    <loader :loading="loading">
-        <div v-if="contributor">
-            <back-button class="mb-4" />
-            <div class="grid gap-4 md:grid-cols-4">
-                <div class="col-span-1">
-                    <img
-                        :src="portrait"
-                        id="contributor-biography-image"
-                        class="w-full rounded-lg grayscale border border-black/20 dark:border-white/20"
-                    />
-                </div>
-                <base-card class="md:col-span-3">
-                    <div class="contributor__biography">
-                        <div class="contributor__biography__header mb-6">
-                            <base-button
-                                v-if="isEditor"
-                                @click="goToEditPage()"
-                                theme="tertiary"
-                                class="mb-4 hidden lg:flex"
-                            >
-                                <template #icon>
-                                    <PencilAltIcon class="w-4 h-4" />
-                                </template>
-                                {{ $t('common_edit') }}
-                            </base-button>
-                            <p class="text-primary">
-                                {{ $t("song_contributor") }}
-                            </p>
-                            <h1 class="font-bold text-2xl">
-                                {{ contributor.name }}
-                            </h1>
-                            <small
-                                class="text-gray-500 italic"
-                                v-if="contributor.subtitle"
-                            >
-                                {{ contributor.subtitle }}
-                            </small>
+    <div>
+        <loader :loading="loading">
+            <div v-if="contributor">
+                <back-button class="mb-4" />
+                <div class="grid gap-4 md:grid-cols-4">
+                    <div class="col-span-1">
+                        <img
+                            :src="portrait"
+                            id="contributor-biography-image"
+                            class="w-full rounded-lg grayscale border border-black/20 dark:border-white/20"
+                        />
+                    </div>
+                    <base-card class="md:col-span-3">
+                        <div class="contributor__biography">
+                            <div class="contributor__biography__header mb-6">
+                                <base-button
+                                    v-if="isEditor"
+                                    @click="goToEditPage()"
+                                    theme="tertiary"
+                                    class="mb-4 hidden lg:flex"
+                                >
+                                    <template #icon>
+                                        <PencilAltIcon class="w-4 h-4" />
+                                    </template>
+                                    {{ $t('common_edit') }}
+                                </base-button>
+                                <p class="text-primary">
+                                    {{ $t("song_contributor") }}
+                                </p>
+                                <h1 class="font-bold text-2xl">
+                                    {{ contributor.name }}
+                                </h1>
+                                <small
+                                    class="text-gray-500 italic"
+                                    v-if="contributor.subtitle"
+                                >
+                                    {{ contributor.subtitle }}
+                                </small>
+                            </div>
+                            <div
+                                v-html="contributor.getBiography(languageKey)"
+                                class="text-sm"
+                            ></div>
                         </div>
-                        <div
-                            v-html="contributor.getBiography(languageKey)"
-                            class="text-sm"
-                        ></div>
-                    </div>
-                </base-card>
-            </div>
-
-            <div class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div v-for="c in collections" :key="c.id">
-                    <h2 class="font-bold mb-2">{{ c.getName(languageKey) }}</h2>
-                    <div class="contributor__songs__wrapper">
-                        <song-list-card
-                            :collection="c"
-                            :title="$t('song_author')"
-                            :songs="
-                                authorSongs.filter((s) =>
-                                    s.collectionIds.some(col => col == c.id)
-                                )
-                            "
-                        ></song-list-card>
-                        <song-list-card
-                            :collection="c"
-                            :title="$t('song_composer')"
-                            :songs="
-                                composerSongs.filter((s) =>
-                                    s.collectionIds.some(col => col == c.id)
-                                )
-                            "
-                        ></song-list-card>
+                    </base-card>
+                </div>
+                <div class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div v-for="c in collections" :key="c.id">
+                        <h2 class="font-bold mb-2">{{ c.getName(languageKey) }}</h2>
+                        <div class="contributor__songs__wrapper">
+                            <song-list-card
+                                :collection="c"
+                                :title="$t('song_author')"
+                                :songs="
+                                    authorSongs.filter((s) =>
+                                        s.collectionIds.some(col => col == c.id)
+                                    )
+                                "
+                            ></song-list-card>
+                            <song-list-card
+                                :collection="c"
+                                :title="$t('song_composer')"
+                                :songs="
+                                    composerSongs.filter((s) =>
+                                        s.collectionIds.some(col => col == c.id)
+                                    )
+                                "
+                            ></song-list-card>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </loader>
+        </loader>
+    </div>
 </template>
 
 <script lang="ts">
