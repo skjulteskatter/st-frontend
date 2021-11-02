@@ -1,33 +1,35 @@
 <template>
-	<back-button class="mb-4" />
-	<header class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
-		<div>
-			<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
-			<p class="text-primary">{{ song?.getName(languageKey) }}</p>
-		</div>
-		<div class="flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4">
-			<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
-			<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
-			<base-button
-				theme="secondary"
-				@click="getAnalytics"
-				icon="refresh"
-			>{{ $t('statistics_update') }}</base-button>
-		</div>
-	</header>
-	<loader :loading="loading" />
-	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:grid-rows-3">
-		<line-chart :series="Series" class="md:col-span-2 md:row-span-3" />
-		<base-card>
-			<template #header>
-				<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
-			</template>
-			<div class="text-gray-400 text-4xl w-full h-full flex justify-center items-center gap-4">
-				{{ viewCount }}
-				<EyeIcon class="w-8 h-8 opacity-50" />
+	<div>
+		<back-button class="mb-4" />
+		<header class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
+			<div>
+				<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
+				<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 			</div>
-		</base-card>
-		<country-list :analytics="analytics" class="md:row-span-2" />
+			<div class="flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4">
+				<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
+				<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
+				<base-button
+					theme="secondary"
+					@click="getAnalytics"
+					icon="refresh"
+				>{{ $t('statistics_update') }}</base-button>
+			</div>
+		</header>
+		<loader :loading="loading" />
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:grid-rows-3">
+			<line-chart :series="Series" class="md:col-span-2 md:row-span-3" />
+			<base-card>
+				<template #header>
+					<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
+				</template>
+				<div class="text-gray-400 text-4xl w-full h-full flex justify-center items-center gap-4">
+					{{ viewCount }}
+					<EyeIcon class="w-8 h-8 opacity-50" />
+				</div>
+			</base-card>
+			<country-list :analytics="analytics" class="md:row-span-2" />
+		</div>
 	</div>
 </template>
 
