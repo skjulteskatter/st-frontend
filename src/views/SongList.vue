@@ -72,6 +72,7 @@
                             :title="e.title"
                             :action="e.action"
                             :count="e.count"
+                            :isAdmin="isAdmin"
                             class="mb-4"
                         ></song-list-card>
                     </div>
@@ -137,6 +138,10 @@ export default class SongList extends Vue {
     public cId = "";
     public list: ListEntry[] = [];
     public loadingList = false;
+
+    public get isAdmin() {
+        return this.store.getters.isAdmin;
+    }
 
     public get searchNumber() {
         return this.searchString.replace(/[^0-9]/g, "");

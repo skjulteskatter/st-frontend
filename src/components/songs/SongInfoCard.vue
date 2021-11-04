@@ -27,7 +27,7 @@
                     <span class="mr-4">
                         {{ title }}
                     </span>
-                    <span v-if="viewCount != null" class="ml-auto flex items-center gap-1 font-normal text-gray-400">
+                    <span v-if="viewCount != null && isAdmin" class="ml-auto flex items-center gap-1 font-normal text-gray-400">
                         {{ viewCount }}
                         <EyeIcon class="w-5 h-5" />
                     </span>
@@ -156,6 +156,10 @@ export default class SongInfoCard extends Vue {
 
     public get Language() {
         return this.languageKey ?? "en";
+    }
+
+    public get isAdmin() {
+        return this.store.getters.isAdmin;
     }
 
     public mounted() {
