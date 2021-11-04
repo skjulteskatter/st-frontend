@@ -30,7 +30,7 @@
                 </span>
                 <div class="flex-grow flex items-center ml-2">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
-                    <span class="ml-auto opacity-50 flex items-center gap-1">
+                    <span class="ml-auto opacity-50 flex items-center gap-1" v-if="isAdmin">
                         {{ song.Views }}
                         <EyeIcon class="w-3 h-3 opacity-50" />
                     </span>
@@ -80,6 +80,7 @@ import { Song } from "@/classes";
         action: {
             type: Function,
         },
+        isAdmin: Boolean,
     },
     components: {
         BaseModal,
@@ -95,6 +96,7 @@ export default class SongListCard extends Vue {
     public title?: string;
     public count?: boolean;
     public action?: Function;
+    public isAdmin?: boolean;
     
     public showCTA = false;
 
