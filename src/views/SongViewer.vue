@@ -311,7 +311,13 @@ export default class SongViewer extends Vue {
         await this.load();
     }
 
+    private fullLoading = false;
+
     public async load() {
+        if (this.fullLoading) {
+            return;
+        }
+        this.fullLoading = true;
         this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
             show: false,
             clef: "treble",
@@ -366,6 +372,7 @@ export default class SongViewer extends Vue {
         setTimeout(log, 5000);
         this.setLyrics();
         this.setView(this.store.state.songs.view);
+        this.fullLoading = false;
     }
 
     public get user() {

@@ -141,6 +141,9 @@ export default class Song extends BaseClass implements ISong {
     public loadingLyrics = false;
 
     public async getLyrics(language?: string) {
+        if (this.loadingLyrics) {
+            return null;
+        }
         this.loadingLyrics = true;
         try {
             language = language ?? this.store.getters.languageKey;
