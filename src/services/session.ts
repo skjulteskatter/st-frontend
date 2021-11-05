@@ -120,20 +120,28 @@ export class Session {
         this._initialized = false;
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
 
-        const lastCacheClear = await cache.get("config", "last_cache_clear") as number | undefined;
+        const lastCacheClear = await cache.get("config", "last_cache_clear") as Date | undefined;
 
-        if (!lastCacheClear || lastCacheClear < (new Date().getTime() - 86400000)) {
+        if (!lastCacheClear || lastCacheClear.getTime() < (new Date().getTime() - 86400000)) {
             await cache.clearCache();
 
-            await cache.set("config", "last_cache_clear", new Date().getTime());
+            await cache.set("config", "last_cache_clear", new Date());
+        }
+
+        const lastTimeUpdated = await cache.get("config", "last_updated") as Date | undefined;
+
+        const shouldUpdate = !lastTimeUpdated || lastTimeUpdated.getTime() < (new Date().getTime() - 3600000);
+
+        if (shouldUpdate) {
+            await cache.set("config", "last_updated", new Date());
         }
 
         const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
 
-        const previousCols = await cache.get("config", "owned_collections");
+        const previousCols = await cache.get("config", "owned_collections") as string[] | undefined;
 
         if (previousCols) {
-            const fetchSongs = ownedCols.filter(c => !(JSON.parse(previousCols as string) as string[]).some(i => i == c));
+            const fetchSongs = ownedCols.filter(c => !previousCols.includes(c));
 
             if (fetchSongs.length) {
                 const s = await songs.getAllSongs(fetchSongs);
@@ -165,17 +173,15 @@ export class Session {
             }
         }
 
-        await cache.set("config", "owned_collections", JSON.stringify(ownedCols));
+        await cache.set("config", "owned_collections", ownedCols);
 
         const fetchSongs = async () => {
             try {
                 const key = "last_updated_songs";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
+                const lastUpdated = await cache.get("config", key) as Date | undefined;
 
-                const now = new Date();
-
-                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                    const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated);
+                if (shouldUpdate) {
+                    const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated?.toISOString());
 
                     await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
                         a[b.id] = b;
@@ -184,7 +190,7 @@ export class Session {
                         [id: string]: ISong;
                     }));
 
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
                 }
             }
             catch (e) {
@@ -200,12 +206,9 @@ export class Session {
         const fetchFiles = async () => {
             try {
                 const key = "last_updated_files";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
-
-                const now = new Date();
-
-                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated);
+                const lastUpdated = await cache.get("config", key) as Date | undefined;
+                if (shouldUpdate) {
+                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated?.toISOString());
 
                     await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
                         a[b.id] = b;
@@ -214,7 +217,7 @@ export class Session {
                         [id: string]: MediaFile;
                     }));
 
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated).toISOString());
+                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
                 }
             } catch (e) {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -229,12 +232,9 @@ export class Session {
         const fetchContributors = async () => {
             try {
                 const key = "last_updated_contributors";
-                const lastUpdated = await cache.get("config", key) as string | undefined;
-
-                const now = new Date();
-
-                if (lastUpdated == undefined || (now.getTime() - new Date(lastUpdated).getTime()) > 3600000) {
-                    const updateItems = await songs.getContributors(lastUpdated);
+                const lastUpdated = await cache.get("config", key) as Date | undefined;
+                if (shouldUpdate) {
+                    const updateItems = await songs.getContributors(lastUpdated?.toISOString());
 
                     await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
                         a[b.id] = b;
@@ -243,7 +243,7 @@ export class Session {
                         [id: string]: ICollectionItem<ApiContributor>;
                     }));
 
-                    await cache.set("config", key, new Date(updateItems.lastUpdated).toISOString());
+                    await cache.set("config", key, new Date(updateItems.lastUpdated));
                 }
             }
             catch (e) {
@@ -270,12 +270,14 @@ export class Session {
 
         try {
             const key = "lyrics_expiry";
-            const expiry = await cache.get("config", key) as number | undefined;
+            const expiry = await cache.get("config", key) as Date | undefined;
 
-            if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
+            if (!expiry || expiry.getTime() < new Date().getTime()) {
                 await cache.clearStore("lyrics");
 
-                await cache.set("config", key, new Date().getTime() + 86400000);
+                const date = new Date();
+                date.setDate(date.getDate() + 1);
+                await cache.set("config", key, date);
             } else {
                 this.lyrics = (await cache.getAll("lyrics")).map(i => new Lyrics(i));
             }
