@@ -144,7 +144,7 @@ export default class EditUser extends Vue {
     }
 
     public getUnownedCollections(subscriptions: ISubscription[]) {
-        return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds.includes(i.id)));
+        return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
     }
 
     public async addSubscriptions(user: User) {

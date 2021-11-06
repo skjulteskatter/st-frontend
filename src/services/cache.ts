@@ -7,7 +7,7 @@ type StoreTypes = {
     songs: ISong;
     contributors: ICollectionItem<ApiContributor>;
     lyrics: Lyrics;
-    config: string | number | boolean | undefined;
+    config: string | string[] | number | boolean | Date | undefined;
     items: {
         id: string;
         value: unknown;
@@ -40,7 +40,8 @@ class CacheService {
         "tags",
         "custom_collections",
     ];
-    private version = 26;
+    // Only update if you need to clear cache for everyone or a new store is added.
+    private version = 27;
 
     private db() {
         const v = this.version;
