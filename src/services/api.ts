@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, MediaFile, PublicUser, ShareKey } from "songtreasures";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, MediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse } from "songtreasures";
 import http from "./http";
 
 export const activity = {
@@ -313,7 +313,34 @@ export const search = {
     },
 };
 
-const api = {
+export const scriptures = {
+    getAll() {
+        return http.get<IScripture[]>("api/Scriptures");
+    },
+    getScripture(id: string) {
+        return http.get<IScripture>("api/Scriptures/" + id);
+    },
+    getTranslations(scriptureId: string) {
+        return http.get<ITranslation[]>(`api/Scriptures/${scriptureId}/Translations`);
+    },
+    getBooks(translationId: string, includeChildren = false) {
+        return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books?includeChildren=${includeChildren}`);
+    },
+    getBook(translationId: string, bookId: string, includeChildren = false) {
+        return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}?includeChildren=${includeChildren}`);
+    },
+    getChapters(translationId: string, bookId: string, includeChildren = false) {
+        return http.get<IChapter[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapters?includeChildren=${includeChildren}`);
+    },
+    getChapter(translationId: string, bookId: string, chapterId: string, includeChildren = false) {
+        return http.get<IChapter>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapter/${chapterId}?includeChildren=${includeChildren}`);
+    },
+    getVerses(translationId: string, bookId: string, chapterId: string, to = 0, from = 0, includeChildren = false) {
+        return http.get<IVerse[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapter/${chapterId}/Verses?to=${to}&from=${from}&includeChildren=${includeChildren}`);
+    },
+};
+
+export default {
     session,
     admin,
     songs,
@@ -324,6 +351,5 @@ const api = {
     tags,
     analytics,
     search,
+    scriptures,
 };
-
-export default api;

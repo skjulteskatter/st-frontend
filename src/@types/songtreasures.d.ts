@@ -258,6 +258,49 @@ declare module "songtreasures" {
             parts: string[];
         }[];
     };
+
+    type TDocument = {
+        id: string;
+        updatedAt: string;
+    }
+
+    interface IScripture extends TDocument {
+        title: LocaleString;
+        icon: string;
+        image: string;
+    }
+
+    interface ITranslation extends TDocument {
+        collectionId: string;
+        title: string;
+        shortTitle: string;
+        sourceName: string;
+        icon: string;
+        image: string;
+        language: string;
+    }
+
+    interface IBook extends TDocument {
+        translationId: string;
+        title: string;
+        shortTitle: string;
+        number: number;
+        color: string;
+        chapters: IChapter[] | null;
+    }
+
+    interface IChapter extends TDocument {
+        bookId: string;
+        number: number;
+        title: string;
+        verses: IVerse[] | null;
+    }
+
+    interface IVerse {
+        key: string;
+        number: number;
+        content: string;
+    }
 }
 
 interface Verse {
