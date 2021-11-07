@@ -28,7 +28,7 @@ declare module "checkout" {
     
     interface ApiProduct {
         id: string;
-        name: LocaleString;
+        name: ILocaleString;
         collectionIds: string[];
         prices: Price[];
         priority: number;

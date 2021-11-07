@@ -33,7 +33,7 @@ export default class Song extends BaseClass implements ISong {
     public origins: {
         type: "text" | "melody";
         country: string;
-        description: LocaleString;
+        description: ILocaleString;
     }[];
 
     public themeIds: string[];
@@ -63,7 +63,7 @@ export default class Song extends BaseClass implements ISong {
         return this.files.filter(f => f.type.startsWith("sheetmusic"));
     }
 
-    public details: LocaleString;
+    public details: ILocaleString;
     public hasLyrics: boolean;
     public hasChords;
     public newMelody: boolean;

@@ -7,9 +7,7 @@ import { scriptures } from "../api";
 
 class Scriptures {
     private scriptures: Scripture[] | null = null;
-    private translations: {
-        [scriptureId: string]: Translation[];
-    } = {};
+    private translations: Translation[] = [];
     private books: {
         [translationId: string]: Book[];
     } = {};
@@ -19,29 +17,30 @@ class Scriptures {
         if (this.scriptures === null && !this._initializing) {
             this._initializing = true;
             this.scriptures = (await scriptures.getAll()).map(s => new Scripture(s));
-            
+            this._initializing = false;
         }
     }
 
     public async get(id: string): Promise<Scripture> {
         let scripture = this.scriptures?.find(s => s.id === id);
         if (!scripture) {
-            scripture = await scriptures.getScripture(id);
+            scripture = new Scripture(await scriptures.getScripture(id));
         }
         return scripture;
     }
 
     public async getTranslations(scriptureId: string): Promise<Translation[]> {
-        if (this.translations[scriptureId] === undefined) {
-            this.translations[scriptureId] = await scriptures.getTranslations(scriptureId);
+        if (!this.translations.some(t => t.scriptureId === scriptureId)) {
+            this.translations.push(...(await scriptures.getTranslations(scriptureId)).map(i => new Translation(i)));
         }
-        return this.translations[scriptureId];
+        return this.translations.filter(t => t.scriptureId === scriptureId);
     }
 
-    public async getTranslation(scriptureId: string, id: string): Promise<Translation> {
-        const translation = (await scriptures.getTranslations(scriptureId)).find(t => t.id === id);
+    public async getTranslation(id: string): Promise<Translation> {
+        let translation = this.translations.find(t => t.id === id);
         if (!translation) {
-            throw new Error("Translation not found");
+            translation = new Translation((await scriptures.getTranslation(id)));
+            this.translations.push(translation);
         }
         return translation;
     }
@@ -83,6 +82,10 @@ class Scriptures {
             chapter.verses = (await scriptures.getVerses(translationId, bookId, chapterId)).map(v => new Verse(v));
         }
         return chapter.verses;
+    }
+
+    public get Scriptures() {
+        return this.scriptures ?? [];
     }
 }
 

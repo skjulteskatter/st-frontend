@@ -102,6 +102,19 @@ const FavoritesView = () => import(/* webpackChunkName: 'favoritesView' */ "../v
     window.location.reload();
 });
 
+const Scriptures = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/Scriptures.vue").catch(() => {
+    window.location.reload();
+});
+const ScriptureList = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/List.vue").catch(() => {
+    window.location.reload();
+});
+const ScriptureView = () => import(/* wepbackChunkName: 'scriptureView' */ "../views/scriptures/View.vue").catch(() => {
+    window.location.reload();
+});
+const TranslationView = () => import(/* webpackChunkName: 'translationView' */ "../views/scriptures/translations/View.vue").catch(() => {
+    window.location.reload();
+});
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -216,6 +229,28 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/favorites",
                 name: "favorites",
                 component: FavoritesView,
+            },
+            {
+                path: "/scriptures",
+                name: "scriptures",
+                component: Scriptures,
+                children: [
+                    {
+                        path: "",
+                        name: "scripture-list",
+                        component: ScriptureList,
+                    },
+                    {
+                        path: ":id",
+                        name: "scripture-view",
+                        component: ScriptureView,
+                    },
+                    {
+                        path: "translation/:id",
+                        name: "translation-view",
+                        component: TranslationView,
+                    },
+                ],
             },
         ],
     },
