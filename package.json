@@ -1,14 +1,13 @@
 {
-  "name": "dmb",
-  "version": "1.0.0",
+  "name": "songtreasures",
+  "version": "2.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "deploy": "firebase deploy",
-    "auth": "vsts-npm-auth -config .npmrc",
-    "dev": "vue-cli-service build --watch --dest ../BACKEND/wwwroot"
+    "auth": "vsts-npm-auth -config .npmrc"
   },
   "dependencies": {
     "@headlessui/vue": "^1.4.1",
@@ -17,12 +16,10 @@
     "@tailwindcss/forms": "^0.3.4",
     "@tailwindcss/postcss7-compat": "^2.2.17",
     "apexcharts": "^3.29.0",
-    "core-js": "^3.19.1",
-    "firebase": "^8.9.1",
+    "firebase": "^9.3.0",
     "i18n-iso-countries": "^6.8.0",
     "idb": "^6.1.5",
     "isomorphic-fetch": "^3.0.0",
-    "jszip": "^3.7.1",
     "less-loader": "^7.3.0",
     "opensheetmusicdisplay": "^1.2.0",
     "plyr": "^3.6.9",
@@ -37,7 +34,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@tsconfig/node12": "^1.0.9",
+    "@tsconfig/node14": "^1.0.1",
     "@types/chai": "^4.2.22",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/mocha": "^5.2.4",
@@ -65,6 +62,7 @@
     "postcss": "^7.0.39",
     "sass-loader": "^8.0.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+    "tslib": "^2.3.1",
     "typescript": "^4.4.4",
     "vue-cli-plugin-tailwind": "~2.0.6"
   }

@@ -162,6 +162,11 @@ export default class TheNavbar extends Vue {
 				path: "/admin",
 				condition: this.isAdmin,
 			},
+			{
+				name: "Scriptures",
+				path: "/scriptures",
+				condition: this.isAdmin,
+			},
 		];
 	}
 

@@ -21,7 +21,7 @@ export default class Collection extends BaseClass implements ICollection {
     private _key;
     public enabled;
     public freeSongs;
-    public keys: LocaleString;
+    public keys: ILocaleString;
     public defaultType;
 
     private _defaultSort: Sort;
@@ -47,7 +47,7 @@ export default class Collection extends BaseClass implements ICollection {
         return this._available == true;    
     }
 
-    public details?: LocaleString;
+    public details?: ILocaleString;
     public hasChords: {
         [lang: string]: boolean;
     };

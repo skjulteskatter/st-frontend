@@ -5,7 +5,8 @@ interface Step {
     type: string;
 }
 
-interface LocaleString {
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface ILocaleString {
     [code: string]: string;
 }
 
@@ -16,7 +17,7 @@ interface Language {
 
 interface Origin {
     country: string;
-    description: LocaleString;
+    description: ILocaleString;
 }
 
 type SheetMusicOptions = {
