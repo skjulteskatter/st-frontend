@@ -2,7 +2,7 @@
     <div v-if="scripture">
         <h1 class="text-xl">{{scripture.title.default}}</h1>
         <div class="scripture-content">
-            <router-view/>
+            <router-view />
         </div>
     </div>
 </template>

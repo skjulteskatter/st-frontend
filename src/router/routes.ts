@@ -23,15 +23,9 @@ const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/S
 const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue").catch(() => {
     window.location.reload();
 });
-// const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue").catch(() => {
-//     window.location.reload();
-// });
 const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
     window.location.reload();
 });
-// const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
-//     window.location.reload();
-// });
 const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
     window.location.reload();
 });

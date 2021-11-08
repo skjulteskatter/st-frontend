@@ -2,9 +2,7 @@
     <div v-if="translation">
         {{translation.title}}
         
-        <div class="mb-2" v-for="book in Books" :key="book.id">
-            <base-button @click="book.view()">{{book.title}} | {{book.shortTitle}}</base-button>
-        </div>
+        <router-view />
     </div>
 </template>
 <script lang="ts">

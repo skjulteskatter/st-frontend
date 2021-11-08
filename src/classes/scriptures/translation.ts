@@ -26,7 +26,7 @@ export default class Translation implements ITranslation {
 
     public view() {
         router.push({
-            name: "translation-view",
+            name: "book-list",
             params: {
                 scriptureId: this.scriptureId,
                 translationId: this.id,

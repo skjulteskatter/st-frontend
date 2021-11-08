@@ -8,6 +8,6 @@ import { Options, Vue } from "vue-class-component";
     name: "book-view",
 })
 export default class BookView extends Vue {
-
+    
 }
 </script>
