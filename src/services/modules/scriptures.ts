@@ -36,10 +36,10 @@ class Scriptures {
         return this.translations.filter(t => t.scriptureId === scriptureId);
     }
 
-    public async getTranslation(id: string): Promise<Translation> {
+    public async getTranslation(scriptureId: string, id: string): Promise<Translation> {
         let translation = this.translations.find(t => t.id === id);
         if (!translation) {
-            translation = new Translation((await scriptures.getTranslation(id)));
+            translation = new Translation((await scriptures.getTranslation(scriptureId, id)));
             this.translations.push(translation);
         }
         return translation;
@@ -47,7 +47,7 @@ class Scriptures {
 
     public async getBooks(translationId: string): Promise<Book[]> {
         if (this.books[translationId] === undefined) {
-            this.books[translationId] = await scriptures.getBooks(translationId);
+            this.books[translationId] = (await scriptures.getBooks(translationId)).map(i => new Book(i));
         }
         return this.books[translationId];
     }

@@ -8,9 +8,11 @@
 
 <script lang="ts">
 import scriptures from "@/services/modules/scriptures";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
-
+@Options({
+    name: "scripture-list",
+})
 export default class ScriptureList extends Vue {
     private service = scriptures;
 

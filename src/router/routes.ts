@@ -1,3 +1,4 @@
+import { ScriptureList, Scriptures, ScriptureView, TranslationList, TranslationView } from "@/views/scriptures";
 import { RouteRecordRaw } from "vue-router";
 
 import StackedLayout from "../layout/StackedLayout.vue";
@@ -99,19 +100,6 @@ const PrintView = () => import(/* webpackChunkName: 'printView' */ "../views/Pri
 });
 
 const FavoritesView = () => import(/* webpackChunkName: 'favoritesView' */ "../views/Favorites.vue").catch(() => {
-    window.location.reload();
-});
-
-const Scriptures = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/Scriptures.vue").catch(() => {
-    window.location.reload();
-});
-const ScriptureList = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/List.vue").catch(() => {
-    window.location.reload();
-});
-const ScriptureView = () => import(/* wepbackChunkName: 'scriptureView' */ "../views/scriptures/View.vue").catch(() => {
-    window.location.reload();
-});
-const TranslationView = () => import(/* webpackChunkName: 'translationView' */ "../views/scriptures/translations/View.vue").catch(() => {
     window.location.reload();
 });
 
@@ -241,14 +229,28 @@ const routes: Array<RouteRecordRaw> = [
                         component: ScriptureList,
                     },
                     {
-                        path: ":id",
+                        path: ":scriptureId",
                         name: "scripture-view",
                         component: ScriptureView,
-                    },
-                    {
-                        path: "translation/:id",
-                        name: "translation-view",
-                        component: TranslationView,
+                        children: [
+                            {
+                                path: "",
+                                name: "translation-list",
+                                component: TranslationList,
+                            },
+                            {
+                                path: ":translationId",
+                                name: "translation-view",
+                                component: TranslationView,
+                                children: [
+                                    {
+                                        path: "",
+                                        name: "book-list",
+                                        component: BookList,
+                                    },
+                                ],
+                            },
+                        ],
                     },
                 ],
             },

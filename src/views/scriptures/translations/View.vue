@@ -1,6 +1,10 @@
 <template>
     <div v-if="translation">
         {{translation.title}}
+        
+        <div class="mb-2" v-for="book in Books" :key="book.id">
+            <base-button @click="book.view()">{{book.title}} | {{book.shortTitle}}</base-button>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -12,16 +16,22 @@ import { Vue } from "vue-class-component";
 export default class TranslationView extends Vue {
     private service = scriptures;
     public translation: Translation | null = null;
-    public books: Book[] | null = null;
+    private books: Book[] | null = null;
+
+    public get Books() {
+        return this.books ?? [];
+    }
 
     async mounted() {
         await this.load();
     }
 
     private async load() {
-        const id = this.$route.params.id;
-        if (id && typeof(id) === "string") {
-            this.translation = await this.service.getTranslation(id);
+        const scriptureId = this.$route.params.scriptureId as string | undefined;
+        const id = this.$route.params.translationId as string | undefined;
+        if (scriptureId && id) {
+            this.translation = await this.service.getTranslation(scriptureId, id);
+            this.books = await this.service.getBooks(id);
         }
     }
 }

@@ -320,11 +320,11 @@ export const scriptures = {
     getScripture(id: string) {
         return http.get<IScripture>("api/Scriptures/" + id);
     },
-    getTranslation(id: string) {
-        return http.get<ITranslation>(`api/Scriptures/Translation/${id}`);
-    },
     getTranslations(scriptureId: string) {
         return http.get<ITranslation[]>(`api/Scriptures/${scriptureId}/Translations`);
+    },
+    getTranslation(scriptureId: string, id: string) {
+        return http.get<ITranslation>(`api/Scriptures/${scriptureId}/Translation/${id}`);
     },
     getBooks(translationId: string, includeChildren = false) {
         return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books?includeChildren=${includeChildren}`);

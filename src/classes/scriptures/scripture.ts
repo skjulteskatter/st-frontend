@@ -21,7 +21,7 @@ export default class Scripture implements IScripture {
         router.push({
             name: "scripture-view",
             params: {
-                id: this.id,
+                scriptureId: this.id,
             },
         });
     }
