@@ -1,4 +1,12 @@
-import { ScriptureList, Scriptures, ScriptureView, TranslationList, TranslationView } from "@/views/scriptures";
+import { 
+    BookList, 
+    BookView, 
+    ScriptureList, 
+    Scriptures, 
+    ScriptureView, 
+    TranslationList, 
+    TranslationView,
+} from "@/views/scriptures";
 import { RouteRecordRaw } from "vue-router";
 
 import StackedLayout from "../layout/StackedLayout.vue";
@@ -247,6 +255,11 @@ const routes: Array<RouteRecordRaw> = [
                                         path: "",
                                         name: "book-list",
                                         component: BookList,
+                                    },
+                                    {
+                                        path: ":bookId",
+                                        name: "book-view",
+                                        component: BookView,
                                     },
                                 ],
                             },
