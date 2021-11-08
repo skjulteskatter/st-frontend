@@ -1,8 +1,28 @@
 /* eslint-disable no-console */
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/performance";
-import "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { 
+    applyActionCode,
+    AuthProvider, 
+    browserLocalPersistence, 
+    browserSessionPersistence, 
+    createUserWithEmailAndPassword, 
+    FacebookAuthProvider, 
+    fetchSignInMethodsForEmail, 
+    getAuth, 
+    GoogleAuthProvider, 
+    OAuthProvider, 
+    onAuthStateChanged, 
+    signInWithCustomToken, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    TwitterAuthProvider, 
+    updatePassword, 
+    updateProfile, 
+    User, 
+    UserCredential,
+} from "firebase/auth";
+import { getAnalytics, logEvent, setUserId } from "firebase/analytics";
+import "firebase/compat/performance";
 import router from "@/router";
 import api, { session } from "./api";
 import { useStore } from "@/store";
@@ -13,11 +33,14 @@ import { firebaseConfig } from "@/config";
 import http from "./http";
 import { cache } from "./cache";
 
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+const analyticsApp = getAnalytics(firebaseApp);
 
-export const analytics = firebase.analytics();
-
-export const a = firebase.auth;
+export const analytics = {
+    logEvent: (event: string, params?: {[key: string]: unknown}) => logEvent(analyticsApp, event, params),
+    setUserId: (id: string) => setUserId(analyticsApp, id),
+};
+export const a = getAuth(firebaseApp);
 
 function notInitialized() {
     throw Error("FIREBASE DID NOT INITIALIZE");
@@ -27,11 +50,7 @@ function invalidProvider() {
     throw Error("INVALID PROVIDER");
 }
 
-if (!a) {
-    notInitialized();
-}
-
-async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
+async function loginUser(auth: Auth, user: User): Promise<boolean> {
     if (user.emailVerified) {
         useStore()?.commit(SessionMutationTypes.ERROR, "");
         analytics.logEvent("login");
@@ -44,20 +63,20 @@ async function loginUser(auth: Auth, user: firebase.User): Promise<boolean> {
 }
 
 const providers: {
-    [key: string]: firebase.auth.AuthProvider;
+    [key: string]: AuthProvider;
 } = {
-    google: new a.GoogleAuthProvider(),
-    twitter: new a.TwitterAuthProvider(),
+    google: new GoogleAuthProvider(),
+    twitter: new TwitterAuthProvider(),
     microsoft: (() => {
-        const p = new a.OAuthProvider("microsoft.com");
+        const p = new OAuthProvider("microsoft.com");
         p.setCustomParameters({
             prompt: "consent",
         });
         return p;
     })(),
-    facebook: new a.FacebookAuthProvider(),
+    facebook: new FacebookAuthProvider(),
     apple: (() => {
-        const p = new a.OAuthProvider("apple.com");
+        const p = new OAuthProvider("apple.com");
         p.addScope("email");
         p.addScope("name");
 
@@ -74,11 +93,11 @@ class Auth {
     };
     
     public get emailVerified() {
-        return a().currentUser?.emailVerified == true;
+        return a.currentUser?.emailVerified == true;
     }
 
     public get image() {
-        return a().currentUser?.photoURL ?? "";
+        return a.currentUser?.photoURL ?? "";
     }
 
 
@@ -99,16 +118,15 @@ class Auth {
     }
 
     public async getProviders(email: string) {
-        return await a().fetchSignInMethodsForEmail(email);
+        return await fetchSignInMethodsForEmail(a, email);
     }
 
     public async setDisplayName(name: string) {
-        if (!a) {
-            notInitialized();
+        if (a.currentUser) {
+            await updateProfile(a.currentUser, {
+                displayName: name,
+            });
         }
-        await a().currentUser?.updateProfile({
-            displayName: name,
-        });
     }
 
     public async loginWithToken(token: string) {
@@ -116,10 +134,9 @@ class Auth {
             notInitialized();
         }
 
-        await a().setPersistence(a.Auth.Persistence.LOCAL);
+        await a.setPersistence(browserLocalPersistence);
 
-        const result = await a()
-            .signInWithCustomToken(token);
+        const result = await signInWithCustomToken(a, token);
         
         const user = result.user;
 
@@ -132,7 +149,7 @@ class Auth {
         if (!a) {
             notInitialized();
         }
-        await a().setPersistence(a.Auth.Persistence.LOCAL);
+        await a.setPersistence(browserLocalPersistence);
 
         const provider = providers[providerName];
 
@@ -140,8 +157,7 @@ class Auth {
             invalidProvider();
         }
 
-        const result = await a()
-            .signInWithPopup(provider);
+        const result = await signInWithPopup(a, provider);
         
         const user = result.user;
 
@@ -181,17 +197,16 @@ class Auth {
             notInitialized();
         }
         if (stayLoggedIn) {
-            await a().setPersistence(a.Auth.Persistence.LOCAL);
+            await a.setPersistence(browserLocalPersistence);
         } else {
-            await a().setPersistence(a.Auth.Persistence.SESSION);
+            await a.setPersistence(browserSessionPersistence);
         }
 
-        const result = await a()
-            .signInWithEmailAndPassword(email, password)
+        const result = await signInWithEmailAndPassword(a, email, password)
             .catch(e => {
                 this.switchCode(e.code);
                 return;
-            }) as firebase.auth.UserCredential;
+            }) as UserCredential;
 
         const user = result.user;
 
@@ -207,8 +222,7 @@ class Auth {
 
         // const methods = await a().fetchSignInMethodsForEmail(email);
 
-        const result = await a()
-            .createUserWithEmailAndPassword(email, password)
+        const result = await createUserWithEmailAndPassword(a, email, password)
             .catch(e => {
                 this.switchCode(e.code);
             });
@@ -216,7 +230,7 @@ class Auth {
 
         const user = result.user;
 
-        await user?.updateProfile({
+        await updateProfile(user, {
             displayName,
         }).catch(e => {
             switch (e.code) {
@@ -234,11 +248,11 @@ class Auth {
     }
 
     public async resetPassword(oldPassword: string, password: string) {
-        const user = a().currentUser;
+        const user = a.currentUser;
 
         if (user) {
             try {
-                await user.updatePassword(password);
+                await updatePassword(user, password);
 
                 //console.log("updated password");
             }
@@ -246,15 +260,15 @@ class Auth {
                 console.log(e);
                 if (!user.email) throw new Error("No email found on account ???");
 
-                await a().signInWithEmailAndPassword(user.email, oldPassword);
+                await signInWithEmailAndPassword(a, user.email, oldPassword);
 
-                await user.updatePassword(password);
+                await updatePassword(user, password);
             }
         }
     }
 
     public async sendLinkToEmail() {
-        const user = a().currentUser;
+        const user = a.currentUser;
 
         if (user && !this.verificationEmailSent) {
             this.verificationEmailSent = true;
@@ -265,16 +279,16 @@ class Auth {
     }
 
     public async logout() {
-        await a().signOut();
+        await a.signOut();
         localStorage.clear();
         cache.clearCache();
         window.location.replace("/");
     }
 
     public async verificationCode(code: string) {
-        await a().applyActionCode(code);
+        await applyActionCode(a, code);
 
-        const user = a().currentUser;
+        const user = a.currentUser;
 
         if (user?.emailVerified) {
             return "VERIFIED_EMAIL";
@@ -283,7 +297,7 @@ class Auth {
     }
 
     public get isAuthenticated() {
-        const user = a().currentUser;
+        const user = a.currentUser;
         if (user?.emailVerified) {
             return true;
         }
@@ -291,7 +305,7 @@ class Auth {
     }
 
     public async getToken() {
-        const user = a().currentUser;
+        const user = a.currentUser;
         if (user?.emailVerified) {
             const token = await user.getIdToken();
             localStorage.setItem("id_token", token);
@@ -306,37 +320,21 @@ class Auth {
 
         const url = await api.session.uploadImage(fileName, image);
 
-        if (url) {
-            await a().currentUser?.updateProfile({
+        if (url && a.currentUser) {
+            await updateProfile(a.currentUser, {
                 photoURL: url.image,
             });
         }
     }
 
     public get user() {
-        return a()?.currentUser;
+        return a.currentUser;
     }
-
-    // public renderUi() {
-    //     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    //     const firebaseui = require('firebaseui');
-
-    //     const ui = new firebaseui.auth.AuthUI(a());
-
-    //     ui.start('#firebase-auth-container', {
-    //         signInOptions: [
-    //             a.EmailAuthProvider.PROVIDER_ID,
-    //             a.GoogleAuthProvider.PROVIDER_ID,
-    //             a.FacebookAuthProvider.PROVIDER_ID,
-    //         ],
-    //         signInSuccessUrl: '/'
-    //     })
-    // }
 }
 
 const auth = new Auth();
 
-a().onAuthStateChanged(async s => {
+onAuthStateChanged(a, async s => {
     if (s) {
         await useStore().dispatch(SessionActionTypes.SESSION_START);
     }

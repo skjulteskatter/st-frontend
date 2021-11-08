@@ -57,10 +57,10 @@ declare module "songtreasures" {
             [lang: string]: string;
         };
         key: string;
-        keys: LocaleString;
+        keys: ILocaleString;
         image: string;
         available?: boolean;
-        details?: LocaleString;
+        details?: ILocaleString;
         hasChords: {
             [lang: string]: boolean;
         };
@@ -78,7 +78,7 @@ declare module "songtreasures" {
         }[];
         type: string;
         image?: string;
-        name: LocaleString;
+        name: ILocaleString;
         participants: IParticipant[];
         yearWritten?: number;
         yearComposed?: number;
@@ -95,13 +95,13 @@ declare module "songtreasures" {
         origins: {
             type: "text" | "melody";
             country: string;
-            description: LocaleString;
+            description: ILocaleString;
         }[];
         transpositions?: {
             [key: string]: number;
         };
         verses: number;
-        details?: LocaleString;
+        details?: ILocaleString;
         newMelody: boolean;
         newMelodies: string[];
     }
@@ -199,14 +199,14 @@ declare module "songtreasures" {
 
     interface CreditSong {
         id: string;
-        name: LocaleString;
-        collection: LocaleString;
+        name: ILocaleString;
+        collection: ILocaleString;
         number: number;
         authors: string[];
         composers: string[];
         arrangers: string[];
-        textCopyright: LocaleString;
-        melodyCopyright: LocaleString;
+        textCopyright: ILocaleString;
+        melodyCopyright: ILocaleString;
     }
 
     interface ShareKey {
@@ -226,7 +226,7 @@ declare module "songtreasures" {
 
     interface IItem {
         id: string;
-        name: LocaleString;
+        name: ILocaleString;
     }
 
     type ICopyright = IItem;
@@ -238,7 +238,7 @@ declare module "songtreasures" {
     }
 
     interface IGenre extends IItem {
-        description: LocaleString;
+        description: ILocaleString;
     }
 
     type ICategory = IItem;
@@ -258,6 +258,49 @@ declare module "songtreasures" {
             parts: string[];
         }[];
     };
+
+    type TDocument = {
+        id: string;
+        updatedAt: string;
+    }
+
+    interface IScripture extends TDocument {
+        title: ILocaleString;
+        icon: string;
+        image: string;
+    }
+
+    interface ITranslation extends TDocument {
+        scriptureId: string;
+        title: string;
+        shortTitle: string;
+        sourceName: string;
+        icon: string;
+        image: string;
+        language: string;
+    }
+
+    interface IBook extends TDocument {
+        translationId: string;
+        title: string;
+        shortTitle: string;
+        number: number;
+        color: string;
+        chapters: IChapter[] | null;
+    }
+
+    interface IChapter extends TDocument {
+        bookId: string;
+        number: number;
+        title: string;
+        verses: IVerse[] | null;
+    }
+
+    interface IVerse {
+        key: string;
+        number: number;
+        content: string;
+    }
 }
 
 interface Verse {

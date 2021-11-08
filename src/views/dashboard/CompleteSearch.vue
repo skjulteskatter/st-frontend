@@ -63,7 +63,7 @@ export default class CompleteSearch extends Vue {
         this.loading = false;
     }
     
-    public localeString(s: LocaleString) {
+    public localeString(s: ILocaleString) {
         return s[this.languageKey] ?? s.en ?? Object.values(s)[0];
     }
 
