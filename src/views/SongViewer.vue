@@ -1,20 +1,5 @@
 <template>
     <div>
-        <teleport to="head" v-if="collection && song">
-            <meta property="og:site_name" content="SongTreasures" />
-            <meta property="og:url" content="https://songtreasures.app" />
-            <meta property="og:type" content="website" />
-
-            <meta property="og:title" :content="song.getName()" />
-            <meta property="og:description" :content="`${collection.getName(languageKey)} ${song.getNumber(collection.id)}`" />
-
-            <meta property="og:image" :content="collection.image" />
-            <meta property="og:image:secure_url" :content="collection.image" />
-            <meta property="og:image:alt" :content="collection.getName(languageKey)" />
-            <meta property="og:image:width" content="200" />
-            <meta property="og:image:height" content="200" />
-        </teleport>
-
         <loader :loading="loading">
             <div v-if="song" class="flex flex-col gap-4">
                 <div class="flex justify-between">
