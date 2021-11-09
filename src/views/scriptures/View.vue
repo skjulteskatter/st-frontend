@@ -1,6 +1,6 @@
 <template>
     <div v-if="scripture">
-        <h1 class="text-xl">{{scripture.title.default}}</h1>
+        <h1 class="text-xl md:text-2xl font-bold mb-4">{{scripture.title.default}}</h1>
         <div class="scripture-content">
             <router-view />
         </div>

@@ -1,5 +1,6 @@
 <template>
     <div v-if="book">
+        <h2 class="text-xl font-semibold">{{ book.title }}</h2>
         <router-view/>
     </div>
 </template>

@@ -3,6 +3,7 @@
         <h2 class="font-bold">
             {{ $t('common_language') }}
         </h2>
+        <loader :loading="!languages" />
         <ul class="flex flex-col gap-2 mb-2" v-if="languages">
             <li v-for="l in languages" :key="l">
                 <label class="flex items-center gap-2">

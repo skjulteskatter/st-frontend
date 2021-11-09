@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div>Chapter</div>
-        <p v-for="i in Verses" :key="i.key">
-            <span class="text-sm mr-2">{{i.number}}</span>
+        <h3 class="text-lg">{{ Chapter.title }} {{ Chapter.number }}</h3>
+        <span class="mr-2" v-for="i in Verses" :key="i.key">
+            <span class="text-xs opacity-50 mr-1">{{i.number}}</span>
             <span v-html="i.content" />
-        </p>
+        </span>
     </div>
 </template>
 <script lang="ts">
@@ -22,6 +22,10 @@ export default class ChapterView extends Vue {
     public chapter: Chapter | null = null;
 
     private verses: Verse[] | null = null;
+
+    public get Chapter() {
+        return this.chapter ?? {} as Chapter;
+    }
 
     public get Verses() {
         return this.verses ?? [];
