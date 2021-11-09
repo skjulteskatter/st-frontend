@@ -2,7 +2,7 @@
     <div>
         <loader :loading="!books" />
         <div class="mb-2" v-for="book in Books" :key="book.id">
-            <base-button @click="book.view()">{{book.title}}</base-button>
+            <base-button @click="setBook(book)">{{book.title}}</base-button>
         </div>
     </div>
 </template>
@@ -33,6 +33,11 @@ export default class BookList extends Vue {
         if (scriptureId && translation) {
             this.books = await this.service.getBooks(translation.id);
         }
+    }
+
+    public async setBook(book: Book) {
+        await this.service.setBook(book.number);
+        book.view();
     }
 }
 </script>

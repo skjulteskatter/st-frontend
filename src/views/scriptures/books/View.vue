@@ -27,11 +27,17 @@ export default class BookView extends Vue {
     }
 
     private async load() {
-        const { bookId } = this.$route.params as {[key: string]: string};
-        const translation = await this.service.getCurrentTranslation();
+        this.book = await this.service.getCurrentBook();
+        if (!this.book) {
+            const { bookId } = this.$route.params as {[key: string]: string};
+            const translation = await this.service.getCurrentTranslation();
 
-        if (translation && bookId) {
-            this.book = await this.service.getBook(translation.id, bookId);
+            if (translation && bookId)
+                this.book = await this.service.getBook(translation.id, bookId);
+
+            if (this.book) {
+                this.service.setBook(this.book.number);
+            }
         }
     }
 }
