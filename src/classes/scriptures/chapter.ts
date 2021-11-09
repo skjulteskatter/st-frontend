@@ -1,3 +1,4 @@
+import router from "@/router";
 import { IChapter } from "songtreasures";
 import Verse from "./verse";
 
@@ -16,5 +17,14 @@ export default class Chapter implements IChapter {
         this.number = i.number;
         this.title = i.title;
         this.verses = i.verses ? i.verses.map(v => new Verse(v)) : null;
+    }
+
+    public view() {
+        router.push({
+            name: "chapter-view",
+            params: {
+                chapterId: this.id,
+            },
+        });
     }
 }
