@@ -11,9 +11,9 @@
 					<div class="hidden md:block">
 						<div class="ml-10 flex items-baseline space-x-4">
 							<template v-for="item in links" :key="item.name">
-								<router-link v-if="item.condition" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
+								<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
 									<span class="flex items-center gap-2">
-										<LockClosedIcon v-if="item.name == 'Admin'" class="w-3 h-3" />
+										<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3" />
 										{{ item.name }}
 									</span>
 								</router-link>
@@ -66,7 +66,7 @@
 		<DisclosurePanel class="md:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<template v-for="item in links" :key="item.name">
-					<router-link v-if="item.condition" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
+					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
 				</template>
 			</div>
 			<div class="pt-4 pb-3 border-t border-gray-300">
@@ -140,22 +140,18 @@ export default class TheNavbar extends Vue {
 			{
 				name: this.$t("common_home"),
 				path: "/",
-				condition: true,
 			},
 			{
 				name: this.$t("common_collections"),
 				path: "/collections",
-				condition: true,
 			},
 			{
 				name: `${this.$t("common_your")} ${this.$t("common_collections").toLocaleLowerCase()}`,
 				path: "/playlists",
-				condition: true,
 			},
 			{
 				name: this.$t("favorites"),
 				path: "/favorites",
-				condition: true,
 			},
 			{
 				name: "Admin",
