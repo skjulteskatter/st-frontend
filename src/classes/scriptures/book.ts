@@ -1,3 +1,4 @@
+import router from "@/router";
 import { IBook } from "songtreasures";
 import Chapter from "./chapter";
 
@@ -20,5 +21,14 @@ export default class Book implements IBook {
         this.number = i.number;
         this.color = i.color;
         this.chapters = i.chapters ? i.chapters.map(c => new Chapter(c)) : null;
+    }
+
+    public view() {
+        router.push({
+            name: "chapter-list",
+            params: {
+                bookId: this.id,
+            },
+        });
     }
 }

@@ -36,18 +36,19 @@ class Scriptures {
         return this.translations.filter(t => t.scriptureId === scriptureId);
     }
 
-    public async getTranslation(id: string): Promise<Translation> {
-        let translation = this.translations.find(t => t.id === id);
+    public async getTranslation(scriptureId: string, id: string): Promise<Translation> {
+        const translation = (await this.getTranslations(scriptureId)).find(t => t.id === id);
         if (!translation) {
-            translation = new Translation((await scriptures.getTranslation(id)));
-            this.translations.push(translation);
+            throw new Error("Translation not found");
         }
         return translation;
     }
 
     public async getBooks(translationId: string): Promise<Book[]> {
         if (this.books[translationId] === undefined) {
-            this.books[translationId] = await scriptures.getBooks(translationId);
+            this.books[translationId] = (await scriptures.getBooks(translationId))
+                .map(i => new Book(i))
+                .sort((a, b) => a.number > b.number ? 1 : -1);
         }
         return this.books[translationId];
     }
@@ -63,7 +64,9 @@ class Scriptures {
     public async getChapters(translationId: string, bookId: string): Promise<Chapter[]> {
         const book = await this.getBook(translationId, bookId);
         if (book.chapters === null) {
-            book.chapters = (await scriptures.getChapters(translationId, bookId)).map(c => new Chapter(c));
+            book.chapters = (await scriptures.getChapters(translationId, bookId))
+                .map(c => new Chapter(c))
+                .sort((a, b) => a.number > b.number ? 1 : -1);
         }
         return book.chapters;
     }

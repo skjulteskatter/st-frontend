@@ -1,3 +1,14 @@
+import { 
+    BookList, 
+    BookView, 
+    ChapterList, 
+    ChapterView,
+    ScriptureList, 
+    Scriptures, 
+    ScriptureView, 
+    TranslationList, 
+    TranslationView,
+} from "@/views/scriptures";
 import { RouteRecordRaw } from "vue-router";
 
 import StackedLayout from "../layout/StackedLayout.vue";
@@ -14,15 +25,9 @@ const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/S
 const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue").catch(() => {
     window.location.reload();
 });
-// const LyricsViewer = () => import(/* webpackChunkName: 'lyrics' */ "../views/LyricsViewer.vue").catch(() => {
-//     window.location.reload();
-// });
 const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
     window.location.reload();
 });
-// const KaraokeViewer = () => import(/* webpackChunkName: 'karaoke' */ "../views/KaraokeViewer.vue").catch(() => {
-//     window.location.reload();
-// });
 const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
     window.location.reload();
 });
@@ -99,19 +104,6 @@ const PrintView = () => import(/* webpackChunkName: 'printView' */ "../views/Pri
 });
 
 const FavoritesView = () => import(/* webpackChunkName: 'favoritesView' */ "../views/Favorites.vue").catch(() => {
-    window.location.reload();
-});
-
-const Scriptures = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/Scriptures.vue").catch(() => {
-    window.location.reload();
-});
-const ScriptureList = () => import(/* webpackChunkName: 'scriptures' */ "../views/scriptures/List.vue").catch(() => {
-    window.location.reload();
-});
-const ScriptureView = () => import(/* wepbackChunkName: 'scriptureView' */ "../views/scriptures/View.vue").catch(() => {
-    window.location.reload();
-});
-const TranslationView = () => import(/* webpackChunkName: 'translationView' */ "../views/scriptures/translations/View.vue").catch(() => {
     window.location.reload();
 });
 
@@ -241,14 +233,43 @@ const routes: Array<RouteRecordRaw> = [
                         component: ScriptureList,
                     },
                     {
-                        path: ":id",
+                        path: ":scriptureId",
                         name: "scripture-view",
                         component: ScriptureView,
-                    },
-                    {
-                        path: "translation/:id",
-                        name: "translation-view",
-                        component: TranslationView,
+                        children: [
+                            {
+                                path: "",
+                                name: "translation-list",
+                                component: TranslationList,
+                            },
+                            {
+                                path: ":translationId",
+                                name: "translation-view",
+                                component: TranslationView,
+                            },
+                            {
+                                path: ":translationId/Books",
+                                name: "book-list",
+                                component: BookList,
+                            },
+                            {
+                                path: ":translationId/:bookId",
+                                name: "book-view",
+                                component: BookView,
+                                children: [
+                                    {
+                                        path: "",
+                                        name: "chapter-list",
+                                        component: ChapterList,
+                                    },
+                                    {
+                                        path: ":chapterId",
+                                        name: "chapter-view",
+                                        component: ChapterView,
+                                    },
+                                ],
+                            },
+                        ],
                     },
                 ],
             },

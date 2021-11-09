@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 
 interface Step {
     name: string;
@@ -6,9 +7,13 @@ interface Step {
 }
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-interface ILocaleString {
-    [code: string]: string;
+
+
+interface ILocale<T> {
+    [code: string]: T;
 }
+
+type ILocaleString = ILocale<string>;
 
 interface Language {
     key: string;
