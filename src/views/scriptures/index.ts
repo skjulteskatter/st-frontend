@@ -1,4 +1,3 @@
-export * from "./translations";
 export * from "./books";
 
 const ScriptureList = () => import(/* webpackChunkName: 'scriptureList' */ "./List.vue");
