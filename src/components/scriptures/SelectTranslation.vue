@@ -25,18 +25,29 @@
 </template>
 <script lang="ts">
 import Translation from "@/classes/scriptures/translation";
-import scriptures from "@/services/modules/scriptures";
-import { appSession } from "@/services/session";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
 
+@Options({
+    name: "select-translation",
+    props: {
+        translations: {
+            type: Array,
+        },
+        languages: {
+            type: Array,
+        },
+        filterOnLanguages: {
+            type: Object,
+        },
+    },
+    emits: [
+        "setTranslation",
+    ],
+})
 export default class SelectTranslation extends Vue {
-    private service = scriptures;
-    
-    private translations: Translation[] | null = null;
-
-    public languages: Language[] | null = null;
-
-    public filterOnLanguages: ILocale<boolean> | null = null;
+    private translations?: Translation[];
+    public languages?: Language[];
+    public filterOnLanguages?: ILocale<boolean>;
 
     public get FilterOnLanguages() {
         return this.filterOnLanguages ?? {};
@@ -49,26 +60,8 @@ export default class SelectTranslation extends Vue {
         return this.translations?.filter(i => this.FilterOnLanguages[i.language] === true) ?? [];
     }
 
-    async mounted() {
-        await this.load();
-    }
-
-    private async load() {
-        const scriptureId = this.$route.params.scriptureId as string | undefined;
-        if (scriptureId) {
-            this.translations = await this.service.getTranslations(scriptureId);
-
-            this.languages = appSession.languages.filter(l => this.translations?.some(t => t.language === l.key));
-            this.filterOnLanguages = this.languages.reduce((a, b) => {
-                a[b.key] = appSession.user.settings.languageKey === b.key;
-                return a;
-            }, {} as ILocale<boolean>);
-        }
-    }
-
-    public async setTranslation(translation: Translation) {
-        await this.service.setTranslation(translation.id);
-        translation.view();
+    public setTranslation(translation: Translation) {
+        this.$emit("setTranslation", translation);
     }
 }
 </script>

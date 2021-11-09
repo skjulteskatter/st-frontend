@@ -27,11 +27,10 @@ export default class BookList extends Vue {
     }
 
     private async load() {
-        const { scriptureId, translationId } = this.$route.params as {[key: string]: string | undefined};
-        // const scriptureId = this.$route.params.scriptureId as string | undefined;
-        // const translationId = this.$route.params.translationId as string | undefined;
-        if (scriptureId && translationId) {
-            this.books = await this.service.getBooks(translationId);
+        const { scriptureId } = this.$route.params as {[key: string]: string | undefined};
+        const translation = await this.service.getCurrentTranslation();
+        if (scriptureId && translation) {
+            this.books = await this.service.getBooks(translation.id);
         }
     }
 }
