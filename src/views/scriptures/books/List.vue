@@ -1,5 +1,6 @@
 <template>
     <div>
+        <loader :loading="!books" />
         <div class="mb-2" v-for="book in Books" :key="book.id">
             <base-button @click="book.view()">{{book.title}}</base-button>
         </div>
