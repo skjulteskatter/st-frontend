@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <base-button @click="scripture.view()" v-for="scripture in Scriptures" :key="scripture.id">
-            {{scripture.title.default}}
-        </base-button>
-    </div>
+    <base-button @click="scripture.view()" v-for="scripture in Scriptures" :key="scripture.id">
+        {{scripture.title.default}}
+    </base-button>
 </template>
 
 <script lang="ts">
@@ -21,7 +19,3 @@ export default class ScriptureList extends Vue {
     }
 }
 </script>
-
-<style>
-
-</style>
