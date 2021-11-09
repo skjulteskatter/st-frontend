@@ -4,7 +4,8 @@
             <h1 class="text-xl">{{scripture.title.default}}</h1>
             <select-translation 
                 :filterOnLanguages="filterOnLanguages" 
-                :languages="languages" 
+                :languages="languages"
+                :translation="translation"
                 :translations="translations"
                 @setTranslation="setTranslation"
             ></select-translation>
@@ -47,21 +48,22 @@ export default class ScriptureView extends Vue {
             await this.service.setScripture(this.scripture.id);
             this.translation = await this.service.getCurrentTranslation();
 
-            if (!this.translation) {
-                this.translations = await this.service.getTranslations(this.scripture.id);
+            this.translations = await this.service.getTranslations(this.scripture.id);
 
-                this.languages = appSession.languages.filter(l => this.translations?.some(t => t.language === l.key));
-                this.filterOnLanguages = this.languages.reduce((a, b) => {
-                    a[b.key] = appSession.user.settings.languageKey === b.key;
-                    return a;
-                }, {} as ILocale<boolean>);
-            }
+            this.languages = appSession.languages.filter(l => this.translations?.some(t => t.language === l.key));
+            this.filterOnLanguages = this.languages.reduce((a, b) => {
+                a[b.key] = appSession.user.settings.languageKey === b.key;
+                return a;
+            }, {} as ILocale<boolean>);
         }
     }
 
     public async setTranslation(translation: Translation) {
+        this.scripture?.view();
+        this.translation = null;
         await this.service.setTranslation(translation.id);
         translation.view();
+        this.translation = translation;
     }
 }
 </script>

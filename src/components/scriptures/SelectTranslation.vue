@@ -30,6 +30,9 @@ import { Options, Vue } from "vue-class-component";
 @Options({
     name: "select-translation",
     props: {
+        translation: {
+            type: Object,
+        },
         translations: {
             type: Array,
         },
@@ -45,6 +48,7 @@ import { Options, Vue } from "vue-class-component";
     ],
 })
 export default class SelectTranslation extends Vue {
+    public translation?: Translation;
     private translations?: Translation[];
     public languages?: Language[];
     public filterOnLanguages?: ILocale<boolean>;
