@@ -1,94 +1,87 @@
-import Book from "@/classes/scriptures/book";
-import Chapter from "@/classes/scriptures/chapter";
-import Scripture from "@/classes/scriptures/scripture";
-import Translation from "@/classes/scriptures/translation";
-import Verse from "@/classes/scriptures/verse";
-import { scriptures } from "../api";
+import { cache } from "../cache";
+import BaseScriptures from "./baseScriptures";
 
-class Scriptures {
-    private scriptures: Scripture[] | null = null;
-    private translations: Translation[] = [];
-    private books: {
-        [translationId: string]: Book[];
+class Scriptures extends BaseScriptures {
+    private _scriptureId: string | null = null;
+    private _translationId: {
+        [scriptureId: string]: string | undefined;
+    } = {};
+    private _bookId: {
+        [scriptureId: string]: number | undefined;
     } = {};
 
-    private _initializing = false;
-    public async initialize() {
-        if (this.scriptures === null && !this._initializing) {
-            this._initializing = true;
-            this.scriptures = (await scriptures.getAll()).map(s => new Scripture(s));
-            this._initializing = false;
-        }
-    }
-
-    public async get(id: string): Promise<Scripture> {
-        let scripture = this.scriptures?.find(s => s.id === id);
-        if (!scripture) {
-            scripture = new Scripture(await scriptures.getScripture(id));
-        }
-        return scripture;
-    }
-
-    public async getTranslations(scriptureId: string): Promise<Translation[]> {
-        if (!this.translations.some(t => t.scriptureId === scriptureId)) {
-            this.translations.push(...(await scriptures.getTranslations(scriptureId)).map(i => new Translation(i)));
-        }
-        return this.translations.filter(t => t.scriptureId === scriptureId);
-    }
-
-    public async getTranslation(scriptureId: string, id: string): Promise<Translation> {
-        const translation = (await this.getTranslations(scriptureId)).find(t => t.id === id);
-        if (!translation) {
-            throw new Error("Translation not found");
-        }
-        return translation;
-    }
-
-    public async getBooks(translationId: string): Promise<Book[]> {
-        if (this.books[translationId] === undefined) {
-            this.books[translationId] = (await scriptures.getBooks(translationId))
-                .map(i => new Book(i))
-                .sort((a, b) => a.number > b.number ? 1 : -1);
-        }
-        return this.books[translationId];
-    }
-
-    public async getBook(translationId: string, id: string): Promise<Book> {
-        const book = (await this.getBooks(translationId)).find(t => t.id === id);
-        if (!book) {
-            throw new Error("Book not found");
-        }
-        return book;
-    }
-
-    public async getChapters(translationId: string, bookId: string): Promise<Chapter[]> {
-        const book = await this.getBook(translationId, bookId);
-        if (book.chapters === null) {
-            book.chapters = (await scriptures.getChapters(translationId, bookId))
-                .map(c => new Chapter(c))
-                .sort((a, b) => a.number > b.number ? 1 : -1);
-        }
-        return book.chapters;
-    }
-
-    public async getChapter(translationId: string, bookId: string, id: string): Promise<Chapter> {
-        const chapter = (await this.getChapters(translationId, bookId)).find(t => t.id === id);
-        if (!chapter) {
-            throw new Error("Book not found");
-        }
-        return chapter;
-    }
-
-    public async getVerses(translationId: string, bookId: string, chapterId: string) {
-        const chapter = await this.getChapter(translationId, bookId, chapterId);
-        if (chapter.verses === null) {
-            chapter.verses = (await scriptures.getVerses(translationId, bookId, chapterId)).map(v => new Verse(v));
-        }
-        return chapter.verses;
-    }
-
     public get Scriptures() {
-        return this.scriptures ?? [];
+        return this.scriptures;
+    }
+
+    public async getCurrentScripture() {
+        return this._scriptureId ? await this.get(this._scriptureId) : null;
+    }
+
+    public get Translations() {
+        return this.translations;
+    }
+
+    public async getCurrentTranslation() {
+        const scripture = await this.getCurrentScripture();
+
+        if (scripture) {
+            const id = this._translationId[scripture.id] ?? 
+                await cache.get("config", `translation:${scripture.id}`) as string | undefined;
+            if (id) {
+                const translation = await this.getTranslation(scripture.id, id);
+                if (translation) {
+                    this._translationId[scripture.id] = translation.id;
+                    return translation;
+                }
+            }
+        }
+        return null;
+    }
+
+    public async getCurrentBook() {
+        try {
+            const translation = await this.getCurrentTranslation();
+            if (translation) {
+                const number = this._bookId[translation.scriptureId];
+                
+                if (number) {
+                    const book = await this.getBook(translation.id, number.toString());
+                    this._bookId[translation.scriptureId] = book.number;
+                    return book;
+                }
+            }
+            return null;
+        }
+        catch {
+            return null;
+        }
+    }
+
+    public async setScripture(id: string) {
+        const scripture = await this.get(id);
+        if (scripture) {
+            this._scriptureId = scripture.id;
+        }
+    }
+
+    public async setTranslation(id: string) {
+        const scripture = await this.getCurrentScripture();
+        if (scripture) {
+            const translation = await this.getTranslation(scripture.id, id);
+            if (translation) {
+                this._translationId[scripture.id] = translation.id;
+                await cache.set("config", `translation:${scripture.id}`, translation.id);
+            }
+        }
+    }
+
+    public async setBook(number: number) {
+        const translation = await this.getCurrentTranslation();
+        if (translation) {
+            const book = await this.getBook(translation.id, number.toString());
+            this._bookId[translation.scriptureId] = book.number;
+        }
     }
 }
 

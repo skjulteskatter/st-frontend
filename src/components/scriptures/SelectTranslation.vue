@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <base-button @click="show = !show" class="mb-2">Select Translation</base-button>
+    <div v-if="show">
         <div class="flex flex-col gap-2 mb-2" v-if="languages">
             <label class="font-bold">
                 {{ $t('common_language') }}
@@ -19,24 +20,45 @@
             </label>
         </div>
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
-            <base-button @click="translation.view()">{{translation.title}} | {{translation.language}}</base-button>
+            <translation-card :translation="translation" @click="setTranslation(translation)" />
         </div>
     </div>
 </template>
 <script lang="ts">
 import Translation from "@/classes/scriptures/translation";
-import scriptures from "@/services/modules/scriptures";
-import { appSession } from "@/services/session";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
+import TranslationCard from "./TranslationCard.vue";
 
+@Options({
+    name: "select-translation",
+    components: {
+        TranslationCard,
+    },
+    props: {
+        translation: {
+            type: Object,
+        },
+        translations: {
+            type: Array,
+        },
+        languages: {
+            type: Array,
+        },
+        filterOnLanguages: {
+            type: Object,
+        },
+    },
+    emits: [
+        "setTranslation",
+    ],
+})
 export default class SelectTranslation extends Vue {
-    private service = scriptures;
-    
-    private translations: Translation[] | null = null;
+    public show = false;
 
-    public languages: Language[] | null = null;
-
-    public filterOnLanguages: ILocale<boolean> | null = null;
+    public translation?: Translation;
+    private translations?: Translation[];
+    public languages?: Language[];
+    public filterOnLanguages?: ILocale<boolean>;
 
     public get FilterOnLanguages() {
         return this.filterOnLanguages ?? {};
@@ -49,21 +71,9 @@ export default class SelectTranslation extends Vue {
         return this.translations?.filter(i => this.FilterOnLanguages[i.language] === true) ?? [];
     }
 
-    async mounted() {
-        await this.load();
-    }
-
-    private async load() {
-        const scriptureId = this.$route.params.scriptureId as string | undefined;
-        if (scriptureId) {
-            this.translations = await this.service.getTranslations(scriptureId);
-
-            this.languages = appSession.languages.filter(l => this.translations?.some(t => t.language === l.key));
-            this.filterOnLanguages = this.languages.reduce((a, b) => {
-                a[b.key] = appSession.user.settings.languageKey === b.key;
-                return a;
-            }, {} as ILocale<boolean>);
-        }
+    public setTranslation(translation: Translation) {
+        this.$emit("setTranslation", translation);
+        this.show = false;
     }
 }
 </script>

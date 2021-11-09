@@ -5,9 +5,7 @@ import {
     ChapterView,
     ScriptureList, 
     Scriptures, 
-    ScriptureView, 
-    TranslationList, 
-    TranslationView,
+    ScriptureView,
 } from "@/views/scriptures";
 import { RouteRecordRaw } from "vue-router";
 
@@ -239,21 +237,11 @@ const routes: Array<RouteRecordRaw> = [
                         children: [
                             {
                                 path: "",
-                                name: "translation-list",
-                                component: TranslationList,
-                            },
-                            {
-                                path: ":translationId",
-                                name: "translation-view",
-                                component: TranslationView,
-                            },
-                            {
-                                path: ":translationId/Books",
                                 name: "book-list",
                                 component: BookList,
                             },
                             {
-                                path: ":translationId/:bookId",
+                                path: ":bookId",
                                 name: "book-view",
                                 component: BookView,
                                 children: [

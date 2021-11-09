@@ -23,7 +23,7 @@ export default class Chapter implements IChapter {
         router.push({
             name: "chapter-view",
             params: {
-                chapterId: this.id,
+                chapterId: this.number,
             },
         });
     }

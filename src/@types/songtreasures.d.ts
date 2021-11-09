@@ -266,6 +266,7 @@ declare module "songtreasures" {
 
     interface IScripture extends TDocument {
         title: ILocaleString;
+        key: ILocaleString;
         icon: string;
         image: string;
     }

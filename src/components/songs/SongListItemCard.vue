@@ -26,7 +26,7 @@
                         <span>&middot;</span>
                         <span>{{ song.originalKey }}</span>
                     </small>
-                    <p class="mt-4 text-gray-400">{{ context }}</p>
+                    <p class="mt-4 text-gray-400" v-if="context">{{ context }}</p>
                 </div>
             </div>
         </div>

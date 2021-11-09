@@ -32,10 +32,11 @@ export default class ChapterList extends Vue {
     }
 
     private async load() {
-        const { scriptureId, translationId, bookId } = this.$route.params as {[key: string]: string | undefined};
+        const { bookId } = this.$route.params as {[key: string]: string | undefined};
+        const translation = await this.service.getCurrentTranslation();
 
-        if (scriptureId && translationId && bookId) {
-            this.chapters = await this.service.getChapters(translationId, bookId);
+        if (translation && bookId) {
+            this.chapters = await this.service.getChapters(translation.id, bookId);
         }
     }
 }

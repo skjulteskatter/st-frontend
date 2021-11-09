@@ -1,17 +1,26 @@
 <template>
+    <!-- TODO: Define correct classes. -->
     <div>
-        <base-button @click="scripture.view()" v-for="scripture in Scriptures" :key="scripture.id">
-            {{scripture.title.default}}
-        </base-button>
+        <scripture-card
+            class="max-w-md cursor-pointer"
+            @click="scripture.view()" 
+            v-for="scripture in Scriptures" 
+            :key="scripture.id"
+            :scripture="scripture"
+        />
     </div>
 </template>
 
 <script lang="ts">
+import { ScriptureCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
     name: "scripture-list",
+    components: {
+        ScriptureCard,
+    },
 })
 export default class ScriptureList extends Vue {
     private service = scriptures;
@@ -21,7 +30,3 @@ export default class ScriptureList extends Vue {
     }
 }
 </script>
-
-<style>
-
-</style>
