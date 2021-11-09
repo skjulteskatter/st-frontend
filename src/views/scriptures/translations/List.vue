@@ -1,26 +1,24 @@
 <template>
     <div>
-        <div class="flex flex-col gap-2 mb-2" v-if="languages">
-            <label class="font-bold">
-                {{ $t('common_language') }}
-            </label>
-            <label
-                class="flex items-center gap-2"
-                v-for="l in languages"
-                :key="l"
-            >
-                <input
-                    v-model="FilterOnLanguages[l.key]"
-                    type="checkbox"
-                    :name="l.name"
-                    class="border-gray-300 rounded text-primary focus:ring-primary"
-                />
-                {{ l.name }}
-            </label>
-        </div>
-        <div class="mb-2" v-for="translation in Translations" :key="translation.id">
-            <base-button @click="translation.view()">{{translation.title}} | {{translation.language}}</base-button>
-        </div>
+        <h2 class="font-bold">
+            {{ $t('common_language') }}
+        </h2>
+        <ul class="flex flex-col gap-2 mb-2" v-if="languages">
+            <li v-for="l in languages" :key="l">
+                <label class="flex items-center gap-2">
+                    <input
+                        v-model="FilterOnLanguages[l.key]"
+                        type="checkbox"
+                        :name="l.name"
+                        class="border-gray-300 rounded text-primary focus:ring-primary"
+                    />
+                    {{ l.name }}
+                </label>
+            </li>
+        </ul>
+        <template v-for="translation in Translations" :key="translation.id">
+            <base-button class="mb-2" @click="translation.view()">{{translation.title}} &middot; <span class="opacity-50">{{translation.language}}</span></base-button>
+        </template>
     </div>
 </template>
 <script lang="ts">
