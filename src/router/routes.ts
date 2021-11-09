@@ -1,6 +1,8 @@
 import { 
     BookList, 
     BookView, 
+    ChapterList, 
+    ChapterView,
     ScriptureList, 
     Scriptures, 
     ScriptureView, 
@@ -244,16 +246,26 @@ const routes: Array<RouteRecordRaw> = [
                                 path: ":translationId",
                                 name: "translation-view",
                                 component: TranslationView,
+                            },
+                            {
+                                path: ":translationId/Books",
+                                name: "book-list",
+                                component: BookList,
+                            },
+                            {
+                                path: ":translationId/:bookId",
+                                name: "book-view",
+                                component: BookView,
                                 children: [
                                     {
                                         path: "",
-                                        name: "book-list",
-                                        component: BookList,
+                                        name: "chapter-list",
+                                        component: ChapterList,
                                     },
                                     {
-                                        path: ":bookId",
-                                        name: "book-view",
-                                        component: BookView,
+                                        path: ":chapterId",
+                                        name: "chapter-view",
+                                        component: ChapterView,
                                     },
                                 ],
                             },
