@@ -1,6 +1,7 @@
 <template>
     <div v-if="book">
-        <h2 class="text-xl font-semibold">{{ book.title }}</h2>
+        <book-card :book="book"></book-card>
+        <div class="mb-2" />
         <router-view/>
     </div>
 </template>
@@ -8,9 +9,13 @@
 import Book from "@/classes/scriptures/book";
 import scriptures from "@/services/modules/scriptures";
 import { Options, Vue } from "vue-class-component";
+import { BookCard } from "@/components/scriptures";
 
 @Options({
     name: "book-view",
+    components: {
+        BookCard,
+    },
 })
 export default class BookView extends Vue {
     private service = scriptures;
@@ -22,10 +27,11 @@ export default class BookView extends Vue {
     }
 
     private async load() {
-        const { translationId, bookId } = this.$route.params as {[key: string]: string};
+        const { bookId } = this.$route.params as {[key: string]: string};
+        const translation = await this.service.getCurrentTranslation();
 
-        if (translationId && bookId) {
-            this.book = await this.service.getBook(translationId, bookId);
+        if (translation && bookId) {
+            this.book = await this.service.getBook(translation.id, bookId);
         }
     }
 }
