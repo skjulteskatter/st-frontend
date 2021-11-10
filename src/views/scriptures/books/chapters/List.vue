@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap max-w-md">
         <button 
             v-for="i in Chapters" 
             :key="i.id"
