@@ -6,8 +6,11 @@ interface Step {
     type: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-
+type CheckboxListData = {
+    key: string;
+    label: string;
+    value: boolean;
+}[];
 
 interface ILocale<T> {
     [code: string]: T;
