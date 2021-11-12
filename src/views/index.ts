@@ -2,6 +2,7 @@ export * from "./collections";
 export * from "./login/index";
 export * from "./playlist";
 export * from "./scriptures";
+export * from "./tags";
 
 const ContributorView = () => import("./ContributorView.vue");
 const CreditSongView = () => import("./CreditSong.vue");

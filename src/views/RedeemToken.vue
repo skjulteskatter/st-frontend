@@ -1,13 +1,9 @@
 <template>
-    <div>
-        <div v-if="result">
-            <div v-if="result.type == 'playlist'">
-                <h1>{{result.name}}</h1>
-            </div>
-            <div v-if="result.type == 'tag'">
-                <h1>{{result.name}}</h1>
-            </div>
-        </div>
+    <div v-if="result?.type === 'playlist'">
+        <h1>{{result.name}}</h1>
+    </div>
+    <div v-if="result?.type === 'tag'">
+        <h1>{{result.name}}</h1>
     </div>
 </template>
 <script lang="ts">

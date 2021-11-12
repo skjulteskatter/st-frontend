@@ -15,6 +15,8 @@ import {
     Playlists,
     PlaylistList,
     PlaylistView,
+    TagList,
+    TagView,
 } from "@/views";
 
 import { RouteRecordRaw } from "vue-router";
@@ -68,12 +70,6 @@ const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/Ve
 });
 
 const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
-    window.location.reload();
-});
-const TagView = () => import(/* webpackChunkName: 'tagList' */ "../views/tags/TagView.vue").catch(() => {
-    window.location.reload();
-});
-const TagList = () => import(/* webpackChunkName: 'tagsList' */ "../views/tags/TagList.vue").catch(() => {
     window.location.reload();
 });
 const SongStatistics = () => import(/* webpackChunkName: 'songStatistics' */ "../views/statistics/SongStatistics.vue").catch(() => {
