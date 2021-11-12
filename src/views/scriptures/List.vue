@@ -1,6 +1,6 @@
 <template>
     <!-- TODO: Define correct classes. -->
-    <div>
+    <div v-if="Scriptures.length">
         <scripture-card
             class="max-w-md cursor-pointer"
             @click="scripture.view()" 
@@ -14,19 +14,17 @@
 <script lang="ts">
 import { ScriptureCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "scripture-list",
     components: {
         ScriptureCard,
     },
-})
-export default class ScriptureList extends Vue {
-    private service = scriptures;
-
-    public get Scriptures() {
-        return this.service.Scriptures;
-    }
-}
+    computed: {
+        Scriptures() {
+            return scriptures.Scriptures;
+        },
+    },
+});
 </script>

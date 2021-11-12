@@ -7,38 +7,38 @@
 </template>
 <script lang="ts">
 import Book from "@/classes/scriptures/book";
-import scriptures from "@/services/modules/scriptures";
-import { Options, Vue } from "vue-class-component";
 import { BookCard } from "@/components/scriptures";
+import scriptures from "@/services/modules/scriptures";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "book-view",
     components: {
         BookCard,
     },
-})
-export default class BookView extends Vue {
-    private service = scriptures;
-
-    public book: Book | null = null;
-
+    data() {
+        return {
+            book: null as Book | null,
+        };
+    },
     async mounted() {
         await this.load();
-    }
+    },
+    methods: {
+        async load() {
+            this.book = await scriptures.getCurrentBook();
+            if (!this.book) {
+                const { bookId } = this.$route.params as {[key: string]: string};
+                const translation = await scriptures.getCurrentTranslation();
 
-    private async load() {
-        this.book = await this.service.getCurrentBook();
-        if (!this.book) {
-            const { bookId } = this.$route.params as {[key: string]: string};
-            const translation = await this.service.getCurrentTranslation();
+                if (translation && bookId)
+                    this.book = await scriptures.getBook(translation.id, bookId);
 
-            if (translation && bookId)
-                this.book = await this.service.getBook(translation.id, bookId);
-
-            if (this.book) {
-                this.service.setBook(this.book.number);
+                if (this.book) {
+                    scriptures.setBook(this.book.number);
+                }
             }
-        }
-    }
-}
+        },
+    },
+});
 </script>

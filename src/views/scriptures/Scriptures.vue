@@ -1,17 +1,22 @@
 <template>
-    <div>
+    <div v-if="loaded">
         <router-view />
     </div>
 </template>
 <script lang="ts">
 import scriptures from "@/services/modules/scriptures";
-import { Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-export default class Scriptures extends Vue {
-    private service = scriptures;
-
+export default defineComponent({
+    name: "scriptures",
     async mounted() {
-        await this.service.initialize();
-    }
-}
+        await scriptures.initialize();
+        this.loaded = true;
+    },
+    data() {
+        return {
+            loaded: false,
+        };
+    },
+});
 </script>
