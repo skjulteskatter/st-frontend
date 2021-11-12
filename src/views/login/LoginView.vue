@@ -261,13 +261,7 @@ export default class Login extends Vue {
 }
 </script>
 <style lang="scss">
-
 .login-image {
     object-fit: contain;
-}
-
-.pattern {
-    background-color: #213f47;
-    background-image: url("/img/login-bg.svg");
 }
 </style>

@@ -35,3 +35,9 @@ export default class LoginPage extends Vue {
     }
 }
 </script>
+<style lang="scss">
+.pattern {
+    background-color: #213f47;
+    background-image: url("/img/login-bg.svg");
+}
+</style>
