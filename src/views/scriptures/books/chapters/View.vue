@@ -17,54 +17,52 @@
 import Chapter from "@/classes/scriptures/chapter";
 import Verse from "@/classes/scriptures/verse";
 import scriptures from "@/services/modules/scriptures";
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "chapter-view",
-})
-export default class ChapterView extends Vue {
-    private service = scriptures;
-
-    public loading = false;
-
-    public selectedWords: {
-        [verseKey: string]: {
-            [index: number]: boolean;
+    data() {
+        return {
+            loading: false,
+            chapter: null as Chapter | null,
+            verses: null as Verse[] | null,
+            selectedWords: {} as {
+                [verseKey: string]: {
+                    [index: number]: boolean;
+                };
+            },
         };
-    } = {};
-
-    public chapter: Chapter | null = null;
-    private verses: Verse[] | null = null;
-
-    public get Verses() {
-        return this.verses?.map(v => {
-            return {
-                number: v.number,
-                key: v.key,
-                content: v.content.split(" "),
-            };
-        }) ?? [];
-    }
-
-    async mounted() {
+    },
+    async mounted(){
         await this.load();
-    }
+    },
+    computed: {
+        Verses() {
+            return ((this as unknown as {verses?: Verse[]}).verses)?.map(v => {
+                return {
+                    number: v.number,
+                    key: v.key,
+                    content: v.content.split(" "),
+                };
+            }) ?? [];
+        },
+    },
+    methods: {
+        async load() {
+            this.loading = true;
+            const {bookId, chapterId} = this.$route.params as {[key: string]: string};
+            const translation = await scriptures.getCurrentTranslation();
 
-    private async load() {
-        this.loading = true;
-        const {bookId, chapterId} = this.$route.params as {[key: string]: string};
-        const translation = await this.service.getCurrentTranslation();
-
-        if (translation && bookId && chapterId) {
-            this.chapter = await this.service.getChapter(translation.id, bookId, chapterId);
-            this.verses = await this.service.getVerses(translation.id, bookId, chapterId);
-        }
-        this.loading = false;
-    }
-
-    public selectWord(verseId: string, wordIndex: number) {
-        this.selectedWords[verseId] ??= [];
-        this.selectedWords[verseId][wordIndex] = !this.selectedWords[verseId][wordIndex];
-    }
-}
+            if (translation && bookId && chapterId) {
+                this.chapter = await scriptures.getChapter(translation.id, bookId, chapterId);
+                this.verses = await scriptures.getVerses(translation.id, bookId, chapterId);
+            }
+            this.loading = false;
+        },
+        selectWord(verseId: string, wordIndex: number) {
+            this.selectedWords[verseId] ??= [];
+            this.selectedWords[verseId][wordIndex] = !this.selectedWords[verseId][wordIndex];
+        },
+    },
+});
 </script>

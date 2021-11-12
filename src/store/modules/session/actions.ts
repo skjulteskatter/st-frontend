@@ -63,7 +63,7 @@ async function init(state: State, commit: Commit): Promise<void> {
         commit(SessionMutationTypes.SET_LOG_ITEMS, a);
     });
 
-    if (router.currentRoute.value.name == "login") {
+    if (["login-page", "login-view", "create-user-view"].includes(router.currentRoute.value.name?.toString() ?? "")) {
         router.push(state.redirect ?? "/");
     }
     await ensureLanguageIsFetched();

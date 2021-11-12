@@ -57,6 +57,7 @@
                         :placeholder="$t('common_search')"
                         v-model="searchString"
                         @search="search"
+                        @keyup="filterByNumber"
                     />
                 </div>
                 <loader :loading="loadingList" v-if="!loading">
@@ -225,16 +226,22 @@ export default class SongList extends Vue {
     public async setListType(value: Sort) {
         if (this.listType !== value) {
             this.listType = value;
+            this.searchString = "";
             await this.loadList();
         }
+    }
+
+    public filterByNumber() {
+        if(!this.collection) return;
+        this.list = this.collection.Lists[this.listType](this.searchNumber);
     }
 
     public async loadList() {
         this.loadingList = true;
         if (this.collection) {
-            await new Promise(r => setTimeout(r, 100));
+            await new Promise(r => setTimeout(r, 1));
             this.collection.getList(this.listType);
-            this.list = this.collection.Lists[this.listType](this.searchNumber);
+            this.filterByNumber();
         }
         this.loadingList = false;
     }

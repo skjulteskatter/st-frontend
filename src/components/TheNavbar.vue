@@ -147,7 +147,7 @@ export default class TheNavbar extends Vue {
 			},
 			{
 				name: `${this.$t("common_your")} ${this.$t("common_collections").toLocaleLowerCase()}`,
-				path: "/playlists",
+				path: "/custom-collections",
 			},
 			{
 				name: this.$t("favorites"),
@@ -179,7 +179,6 @@ export default class TheNavbar extends Vue {
 	}
 }
 </script>
-
 <style scoped>
 .router-link-exact-active {
 	@apply text-primary;

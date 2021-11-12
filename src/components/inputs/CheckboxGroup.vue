@@ -3,28 +3,26 @@
 		<label class="font-bold">
 			{{ name }}
 		</label>
-		<label
-			class="flex items-center gap-2"
-			v-for="label in Labels"
-			:key="label"
-		>
-			<input
-				v-model="Values[label]"
-				type="checkbox"
-				:name="label"
-				class="border-gray-300 rounded text-primary focus:ring-primary"
-				@change="action"
-			/>
-			{{ $t(`types_${label}`) }}
-		</label>
+		<checkbox 
+			v-for="(label, i) in Labels"
+			:key="i"
+			v-model="Values[label]"
+			@input="(v) => Values[label] = v"
+			@change="action"
+			:label="$t(`types_${label}`)"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
+import Checkbox from "./Checkbox.vue";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
 	name: "checkbox-group",
+	components: {
+		Checkbox,
+	},
 	props: {
 		name: {
 			type: String,

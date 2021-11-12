@@ -302,6 +302,18 @@ declare module "songtreasures" {
         number: number;
         content: string;
     }
+    
+    interface Notification {
+        id?: string;
+        type: "warning" | "error" | "success" | "info";
+        title: string;
+        icon: string;
+        content?: string;
+        timeout?: number;
+        dateTime?: Date;
+        callback?: Function;
+        store?: boolean;
+    }
 }
 
 interface Verse {

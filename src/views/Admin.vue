@@ -5,58 +5,6 @@
             <copy-to-clipboard :content="token" label="API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-4">
-            <!-- <base-card>
-                <div class="flex flex-wrap gap-2">
-                    <base-card
-                        v-for="collection in collections"
-                        :key="collection.id"
-                        border
-                        secondary
-                    >
-                        <b class="block">{{ collection.key }}</b>
-                        <base-button
-                            :loading="loadingClearCache.includes(collection.id)"
-                            @click="clearCollection(collection.id)"
-                            theme="error"
-                            icon="trash"
-                        >
-                            {{ $t("admin_clearcache") }}
-                        </base-button>
-                    </base-card>
-                    <base-button
-                        @click="clearCollection('Landax')"
-                        icon="trash"
-                        theme="error"
-                        :loading="loadingClearCache.includes('Landax')"
-                    >
-                        Clear Landax
-                    </base-button> 
-                    <base-button
-                        @click="clearCollection('Import')"
-                        icon="refresh"
-                        theme="error"
-                        :loading="loadingClearCache.includes('Import')"
-                    >
-                        Import from Landax
-                    </base-button>
-                    <base-button
-                        @click="clearCollection('Index')"
-                        icon="refresh"
-                        theme="secondary"
-                        :loading="loadingClearCache.includes('Index')"
-                    >
-                        Index Songs
-                    </base-button>
-                    <base-button
-                        @click="syncFiles()"
-                        icon="refresh"
-                        theme="secondary"
-                        :loading="loadingSync"
-                    >
-                        Files
-                    </base-button>
-                </div>
-            </base-card> -->
             <users-list :users="users" :currentUser="currentUser"></users-list>
         </div>
     </div>
@@ -64,7 +12,6 @@
         <h1>{{ $t("admin_noAccess") }}</h1>
     </div>
 </template>
-
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { UsersList } from "@/components";

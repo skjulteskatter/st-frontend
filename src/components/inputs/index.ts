@@ -7,10 +7,14 @@ import FullSearchInput from "./FullSearchInput.vue";
 import BaseInput from "./BaseInput.vue";
 import CopyToClipboard from "./CopyToClipboard.vue";
 import SongFilterSelect from "./SongFilterSelect.vue";
+import Checkbox from "./Checkbox.vue";
+import CheckboxList from "./CheckboxList.vue";
 
 export {
     ButtonGroup,
     BaseDropdown,
+    Checkbox,
+    CheckboxList,
     SongFilterDropdown,
     SearchInput,
     SearchResultItemCard,

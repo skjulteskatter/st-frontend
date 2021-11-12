@@ -1,5 +1,5 @@
-const ChapterView = () => import(/* webpackChunkName: 'chapterView' */ "./View.vue");
-const ChapterList = () => import(/* webpackChunkName: 'chapterList' */ "./List.vue");
+const ChapterView = () => import(/* webpackChunkName: 'scriptures' */ "./View.vue");
+const ChapterList = () => import(/* webpackChunkName: 'scriptures' */ "./List.vue");
 
 export {
     ChapterList,
