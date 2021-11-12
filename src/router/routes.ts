@@ -1,3 +1,4 @@
+import { CreateUserView, LoginPage, LoginView } from "@/views";
 import { 
     BookList, 
     BookView, 
@@ -61,9 +62,6 @@ const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ "..
     window.location.reload();
 });
 
-const Login = () => import(/* webpackChunkName: 'login' */ "../views/Login.vue").catch(() => {
-    window.location.reload();
-});
 const CreateUser = () => import(/* webpackChunkName: 'createUser' */ "../views/CreateUser.vue").catch(() => {
     window.location.reload();
 });
@@ -265,8 +263,21 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: "/login",
-        name: "login",
-        component: Login,
+        name: "login-page",
+        component: LoginPage,
+        children: [
+            {
+                path: "",
+                name: "login-view",
+                component: LoginView,
+            },
+            {
+                path: "create",
+                alias: "/create",
+                name: "create-user-view",
+                component: CreateUserView,
+            },
+        ],
     },
     {
         path: "/create",

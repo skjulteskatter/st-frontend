@@ -125,7 +125,7 @@ export default class StackedLayout extends Vue {
         }, 5000);
 
         if (!this.user) {
-            this.$router.push({ name: "login" });
+            this.$router.push({ name: "login-page" });
         } else {
             if (!this.store.getters.stripeInitialized) {
                 await this.store.dispatch(
