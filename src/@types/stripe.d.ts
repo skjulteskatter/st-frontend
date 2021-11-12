@@ -1,4 +1,3 @@
-
 declare module "checkout" {
     interface SessionRequest {
         productIds: string[];
