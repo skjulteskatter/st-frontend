@@ -1,7 +1,14 @@
 <template>
     <base-button @click="show = !show" class="mb-2">Select Translation</base-button>
     <div v-if="show">
-        <div class="flex flex-col gap-2 mb-2" v-if="languages">
+        <checkbox-list
+            v-if="checkboxData"
+            :items="checkboxData"
+            :title="$t('common_language')"
+            @change="checkboxData = checkboxData"
+        />
+
+        <!-- <div class="flex flex-col gap-2 mb-2" v-if="languages">
             <label class="font-bold">
                 {{ $t('common_language') }}
             </label>
@@ -18,7 +25,7 @@
                 />
                 {{ l.name }}
             </label>
-        </div>
+        </div> -->
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
             <translation-card :translation="translation" @click="setTranslation(translation)" />
         </div>
@@ -27,11 +34,13 @@
 <script lang="ts">
 import Translation from "@/classes/scriptures/translation";
 import { Options, Vue } from "vue-class-component";
+import { CheckboxList } from "@/components/inputs";
 import TranslationCard from "./TranslationCard.vue";
 
 @Options({
     name: "select-translation",
     components: {
+        CheckboxList,
         TranslationCard,
     },
     props: {
@@ -40,9 +49,11 @@ import TranslationCard from "./TranslationCard.vue";
         },
         translations: {
             type: Array,
+            required: true,
         },
         languages: {
             type: Array,
+            required: true,
         },
         filterOnLanguages: {
             type: Object,
@@ -60,9 +71,37 @@ export default class SelectTranslation extends Vue {
     public languages?: Language[];
     public filterOnLanguages?: ILocale<boolean>;
 
+    mounted() {
+        // this.checkboxData = [];
+
+        // for (const language of this.languages ?? []) {
+        //     this.checkboxData.push({
+        //         key: language.key,
+        //         label: language.name,
+        //         value: this.filterOnLanguages?.[language.key] === true,
+        //     });
+        // }
+    }
+
+    public get checkboxData() {
+        return this.languages?.map(l => {
+            return {
+                key: l.key,
+                label: l.name,
+                value: this.FilterOnLanguages[l.key] === true,
+            };
+        }) ?? [];
+    }
+
+    public set checkboxData(v) {
+        for (const data of v) {
+            this.FilterOnLanguages[data.key] = data.value;
+        }
+    }
     public get FilterOnLanguages() {
         return this.filterOnLanguages ?? {};
     }
+
     public set FilterOnLanguages(v) {
         this.filterOnLanguages = v;
     }

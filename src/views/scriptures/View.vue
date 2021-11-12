@@ -2,7 +2,8 @@
     <div v-if="scripture">
         <div>
             <h1 class="text-xl">{{scripture.title.default}}</h1>
-            <select-translation 
+            <select-translation
+                v-if="loaded"
                 :filterOnLanguages="filterOnLanguages" 
                 :languages="languages"
                 :translation="translation"
@@ -37,6 +38,8 @@ export default class ScriptureView extends Vue {
     public languages: Language[] | null = null;
     public filterOnLanguages: ILocale<boolean> | null = null;
 
+    public loaded = false;
+
     async mounted() {
         await this.load();
     }
@@ -55,6 +58,7 @@ export default class ScriptureView extends Vue {
                 a[b.key] = appSession.user.settings.languageKey === b.key;
                 return a;
             }, {} as ILocale<boolean>);
+            this.loaded = true;
         }
     }
 

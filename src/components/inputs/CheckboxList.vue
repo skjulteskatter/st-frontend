@@ -7,7 +7,6 @@
 			v-for="item in Items"
 			:key="item.key"
 			v-model="item.value"
-			@input="(v) => item.value = v"
 			:label="item.label"
 		/>
 	</div>

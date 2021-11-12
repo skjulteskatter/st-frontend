@@ -1,10 +1,8 @@
 <template>
     <label class="checkbox">
         <input
-            v-bind:checked="value"
-            @input="$emit('input', $event.target.checked)"
-            ref="input"
-
+            :checked="modelValue"
+            @input="$emit('update:modelValue', $event.target.checked)"
             type="checkbox"
             :name="label"
             class="border-gray-300 rounded text-primary focus:ring-primary"
@@ -18,7 +16,7 @@ import { Options, Vue } from "vue-class-component";
 @Options({
     name: "checkbox",
     props: {
-        value: {
+        modelValue: {
             type: Boolean,
         },
         label: {
@@ -26,11 +24,11 @@ import { Options, Vue } from "vue-class-component";
         },
     },
     emits: [
-        "input",
+        "update:modelValue",
     ],
 })
 export default class Checkbox extends Vue {
     public label?: string;
-    public value?: boolean;
+    public modelValue?: boolean;
 }
 </script>
