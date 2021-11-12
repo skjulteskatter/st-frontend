@@ -13,31 +13,32 @@
 <script lang="ts">
 import Chapter from "@/classes/scriptures/chapter";
 import scriptures from "@/services/modules/scriptures";
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "chapter-list",
-})
-export default class ChapterList extends Vue {
-    private service = scriptures;
-
-    private chapters: Chapter[] | null = null;
-
-    public get Chapters() {
-        return this.chapters ?? [];
-    }
-
+    data() {
+        return {
+            chapters: null as Chapter[] | null,
+        };
+    },
+    computed: {
+        Chapters(): Chapter[] {
+            return this.chapters ?? [];
+        },
+    },
     async mounted() {
         await this.load();
-    }
+    },
+    methods: {
+        async load() {
+            const { bookId } = this.$route.params as {[key: string]: string | undefined};
+            const translation = await scriptures.getCurrentTranslation();
 
-    private async load() {
-        const { bookId } = this.$route.params as {[key: string]: string | undefined};
-        const translation = await this.service.getCurrentTranslation();
-
-        if (translation && bookId) {
-            this.chapters = await this.service.getChapters(translation.id, bookId);
-        }
-    }
-}
+            if (translation && bookId) {
+                this.chapters = await scriptures.getChapters(translation.id, bookId);
+            }
+        },
+    },
+});
 </script>
