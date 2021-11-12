@@ -56,7 +56,7 @@ import { notify } from "@/services/notify";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
-    name: "playlist-overview",
+    name: "playlist-list",
     components: {
         BaseModal,
         PlaylistCard,
@@ -69,7 +69,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
         ExclamationIcon,
     },
 })
-export default class PlaylistOverview extends Vue {
+export default class PlaylistList extends Vue {
     private store = useStore();
     public createPlaylist = false;
     public showModal = false;

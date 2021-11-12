@@ -1,5 +1,10 @@
-import { CreateUserView, LoginPage, LoginView } from "@/views";
 import { 
+    Collections,
+    CollectionList,
+    CollectionView,
+    CreateUserView, 
+    LoginPage, 
+    LoginView,
     BookList, 
     BookView, 
     ChapterList, 
@@ -7,10 +12,20 @@ import {
     ScriptureList, 
     Scriptures, 
     ScriptureView,
-} from "@/views/scriptures";
+    Playlists,
+    PlaylistList,
+    PlaylistView,
+} from "@/views";
+
 import { RouteRecordRaw } from "vue-router";
 
-import StackedLayout from "../layout/StackedLayout.vue";
+import StackedLayout from "@/layout/StackedLayout.vue";
+
+function getComponent<T>(func: () => Promise<T>) {
+    return () => func().catch(() => {
+        window.location.reload();
+    });
+} 
 
 const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue").catch(() => {
     window.location.reload();
@@ -37,32 +52,7 @@ const ContributorView = () => import(/* webpackChunkName: 'contributor' */ "../v
     window.location.reload();
 });
 
-const CollectionView = () => import(/* webpackChunkName: 'store' */ "../views/CollectionView.vue").catch(() => {
-    window.location.reload();
-});
-const CollectionItem = () => import(/* webpackChunkName: 'store-item' */ "../views/collections/CollectionItem.vue").catch(() => {
-    window.location.reload();
-});
-const CollectionList = () => import(/* webpackChunkName: 'store-home' */ "../views/collections/CollectionList.vue").catch(() => {
-    window.location.reload();
-});
-
-const Playlist = () => import(/* webpackChunkName: 'playlist' */ "../views/playlist/Playlist.vue").catch(() => {
-    window.location.reload();
-});
-const PlaylistView = () => import(/* webpackChunkName: 'playlist-view' */ "../views/playlist/PlaylistView.vue").catch(() => {
-    window.location.reload();
-});
-const PlaylistOverview = () => import(/* webpackChunkName: 'playlist-overview' */ "../views/playlist/PlaylistOverview.vue").catch(() => {
-    window.location.reload();
-});
-
-
 const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ "../views/dashboard/CompleteSearch.vue").catch(() => {
-    window.location.reload();
-});
-
-const CreateUser = () => import(/* webpackChunkName: 'createUser' */ "../views/CreateUser.vue").catch(() => {
     window.location.reload();
 });
 
@@ -113,75 +103,75 @@ const routes: Array<RouteRecordRaw> = [
                 path: "",
                 name: "main",
                 alias: "/dashboard",
-                component: Dashboard,
+                component: getComponent(Dashboard),
             },
             {
                 path: "credit",
                 name: "credit",
-                component: CreditSong,
+                component: getComponent(CreditSong),
             },
             {
                 path: "admin",
                 name: "admin",
-                component: Admin,
+                component: getComponent(Admin),
             },
             {
                 path: "tags",
                 name: "tags",
-                component: TagList,
+                component: getComponent(TagList),
             },
             {
                 path: "tags/:id",
                 name: "tag",
-                component: TagView,
+                component: getComponent(TagView),
             },
             {
                 path: "statistics/:id",
                 name: "song-stats",
-                component: SongStatistics,
+                component: getComponent(SongStatistics),
             },
             {
                 path: "songs",
                 name: "songs",
-                component: SongSelector,
+                component: getComponent(SongSelector),
                 children: [
                     {
                         path: ":collection",
                         name: "song-list",
-                        component: SongList,
+                        component: getComponent(SongList),
                     },
                     {
                         path: ":collection/:number",
                         name: "song",
-                        component: SongViewer,
+                        component: getComponent(SongViewer),
                     },
                     {
                         path: "search",
                         name: "search",
-                        component: CompleteSearch,
+                        component: getComponent(CompleteSearch),
                     },
                 ],
             },
             {
                 path: "contributors/:contributor",
                 name: "contributor",
-                component: ContributorView,
+                component: getComponent(ContributorView),
             },
             {
                 path: "collections",
                 alias: "store",
                 name: "collections",
-                component: CollectionView,
+                component: getComponent(Collections),
                 children: [
                     {
                         path: "",
                         name: "collection-list",
-                        component: CollectionList,
+                        component: getComponent(CollectionList),
                     },
                     {
                         path: ":id",
                         name: "collection-item",
-                        component: CollectionItem,
+                        component: getComponent(CollectionView),
                     },
                 ],
             },
@@ -189,69 +179,70 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: "settings",
                 name: "settings",
-                component: SettingsView,
+                component: getComponent(SettingsView),
             },
             {
-                path: "/playlists",
-                name: "playlists",
-                component: Playlist,
+                path: "/custom-collections",
+                alias: "/playlists",
+                name: "custom-collections",
+                component: getComponent(Playlists),
                 children: [
                     {
                         path: "",
                         name: "playlist-overview",
-                        component: PlaylistOverview,
+                        component: getComponent(PlaylistList),
                     },
                     {
                         path: ":id",
                         name: "playlist-view",
-                        component: PlaylistView,
+                        component: getComponent(PlaylistView),
                     },
                 ],
             },
             {
                 path: "sharing",
                 name: "sharing",
-                component: RedeemToken,
+                component: getComponent(RedeemToken),
             },
             {
                 path: "/favorites",
                 name: "favorites",
-                component: FavoritesView,
+                component: getComponent(FavoritesView),
             },
             {
                 path: "/scriptures",
                 name: "scriptures",
-                component: Scriptures,
+                component: getComponent(Scriptures),
                 children: [
                     {
                         path: "",
                         name: "scripture-list",
-                        component: ScriptureList,
+                        component: getComponent(ScriptureList),
                     },
                     {
                         path: ":scriptureId",
                         name: "scripture-view",
-                        component: ScriptureView,
+                        component: getComponent(ScriptureView),
                         children: [
                             {
                                 path: "",
                                 name: "book-list",
-                                component: BookList,
+                                component: getComponent(BookList),
                             },
                             {
                                 path: ":bookId",
                                 name: "book-view",
-                                component: BookView,
+                                component: getComponent(BookView),
                                 children: [
                                     {
                                         path: "",
                                         name: "chapter-list",
-                                        component: ChapterList,
+                                        component: getComponent(ChapterList),
                                     },
                                     {
                                         path: ":chapterId",
                                         name: "chapter-view",
-                                        component: ChapterView,
+                                        component: getComponent(ChapterView),
                                     },
                                 ],
                             },
@@ -264,70 +255,55 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/login",
         name: "login-page",
-        component: LoginPage,
+        component: getComponent(LoginPage),
         children: [
             {
                 path: "",
                 name: "login-view",
-                component: LoginView,
+                component: getComponent(LoginView),
             },
             {
                 path: "create",
                 alias: "/create",
                 name: "create-user-view",
-                component: CreateUserView,
+                component: getComponent(CreateUserView),
             },
         ],
     },
     {
-        path: "/create",
-        name: "create-user",
-        component: CreateUser,
-    },
-    // {
-    //     path: "/lyrics",
-    //     name: "lyrics",
-    //     component: LyricsViewer,
-    // },
-    {
         path: "/presentation",
         name: "presentation-view",
-        component: PresentationView,
+        component: getComponent(PresentationView),
     },
-    // {
-    //     path: "/karaoke",
-    //     name: "karaoke",
-    //     component: KaraokeViewer,
-    // },
     {
         path: "/success",
         name: "success",
-        component: Success,
+        component: getComponent(Success),
     },
     {
         path: "/verify-email",
         name: "verify-email",
-        component: VerifyEmail,
+        component: getComponent(VerifyEmail),
     },
     {
         path: "/:pathMatch(.*)*",
         name: "not-found",
-        component: NotFound,
+        component: getComponent(NotFound),
     },
     {
         path: "/sheetmusic/:id",
         name: "sheet-music-embed",
-        component: SheetMusic,
+        component: getComponent(SheetMusic),
     },
     {
         path: "/sheetmusic",
         name: "sheet-music",
-        component: SheetMusic,
+        component: getComponent(SheetMusic),
     },
     {
         path: "/print",
         name: "print",
-        component: PrintView,
+        component: getComponent(PrintView),
     },
 ];
 
