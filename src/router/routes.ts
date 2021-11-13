@@ -251,18 +251,18 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/login",
         name: "login-page",
-        component: getComponent(LoginPage),
+        component: LoginPage,
         children: [
             {
                 path: "",
                 name: "login-view",
-                component: getComponent(LoginView),
+                component: LoginView,
             },
             {
                 path: "create",
                 alias: "/create",
                 name: "create-user-view",
-                component: getComponent(CreateUserView),
+                component: CreateUserView,
             },
         ],
     },
