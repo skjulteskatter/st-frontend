@@ -1,6 +1,6 @@
 <template>
-    <div id="presentation-view" :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
-        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? '' : 'bg-gray-100']">
+    <div id="presentation-view" :class="['flex h-full', theme == 'dark' ? 'text-white bg-[#101010]' : 'text-[#101010] bg-white']">
+        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? 'bg-black' : 'bg-gray-100']">
             <img class="w-full drop-shadow-sm" :src="`/img/collections/wotl/${logoLanguageKey}.png`" v-if="Collection?.key == 'HV'" />
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
