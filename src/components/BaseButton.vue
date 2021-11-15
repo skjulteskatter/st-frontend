@@ -83,7 +83,7 @@ export default class BaseButton extends Vue {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(white, 0.15);
+            background: rgba(white, 0.1);
             z-index: 1;
         }
     }
