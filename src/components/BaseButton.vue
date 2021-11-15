@@ -1,6 +1,6 @@
 <template>
     <button
-        class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+        class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 active:text-opacity-50"
         :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'button--disabled': disabled }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
@@ -94,11 +94,15 @@ export default class BaseButton extends Vue {
 
     &--secondary {
         background-color: var(--st-color-secondary);
-        color: var(--st-color-text-dm);
     }
 
     &--tertiary {
         @apply text-primary hover:bg-primary/20 dark:hover:bg-transparent;
+
+        &:hover:after {
+            content: "";
+            display: none;
+        }
     }
 
     &--warning {

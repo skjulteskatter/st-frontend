@@ -15,7 +15,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      textOpacity: ["active"],
+    },
   },
   plugins: [
     require("@tailwindcss/forms"),
