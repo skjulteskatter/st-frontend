@@ -119,8 +119,8 @@
                                 @previous="previous()"
                                 @mute="control.mute()"
                             />
-                            <theme-selector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
                             <song-selector :songs="collection?.songs" @setSong="setSong" />
+                            <theme-selector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
                         </div>
                     </aside>
                 </div>
