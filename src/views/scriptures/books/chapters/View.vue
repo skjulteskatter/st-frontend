@@ -1,16 +1,16 @@
 <template>
     <div class="flex justify-center">
-        <base-card class="max-w-md" v-if="chapter">
-            <template #header>
-                {{chapter.number}}
-            </template>
-            <loader :loading="loading">
-                <p class="mb-2" v-for="v in Verses" :key="v.key">
-                    <span class="text-lg mr-2">{{v.number}}</span>
-                    <span :style="{'text-decoration': selectedWords[v.key]?.[i] ? 'underline' : ''}" @click="selectWord(v.key, i)" v-for="(word, i) in v.content" :key="i" v-html="word + ' '"/>
-                </p>
-            </loader>
-        </base-card>
+        <loader :loading="loading">
+            <base-card class="max-w-md" v-if="chapter">
+                <template #header>
+                    {{chapter.number}}
+                </template>
+                    <p class="mb-2" v-for="v in Verses" :key="v.key">
+                        <span class="text-lg mr-2">{{v.number}}</span>
+                        <span :style="{'text-decoration': selectedWords[v.key]?.[i] ? 'underline' : ''}" @click="selectWord(v.key, i)" v-for="(word, i) in v.content" :key="i" v-html="word + ' '"/>
+                    </p>
+            </base-card>
+        </loader>
     </div>
 </template>
 <script lang="ts">

@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div class="flex justify-center">
         <loader :loading="!books" />
-        <div class="flex gap-2 flex-wrap">
+        <base-list :items="Books" :nameSelector="(i) => i.title" :clickCallback="(i) => setBook(i)"/>
+        <!-- <div class="flex gap-2 flex-wrap">
             <div class="mb-2" v-for="book in Books" :key="book.id">
                 <button 
                     @click="setBook(book)"
@@ -10,16 +11,20 @@
                     {{book.title}}
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script lang="ts">
 import Book from "@/classes/scriptures/book";
+import BaseList from "@/components/BaseList.vue";
 import scriptures from "@/services/modules/scriptures";
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
     name: "book-list",
+    components: {
+        BaseList,
+    },
     data() {
         return {
             books: null as Book[] | null,

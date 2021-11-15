@@ -4,14 +4,16 @@ import i18n from "./i18n";
 import router from "./router";
 import { store } from "@/store";
 import "tailwindcss/tailwind.css";
+import "@/style/main.scss";
+import "@/style/tailwind.css";
 
 // GLOBAL COMPONENTS
 import { 
-    Loader,
-    BaseButton,
-    Tooltip,
-    BaseCard,
     BackButton,
+    BaseButton,
+    BaseCard,
+    Loader,
+    Tooltip,
 } from "@/components";
 import { Icon } from "./components/icon";
 import { BaseDropdown, BaseInput } from "./components/inputs";

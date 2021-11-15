@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { UsersList } from "@/components";
+import { UsersList } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import api from "@/services/api";
 import auth from "@/services/auth";

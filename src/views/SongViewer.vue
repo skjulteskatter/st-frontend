@@ -157,15 +157,17 @@
 import { SongInfoCard, SongMediaCard, SongTags } from "@/components/songs";
 import { Options, Vue } from "vue-class-component";
 import {
-    PresentationControlPanel,
-    PresentationPreview,
-    ThemeSelector,
-    SongSelector,
     LyricsCard,
     BackButton,
     Modal,
     BaseModal,
 } from "@/components";
+import {
+    PresentationControlPanel,
+    PresentationPreview,
+    ThemeSelector,
+    SongSelector,
+} from "@/components/presentation";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, DesktopComputerIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
