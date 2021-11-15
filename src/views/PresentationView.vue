@@ -1,10 +1,10 @@
 <template>
     <div id="presentation-view" :class="['flex h-full', theme == 'dark' ? 'text-white bg-black' : 'text-black bg-white']">
-        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? 'bg-white/5' : 'bg-gray-100']">
+        <aside v-if="showSideBar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? '' : 'bg-gray-100']">
             <img class="w-full drop-shadow-sm" :src="`/img/collections/wotl/${logoLanguageKey}.png`" v-if="Collection?.key == 'HV'" />
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
-        <div class="text-3xl h-full flex-grow">
+        <div class="text-3xl h-full flex-grow flex flex-col">
             <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSideBar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
                 <h1 class="text-6xl" v-if="song.number">{{ song.number }}</h1>
@@ -75,28 +75,7 @@
                     </div>
                 </div>
             </div>
-            <div :class="{'hidden': muted}" class="verses" id="presentation-content">
-                <div
-                    class="relative verse"
-                    :class="{ 'italic ml-8': verse.type == 'chorus' }"
-                    v-for="(verse, i) in Verses"
-                    :key="i + '_' + verse"
-                >
-                    <span
-                        class="absolute verse-name"
-                        v-if="verse.type != 'chorus'"
-                        >{{ verse.name }}</span
-                    >
-                    <p
-                        class="line"
-                        :class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
-                        v-for="(line, i) in verse.content"
-                        :key="i + '_' + line"
-                    >
-                        {{ line }}
-                    </p>
-                </div>
-            </div>
+            <PresentationLyrics v-if="verses" :verses="verses" :class="{ 'hidden': muted }" />
         </div>
     </div>
 </template>
@@ -105,8 +84,15 @@ import { Lyrics, Song } from "@/classes";
 import { viewer } from "@/classes/presentation/viewer";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
+import { PresentationLyrics } from "@/components/presentation";
 
+@Options({
+    name: "presentation-view",
+    components: {
+        PresentationLyrics,
+    },
+})
 export default class PresentationView extends Vue {
     public viewer = viewer;
     private store = useStore();
@@ -142,8 +128,6 @@ export default class PresentationView extends Vue {
         this.verses = viewer.Verses;
         this.showSideBar = viewer.Settings?.showSideBar === true;
 
-        // this.rerender();
-
         viewer.registerCallback("lyrics", () => {
             this.lyrics = viewer.Lyrics;
             this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
@@ -169,16 +153,18 @@ export default class PresentationView extends Vue {
         });
     }
 
-    public async rerender() {
-        await new Promise(r => setTimeout(r, 100));
-        const content = document.getElementById("presentation-content") as HTMLDivElement;
-
-        let currentFontSize = content.style.fontSize ? parseInt(content.style.fontSize.replace(/[^0-9]/g, "")) : 16;
-        while (content.parentElement && content.clientHeight < content.parentElement?.clientHeight) {
-            currentFontSize++;
-            content.style.fontSize = currentFontSize + "px";
-            content.style.lineHeight = currentFontSize + "px";
-        }
+    public unmounted() {
+        // Prevent memory leaks
+        removeEventListener("keydown", (e) => {
+            if (e.key == "ArrowRight") {
+                viewer.next();
+                this.verses = viewer.Verses;
+            }
+            if (e.key == "ArrowLeft") {
+                viewer.previous();
+                this.verses = viewer.Verses;
+            }
+        });
     }
 
     public get melodyOrigin() {
@@ -201,36 +187,3 @@ export default class PresentationView extends Vue {
     }
 }
 </script>
-
-<style>
-
-:root {
-    --header-size: .5em;
-    --header-height: .56em;
-
-    --verse-size: .95em;
-    --verse-height: 1.07em;
-}
-
-.verses {
-    margin-left: 3em;
-    margin-top: 1em;
-    max-width: max-content;
-    font-size: clamp(var(--verse-size), 3.5vw, 3em);
-}
-.verse:not(:last-child) {
-    margin-bottom: 1em;
-}
-.line {
-    text-indent: -1em;
-    margin-left: 1em;
-    line-height: var(--verse-height);
-}
-.verse-name {
-    left: -1.5em;
-    line-height: var(--verse-height);
-}
-::-webkit-scrollbar {
-    display: none;
-}
-</style>
