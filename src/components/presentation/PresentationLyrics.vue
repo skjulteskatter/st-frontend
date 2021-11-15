@@ -48,15 +48,12 @@ export default defineComponent({
 	mounted() {
 		this.container = document.getElementById("presentation-lyrics");
 		this.element = document.getElementById("verses");
+		
+		this.calculateFontSize();
+		this.calculateLineHeight();
+		this.calculateWhitespace();
 
-		setTimeout(() => {
-			// Calculate everything on mount
-			this.calculateFontSize();
-			this.calculateLineHeight();
-			this.calculateWhitespace();
-
-			this.setProperties();
-		}, 100);
+		this.setProperties();
 	},
 	methods: {
 		setProperties() {
