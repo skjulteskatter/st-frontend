@@ -3,8 +3,8 @@
 		<div id="verses">
 			<div
 				class="relative verse"
-				v-for="(verse, i) in Verses"
-				:key="i + '_' + verse"
+				v-for="(verse, i) in verses"
+				:key="i"
 				:class="{ 'ml-8': verse.type == 'chorus' }"
 			>
 				<span class="absolute verse-name" v-if="verse.type != 'chorus'">
@@ -24,85 +24,77 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "vue";
 
-@Options({
-	name: "presentation-lyrics",
+export default defineComponent({
+	data() {
+		return {
+			container: null as HTMLElement | null,
+			element: null as HTMLElement | null,
+			fontSize: 0,
+			lineHeight: 0,
+			margin: {
+				top: 0,
+				left: 0,
+			},
+		};
+	},
 	props: {
 		verses: {
-			type: Array,
+			type: Array as PropType<Verse[]>,
 			required: true,
 		},
 	},
-})
-export default class PresentationLyrics extends Vue {
-	public verses?: Verse[];
-
-	private container: HTMLElement | null = {} as HTMLElement;
-	private element: HTMLElement | null = {} as HTMLElement;
-
-	private fontSize = 0;
-	private lineHeight = 0;
-	private margin = {
-		top: 0,
-		left: 0,
-	};
-
-	public mounted() {
+	mounted() {
 		this.container = document.getElementById("presentation-lyrics");
 		this.element = document.getElementById("verses");
 
-		// Calculate everything on mount
-		this.calculateFontSize();
-		this.calculateLineHeight();
-		this.calculateWhitespace();
+		setTimeout(() => {
+			// Calculate everything on mount
+			this.calculateFontSize();
+			this.calculateLineHeight();
+			this.calculateWhitespace();
 
-		this.setProperties();
-	}
+			this.setProperties();
+		}, 100);
+	},
+	methods: {
+		setProperties() {
+			if(!this.container || !this.element) return;
 
-	private setProperties() {
-		if(!this.container || !this.element) return;
+			this.container.style.fontSize = `${this.fontSize}px`;
+			this.container.style.lineHeight = `${this.lineHeight}`;
+			this.element.style.marginTop = `${this.margin.top}px`;
+			this.element.style.marginLeft = `${this.margin.left}px`;
+		},
+		calculateFontSize() {
+			if(!this.container) return;
 
-		this.container.style.fontSize = `${this.fontSize}px`;
-		this.container.style.lineHeight = `${this.lineHeight}`;
-		this.element.style.marginTop = `${this.margin.top}px`;
-		this.element.style.marginLeft = `${this.margin.left}px`;
-	}
+			const rect = this.container.getBoundingClientRect();
+			const size = Math.min(rect.width / this.verseLines.length / 8, 24) + 32;
+			this.fontSize = size;
+		},
+		calculateLineHeight() {
+			this.lineHeight = Math.min(3 / this.verseLines.length, 0.5) + 0.8;
+		},
+		calculateWhitespace() {
+			if(!this.container) return;
 
-	// Individual calculations
-	private calculateFontSize() {
-		if(!this.container) return;
-
-		const rect = this.container.getBoundingClientRect();
-		const size = Math.min(rect.width / this.verseLines.length / 8, 24) + 32;
-		this.fontSize = size;
-	}
-
-	private calculateLineHeight() {
-		this.lineHeight = Math.min(3 / this.verseLines.length, 0.5) + 0.8;
-	}
-
-	private calculateWhitespace() {
-		if(!this.container) return;
-
-		const rect = this.container.getBoundingClientRect();
-		this.margin.left = rect.width / (this.longestLine?.length / 7);
-		this.margin.top = rect.height / (this.verseLines?.length * 1.5);
-	}
-
-	// Getters
-	public get Verses() {
-		return this.verses ?? [];
-	}
-
-	public get verseLines() {
-		return this.Verses.reduce((prev, cur) => [...prev, ...cur.content], [] as string[]);
-	}
-
-	public get longestLine() {
-		return this.verseLines.sort((a,b) => b.length - a.length)[0];
-	}
-}
+			const rect = this.container.getBoundingClientRect();
+			this.margin.left = rect.width / (this.longestLine?.length / 7);
+			this.margin.top = rect.height / (this.verseLines?.length * 1.5);
+		},
+	},
+	computed: {
+		verseLines() {
+			return this.verses.reduce((prev, cur) => [...prev, ...cur.content], [] as string[]);
+		},
+		longestLine(): string {
+			const lines = this.verseLines;
+			return lines.sort((a,b) => b.length - a.length)[0];
+		},
+	},
+});
 </script>
 
 <style>
