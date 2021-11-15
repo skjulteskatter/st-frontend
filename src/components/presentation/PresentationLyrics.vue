@@ -44,12 +44,20 @@ export default defineComponent({
 			type: Array as PropType<Verse[]>,
 			required: true,
 		},
+		songId: String,
 	},
 	mounted() {
 		this.container = document.getElementById("presentation-lyrics");
 		this.element = document.getElementById("verses");
 		
 		this.render();
+	},
+	watch: {
+		songId: {
+			handler() {
+				setTimeout(this.render, 10);
+			},
+		},
 	},
 	methods: {
 		setProperties() {
