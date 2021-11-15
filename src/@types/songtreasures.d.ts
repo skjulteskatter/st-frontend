@@ -247,6 +247,7 @@ declare module "songtreasures" {
         [key: string]: {
             name: string;
             content: string[];
+            bibleReferences: BibleReference[];
         };
     }
     
@@ -301,6 +302,14 @@ declare module "songtreasures" {
         key: string;
         number: number;
         content: string;
+        bibleReferences: BibleReference[];
+    }
+
+    type BibleReference = {
+        book: number;
+        chapter: number;
+        verseFrom: number;
+        verseTo: number;
     }
     
     interface Notification {
