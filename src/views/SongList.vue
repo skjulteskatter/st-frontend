@@ -52,7 +52,7 @@
                         <SongFilterSelect @apply="loadList" />
                     </div>
                     <SearchInput
-                        class="max-w-sm"
+                        class="max-w-xs"
                         type="text"
                         :placeholder="$t('common_search')"
                         v-model="searchString"
