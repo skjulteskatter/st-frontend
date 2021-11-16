@@ -19,7 +19,7 @@ import VueApexCharts from "vue3-apexcharts";
 @Options({
 	name: "line-chart",
 	components: {
-		chart: VueApexCharts,
+		Chart: VueApexCharts,
 	},
 	props: {
 		options: {
