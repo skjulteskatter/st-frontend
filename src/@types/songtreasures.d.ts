@@ -302,7 +302,6 @@ declare module "songtreasures" {
         key: string;
         number: number;
         content: string;
-        bibleReferences: BibleReference[];
     }
 
     type BibleReference = {
