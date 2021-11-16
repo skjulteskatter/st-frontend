@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <PresentationLyrics v-if="verses" :verses="verses" :class="{ 'hidden': muted }" />
+            <PresentationLyrics v-if="verses" :verses="verses" :songId="song?.id" :class="{ 'hidden': muted }" />
         </div>
     </div>
 </template>

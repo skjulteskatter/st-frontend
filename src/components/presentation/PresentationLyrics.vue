@@ -44,6 +44,9 @@ export default defineComponent({
 			type: Array as PropType<Verse[]>,
 			required: true,
 		},
+		songId: {
+			type: String,
+		},
 	},
 	mounted() {
 		this.container = document.getElementById("presentation-lyrics");
@@ -51,8 +54,13 @@ export default defineComponent({
 		
 		this.render();
 	},
-	updated() {
-		this.render();
+	// updated() {
+	// 	this.render();
+	// },
+	watch: {
+		songId() {
+			setTimeout(this.render, 10);
+		},
 	},
 	methods: {
 		setProperties() {
