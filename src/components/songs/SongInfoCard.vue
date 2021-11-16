@@ -3,7 +3,7 @@
         v-if="song"
         v-cloak
     >
-        <template #header>
+        <template #header v-if="collection || isAdmin">
             <span class="flex justify-between items-center">
                 <router-link
                     :to="`/songs/${collection.key}`"
@@ -12,7 +12,7 @@
                 >
                     {{ collection.getName(Language) }}
                 </router-link>
-                <router-link :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
+                <router-link v-if="isAdmin" :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
                     {{ $t('song_seeStatistics') }}
                     <ArrowSmRightIcon class="w-4 h-4" />
                 </router-link>

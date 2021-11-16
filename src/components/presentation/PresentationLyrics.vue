@@ -44,16 +44,23 @@ export default defineComponent({
 			type: Array as PropType<Verse[]>,
 			required: true,
 		},
+		songId: {
+			type: String,
+		},
 	},
 	mounted() {
 		this.container = document.getElementById("presentation-lyrics");
 		this.element = document.getElementById("verses");
 		
-		this.calculateFontSize();
-		this.calculateLineHeight();
-		this.calculateWhitespace();
-
-		this.setProperties();
+		this.render();
+	},
+	// updated() {
+	// 	this.render();
+	// },
+	watch: {
+		songId() {
+			setTimeout(this.render, 10);
+		},
 	},
 	methods: {
 		setProperties() {
@@ -72,14 +79,21 @@ export default defineComponent({
 			this.fontSize = size;
 		},
 		calculateLineHeight() {
-			this.lineHeight = Math.min(3 / this.verseLines.length, 0.5) + 0.8;
+			this.lineHeight = Math.min(3 / this.verseLines.length, 0.5) + 1;
 		},
 		calculateWhitespace() {
 			if(!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			this.margin.left = rect.width / (this.longestLine?.length / 7);
+			this.margin.left = rect.width / (this.longestLine?.length / 8);
 			this.margin.top = rect.height / (this.verseLines?.length * 1.5);
+		},
+		render() {
+			this.calculateFontSize();
+			this.calculateLineHeight();
+			this.calculateWhitespace();
+
+			this.setProperties();
 		},
 	},
 	computed: {
@@ -97,7 +111,6 @@ export default defineComponent({
 <style>
 #presentation-lyrics {
 	flex-grow: 1;
-	background: #121212;
 	overflow-y: hidden;
 }
 
