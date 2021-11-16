@@ -37,31 +37,12 @@
                 </div>
             </li>
         </ul>
-        <BaseModal
-            :show="showCTA"
-            @close="closeCTA"
-        >
-            <div class="flex flex-col gap-4 items-center">
-                <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
-                <span class="text-center">
-                    <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
-                    <p>{{ $t('store_gainAccess') }}</p>
-                </span>
-                <BaseButton theme="secondary" @click="closeCTA">
-                    <template #icon>
-                        <CheckIcon class="w-4 h-4" />
-                    </template>
-                    OK
-                </BaseButton>
-            </div>
-        </BaseModal>
     </BaseCard>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { appSession } from "@/services/session";
-import { BaseModal } from "@/components";
 import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 
@@ -83,13 +64,13 @@ import { Song } from "@/classes";
         isAdmin: Boolean,
     },
     components: {
-        BaseModal,
         StarIcon,
         LockClosedIcon,
         CheckIcon,
         EyeIcon,
     },
     name: "song-list-card",
+    emits: ["showCta"],
 })
 export default class SongListCard extends Vue {
     public songs?: Song[];
@@ -98,25 +79,15 @@ export default class SongListCard extends Vue {
     public action?: Function;
     public isAdmin?: boolean;
     
-    public showCTA = false;
-
     public get Songs() {
         return this.songs ?? [];
     }
 
     public viewSong(song: Song) {
         if(!song.available) {
-            return this.openCTA();
+            return this.$emit("showCta");
         }
         song.view();
-    }
-
-    public openCTA() {
-        this.showCTA = true;
-    }
-
-    public closeCTA() {
-        this.showCTA = false;
     }
 
     public get songsWithAudioFiles() {

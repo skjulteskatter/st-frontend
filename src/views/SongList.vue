@@ -74,6 +74,7 @@
                             :action="e.action"
                             :count="e.count"
                             :isAdmin="isAdmin"
+                            @showCta="showCta = true"
                             class="mb-4"
                          />
                     </div>
@@ -94,6 +95,24 @@
                     </h1>
                 </Loader>
             </div>
+            <BaseModal
+                :show="showCta"
+                @close="closeCta"
+            >
+                <div class="flex flex-col gap-4 items-center">
+                    <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
+                    <span class="text-center">
+                        <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
+                        <p>{{ $t('store_gainAccess') }}</p>
+                    </span>
+                    <BaseButton theme="secondary" @click="closeCta">
+                        <template #icon>
+                            <CheckIcon class="w-4 h-4" />
+                        </template>
+                        OK
+                    </BaseButton>
+                </div>
+            </BaseModal>
         </Loader>
     </div>
 </template>
@@ -109,14 +128,14 @@ import {
     SearchInput,
     SongFilterSelect,
 } from "@/components/inputs";
-import { BackButton } from "@/components";
-import { ShoppingCartIcon } from "@heroicons/vue/solid";
+import { BackButton, BaseModal } from "@/components";
+import { ShoppingCartIcon, CheckIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
+import { LockClosedIcon } from "@heroicons/vue/outline";
 import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
-import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
@@ -125,10 +144,13 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
         SongFilterDropdown,
         SongFilterSelect,
         BackButton,
+        BaseModal,
         SearchInput,
         ShoppingCartIcon,
+        CheckIcon,
         ViewGridIcon,
         ViewBoardsIcon,
+        LockClosedIcon,
     },
     name: "song-list",
 })
@@ -139,6 +161,8 @@ export default class SongList extends Vue {
     public cId = "";
     public list: ListEntry[] = [];
     public loadingList = false;
+
+    public showCta = false;
 
     public get isAdmin() {
         return this.store.getters.isAdmin;
@@ -268,6 +292,10 @@ export default class SongList extends Vue {
                 },
             });
         }
+    }
+
+    public closeCta() {
+        this.showCta = false;
     }
 }
 </script>
