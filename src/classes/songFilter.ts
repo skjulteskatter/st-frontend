@@ -1,3 +1,4 @@
+import { MediaFile } from "songtreasures";
 import { Song } from ".";
 
 export type TSongFilter = {
@@ -48,17 +49,24 @@ export default class SongFilter implements TSongFilter {
     }
 
     public GetSongs() {
+        const hasFiles = (filter: string[], files: MediaFile[]) => {
+            return filter.length === 0 || filter.every(f => files.some(i => i.category === f));
+        };
+        const hasIds = (filter: string[], prop: string[] | string) => {
+            return filter.length === 0 || filter.every(f => prop.includes(f));
+        };
+        
         return this._songs.filter(s => (
             !this.hasAudioFiles || s.audioFiles.length > 0)
             && (!this.hasVideoFiles || s.videoFiles.length > 0)
             && (!this.hasSheetMusic || s.sheetMusic.length > 0)
             && (!this.hasLyrics || s.hasLyrics)
-            && (this.audioFiles.length === 0 || s.audioFiles.some(a => this.audioFiles.includes(a.category)))
-            && (this.videoFiles.length === 0 || s.videoFiles.some(a => this.videoFiles.includes(a.category)))
-            && (this.sheetMusicTypes.length === 0 || s.sheetMusic.some(a => this.sheetMusicTypes.includes(a.category)))
-            && (this.contentTypes.length === 0 || this.contentTypes.includes(s.type))
-            && (this.themes.length === 0 || s.themeIds.some(i => this.themes.includes(i)))
-            && (this.origins.length === 0 || s.origins.some(i => this.origins.includes(i.country))
-        ));
+            && hasFiles(this.audioFiles, s.audioFiles)
+            && hasFiles(this.videoFiles, s.videoFiles)
+            && hasFiles(this.sheetMusicTypes, s.sheetMusic)
+            && hasIds(this.contentTypes, [s.type])
+            && hasIds(this.themes, s.themeIds)
+            && hasIds(this.origins, s.origins.map(o => o.country)),
+        );
     }
 }
