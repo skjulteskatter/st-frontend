@@ -1,6 +1,6 @@
 <template>
     <div v-if="tag != undefined" class="p-4 md:p-8">
-        <back-button class="mb-4" />
+        <BackButton class="mb-4" />
         <header class="mb-4 flex flex-col md:flex-row md:items-center gap-4">
             <h1 class="font-bold text-2xl md:text-3xl">{{ $t('common_tags') }}</h1>
             <span class="flex-grow flex gap-4 items-center justify-between">
@@ -12,7 +12,7 @@
             </span>
         </header>
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
-            <song-list-item-card
+            <SongListItemCard
                 v-for="song in songs"
                 :key="song.id"
                 :song="song"

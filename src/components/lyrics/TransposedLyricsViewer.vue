@@ -3,7 +3,7 @@
         v-if="lyrics"
         class="transposed-lyrics"
     >
-        <verse-view v-for="(v, i) in lyrics.versesWithChords" :verse="v" :key="i" />
+        <VerseView v-for="(v, i) in lyrics.versesWithChords" :verse="v" :key="i" />
     </div>
 </template>
 

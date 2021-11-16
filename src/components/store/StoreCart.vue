@@ -1,5 +1,5 @@
 <template>
-    <base-dropdown v-if="cartItems.length" origin="right" class="text-sm" :show="show">
+    <BaseDropdown v-if="cartItems.length" origin="right" class="text-sm" :show="show">
         <template #button>
             <ShoppingCartIcon class="w-6 h-6 relative opacity-50" />
             <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
@@ -37,7 +37,7 @@
                     <img :src="i.collections.find(c => i.collectionIds.includes(c.id))?.image" class="max-h-12 rounded mr-4 inline-block" height="48" />
                     <div class="inline-block mr-4">
                         <span>{{ i.getName(languageKey) }}</span>
-                        <price-div class="opacity-50 text-xs" :product="i" :country="country" />
+                        <PriceDiv class="opacity-50 text-xs" :product="i" :country="country" />
                     </div>
                     <button class="ml-auto cursor-pointer opacity-50" @click="removeProduct(i.id)">
                         <XIcon class="w-4 h-4" />
@@ -51,14 +51,14 @@
                 <span>{{ $t("store_total") }}:</span>
                 <span>{{ totalPrice }}</span>
             </p>
-            <base-button theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
+            <BaseButton theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
                 {{ $t("store_checkout") }}
-            </base-button>
+            </BaseButton>
         </div>
-    </base-dropdown>
+    </BaseDropdown>
 </template>
 <script lang="ts">
 import http from "@/services/http";

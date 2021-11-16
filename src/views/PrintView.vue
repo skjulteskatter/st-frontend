@@ -1,6 +1,6 @@
 <template>
 	<article class="bg-white p-8">
-		<back-button class="back-button" />
+		<BackButton class="back-button" />
 		<header class="mb-8 py-4 border-b border-gray-300 flex justify-between items-end" v-if="collection && song">
 			<div>
 				<p class="text-primary">{{ collection.getName(languageKey) }}</p>

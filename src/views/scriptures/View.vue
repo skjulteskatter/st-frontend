@@ -2,14 +2,14 @@
     <div v-if="scripture">
         <div>
             <h1 class="text-xl">{{scripture.title.default}}</h1>
-            <select-translation
+            <SelectTranslation
                 v-if="loaded"
                 :filterOnLanguages="filterOnLanguages" 
                 :languages="languages"
                 :translation="translation"
                 :translations="translations"
                 @setTranslation="setTranslation"
-            ></select-translation>
+            />
         </div>
         <div class="scripture-content" v-if="translation">
             <router-view />

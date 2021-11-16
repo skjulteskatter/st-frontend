@@ -1,7 +1,7 @@
 <template>
-	<loader :loading="!(user && initialized)">
+	<Loader :loading="!(user && initialized)">
 		<div class="flex flex-col h-full">
-			<the-navbar />
+			<TheNavbar />
 			<main class="flex-grow">
 				<div class="h-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 					<!-- Route transitions -->
@@ -24,7 +24,7 @@
 					class="sticky bottom-0 md:overflow-y-auto"
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
 				>
-					<open-sheet-music-display
+					<OpenSheetMusicDisplay
 						v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
 						:options="sheetMusicOptions"
 						:relativeKey="user?.settings?.defaultTransposition"
@@ -32,29 +32,29 @@
 						@finishLoading="osmdLoading = false"
 					/>
 					<div id="osmd-canvas" class="bg-white"></div>
-					<loader :loading="osmdLoading" />
+					<Loader :loading="osmdLoading" />
 				</div>
 				<div
 					class="w-full h-full flex flex-col fixed top-20"
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
 				>
 					<div class="p-4 flex justify-end bg-white w-full">
-						<base-button icon="error" theme="error" @click="close()">{{$t('common_close')}}</base-button>
+						<BaseButton icon="error" theme="error" @click="close()">{{$t('common_close')}}</BaseButton>
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
 			</main>
 			<footer>
-				<copyright />
+				<Copyright />
 			</footer>
-			<audio-player />
+			<AudioPlayer />
 		</div>
 
 		<!-- Modals -->
-		<privacy-policy-accept />
-		<added-to-cart />
-		<tos />
-		<base-modal
+		<PrivacyPolicyAccept />
+		<AddedToCart />
+		<Tos />
+		<BaseModal
 			:show="show && splash != undefined"
 			@close="closeSplash()"
 		>
@@ -64,13 +64,13 @@
 			<p>{{splash?.content}}</p>
 			<template #footer>
 				<div v-if="splash?.callback" class="flex gap-2">
-					<base-button theme="tertiary" @click="closeSplash()">{{$t('common_cancel')}}</base-button>
-					<base-button class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</base-button>
+					<BaseButton theme="tertiary" @click="closeSplash()">{{$t('common_cancel')}}</BaseButton>
+					<BaseButton class="ml-auto" @click="splash?.callback ? splash.callback() : undefined">{{$t('continue')}}</BaseButton>
 				</div>
-				<base-button v-else class="ml-auto" @click="closeSplash()">{{$t('common_close')}}</base-button>
+				<BaseButton v-else class="ml-auto" @click="closeSplash()">{{$t('common_close')}}</BaseButton>
 			</template>
-		</base-modal>
-	</loader>
+		</BaseModal>
+	</Loader>
 </template>
 
 <script lang="ts">

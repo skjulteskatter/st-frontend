@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
-        <base-card>
+        <BaseCard>
             <template #header>
                 <div class="flex gap-4 items-center justify-between">
                     <h3 class="font-bold">
@@ -10,13 +10,13 @@
                 </div>
             </template>
             <div class="flex flex-col items-center gap-2 py-4">
-                <base-button
+                <BaseButton
                     theme="primary"
                     @click="open()"
                 >
                     {{ $t("song_openviewer") }}
-                </base-button>
-                <base-button
+                </BaseButton>
+                <BaseButton
                     theme="tertiary"
                     @click="$emit('refresh')"
                 >
@@ -24,20 +24,20 @@
                         <RefreshIcon class="w-4 h-4" />
                     </template>
                     {{ $t("song_updateviewer") }}
-                </base-button>
-                <base-button
+                </BaseButton>
+                <BaseButton
                     theme="tertiary"
                     @click="$emit('mute')"
                 >
                     {{ $t("mute") }}
-                </base-button>
+                </BaseButton>
             </div>
             <template #footer>
                 <h4 class="tracking-wider uppercase text-xs opacity-50 mb-2">
                     {{ $t("song_controlpanel") }}
                 </h4>
                 <div class="flex gap-2">
-                    <base-button
+                    <BaseButton
                         class="flex-grow"
                         @click="$emit('previous')"
                         theme="secondary"
@@ -46,8 +46,8 @@
                             <ArrowSmLeftIcon class="w-4 h-4" />
                         </template>
                         {{ $t("common_previous") }} {{ $t('song_verse').toLocaleLowerCase() }}
-                    </base-button>
-                    <base-button
+                    </BaseButton>
+                    <BaseButton
                         class="flex-grow"
                         @click="$emit('next')"
                         theme="secondary"
@@ -56,10 +56,10 @@
                             <ArrowSmRightIcon class="w-4 h-4" />
                         </template>
                         {{ $t("common_next") }} {{ $t('song_verse').toLocaleLowerCase() }}
-                    </base-button>
+                    </BaseButton>
                 </div>
             </template>
-        </base-card>
+        </BaseCard>
     </div>
 </template>
 

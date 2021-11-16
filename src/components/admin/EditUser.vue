@@ -1,7 +1,7 @@
 <template>
-	<base-button theme="tertiary" class="px-2 py-1" @click="showModal()">{{ $t('common_edit') }}</base-button>
-	<slide-panel :open="show" @close="hideModal()" :title="`${$t('common_edit')} ${$t('common_user').toLocaleLowerCase()}`">
-		<loader :loading="loading" position="local">
+	<BaseButton theme="tertiary" class="px-2 py-1" @click="showModal()">{{ $t('common_edit') }}</BaseButton>
+	<SlidePanel :open="show" @close="hideModal()" :title="`${$t('common_edit')} ${$t('common_user').toLocaleLowerCase()}`">
+		<Loader :loading="loading" position="local">
 			<div class="flex flex-col gap-4">
 				<div class="flex gap-4 items-center">
 					<img
@@ -50,7 +50,7 @@
 							</button>
 							<small class="whitespace-nowrap block" v-for="c in getCollections(i)" :key="c.id">{{c.getName()}}</small>
 						</div>
-						<base-dropdown
+						<BaseDropdown
 							:label="'Add'"
 						>
 							<div class="mb-2 text-sm" v-for="i in getUnownedCollections(User.subscriptions)" :key="i.id">
@@ -62,19 +62,19 @@
 							<br/>
 							<span class="text-sm">Valid To</span>
 							<input type="date" v-model="validTo[User.id]"/>
-							<base-button class="mb-2" :disabled="!Object.values(newSubs[User.id]).includes(true) || !validTo[User.id]" @click="addSubscriptions(User)">Save</base-button>
-						</base-dropdown>
+							<BaseButton class="mb-2" :disabled="!Object.values(newSubs[User.id]).includes(true) || !validTo[User.id]" @click="addSubscriptions(User)">Save</BaseButton>
+						</BaseDropdown>
 					</div>
 				</div>
-				<base-button
+				<BaseButton
 					theme="secondary"
 					@click="$emit('save')"
 					:loading="loading"
-					>{{ $t("common_save") }}</base-button
+					>{{ $t("common_save") }}</BaseButton
 				>
 			</div>
-		</loader>
-	</slide-panel>
+		</Loader>
+	</SlidePanel>
 </template>
 
 <script lang="ts">

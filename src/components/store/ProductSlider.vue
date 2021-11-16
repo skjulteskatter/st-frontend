@@ -1,10 +1,10 @@
 <template>
     <div class="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <product-card
+        <ProductCard
             v-for="product in Products"
             :key="product.id"
             :product="product"
-        ></product-card>
+        />
         <slot />
     </div>
 </template>

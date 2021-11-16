@@ -38,12 +38,12 @@
                     <ChevronUpIcon class="w-4 h-4" v-if="showFiles" />
                     <ChevronDownIcon class="w-4 h-4" v-else />
                 </button>
-                <media-list-item :files="files" :callback="setFile" v-if="showFiles" class="mt-2" />
+                <MediaListItem :files="files" :callback="setFile" v-if="showFiles" class="mt-2" />
             </div>
         </div>
 
         <div class="sheetmusic-wrapper">
-            <open-sheet-music-display
+            <OpenSheetMusicDisplay
                 v-if="
                     loaded &&
                     type != pdfType &&
@@ -52,7 +52,7 @@
                     ['sheet-music', 'sheet-music-embed'].includes(routeName)
                 "
                 :options="options"
-            ></open-sheet-music-display>
+            ></OpenSheetMusicDisplay>
             <object
                 v-if="type == pdfType && options"
                 :data="options.url"

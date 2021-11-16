@@ -1,7 +1,7 @@
 <template>
-    <base-button @click="show = !show" class="mb-2">Select Translation</base-button>
+    <BaseButton @click="show = !show" class="mb-2">Select Translation</BaseButton>
     <div v-if="show">
-        <checkbox-list
+        <CheckboxList
             v-if="checkboxData"
             :items="checkboxData"
             :title="$t('common_language')"
@@ -27,7 +27,7 @@
             </label>
         </div> -->
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
-            <translation-card :translation="translation" @click="setTranslation(translation)" />
+            <TranslationCard :translation="translation" @click="setTranslation(translation)" />
         </div>
     </div>
 </template>

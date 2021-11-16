@@ -2,7 +2,7 @@
     <div>
         <div class="flex justify-between items-center mb-4">
             <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common_settings") }}</h1>
-            <base-button
+            <BaseButton
                 theme="error"
                 @click="logout"
                 class="settings-page__logout"
@@ -11,7 +11,7 @@
                     <LogoutIcon class="w-4 h-4" />
                 </template>
                 {{ $t("common_logout") }}
-            </base-button>
+            </BaseButton>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-1 gap-4">
             <div>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="md:col-span-3">
-                <settings-card :category="category" />
+                <SettingsCard :category="category" />
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
-        <loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
+        <Loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
             <div v-if="song && collection">
                 <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                 <div class="flex gap-2 items-center opacity-50 tracking-wide">
@@ -20,7 +20,7 @@
             <div class="flex">
                 <label class="flex flex-col mr-2">
                     <span class="text-sm text-gray-500">{{ $t('song_key') }}</span>
-                    <base-dropdown
+                    <BaseDropdown
                         origin="left"
                         :label="
                             relativeTranspositions.find(
@@ -49,11 +49,11 @@
                                 </span>
                             </button>
                         </div>
-                    </base-dropdown>
+                    </BaseDropdown>
                 </label>
                 <label class="flex flex-col mr-2">
                     <span class="text-sm text-gray-500">{{ $t('song_clef') }}</span>
-                    <base-dropdown
+                    <BaseDropdown
                         origin="left"
                         :label="options?.clef"
                         class="flex flex-col"
@@ -96,7 +96,7 @@
                                 </span>
                             </button>
                         </div>
-                    </base-dropdown>
+                    </BaseDropdown>
                 </label>
                 <label class="flex flex-col mr-2">
                     <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
@@ -118,17 +118,17 @@
                 </label>
                 <label class="flex flex-col">
                     <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
-                    <song-changer :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()" />
+                    <SongChanger :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()" />
                 </label>
                 <button
                     v-if="$route.name == 'song'"
                     class="absolute top-4 right-4 text-red-700"
                     @click="close()"
                 >
-                    <icon name="error" />
+                    <Icon name="error" />
                 </button>
             </div>
-        </loader>
+        </Loader>
     </div>
 </template>
 

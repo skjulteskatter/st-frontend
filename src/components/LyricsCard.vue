@@ -1,9 +1,9 @@
 <template>
-    <base-card v-if="song" class="overflow-visible">
+    <BaseCard v-if="song" class="overflow-visible">
         <template #header>
             <div class="w-full flex items-center gap-2">
                 <h3 class="font-bold">{{ $t("song_lyrics") }}</h3>
-                <base-button
+                <BaseButton
                     v-if="editor"
                     theme="tertiary"
                     @click="edit()"
@@ -12,9 +12,9 @@
                         <PencilAltIcon class="w-4 h-4" />
                     </template>
                     {{ $t('common_edit') }}
-                </base-button>
-                <song-changer class="ml-auto" :label="$t('song_changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
-                <print-button class="hidden md:flex" />
+                </BaseButton>
+                <SongChanger class="ml-auto" :label="$t('song_changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
+                <PrintButton class="hidden md:flex" />
             </div>
         </template>
         <div class="flex gap-2 items-center mb-4">
@@ -56,7 +56,7 @@
             </label>
             <div class="flex flex-col gap-1" v-show="chordsEnabled">
                 <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song_key') }}</span>
-                <base-dropdown
+                <BaseDropdown
                     origin="left"
                     :label="
                         relativeTranspositions.find(
@@ -84,7 +84,7 @@
                             </span>
                         </button>
                     </div>
-                </base-dropdown>
+                </BaseDropdown>
             </div>
             <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="chordsEnabled && song.newMelody && song.newMelodies.includes(languageKey)">
                 <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song_newMelody") }}</SwitchLabel>
@@ -104,15 +104,15 @@
                 </Switch>
             </SwitchGroup>
         </div>
-        <loader :loading="!lyrics || loading" position="local">
+        <Loader :loading="!lyrics || loading" position="local">
             <component
                 :is="lyrics?.ContainsChords ? (type === 'chords' ? 'TransposedLyricsViewer' : 'PerformanceViewer') :
                 'LyricsViewer'"
                 :lyrics="lyrics"
             />
             <div v-if="lyrics?.notes">{{lyrics.notes}}</div>
-        </loader>
-    </base-card>
+        </Loader>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Collection, Lyrics, Song } from "@/classes";

@@ -1,10 +1,10 @@
 <template>
-    <transition-root
+    <TransitionRoot
         as="template"
         :show="show"
     >
         <Dialog as="div" @close="closeModal">
-            <transition-child
+            <TransitionChild
                 as="template"
                 enter="duration-200 ease-out"
                 enter-from="opacity-0"
@@ -14,8 +14,8 @@
                 leave-to="opacity-0"
             >
                 <DialogOverlay class="fixed inset-0 bg-black/50 z-40" />
-            </transition-child>
-            <transition-child
+            </TransitionChild>
+            <TransitionChild
                 as="template"
                 enter="duration-200 ease-out"
                 enter-from="opacity-0 scale-95"
@@ -24,7 +24,7 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <base-card class="w-full md:w-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
+                <BaseCard class="w-full md:w-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
                     <template #header v-if="$slots.title || $slots.description || $slots.icon">
                         <div class="flex flex-col sm:flex-row gap-4">
                             <slot name="icon" />
@@ -42,10 +42,10 @@
                     <template #footer v-if="$slots.footer">
                         <slot name="footer" />
                     </template>
-                </base-card>
-            </transition-child>
+                </BaseCard>
+            </TransitionChild>
         </Dialog>
-    </transition-root>
+    </TransitionRoot>
 </template>
 
 <script lang="ts">

@@ -1,25 +1,25 @@
 <template>
 	<div>
-		<back-button class="mb-4" />
+		<BackButton class="mb-4" />
 		<header class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
 			<div>
 				<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
 				<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 			</div>
 			<div class="flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4">
-				<base-input type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
-				<base-input type="date" v-model="toDate" :label="$t('statistics_endDate')" />
-				<base-button
+				<BaseInput type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
+				<BaseInput type="date" v-model="toDate" :label="$t('statistics_endDate')" />
+				<BaseButton
 					theme="secondary"
 					@click="getAnalytics"
 					icon="refresh"
-				>{{ $t('statistics_update') }}</base-button>
+				>{{ $t('statistics_update') }}</BaseButton>
 			</div>
 		</header>
-		<loader :loading="loading" />
+		<Loader :loading="loading" />
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:grid-rows-3">
-			<line-chart :series="Series" class="md:col-span-2 md:row-span-3" />
-			<base-card>
+			<LineChart :series="Series" class="md:col-span-2 md:row-span-3" />
+			<BaseCard>
 				<template #header>
 					<h3 class="font-bold text-xl">{{ $t('statistics_total') }}</h3>
 				</template>
@@ -27,8 +27,8 @@
 					{{ viewCount }}
 					<EyeIcon class="w-8 h-8 opacity-50" />
 				</div>
-			</base-card>
-			<country-list :analytics="analytics" class="md:row-span-2" />
+			</BaseCard>
+			<CountryList :analytics="analytics" class="md:row-span-2" />
 		</div>
 	</div>
 </template>

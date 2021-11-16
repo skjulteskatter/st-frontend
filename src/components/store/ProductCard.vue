@@ -29,7 +29,7 @@
                     <InformationCircleIcon class="w-4 h-4" />
                 </button>
             </div>
-            <base-button
+            <BaseButton
                 theme="secondary"
                 :disabled="inCart || !collection.enabled"
                 v-if="!product.owned"
@@ -39,7 +39,7 @@
                     <ShoppingCartIcon class="w-4 h-4" />
                 </template>
                 {{ $t('store_addToCart') }}
-            </base-button>
+            </BaseButton>
         </div>
     </div>
 </template>

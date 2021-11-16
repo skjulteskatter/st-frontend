@@ -1,11 +1,11 @@
 <template>
-    <base-card>
+    <BaseCard>
         <template #header>
             <div class="flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
                 <h3 class="font-bold">{{ $t("admin_users") }}</h3>
                 <div class="flex gap-2 items-center">
-                    <search-input class="flex-grow" v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
-                    <base-button
+                    <SearchInput class="flex-grow" v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
+                    <BaseButton
                         :class="{ disabled: disableButton }"
                         @click="refreshUsers"
                         :loading="loading['refresh']"
@@ -14,12 +14,12 @@
                         theme="tertiary"
                     >
                         {{ $t("common_update") }}
-                    </base-button>
+                    </BaseButton>
                 </div>
             </div>
         </template>
         <div class="overflow-x-auto">
-            <loader :loading="loading['search']" position="local">
+            <Loader :loading="loading['search']" position="local">
                 <table class="min-w-full" v-if="Users.length">
                     <thead>
                         <tr>
@@ -55,15 +55,15 @@
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">{{ u.id }}</td>
                             <td class="px-4 py-3 whitespace-nowrap">
-                                <edit-user v-if="u.id != User?.id" :user="u" @save="saveRoles(u)" />
+                                <EditUser v-if="u.id != User?.id" :user="u" @save="saveRoles(u)" />
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <p v-else class="w-full text-center text-gray-500">No users to show</p>
-            </loader>
+            </Loader>
         </div>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">

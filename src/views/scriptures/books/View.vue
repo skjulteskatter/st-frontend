@@ -1,6 +1,6 @@
 <template>
     <div v-if="book">
-        <book-card :book="book"></book-card>
+        <BookCard :book="book" />
         <div class="mb-2" />
         <router-view/>
     </div>

@@ -1,7 +1,7 @@
 <template>
-    <base-card v-if="book">
+    <BaseCard v-if="book">
         <h1>{{book.title}}</h1>
-    </base-card>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Book } from "@/classes/scriptures";

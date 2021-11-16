@@ -1,17 +1,17 @@
 <template>
-    <base-card>
+    <BaseCard>
         <template #header>
             <div class="flex justify-between items-center">
                 <span class="flex items-center">
                     <h2 class="font-bold mr-4">
                         {{ $t("common_my") + " " + $t("common_collections").toLowerCase() }}
                     </h2>
-                    <tooltip :text="$t('tooltip_myCollections')" />
+                    <Tooltip :text="$t('tooltip_myCollections')" />
                 </span>
                 <button aria-label="Create new personal collection" class="text-sm py-1 px-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10" @click="openCreatePlaylist">
                     <PlusIcon class="w-4 h-4" />
                 </button>
-                <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
+                <CreatePlaylistModal :show="createPlaylist" @close="closeCreatePlaylist" />
             </div>
         </template>
         <div class="flex flex-col gap-2 shadow-scroll" v-if="playlists.length">
@@ -36,7 +36,7 @@
         <p class="p-4 opacity-50 text-center" v-else>
             {{ $t("common_noAmount") }} {{ $t('common_collections').toLocaleLowerCase() }}
         </p>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">

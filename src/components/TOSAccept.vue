@@ -1,5 +1,5 @@
 <template>
-    <base-modal
+    <BaseModal
         :show="!termsAccepted && cart.length > 0"
     >
         <template #icon>
@@ -13,15 +13,15 @@
         </template>
         <div class="flex flex-col gap-4 items-center text-center">
             <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common_readHere')}}</a>
-            <base-button
+            <BaseButton
                 :loading="loading"
                 :disabled="disabled"
                 @click="acceptTermsOfService"
                 icon="check"
                 theme="secondary"
-            >{{$t('policies_agreeTOS')}}</base-button>
+            >{{$t('policies_agreeTOS')}}</BaseButton>
         </div>
-    </base-modal>
+    </BaseModal>
 </template>
 <script lang="ts">
 import { session } from "@/services/api";

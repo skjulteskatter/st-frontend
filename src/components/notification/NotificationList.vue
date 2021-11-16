@@ -1,5 +1,5 @@
 <template>
-	<base-dropdown class="cursor-pointer" origin="right">
+	<BaseDropdown class="cursor-pointer" origin="right">
 		<template #button>
 			<button class="relative p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white hover:bg-black/5 dark:hover:bg-white/10">
 				<span class="sr-only">View notifications</span>
@@ -26,7 +26,7 @@
 				class="p-2 rounded-md bg-transparent max-w-sm relative flex gap-2 border border-black/10 dark:border-white/10"
 				@click="n.callback?.()"
 			>
-				<icon v-if="n.icon" :name="n.icon" size="18" :class="{ 'text-green-700': n.type == 'success', 'text-red-700 dark:text-red-400': n.type == 'error' }" />
+				<Icon v-if="n.icon" :name="n.icon" size="18" :class="{ 'text-green-700': n.type == 'success', 'text-red-700 dark:text-red-400': n.type == 'error' }" />
 				<div class="flex-grow text-xs">
 					<strong class="block">{{ n.title }} </strong>
 					<span v-if="n.content" style="">{{ n.content }}</span>
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 		<p v-else class="p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications_noNotifications') }}</p>
-	</base-dropdown>
+	</BaseDropdown>
 </template>
 
 <script lang="ts">

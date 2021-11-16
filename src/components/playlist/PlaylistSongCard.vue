@@ -4,7 +4,7 @@
         leave-from-class="opacity-100 translate-x-0"
         leave-to-class="opacity-0 translate-x-2"
     >
-        <base-card :class="['group', disabled ? 'opacity-50' : 'cursor-pointer']">
+        <BaseCard :class="['group', disabled ? 'opacity-50' : 'cursor-pointer']">
             <div class="flex gap-4 items-center">
                 <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
                 <button @click="goToSong" class="text-left flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2">
@@ -28,7 +28,7 @@
                     <TrashIcon class="h-4 w-4 opacity-50" />
                 </button>
             </div>
-        </base-card>
+        </BaseCard>
     </transition>
 </template>
 

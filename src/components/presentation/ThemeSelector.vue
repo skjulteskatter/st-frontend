@@ -1,5 +1,5 @@
 <template>
-	<base-card>
+	<BaseCard>
 		<template #header>
 			<div class="flex gap-4 items-center justify-between">
 				<h4 class="font-bold tracking-wide">{{ $t("common_settings") }}</h4>
@@ -42,7 +42,7 @@
 			</Switch>
 			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Show sidepanel</SwitchLabel>
 		</SwitchGroup>
-	</base-card>
+	</BaseCard>
 </template>
 
 <script lang="ts">

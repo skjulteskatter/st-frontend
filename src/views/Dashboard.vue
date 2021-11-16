@@ -4,9 +4,9 @@
             {{ $t("common_welcome") }}, {{ user.displayName }}
         </h1>
         <div class="grid gap-4 md:gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            <owned-collections />
-            <activity-feed />
-            <playlists />
+            <OwnedCollections />
+            <ActivityFeed />
+            <Playlists />
         </div>
     </div>
 </template>

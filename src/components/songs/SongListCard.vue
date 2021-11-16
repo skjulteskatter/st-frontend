@@ -1,5 +1,5 @@
 <template>
-    <base-card class="theme-card" v-if="title && Songs.length > 0">
+    <BaseCard class="theme-card" v-if="title && Songs.length > 0">
         <template #header>
             <div class="flex justify-between">
                 <b
@@ -37,7 +37,7 @@
                 </div>
             </li>
         </ul>
-        <base-modal
+        <BaseModal
             :show="showCTA"
             @close="closeCTA"
         >
@@ -47,15 +47,15 @@
                     <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
                     <p>{{ $t('store_gainAccess') }}</p>
                 </span>
-                <base-button theme="secondary" @click="closeCTA">
+                <BaseButton theme="secondary" @click="closeCTA">
                     <template #icon>
                         <CheckIcon class="w-4 h-4" />
                     </template>
                     OK
-                </base-button>
+                </BaseButton>
             </div>
-        </base-modal>
-    </base-card>
+        </BaseModal>
+    </BaseCard>
 </template>
 
 <script lang="ts">

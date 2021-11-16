@@ -1,9 +1,9 @@
 <template>
-    <splash-screen :loading="initialized === false" />
-    <loader :loading="initialized === false">
+    <SplashScreen :loading="initialized === false" />
+    <Loader :loading="initialized === false">
         <router-view />
-    </loader>
-    <notification-group />
+    </Loader>
+    <Notification-group />
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";

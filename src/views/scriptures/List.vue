@@ -1,7 +1,7 @@
 <template>
     <!-- TODO: Define correct classes. -->
     <div v-if="Scriptures.length">
-        <scripture-card
+        <ScriptureCard
             class="max-w-md cursor-pointer"
             @click="scripture.view()" 
             v-for="scripture in Scriptures" 

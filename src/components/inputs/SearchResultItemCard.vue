@@ -1,5 +1,5 @@
 <template>
-    <base-card class="hover:ring-2 hover:ring-gray-400 cursor-pointer">
+    <BaseCard class="hover:ring-2 hover:ring-gray-400 cursor-pointer">
         <div class="flex gap-2" v-if="item?.type === 'song'">
             <b class="text-gray-400">{{ item.Song.number }}</b>
             <div class="flex flex-col gap-2">
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">

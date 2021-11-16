@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-center">
-        <loader :loading="!books" />
-        <base-list :items="Books" :nameSelector="(i) => i.title" :clickCallback="(i) => setBook(i)"/>
+        <Loader :loading="!books" />
+        <BaseList :items="Books" :nameSelector="(i) => i.title" :clickCallback="(i) => setBook(i)"/>
         <!-- <div class="flex gap-2 flex-wrap">
             <div class="mb-2" v-for="book in Books" :key="book.id">
                 <button 

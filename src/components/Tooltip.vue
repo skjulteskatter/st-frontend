@@ -1,7 +1,7 @@
 <template>
 	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="showTooltip">
 		<QuestionMarkCircleIcon class="w-4 h-4 text-secondary dark:text-white" />
-		<transition-root
+		<TransitionRoot
 			:show="open"
 			as="div"
 			:class="['mb-2 absolute bottom-full px-2 py-1 bg-secondary rounded-md shadow z-10 dark:bg-white', positionClasses]"
@@ -17,7 +17,7 @@
 				:class="{ 'right-3': position == 'right', 'left-3': position == 'left', 'left-1/2 -translate-x-1/2': position == 'center' }"
 			></span>
 			<small class="text-white font-normal whitespace-nowrap dark:text-secondary">{{ text }}</small>
-		</transition-root>
+		</TransitionRoot>
 	</div>
 </template>
 

@@ -1,23 +1,23 @@
 <template>
-	<base-modal :show="show">
+	<BaseModal :show="show">
 		<template #title>
 			<h2 class="font-bold">{{ $t('playlist_createnew') }}</h2>
 		</template>
 		<form @submit.prevent="createPlaylist" class="flex flex-col gap-4">
-			<base-input
+			<BaseInput
 				class="border border-black/20 dark:border-white/20 flex-shrink-0"
 				:label="$t('common_name')"
 				v-model="playlistName"
 				required
 			/>
-			<base-button :loading="loading" theme="secondary" type="submit">
+			<BaseButton :loading="loading" theme="secondary" type="submit">
 				<template #icon>
 					<CheckIcon class="w-4 h-4" />
 				</template>
 				Ok
-			</base-button>
+			</BaseButton>
 		</form>
-	</base-modal>
+	</BaseModal>
 </template>
 
 <script lang="ts">

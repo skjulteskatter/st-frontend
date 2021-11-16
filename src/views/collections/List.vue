@@ -4,12 +4,12 @@
             <div class="flex justify-between w-full">
                 <div class="flex items-center">
                     <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common_collections") }}</h1>
-                    <tooltip :text="$t('store_currencyDescription')" />
+                    <Tooltip :text="$t('store_currencyDescription')" />
                 </div>
-                <store-cart class="md:hidden" />
+                <StoreCart class="md:hidden" />
             </div>
             <div class="flex gap-2">
-                <base-button
+                <BaseButton
                     theme="tertiary"
                     @click="refreshSubscriptions"
                     class="refresh-button hidden"
@@ -19,8 +19,8 @@
                         <RefreshIcon class="h-4 w-4" />
                     </template>
                     {{ $t("common_refreshSubscriptions") }}
-                </base-button>
-                <base-button
+                </BaseButton>
+                <BaseButton
                     v-if="productIds.length"
                     @click="portal"
                     theme="tertiary"
@@ -34,10 +34,10 @@
                         {{ $t("common_manage") }}
                         {{ $t("common_subscriptions").toLowerCase() }}
                     </span>
-                </base-button>
+                </BaseButton>
             </div>
         </div>
-        <product-slider class="mb-4" :products="products" v-if="products.length" />
+        <ProductSlider class="mb-4" :products="products" v-if="products.length" />
     </div>
 </template>
 

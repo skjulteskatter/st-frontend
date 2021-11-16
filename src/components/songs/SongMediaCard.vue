@@ -1,5 +1,5 @@
 <template>
-    <base-card
+    <BaseCard
         v-if="song"
         class="border border-primary"
     >
@@ -8,7 +8,7 @@
                 <h3 class="font-bold">
                     {{ $t("song_media") }}
                 </h3>
-                <tooltip :text="$t('tooltip_songFiles')" />
+                <Tooltip :text="$t('tooltip_songFiles')" />
                 <a
                     target="_blank"
                     href="https://docs.google.com/forms/d/e/1FAIpQLSd9Sqcxox4B4UbSm2WPCD_jERcX0fiQ_d6Nw13sq8T0eXr36w/viewform"
@@ -23,7 +23,7 @@
                 <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t("song_sheetmusic") }}
                 </p>
-                <media-list-item :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
+                <MediaListItem :files="song.sheetMusic.filter(s => !s.type.endsWith('sibelius'))" :callback="selectSheetMusic" type="sheetmusic" />
             </div>
             <div
                 v-if="song.audioFiles.length"
@@ -31,7 +31,7 @@
                 <p class="text-xs mb-2 tracking-wider uppercase opacity-50">
                     {{ $t('song_audioFiles') }}
                 </p>
-                <media-list-item :files="song.audioFiles" :callback="selectAudio" type="audio" />
+                <MediaListItem :files="song.audioFiles" :callback="selectAudio" type="audio" />
             </div>
             <div
                 v-if="song.videoFiles.length"
@@ -53,7 +53,7 @@
                         </div>
                     </button>
                 </div>
-                <base-modal
+                <BaseModal
                     :show="showVideo"
                     @close="closeVideo"
                 >
@@ -70,11 +70,11 @@
                     >
                         Sorry, your browser doesn't support embedded videos.
                     </video>
-                </base-modal>
+                </BaseModal>
             </div>
         </div>
         <p v-else class="text-sm opacity-50 text-center p-2">{{ $t('song_noFiles') }}</p>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">
