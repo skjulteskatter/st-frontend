@@ -7,7 +7,7 @@
         <div class="text-3xl h-full flex-grow flex flex-col">
             <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSideBar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
-                <h1 class="text-6xl" v-if="song.number">{{ song.number }}</h1>
+                <h1 class="text-7xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
                     <div class="flex gap-4">
                         <p
