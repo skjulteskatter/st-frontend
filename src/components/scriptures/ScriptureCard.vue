@@ -1,9 +1,9 @@
 <template>
-    <base-card v-if="scripture">
+    <BaseCard v-if="scripture">
         <template #header>
             {{scripture.title.default}}
         </template>
-    </base-card>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Scripture } from "@/classes/scriptures";

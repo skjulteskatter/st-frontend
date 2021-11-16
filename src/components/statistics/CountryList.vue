@@ -1,5 +1,5 @@
 <template>
-	<base-card>
+	<BaseCard>
 		<template #header>
 			<h3 class="font-bold text-xl">{{ $t('statistics_viewsPerCountry') }}</h3>
 		</template>
@@ -13,7 +13,7 @@
 				<span>{{ country.count }}</span>
 			</li>
 		</ol>
-	</base-card>
+	</BaseCard>
 </template>
 
 <script lang="ts">

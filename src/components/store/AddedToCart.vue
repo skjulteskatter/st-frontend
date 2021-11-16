@@ -1,6 +1,6 @@
 <template>
-    <loader :loading="checkingOut" position="global">
-        <base-modal :show="Show" @close="cancel = true">
+    <Loader :loading="checkingOut" position="global">
+        <BaseModal :show="Show" @close="cancel = true">
             <template #title>
                 <div class="flex gap-4 justify-between w-full">
                     <h3 class="text-lg font-bold">{{$t('store_addedToCart')}}</h3>
@@ -39,24 +39,24 @@
                     >
                     <span>
                         <p class="text-base">{{ p.getName() }}</p>
-                        <price-div class="opacity-50 text-sm" :product="p"/>
+                        <PriceDiv class="opacity-50 text-sm" :product="p"/>
                     </span>
                 </div>
             </div>
             <template #footer>
                 <div class="flex gap-4 justify-end">
-                    <base-button theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</base-button>
-                    <base-button theme="primary" @click="addAllItemsCheckout">{{$t('store_allItems')}}</base-button>
-                    <base-button theme="secondary" @click="checkout" :loading="checkingOut">
+                    <BaseButton theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</BaseButton>
+                    <BaseButton theme="primary" @click="addAllItemsCheckout">{{$t('store_allItems')}}</BaseButton>
+                    <BaseButton theme="secondary" @click="checkout" :loading="checkingOut">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{$t('store_checkout')}}
-                    </base-button>
+                    </BaseButton>
                 </div>
             </template>
-        </base-modal>
-    </loader>
+        </BaseModal>
+    </Loader>
 </template>
 <script lang="ts">
 import { useStore } from "@/store";

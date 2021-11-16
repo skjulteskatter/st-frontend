@@ -1,5 +1,5 @@
 <template>
-    <base-card
+    <BaseCard
         v-if="song"
         v-cloak
     >
@@ -48,14 +48,14 @@
                         v-if="song.Authors.length"
                     >
                         <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
-                        <contributor-info :contributors="song.Authors" />
+                        <ContributorInfo :contributors="song.Authors" />
                     </small>
                     <small
                         v-if="song.Composers.length"
                         class="flex gap-2"
                     >
                         <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
-                        <contributor-info :contributors="song.Composers" />
+                        <ContributorInfo :contributors="song.Composers" />
                     </small>
                     <small 
                         v-if="!song.Composers.length && !melodyOrigin"
@@ -116,7 +116,7 @@
                 <span class="text-sm">{{ $t('store_learnMore') }}</span>
             </button>
         </div>
-    </base-card>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Collection, Song } from "@/classes";

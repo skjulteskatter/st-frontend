@@ -1,5 +1,5 @@
 <template>
-    <base-card class="overflow-visible">
+    <BaseCard class="overflow-visible">
         <template #header>
             <div class="flex gap-4 items-center">
                 <h3 class="font-bold">{{ $t("presentation_chooseVerses") }}</h3>
@@ -33,7 +33,7 @@
                 >{{ verse.content.join("\n") }}</p>
             </div>
         </div>
-    </base-card>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";

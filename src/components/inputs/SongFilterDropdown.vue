@@ -6,7 +6,7 @@
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types_lyrics')" origin="left">
+                <BaseDropdown :label="$t('types_lyrics')" origin="left">
                     <div class="w-72">
                         <label class="font-bold">
                             <input
@@ -20,40 +20,40 @@
                             {{ $t("types_lyrics") }}
                         </label>
                     </div>
-                </base-dropdown>
+                </BaseDropdown>
             </div>
             <div class="relative">
                 <div v-if="isEmpty(videoValues)">
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types_video')" origin="left">
+                <BaseDropdown :label="$t('types_video')" origin="left">
                     <div class="w-72" >
-                        <checkbox-group :name="$t('types_video')" :labels="videoTypes" :values="videoValues" :action="apply" />
+                        <CheckboxGroup :name="$t('types_video')" :labels="videoTypes" :values="videoValues" :action="apply" />
                     </div>
-                </base-dropdown>
+                </BaseDropdown>
             </div>
             <div class="relative">
                 <div v-if="isEmpty(sheetMusicValues)">
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types_sheetmusic')" origin="left">
+                <BaseDropdown :label="$t('types_sheetmusic')" origin="left">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types_sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
+                        <CheckboxGroup :name="$t('types_sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
                     </div>
-                </base-dropdown>
+                </BaseDropdown>
             </div>
             <div class="relative">
                 <div v-if="isEmpty(audioValues)">
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-                <base-dropdown :label="$t('types_audio')" origin="right">
+                <BaseDropdown :label="$t('types_audio')" origin="right">
                     <div class="w-72">
-                        <checkbox-group :name="$t('types_audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
+                        <CheckboxGroup :name="$t('types_audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
                     </div>
-                </base-dropdown>
+                </BaseDropdown>
             </div>
         </div>
         <button class="flex-grow text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common_remove') }}</button>

@@ -1,6 +1,6 @@
 <template>
     <div v-if="playlist" class="flex flex-col h-full">
-        <back-button class="mb-4" to="/playlists" />
+        <BackButton class="mb-4" to="/playlists" />
         <header class="flex flex-col sm:flex-row gap-4 justify-between items-start mb-6">
             <span>
                 <h1 class="font-bold text-xl flex gap-2 items-center">
@@ -17,7 +17,7 @@
                 </span>
             </span>
             <div class="flex gap-2 md:gap-4">
-                <base-button
+                <BaseButton
                     v-if="playlist.userId == userId"
                     @click="toggleSharePlaylist()"
                     :loading="loading['share']"
@@ -26,13 +26,13 @@
                         <ShareIcon class="w-4 h-4" />
                     </template>
                     {{ $t('common_share') }} {{ $t('common_collection').toLocaleLowerCase() }}
-                </base-button>
-                <base-button theme="error" @click="showDelete = true">
+                </BaseButton>
+                <BaseButton theme="error" @click="showDelete = true">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
                     {{ $t("common_delete") }}
-                </base-button>
+                </BaseButton>
             </div>
         </header>
         <div v-if="!playlist.entries.length" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center gap-4 opacity-50">
@@ -41,7 +41,7 @@
             </span>
             <h2>{{ $t("playlist_nosongs") }}</h2>
         </div>
-        <draggable
+        <Draggable
             class="flex flex-col gap-4"
             v-else
             :list="entries"
@@ -52,20 +52,20 @@
             ghost-class="opacity-50"
         >
             <template #item="{element}">
-                <playlist-song-card
+                <PlaylistSongCard
                     :entry="element"
                     :canEdit="canEdit"
                     @remove="removeEntry"
                 />
             </template>
-        </draggable>
-        <base-button class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" v-if="entryOrderEdited">
+        </Draggable>
+        <BaseButton class="mt-2 bg-green-100" @click="saveOrder" :loading="loading['entryOrder']" v-if="entryOrderEdited">
             <template #icon>
                 <SaveIcon class="w-4 h-4" />
             </template>
             {{$t('common_save')}}
-        </base-button>
-        <base-modal
+        </BaseButton>
+        <BaseModal
             :show="Show"
             @close="hideModal()"
         >
@@ -79,7 +79,7 @@
                 >
                     <span class="w-full flex gap-2 justify-between">
                         <CopyToClipboard label="Kopiér delingslenke" :content="getLink(key.key)" />
-                        <base-button
+                        <BaseButton
                             theme="error"
                             :disabled="deleted[key.key]"
                             :loading="loading[key.key]"
@@ -90,7 +90,7 @@
                             <template #icon>
                                 <TrashIcon class="w-4 h-4" />
                             </template>
-                        </base-button>
+                        </BaseButton>
                     </span>
                     <small v-if="new Date() > new Date(key.validTo)" class="text-red-700 gap-2 flex items-center">
                         <ExclamationIcon class="w-4 h-4" />
@@ -98,7 +98,7 @@
                     </small>
                     <small class="block text-gray-400" v-else>{{ $t('playlist_validTo') }} {{new Date(key.validTo).toLocaleDateString()}}</small>
                 </div>
-                <base-button @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist_createShareLink') }}</base-button>
+                <BaseButton @click="sharePlaylist" :loading="sharingPlaylist" v-if="!Keys.length">{{ $t('playlist_createShareLink') }}</BaseButton>
             </div>
             <div class="flex flex-col gap-2 mt-4 max-h-64 overflow-y-auto" v-if="Users.length">
                 <h3 class="text-xs font-bold">{{ $t('playlist_sharedWith') }}</h3>
@@ -119,8 +119,8 @@
                     </button>
                 </div>
             </div>
-        </base-modal>
-        <base-modal :show="showDelete" @close="showDelete = false">
+        </BaseModal>
+        <BaseModal :show="showDelete" @close="showDelete = false">
             <template #icon>
                 <ExclamationIcon class="w-6 h-6 text-red-500" />
             </template>
@@ -131,17 +131,17 @@
                 <small class="opacity-50 tracking-wide">{{ $t('playlist_deleteDescription') }}</small>
             </template>
             <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
-                <base-button theme="tertiary" @click="showDelete = false">
+                <BaseButton theme="tertiary" @click="showDelete = false">
                     {{ $t('common_cancel') }}
-                </base-button>
-                <base-button theme="error" @click="deletePlaylist">
+                </BaseButton>
+                <BaseButton theme="error" @click="deletePlaylist">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
                     {{ $t('common_delete') }}
-                </base-button>
+                </BaseButton>
             </div>
-        </base-modal>
+        </BaseModal>
     </div>
 </template>
 

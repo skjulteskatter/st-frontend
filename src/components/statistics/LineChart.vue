@@ -1,15 +1,15 @@
 <template>
-	<base-card>
+	<BaseCard>
 		<template #header>
 			<h2 class="font-bold text-xl">{{ $t('statistics_viewsOverTime') }}</h2>
 		</template>
-		<chart
+		<Chart
 			width="100%"
 			type="line"
 			:options="options"
 			:series="series"
 		/>
-	</base-card>
+	</BaseCard>
 </template>
 
 <script lang="ts">
@@ -19,7 +19,7 @@ import VueApexCharts from "vue3-apexcharts";
 @Options({
 	name: "line-chart",
 	components: {
-		chart: VueApexCharts,
+		Chart: VueApexCharts,
 	},
 	props: {
 		options: {

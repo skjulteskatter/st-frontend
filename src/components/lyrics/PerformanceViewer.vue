@@ -4,25 +4,25 @@
         class="performance-viewer"
     >
         <div class="song">
-            <verse-view 
+            <VerseView 
                 v-for="(v, i) in currentVerses"
                 :key="i"
                 :verse="v"
             />
         </div>
         <div class="flex gap-2 mt-4">
-            <base-button @click="previous">
+            <BaseButton @click="previous">
                 <template #icon>
                     <ArrowLeftIcon class="w-4 h-4" />
                 </template>
                 {{ $t('common_previous') }}
-            </base-button>
-            <base-button @click="next">
+            </BaseButton>
+            <BaseButton @click="next">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
                 {{$t('common_next')}}
-            </base-button>
+            </BaseButton>
         </div>
     </div>
 </template>

@@ -4,10 +4,10 @@
             :checked="modelValue"
             @input="$emit('update:modelValue', $event.target.checked)"
             type="checkbox"
-            :name="label"
-            class="border-gray-300 rounded text-primary focus:ring-primary"
+            :name="name"
+            class="border-gray-300 rounded text-primary focus:ring-primary mr-2"
         />
-        {{ label }}
+        <slot/>
     </label>
 </template>
 <script lang="ts">
@@ -19,7 +19,7 @@ import { Options, Vue } from "vue-class-component";
         modelValue: {
             type: Boolean,
         },
-        label: {
+        name: {
             type: String,
         },
     },
@@ -28,7 +28,7 @@ import { Options, Vue } from "vue-class-component";
     ],
 })
 export default class Checkbox extends Vue {
-    public label?: string;
+    public name?: string;
     public modelValue?: boolean;
 }
 </script>

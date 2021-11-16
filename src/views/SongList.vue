@@ -1,18 +1,18 @@
 <template>
     <div>
-        <loader :loading="loading">
+        <Loader :loading="loading">
             <div v-if="collection">
-                <back-button class="mb-4" to="/collections" />
+                <BackButton class="mb-4" to="/collections" />
                 <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                     <h1 class="font-bold text-2xl md:text-3xl">
                         {{ collection.name[languageKey] }}
                     </h1>
-                    <base-button theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_buy') }}
-                    </base-button>
+                    </BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                         <ViewBoardsIcon class="w-5 h-5" v-else />
@@ -23,11 +23,11 @@
                         <label for="song-category" class="text-gray-500 text-xs dark:text-gray-400">
                             {{ $t("song_sortby") }}
                         </label>
-                        <button-group
+                        <ButtonGroup
                             :buttons="buttons"
                             :action="setListType"
                             class="hidden md:flex"
-                        ></button-group>
+                        />
                         <select
                             class="p-2 bg-white border border-black/20 rounded-md block md:hidden dark:bg-secondary dark:border-white/20"
                             @input="setListType($event.target.value)"
@@ -46,13 +46,13 @@
                         <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
                             {{ $t("song_filterByContent") }}
                         </label>
-                        <song-filter-dropdown
+                        <SongFilterDropdown
                             @apply="loadList"
                         />
-                        <song-filter-select @apply="loadList" />
+                        <SongFilterSelect @apply="loadList" />
                     </div>
-                    <search-input
-                        class="max-w-sm"
+                    <SearchInput
+                        class="max-w-xs"
                         type="text"
                         :placeholder="$t('common_search')"
                         v-model="searchString"
@@ -60,12 +60,12 @@
                         @keyup="filterByNumber"
                     />
                 </div>
-                <loader :loading="loadingList" v-if="!loading">
+                <Loader :loading="loadingList" v-if="!loading">
                     <div
                         class="song-list song-list__items"
                         v-if="list?.length && viewType === 'boards'"
                     >
-                        <song-list-card
+                        <SongListCard
                             :collection="collection"
                             v-for="(e, i) in list"
                             :key="i"
@@ -74,8 +74,9 @@
                             :action="e.action"
                             :count="e.count"
                             :isAdmin="isAdmin"
+                            @showCta="showCta = true"
                             class="mb-4"
-                        ></song-list-card>
+                         />
                     </div>
                     <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
                         <button
@@ -92,9 +93,27 @@
                     <h1 class="opacity-50" v-if="!songs.length && !loading">
                         No results
                     </h1>
-                </loader>
+                </Loader>
             </div>
-        </loader>
+            <BaseModal
+                :show="showCta"
+                @close="closeCta"
+            >
+                <div class="flex flex-col gap-4 items-center">
+                    <LockClosedIcon class="mt-2 w-16 h-16 text-primary" />
+                    <span class="text-center">
+                        <h3 class="font-bold text-xl">{{ $t('store_limitedAccess') }}</h3>
+                        <p>{{ $t('store_gainAccess') }}</p>
+                    </span>
+                    <BaseButton theme="secondary" @click="closeCta">
+                        <template #icon>
+                            <CheckIcon class="w-4 h-4" />
+                        </template>
+                        OK
+                    </BaseButton>
+                </div>
+            </BaseModal>
+        </Loader>
     </div>
 </template>
 
@@ -109,14 +128,14 @@ import {
     SearchInput,
     SongFilterSelect,
 } from "@/components/inputs";
-import { BackButton } from "@/components";
-import { ShoppingCartIcon } from "@heroicons/vue/solid";
+import { BackButton, BaseModal } from "@/components";
+import { ShoppingCartIcon, CheckIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
+import { LockClosedIcon } from "@heroicons/vue/outline";
 import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
-import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
@@ -125,10 +144,13 @@ import { ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
         SongFilterDropdown,
         SongFilterSelect,
         BackButton,
+        BaseModal,
         SearchInput,
         ShoppingCartIcon,
+        CheckIcon,
         ViewGridIcon,
         ViewBoardsIcon,
+        LockClosedIcon,
     },
     name: "song-list",
 })
@@ -139,6 +161,8 @@ export default class SongList extends Vue {
     public cId = "";
     public list: ListEntry[] = [];
     public loadingList = false;
+
+    public showCta = false;
 
     public get isAdmin() {
         return this.store.getters.isAdmin;
@@ -268,6 +292,10 @@ export default class SongList extends Vue {
                 },
             });
         }
+    }
+
+    public closeCta() {
+        this.showCta = false;
     }
 }
 </script>

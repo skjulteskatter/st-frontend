@@ -1,5 +1,5 @@
 <template>
-    <base-card v-if="user">
+    <BaseCard v-if="user">
         <div class="h-full flex gap-4 items-center justify-start md:flex-col md:justify-center">
             <img class="w-16 h-16 md:h-32 md:w-32 rounded-full object-cover" :src="image" alt="user portrait" />
             <div class="md:text-center">
@@ -12,7 +12,7 @@
                 </span>
             </div>
         </div>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">

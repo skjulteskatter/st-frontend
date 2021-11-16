@@ -1,14 +1,14 @@
 <template>
-    <base-card>
+    <BaseCard>
         <template #header>
             <div class="flex items-center">
                 <h2 class="font-bold mr-4">
                     {{ $t("activity_recentlyViewed") }}
                 </h2>
-                <tooltip :text="$t('tooltip_recentActivity')" />
+                <Tooltip :text="$t('tooltip_recentActivity')" />
             </div>
         </template>
-        <loader :loading="activitiesInitialized === false">
+        <Loader :loading="activitiesInitialized === false">
             <div class="flex flex-col gap-2 border-l-2 border-gray-100 dark:border-white/5 shadow-scroll" v-if="activities.length">
                 <router-link
                     class="ml-2 flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
@@ -31,8 +31,8 @@
             <p class="p-4 text-gray-500 dark:text-gray-400 text-center" v-else>
                 {{ $t("dashboard_noActivity") }}
             </p>
-        </loader>
-    </base-card>
+        </Loader>
+    </BaseCard>
 </template>
 
 <script lang="ts">

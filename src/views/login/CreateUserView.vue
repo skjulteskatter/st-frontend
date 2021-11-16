@@ -7,17 +7,17 @@
                 class="max-h-16"
                 height="64"
             />
-            <back-button class="mt-8 mr-auto" to="/login" />
+            <BackButton class="mt-8 mr-auto" to="/login" />
             <h2 class="font-bold text-2xl lg:text-4xl mt-16 mb-4">Register with email</h2>
             <form @submit.prevent="submitForm" class="flex flex-col gap-4 w-full">
                 <h3 v-if="error" class="bg-red-100 text-red-700 rounded p-2">{{error}}</h3>
-                <base-input label="Name" v-model="form.displayName" autocomplete="name" type="text" />
-                <base-input label="Email" v-model="form.email" autocomplete="email" type="email" />
-                <base-input label="Password" v-model="form.password" autocomplete="new-password" type="password" />
-                <base-input label="Repeat password" v-model="form.repeatPassword" autocomplete="new-password" type="password" :style="form.repeatPassword != form.password ? 'color: red' : ''" />
-                <base-button :loading="creatingAccount" theme="secondary" type="submit">
+                <BaseInput label="Name" v-model="form.displayName" autocomplete="name" type="text" />
+                <BaseInput label="Email" v-model="form.email" autocomplete="email" type="email" />
+                <BaseInput label="Password" v-model="form.password" autocomplete="new-password" type="password" />
+                <BaseInput label="Repeat password" v-model="form.repeatPassword" autocomplete="new-password" type="password" :style="form.repeatPassword != form.password ? 'color: red' : ''" />
+                <BaseButton :loading="creatingAccount" theme="secondary" type="submit">
                     Sign up
-                </base-button>
+                </BaseButton>
             </form>
         </div>
     </section>

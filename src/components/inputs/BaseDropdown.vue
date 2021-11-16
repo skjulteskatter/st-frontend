@@ -3,7 +3,7 @@
         <PopoverButton class="cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:ring-offset-secondary">
             <div class="bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 dark:bg-secondary dark:border-white/20" v-if="label">
                 <span>{{ label }}</span>
-                <icon
+                <Icon
                     :name="icon"
                     size="18"
                     v-if="icon"
@@ -21,7 +21,7 @@
             leave-to-class="-translate-y-2 opacity-0"
         >
             <PopoverPanel>
-                <base-card :class="`z-10 absolute mt-2 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
+                <BaseCard :class="`z-10 absolute mt-2 ${origin == 'left' ? 'left-0 right-auto' : 'right-0 left-auto'}`">
                     <template #header v-if="$slots.header">
                         <slot name="header" />
                     </template>
@@ -29,7 +29,7 @@
                     <template #footer v-if="$slots.footer">
                         <slot name="footer" />
                     </template>
-                </base-card>
+                </BaseCard>
             </PopoverPanel>
         </transition>
     </Popover>

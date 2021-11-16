@@ -8,7 +8,7 @@
             </div>
         </section>
     </div>
-    <loader v-else :loading="true"></loader>
+    <Loader v-else :loading="true"></Loader>
 </template>
 <script lang="ts">
 import { useStore } from "@/store";

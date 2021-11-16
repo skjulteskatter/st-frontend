@@ -3,7 +3,7 @@
 		<KeyIcon class="inline w-4 h-4 mr-2" />
 		<span>{{ $t('settings_changePassword') }}</span>
 	</button>
-	<base-modal
+	<BaseModal
 		:show="show"
 		@close="hideModal"
 		class="change-password"
@@ -12,31 +12,31 @@
 			<h3 class="font-bold text-xl">{{ $t("settings_changePassword") }}</h3>
 		</template>
 		<form @submit="resetPassword" class="flex flex-col gap-2">
-			<base-input
+			<BaseInput
 				type="password"
 				v-if="passwordUser"
 				v-model="oldPassword"
 				:label="$t('settings_oldPassword')"
 			/>
-			<base-input
+			<BaseInput
 				type="password"
 				v-model="newPassword"
 				:label="$t('settings_newPassword')"
 			/>
-			<base-input
+			<BaseInput
 				:style="newPassword != repeatPassword ? 'color: red' : ''"
 				type="password"
 				v-model="repeatPassword"
 				:label="$t('settings_repeatPassword')"
 			/>
-			<base-button theme="secondary" formaction="submit">
+			<BaseButton theme="secondary" formaction="submit">
 				<template #icon>
 					<CheckIcon class="w-4 h-4" />
 				</template>
 				{{ $t("common_submit") }}
-			</base-button>
+			</BaseButton>
 		</form>
-	</base-modal>
+	</BaseModal>
 </template>
 
 <script lang="ts">

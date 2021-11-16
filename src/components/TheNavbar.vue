@@ -22,13 +22,13 @@
 					</div>
 				</div>
 
-				<full-search-input class="md:ml-auto" :disabled="$route.name == 'search'" />
+				<FullSearchInput class="md:ml-auto" :disabled="$route.name == 'search'" />
 				
 				<div class="hidden md:block">
 					<div class="ml-4 flex items-center md:ml-6">
-						<store-cart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
-						<feedback />
-						<notification-list />
+						<StoreCart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
+						<Feedback />
+						<Notification-list />
 
 						<!-- Profile dropdown -->
 						<Menu as="div" class="ml-3 relative">
@@ -55,8 +55,8 @@
 					<!-- Mobile menu button -->
 					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
 						<span class="sr-only">Open main menu</span>
-						<icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-						<icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />
+						<Icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+						<Icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />
 					</DisclosureButton>
 				</div>
 			</div>
@@ -78,7 +78,7 @@
 						<div class="text-base leading-tight font-medium">{{ user.displayName }}</div>
 						<div class="text-sm leading-tight opacity-50">{{ user.email }}</div>
 					</div>
-					<notification-list class="ml-auto" />
+					<Notification-list class="ml-auto" />
 				</div>
 				<div class="mt-3 px-2 space-y-1">
 					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common_settings') }}</router-link>

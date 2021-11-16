@@ -1,16 +1,16 @@
 <template>
-    <base-dropdown
+    <BaseDropdown
         :label="'Transpose ' + currentTransposition"
     >
-        <base-button
+        <BaseButton
             v-for="(key, i) in keys"
             :key="i"
             :disabled="currentTransposition == key"
             @click="transpose(transpositions ? transpositions[key] : 0)"
         >
             {{key}}
-        </base-button>
-    </base-dropdown>
+        </BaseButton>
+    </BaseDropdown>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";

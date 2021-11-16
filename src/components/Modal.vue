@@ -1,16 +1,16 @@
 <template>
     <div>
-        <base-button
+        <BaseButton
             @click="() => {openModal(); callback()}"
             :theme="theme"
             :icon="icon"
             v-if="type == 'button'"
-            >{{ label }}</base-button
+            >{{ label }}</BaseButton
         >
         <b @click="openModal" v-if="type == 'span'">
             {{ label }}
         </b>
-        <transition-root
+        <TransitionRoot
             class="flex justify-center items-center fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 z-30"
             as="div"
             :show="modalIsOpen"
@@ -22,7 +22,7 @@
             leave-from="opacity-100"
             leave-to="opacity-0"
         >
-            <transition-child
+            <TransitionChild
                 as="div"
                 class="max-w-xl"
                 enter="transition transform"
@@ -32,14 +32,14 @@
                 leave-from="translate-y-0"
                 leave-to="translate-y-4"
             >
-                <base-card
+                <BaseCard
                     @mouseover="mouseOverCard = true"
                     @mouseleave="mouseOverCard = false"
                 >
                     <slot></slot>
-                </base-card>
-            </transition-child>
-        </transition-root>
+                </BaseCard>
+            </TransitionChild>
+        </TransitionRoot>
     </div>
 </template>
 

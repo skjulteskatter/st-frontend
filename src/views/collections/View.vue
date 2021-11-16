@@ -1,6 +1,6 @@
 <template>
     <div>
-        <back-button class="mb-4" />
+        <BackButton class="mb-4" />
         <div class="grid gap-4 lg:grid-cols-3" v-if="product">
             <div>
                 <img
@@ -9,15 +9,15 @@
                     :alt="product.getName(languageKey)"
                 />
             </div>
-            <base-card class="p-4 lg:col-span-2">
+            <BaseCard class="p-4 lg:col-span-2">
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName(languageKey) }}
                 </h1>
                 <p class="text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    <price-div :product="product" :country="country"></price-div>
+                    <PriceDiv :product="product" :country="country" />
                 </p>
                 <div class="mb-4">
-                    <base-button
+                    <BaseButton
                         theme="secondary"
                         :disabled="inCart || !collections[0].enabled"
                         v-if="!product.owned"
@@ -27,14 +27,14 @@
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t("store_addToCart") }}
-                    </base-button>
+                    </BaseButton>
                     <span class="opacity-50" v-else>
                         {{ $t("store_alreadyOwned") }}
                     </span>
                 </div>
                 <h3 class="font-bold text-lg mt-8" v-if="details">{{ $t('store_about') }}</h3>
                 <div v-html="details" class="flex flex-col gap-2 text-sm"></div>
-            </base-card>
+            </BaseCard>
         </div>
     </div>
 </template>

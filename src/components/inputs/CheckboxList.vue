@@ -3,12 +3,14 @@
 		<label v-if="title" class="font-bold">
 			{{ title }}
 		</label>
-		<checkbox 
+		<Checkbox 
 			v-for="item in Items"
 			:key="item.key"
 			v-model="item.value"
-			:label="item.label"
-		/>
+			:name="item.label"
+		>
+			{{ item.label }}
+		</Checkbox>
 	</div>
 </template>
 

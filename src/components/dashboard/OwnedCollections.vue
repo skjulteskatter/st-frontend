@@ -1,9 +1,9 @@
 <template>
-	<base-card class="2xl:col-span-2">
+	<BaseCard class="2xl:col-span-2">
 		<template #header>
 			<div class="flex items-center">
 				<h2 class="font-bold mr-4">{{ $t('common_collections') }}</h2>
-				<tooltip :text="$t('tooltip_ownedCollections')" />
+				<Tooltip :text="$t('tooltip_ownedCollections')" />
 				<router-link
 					v-if="collections?.length"
 					to="/collections"
@@ -16,7 +16,7 @@
 		</template>
 		<div class="flex flex-col gap-2 h-full">
 			<div v-if="collections?.length" class="flex flex-col gap-2">
-				<collection-card
+				<CollectionCard
 					v-for="c in collections"
 					:key="c.id"
 					:collection="c"
@@ -31,7 +31,7 @@
 				</p>
 			</router-link>
 		</div>
-	</base-card>
+	</BaseCard>
 </template>
 
 <script lang="ts">

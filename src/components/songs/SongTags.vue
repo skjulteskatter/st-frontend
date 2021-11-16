@@ -15,7 +15,7 @@
                 <XIcon class="w-4 h-4" />
             </button>
         </span>
-        <base-dropdown class="flex-grow">
+        <BaseDropdown class="flex-grow">
             <template #button>
                 <button aria-label="Add category" class="py-1 text-gray-500 text-xs flex items-center gap-2">
                     <PlusIcon class="w-4 h-4" />
@@ -23,12 +23,12 @@
                 </button>
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
-                <base-input v-model="tagFilter" type="text" :placeholder="$t('tag')" class="w-full"/>
-                <base-button type="submit" theme="primary" :content="false">
+                <BaseInput v-model="tagFilter" type="text" :placeholder="$t('tag')" class="w-full"/>
+                <BaseButton type="submit" theme="primary" :content="false">
                     <template #icon>
                         <PlusIcon class="w-4 h-4" />
                     </template>
-                </base-button>
+                </BaseButton>
             </form>
             <template #footer>
                 <div v-if="tags.length">
@@ -42,7 +42,7 @@
                     </ul>
                 </div>
             </template>
-        </base-dropdown>
+        </BaseDropdown>
     </div>
 </template>
 <script lang="ts">

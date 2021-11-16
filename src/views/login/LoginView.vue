@@ -67,14 +67,14 @@
                             enter-to-class="opacity-100 scale-100 translate-y-0"
                         >
                             <form v-if="showEmail" @submit.prevent="submitForm" class="flex flex-col gap-4 mt-16 w-full">
-                                <base-input
+                                <BaseInput
                                     label="Email"
                                     type="email"
                                     v-model="form.email"
                                     required
                                     :disabled="providers.length > 0"
                                 />
-                                <base-input
+                                <BaseInput
                                     label="Password"
                                     type="password"
                                     :required="providers.includes('password')"
@@ -85,14 +85,14 @@
                                     <input type="checkbox" v-model="stayLoggedIn" class="rounded border border-gray-300 focus:ring-primary text-primary" />
                                     <span>Remember me</span>
                                 </label>
-                                <base-button
+                                <BaseButton
                                     theme="secondary"
                                     type="submit"
                                     formaction="submit"
                                     :loading="loading.login"
                                 >
                                     Sign in
-                                </base-button>
+                                </BaseButton>
                                 <a class="text-sm cursor-pointer hover:underline" @click="forgotPassword = true">Forgot password?</a>
                             </form>
                         </transition>
@@ -135,29 +135,29 @@
             </TabGroup>
         </div>
     </section>
-    <base-modal :show="forgotPassword" @close="forgotPassword = false">
+    <BaseModal :show="forgotPassword" @close="forgotPassword = false">
         <template #title>
             <h1 class="text-xl font-bold">Forgot password</h1>
         </template>
         <div class="flex flex-col items-center gap-4">
             <form @submit.prevent="sendForgotEmail()" class="flex flex-col gap-4">
-                <base-input
+                <BaseInput
                     type="email"
                     label="Email"
                     v-model="form.email"
                     required
                     @keydown.enter="sendForgotEmail()"
                 />
-                <base-button 
+                <BaseButton 
                     theme="secondary"
                     type="submit"
                     formaction="submit"
                     :disabled="forgotPasswordSent"
-                >Send</base-button>
+                >Send</BaseButton>
             </form>
             <div v-if="forgotPasswordSent">Email sent</div>
         </div>
-    </base-modal>
+    </BaseModal>
 </template>
 
 <script lang="ts">

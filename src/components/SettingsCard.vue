@@ -1,5 +1,5 @@
 <template>
-    <base-card v-if="user">
+    <BaseCard v-if="user">
         <div class="grid md:grid-cols-2 gap-6" v-show="category == 'general'">
             <div class="relative">
                 <label class="block uppercase text-xs tracking-wide mb-1" for="theme-mode">{{ $t('common_color') }}{{ $t("common_theme") }}</label>
@@ -104,7 +104,7 @@
                 </label>
                 <div>
                     <label class="block text-xs uppercase tracking-wide mb-1">{{ $t("common_password") }}</label>
-                    <change-password />
+                    <ChangePassword />
                 </div>
             </div>
             <div class="mt-6" v-if="collections.length">
@@ -116,7 +116,7 @@
         </div>
         <template #footer>
             <div class="flex justify-end gap-4">
-                <base-button
+                <BaseButton
                     v-if="category == 'user' && collections.length"
                     @click="portal"
                     :loading="loading['subscriptions']"
@@ -127,8 +127,8 @@
                     </template>
                     {{ $t("common_manage") }}
                     {{ $t("common_subscriptions").toLowerCase() }}
-                </base-button>
-                <base-button
+                </BaseButton>
+                <BaseButton
                     :loading="loading['save']"
                     @click="save"
                     theme="secondary"
@@ -137,10 +137,10 @@
                         <CheckIcon class="w-4 h-4" />
                     </template>
                     {{ $t("common_save") }}
-                </base-button>
+                </BaseButton>
             </div>
         </template>
-    </base-card>
+    </BaseCard>
 </template>
 
 <script lang="ts">

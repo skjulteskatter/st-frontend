@@ -1,5 +1,5 @@
 <template>
-    <transition-root
+    <TransitionRoot
         :show="show"
         enter="transition-opacity duration-200"
         enter-from="opacity-0"
@@ -13,7 +13,7 @@
             v-if="show"
             @click="callback ? callback() : undefined"
         >
-            <icon v-if="icon" :name="icon" size="18" :class="{ 'text-green-700': type == 'success', 'text-red-700': type == 'error', 'text-primary': type == 'primary' }" />
+            <Icon v-if="icon" :name="icon" size="18" :class="{ 'text-green-700': type == 'success', 'text-red-700': type == 'error', 'text-primary': type == 'primary' }" />
             <div class="flex-grow text-xs">
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body" style="">{{ body }}</span>
@@ -22,7 +22,7 @@
                 <XIcon class="w-4 h-4" />
             </button>
         </div>
-    </transition-root>
+    </TransitionRoot>
 </template>
 
 <script lang="ts">

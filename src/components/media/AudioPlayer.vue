@@ -37,11 +37,11 @@
             <audio id="audio-player" :src="audio.directUrl"></audio>
         </div>
         <div class="hidden md:block">
-            <base-button theme="tertiary" @click="closePlayer" icon="error">
+            <BaseButton theme="tertiary" @click="closePlayer" icon="error">
                 <span>
                     {{ $t("common_close") }}
                 </span>
-            </base-button>
+            </BaseButton>
         </div>
     </div>
 </template>

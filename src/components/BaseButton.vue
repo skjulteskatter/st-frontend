@@ -5,7 +5,7 @@
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <icon size="18" v-if="icon && !$slots.icon" :name="icon" class="inline-block" />
+        <Icon size="18" v-if="icon && !$slots.icon" :name="icon" class="inline-block" />
         <span v-else-if="$slots.icon">
             <slot name="icon" />
         </span>

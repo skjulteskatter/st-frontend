@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center">
-        <base-list :items="Chapters" :clickCallback="(i) => i.view()" :nameSelector="(i) => i.number"/>
+        <BaseList :items="Chapters" :clickCallback="(i) => i.view()" :nameSelector="(i) => i.number"/>
         <!-- <button 
             v-for="i in Chapters" 
             :key="i.id"

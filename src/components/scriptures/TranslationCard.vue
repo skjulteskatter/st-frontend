@@ -1,7 +1,7 @@
 <template>
-    <base-card v-if="translation">
+    <BaseCard v-if="translation">
         {{translation.title}}
-    </base-card>
+    </BaseCard>
 </template>
 <script lang="ts">
 import { Translation } from "@/classes/scriptures";

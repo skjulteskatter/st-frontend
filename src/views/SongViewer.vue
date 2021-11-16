@@ -1,12 +1,12 @@
 <template>
     <div>
-        <loader :loading="loading">
+        <Loader :loading="loading">
             <div v-if="song" class="flex flex-col gap-4">
                 <div class="flex justify-between">
-                    <back-button :to="`/songs/${collection?.key}`" />
+                    <BackButton :to="`/songs/${collection?.key}`" />
                     <div class="flex gap-2 items-center ml-auto">
                         <span v-if="isAdmin" class="bg-black/10 dark:bg-white/10 text-sm py-2 px-3 rounded-md hidden xl:block">{{ song.id }}</span>
-                        <base-button
+                        <BaseButton
                             v-if="isAdmin"
                             @click="goToEditPage()"
                             theme="tertiary"
@@ -16,18 +16,18 @@
                                 <PencilAltIcon class="w-4 h-4" />
                             </template>
                             {{ $t('common_edit') }}
-                        </base-button>
+                        </BaseButton>
                         <button v-if="isAdmin" @click="favorites.toggle(song?.id)" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
                             <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.has(song?.id)" />
                             <HeartOutline class="w-6 h-6 opacity-50" v-else />
                         </button>
-                        <base-button theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
+                        <BaseButton theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                             <template #icon>
                                 <FolderAddIcon class="w-4 h-4" />
                             </template>
                             {{ $t('common_addTo') + ' ' + $t('common_collection').toLowerCase() }}
-                        </base-button>
-                        <base-modal :show="show" @close="closeAdder()">
+                        </BaseButton>
+                        <BaseModal :show="show" @close="closeAdder()">
                             <template #title>
                                 <div class="flex gap-4 items-center flex-grow">
                                     <h3 class="font-bold">
@@ -36,20 +36,20 @@
                                     <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">+</button>
                                 </div>
                             </template>
-                            <create-playlist-modal :show="showPlaylistModal" @close="showPlaylistModal = false" />
+                            <CreatePlaylistModal :show="showPlaylistModal" @close="showPlaylistModal = false" />
                             <div class="flex flex-col gap-2 max-h-72 w-96 overflow-y-auto shadow-scroll">
-                                <playlist-card
+                                <PlaylistCard
                                     v-for="playlist in playlists"
                                     :key="playlist.id"
                                     :playlist="playlist"
                                     @click="addToPlaylist(playlist)"
                                 />
                             </div>
-                        </base-modal>
+                        </BaseModal>
                     </div>
                 </div>
                 <div class="flex justify-between">
-                    <song-tags :song="song" />
+                    <SongTags :song="song" />
                     <SwitchGroup as="div" class="hidden md:flex gap-2 items-center cursor-pointer" v-if="song?.hasLyrics">
                         <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
                         <Switch
@@ -73,13 +73,13 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="flex flex-col gap-4 md:col-span-2">
-                        <song-info-card
+                        <SongInfoCard
                             :song="song"
                             :languageKey="languageKey"
                             :viewCount="viewCount"
                             class="md:col-span-2"
                         />
-                        <lyrics-card
+                        <LyricsCard
                             :class="{ 'hidden': sheetMusicOptions?.show }"
                             v-if="song.hasLyrics && !isExtended"
                             :loading="loadingLyrics"
@@ -91,7 +91,7 @@
                             @transpose="transpose"
                             @setView="setView"
                         />
-                        <presentation-preview
+                        <PresentationPreview
                             v-if="song.hasLyrics && isExtended && lyrics"
                             :text="lyrics?.getText({
                                 chorus: this.$t('song_chorus'),
@@ -105,7 +105,7 @@
                         />
                     </div>
                     <aside>
-                        <song-media-card
+                        <SongMediaCard
                             v-if="!isExtended"
                             :song="song"
                             :lyrics="lyrics ?? undefined"
@@ -113,20 +113,20 @@
                             class="sticky top-20"
                         />
                         <div v-else class="sticky top-20 flex flex-col gap-4">
-                            <presentation-control-panel
+                            <PresentationControlPanel
                                 @refresh="refresh()"
                                 @next="next()"
                                 @previous="previous()"
                                 @mute="control.mute()"
                             />
-                            <song-selector :songs="collection?.songs" @setSong="setSong" />
-                            <theme-selector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
+                            <SongSelector :songs="collection?.songs" @setSong="setSong" />
+                            <ThemeSelector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
                         </div>
                     </aside>
                 </div>
             </div>
-        </loader>
-        <base-modal :show="song ? !song.available : false">
+        </Loader>
+        <BaseModal :show="song ? !song.available : false">
             <div class="flex flex-col items-center">
                 <LockClosedIcon class="w-10 h-10 text-primary my-4" />
                 <h2 class="text-2xl font-bold">{{ $t('store_limitedAccess') }}</h2>
@@ -136,21 +136,21 @@
                     <p>{{ collection.getName(languageKey) }}</p>
                 </div>
                 <div class="flex gap-4 mt-8">
-                    <base-button theme="tertiary" @click="$router.back()">
+                    <BaseButton theme="tertiary" @click="$router.back()">
                         <template #icon>
                             <ArrowLeftIcon class="w-4 h-4" />
                         </template>
                         {{ $t('common_back') }}
-                    </base-button>
-                    <base-button theme="secondary" @click="collection?.addToCart">
+                    </BaseButton>
+                    <BaseButton theme="secondary" @click="collection?.addToCart">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_addToCart') }}
-                    </base-button>
+                    </BaseButton>
                 </div>
             </div>
-        </base-modal>
+        </BaseModal>
     </div>
 </template>
 <script lang="ts">

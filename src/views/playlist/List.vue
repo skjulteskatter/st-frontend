@@ -5,7 +5,7 @@
             {{ $t("common_collections").toLowerCase() }}
         </h1>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <playlist-card
+            <PlaylistCard
                 v-for="playlist in playlists"
                 :key="playlist.id"
                 :playlist="playlist"
@@ -16,8 +16,8 @@
                 <p class="tracking-wide">{{ $t('playlist_createnew') }}</p>
             </button>
         </div>
-        <create-playlist-modal :show="createPlaylist" @close="closeCreatePlaylist" />
-        <base-modal :show="showModal" @close="showModal = false">
+        <CreatePlaylistModal :show="createPlaylist" @close="closeCreatePlaylist" />
+        <BaseModal :show="showModal" @close="showModal = false">
             <template #icon>
                 <ExclamationIcon class="w-6 h-6 text-red-500" />
             </template>
@@ -28,17 +28,17 @@
                 <small class="opacity-50 tracking-wide">{{ $t('playlist_deleteDescription') }}</small>
             </template>
             <div class="flex flex-col gap-4 sm:flex-row sm:justify-end">
-                <base-button theme="tertiary" @click="showModal = false">
+                <BaseButton theme="tertiary" @click="showModal = false">
                     {{ $t('common_cancel') }}
-                </base-button>
-                <base-button theme="error" @click="deletePlaylist">
+                </BaseButton>
+                <BaseButton theme="error" @click="deletePlaylist">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
                     {{ $t('common_delete') }}
-                </base-button>
+                </BaseButton>
             </div>
-        </base-modal>
+        </BaseModal>
     </div>
 </template>
 

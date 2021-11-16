@@ -1,7 +1,7 @@
 <template>
     <div class="flex justify-center">
-        <loader :loading="loading">
-            <base-card class="max-w-md" v-if="chapter">
+        <Loader :loading="loading">
+            <BaseCard class="max-w-md" v-if="chapter">
                 <template #header>
                     {{chapter.number}}
                 </template>
@@ -9,8 +9,8 @@
                         <span class="text-lg mr-2">{{v.number}}</span>
                         <span :style="{'text-decoration': selectedWords[v.key]?.[i] ? 'underline' : ''}" @click="selectWord(v.key, i)" v-for="(word, i) in v.content" :key="i" v-html="word + ' '"/>
                     </p>
-            </base-card>
-        </loader>
+            </BaseCard>
+        </Loader>
     </div>
 </template>
 <script lang="ts">

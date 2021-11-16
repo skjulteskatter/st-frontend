@@ -1,11 +1,11 @@
 <template>
     <section>
-        <back-button class="mb-4" />
+        <BackButton class="mb-4" />
         <header class="flex gap-4 mb-4">
             <h1 class="font-bold text-3xl">{{ $t('credits_songCredit') }}</h1>
         </header>
         <section class="mb-4">
-            <base-card v-if="step == 1">
+            <BaseCard v-if="step == 1">
                 <template #header>
                     <h2 class="font-semibold">Choose song</h2>
                 </template>
@@ -29,8 +29,8 @@
                         <input type="number" v-model="number" :placeholder="$t('song_number')" class="pl-10 rounded-md border-black/20 dark:border-white/20" />
                     </label>
                 </div>
-            </base-card>
-            <base-card v-if="step == 2">
+            </BaseCard>
+            <BaseCard v-if="step == 2">
                 <div v-if="song">
                     <div class="flex flex-col mb-4">
                         <h2 class="font-bold text-lg">{{ song.getName(Language) }}</h2>
@@ -40,27 +40,27 @@
                     <input ref="file" type="file" id="credit-file-input" accept="audio/mpeg"/>
                 </div>
                 <p v-else>Please select a song</p>
-            </base-card>
+            </BaseCard>
         </section>
         <div class="flex gap-4 justify-end">
-            <base-button theme="tertiary" @click="previousStep()" v-if="step > 1">
+            <BaseButton theme="tertiary" @click="previousStep()" v-if="step > 1">
                 <template #icon>
                     <ArrowLeftIcon class="w-4 h-4" />
                 </template>
                 {{ $t('common_previous') }}
-            </base-button>
-            <base-button theme="secondary" :disabled="!(collection && number)" @click="nextStep()" v-if="step < 2">
+            </BaseButton>
+            <BaseButton theme="secondary" :disabled="!(collection && number)" @click="nextStep()" v-if="step < 2">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
                 {{ $t('common_next') }}
-            </base-button>
-            <base-button theme="secondary" :loading="loading" :disabled="!downloadReady" @click="creditSong()" v-if="step == 2">
+            </BaseButton>
+            <BaseButton theme="secondary" :loading="loading" :disabled="!downloadReady" @click="creditSong()" v-if="step == 2">
                 <template #icon>
                     <DownloadIcon class="w-4 h-4" />
                 </template>
                 {{ $t('credits_creditAndDownload') }}
-            </base-button>
+            </BaseButton>
         </div>
     </section>
 </template>

@@ -2,10 +2,10 @@
     <div v-if="isAdmin">
         <div class="mb-4 flex gap-4">
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
-            <copy-to-clipboard :content="token" label="API token" title="Copy API token" />
+            <CopyToClipboard :content="token" label="API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-4">
-            <users-list :users="users" :currentUser="currentUser"></users-list>
+            <UsersList :users="users" :currentUser="currentUser" />
         </div>
     </div>
     <div v-else>

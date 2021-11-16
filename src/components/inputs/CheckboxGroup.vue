@@ -3,14 +3,15 @@
 		<label class="font-bold">
 			{{ name }}
 		</label>
-		<checkbox 
+		<Checkbox
 			v-for="(label, i) in Labels"
 			:key="i"
 			v-model="Values[label]"
-			@input="(v) => Values[label] = v"
 			@change="action"
-			:label="$t(`types_${label}`)"
-		/>
+			:name="$t(`types_${label}`)"
+		>
+			{{ $t(`types_${label}`) }}
+		</Checkbox>
 	</div>
 </template>
 
