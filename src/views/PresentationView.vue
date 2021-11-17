@@ -145,10 +145,12 @@ export default class PresentationView extends Vue {
             if (e.key == "ArrowRight") {
                 viewer.next();
                 this.verses = viewer.Verses;
+                this.muted = viewer.Settings?.muted === true;
             }
             if (e.key == "ArrowLeft") {
                 viewer.previous();
                 this.verses = viewer.Verses;
+                this.muted = viewer.Settings?.muted === true;
             }
         });
     }
