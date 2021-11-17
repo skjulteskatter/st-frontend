@@ -322,7 +322,6 @@ export default class Collection extends BaseClass implements ICollection {
                 case "number":
                     this._lists[value] = this.songs.reduce((a, b) => {
                         const number = Math.floor((b.getNumber(this.id) - 1) / songsPerCard);
-                        // console.log(number);
                         let entry = a[number];
                         if (!entry) {
                             entry = {
