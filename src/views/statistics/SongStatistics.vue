@@ -10,6 +10,7 @@
 				<BaseInput type="date" v-model="fromDate" :label="$t('statistics_startDate')" />
 				<BaseInput type="date" v-model="toDate" :label="$t('statistics_endDate')" />
 				<BaseButton
+					class="flex-shrink-0"
 					theme="secondary"
 					@click="getAnalytics"
 					icon="refresh"
