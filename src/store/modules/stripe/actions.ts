@@ -40,6 +40,12 @@ export const actions: ActionTree<State, RootState> & Actions = {
     async [StripeActionTypes.START_SESSION]({ state }) {
         const user = useStore().getters.user;
 
+        if (!user) return;
+
+        if (user.email.endsWith("privaterelay.appleid.com") && !confirm((i18n.global.t("store_privateRelayUsed")).replace("%0", appSession.user.email))) {
+            return;
+        }
+
         const fun = async () => {
             if (state.cart.length > 0) await stripeService.checkout(state.cart, state.type);
         };
