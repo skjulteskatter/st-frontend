@@ -61,7 +61,7 @@
                     :label="
                         relativeTranspositions.find(
                             (r) => r.value == selectedTransposition
-                        )?.view ?? 'Transpose'
+                        )?.view ?? $t('song_transpose')
                     "
                 >
                     <div class="overflow-y-auto max-h-64 shadow-scroll">
@@ -120,7 +120,6 @@ import { Options, Vue } from "vue-class-component";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
-    TransposeDropdown,
     PrintButton,
     PerformanceViewer,
 } from "./lyrics";
@@ -136,7 +135,6 @@ import { SongViewType } from "@/store/modules/songs/state";
 @Options({
     components: {
         TransposedLyricsViewer,
-        TransposeDropdown,
         PerformanceViewer,
         LyricsViewer,
         PrintButton,

@@ -40,7 +40,6 @@ import { Options, Vue } from "vue-class-component";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
-    TransposeDropdown,
     PrintButton,
 } from "../lyrics";
 import { SongChanger } from "@/components/songs";
@@ -50,7 +49,6 @@ import { MinusCircleIcon } from "@heroicons/vue/outline";
 @Options({
     components: {
         TransposedLyricsViewer,
-        TransposeDropdown,
         LyricsViewer,
         PrintButton,
         SongChanger,
