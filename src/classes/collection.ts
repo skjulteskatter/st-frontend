@@ -320,21 +320,22 @@ export default class Collection extends BaseClass implements ICollection {
         if (!this._lists[value]) {
             switch (value) {
                 case "number":
-                    this._lists[value] = this.songs.reduce((a, b) => {
+                    this._lists[value] = Object.values(this.songs.reduce((a, b) => {
                         const number = Math.floor((b.getNumber(this.id) - 1) / songsPerCard);
-                        let entry = a[number];
+                        // console.log(number);
+                        let entry = a[number.toString()];
                         if (!entry) {
                             entry = {
-                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                title: `${(number * songsPerCard) + 1}-${number * songsPerCard + songsPerCard}`,
                                 songs: [],
                                 count: false,
                             };
-                            a.push(entry);
+                            a[number.toString()] = entry;
                         }
                         entry.songs.push(b);
 
                         return a;
-                    }, [] as ListEntry[]).map(i => {
+                    }, {} as {[key: string]: ListEntry})).map(i => {
                         i.songs = i.songs.sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
                         return i;
                     });
