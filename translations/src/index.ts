@@ -37,7 +37,9 @@ async function main() {
                 }
             }
 
-            writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries));
+            if (Object.values(entries).length) {
+                writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries));
+            }
         }
     }
 }
