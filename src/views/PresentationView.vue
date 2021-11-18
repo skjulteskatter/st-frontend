@@ -10,9 +10,7 @@
                 <h1 class="text-7xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-lg tracking-wide flex flex-col items-end">
                     <div class="flex gap-4">
-                        <p
-                            v-if="song.Authors.length > 0"
-                        >
+                        <p v-if="song.Authors.length > 0">
                             {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
                             <span v-for="author in song.Authors" :key="author.id">
                                 {{ author.name }}
@@ -21,10 +19,7 @@
                         <span v-if="song.Authors.length">&middot;</span>
                         <p v-if="song.Composers.length > 0">
                             {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
-                            <span
-                                v-for="composer in song.Composers"
-                                :key="composer.id"
-                            >
+                            <span v-for="composer in song.Composers" :key="composer.id">
                                 {{ composer.name }}
                             </span>
                         </p>
@@ -49,16 +44,12 @@
                             © {{ getLocaleString(song.copyright.melody.name) }}
                         </p>
                         <div v-else class="flex gap-4">
-                            <p
-                                v-if="song.copyright.text"
-                            >
+                            <p v-if="song.copyright.text">
                                 {{ $t("song_text") }} ©
                                 {{ getLocaleString(song.copyright.text.name) }}
                             </p>
                             <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
-                            <p
-                                v-if="song.copyright.melody"
-                            >
+                            <p v-if="song.copyright.melody">
                                 {{ $t("song_melody") }} ©
                                 {{ getLocaleString(song.copyright.melody.name) }}
                             </p>
