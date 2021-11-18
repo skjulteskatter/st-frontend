@@ -32,7 +32,7 @@ export default class SplashScreen extends Vue {
 
 <style scoped>
 .loading-bar {
-	animation: loading-bar 2s linear;
+	animation: loading-bar 3s linear;
 	animation-fill-mode: forwards;
 }
 

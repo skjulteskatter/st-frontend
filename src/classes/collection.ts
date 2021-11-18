@@ -325,11 +325,11 @@ export default class Collection extends BaseClass implements ICollection {
                         let entry = a[number];
                         if (!entry) {
                             entry = {
-                                title: `${number * songsPerCard + 1}-${number * songsPerCard + songsPerCard}`,
+                                title: `${(number * songsPerCard) + 1}-${number * songsPerCard + songsPerCard}`,
                                 songs: [],
                                 count: false,
                             };
-                            a.push(entry);
+                            a[number] = entry;
                         }
                         entry.songs.push(b);
 

@@ -25,7 +25,7 @@
                         :label="
                             relativeTranspositions.find(
                                 (r) => r.value == transposition
-                            )?.view ?? 'Transpose'
+                            )?.view ?? $t('song_transpose')
                         "
                         class="flex flex-col"
                     >

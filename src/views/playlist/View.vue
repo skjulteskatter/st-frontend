@@ -78,7 +78,7 @@
                     class="flex flex-col gap-2"
                 >
                     <span class="w-full flex gap-2 justify-between">
-                        <CopyToClipboard label="Kopiér delingslenke" :content="getLink(key.key)" />
+                        <CopyToClipboard :label="$t('playlist_copyLink')" :content="getLink(key.key)" />
                         <BaseButton
                             theme="error"
                             :disabled="deleted[key.key]"

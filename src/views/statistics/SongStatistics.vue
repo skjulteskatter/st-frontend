@@ -3,7 +3,7 @@
 		<BackButton class="mb-4" />
 		<header class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
 			<div>
-				<h1 class="font-bold text-3xl">{{ $t('song_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
+				<h1 class="font-bold text-3xl">{{ $t('common_song') }} {{ $t('common_statistics').toLocaleLowerCase() }}</h1>
 				<p class="text-primary">{{ song?.getName(languageKey) }}</p>
 			</div>
 			<div class="flex gap-2 flex-col lg:flex-row lg:items-end lg:gap-4">
