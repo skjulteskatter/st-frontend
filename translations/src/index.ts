@@ -1,4 +1,5 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
+import { join } from "path";
 
 async function main() {
     const languages = readdirSync("./translations/data/");
@@ -51,3 +52,44 @@ async function main() {
 }
 
 main();
+
+function getAllFiles(dirPath: string, arrayOfFiles: string[] | null) {
+    const files = readdirSync(dirPath);
+  
+    arrayOfFiles = arrayOfFiles || [];
+  
+    files.forEach(function(file) {
+        if (statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
+        } else {
+            arrayOfFiles.push(join(__dirname + "/../../", dirPath, "/", file));
+        }
+    });
+  
+    return arrayOfFiles;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getAllKeys() {
+    const filepaths = getAllFiles("./src", null);
+
+    const keys: string[] = [];
+
+    for (const filepath of filepaths) {
+        if ((filepath.endsWith(".ts") && !filepath.endsWith(".d.ts")) || filepath.endsWith(".vue")) {
+            const content = readFileSync(filepath, {encoding: "utf-8"});
+
+            const result = content.match(/(?<=\$t\(('|"))\w*(?=("|')\))/gm);
+
+            if (result) {
+                for (const key of result) {
+                    if (!keys.includes(key)) {
+                        keys.push(key);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// getAllKeys();
