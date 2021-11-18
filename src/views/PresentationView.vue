@@ -19,9 +19,7 @@
                             </span>
                         </p>
                         <span v-if="song.Authors.length">&middot;</span>
-                        <p
-                            v-if="song.Composers.length > 0"
-                        >
+                        <p v-if="song.Composers.length > 0">
                             {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
                             <span
                                 v-for="composer in song.Composers"
@@ -30,15 +28,8 @@
                                 {{ composer.name }}
                             </span>
                         </p>
-                        <p
-                            v-else
-                        >
-                            {{$t("song_unknownComposer")}}
-                        </p>
-                        <span v-if="(song.Authors.length || song.Composers.length) && melodyOrigin">&middot;</span>
-                        <p v-if="melodyOrigin">
-                            {{ $t("song_melody") }}: {{ melodyOrigin }}
-                        </p>
+                        <p v-else-if="!song.Composers.length && !melodyOrigin">{{$t("song_unknownComposer")}}</p>
+                        <p v-if="melodyOrigin">{{ melodyOrigin }}</p>
                     </div>
                     <div class="flex gap-4">
                         <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
@@ -169,10 +160,16 @@ export default class PresentationView extends Vue {
         });
     }
 
-    public get melodyOrigin() {
-        const melodyOrigin = this.song?.melodyOrigin;
+    public get Language() {
+        return this.store.getters.languageKey;
+    }
 
-        return melodyOrigin?.description[this.store.getters.languageKey] ?? melodyOrigin?.description.no;
+    public get melodyOrigin() {
+        return (
+            this.song?.melodyOrigin?.description?.[this.Language] ??
+            this.song?.melodyOrigin?.description?.no ??
+            undefined
+        );
     }
 
     public getLocaleString(dictionary: { [key: string]: string }) {
