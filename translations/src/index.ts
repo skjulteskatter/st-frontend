@@ -27,7 +27,10 @@ async function main() {
                 }
     
                 try {
-                    entries[JSON.parse(data[0])] = JSON.parse(data[1]);
+                    const value = JSON.parse(data[1]);
+                    if (value) {
+                        entries[JSON.parse(data[0])] = value;
+                    }
                 }
                 catch {
                     //
