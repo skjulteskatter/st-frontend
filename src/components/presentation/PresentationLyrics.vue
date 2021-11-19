@@ -1,6 +1,6 @@
 <template>
 	<article id="presentation-lyrics">
-		<div id="verses">
+		<div id="verses" ref="versesElement">
 			<div
 				class="relative verse"
 				v-for="(verse, i) in verses"
@@ -25,6 +25,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { debouncer } from "@/classes/debouncer";
 
 export default defineComponent({
 	data() {
@@ -49,10 +50,12 @@ export default defineComponent({
 		},
 	},
 	mounted() {
-		this.container = document.getElementById("presentation-lyrics");
-		this.element = document.getElementById("verses");
+		this.container = this.$el;
+		this.element = this.$refs.versesElement as HTMLDivElement;
 		
 		this.render();
+
+    addEventListener("resize", debouncer.debounce(() => this.render(), 50));
 	},
 	// updated() {
 	// 	this.render();

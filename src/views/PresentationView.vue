@@ -143,6 +143,10 @@ export default class PresentationView extends Vue {
         this.verses = viewer.Verses;
         this.muted = viewer.Settings?.muted === true;
       }
+
+      if (e.ctrlKey && e.key === "m") {
+        viewer.mute();
+      }
     }
 
     public get Language() {
