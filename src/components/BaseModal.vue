@@ -28,7 +28,7 @@
                     <template #header v-if="$slots.title || $slots.description || $slots.icon">
                         <div class="flex flex-col sm:flex-row gap-4">
                             <slot name="icon" />
-                            <div>
+                            <div class="w-full">
                                 <DialogTitle>
                                     <slot name="title" />
                                 </DialogTitle>
