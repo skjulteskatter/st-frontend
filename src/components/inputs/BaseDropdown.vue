@@ -1,6 +1,6 @@
 <template>
     <Popover class="relative">
-        <PopoverButton class="cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:ring-offset-secondary">
+        <PopoverButton class="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:ring-offset-secondary">
             <div class="bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 dark:bg-secondary dark:border-white/20" v-if="label">
                 <span>{{ label }}</span>
                 <Icon
@@ -13,7 +13,7 @@
             <slot name="button" v-else></slot>
         </PopoverButton>
         <transition
-            enter-active-class="transition duration-150 ease-out"
+            enter-active-class="transition duration-100 ease-out"
             enter-from-class="-translate-y-2 scale-95 opacity-0"
             enter-to-class="translate-y-0 opacity-100"
             leave-active-class="transition duration-100 ease-in"
