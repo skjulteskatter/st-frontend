@@ -14,7 +14,7 @@
                         {{ $t('common_collection') }}
                         <BookOpenIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
                         <select
-                            class="pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                            class="pl-10 rounded-md border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                             id="collection"
                             name="collection"
                             v-model="collection"

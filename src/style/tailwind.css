@@ -16,12 +16,12 @@
 	[multiple],
 	textarea,
 	select {
-		@apply w-full border-gray-300 rounded focus:border-primary focus:ring-primary;
+		@apply w-full border-gray-300 rounded focus-visible:border-primary focus-visible:ring-primary;
 	}
 	
 	[type='checkbox'],
 	[type='radio'] {
-		@apply rounded border-gray-300 text-primary focus:ring-primary;
+		@apply rounded border-gray-300 text-primary focus-visible:ring-primary;
 	}
 }
 

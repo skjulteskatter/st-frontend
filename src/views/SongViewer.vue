@@ -56,7 +56,7 @@
                             :disabled="lyrics?.ContainsChords"
                             @click="extend()"
                             v-model="switchExtended"
-                            class="focus:outline-none"
+                            class="focus-visible:outline-none"
                             :class="{ 'opacity-50 cursor-not-allowed': lyrics?.ContainsChords }"
                         >
                             <div

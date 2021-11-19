@@ -5,7 +5,7 @@
             @input="$emit('update:modelValue', $event.target.checked)"
             type="checkbox"
             :name="name"
-            class="border-gray-300 rounded text-primary focus:ring-primary mr-2"
+            class="border-gray-300 rounded text-primary focus-visible:ring-primary mr-2"
         />
         <slot/>
     </label>

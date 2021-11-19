@@ -90,7 +90,7 @@
                 <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song_newMelody") }}</SwitchLabel>
                 <Switch
                     @click="newMelody()"
-                    class="focus:outline-none"
+                    class="focus-visible:outline-none"
                 >
                     <div
                         class="relative inline-flex items-center h-8 rounded-full w-16 transition-colors my-1"

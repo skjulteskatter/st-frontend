@@ -11,7 +11,7 @@
         <Loader :loading="activitiesInitialized === false">
             <div class="flex flex-col gap-2 border-l-2 border-gray-100 dark:border-white/5 shadow-scroll" v-if="activities.length">
                 <router-link
-                    class="ml-2 flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+                    class="ml-2 flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
                     v-for="(a, i) in activities"
                     :key="a.id ?? i"
                     :to="a.getRouterLink(collections)"

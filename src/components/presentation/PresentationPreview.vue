@@ -3,7 +3,7 @@
         <template #header>
             <div class="flex gap-4 items-center">
                 <h3 class="font-bold">{{ $t("presentation_chooseVerses") }}</h3>
-                <button aria-label="Toggle all verses" @click="toggleAll" class="text-sm rounded-md bg-black/10 hover:bg-black/20 px-3 py-1 flex gap-2 items-center focus:ring-2 focus:ring-primary">
+                <button aria-label="Toggle all verses" @click="toggleAll" class="text-sm rounded-md bg-black/10 hover:bg-black/20 px-3 py-1 flex gap-2 items-center focus-visible:ring-2 focus-visible:ring-primary">
                     <CheckCircleIcon class="w-4 h-4" v-if="!unset" />
                     <MinusCircleIcon class="w-4 h-4" v-else />
                     {{ $t('presentation_toggleAllVerses') }}

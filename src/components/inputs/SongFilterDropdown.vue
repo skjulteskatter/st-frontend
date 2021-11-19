@@ -23,7 +23,7 @@
                     type="checkbox"
                     name="lyrics"
                     id="lyrics"
-                    class="mr-2 border-gray-300 rounded text-primary focus:ring-primary"
+                    class="mr-2 border-gray-300 rounded text-primary focus-visible:ring-primary"
                     @change="apply()"
                 />
                 <span>{{ $t("types_lyrics") }}</span>
@@ -118,29 +118,28 @@ export default class SongFilterDropdown extends Vue {
         const types = this.contentTypes.filter(
             (t) => this.typeValues[t] == true,
         );
+        const sheetMusic = this.sheetMusicTypes.filter(
+            (t) => this.sheetMusicValues[t] == true,
+        );
 
         const filter = this.store.state.songs.filter;
-
         filter.videoFiles = videos;
         filter.audioFiles = audio;
         filter.contentTypes = types;
-        filter.sheetMusicTypes = this.sheetMusicTypes.filter(
-            (t) => this.sheetMusicValues[t] == true,
-        );
+        filter.sheetMusicTypes = sheetMusic;
 
         this.store.commit(SongsMutationTypes.SET_FILTER, filter);
         this.$emit("apply");
     }
 
     public get filtersActive() {
-        let count = 0;
-
-        count += Object.keys(this.audioValues).length;
-        count += Object.keys(this.videoValues).length;
-        count += Object.keys(this.sheetMusicValues).length;
-        count += Object.keys(this.typeValues).length;
-
-        return count != 0;
+        const allFilters = [
+            ...Object.keys(this.audioValues),
+            ...Object.keys(this.videoValues),
+            ...Object.keys(this.sheetMusicValues),
+            ...Object.keys(this.typeValues),
+        ];
+        return allFilters.length > 0;
     }
 
     public get loading() {

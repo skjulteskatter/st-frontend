@@ -9,7 +9,7 @@
                         <Switch
                             @click="toggleType()"
                             v-model="yearlySub"
-                            class="focus:outline-none"
+                            class="focus-visible:outline-none"
                         >
                             <div
                                 class="relative inline-flex items-center h-5 w-8 rounded-full transition-colors my-1"
