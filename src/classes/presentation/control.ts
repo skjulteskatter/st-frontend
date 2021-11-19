@@ -13,6 +13,13 @@ export class PresentationControl extends PresentationBase {
                 if (e.key == "ArrowLeft") {
                     this.previous();
                 }
+
+                if (e.ctrlKey && e.key === "o") {
+                    this.open();
+                }
+                if (e.ctrlKey && e.key === "m") {
+                    this.mute();
+                }
             });
         }
 
@@ -48,6 +55,11 @@ export class PresentationControl extends PresentationBase {
             theme: this.settings?.theme ?? "dark",
             showSideBar: this.settings?.showSideBar ?? true,
         };
+    }
+
+    public open(): void {
+        this.commit();
+        window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
     }
 }
 

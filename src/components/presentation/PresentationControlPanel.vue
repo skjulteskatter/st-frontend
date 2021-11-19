@@ -12,7 +12,7 @@
             <div class="flex flex-col items-center gap-2 py-4">
                 <BaseButton
                     theme="primary"
-                    @click="open()"
+                    @click="$emit('open')"
                 >
                     {{ $t("song_openviewer") }}
                 </BaseButton>
@@ -82,9 +82,5 @@ import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/s
     ],
 })
 export default class PresentationControlPanel extends Vue {
-    public open() {
-        this.$emit("refresh");
-        window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
-    }
 }
 </script>

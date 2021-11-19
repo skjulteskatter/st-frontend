@@ -112,6 +112,7 @@ export default defineComponent({
 #presentation-lyrics {
 	flex-grow: 1;
 	overflow-y: hidden;
+  caret-color: transparent;
 }
 
 .verse:not(:last-child) {

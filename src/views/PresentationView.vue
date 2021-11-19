@@ -123,32 +123,26 @@ export default class PresentationView extends Vue {
             this.showSideBar = viewer.Settings?.showSideBar === true;
         });
 
-        addEventListener("keydown", (e) => {
-            if (e.key == "ArrowRight") {
-                viewer.next();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-            if (e.key == "ArrowLeft") {
-                viewer.previous();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-        });
+        addEventListener("keydown", this.onKeyDown);
     }
 
     public unmounted() {
-        // Prevent memory leaks
-        removeEventListener("keydown", (e) => {
-            if (e.key == "ArrowRight") {
-                viewer.next();
-                this.verses = viewer.Verses;
-            }
-            if (e.key == "ArrowLeft") {
-                viewer.previous();
-                this.verses = viewer.Verses;
-            }
-        });
+        removeEventListener("keydown", this.onKeyDown); // Prevent memory leaks
+    }
+
+    private onKeyDown(e: KeyboardEvent): void {
+      if (e.key == "ArrowRight") {
+        e.preventDefault(); // prevent cursor from appearing in view
+        viewer.next();
+        this.verses = viewer.Verses;
+        this.muted = viewer.Settings?.muted === true;
+      }
+      if (e.key == "ArrowLeft") {
+        e.preventDefault(); // prevent cursor from appearing in view
+        viewer.previous();
+        this.verses = viewer.Verses;
+        this.muted = viewer.Settings?.muted === true;
+      }
     }
 
     public get Language() {

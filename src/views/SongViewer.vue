@@ -115,6 +115,7 @@
                         <div v-else class="sticky top-20 flex flex-col gap-4">
                             <PresentationControlPanel
                                 @refresh="refresh()"
+                                @open="control.open()"
                                 @next="next()"
                                 @previous="previous()"
                                 @mute="control.mute()"
@@ -267,11 +268,7 @@ export default class SongViewer extends Vue {
     public toggleAll() {
         if (this.lyrics) {
             this.control.toggleAll();
-            if (this.control.AvailableVerses.length) {
-                this.unset = false;
-            } else {
-                this.unset = true;
-            }
+            this.unset = !this.control.AvailableVerses.length;
         }
     }
 
