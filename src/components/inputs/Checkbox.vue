@@ -1,5 +1,5 @@
 <template>
-    <label class="checkbox">
+    <label class="flex items-center">
         <input
             :checked="modelValue"
             @input="$emit('update:modelValue', $event.target.checked)"
