@@ -9,7 +9,7 @@
 		</template>
 		<div class="grid gap-4">
             <input
-				class="text-sm rounded-md bg-transparent border-black/20 dark:border-white/20 focus:border-transparent focus:ring-2 focus:ring-primary"
+				class="text-sm rounded-md bg-transparent border-black/20 dark:border-white/20 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-primary"
 				v-model="number"
 				type="number"
 			/>

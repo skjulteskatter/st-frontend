@@ -5,7 +5,7 @@
         enter-from-class="opacity-0 translate-y-2"
         enter-to-class="opacity-100 translate-y-0"
     >
-        <button class="text-left rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 group" @click="goToPlaylist">
+        <button class="text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 group" @click="goToPlaylist">
             <BaseCard class="h-full cursor-pointer">
                 <div class="flex gap-4">
                     <FolderIcon class="w-6 h-6 opacity-50" />

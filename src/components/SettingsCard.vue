@@ -4,7 +4,7 @@
             <div class="relative">
                 <label class="block uppercase text-xs tracking-wide mb-1" for="theme-mode">{{ $t('common_color') }}{{ $t("common_theme") }}</label>
                 <select
-                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                     name="theme-mode"
                     id="theme-mode"
                     v-model="theme"
@@ -18,7 +18,7 @@
             <div class="relative">
                 <label class="block uppercase text-xs tracking-wide mb-1" for="language">{{ $t("common_language") }}</label>
                 <select
-                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                     id="language"
                     name="language"
                     v-model="selectedLanguage"
@@ -37,7 +37,7 @@
             <div class="relative">
                 <label class="block uppercase text-xs tracking-wide mb-1" for="transposition-key">{{ $t("song_key") }}</label>
                 <select
-                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                    class="pl-10 w-full rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                     id="transposition-key"
                     name="transposition-key"
                     v-model="selectedKey"
@@ -64,7 +64,7 @@
                 <div>
                     <label class="block uppercase tracking-wide text-xs mb-1" for="display-name">{{ $t("common_name") }}</label>
                     <input
-                        class="w-full rounded-md border border-black/20 dark:border-white/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                        class="w-full rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                         id="display-name"
                         type="text"
                         v-model="newDisplayName"
@@ -74,7 +74,7 @@
                 <!-- <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md dark:bg-opacity-10">
                     <label for="gender">{{ $t("common_gender") }}</label>
                     <select
-                        class="rounded-mdborder border-black/20 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2 dark:bg-secondary"
+                        class="rounded-mdborder border-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
                         id="gender"
                         name="gender"
                         v-model="gender"

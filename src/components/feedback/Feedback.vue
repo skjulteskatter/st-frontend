@@ -1,5 +1,5 @@
 <template>
-	<button aria-label="Help button" class="p-1 mr-2 rounded-md focus:ring-2 focus:ring-primary hover:bg-black/5 dark:hover:bg-white/10" @click="openPanel()">
+	<button aria-label="Help button" class="p-1 mr-2 rounded-md focus-visible:ring-2 focus-visible:ring-primary hover:bg-black/5 dark:hover:bg-white/10" @click="openPanel()">
 		<QuestionMarkCircleIcon class="opacity-50 w-6 h-6" />
 	</button>
 	<SlidePanel title="Help & Support" :open="open" @close="closePanel()">

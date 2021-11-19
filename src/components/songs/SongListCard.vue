@@ -28,7 +28,7 @@
                 <span>
                     {{ song.getName() }}
                 </span>
-                <div class="flex-grow flex items-center ml-2">
+                <div class="flex-grow flex items-baseline ml-2">
                     <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
                     <span class="ml-auto opacity-50 flex items-center gap-1" v-if="isAdmin">
                         {{ song.Views }}
