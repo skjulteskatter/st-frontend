@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-col rounded-lg overflow-hidden shadow-md relative" v-if="product && collection">
-        <LockClosedIcon v-if="!collection.available" class="w-8 h-8 text-red-800 z-10 absolute top-4 left-4 p-2 rounded-full bg-red-500/20" />
-        <CheckIcon v-else-if="collection.available" class="w-8 h-8 text-green-700 z-10 absolute top-4 left-4 p-2 rounded-full bg-green-500/20" />
+        <LockClosedIcon v-if="!collection.available" class="w-8 h-8 text-red-800 absolute top-4 left-4 p-2 rounded-full bg-red-500/20" />
+        <CheckIcon v-else-if="collection.available" class="w-8 h-8 text-green-700 absolute top-4 left-4 p-2 rounded-full bg-green-500/20" />
         <div class="overflow-hidden min-h-[250px] bg-white dark:bg-secondary">
             <img
                 loading="lazy"
-                class="w-full object-cover cursor-pointer transition hover:scale-105"
+                class="w-full object-cover cursor-pointer"
                 height="250"
                 :src="image"
                 @click="goToCollection"
