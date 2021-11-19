@@ -1,19 +1,19 @@
 <template>
     <BaseDropdown origin="right" v-if="collection && !loading">
         <template #button>
-            <button class="p-2 flex gap-2 items-center rounded-md text-sm border border-black/20 bg-white dark:bg-secondary dark:border-white/20 relative">
+            <div class="text-sm bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 dark:bg-secondary dark:border-white/20 relative">
                 Filter
                 <AdjustmentsIcon class="w-4 h-4" />
                 <div v-if="filtersActive">
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1"></span>
                     <span class="w-3 h-3 rounded-full bg-primary z-20 absolute -top-1 -right-1 animate-ping"></span>
                 </div>
-            </button>
+            </div>
         </template>
         <template #header>
             <div class="flex justify-between items-baseline gap-2">
                 <h3 class="font-bold">{{ $t('song_filterByContent') }}</h3>
-                <button class="text-red-700 hover:underline" @click="removeFilters" v-if="filtersActive">{{ $t('common_remove') }}</button>
+                <button class="text-red-700 rounded-md py-1 px-2 text-sm hover:bg-red-500/10" @click="removeFilters" v-if="filtersActive">{{ $t('common_remove') }}</button>
             </div>
         </template>
         <div class="w-72 flex flex-col gap-6">
