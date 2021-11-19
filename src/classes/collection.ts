@@ -176,6 +176,7 @@ export default class Collection extends BaseClass implements ICollection {
                     label: "common_views",
                     value: "views",
                     selected: () => this.listType == "views",
+                    hidden: !this.store.getters.user?.roles.includes("administrator"),
                 },
             ].filter(
                 (b) =>
