@@ -175,3 +175,9 @@ export default class PresentationView extends Vue {
     }
 }
 </script>
+<style>
+#presentation-view {
+  height: 100vh;
+  width: 100vw;
+}
+</style>

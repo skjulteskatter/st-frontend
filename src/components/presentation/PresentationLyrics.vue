@@ -24,8 +24,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { debouncer } from "@/classes/debouncer";
+import {defineComponent, PropType} from "vue";
+import {debouncer} from "@/classes/debouncer";
+
+// just set to false if you want to disable the feature, without removing code
+const FIGHT_BROWSER_ZOOM = true;
 
 export default defineComponent({
 	data() {
@@ -56,6 +59,12 @@ export default defineComponent({
 		this.render();
 
     addEventListener("resize", debouncer.debounce(() => this.render(), 50));
+
+    // prevent accidental zooming
+    addEventListener("wheel", e => {
+      e.preventDefault();
+      return false;
+    }, { passive: false });
 	},
 	// updated() {
 	// 	this.render();
@@ -66,20 +75,37 @@ export default defineComponent({
 		},
 	},
 	methods: {
+    recalculatePixels(pixel: number): number {
+      if (!FIGHT_BROWSER_ZOOM || pixel < 0.1) {
+        return pixel;
+      }
+
+      // 1 means 100% zoom, if bigger, we need to reduce font size to fight the zoom
+      const pixelRatio = window.devicePixelRatio;
+      if (pixelRatio < 1.01) {
+        return pixel;
+      }
+
+      const reducePixelRatio = pixelRatio - 1; // get increase ratio (110% - 10% increased and should be reduced)
+
+      // multiply pixel with ratio - remove 10% from pixel. And remove 10% from the result again because it worked in tests..
+      const reduce = (pixel * reducePixelRatio) * (1 - reducePixelRatio);
+
+      return pixel - reduce;
+    },
 		setProperties() {
 			if(!this.container || !this.element) return;
 
-			this.container.style.fontSize = `${this.fontSize}px`;
+			this.container.style.fontSize = `${this.recalculatePixels(this.fontSize)}px`;
 			this.container.style.lineHeight = `${this.lineHeight}`;
-			this.element.style.marginTop = `${this.margin.top}px`;
-			this.element.style.marginLeft = `${this.margin.left}px`;
+			this.element.style.marginTop = `${this.recalculatePixels(this.margin.top)}px`;
+			this.element.style.marginLeft = `${this.recalculatePixels(this.margin.left)}px`;
 		},
 		calculateFontSize() {
 			if(!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			const size = Math.min(rect.width / this.verseLines.length / 8, 24) + 32;
-			this.fontSize = size;
+      this.fontSize = Math.min(rect.width / this.verseLines.length / 8, 24) + 32;
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(3 / this.verseLines.length, 0.5) + 1;
