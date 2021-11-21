@@ -1,5 +1,5 @@
 <template>
-	<select multiple class="md:hidden rounded-md border border-black/20 dark:border-white/20 dark:bg-secondary" v-model="selectedValues" @change="apply">
+	<select multiple class="rounded-md border border-black/20 dark:border-white/20 dark:bg-secondary" v-model="selectedValues" @change="apply">
 		<optgroup v-for="type in contentTypes" :key="type" :label="$t(`types_${type}`)">
 			<option v-for="value in filterValues[type]" :key="value" :value="value">{{ $t(`types_${value}`) }}</option>
 		</optgroup>

@@ -28,7 +28,7 @@
 		<SwitchGroup as="div" class="flex gap-2 items-center cursor-pointer">
 			<Switch
 				v-model="Sidebar"
-				class="focus:outline-none"
+				class="focus-visible:outline-none"
 			>
 				<div
 					class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"

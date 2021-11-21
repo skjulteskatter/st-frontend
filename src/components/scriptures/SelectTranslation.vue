@@ -21,7 +21,7 @@
                     v-model="FilterOnLanguages[l.key]"
                     type="checkbox"
                     :name="l.name"
-                    class="border-gray-300 rounded text-primary focus:ring-primary"
+                    class="border-gray-300 rounded text-primary focus-visible:ring-primary"
                 />
                 {{ l.name }}
             </label>

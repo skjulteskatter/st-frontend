@@ -30,7 +30,7 @@
 						>
 							<input
 								type="checkbox"
-								class="text-primary rounded border-gray-300 focus:ring-primary mr-1"
+								class="text-primary rounded border-gray-300 focus-visible:ring-primary mr-1"
 								:checked="
 									User.roles.find(
 										(r) => r == role
@@ -55,7 +55,7 @@
 						>
 							<div class="mb-2 text-sm" v-for="i in getUnownedCollections(User.subscriptions)" :key="i.id">
 								<label :key="i.id" class="cursor-pointer">
-									<input :key="i.id" type="checkbox" class="text-primary rounded border-gray-300 focus:ring-primary mr-1" v-model="newSubs[User.id][i.id]" />
+									<input :key="i.id" type="checkbox" class="text-primary rounded border-gray-300 focus-visible:ring-primary mr-1" v-model="newSubs[User.id][i.id]" />
 									{{i.getName()}}
 								</label>
 							</div>

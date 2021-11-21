@@ -29,7 +29,7 @@
                             class="hidden md:flex"
                         />
                         <select
-                            class="p-2 bg-white border border-black/20 rounded-md block md:hidden dark:bg-secondary dark:border-white/20"
+                            class="p-2 pr-6 bg-white border border-black/20 rounded-md block text-sm md:hidden dark:bg-secondary dark:border-white/20"
                             @input="setListType($event.target.value)"
                         >
                             <option
@@ -42,23 +42,23 @@
                             </option>
                         </select>
                     </div>
-                    <div class="flex flex-col gap-1">
+                    <div class="md:hidden">
                         <label for="song-filters" class="text-xs text-gray-500 dark:text-gray-400">
                             {{ $t("song_filterByContent") }}
                         </label>
-                        <SongFilterDropdown
-                            @apply="loadList"
-                        />
                         <SongFilterSelect @apply="loadList" />
                     </div>
-                    <SearchInput
-                        class="max-w-xs"
-                        type="text"
-                        :placeholder="$t('common_search')"
-                        v-model="searchString"
-                        @search="search"
-                        @keyup="filterByNumber"
-                    />
+                    <div class="flex gap-2 items-stretch">
+                        <SearchInput
+                            class="md:max-w-xs"
+                            type="text"
+                            :placeholder="$t('common_search')"
+                            v-model="searchString"
+                            @search="search"
+                            @keyup="filterByNumber"
+                        />
+                        <SongFilterDropdown @apply="loadList" class="hidden md:flex" />
+                    </div>
                 </div>
                 <Loader :loading="loadingList" v-if="!loading">
                     <div

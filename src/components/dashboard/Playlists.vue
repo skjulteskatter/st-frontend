@@ -16,7 +16,7 @@
         </template>
         <div class="flex flex-col gap-2 shadow-scroll" v-if="playlists.length">
             <router-link
-                class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2"
+                class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
                 :to="playlistLink(p)"

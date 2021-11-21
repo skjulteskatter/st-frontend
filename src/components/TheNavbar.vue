@@ -33,13 +33,13 @@
 						<!-- Profile dropdown -->
 						<Menu as="div" class="ml-3 relative">
 							<div>
-								<MenuButton class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+								<MenuButton class="max-w-xs rounded-full flex items-center text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white">
 									<span class="sr-only">Open user menu</span>
 									<img loading="lazy" class="h-8 w-8 rounded-full border border-black/20 dark:border-white/20" :src="image" :alt="user.displayName + ' profile picture'" width="32" height="32" />
 								</MenuButton>
 							</div>
 							<transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-								<MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-secondary ring-1 ring-black ring-opacity-5 focus:outline-none">
+								<MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-secondary ring-1 ring-black ring-opacity-5 focus-visible:outline-none">
 									<MenuItem v-slot="{ active }">
 										<router-link to="/settings" :class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']">{{ $t('common_settings') }}</router-link>
 									</MenuItem>
@@ -53,7 +53,7 @@
 				</div>
 				<div class="-mr-2 flex md:hidden">
 					<!-- Mobile menu button -->
-					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white">
 						<span class="sr-only">Open main menu</span>
 						<Icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
 						<Icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />

@@ -7,7 +7,7 @@
         <BaseCard :class="['group', disabled ? 'opacity-50' : 'cursor-pointer']">
             <div class="flex gap-4 items-center">
                 <SelectorIcon class="w-5 h-5 opacity-50 cursor-move" />
-                <button @click="goToSong" class="text-left flex-grow rounded focus:outline-none focus:ring-2 focus:ring-primary ring-offset-2">
+                <button @click="goToSong" class="text-left flex-grow rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2">
                     <div class="flex flex-col">
                         <span class="font-semibold">
                             {{ song?.getName() }}

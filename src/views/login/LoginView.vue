@@ -82,7 +82,7 @@
                                     v-model="form.password"
                                 />
                                 <label class="flex gap-3 items-center">
-                                    <input type="checkbox" v-model="stayLoggedIn" class="rounded border border-gray-300 focus:ring-primary text-primary" />
+                                    <input type="checkbox" v-model="stayLoggedIn" class="rounded border border-gray-300 focus-visible:ring-primary text-primary" />
                                     <span>Remember me</span>
                                 </label>
                                 <BaseButton

@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-col gap-1">
-		<label class="font-bold">
+		<label class="text-xs opacity-50 uppercase tracking-wider">
 			{{ name }}
 		</label>
 		<Checkbox
