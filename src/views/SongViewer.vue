@@ -306,8 +306,30 @@ export default class SongViewer extends Vue {
         await this.load();
     }
 
+    public mounted() {
+      this.onKeyDown = this.onKeyDown.bind(this);
+      addEventListener("keydown", this.onKeyDown);
+    }
+
+    public unmounted() {
+      removeEventListener("keydown", this.onKeyDown);
+    }
+
     public async updated() {
         await this.load();
+    }
+
+    private onKeyDown(e: KeyboardEvent) {
+      if (e.ctrlKey && e.altKey && e.code === "KeyP") {
+          this.extend();
+          e.preventDefault();
+          return false;
+      }
+      if (e.ctrlKey && e.altKey && e.code === "KeyS") {
+          this.toggleSidebar();
+          e.preventDefault();
+          return false;
+      }
     }
 
     private fullLoading = false;

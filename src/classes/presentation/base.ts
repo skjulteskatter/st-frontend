@@ -122,7 +122,6 @@ export class PresentationBase {
                 }
 
                 if (this.type == "viewer") {
-
                     if (key.endsWith("lyrics")) {
                         this.lyrics = JSON.parse(item);
                         this.executeCallback("lyrics");
