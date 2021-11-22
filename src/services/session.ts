@@ -120,12 +120,11 @@ export class Session {
         // Set users initial language
         if(!this.user.settings.languageKey) {
             try {
-                this.user.settings.languageKey = navigator.language;
+                this.user.settings.languageKey = navigator.language.split("-")[0];
+                this.user.saveSettings();
             }
             catch {
                 this.user.settings.languageKey = "en";
-            }
-            finally {
                 this.user.saveSettings();
             }
         }
