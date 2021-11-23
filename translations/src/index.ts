@@ -1,6 +1,43 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
 
+function CSVToArray(strData: string, strDelimiter: string) {
+    strDelimiter = (strDelimiter || ",");
+    const objPattern = new RegExp(
+        (
+            "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+            "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+            "([^\"\\" + strDelimiter + "\\r\\n]*))"
+        ),
+        "gi",
+        );
+    const arrData = [[]];
+    let arrMatches = null;
+    while ((arrMatches = objPattern.exec( strData ))){
+        const strMatchedDelimiter = arrMatches[ 1 ];
+        if (
+            strMatchedDelimiter.length &&
+            strMatchedDelimiter !== strDelimiter
+            ){
+            arrData.push( [] );
+
+        }
+
+        let strMatchedValue;
+        if (arrMatches[ 2 ]){
+            strMatchedValue = arrMatches[ 2 ].replace(
+                new RegExp( "\"\"", "g" ),
+                "\"",
+                );
+
+        } else {
+            strMatchedValue = arrMatches[ 3 ];
+        }
+        arrData[ arrData.length - 1 ].push( strMatchedValue );
+    }
+    return( arrData );
+}
+
 function main() {
     const languages = readdirSync("./translations/data/");
 
@@ -13,36 +50,36 @@ function main() {
 
         try {
             const files = readdirSync(path);
+                
+            const entries: {
+                [key: string]: string;
+            } = {};
 
             for (const fileName of files) {
                 const content = readFileSync(path + "/" + fileName, {encoding: "utf-8"});
-                
-                const entries: {
-                    [key: string]: string;
-                } = {};
+
+                let data = CSVToArray(content, ";");
+
+                // In case it's already fixed (old solution only had 3 entries)
+                if (data[0].length !== 3) {
+                    data = CSVToArray(content, ",");
+                }
         
-                for (const line of content.split("\n")) {
-                    const data = line.split(";");
-    
-    
-                    if (data.length !== 3){
-                        continue;
-                    }
-        
+                for (const line of data) {
                     try {
-                        const value = JSON.parse(data[1]);
+                        const value = line[1];
                         if (value) {
-                            entries[JSON.parse(data[0])] = value;
+                            entries[line[0] as string] = value;
                         }
                     }
                     catch {
                         //
                     }
                 }
+            }
     
-                if (Object.values(entries).length) {
-                    writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries));
-                }
+            if (Object.values(entries).length) {
+                writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries));
             }
         }
         catch {
@@ -126,3 +163,5 @@ function toCsv() {
 }
 
 toCsv();
+
+
