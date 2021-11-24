@@ -26,7 +26,7 @@
                                     {{ $t('common_edit') }}
                                 </BaseButton>
                                 <p class="text-primary">
-                                    {{ $t("song_contributor") }}
+                                    {{ $t("common_contributor") }}
                                 </p>
                                 <h1 class="font-bold text-2xl">
                                     {{ contributor.name }}
