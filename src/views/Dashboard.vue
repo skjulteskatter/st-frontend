@@ -15,7 +15,6 @@
 import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 
-import { CollectionCard } from "@/components";
 import {
     ActivityFeed,
     Playlists,
@@ -25,7 +24,6 @@ import {
 @Options({
     name: "dashboard",
     components: {
-        CollectionCard,
         ActivityFeed,
         Playlists,
         OwnedCollections,

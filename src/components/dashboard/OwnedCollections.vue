@@ -16,11 +16,30 @@
 		</template>
 		<div class="flex flex-col gap-2 h-full">
 			<div v-if="collections?.length" class="flex flex-col gap-2">
-				<CollectionCard
+				<button
 					v-for="c in collections"
 					:key="c.id"
-					:collection="c"
-				/>
+					class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
+					:disabled="!c?.available"
+					@click="$router.push({
+						name: 'song-list',
+						params: {
+							collection: c.key,
+						}
+					})"
+				>
+					<img
+						loading="lazy"
+						:src="c.image"
+						:alt="c.getName()"
+						class="max-h-10 rounded border"
+						width="40"
+						height="40"
+					/>
+					<span class="text-xs font-medium tracking-wide w-full flex justify-between items-center">
+						{{ c.getName() }}
+					</span>
+				</button>
 			</div>
 			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md flex flex-col items-center">
 				<CollectionIcon class="w-10 h-10 mb-4 opacity-50" />
@@ -36,7 +55,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { CollectionCard } from "@/components";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
@@ -44,7 +62,6 @@ import { Collection } from "@/classes";
 @Options({
 	name: "owned-collections",
 	components: {
-		CollectionCard,
 		ArrowRightIcon,
 		CollectionIcon,
 	},

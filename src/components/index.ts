@@ -5,7 +5,6 @@ import Loader from "./Loader.vue";
 import Copyright from "./Copyright.vue";
 import LyricsCard from "./LyricsCard.vue";
 import SettingsCard from "./SettingsCard.vue";
-import CollectionCard from "./CollectionCard.vue";
 import BackButton from "./BackButton.vue";
 import Tooltip from "./Tooltip.vue";
 import BaseTable from "./BaseTable.vue";
@@ -18,7 +17,6 @@ export {
     BaseModal,
     Loader,
     SettingsCard,
-    CollectionCard,
     LyricsCard,
     BackButton,
     Tooltip,
