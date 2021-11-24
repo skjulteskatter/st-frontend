@@ -15,27 +15,27 @@
             <li
                 v-for="song in Songs"
                 :key="song.id"
-                @click="viewSong(song)"
-                class="flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(),
-                    'text-green-700': song.available && !this.songsWithSheetMusic.includes(song.id),
+                    'text-green-700': song.available && !songsWithSheetMusic.includes(song.id),
                     'opacity-40': !song.available,
                 }"
             >
-                <b class="w-6 flex-shrink-0 mr-2 text-right">
-                    {{ song.number }}
-                </b>
-                <span>
-                    {{ song.getName() }}
-                </span>
-                <div class="flex-grow flex items-baseline ml-2">
-                    <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
-                    <span class="ml-auto opacity-50 flex items-center gap-1" v-if="isAdmin">
-                        {{ song.Views }}
-                        <EyeIcon class="w-3 h-3 opacity-50" />
+                <button @click="viewSong(song)" class="w-full text-left flex hover:text-primary hover:underline cursor-pointer dark:opacity-90">
+                    <b class="w-6 flex-shrink-0 mr-2 text-right">
+                        {{ song.number }}
+                    </b>
+                    <span>
+                        {{ song.getName() }}
                     </span>
-                </div>
+                    <div class="flex-grow flex items-baseline ml-2">
+                        <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
+                        <span class="ml-auto opacity-50 flex items-center gap-1" v-if="isAdmin">
+                            {{ song.Views }}
+                            <EyeIcon class="w-3 h-3 opacity-50" />
+                        </span>
+                    </div>
+                </button>
             </li>
         </ul>
     </BaseCard>
