@@ -7,25 +7,6 @@
             :title="$t('common_language')"
             @change="checkboxData = checkboxData"
         />
-
-        <!-- <div class="flex flex-col gap-2 mb-2" v-if="languages">
-            <label class="font-bold">
-                {{ $t('common_language') }}
-            </label>
-            <label
-                class="flex items-center gap-2"
-                v-for="l in languages"
-                :key="l"
-            >
-                <input
-                    v-model="FilterOnLanguages[l.key]"
-                    type="checkbox"
-                    :name="l.name"
-                    class="border-gray-300 rounded text-primary focus-visible:ring-primary"
-                />
-                {{ l.name }}
-            </label>
-        </div> -->
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
             <TranslationCard :translation="translation" @click="setTranslation(translation)" />
         </div>
@@ -70,18 +51,6 @@ export default class SelectTranslation extends Vue {
     private translations?: Translation[];
     public languages?: Language[];
     public filterOnLanguages?: ILocale<boolean>;
-
-    mounted() {
-        // this.checkboxData = [];
-
-        // for (const language of this.languages ?? []) {
-        //     this.checkboxData.push({
-        //         key: language.key,
-        //         label: language.name,
-        //         value: this.filterOnLanguages?.[language.key] === true,
-        //     });
-        // }
-    }
 
     public get checkboxData() {
         return this.languages?.map(l => {

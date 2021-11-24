@@ -24,10 +24,10 @@
 				:label="$t('settings_newPassword')"
 			/>
 			<BaseInput
-				:style="newPassword != repeatPassword ? 'color: red' : ''"
 				type="password"
 				v-model="repeatPassword"
 				:label="$t('settings_repeatPassword')"
+				:class="{'text-red-500 border-red-500': newPassword != repeatPassword}"
 			/>
 			<BaseButton theme="secondary" formaction="submit">
 				<template #icon>
@@ -42,7 +42,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "@/components";
-import { useStore } from "vuex";
 import auth from "@/services/auth";
 import { BaseInput } from "@/components/inputs";
 import { KeyIcon, CheckIcon } from "@heroicons/vue/solid";
@@ -57,10 +56,7 @@ import { KeyIcon, CheckIcon } from "@heroicons/vue/solid";
 	},
 })
 export default class ChangePassword extends Vue {
-	private store = useStore();
-
 	public show = false;
-	public updatePassword = false;
 
     public newPassword = "";
     public repeatPassword = "";

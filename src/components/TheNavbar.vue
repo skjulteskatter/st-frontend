@@ -55,8 +55,8 @@
 					<!-- Mobile menu button -->
 					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white">
 						<span class="sr-only">Open main menu</span>
-						<Icon name="menu" v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-						<Icon name="error" v-else class="block h-6 w-6" aria-hidden="true" />
+						<MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+						<XIcon v-else class="block h-6 w-6" aria-hidden="true" />
 					</DisclosureButton>
 				</div>
 			</div>
@@ -105,7 +105,7 @@ import {
 } from "@headlessui/vue";
 import NotificationList from "@/components/notification/NotificationList.vue";
 import Feedback from "@/components/feedback/Feedback.vue";
-import { LockClosedIcon } from "@heroicons/vue/solid";
+import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/vue/solid";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 @Options({
@@ -122,6 +122,8 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 		Feedback,
 		NotificationList,
 		LockClosedIcon,
+		MenuIcon,
+		XIcon,
 	},
 	name: "the-navbar",
 })

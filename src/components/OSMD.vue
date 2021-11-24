@@ -125,7 +125,7 @@
                     class="absolute top-4 right-4 text-red-700"
                     @click="close()"
                 >
-                    <Icon name="error" />
+                    <XIcon class="w-4 h-4" />
                 </button>
             </div>
         </Loader>
@@ -138,6 +138,7 @@ import { osmd } from "@/services/osmd";
 import { Collection, transposer } from "@/classes";
 import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
+import { XIcon } from "@heroicons/vue/solid";
 
 @Options({
     props: {
@@ -150,6 +151,7 @@ import { SongChanger } from "@/components/songs";
     },
     components: {
         SongChanger,
+        XIcon,
     },
     name: "OSMD",
 })
@@ -159,11 +161,8 @@ export default class OSMD extends Vue {
     public originalKey?: string;
     public transposition = 0;
     public relativeKey?: string;
-    public clefs: ("bass" | "treble" | "alto")[] = ["bass", "treble", "alto"];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public playbackControl: any;
     public zoom = 1;
-    public createdDone = false;
     public options?: SheetMusicOptions;
     public octave = 0;
     

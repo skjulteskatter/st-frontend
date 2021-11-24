@@ -5,8 +5,9 @@
                 <b
                     :class="{ 'hover:bg-black/10 bg-black/5 rounded px-2 cursor-pointer dark:bg-white/10 dark:hover:bg-white/20': action != undefined }"
                     @click="action"
-                    >{{ title }}</b
                 >
+                    {{ title }}
+                </b>
                 <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
             </div>
         </template>

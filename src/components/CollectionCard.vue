@@ -1,9 +1,7 @@
 <template>
     <button
         class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
-        :class="{
-            disabled: !collection?.available,
-        }"
+        :disabled="!collection?.available"
         @click="selectCollection()"
     >
         <img
@@ -22,7 +20,6 @@
 
 <script lang="ts">
 import { Collection } from "@/classes";
-import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
@@ -34,7 +31,6 @@ import { Options, Vue } from "vue-class-component";
     name: "collection-card",
 })
 export default class CollectionCard extends Vue {
-    private store = useStore();
     public collection?: Collection;
 
     public selectCollection() {
@@ -53,10 +49,6 @@ export default class CollectionCard extends Vue {
 
     public get image() {
         return this.collection?.image + "?w=200";
-    }
-
-    public get selected() {
-        return this.store.getters.collection ?? {};
     }
 }
 </script>

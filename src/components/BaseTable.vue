@@ -1,15 +1,19 @@
 <template>
     <table>
-        <tr>
-            <th v-for="(header, i) in headers" :key="i">
-                {{header.name}}
-            </th>
-        </tr>
-        <tr v-for="(item, i) in items" :key="i">
-            <td v-for="(header, i) in headers" :key="i">
-                {{header.selector(item)}}
-            </td>
-        </tr>
+        <thead>
+            <tr>
+                <th v-for="(header, i) in headers" :key="i">
+                    {{header.name}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, i) in items" :key="i">
+                <td v-for="(header, i) in headers" :key="i">
+                    {{header.selector(item)}}
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 <script lang="ts">
