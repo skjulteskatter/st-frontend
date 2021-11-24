@@ -8,7 +8,7 @@
             <p class="text-gray-400">{{ (searchResult?.count ?? 0) + ' ' + $t('common_results').toLowerCase() }}</p>
         </div>
         <div class="mb-8" v-if="Contributors.length">
-            <h3 class="uppercase tracking-wide mb-2">{{ $t('song_contributors') }}</h3>
+            <h3 class="uppercase tracking-wide mb-2">{{ $t('common_contributors') }}</h3>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <SearchResultItemCard @click="item.view()" v-for="item in Contributors" :key="item.id" :item="item"/>
             </div>
