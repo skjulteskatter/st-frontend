@@ -160,7 +160,6 @@ import { Options, Vue } from "vue-class-component";
 import {
     LyricsCard,
     BackButton,
-    Modal,
     BaseModal,
 } from "@/components";
 import {
@@ -197,7 +196,6 @@ import { SongViewType } from "@/store/modules/songs/state";
         SongMediaCard,
         SongTags,
         BackButton,
-        Modal,
         BaseModal,
         PlaylistCard: PlaylistAddToCard,
         CreatePlaylistModal,

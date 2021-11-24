@@ -1,7 +1,5 @@
 <template>
-    <BaseModal
-        :show="!policyAccepted"
-    >
+    <BaseModal :show="!policyAccepted">
         <template #icon>
             <InformationCircleIcon class="w-6 h-6 opacity-50" />
         </template>
@@ -17,9 +15,13 @@
                 :loading="loading"
                 :disabled="disabled"
                 @click="acceptPrivacyPolicy"
-                icon="check"
                 theme="secondary"
-            >{{$t('policies_agree')}}</BaseButton>
+            >
+                <template #icon>
+                    <CheckIcon class="w-4 h-4" />
+                </template>
+                {{$t('policies_agree')}}
+            </BaseButton>
         </div>
     </BaseModal>
 </template>
@@ -29,24 +31,21 @@ import { useStore } from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
+import { CheckIcon } from "@heroicons/vue/solid";
 
 @Options({
     components: {
         BaseModal,
         InformationCircleIcon,
+        CheckIcon,
     },
 })
 export default class PolicyAccepter extends Vue {
     public terms = false;
-    public pp = false;
     public store = useStore();
 
     public loading = false;
     public disabled = false;
-
-    public get termsAccepted() {
-        return this.store.getters.user?.termsAndConditions === true;
-    }
     
     public get policyAccepted() {
         return this.store.getters.user?.privacyPolicy === true;

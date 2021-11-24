@@ -1,7 +1,7 @@
 <template>
     <button
-        class="overflow-hidden py-2 px-3 text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 active:text-opacity-50"
-        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'button--disabled': disabled }]"
+        class="overflow-hidden text-white cursor-pointer flex justify-center items-center gap-2 rounded-md relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 active:text-opacity-50"
+        :class="[`button--${theme} button`, { 'opacity-75 cursor-wait button--loading': loading, 'button--disabled': disabled, 'py-1 px-2': size == 'small', 'py-2 px-3': size == 'medium', 'py-3 px-4': size == 'large' }]"
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
@@ -9,7 +9,7 @@
         <span v-else-if="$slots.icon">
             <slot name="icon" />
         </span>
-        <span class="text-sm" v-if="content">
+        <span :class="{ 'text-sm': size == 'medium', 'text-xs': size == 'small', 'text-base': size == 'large' }" v-if="$slots.default">
             <slot />
         </span>
     </button>
@@ -33,6 +33,7 @@ import { Options, Vue } from "vue-class-component";
                         "success",
                         "error",
                         "warning",
+                        "neutral",
                     ].includes(value)
                 );
             },
@@ -53,9 +54,10 @@ import { Options, Vue } from "vue-class-component";
             type: Boolean,
             default: false,
         },
-        content: {
-            type: Boolean,
-            default: true,
+        size: {
+            type: String,
+            default: "medium",
+            enum: ["small", "medium", "large"],
         },
     },
 })
@@ -65,7 +67,7 @@ export default class BaseButton extends Vue {
     public theme?: string;
     public icon?: string;
     public disabled?: boolean;
-    public content?: boolean;
+    public size?: string;
 
     public get isLoading() {
         return this.loading;
@@ -115,6 +117,10 @@ export default class BaseButton extends Vue {
 
     &--error {
         background-color: var(--st-color-error);
+    }
+
+    &--neutral {
+        @apply bg-black/10 dark:bg-white/10 text-gray-800 dark:text-white;
     }
 
     &--loading {

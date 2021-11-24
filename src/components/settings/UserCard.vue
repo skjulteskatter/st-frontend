@@ -34,29 +34,3 @@ export default class UserCard extends Vue {
     }
 }
 </script>
-
-<style lang="scss">
-@import "../../style/mixins";
-
-.user-card {
-
-    &__roles {
-        display: flex;
-        justify-content: center;
-        gap: var(--st-spacing);
-        flex-wrap: wrap;
-
-        @include breakpoint("small") {
-            display: none;
-        }
-    }
-
-    &__details {
-        text-align: center;
-
-        @include breakpoint("small") {
-            text-align: initial;
-        }
-    }
-}
-</style>

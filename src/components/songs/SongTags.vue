@@ -24,7 +24,7 @@
             </template>
             <form @submit.prevent="createTag" class="flex gap-2 max-w-md w-full">
                 <BaseInput v-model="tagFilter" type="text" :placeholder="$t('tag')" class="w-full"/>
-                <BaseButton type="submit" theme="primary" :content="false">
+                <BaseButton type="submit" theme="primary">
                     <template #icon>
                         <PlusIcon class="w-4 h-4" />
                     </template>
@@ -32,13 +32,13 @@
             </form>
             <template #footer>
                 <div v-if="tags.length">
-                    <!-- <small class="opacity-50 text-xs leading-none mb-1 uppercase tracking-wider">{{ $t('common_your') }} {{ $t('song_categories').toLocaleLowerCase() }}</small> -->
                     <ul class="flex flex-wrap gap-1">
                         <li 
                             class="px-3 py-1 rounded-full tracking-wide text-xs bg-black/10 text-gray-600 dark:text-gray-400 dark:bg-white/10 flex gap-1 items-center hover:bg-black/20 dark:hover:bg-white/20 cursor-pointer" 
                             v-for="tag in tags" 
                             :key="tag.id" 
-                            @click="addToTag(tag.id)">{{tag.name}}</li>
+                            @click="addToTag(tag.id)"
+                        >{{tag.name}}</li>
                     </ul>
                 </div>
             </template>
@@ -114,10 +114,6 @@ export default class SongTags extends Vue {
 
     public get Song() {
         return this.song as Song;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
     }
 }
 </script>

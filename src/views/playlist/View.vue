@@ -84,8 +84,6 @@
                             :disabled="deleted[key.key]"
                             :loading="loading[key.key]"
                             @click="deleteKey(key)"
-                            :content="false"
-                            class="px-3"
                         >
                             <template #icon>
                                 <TrashIcon class="w-4 h-4" />
