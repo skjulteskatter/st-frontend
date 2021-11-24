@@ -33,6 +33,7 @@ import { Options, Vue } from "vue-class-component";
                         "success",
                         "error",
                         "warning",
+                        "neutral",
                     ].includes(value)
                 );
             },
@@ -116,6 +117,10 @@ export default class BaseButton extends Vue {
 
     &--error {
         background-color: var(--st-color-error);
+    }
+
+    &--neutral {
+        @apply bg-black/10 dark:bg-white/10 text-gray-800 dark:text-white;
     }
 
     &--loading {
