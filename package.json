@@ -11,6 +11,7 @@
     "translations": "tsc ./translations/src/index.ts --outDir ./translations/dist && node ./translations/dist/"
   },
   "dependencies": {
+    "@crowdin/crowdin-api-client": "^1.12.3",
     "@headlessui/vue": "^1.4.1",
     "@heroicons/vue": "^1.0.5",
     "@stripe/stripe-js": "^1.21.1",
@@ -26,6 +27,7 @@
     "plyr": "^3.6.9",
     "regenerator-runtime": "^0.13.9",
     "showdown": "^1.9.1",
+    "unzipper": "^0.10.11",
     "vue": "^3.2.21",
     "vue-class-component": "^8.0.0-0",
     "vue-i18n": "^9.1.9",

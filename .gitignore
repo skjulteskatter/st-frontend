@@ -30,3 +30,4 @@ translations/dist
 translations/data
 translations/out
 translations/out-csv
+translations/src/config.ts
