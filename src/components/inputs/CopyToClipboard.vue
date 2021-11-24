@@ -45,7 +45,7 @@ import { ClipboardCopyIcon } from "@heroicons/vue/solid";
 export default class CopyToClipboard extends Vue {
 	public label?: string;
 	public content?: string;
-	private copied = false;
+	public copied = false;
 
 	public copy() {
 		if(this.content) {

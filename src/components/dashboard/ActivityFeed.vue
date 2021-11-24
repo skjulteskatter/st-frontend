@@ -18,7 +18,7 @@
                 >
                     <span class="w-2 h-2 bg-gray-200 rounded-full absolute -left-3 top-7 dark:bg-gray-500"></span>
                     <span class="flex flex-col justify-center flex-1">
-                        <small class="opacity-50 tracking-wide">{{ $t(`song_${a.type}`) }}</small>
+                        <small class="opacity-50 tracking-wide">{{ $t(`common_${a.type}`) }}</small>
                         <p class="text-xs font-medium">
                             {{ a.name }}
                         </p>

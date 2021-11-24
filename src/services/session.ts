@@ -117,6 +117,18 @@ export class Session {
         this.user = new User(user);
         googleAnalytics.setUserId(this.user.id);
 
+        // Set users initial language
+        if(!this.user.settings.languageKey) {
+            try {
+                this.user.settings.languageKey = navigator.language.split("-")[0];
+                this.user.saveSettings();
+            }
+            catch {
+                this.user.settings.languageKey = "en";
+                this.user.saveSettings();
+            }
+        }
+
         this._initialized = false;
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
 

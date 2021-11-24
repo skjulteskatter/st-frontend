@@ -7,7 +7,7 @@
 			<li
 				class="px-2 py-2 rounded-md hover:bg-black/5 flex justify-between"
 				v-for="(country, i) in sortedCountries"
-				:key="country"
+				:key="country.country"
 			>
 				<span>{{ i+1 }}. {{ country.country }}</span>
 				<span>{{ country.count }}</span>

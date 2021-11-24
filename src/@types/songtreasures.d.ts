@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 declare module "songtreasures" {
+    type GenderType = "male" | "female" | "unknown";
+
     interface IUser {
         id: string;
         displayName: string;
@@ -8,19 +10,22 @@ declare module "songtreasures" {
         subscriptions: ISubscription[];
         roles: string[];
         birthDay: string;
-        gender: "male" | "female" | "unknown";
+        gender: GenderType;
         settings?: ISettings;
         lastLogin: Date;
         privacyPolicy: boolean;
         termsAndConditions: boolean;
     }
 
+    type ThemeType = "light" | "dark";
+    type ClefType = "treble" | "bass" | "alto";
+
     type ISettings = {
         languageKey?: string;
         defaultTransposition?: string;
         defaultTranscode?: string;
-        defaultClef?: "treble" | "bass" | "alto";
-        theme?: "light" | "dark";
+        defaultClef?: ClefType;
+        theme?: ThemeType;
     }
 
     type ISubscription = {
@@ -181,11 +186,13 @@ declare module "songtreasures" {
         canEdit: boolean;
     }
 
+    type MediaType = "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
+
     interface MediaFile {
         id: string;
         songId: string;
         name: string;
-        type: "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
+        type: MediaType;
         collectionIds: string[];
         category: string;
         number: number;
@@ -194,7 +201,6 @@ declare module "songtreasures" {
         information: string;
         directUrl: string;
         participants: IParticipant[];
-        song?: ISong;
     }
 
     interface CreditSong {

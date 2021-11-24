@@ -185,8 +185,6 @@ export default class LyricsCard extends Vue {
         this.selectedFormat = v;
     }
 
-    public loaded = false;
-
     public loading?: boolean;
 
     public get SelectedLanguage() {
@@ -199,10 +197,6 @@ export default class LyricsCard extends Vue {
 
     public get chordsEnabled() {
         return this.lyrics?.ContainsChords === true;
-    }
-
-    public set chordsEnabled(v) {
-        // 
     }
 
     public get relativeTranspositions(): {
@@ -268,10 +262,6 @@ export default class LyricsCard extends Vue {
         this.transpose();
     }
 
-    public get OriginalKey() {
-        return this.lyrics?.originalKey ?? this.song?.originalKey ?? "C";
-    }
-
     public get defaultTransposition() {
         return this.store.getters.user?.settings?.defaultTransposition ?? "C";
     }
@@ -282,14 +272,6 @@ export default class LyricsCard extends Vue {
 
     public get newMelodyLanguages() {
         return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
-    }
-
-    public transpositionStrings() {
-        return transposer.getRelativeTranspositions(
-            this.song?.originalKey ?? "C",
-            this.defaultTransposition,
-            this.song?.transpositions ?? {},
-        );
     }
 
     public edit() {

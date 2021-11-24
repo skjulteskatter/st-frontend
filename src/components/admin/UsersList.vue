@@ -9,11 +9,11 @@
                         :class="{ disabled: disableButton }"
                         @click="refreshUsers"
                         :loading="loading['refresh']"
-                        :content="false"
-                        icon="refresh"
                         theme="tertiary"
                     >
-                        {{ $t("common_update") }}
+                        <template #icon>
+                            <RefreshIcon class="w-4 h-4" />
+                        </template>
                     </BaseButton>
                 </div>
             </div>
@@ -35,9 +35,7 @@
                         <tr v-for="u in Users" :key="u.id">
                             <td class="flex gap-4 items-center px-4 py-3 whitespace-nowrap">
                                 <img
-                                    :src="
-                                        u.image ?? '/img/portrait-placeholder.png'
-                                    "
+                                    :src="u.image ?? '/img/portrait-placeholder.png'"
                                     class="w-8 h-8 object-cover rounded-full border border-black/20 dark:border-white/20"
                                     width="32"
                                     height="32"
@@ -68,7 +66,6 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Modal } from "@/components";
 import { SearchInput } from "@/components/inputs";
 import EditUser from "@/components/admin/EditUser.vue";
 import { useStore } from "@/store";
@@ -77,13 +74,14 @@ import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
 import api from "@/services/api";
 import { User } from "@/classes";
+import { RefreshIcon } from "@heroicons/vue/solid";
 
 @Options({
     name: "users-list",
     components: {
-        Modal,
         SearchInput,
         EditUser,
+        RefreshIcon,
     },
     props: {
         users: {

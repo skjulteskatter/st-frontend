@@ -115,6 +115,7 @@
                         <div v-else class="sticky top-20 flex flex-col gap-4">
                             <PresentationControlPanel
                                 @refresh="refresh()"
+                                @open="control.open()"
                                 @next="next()"
                                 @previous="previous()"
                                 @mute="control.mute()"
@@ -159,7 +160,6 @@ import { Options, Vue } from "vue-class-component";
 import {
     LyricsCard,
     BackButton,
-    Modal,
     BaseModal,
 } from "@/components";
 import {
@@ -196,7 +196,6 @@ import { SongViewType } from "@/store/modules/songs/state";
         SongMediaCard,
         SongTags,
         BackButton,
-        Modal,
         BaseModal,
         PlaylistCard: PlaylistAddToCard,
         CreatePlaylistModal,
@@ -267,11 +266,7 @@ export default class SongViewer extends Vue {
     public toggleAll() {
         if (this.lyrics) {
             this.control.toggleAll();
-            if (this.control.AvailableVerses.length) {
-                this.unset = false;
-            } else {
-                this.unset = true;
-            }
+            this.unset = !this.control.AvailableVerses.length;
         }
     }
 
@@ -309,8 +304,30 @@ export default class SongViewer extends Vue {
         await this.load();
     }
 
+    public mounted() {
+      this.onKeyDown = this.onKeyDown.bind(this);
+      addEventListener("keydown", this.onKeyDown);
+    }
+
+    public unmounted() {
+      removeEventListener("keydown", this.onKeyDown);
+    }
+
     public async updated() {
         await this.load();
+    }
+
+    private onKeyDown(e: KeyboardEvent) {
+      if (e.ctrlKey && e.altKey && e.code === "KeyP") {
+          this.extend();
+          e.preventDefault();
+          return false;
+      }
+      if (e.ctrlKey && e.altKey && e.code === "KeyS") {
+          this.toggleSidebar();
+          e.preventDefault();
+          return false;
+      }
     }
 
     private fullLoading = false;
