@@ -134,6 +134,8 @@ export const admin = {
             stripeStatus: string[];
             firebaseStatus: string[];
             user: IUser;
+            firebaseSubscriptions: ISubscription[];
+            stripeSubscriptions: ISubscription[];
         }>("api/Admin/EmailLookup", {
             email,
         });
