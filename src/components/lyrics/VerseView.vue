@@ -13,34 +13,33 @@
         </div>
     </div>
 </template>
-<script lang="ts">
-import { LyricsChordContent } from "songtreasures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+<script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
+import { LyricsChordContent } from "songtreasures";
+
+export default defineComponent({
+    name: "verse-view",
     props: {
         verse: {
-            type: Object,
+            type: Object as PropType<LyricsChordContent>,
         },
     },
-    name: "verse-view",
-})
-export default class VerseView extends Vue {
-    private verse?: LyricsChordContent;
-
-    public get Verse() {
-        return this.verse ?? {
-            name: "1",
-            content: [],
-            key: "verse_1",
-        };
-    }
-
-    public get type() {
-        return this.Verse.key.split("_")[0];
-    }
-}
+    computed: {
+        Verse() {
+            return this.verse ?? {
+                name: "1",
+                content: [],
+                key: "verse_1",
+            };
+        },
+        type() {
+            return this.Verse.key.split("_")[0];
+        },
+    },
+});
 </script>
+
 <style lang="scss">
 .verse-title,
 .chorus-title {
@@ -50,10 +49,6 @@ export default class VerseView extends Vue {
 
 .content,
 .chorus {
-    // &:not(:last-child) {
-    //     margin-bottom: calc(var(--st-spacing)*2);
-    // }
-
     .songline {
         border-collapse: collapse;
         white-space: pre;

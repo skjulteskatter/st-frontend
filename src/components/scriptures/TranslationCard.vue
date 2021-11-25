@@ -3,19 +3,17 @@
         {{translation.title}}
     </BaseCard>
 </template>
-<script lang="ts">
-import { Translation } from "@/classes/scriptures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+<script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
+import { Translation } from "@/classes/scriptures";
+
+export default defineComponent({
     name: "translation-card",
     props: {
         translation: {
-            type: Object,
+            type: Object as PropType<Translation>,
         },
     },
-})
-export default class ScriptureCard extends Vue {
-    public translation?: Translation;
-}
+});
 </script>

@@ -58,17 +58,18 @@
         </BaseModal>
     </Loader>
 </template>
+
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { Options, Vue } from "vue-class-component";
 import { BaseModal } from "..";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "added-to-cart",
     components: {
         BaseModal,
@@ -78,48 +79,44 @@ import { ShoppingCartIcon } from "@heroicons/vue/solid";
         SwitchLabel,
         ShoppingCartIcon,
     },
-})
-export default class AddedToCart extends Vue {
-    private store = useStore();
-    public cancel = false;
-    public checkingOut = false;
-
-    public yearlySub = true;
-
-    public toggleType() {
-        this.type = (this.type == "year" ? "month" : "year");
-    }
-
-    public get type() {
-        return this.store.state.stripe.type;
-    }
-
-    public set type(v) {
-        this.store.commit(StripeMutationTypes.CART_TYPE, v);
-    }
-
-    public get Show() {
-        return this.checkingOut || (this.store.state.stripe.cart.length == 1 && !this.cancel && this.store.getters.user?.termsAndConditions == true);
-    }
-    
-    public async checkout() {
-        this.checkingOut = true;
-        await this.store.dispatch(StripeActionTypes.START_SESSION);
-        this.checkingOut = false;
-    }
-
-    public async addAllItemsCheckout() {
-        this.store.commit(StripeMutationTypes.CART_SET, this.store.getters.products.filter(i => i.collections[0]?.enabled && !this.store.getters.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id));
-
-        await this.checkout();
-    }
-
-    public get Products() {
-        return this.store.getters.cartItems;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-}
+    data: () => ({
+        store: useStore(),
+        cancel: false,
+        checkingOut: false,
+        yearlySub: true,
+    }),
+    computed: {
+        type: {
+            get() {
+                return this.store.state.stripe.type;
+            },
+            set(v: "year" | "month") {
+                this.store.commit(StripeMutationTypes.CART_TYPE, v);
+            },
+        },
+        Show() {
+            return this.checkingOut || (this.store.state.stripe.cart.length == 1 && !this.cancel && this.store.getters.user?.termsAndConditions == true);
+        },
+        Products() {
+            return this.store.getters.cartItems;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+    methods: {
+        toggleType() {
+            this.type = (this.type == "year" ? "month" : "year");
+        },
+        async checkout() {
+            this.checkingOut = true;
+            await this.store.dispatch(StripeActionTypes.START_SESSION);
+            this.checkingOut = false;
+        },
+        async addAllItemsCheckout() {
+            this.store.commit(StripeMutationTypes.CART_SET, this.store.getters.products.filter(i => i.collections[0]?.enabled && !this.store.getters.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id));
+            await this.checkout();
+        },
+    },
+});
 </script>

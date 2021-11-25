@@ -119,14 +119,15 @@
     </BaseCard>
 </template>
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Collection, Song } from "@/classes";
-import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 import { EyeIcon } from "@heroicons/vue/outline";
 import ContributorInfo from "./ContributorInfo.vue";
 
-@Options({
+export default defineComponent({
+    name: "song-info-card",
     components: {
         ContributorInfo,
         InformationCircleIcon,
@@ -138,31 +139,47 @@ import ContributorInfo from "./ContributorInfo.vue";
             type: String,
         },
         song: {
-            type: Object,
+            type: Object as PropType<Song>,
         },
         viewCount: {
             type: Number,
         },
     },
-    name: "song-info-card",
-})
-export default class SongInfoCard extends Vue {
-    public languageKey?: string;
-    public song?: Song;
-    public imageLoaded = false;
-    public store = useStore();
-    public showDescription = false;
-    public viewCount?: number;
-
-    public get Language() {
-        return this.languageKey ?? "en";
-    }
-
-    public get isAdmin() {
-        return this.store.getters.isAdmin;
-    }
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+        imageLoaded: false,
+        showDescription: false,
+    }),
+    computed: {
+        Language() {
+            return this.languageKey ?? "en";
+        },
+        isAdmin() {
+            return this.store.getters.isAdmin;
+        },
+        collection(): Collection | undefined {
+            const id = this.store.state.songs.collectionId;
+            if (!id) return undefined;
+            const collection = this.store.state.songs.collections.find((c) =>
+                Object.values(c.keys).includes(id),
+            );
+            return collection as Collection;
+        },
+        title() {
+            return this.song?.getName(this.Language);
+        },
+        melodyOrigin() {
+            return (
+                this.song?.melodyOrigin?.description?.[this.Language] ??
+                this.song?.melodyOrigin?.description?.no ??
+                undefined
+            );
+        },
+        identicalCopyright() {
+            return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
+        },
+    },
+    mounted() {
         if (this.song) {
             if (this.song.image) {
 
@@ -183,42 +200,18 @@ export default class SongInfoCard extends Vue {
                 this.imageLoaded = true;
             }
         }
-    }
-
-    public get collection(): Collection | undefined {
-        const id = this.store.state.songs.collectionId;
-        if (!id) return undefined;
-        const collection = this.store.state.songs.collections.find((c) =>
-            Object.values(c.keys).includes(id),
-        );
-        return collection;
-    }
-
-    public get title() {
-        return this.song?.getName(this.Language);
-    }
-
-    public getLocaleString(dictionary: { [key: string]: string }) {
-        if (!dictionary) return "";
-        return (
-            dictionary[this.Language] ??
-            dictionary.en ??
-            dictionary[Object.keys(dictionary)[0]]
-        );
-    }
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.description?.[this.Language] ??
-            this.song?.melodyOrigin?.description?.no ??
-            undefined
-        );
-    }
-
-    public get identicalCopyright() {
-        return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
-    }
-}
+    },
+    methods: {
+        getLocaleString(dictionary: { [key: string]: string }) {
+            if (!dictionary) return "";
+            return (
+                dictionary[this.Language] ??
+                dictionary.en ??
+                dictionary[Object.keys(dictionary)[0]]
+            );
+        },
+    },
+});
 </script>
 
 <style scoped>

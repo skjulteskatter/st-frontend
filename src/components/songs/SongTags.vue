@@ -45,75 +45,70 @@
         </BaseDropdown>
     </div>
 </template>
+
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song, Tag } from "@/classes";
 import { tags } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 import { XIcon, PlusIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "song-tags",
-    props: {
-        song: {
-            type: Object,
-        },
-    },
     components: {
         XIcon,
         PlusIcon,
     },
-})
-export default class SongTags extends Vue {
-    private store = useStore();
-    private song?: Song;
-
-    public tags: Tag[] = [];
-    public songTags: Tag[] = [];
-
-    public mounted() {
+    props: {
+        song: {
+            type: Object as PropType<Song>,
+        },
+    },
+    data: () => ({
+        store: useStore(),
+        tags: [] as Tag[],
+        songTags: [] as Tag[],
+        tagFilter: "",
+    }),
+    computed: {
+        Song() {
+            return this.song as Song;
+        },
+    },
+    mounted() {
         this.loadTags();
-    }
+    },
+    methods: {
+        loadTags() {
+            this.tags = appSession.tags.filter(t => !t.songIds.includes(this.Song.id) && (!this.tagFilter || t.name.toLowerCase().includes(this.tagFilter.toLowerCase())));
+            this.songTags = this.Song.Tags;
+        },
+        async createTag() {
+            if (this.tagFilter == "" || this.tags.find(t => t.name == this.tagFilter)) {
+                return;
+            }
+            const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
+            appSession.tags.push(new Tag(newTag));
 
-    private loadTags() {
-        this.tags = appSession.tags.filter(t => !t.songIds.includes(this.Song.id) && (!this.tagFilter || t.name.toLowerCase().includes(this.tagFilter.toLowerCase())));
-        this.songTags = this.Song.Tags;
-    }
+            this.tagFilter = "";
+        },
+        async addToTag(id: string) {
+            const tag = this.tags.find(t => t.id === id);
 
-    public tagFilter = "";
+            if (tag) {
+                await tag.addSongsToTag([this.Song.id]);
+                this.loadTags();
+            }
+        },
+        async removeFromTag(id: string) {
+            const tag = this.Song.Tags.find(t => t.id === id);
 
-    public async createTag() {
-        if (this.tagFilter == "" || this.tags.find(t => t.name == this.tagFilter)) {
-            return;
-        }
-        const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
-
-        appSession.tags.push(new Tag(newTag));
-
-        this.tagFilter = "";
-    }
-
-    public async addToTag(id: string) {
-        const tag = this.tags.find(t => t.id === id);
-
-        if (tag) {
-            await tag.addSongsToTag([this.Song.id]);
-            this.loadTags();
-        }
-    }
-
-    public async removeFromTag(id: string) {
-        const tag = this.Song.Tags.find(t => t.id === id);
-
-        if (tag) {
-            await tag.removeSongsFromTag([this.Song.id]);
-            this.loadTags();
-        }
-    }
-
-    public get Song() {
-        return this.song as Song;
-    }
-}
+            if (tag) {
+                await tag.removeSongsFromTag([this.Song.id]);
+                this.loadTags();
+            }
+        },
+    },
+});
 </script>

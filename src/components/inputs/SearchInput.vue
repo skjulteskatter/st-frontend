@@ -18,10 +18,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { SearchIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "search-input",
     props: {
         modelValue: {
@@ -38,10 +38,5 @@ import { SearchIcon } from "@heroicons/vue/solid";
         SearchIcon,
     },
     emits: ["search", "update:modelValue"],
-})
-export default class SearchInput extends Vue {
-    public modelValue?: string;
-    public disabled?: boolean;
-    public placeholder?: string;
-}
+});
 </script>

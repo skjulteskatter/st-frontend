@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { ICustomCollectionEntry } from "songtreasures";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
@@ -41,11 +41,11 @@ import { appSession } from "@/services/session";
 import { songs } from "@/services/api";
 import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "playlist-song-card",
     props: {
         entry: {
-            type: Object,
+            type: Object as PropType<ICustomCollectionEntry>,
             required: true,
         },
         canEdit: {
@@ -56,54 +56,48 @@ import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
         SelectorIcon,
         TrashIcon,
     },
-    emits: [
-        "remove",
-    ],
-})
-export default class PlaylistSongCard extends Vue {
-    private store = useStore();
-    public entry?: ICustomCollectionEntry;
-    public song: Song | null = null;
-    public canEdit?: boolean;
+    data: () => ({
+        store: useStore(),
+        song: null as Song | null,
+    }),
+    emits: ["remove"],
+    computed: {
+        userId() {
+            return this.store.getters.user?.id;
+        },
+        disabled() {
+            return this.song?.available !== true;
+        },
+        Collections() {
+            return this.song?.Collections ?? [];
+        },
+    },
+    methods: {
+        async mounted() {
+            this.song = appSession.songs.find(s => s.id == this.entry?.songId) ?? null;
 
-    public get disabled() {
-        return this.song?.available !== true;
-    }
+            if (!this.song && this.entry) {
+                this.song = new Song(await songs.getSongById(this.entry?.songId));
+            }
+        },
+        goToSong() {
+            if (this.disabled)
+                return;
+            const collection = this.Collections[0];
 
-    public get Collections() {
-        return this.song?.Collections ?? [];
-    }
-
-    public async mounted() {
-        this.song = appSession.songs.find(s => s.id == this.entry?.songId) ?? null;
-
-        if (!this.song && this.entry) {
-            this.song = new Song(await songs.getSongById(this.entry?.songId));
-        }
-    }
-
-    public goToSong() {
-        if (this.disabled)
-            return;
-        const collection = this.Collections[0];
-
-        if (collection) {
-            this.$router.push({
-                name: "song",
-                params: {
-                    collection: collection.key,
-                    number: this.song?.getNumber(collection.id),
-                },
-            });
-        }
-    }
-
-    public remove() {
-        this.$emit("remove", this.entry?.id);
-    }
-
-    public get userId() {
-        return this.store.getters.user?.id;
-    }
-}
+            if (collection) {
+                this.$router.push({
+                    name: "song",
+                    params: {
+                        collection: collection.key,
+                        number: this.song?.getNumber(collection.id),
+                    },
+                });
+            }
+        },
+        remove() {
+            this.$emit("remove", this.entry?.id);
+        },
+    },
+});
 </script>

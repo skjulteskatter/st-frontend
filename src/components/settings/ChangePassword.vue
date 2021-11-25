@@ -40,13 +40,13 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { BaseModal } from "@/components";
+import { defineComponent } from "@vue/runtime-core";
 import auth from "@/services/auth";
+import { BaseModal } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { KeyIcon, CheckIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
 	name: "change-password",
 	components: {
 		BaseModal,
@@ -54,30 +54,29 @@ import { KeyIcon, CheckIcon } from "@heroicons/vue/solid";
 		KeyIcon,
 		CheckIcon,
 	},
-})
-export default class ChangePassword extends Vue {
-	public show = false;
-
-    public newPassword = "";
-    public repeatPassword = "";
-    public oldPassword = "";
-
-	public resetPassword() {
-        if (this.newPassword == this.repeatPassword) {
-            auth.resetPassword(this.oldPassword, this.newPassword);
-        }
-    }
-
-    public get passwordUser() {
-        return auth.user?.providerData.find((p) => p?.providerId == "password");
-    }
-
-	public showModal() {
-		this.show = true;
-	}
-
-	public hideModal() {
-		this.show = false;
-	}
-}
+	data: () => ({
+		show: false,
+		newPassword: "",
+		repeatPassword: "",
+		oldPassword: "",
+	}),
+	computed: {
+		passwordUser() {
+			return auth.user?.providerData.find((p) => p?.providerId == "password");
+		},
+	},
+	methods: {
+		resetPassword() {
+			if (this.newPassword == this.repeatPassword) {
+				auth.resetPassword(this.oldPassword, this.newPassword);
+			}
+		},
+		showModal() {
+			this.show = true;
+		},
+		hideModal() {
+			this.show = false;
+		},
+	},
+});
 </script>

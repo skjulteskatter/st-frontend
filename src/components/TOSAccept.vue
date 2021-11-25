@@ -26,46 +26,46 @@
     </BaseModal>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { session } from "@/services/api";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
 import { CheckIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
+    name: "tos-accept",
     components: {
         BaseModal,
         InformationCircleIcon,
         CheckIcon,
     },
-})
-export default class PolicyAccepter extends Vue {
-    public terms = false;
-    public store = useStore();
-
-    public loading = false;
-    public disabled = false;
-
-    public get termsAccepted() {
-        return this.store.getters.user?.termsAndConditions === true;
-    }
-
-    public get cart() {
-        return this.store.getters.cartItems;
-    }
-
-    public async acceptTermsOfService() {
-        this.loading = true;
-        await session.acceptTermsOfService();
-        if (this.store.getters.user)
-            this.store.getters.user.termsAndConditions = true;
-        this.loading = false;
-        this.disabled = true;
-    }
-
-    public openWindow() {
-        window.open("https://songtreasures.org/terms-of-purchase/");
-    }
-}
+    data: () => ({
+        store: useStore(),
+        terms: false,
+        loading: false,
+        disabled: false,
+    }),
+    computed: {
+        termsAccepted() {
+            return this.store.getters.user?.termsAndConditions === true;
+        },
+        cart() {
+            return this.store.getters.cartItems;
+        },
+    },
+    methods: {
+        async acceptTermsOfService() {
+            this.loading = true;
+            await session.acceptTermsOfService();
+            if (this.store.getters.user)
+                this.store.getters.user.termsAndConditions = true;
+            this.loading = false;
+            this.disabled = true;
+        },
+        openWindow() {
+            window.open("https://songtreasures.org/terms-of-purchase/");
+        },
+    },
+});
 </script>

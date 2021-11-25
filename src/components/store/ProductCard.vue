@@ -45,18 +45,16 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Product } from "@/classes";
 import { useStore } from "@/store";
-
 import Price from "./Price.vue";
 import { ShoppingCartIcon, CheckIcon, LockClosedIcon } from "@heroicons/vue/solid";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
-
 import { appSession } from "@/services/session";
 
-@Options({
+export default defineComponent({
+    name: "product-card",
     components: {
         Price,
         ShoppingCartIcon,
@@ -64,72 +62,64 @@ import { appSession } from "@/services/session";
         LockClosedIcon,
         InformationCircleIcon,
     },
-    name: "product-card",
     props: {
         product: {
-            type: Object,
+            type: Object as PropType<Product>,
         },
     },
-})
-export default class ProductCard extends Vue {
-    public product?: Product;
-    public store = useStore();
-    
-    public addToCart() {
-        this.collection?.addToCart();
-    }
-
-    public get inCart() {
-        return this.product
-            ? this.store.state.stripe.cart.includes(this.product.id)
-            : false;
-    }
-
-
-    public goToCollection() {
-        const collectionKey = this.collection?.key;
-
-        if (collectionKey) {
-            this.$router.push({
-                name: "song-list",
-                params: {
-                    collection: collectionKey,
-                },
-            });
-        } else {
-            this.goToItem();
-        }
-    }
-
-    public goToItem() {
-        if (this.product) {
-            this.$router.push({
-                name: "collection-item",
-                params: {
-                    id: this.product.id,
-                },
-            });
-        }
-    }
-
-    public get isAvailable() {
-        return this.collection?.available;
-    }
-
-    public get image() {
-        return this.collection?.image
-            ? `${this.collection?.image}?w=300&q=50`
-            : "/img/placeholder.png";
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get collection() {
-        return appSession.collections.find(
-            (c) => c.id == this.product?.collectionIds[0],
-        );
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        inCart() {
+            return this.product
+                ? this.store.state.stripe.cart.includes(this.product.id)
+                : false;
+        },
+        isAvailable() {
+            return this.collection?.available;
+        },
+        image() {
+            return this.collection?.image
+                ? `${this.collection?.image}?w=300&q=50`
+                : "/img/placeholder.png";
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        collection() {
+            return appSession.collections.find(
+                (c) => c.id == this.product?.collectionIds[0],
+            );
+        },
+    },
+    methods: {
+        addToCart() {
+            this.collection?.addToCart();
+        },
+        goToCollection() {
+            const collectionKey = this.collection?.key;
+            if (collectionKey) {
+                this.$router.push({
+                    name: "song-list",
+                    params: {
+                        collection: collectionKey,
+                    },
+                });
+            } else {
+                this.goToItem();
+            }
+        },
+        goToItem() {
+            if (this.product) {
+                this.$router.push({
+                    name: "collection-item",
+                    params: {
+                        id: this.product.id,
+                    },
+                });
+            }
+        },
+    },
+});
 </script>

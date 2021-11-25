@@ -27,43 +27,39 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { CheckCircleIcon } from "@heroicons/vue/solid";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song } from "@/classes";
 
-@Options({
+export default defineComponent({
 	name: "presentation-theme-selector",
-	components: {
-		CheckCircleIcon,
-	},
 	props: {
 		songs: {
-			type: Array,
+			type: Array as PropType<Song[]>,
 		},
 	},
+	data: () => ({
+		number: null as number | null,
+	}),
 	emits: ["setSong"],
-})
-export default class SongSelector extends Vue {
-    public songs?: Song[];
-    public number: number | null = null;
-
-    public get Songs() {
-        return this.songs ?? [];
-    }
-
-	public selectSong(songId: string) {
-        this.number = null;
-		this.$emit("setSong", songId);
-	}
-
-    public get filteredSongs() {
-        const number = this.number;
-        if (number) {
-            const song = this.Songs.find(i => i.number == number);
-            if (song)
-                return [song];
-        }
-        return [];
-    }
-}
+	computed: {
+		Songs() {
+			return this.songs ?? [];
+		},
+		filteredSongs() {
+			const number = this.number;
+			if (number) {
+				const song = this.Songs.find(i => i.number == number);
+				if (song)
+					return [song];
+			}
+			return [];
+		},
+	},
+	methods: {
+		selectSong(songId: string) {
+			this.number = null;
+			this.$emit("setSong", songId);
+		},
+	},
+});
 </script>

@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
 	name: "song-changer",
 	props: {
 		label: {
@@ -32,11 +32,5 @@ import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/solid";
 		ChevronLeftIcon,
 	},
 	emits: ["next", "previous"],
-})
-export default class SongChanger extends Vue {
-	public label?: string;
-
-	public hasNext?: boolean;
-	public hasPrevious?: boolean;
-}
+});
 </script>

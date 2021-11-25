@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
 	name: "splash-screen",
 	props: {
 		loading: {
@@ -24,10 +24,7 @@ import { Options, Vue } from "vue-class-component";
 			default: true,
 		},
 	},
-})
-export default class SplashScreen extends Vue {
-	public loading?: boolean;
-}
+});
 </script>
 
 <style scoped>

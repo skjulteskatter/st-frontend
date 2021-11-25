@@ -26,16 +26,17 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { notifications } from "@/services/notifications";
 import { TransitionRoot } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "notification-item",
     props: {
         id: {
             type: String,
+            default: "",
         },
         type: {
             type: String,
@@ -64,34 +65,25 @@ import { XIcon } from "@heroicons/vue/solid";
         TransitionRoot,
         XIcon,
     },
-})
-export default class NotificationItem extends Vue {
-    public id = "";
-    public type?: string;
-    public icon?: string;
-    public title?: string | number;
-    public body?: string;
-    public timeout?: number;
-    public callback?: Function;
-    
-    public persist?: boolean;
-
-    public show = true;
-
-    public mounted() {
+    data: () => ({
+        show: true,
+    }),
+    mounted() {
         if (!this.persist) {
             setTimeout(() => (this.show = false), this.timeout ?? 5000);
         }
-    }
-
-    public get typeClass() {
-        if (!this.type) return "";
-        return `notification--${this.type}`;
-    }
-
-    public async remove() {
-        await notifications.remove(this.id);
-        this.show = false;
-    }
-}
+    },
+    computed: {
+        typeClass() {
+            if (!this.type) return "";
+            return `notification--${this.type}`;
+        },
+    },
+    methods: {
+        async remove() {
+            await notifications.remove(this.id);
+            this.show = false;
+        },
+    },
+});
 </script>

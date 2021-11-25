@@ -78,18 +78,19 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
-import { Song } from "@/classes";
-import { Options, Vue } from "vue-class-component";
+import { Collection, Song } from "@/classes";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "songtreasures";
 import { useStore } from "@/store";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 
-@Options({
+export default defineComponent({
+    name: "song-media-card",
     components: {
         BaseModal,
         MediaListItem,
@@ -98,63 +99,58 @@ import { logs } from "@/services/logs";
     },
     props: {
         song: {
-            type: Object,
+            type: Object as PropType<Song>,
         },
     },
-    name: "song-media-card",
-})
-export default class SongMediaCard extends Vue {
-    public song?: Song;
-    public store = useStore();
-    public showVideo = false;
-    public activeVideo = "";
+    data: () => ({
+        store: useStore(),
+        showVideo: false,
+        activeVideo: "",
+    }),
+    computed: {
+        videoUrls() {
+            return this.song?.videoFiles.map(f => f.directUrl) ?? [];
+        },
+        transposition() {
+            return this.store.state.songs.transposition;
+        },
+    },
+    methods: {
+        openVideo() {
+            this.showVideo = true;
+        },
+        closeVideo() {
+            this.showVideo = false;
+        },
+        setActiveVideo(url: string) {
+            this.activeVideo = url;
+            this.openVideo();
+        },
+        selectSheetMusic(sheet: MediaFile) {
+            const options: SheetMusicOptions = {
+                show: true,
+                url: sheet?.directUrl,
+                originalKey: this.song?.originalKey ?? "C",
+                transposition: this.transposition,
+                type: sheet?.type,
+                clef: "treble",
+            };
 
-    public openVideo() {
-        this.showVideo = true;
-    }
+            logs.event("sheetmusic_view", {
+                "file_id": sheet.id,
+                "sheetmusic_transposition": 0,
+                "song_id": this.song?.id,
+            });
 
-    public closeVideo() {
-        this.showVideo = false;
-    }
-
-    public setActiveVideo(url: string) {
-        this.activeVideo = url;
-        this.openVideo();
-    }
-
-    public selectSheetMusic(sheet: MediaFile) {
-        const options: SheetMusicOptions = {
-            show: true,
-            url: sheet?.directUrl,
-            originalKey: this.song?.originalKey ?? "C",
-            transposition: this.transposition,
-            type: sheet?.type,
-            clef: "treble",
-        };
-
-        logs.event("sheetmusic_view", {
-            "file_id": sheet.id,
-            "sheetmusic_transposition": 0,
-            "song_id": this.song?.id,
-        });
-
-        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
-    }
-
-    public get videoUrls() {
-        return this.song?.videoFiles.map(f => f.directUrl) ?? [];
-    }
-
-    public get transposition() {
-        return this.store.state.songs.transposition;
-    }
-
-    public selectAudio(audio: MediaFile) {
-        const track: AudioTrack = {
-            file: audio,
-            collection: this.store.getters.collection,
-        };
-        this.store.commit(SongsMutationTypes.SET_AUDIO, track);
-    }
-}
+            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+        },
+        selectAudio(audio: MediaFile) {
+            const track: AudioTrack = {
+                file: audio,
+                collection: this.store.getters.collection as Collection,
+            };
+            this.store.commit(SongsMutationTypes.SET_AUDIO, track);
+        },
+    },
+});
 </script>

@@ -36,24 +36,21 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { UserCircleIcon } from "@heroicons/vue/outline";
 import SearchResultItem from "@/classes/search/searchResultItem";
 import { CollectionItem, Song } from "@/classes";
 import { ApiContributor } from "songtreasures";
 
-@Options({
+export default defineComponent({
     props: {
         item: {
-            type: Object,
+            type: Object as PropType<SearchResultItem<Song | CollectionItem<ApiContributor>>>,
         },
     },
     components: {
         UserCircleIcon,
     },
     name: "search-result-item",
-})
-export default class SearchResultItemCard extends Vue {
-    public item?: SearchResultItem<Song | CollectionItem<ApiContributor>>;
-}
+});
 </script>

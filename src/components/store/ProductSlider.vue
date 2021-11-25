@@ -10,26 +10,24 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Product } from "@/classes";
-import { Options, Vue } from "vue-class-component";
 import ProductCard from "./ProductCard.vue";
 
-@Options({
-    props: {
-        products: {
-            type: Array,
-        },
-    },
+export default defineComponent({
+    name: "product-slider",
     components: {
         ProductCard,
     },
-    name: "product-slider",
-})
-export default class ProductSlider extends Vue {
-    public products?: Product[];
-
-    public get Products() {
-        return this.products ?? [];
-    }
-}
+    props: {
+        products: {
+            type: Array as PropType<Product[]>,
+        },
+    },
+    computed: {
+        Products() {
+            return this.products ?? [];
+        },
+    },
+});
 </script>
