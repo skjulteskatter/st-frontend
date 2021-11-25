@@ -8,9 +8,7 @@ import { scriptures } from "../api";
 export default class BaseScriptures {
     protected scriptures: Scripture[] = [];
     protected translations: Translation[] = [];
-    protected books: {
-        [translationId: string]: Book[];
-    } = {};
+    protected books: Book[] = [];
 
     private _initializing = false;
     private _initialized = false;
@@ -48,12 +46,13 @@ export default class BaseScriptures {
     }
 
     public async getBooks(translationId: string): Promise<Book[]> {
-        if (this.books[translationId] === undefined) {
-            this.books[translationId] = (await scriptures.getBooks(translationId))
+        if (!this.books.some(i => i.translationId === translationId)) {
+            this.books.push(...(await scriptures.getBooks(translationId))
                 .map(i => new Book(i))
-                .sort((a, b) => a.number > b.number ? 1 : -1);
+                .sort((a, b) => a.number > b.number ? 1 : -1),
+            );
         }
-        return this.books[translationId];
+        return this.books.filter(b => b.translationId === translationId);
     }
 
     public async getBook(translationId: string, id: string): Promise<Book> {

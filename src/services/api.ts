@@ -126,6 +126,20 @@ export const admin = {
     sync() {
         return http.get<{ result: string }>("api/Admin/Sync");
     },
+    emailLookup(email: string) {
+        return http.post<{
+            userId: {
+                [key: string]: string;
+            };
+            stripeStatus: string[];
+            firebaseStatus: string[];
+            user: IUser;
+            firebaseSubscriptions: ISubscription[];
+            stripeSubscriptions: ISubscription[];
+        }>("api/Admin/EmailLookup", {
+            email,
+        });
+    },
 };
 
 export const songs = {

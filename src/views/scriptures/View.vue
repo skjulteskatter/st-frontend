@@ -10,6 +10,8 @@
                 :translations="translations"
                 @setTranslation="setTranslation"
             />
+            <div v-if="scriptures.CurrentBook">{{scriptures.CurrentBook.title}}</div>
+            <div v-if="scriptures.CurrentChapter">{{scriptures.CurrentChapter.number}}</div>
         </div>
         <div class="scripture-content" v-if="translation">
             <router-view />
@@ -37,6 +39,7 @@ export default defineComponent({
             languages: null as Language[]| null,
             filterOnLanguages: null as ILocale<boolean> | null,
             loaded: false,
+            scriptures,
         };
     },
     async mounted() {
