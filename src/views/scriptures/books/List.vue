@@ -1,17 +1,7 @@
 <template>
     <div class="flex justify-center">
         <Loader :loading="!books" />
-        <BaseList :items="Books" :nameSelector="(i) => i.title" :clickCallback="(i) => setBook(i)"/>
-        <!-- <div class="flex gap-2 flex-wrap">
-            <div class="mb-2" v-for="book in Books" :key="book.id">
-                <button 
-                    @click="setBook(book)"
-                    class="text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
-                >
-                    {{book.title}}
-                </button>
-            </div>
-        </div> -->
+        <BaseList :items="Books" :nameSelector="(i) => i.title" :clickCallback="view"/>
     </div>
 </template>
 <script lang="ts">
@@ -46,7 +36,7 @@ export default defineComponent({
                 this.books = await scriptures.getBooks(translation.id);
             }
         },
-        async setBook(book: Book) {
+        async view(book: Book) {
             await scriptures.setBook(book.number);
             book.view();
         },
