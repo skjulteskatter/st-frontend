@@ -61,17 +61,18 @@
     </BaseDropdown>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import http from "@/services/http";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
-import { Options, Vue } from "vue-class-component";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/outline";
 import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
+import { Product } from "@/classes";
 
-@Options({
+export default defineComponent({
     name: "store-cart",
     components: {
         PriceDiv,
@@ -82,88 +83,80 @@ import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
         XIcon,
         ArrowRightIcon,
     },
-})
-export default class StoreCart extends Vue {
-    private store = useStore();
-    public checkingOut = false;
-    public country = "";
-    public mouseOn = false;
+    data: () => ({
+        store: useStore(),
+        checkingOut: false,
+        country: "",
+        mouseOn: false,
+        yearlySub: true,
+    }),
+    computed: {
+        totalPrice() {
+            let total = 0;
+            const prices = this.cartItems.map(i => {
+                const price = i.prices?.find(p => p.type == this.type);
 
-    public yearlySub = true;
+                if(price) {
+                    return parseInt(price.value.replace(/(\D+)/g, ""));
+                }
+            });
 
-    public async mounted() {
+            for(const price of prices) {
+                if(price) {
+                    total += price;
+                }
+            }
+
+            return this.formatPriceFromNumber(total, this.type);
+        },
+        cartItems() {
+            return this.store.getters.cartItems as Product[];
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        type: {
+            get() {
+                return this.store.state.stripe.type;
+            },
+            set(v: "year" | "month") {
+                this.store.commit(StripeMutationTypes.CART_TYPE, v);
+            },
+        },
+        show() {
+            return this.store.state.stripe.showCart == true || this.mouseOn;
+        },
+    },
+    async mounted() {
         this.country = await http.getCountry();
-    }
-
-    public formatPrices(prices: Price[], type: string) {
-        const unformattedPrice = prices.find((price) => price.type == type)
-            ?.value;
-        const formattedPrice = unformattedPrice?.slice(
-            0,
-            unformattedPrice.length - 2
-        );
-        return `${formattedPrice} /${type}`;
-    }
-    
-    public formatPriceFromNumber(num: number, type: string) {
-        return `NOK ${num / 100} / ${this.$t(type).toLocaleLowerCase()}`;
-    }
-
-    public toggleType() {
-        this.type = this.type == "year" ? "month" : "year";
-    }
-
-    public get totalPrice() {
-        let total = 0;
-        const prices = this.cartItems.map(i => {
-            const price = i.prices?.find(p => p.type == this.type);
-
-            if(price) {
-                return parseInt(price.value.replace(/(\D+)/g, ""));
-            }
-        });
-
-        for(const price of prices) {
-            if(price) {
-                total += price;
-            }
-        }
-
-        return this.formatPriceFromNumber(total, this.type);
-    }
-
-    public get cartItems() {
-        return this.store.getters.cartItems;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get type() {
-        return this.store.state.stripe.type;
-    }
-
-    public set type(v) {
-        this.store.commit(StripeMutationTypes.CART_TYPE, v);
-    }
-
-    public async checkout() {
-        this.checkingOut = true;
-        await this.store.dispatch(StripeActionTypes.START_SESSION);
-        this.checkingOut = false;
-    }
-
-    public get show() {
-        return this.store.state.stripe.showCart == true || this.mouseOn;
-    }
-
-    public clearCart() {
-        this.store.commit(StripeMutationTypes.CART_CLEAR);
-    }
-
-    public removeProduct(id: string) {
-        this.store.commit(StripeMutationTypes.CART_REMOVE_PRODUCT, id);
-    }
-}
+    },
+    methods: {
+        formatPrices(prices: Price[], type: string) {
+            const unformattedPrice = prices.find((price) => price.type == type)
+                ?.value;
+            const formattedPrice = unformattedPrice?.slice(
+                0,
+                unformattedPrice.length - 2
+            );
+            return `${formattedPrice} /${type}`;
+        },
+        formatPriceFromNumber(num: number, type: string) {
+            return `NOK ${num / 100} / ${this.$t(type).toLocaleLowerCase()}`;
+        },
+        toggleType() {
+            this.type = this.type == "year" ? "month" : "year";
+        },
+        async checkout() {
+            this.checkingOut = true;
+            await this.store.dispatch(StripeActionTypes.START_SESSION);
+            this.checkingOut = false;
+        },
+        clearCart() {
+            this.store.commit(StripeMutationTypes.CART_CLEAR);
+        },
+        removeProduct(id: string) {
+            this.store.commit(StripeMutationTypes.CART_REMOVE_PRODUCT, id);
+        },
+    },
+});
 </script>

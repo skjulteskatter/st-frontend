@@ -10,7 +10,7 @@
 					</div>
 					<div class="hidden md:block">
 						<div class="ml-10 flex items-baseline space-x-4">
-							<template v-for="item in links" :key="item.name">
+							<template v-for="item in Links" :key="item.name">
 								<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
 									<span class="flex items-center gap-2">
 										<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3" />
@@ -65,7 +65,7 @@
 		<!-- Mobile -->
 		<DisclosurePanel class="md:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-				<template v-for="item in links" :key="item.name">
+				<template v-for="item in Links" :key="item.name">
 					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
 				</template>
 			</div>
@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { FullSearchInput } from "@/components/inputs";
 import { StoreCart } from "@/components/store";
 import { useStore } from "vuex";
@@ -108,7 +108,8 @@ import Feedback from "@/components/feedback/Feedback.vue";
 import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/vue/solid";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
-@Options({
+export default defineComponent({
+	name: "the-navbar",
 	components: {
 		FullSearchInput,
 		StoreCart,
@@ -125,62 +126,61 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 		MenuIcon,
 		XIcon,
 	},
-	name: "the-navbar",
-})
-export default class TheNavbar extends Vue {
-	public store = useStore();
-	public open = false;
-
-	public logout() {
-        this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
-            window.location.replace("/login");
-        });
-    }
-
-	private get links() {
-		return [
-			{
-				name: this.$t("common_home"),
-				path: "/",
-			},
-			{
-				name: this.$t("common_collections"),
-				path: "/collections",
-			},
-			{
-				name: `${this.$t("common_your")} ${this.$t("common_collections").toLocaleLowerCase()}`,
-				path: "/custom-collections",
-			},
-			{
-				name: this.$t("favorites"),
-				path: "/favorites",
-			},
-			{
-				name: "Admin",
-				path: "/admin",
-				condition: this.isAdmin,
-			},
-			{
-				name: "Scriptures",
-				path: "/scriptures",
-				condition: this.isAdmin,
-			},
-		];
-	}
-
-	public get image() {
-        return this.user?.image ?? "/img/portrait-placeholder.png";
-    }
-
-	public get isAdmin() {
-		return this.store.getters.isAdmin;
-	}
-
-	public get user() {
-		return this.store.getters.user;
-	}
-}
+	data: () => ({
+		store: useStore(),
+		open: false,
+	}),
+	computed: {
+		image() {
+			return this.user?.image ?? "/img/portrait-placeholder.png";
+		},
+		isAdmin() {
+			return this.store.getters.isAdmin;
+		},
+		user() {
+			return this.store.getters.user;
+		},
+		Links() {
+			return [
+				{
+					name: this.$t("common_home"),
+					path: "/",
+				},
+				{
+					name: this.$t("common_collections"),
+					path: "/collections",
+				},
+				{
+					name: `${this.$t("common_your")} ${this.$t("common_collections").toLocaleLowerCase()}`,
+					path: "/custom-collections",
+				},
+				{
+					name: this.$t("favorites"),
+					path: "/favorites",
+				},
+				{
+					name: "Admin",
+					path: "/admin",
+					condition: this.isAdmin,
+				},
+				{
+					name: "Scriptures",
+					path: "/scriptures",
+					condition: this.isAdmin,
+				},
+			];
+		},
+	},
+	methods: {
+		logout() {
+			this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+				window.location.replace("/login");
+			});
+		},
+	},
+});
 </script>
+
 <style scoped>
 .router-link-exact-active {
 	@apply text-primary;

@@ -12,34 +12,31 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { BaseModal } from "@/components";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { Lyrics } from "@/classes";
 
-@Options({
+export default defineComponent({
     name: "lyrics-viewer",
     props: {
         lyrics: {
-            type: Object,
+            type: Object as PropType<Lyrics>,
         },
     },
-    components: {
-        BaseModal,
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        text() {
+           return this.lyrics?.getText({
+                chorus: this.$t("song_chorus"),
+                bridge: this.$t("song_bridge"),
+            }) ?? [];
+        },
     },
-})
-export default class LyricsViewer extends Vue {
-    public store = useStore();
-    public lyrics?: Lyrics;
-
-    public get text() {
-        return this.lyrics?.getText({
-            chorus: this.$t("song_chorus"),
-            bridge: this.$t("song_bridge"),
-        }) ?? [];
-    }
-}
+});
 </script>
+
 <style lang="scss">
 .lyrics-content {
 	column-count: 1;

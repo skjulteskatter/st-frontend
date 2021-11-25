@@ -6,43 +6,40 @@
         <span v-else>{{yearly ? product.originalPrice * 12 : product.originalPrice}}</span> / {{$t(yearly ? 'year' : 'month').toLowerCase()}}
     </div>
 </template>
+
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Product } from "@/classes";
 import http from "@/services/http";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "price",
     props: {
         product: {
-            type: Object,
+            type: Object as PropType<Product>,
         },
     },
-})
-export default class Price extends Vue {
-    private store = useStore();
-    public product?: Product;
-    public country = "no";
-
-    public get yearly() {
-        return this.store.state.stripe.type == "year";
-    }
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+        country: "no",
+    }),
+    computed: {
+        yearly() {
+            return this.store.state.stripe.type == "year";
+        },
+        Country() {
+            return this.country ?? "";
+        },
+        discounted() {
+            return this.product?.discounted(this.Country) === true;
+        },
+        Price() {
+            return this.product?.price;
+        },
+    },
+    async mounted() {
         this.country = await http.getCountry();
-    }
-
-    public get Country() {
-        return this.country ?? "";
-    }
-
-    public get discounted() {
-        return this.product?.discounted(this.Country) === true;
-    }
-
-    public get Price() {
-        return this.product?.price;
-    }
-}
+    },
+});
 </script>

@@ -16,9 +16,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "base-button",
     props: {
         theme: {
@@ -57,22 +57,15 @@ import { Options, Vue } from "vue-class-component";
         size: {
             type: String,
             default: "medium",
-            enum: ["small", "medium", "large"],
+            validator: (v: string) => ["small", "medium", "large"].includes(v),
         },
     },
-})
-export default class BaseButton extends Vue {
-    public loading?: boolean;
-    public loadingLabel?: string;
-    public theme?: string;
-    public icon?: string;
-    public disabled?: boolean;
-    public size?: string;
-
-    public get isLoading() {
-        return this.loading;
-    }
-}
+    computed: {
+        isLoading() {
+            return this.loading;
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

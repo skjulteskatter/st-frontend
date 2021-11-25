@@ -16,21 +16,21 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 
-@Options({
+export default defineComponent({
     name: "user-card",
-})
-export default class UserCard extends Vue {
-    private store = useStore();
-
-    public get image() {
-        return this.user?.image ?? "/img/portrait-placeholder.png";
-    }
-
-    public get user() {
-        return this.store.getters.user;
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        image() {
+            return this.user?.image ?? "/img/portrait-placeholder.png";
+        },
+        user() {
+            return this.store.getters.user;
+        },
+    },
+});
 </script>

@@ -54,23 +54,24 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
 
-@Options({
+export default defineComponent({
 	name: "owned-collections",
 	components: {
 		ArrowRightIcon,
 		CollectionIcon,
 	},
-})
-export default class OwnedCollections extends Vue {
-	private store = useStore();
-
-	public get collections(): Collection[] {
-		return this.store.getters.collections.filter(c => c.available) ?? [];
-	}
-}
+	data: () => ({
+		store: useStore(),
+	}),
+	computed: {
+		collections(): Collection[] {
+			return this.store.getters.collections.filter(c => c.available) as Collection[] ?? [];
+		},
+	},
+});
 </script>

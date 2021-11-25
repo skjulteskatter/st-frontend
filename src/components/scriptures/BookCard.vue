@@ -4,18 +4,15 @@
     </BaseCard>
 </template>
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Book } from "@/classes/scriptures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "book-card",
     props: {
         book: {
-            type: Object,
+            type: Object as PropType<Book>,
         },
     },
-})
-export default class BookCard extends Vue {
-    public book?: Book;
-}
+});
 </script>

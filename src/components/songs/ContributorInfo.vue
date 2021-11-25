@@ -13,23 +13,22 @@
         {{ i.name }}
     </router-link>
 </template>
-<script lang="ts">
-import { ApiContributor } from "songtreasures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+<script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
+import { ApiContributor } from "songtreasures";
+
+export default defineComponent({
     name: "contributor-info",
     props: {
         contributors: {
-            type: Array,
+            type: Array as PropType<ApiContributor[]>,
         },
     },
-})
-export default class ContributorInfo extends Vue {
-    private contributors?: ApiContributor[];
-
-    public get Contributors() {
-        return this.contributors ?? [];
-    }
-}
+    computed: {
+        Contributors() {
+            return this.contributors ?? [];
+        },
+    },
+});
 </script>

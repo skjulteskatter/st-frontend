@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import {
 	Dialog,
 	DialogOverlay,
@@ -45,7 +45,7 @@ import {
 } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/outline";
 
-@Options({
+export default defineComponent({
 	name: "slide-panel",
 	components: {
 		Dialog,	
@@ -64,9 +64,5 @@ import { XIcon } from "@heroicons/vue/outline";
 		},
 	},
 	emits: ["close"],
-})
-export default class SlidePanel extends Vue {
-	public open?: boolean;
-	public title?: string;
-}
+});
 </script>

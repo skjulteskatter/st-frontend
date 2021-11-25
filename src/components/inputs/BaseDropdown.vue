@@ -36,12 +36,18 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "base-dropdown",
+    components: {
+        Popover,
+        PopoverButton,
+        PopoverPanel,
+        ChevronDownIcon,
+    },
     props: {
         label: {
             type: String,
@@ -57,40 +63,29 @@ import { ChevronDownIcon } from "@heroicons/vue/solid";
             type: Boolean,
         },
     },
-    components: {
-        Popover,
-        PopoverButton,
-        PopoverPanel,
-        ChevronDownIcon,
+    data: () => ({
+        visible: false,
+    }),
+    computed: {
+        Show() {
+            return this.show || this.visible;
+        },
     },
-})
-export default class BaseDropdown extends Vue {
-    public label?: string;
-    public icon?: string;
-    public origin?: string;
-    public show?: boolean;
-    public visible = false;
-
-    public get Show() {
-        return this.show || this.visible;
-    }
-
-    public close(e: Event) {
-        if (!this.$el.contains(e.target)) {
-            this.visible = false;
-        }
-    }
-
-    public mounted() {
+    mounted() {
         document.addEventListener("click", this.close);
-    }
-
-    public beforeDestroy() {
+    },
+    beforeUnmount() {
         document.removeEventListener("click", this.close);
-    }
-
-    public openDropdown() {
-        this.visible = !this.visible;
-    }
-}
+    },
+    methods: {
+        close(e: Event) {
+            if (!this.$el.contains(e.target)) {
+                this.visible = false;
+            }
+        },
+        openDropdown() {
+            this.visible = !this.visible;
+        },
+    },
+});
 </script>

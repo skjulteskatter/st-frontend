@@ -13,10 +13,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import VueApexCharts from "vue3-apexcharts";
 
-@Options({
+export default defineComponent({
 	name: "line-chart",
 	components: {
 		Chart: VueApexCharts,
@@ -24,7 +24,7 @@ import VueApexCharts from "vue3-apexcharts";
 	props: {
 		options: {
 			type: Object,
-			default: {
+			default: () => ({
 				chart: {
 					id: "song-statistics",
 					fontFamily: "Inter",
@@ -41,15 +41,11 @@ import VueApexCharts from "vue3-apexcharts";
 						format: "dd MMM HH:mm",
 					},
 				},
-			},
+			}),
 		},
 		series: {
 			type: Array,
 		},
 	},
-})
-export default class LineChart extends Vue {
-	public options?: unknown;
-	public series?: unknown[];
-}
+});
 </script>

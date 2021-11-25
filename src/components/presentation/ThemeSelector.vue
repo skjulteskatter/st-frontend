@@ -46,11 +46,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { CheckCircleIcon } from "@heroicons/vue/solid";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 
-@Options({
+export default defineComponent({
 	name: "presentation-theme-selector",
 	components: {
 		CheckCircleIcon,
@@ -66,23 +66,24 @@ import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 			type: Boolean,
 		},
 	},
+	data: () => ({
+		themes: ["dark", "light"],
+	}),
 	emits: ["setTheme", "toggleSidebar"],
-})
-export default class ThemeSelector extends Vue {
-	public themes = ["dark", "light"];
-	public theme?: string;
-	public showSideBar?: boolean;
-
-	public get Sidebar() {
-		return this.showSideBar ?? true;
-	}
-
-	public set Sidebar(v: boolean) {
-		this.$emit("toggleSidebar", v);
-	}
-
-	public selectTheme(theme: string) {
-		this.$emit("setTheme", theme);
-	}
-}
+	computed: {
+		Sidebar: {
+			get() {
+				return this.showSideBar ?? true;
+			},
+			set(v: boolean) {
+				this.$emit("toggleSidebar", v);
+			},
+		},
+	},
+	methods: {
+		selectTheme(theme: string) {
+			this.$emit("setTheme", theme);
+		},
+	},
+});
 </script>

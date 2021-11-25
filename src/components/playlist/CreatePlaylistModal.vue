@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
@@ -29,7 +29,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { CheckIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
 	name: "create-playlist-modal",
 	props: {
 		show: {
@@ -43,25 +43,24 @@ import { CheckIcon } from "@heroicons/vue/solid";
 		BaseInput,
 		CheckIcon,
 	},
-})
-export default class CreatePlaylistModal extends Vue {
-	private store = useStore();
-	public show?: boolean;
-    
-	public playlistName = "";
-	public loading = false;
+	data: () => ({
+		store: useStore(),
+		playlistName: "",
+		loading: false,
+	}),
+	methods: {
+		async createPlaylist() {
+			this.loading = true;
+			await this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
+				name: this.playlistName,
+			});
 
-    public async createPlaylist() {
-		this.loading = true;
-        await this.store.dispatch(SessionActionTypes.PLAYLIST_CREATE, {
-            name: this.playlistName,
-        });
+			notify("success", this.$t("playlist_newplaylist"), "check", `${this.$t("playlist_newplaylist")} "${this.playlistName}"`, undefined, undefined, false);
 
-        notify("success", this.$t("playlist_newplaylist"), "check", `${this.$t("playlist_newplaylist")} "${this.playlistName}"`, undefined, undefined, false);
-
-        this.playlistName = "";
-		this.loading = false;
-		this.$emit("close");
-    }
-}
+			this.playlistName = "";
+			this.loading = false;
+			this.$emit("close");
+		},
+	},
+});
 </script>

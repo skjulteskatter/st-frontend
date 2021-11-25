@@ -12,32 +12,30 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { ICustomCollection } from "songtreasures";
 import { FolderIcon } from "@heroicons/vue/outline";
 
-@Options({
+export default defineComponent({
     name: "playlist-card",
     props: {
         playlist: {
-            type: Object,
+            type: Object as PropType<ICustomCollection>,
             required: true,
         },
     },
     components: {
         FolderIcon,
     },
-})
-export default class PlaylistCard extends Vue {
-    public playlist?: ICustomCollection;
+    methods: {
+        goToPlaylist() {
+            if (!this.playlist?.id) return;
 
-    public goToPlaylist() {
-        if (!this.playlist?.id) return;
-
-        this.$router.push({
-            name: "playlist-view",
-            params: { id: this.playlist.id },
-        });
-    }
-}
+            this.$router.push({
+                name: "playlist-view",
+                params: { id: this.playlist.id },
+            });
+        },
+    },
+});
 </script>

@@ -42,43 +42,45 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { ICustomCollection } from "songtreasures";
 import { useStore } from "@/store";
-import { FolderIcon, ExclamationIcon } from "@heroicons/vue/outline";
+import { FolderIcon } from "@heroicons/vue/outline";
 import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "playlist-card",
     props: {
         playlist: {
-            type: Object,
+            type: Object as PropType<ICustomCollection>,
             required: true,
         },
     },
-    emits: ["delete"],
     components: {
         FolderIcon,
-        ExclamationIcon,
         TrashIcon,
         UsersIcon,
     },
-})
-export default class PlaylistCard extends Vue {
-    private store = useStore();
-    public playlist?: ICustomCollection;
-    public userId = this.store.getters.user?.id;
+    data: () => ({
+        store: useStore(),
+        hover: false,
+        showModal: false,
+    }),
+    emits: ["delete"],
+    computed: {
+        userId(){
+            return this.store.getters.user?.id;
+        },
+    },
+    methods: {
+        goToPlaylist() {
+            if (!this.playlist?.id || this.hover) return;
 
-    public hover = false;
-    public showModal = false;
-
-    public goToPlaylist() {
-        if (!this.playlist?.id || this.hover) return;
-
-        this.$router.push({
-            name: "playlist-view",
-            params: { id: this.playlist.id },
-        });
-    }
-}
+            this.$router.push({
+                name: "playlist-view",
+                params: { id: this.playlist.id },
+            });
+        },
+    },
+});
 </script>

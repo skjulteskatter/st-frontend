@@ -3,18 +3,20 @@
         <small class="opacity-50">Copyright {{new Date().getFullYear()}} © {{ $t('copyright_title')}}. All Rights Reserved</small>
     </div>
 </template>
+
 <script lang="ts">
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "copyright",
-})
-export default class Copyright extends Vue {
-    private store = useStore();
-
-    public get hide() {
-        return this.store.getters.collection?.loading;
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        hide() {
+            return this.store.getters.collection?.loading;
+        },
+    },
+});
 </script>

@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { TransitionRoot } from "@headlessui/vue";
 import { ClipboardCopyIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
 	props: {
 		content: {
 			type: String,
@@ -41,22 +41,20 @@ import { ClipboardCopyIcon } from "@heroicons/vue/solid";
 		TransitionRoot,
 		ClipboardCopyIcon,
 	},
-})
-export default class CopyToClipboard extends Vue {
-	public label?: string;
-	public content?: string;
-	public copied = false;
-
-	public copy() {
-		if(this.content) {
-			navigator.clipboard.writeText(this.content);
-			this.confirmCopy();
-		}
-	}
-
-	public confirmCopy() {
-		this.copied = true;
-		setTimeout(() => this.copied = false, 2000);
-	}
-}
+	data: () => ({
+		copied: false,
+	}),
+	methods: {
+		copy() {
+			if(this.content) {
+				navigator.clipboard.writeText(this.content);
+				this.confirmCopy();
+			}
+		},
+		confirmCopy() {
+			this.copied = true;
+			setTimeout(() => this.copied = false, 2000);
+		},
+	},
+});
 </script>

@@ -13,9 +13,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "base-input",
     props: {
         label: {
@@ -33,11 +33,5 @@ import { Options, Vue } from "vue-class-component";
         },
     },
     emits: ["update:modelValue"],
-})
-export default class BaseInput extends Vue {
-    public label?: string;
-    public modelValue?: string;
-    public disabled?: boolean;
-    public placeholder?: string;
-}
+});
 </script>

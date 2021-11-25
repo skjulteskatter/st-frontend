@@ -6,18 +6,15 @@
     </BaseCard>
 </template>
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Scripture } from "@/classes/scriptures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "scripture-card",
     props: {
         scripture: {
-            type: Object,
+            type: Object as PropType<Scripture>,
         },
     },
-})
-export default class ScriptureCard extends Vue {
-    public scripture?: Scripture;
-}
+});
 </script>

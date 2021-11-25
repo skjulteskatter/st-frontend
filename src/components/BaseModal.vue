@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { 
     TransitionRoot, 
     TransitionChild,
@@ -59,7 +59,8 @@ import {
     DialogDescription,
 } from "@headlessui/vue";
 
-@Options({
+export default defineComponent({
+    name: "modal",
     components: {
         TransitionRoot,
         TransitionChild,
@@ -73,21 +74,11 @@ import {
             type: Boolean,
         },
     },
-    emits: [
-        "close",
-    ],
-    name: "modal",
-})
-export default class Modal extends Vue {
-    public mouseOverCard = false;
-    public show?: boolean;
-
-    public closeIfOutside() {
-        if (!this.mouseOverCard) this.closeModal();
-    }
-
-    public closeModal() {
-        this.$emit("close");
-    }
-}
+    emits: ["close"],
+    methods: {
+        closeModal() {
+            this.$emit("close");
+        },
+    },
+});
 </script>

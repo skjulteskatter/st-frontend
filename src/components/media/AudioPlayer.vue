@@ -47,25 +47,23 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import Plyr from "plyr";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
 import { XIcon } from "@heroicons/vue/solid";
 
-
-@Options({
+export default defineComponent({
     name: "audio-player",
     components: {
         XIcon,
     },
-})
-export default class AudioPlayer extends Vue {
-    public store = useStore();
-    public player: Plyr = {} as Plyr;
-
-    public updated() {
+    data: () => ({
+        store: useStore(),
+        player: {} as Plyr,
+    }),
+    updated() {
         this.player = new Plyr("#audio-player", {
             settings: [],
         });
@@ -73,29 +71,27 @@ export default class AudioPlayer extends Vue {
         if (this.audio?.directUrl) {
             this.player.play();
         }
-    }
-
-    public get audio() {
-        return this.store.state.songs.audio?.file;
-    }
-
-    public get Song() {
-        return appSession.songs.find(s => s.id == this.audio?.songId) ?? this.store.getters.collection?.songs.find(s => s.id == this.audio?.songId);
-    }
-
-    public get collection(): string | undefined {
-        return this.store.getters.collection?.key;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public closePlayer() {
-        // this.player.stop();
-        this.store.commit(SongsMutationTypes.SET_AUDIO, undefined);
-    }
-}
+    },
+    computed: {
+        audio() {
+            return this.store.state.songs.audio?.file;
+        },
+        Song() {
+            return appSession.songs.find(s => s.id == this.audio?.songId) ?? this.store.getters.collection?.songs.find(s => s.id == this.audio?.songId);
+        },
+        collection(): string | undefined {
+            return this.store.getters.collection?.key;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+    methods: {
+        closePlayer() {
+            this.store.commit(SongsMutationTypes.SET_AUDIO, undefined);
+        },
+    },
+});
 </script>
 
 <style lang="scss">

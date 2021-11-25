@@ -42,18 +42,23 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { appSession } from "@/services/session";
-import { StarIcon, LockClosedIcon, CheckIcon, EyeIcon } from "@heroicons/vue/solid";
+import { StarIcon, EyeIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";
 
-@Options({
+export default defineComponent({
+    name: "song-list-card",
+    components: {
+        StarIcon,
+        EyeIcon,
+    },
     props: {
         title: {
             type: String,
         },
         songs: {
-            type: Array,
+            type: Array as PropType<Song[]>,
         },
         count: {
             type: Boolean,
@@ -64,45 +69,30 @@ import { Song } from "@/classes";
         },
         isAdmin: Boolean,
     },
-    components: {
-        StarIcon,
-        LockClosedIcon,
-        CheckIcon,
-        EyeIcon,
-    },
-    name: "song-list-card",
     emits: ["showCta"],
-})
-export default class SongListCard extends Vue {
-    public songs?: Song[];
-    public title?: string;
-    public count?: boolean;
-    public action?: Function;
-    public isAdmin?: boolean;
-    
-    public get Songs() {
-        return this.songs ?? [];
-    }
-
-    public viewSong(song: Song) {
-        if(!song.available) {
-            return this.$emit("showCta");
-        }
-        song.view();
-    }
-
-    public get songsWithAudioFiles() {
-        return appSession.files.filter(i => i.type === "audio").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-    }
-
-    public get songsWithVideoFiles() {
-        return appSession.files.filter(i => i.type === "video").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-    }
-    
-    public get songsWithSheetMusic() {
-        return appSession.files.filter(i => ["sheetmusic", "sheetmusic-pdf"].includes(i.type)).map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-    }
-}
+    computed: {
+        Songs() {
+            return this.songs ?? [];
+        },
+        songsWithAudioFiles() {
+            return appSession.files.filter(i => i.type === "audio").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
+        },
+        songsWithVideoFiles() {
+            return appSession.files.filter(i => i.type === "video").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
+        },
+        songsWithSheetMusic() {
+            return appSession.files.filter(i => ["sheetmusic", "sheetmusic-pdf"].includes(i.type)).map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
+        },
+    },
+    methods: {
+        viewSong(song: Song) {
+            if(!song.available) {
+                return this.$emit("showCta");
+            }
+            song.view();
+        },
+    },
+});
 </script>
 
 <style lang="scss">

@@ -28,16 +28,16 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Lyrics } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
 import VerseView from "./VerseView.vue";
 
-@Options({
+export default defineComponent({
     name: "performance-viewer",
     props: {
         lyrics: {
-            type: Object,
+            type: Object as PropType<Lyrics>,
         },
     },
     components: {
@@ -45,46 +45,43 @@ import VerseView from "./VerseView.vue";
         ArrowLeftIcon,
         VerseView,
     },
-})
-export default class TransposedLyricsViewer extends Vue {
-    private currentVerseIndex = 0;
-    private length = 0;
-    private size = 2;
-    public lyrics?: Lyrics;
-
-    private eventListener = (e: KeyboardEvent) => {
-        if (e.key === "ArrowLeft") {
-            this.previous();
-        }
-        if (e.key === "ArrowRight") {
-            this.next();
-        }
-    }
-
-    public mounted() {
+    data: () => ({
+        currentVerseIndex: 0,
+        length: 0,
+        size: 2,
+    }),
+    mounted() {
         if (this.lyrics) {
             this.length = this.lyrics.performanceView.length ?? 0;
             this.size = this.lyrics.performanceView[0].content.length > 5 ? 1 : 2;
         }
         window.addEventListener("keydown", this.eventListener);
-    }
-
-    public unmounted() {
+    },
+    unmounted() {
         window.removeEventListener("keydown", this.eventListener);
-    }
-
-    public get currentVerses() {
-        return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + this.size) ?? [];
-    }
-
-    public next() {
-        if (this.currentVerseIndex < this.length - this.size)
-            this.currentVerseIndex += this.size;
-    }
-
-    public previous() {
-        if (this.currentVerseIndex > 0)
-            this.currentVerseIndex -= this.size;
-    }
-}
+    },
+    computed: {
+        currentVerses() {
+            return this.lyrics?.performanceView.slice(this.currentVerseIndex, this.currentVerseIndex + this.size) ?? [];
+        },
+    },
+    methods: {
+        eventListener(e: KeyboardEvent) {
+           if (e.key === "ArrowLeft") {
+                this.previous();
+            }
+            if (e.key === "ArrowRight") {
+                this.next();
+            }
+        },
+        next() {
+            if (this.currentVerseIndex < this.length - this.size)
+                this.currentVerseIndex += this.size;
+        },
+        previous() {
+            if (this.currentVerseIndex > 0)
+                this.currentVerseIndex -= this.size;
+        },
+    },
+});
 </script>

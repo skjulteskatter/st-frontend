@@ -3,29 +3,30 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { Options, Vue } from "vue-class-component";
 import SearchInput from "./SearchInput.vue";
 
-@Options({
+export default defineComponent({
     name: "full-search-input",
     components: {
         SearchInput,
     },
-})
-export default class FullSearchInput extends Vue {
-    private store = useStore();
-    public query = "";
+    data: () => ({
+        store: useStore(),
+        query: "",
+    }),
+    methods: {
+        searchAll() {
+            this.store.commit(SongsMutationTypes.SEARCH, this.query);
+            this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
 
-    public searchAll() {
-        this.store.commit(SongsMutationTypes.SEARCH, this.query);
-        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
-
-        this.$router.push({
-            name: "search",
-        });
-        this.query = "";
-    }
-}
+            this.$router.push({
+                name: "search",
+            });
+            this.query = "";
+        },
+    },
+});
 </script>
