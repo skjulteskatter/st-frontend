@@ -7,22 +7,20 @@
     </div>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { sharing } from "@/services/api";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { ICustomCollection, ITag } from "songtreasures";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "redeem-token",
-})
-export default class RedeemToken extends Vue {
-    private searchParams = new URLSearchParams(window.location.search);
-    private store = useStore();
-
-    public result: ICustomCollection | ITag | null = null;
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+        searchParams: new URLSearchParams(window.location.search),
+        result: null as ICustomCollection | ITag | null,
+    }),
+    async mounted() {
         if (this.token) {
             const r = await sharing.activateKey(this.token);
             this.result = r;
@@ -31,10 +29,11 @@ export default class RedeemToken extends Vue {
                 this.$router.push({name: "playlist-view", params: {id: r.id}});
             }
         }
-    }
-
-    public get token() {
-        return this.searchParams.get("token") as string | null;
-    }
-}
+    },
+    computed: {
+        token() {
+            return this.searchParams.get("token") as string | null;
+        },
+    },
+});
 </script>

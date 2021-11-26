@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { osmd } from "@/services/osmd";
 import { MediaFile } from "songtreasures";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
@@ -78,37 +78,92 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
-// import { SheetMusicOptions } from "@/store/songs";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
-@Options({
+export default defineComponent({
+    name: "sheet-music",
     components: {
         OpenSheetMusicDisplay,
         MediaListItem,
         ChevronUpIcon,
         ChevronDownIcon,
     },
-    name: "sheet-music",
-})
-export default class SheetMusic extends Vue {
-    public store = useStore();
-    public searchParams = new URLSearchParams(window.location.search);
-    public osmd = osmd;
-    public pdfType = SheetMusicTypes.PDF;
-    public files: MediaFile[] = [];
-    public song: Song | null = null;
-    public user?: User;
-
-    public showFiles = true;
-
-    public get languageKey() {
-        return this.user?.settings?.languageKey;
-    }
-
-    public loaded = false;
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+        searchParams: new URLSearchParams(window.location.search),
+        osmd: osmd,
+        pdfType: SheetMusicTypes.PDF,
+        files: [] as MediaFile[],
+        song: null as Song | null,
+        user: {} as User,
+        showFiles: true,
+        loaded: false,
+    }),
+    computed: {
+        languageKey() {
+            return this.user?.settings?.languageKey;
+        },
+        Authors() {
+            return this.song?.participants.filter(i => i.type === "author").map(i => i.contributor as Contributor) ?? [];
+        },
+        Composers() {
+            return this.song?.participants.filter(i => i.type === "composer").map(i => i.contributor as Contributor) ?? [];
+        },
+        options() {
+            return this.store.state.songs.sheetMusic;
+        },
+        sheetMusic() {
+            return this.store.state.songs.sheetMusic ?? {} as SheetMusicOptions;
+        },
+        url() {
+            return (
+                this.sheetMusic.url ??
+                `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`
+            );
+        },
+        originalKey() {
+            return (
+                this.sheetMusic.originalKey ??
+                this.searchParams
+                    .get("originalKey")
+                    ?.replace("sharp", "#")
+                    .replace("flat", "b")
+            );
+        },
+        routeName() {
+            return this.$route.name?.toString() ?? "";
+        },
+        transposeKey() {
+            return this.searchParams.get("transposition");
+        },
+        transposition() {
+            return (
+                this.sheetMusic.transposition ??
+                (this.transposeKey ? parseInt(this.transposeKey) : undefined)
+            );
+        },
+        embed() {
+            const query = this.searchParams.get("embed");
+            const embed = ["", "true"].includes(query ?? "false");
+            return embed;
+        },
+        zoom() {
+            const query = this.searchParams.get("zoom");
+            const zoom = query ? parseInt(query) / 100 : undefined;
+            return zoom;
+        },
+        showSheetMusic() {
+            return this.sheetMusic.show;
+        },
+        type() {
+            return (
+                this.sheetMusic.type ??
+                this.searchParams.get("type")
+            );
+        },
+    },
+    async mounted() {
         const c = document.getElementById("osmd-canvas");
         const pbc = document.getElementById("pb-canvas");
         const token = this.searchParams.get("token");
@@ -129,123 +184,30 @@ export default class SheetMusic extends Vue {
         else {
             throw new Error("No token present");
         }
-        // const o: SheetMusicOptions = {
-        //     show: true,
-        //     url: this.url,
-        //     originalKey: this.originalKey,
-        //     transposition: this.transposition,
-        // }
-
-        // this.songStore.commit("sheetMusic", o)
 
         this.loaded = true;
-    }
-    
-    public async setFile(file: MediaFile) {
-        this.loaded = false;
+    },
+    methods: {
+        async setFile(file: MediaFile) {
+            this.loaded = false;
 
-        await new Promise(r => setTimeout(r, 10));
-        const options: SheetMusicOptions = {
-            show: true,
-            originalKey: this.song?.originalKey ?? "C",
-            url: file.directUrl,
-            type: file.type,
-            transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true),
-            zoom: this.zoom,
-            clef: "treble",
-        };
-        this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
-        this.loaded = true;
-    }
-
-    public get Authors() {
-        return this.song?.participants.filter(i => i.type === "author").map(i => i.contributor as Contributor) ?? [];
-    }
-
-    public get Composers() {
-        return this.song?.participants.filter(i => i.type === "composer").map(i => i.contributor as Contributor) ?? [];
-    }
-
-
-    public get options() {
-        return this.store.state.songs.sheetMusic;
-    }
-
-    public get sheetMusic() {
-        return this.store.state.songs.sheetMusic ?? {} as SheetMusicOptions;
-    }
-
-    public get url() {
-        return (
-            this.sheetMusic.url ??
-            `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`
-        );
-    }
-
-    public get originalKey() {
-        return (
-            this.sheetMusic.originalKey ??
-            this.searchParams
-                .get("originalKey")
-                ?.replace("sharp", "#")
-                .replace("flat", "b")
-        );
-    }
-
-    public get routeName() {
-        return this.$route.name?.toString() ?? "";
-    }
-
-    public get transposeKey() {
-        return this.searchParams.get("transposition");
-    }
-
-    public get transposition() {
-        return (
-            this.sheetMusic.transposition ??
-            (this.transposeKey ? parseInt(this.transposeKey) : undefined)
-        );
-    }
-
-    public get embed() {
-        const query = this.searchParams.get("embed");
-
-        const embed = ["", "true"].includes(query ?? "false");
-
-        return embed;
-    }
-
-    public get zoom() {
-        const query = this.searchParams.get("zoom");
-
-        const zoom = query ? parseInt(query) / 100 : undefined;
-
-        return zoom;
-    }
-
-    public get showSheetMusic() {
-        return this.sheetMusic.show;
-    }
-
-    public get type() {
-        return (
-            this.sheetMusic.type ??
-            this.searchParams.get("type")
-        );
-    }
-
-    // public get options(): SheetMusicOptions {
-    //     return {
-    //         show: this.showSheetMusic,
-    //         url: this.url,
-    //         originalKey: this.originalKey,
-    //         transposition: this.transposition,
-    //         type: this.type ?? undefined,
-    //         clef: "treble",
-    //     };
-    // }
-}
+            await new Promise(r => setTimeout(r, 10));
+            const options: SheetMusicOptions = {
+                show: true,
+                originalKey: this.song?.originalKey ?? "C",
+                url: file.directUrl,
+                type: file.type,
+                transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true),
+                zoom: this.zoom,
+                clef: "treble",
+            };
+            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+            this.loaded = true;
+        },
+    },
+});
 </script>
+
 <style lang="scss">
 @import "../style/mixins";
 

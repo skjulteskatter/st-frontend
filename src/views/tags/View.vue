@@ -27,34 +27,34 @@
         </div>
     </div>
 </template>
+
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { Song, Tag } from "@/classes";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 import { SongListItemCard } from "@/components/songs";
 import { TagIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "tag-view",
     components: {
         SongListItemCard,
         TagIcon,
     },
-})
-export default class TagVue extends Vue {
-    private store = useStore();
-    public tag?: Tag = undefined;
-    public songs: Song[] = [];
-
-    public async beforeMount() {
+    data: () => ({
+        store: useStore(),
+        tag: undefined as Tag | undefined,
+        songs: [] as Song[],
+    }),
+    computed: {
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+    async beforeMount() {
         this.tag = appSession.tags.find(t => t.id == this.$route.params.id);
-
         this.songs = appSession.songs.filter(i => this.tag?.songIds.includes(i.id));
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-}
+    },
+});
 </script>

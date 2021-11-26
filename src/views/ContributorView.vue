@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Contributor, Song } from "@/classes";
@@ -86,25 +86,62 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { appSession } from "@/services/session";
 import { PencilAltIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
+    name: "contributor-view",
     components: {
         SongListCard,
         BackButton,
         PencilAltIcon,
     },
-    name: "contributor-view",
-})
-export default class ContributorView extends Vue {
-    private store = useStore();
-    public loading = false;
-
-    public songs: Song[] = [];
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public async beforeMount() {
+    data: () => ({
+        store: useStore(),
+        loading: false,
+        songs: [] as Song[],
+    }),
+    computed: {
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        contributorItem() {
+            return this.store.state.songs.contributorItem;
+        },
+        contributor() {
+            const item = this.contributorItem?.item;
+            return item ? new Contributor(item) : undefined;
+        },
+        portrait() {
+            const isString = typeof this.contributor?.image === "string";
+            return isString ? this.contributor?.image : "/img/portrait-placeholder.png";
+        },
+        authorSongs(): Song[] {
+            return this.songs
+                .filter((s) =>
+                    s.participants.find(
+                        (p) =>
+                            p.contributorId == this.contributor?.id &&
+                            p.type == "author",
+                    ),
+                )
+                .map((s) => new Song(s));
+        },
+        composerSongs(): Song[] {
+            return this.songs
+                .filter((s) =>
+                    s.participants.find(
+                        (p) =>
+                            p.contributorId == this.contributor?.id &&
+                            p.type == "composer",
+                    ),
+                ) as Song[];
+        },
+        collections(): Collection[] {
+            return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id))) as Collection[];
+        },
+        isEditor() {
+            return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+        },
+    },
+    async beforeMount() {
         this.loading = true;
 
         await this.store.dispatch(
@@ -140,57 +177,13 @@ export default class ContributorView extends Vue {
                 );
             }
         }, 5000);
-    }
-
-    public get contributorItem() {
-        return this.store.state.songs.contributorItem;
-    }
-
-    public get contributor() {
-        const item = this.contributorItem?.item;
-        return item ? new Contributor(item) : undefined;
-    }
-
-    public get portrait() {
-        const isString = typeof this.contributor?.image === "string";
-        return isString ? this.contributor?.image : "/img/portrait-placeholder.png";
-    }
-
-    public get authorSongs(): Song[] {
-        return this.songs
-            .filter((s) =>
-                s.participants.find(
-                    (p) =>
-                        p.contributorId == this.contributor?.id &&
-                        p.type == "author",
-                ),
-            )
-            .map((s) => new Song(s));
-    }
-
-    public get composerSongs(): Song[] {
-        return this.songs
-            .filter((s) =>
-                s.participants.find(
-                    (p) =>
-                        p.contributorId == this.contributor?.id &&
-                        p.type == "composer",
-                ),
-            );
-    }
-
-    public get collections(): Collection[] {
-        return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id)));
-    }
-
-    public get isEditor() {
-        return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
-    }
-
-    public goToEditPage() {
-        window.open(`https://songtreasures.sanity.studio/desk/contributor;${this.contributor?.id}`);
-    }
-}
+    },
+    methods: {
+        goToEditPage() {
+            window.open(`https://songtreasures.sanity.studio/desk/contributor;${this.contributor?.id}`);
+        },
+    },
+});
 </script>
 
 <style lang="scss">

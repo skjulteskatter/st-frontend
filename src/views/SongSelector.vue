@@ -3,17 +3,16 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { Vue, Options } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "song-selector",
-})
-export default class SongSelector extends Vue {
-    private store = useStore();
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+    }),
+    async mounted() {
         if (
             this.$route.name != "collections" &&
             this.$route.params.collection
@@ -23,6 +22,6 @@ export default class SongSelector extends Vue {
                 this.$route.params.collection as string,
             );
         }
-    }
-}
+    },
+});
 </script>
