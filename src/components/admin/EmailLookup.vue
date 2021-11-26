@@ -2,7 +2,7 @@
 	<BaseCard>
 		<template #header>
 			<div class="flex justify-between items-baseline">
-				<SearchInput @search="lookupEmail" />
+				<SearchInput v-model="email" @search="lookupEmail" />
 			</div>
 			<div v-if="user">
 				{{ user }}
@@ -33,10 +33,11 @@ export default defineComponent({
 	},
 	data: () => ({
 		user: {} as Response,
+		email: "",
 	}),
 	methods: {
-		async lookupEmail(email: string) {
-			this.user = await api.admin.emailLookup(email);
+		async lookupEmail() {
+			this.user = await api.admin.emailLookup(this.email);
 		},
 	},
 });
