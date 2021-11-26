@@ -94,8 +94,8 @@
                         <PresentationPreview
                             v-if="song.hasLyrics && isExtended && lyrics"
                             :text="lyrics?.getText({
-                                chorus: this.$t('song_chorus'),
-                                bridge: this.$t('song_bridge'),
+                                chorus: $t('song_chorus'),
+                                bridge: $t('song_bridge'),
                             }, true) ?? []"
                             :availableVerses="control.AvailableVerses"
                             :currentVerses="control.currentVerses"
