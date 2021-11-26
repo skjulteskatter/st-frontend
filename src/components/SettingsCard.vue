@@ -144,8 +144,8 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import themes, { Themes } from "@/classes/themes";
+import { defineComponent } from "@vue/runtime-core";
+import themes from "@/classes/themes";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -165,7 +165,8 @@ import { appSession } from "@/services/session";
 import { session } from "@/services/api";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 
-@Options({
+export default defineComponent({
+    name: "settings-card",
     components: {
         ChangePassword,
         CheckIcon,
@@ -180,69 +181,73 @@ import { StripeActionTypes } from "@/store/modules/stripe/action-types";
             type: String,
         },
     },
-    name: "settings-card",
-})
-export default class SettingsCard extends Vue {
-    public category?: string;
-    public cache = cache;
-    public selectedLanguage: Language = {} as Language;
-    public selectedKey = "";
-    public selectedTranscode = "";
-    public store = useStore();
-    public themes: Themes = themes;
-    public newDisplayName = "";
-    public offline = false;
-    public gender: "male" | "female" | "unknown" = "unknown";
-    public birthDay = "";
+    data: () => ({
+        store: useStore(),
+        cache: cache,
+        selectedLanguage: {} as Language,
+        selectedKey: "",
+        selectedTranscode: "",
+        selectedImage: "",
+        themes: themes,
+        newDisplayName: "",
+        offline: false,
+        gender: "unknown" as "male" | "female" | "unknown",
+        birthDay: "",
+        transpositions: [
+            "Ab",
+            "A",
+            "Bb",
+            "B",
+            "C",
+            "Db",
+            "D",
+            "Eb",
+            "E",
+            "F",
+            "F#",
+            "G",
+        ],
+        transcodes: [
+            "common",
+            "dutch",
+            "german",
+            "latin",
+            "solfege",
+            "scandinavian",
+            "nashville",
+            "roman",
+        ],
+        fileName: "",
+        loading: {} as {
+            [key: string]: boolean;
+        },
 
-    public transpositions = [
-        "Ab",
-        "A",
-        "Bb",
-        "B",
-        "C",
-        "Db",
-        "D",
-        "Eb",
-        "E",
-        "F",
-        "F#",
-        "G",
-    ];
-    public transcodes = [
-        "common",
-        "dutch",
-        "german",
-        "latin",
-        "solfege",
-        "scandinavian",
-        "nashville",
-        "roman",
-    ];
-
-    public get image() {
-        return this.user?.image ?? "/img/portrait-placeholder.png";
-    }
-
-    private get initDate() {
-        return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
-    }
-
-    private dateToString(date: Date) {
-        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-    }
-
-    public fileName = "";
-    private selectedImage?: string;
-
-    public theme = this.user?.settings?.theme;
-    public token = localStorage.getItem("id_token");
-
-    public loading: {
-        [key: string]: boolean;
-    } = {};
-
-    public async mounted() {
+    }),
+    computed: {
+        image() {
+            return this.user?.image ?? "/img/portrait-placeholder.png";
+        },
+        initDate() {
+            return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
+        },
+        theme() {
+            return this.user?.settings?.theme ?? "light";
+        },
+        token() {
+            return localStorage.getItem("id_token");
+        },
+        languages(): Language[] {
+            return appSession.languages || [];
+        },
+        user() {
+            return this.store.getters.user;
+        },
+        collections() {
+            const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
+            return this.store.getters.collections.filter(i => colIds.includes(i.id));
+        },
+    },
+    async mounted() {
         this.selectedLanguage =
             this.languages.find(
                 (l) => l.key == this.user?.settings?.languageKey,
@@ -259,128 +264,110 @@ export default class SettingsCard extends Vue {
         this.birthDay = this.user?.birthDay ? this.dateToString(new Date(this.user.birthDay)) : this.dateToString(this.initDate);
         
         this.offline = await cache.get("config", "offline") == true;
-    }
+    },
+    methods: {
+        dateToString(date: Date) {
+            return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+        },
+        async save() {
+            this.loading["save"] = true;
+            try {
+                const gender = this.gender != this.user?.gender ? this.gender : undefined;
+                const birthDay = this.birthDay != this.dateToString(this.initDate) ? this.birthDay : undefined;
 
-    public async save() {
-        this.loading["save"] = true;
-        try {
-            const gender = this.gender != this.user?.gender ? this.gender : undefined;
-            const birthDay = this.birthDay != this.dateToString(this.initDate) ? this.birthDay : undefined;
+                if (this.user && gender || birthDay) {
+                    await session.saveProfile({
+                        gender,
+                        birthDay,
+                    });
 
-            if (this.user && gender || birthDay) {
-                await session.saveProfile({
-                    gender,
-                    birthDay,
-                });
-
-                if (this.user) {
-                    if (gender)
-                        this.user.gender = gender;
-                    
-                    if (birthDay)
-                        this.user.birthDay = birthDay;
+                    if (this.user) {
+                        if (gender)
+                            this.user.gender = gender;
+                        
+                        if (birthDay)
+                            this.user.birthDay = birthDay;
+                    }
                 }
             }
-        }
-        catch {
-            //
-        }
-        this.themes.setTheme(this.theme);
-        await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
-        this.submitImage();
-        if (this.newDisplayName) {
-            this.setDisplayName();
-        }
-
-        // Fire a success notification
-        notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
-        this.loading["save"] = false;
-    }
-
-    public setOffline() {
-        cache.set("config", "offline", this.offline);
-    }
-
-    public handleImage(e: InputEvent) {
-        const target = e.target as HTMLInputElement | undefined;
-        const file = target?.files?.[0];
-        if (file) {
-            this.createBase64Image(file);
-            this.fileName = file.name;
-        }
-    }
-
-    public setLanguage() {
-        const settings = Object.assign({}, this.user?.settings);
-        const language = this.selectedLanguage;
-        if (language) {
-            settings.languageKey = language.key;
-            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
-        }
-    }
-
-    public setKey() {
-        const settings = Object.assign({}, this.user?.settings);
-        const key = this.selectedKey;
-        if (key) {
-            settings.defaultTransposition = key;
-            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
-        }
-    }
-
-    public setTranscode() {
-        const settings = Object.assign({}, this.user?.settings);
-        const transcode = this.selectedTranscode;
-        if (transcode) {
-            settings.defaultTranscode = transcode;
-            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
-        }
-    }
-
-    public get languages(): Language[] {
-        return appSession.languages || [];
-    }
-
-    public get user() {
-        return this.store.getters.user;
-    }
-
-    public async setDisplayName() {
-        await this.store.dispatch(
-            SessionActionTypes.SET_DISPLAY_NAME,
-            this.newDisplayName,
-        );
-    }
-
-    public async submitImage() {
-        if (this.fileName && this.selectedImage) {
-            await auth.setProfileImage(this.fileName, this.selectedImage);
-        }
-    }
-
-    private async createBase64Image(file: File) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            const res = e.target?.result;
-            if (typeof res == "string") {
-                this.selectedImage = res;
+            catch {
+                //
             }
-        };
-        reader.readAsDataURL(file);
-    }
+            this.themes.setTheme(this.theme);
+            await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
+            this.submitImage();
+            if (this.newDisplayName) {
+                this.setDisplayName();
+            }
 
-    public async portal() {
-        this.loading["subscriptions"] = true;
-        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
-            window.location = (result as unknown) as Location;
-        });
-        // this.loading["subscriptions"] = false;
-    }
+            // Fire a success notification
+            notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
+            this.loading["save"] = false;
+        },
+        setOffline() {
+            cache.set("config", "offline", this.offline);
+        },
+        handleImage(e: InputEvent) {
+            const target = e.target as HTMLInputElement | undefined;
+            const file = target?.files?.[0];
+            if (file) {
+                this.createBase64Image(file);
+                this.fileName = file.name;
+            }
+        },
+        setLanguage() {
+            const settings = Object.assign({}, this.user?.settings);
+            const language = this.selectedLanguage;
+            if (language) {
+                settings.languageKey = language.key;
+                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
+            }
+        },
+        setKey() {
+            const settings = Object.assign({}, this.user?.settings);
+            const key = this.selectedKey;
+            if (key) {
+                settings.defaultTransposition = key;
+                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
+            }
+        },
+        setTranscode() {
+            const settings = Object.assign({}, this.user?.settings);
+            const transcode = this.selectedTranscode;
+            if (transcode) {
+                settings.defaultTranscode = transcode;
+                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
+            }
+        },
+        async setDisplayName() {
+            await this.store.dispatch(
+                SessionActionTypes.SET_DISPLAY_NAME,
+                this.newDisplayName,
+            );
+        },
+        async submitImage() {
+            if (this.fileName && this.selectedImage) {
+                await auth.setProfileImage(this.fileName, this.selectedImage);
+            }
+        },
+        async createBase64Image(file: File) {
+            const reader = new FileReader();
 
-    public get collections() {
-        const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
-        return this.store.getters.collections.filter(i => colIds.includes(i.id));
-    }
-}
+            reader.onload = (e) => {
+                const res = e.target?.result;
+                if (typeof res == "string") {
+                    this.selectedImage = res;
+                }
+            };
+            reader.readAsDataURL(file);
+        },
+        async portal() {
+            this.loading["subscriptions"] = true;
+            await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+                window.location = (result as unknown) as Location;
+            });
+            // this.loading["subscriptions"] = false;
+        },
+    },
+});
 </script>

@@ -9,9 +9,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "loader",
     props: {
         loading: {
@@ -26,15 +26,12 @@ import { Options, Vue } from "vue-class-component";
             },
         },
     },
-})
-export default class Loader extends Vue {
-    public loading?: boolean;
-    public position?: string;
-
-    public get Loading() {
-        return this.loading === true;
-    }
-}
+    computed: {
+        Loading(): boolean {
+            return this.loading === true;
+        },
+    },
+});
 </script>
 
 <style lang="scss" scoped>

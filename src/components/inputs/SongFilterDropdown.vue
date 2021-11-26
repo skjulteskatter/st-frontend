@@ -36,50 +36,65 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { Collection } from "@/classes";
-import { Options, Vue } from "vue-class-component";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import CheckboxGroup from "./CheckboxGroup.vue";
 import { AdjustmentsIcon } from "@heroicons/vue/solid";
+import SongFilter from "@/classes/songFilter";
 
-@Options({
+export default defineComponent({
     name: "song-filter-dropdown",
     components: {
         CheckboxGroup,
         AdjustmentsIcon,
     },
     emits: ["apply"],
-})
-export default class SongFilterDropdown extends Vue {
-    private store = useStore();
-    public videoTypes = ["karaoke"];
-    public audioTypes = [
-        "gathering",
-        "studio",
-        "instrumental",
-        "live_performance",
-        "demo",
-        "playback",
-    ];
-    public contentTypes = ["lyrics", "audio", "video", "sheetmusic"];
-    public sheetMusicTypes = ["leadsheet", "5part"];
-
-    public audioValues: {
-        [id: string]: boolean;
-    } = {};
-    public videoValues: {
-        [id: string]: boolean;
-    } = {};
-
-    public sheetMusicValues: {
-        [id: string]: boolean;
-    } = {};
-    public typeValues: {
-        [id: string]: boolean;
-    } = {};
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+        videoTypes: ["karaoke"],
+        audioTypes: [
+            "gathering",
+            "studio",
+            "instrumental",
+            "live_performance",
+            "demo",
+            "playback",
+        ],
+        contentTypes: ["lyrics", "audio", "video", "sheetmusic"],
+        sheetMusicTypes: ["leadsheet", "5part"],
+        audioValues: {} as {
+            [id: string]: boolean;
+        },
+        videoValues: {} as {
+            [id: string]: boolean;
+        },
+        sheetMusicValues: {} as {
+            [id: string]: boolean;
+        },
+        typeValues: {} as {
+            [id: string]: boolean;
+        },
+    }),
+    computed: {
+        filtersActive() {
+            const allFilters = [
+                ...Object.keys(this.audioValues),
+                ...Object.keys(this.videoValues),
+                ...Object.keys(this.sheetMusicValues),
+                ...Object.keys(this.typeValues),
+            ];
+            return allFilters.length > 0;
+        },
+        loading() {
+            return this.collection?.loading !== false;
+        },
+        collection(): Collection | undefined {
+            return this.store.getters.collection as Collection;
+        },
+    },
+    mounted() {
         const filter = Object.assign({}, this.store.state.songs.filter);
 
         for (const t of filter.audioFiles) {
@@ -97,57 +112,38 @@ export default class SongFilterDropdown extends Vue {
         for (const t of filter.contentTypes) {
             this.typeValues[t] = true;
         }
-    }
+    },
+    methods: {
+        removeFilters() {
+            this.audioValues = {};
+            this.videoValues = {};
+            this.typeValues = {};
+            this.sheetMusicValues = {};
+            this.apply();
+        },
+        apply() {
+            const videos = this.videoTypes.filter(
+                (t) => this.videoValues[t] == true,
+            );
+            const audio = this.audioTypes.filter(
+                (t) => this.audioValues[t] == true,
+            );
+            const types = this.contentTypes.filter(
+                (t) => this.typeValues[t] == true,
+            );
+            const sheetMusic = this.sheetMusicTypes.filter(
+                (t) => this.sheetMusicValues[t] == true,
+            );
 
-    public removeFilters() {
-        this.audioValues = {};
-        this.videoValues = {};
-        this.typeValues = {};
-        this.sheetMusicValues = {};
+            const filter = this.store.state.songs.filter as SongFilter;
+            filter.videoFiles = videos;
+            filter.audioFiles = audio;
+            filter.contentTypes = types;
+            filter.sheetMusicTypes = sheetMusic;
 
-        this.apply();
-    }
-
-    public apply() {
-        const videos = this.videoTypes.filter(
-            (t) => this.videoValues[t] == true,
-        );
-        const audio = this.audioTypes.filter(
-            (t) => this.audioValues[t] == true,
-        );
-        const types = this.contentTypes.filter(
-            (t) => this.typeValues[t] == true,
-        );
-        const sheetMusic = this.sheetMusicTypes.filter(
-            (t) => this.sheetMusicValues[t] == true,
-        );
-
-        const filter = this.store.state.songs.filter;
-        filter.videoFiles = videos;
-        filter.audioFiles = audio;
-        filter.contentTypes = types;
-        filter.sheetMusicTypes = sheetMusic;
-
-        this.store.commit(SongsMutationTypes.SET_FILTER, filter);
-        this.$emit("apply");
-    }
-
-    public get filtersActive() {
-        const allFilters = [
-            ...Object.keys(this.audioValues),
-            ...Object.keys(this.videoValues),
-            ...Object.keys(this.sheetMusicValues),
-            ...Object.keys(this.typeValues),
-        ];
-        return allFilters.length > 0;
-    }
-
-    public get loading() {
-        return this.collection?.loading !== false;
-    }
-
-    public get collection(): Collection | undefined {
-        return this.store.getters.collection;
-    }
-}
+            this.store.commit(SongsMutationTypes.SET_FILTER, filter);
+            this.$emit("apply");
+        },
+    },
+});
 </script>
