@@ -24,47 +24,49 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
-@Options({
+export default defineComponent({
+    name: "create-user-view",
     components: {
         BaseButton,
         BaseInput,
     },
-    name: "create-user-view",
-})
-export default class Login extends Vue {
-    public form = {
-        displayName: "",
-        email: "",
-        password: "",
-        repeatPassword: "",
-    };
-    public stayLoggedIn = false;
-    private store = useStore();
-    public creatingAccount = false;
-
-    public get error() {
-        return this.store.state.session.error;
-    }
-
-    public async submitForm() {
-        if (
-            this.form.password == this.form.repeatPassword &&
-            this.form.password != "" &&
-            this.form.displayName != ""
-        ) {
-            this.creatingAccount = true;
-            await this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
-                email: this.form.email,
-                password: this.form.password,
-                displayName: this.form.displayName,
-            });
-        }
-    }
-}
+    data: () => ({
+        store: useStore(),
+        form: {
+            displayName: "",
+            email: "",
+            password: "",
+            repeatPassword: "",
+        },
+        stayLoggedIn: false,
+        creatingAccount: false,
+    }),
+    computed: {
+        error() {
+            return this.store.state.session.error;
+        },
+    },
+    methods: {
+        async submitForm() {
+            if (
+                this.form.password == this.form.repeatPassword &&
+                this.form.password != "" &&
+                this.form.displayName != ""
+            ) {
+                this.creatingAccount = true;
+                await this.store.dispatch(SessionActionTypes.SESSION_CREATE_USER, {
+                    email: this.form.email,
+                    password: this.form.password,
+                    displayName: this.form.displayName,
+                });
+            }
+        },
+    },
+});
 </script>
