@@ -72,14 +72,14 @@ export default defineComponent({
             return this.song?.Collections ?? [];
         },
     },
-    methods: {
-        async mounted() {
-            this.song = appSession.songs.find(s => s.id == this.entry?.songId) ?? null;
+    async mounted() {
+        this.song = appSession.songs.find(s => s.id == this.entry?.songId) ?? null;
 
-            if (!this.song && this.entry) {
-                this.song = new Song(await songs.getSongById(this.entry?.songId));
-            }
-        },
+        if (!this.song && this.entry) {
+            this.song = new Song(await songs.getSongById(this.entry?.songId));
+        }
+    },
+    methods: {
         goToSong() {
             if (this.disabled)
                 return;
