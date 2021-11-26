@@ -4,8 +4,9 @@
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
             <CopyToClipboard :content="token" label="API token" title="Copy API token" />
         </div>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-6">
             <UsersList :users="users" :currentUser="currentUser" />
+            <EmailLookup />
         </div>
     </div>
     <div v-else>
@@ -14,7 +15,7 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { UsersList } from "@/components/admin";
+import { UsersList, EmailLookup } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -23,6 +24,7 @@ import { User } from "@/classes";
 @Options({
     components: {
         UsersList,
+        EmailLookup,
         CopyToClipboard,
     },
     name: "admin",
