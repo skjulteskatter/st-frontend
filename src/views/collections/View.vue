@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { useStore } from "@/store";
 import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
@@ -48,119 +48,107 @@ import { appSession } from "@/services/session";
 import http from "@/services/http";
 import {Price as PriceDiv} from "@/components/store";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
+import { Product } from "@/classes";
 
-@Options({
+export default defineComponent({
+    name: "collection-item",
     components: {
         BackButton,
         PriceDiv,
         ShoppingCartIcon,
     },
-    name: "collection-item",
-})
-export default class StoreItem extends Vue {
-    private store = useStore();
-    public loading = false;
-    public country = "";
-
-    public async mounted() {
-        this.country = await http.getCountry();
-    }
-
-    public addToCart() {
-        if (this.product)
-            this.store.commit(
-                StripeMutationTypes.CART_ADD_PRODUCT,
-                this.product.id,
+    data: () => ({
+        store: useStore(),
+        loading: false,
+        country: "",
+    }),
+    computed: {
+        discounted() {
+            return this.product?.discounted(this.country) === true;
+        },
+        price() {
+            return this.product?.price?.value;
+        },
+        currency() {
+            return this.price?.split(" ")[0];
+        },
+        amount(): number | null {
+            const n = this.product?.price?.value.split(" ")[1];
+            return n ? parseInt(n) / 100 : null;
+        },
+        type() {
+            return "year";
+        },
+        image() {
+            return this.product?.collections[0].image + "?w=400";
+        },
+        collections() {
+            return appSession.collections.filter((c) =>
+                this.product?.collectionIds.includes(c.id),
             );
-    }
+        },
+        inCart() {
+            return this.product
+                ? this.store.state.stripe.cart.includes(this.product.id)
+                : false;
+        },
+        details() {
+            return this.collections[0].getDetails(this.languageKey);
+        },
+        products() {
+            return this.store.getters.products;
+        },
+        product() {
+            return this.products.find((p) => p.id == this.$route.params.id) as Product;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        ownedIds() {
+            return (
+                this.store.getters.user?.subscriptions
+                    .map((s) => s.productIds)
+                    .reduce((a, b) => [...a, ...b], [] as string[]) ?? []
+            );
+        },
+    },
+    async mounted() {
+        this.country = await http.getCountry();
+    },
+    methods: {
+        addToCart() {
+            if (this.product)
+                this.store.commit(
+                    StripeMutationTypes.CART_ADD_PRODUCT,
+                    this.product.id,
+                );
+        },
+        formatPrices(prices: Price[], type: string) {
+            const unformattedPrice = prices.find((price) => price.type == type)
+                ?.value;
+            const formattedPrice = unformattedPrice?.slice(
+                0,
+                unformattedPrice.length - 2
+            );
 
-    public get discounted() {
-        return this.product?.discounted(this.country) === true;
-    }
+            return `${formattedPrice} /${type}`;
+        },
+        checkoutAll() {
+            const all = this.products.find((p) => p.collections.length > 1);
 
-    public get price() {
-        return this.product?.price?.value;
-    }
-
-    public get currency() {
-        return this.price?.split(" ")[0];
-    }
-
-    public get amount(): number | null {
-        const n = this.product?.price?.value.split(" ")[1];
-        return n ? parseInt(n) / 100 : null;
-    }
-
-    public get type() {
-        return "year";
-    }
-
-    public formatPrices(prices: Price[], type: string) {
-        const unformattedPrice = prices.find((price) => price.type == type)
-            ?.value;
-        const formattedPrice = unformattedPrice?.slice(
-            0,
-            unformattedPrice.length - 2
-        );
-
-        return `${formattedPrice} /${type}`;
-    }
-
-    public get image() {
-        return this.product?.collections[0].image + "?w=400";
-    }
-
-    public get collections() {
-        return appSession.collections.filter((c) =>
-            this.product?.collectionIds.includes(c.id),
-        );
-    }
-
-    public get inCart() {
-        return this.product
-            ? this.store.state.stripe.cart.includes(this.product.id)
-            : false;
-    }
-
-    public checkoutAll() {
-        const all = this.products.find((p) => p.collections.length > 1);
-
-        if (all) {
-            if (all.id == this.product?.id) {
-                this.addToCart();
-            } else {
-                this.$router.push({
-                    name: "collection-item",
-                    params: {
-                        id: all.id,
-                    },
-                });
+            if (all) {
+                if (all.id == this.product?.id) {
+                    this.addToCart();
+                } else {
+                    this.$router.push({
+                        name: "collection-item",
+                        params: {
+                            id: all.id,
+                        },
+                    });
+                }
             }
-        }
-    }
-
-    public get details() {
-        return this.collections[0].getDetails(this.languageKey);
-    }
-
-    public get products() {
-        return this.store.getters.products;
-    }
-
-    public get product() {
-        return this.products.find((p) => p.id == this.$route.params.id);
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get ownedIds() {
-        return (
-            this.store.getters.user?.subscriptions
-                .map((s) => s.productIds)
-                .reduce((a, b) => [...a, ...b], [] as string[]) ?? []
-        );
-    }
-}
+        },
+    },
+});
 </script>
