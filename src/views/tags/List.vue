@@ -21,28 +21,27 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { appSession } from "@/services/session";
-import { Options, Vue } from "vue-class-component";
 import { Tag } from "@/classes";
 import { useStore } from "@/store";
 
-@Options({
+export default defineComponent({
     name: "tag-list",
-})
-export default class TagList extends Vue {
-    private store = useStore();
-    private tags: Tag[] = [];
-
-    public async beforeMount() {
+    data: () => ({
+        store: useStore(),
+        tags: [] as Tag[],
+    }),
+    computed: {
+        Tags() {
+            return this.tags;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+    async beforeMount() {
         this.tags = appSession.tags;
-    }
-
-    public get Tags() {
-        return this.tags;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-}
+    },
+});
 </script>

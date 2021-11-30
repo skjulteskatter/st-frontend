@@ -337,23 +337,23 @@ export const scriptures = {
     getTranslations(scriptureId: string) {
         return http.get<ITranslation[]>(`api/Scriptures/${scriptureId}/Translations`);
     },
-    getTranslation(scriptureId: string, id: string) {
-        return http.get<ITranslation>(`api/Scriptures/${scriptureId}/Translation/${id}`);
+    getTranslation(id: string) {
+        return http.get<ITranslation>(`api/Translation/${id}`);
     },
-    getBooks(translationId: string, includeChildren = false) {
-        return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books?includeChildren=${includeChildren}`);
+    getBooks(translationId: string) {
+        return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books`);
     },
-    getBook(translationId: string, bookId: string, includeChildren = false) {
-        return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}?includeChildren=${includeChildren}`);
+    getBook(bookId: string) {
+        return http.get<IBook[]>(`api/Scriptures/Book/${bookId}`);
     },
-    getChapters(translationId: string, bookId: string, includeChildren = false) {
-        return http.get<IChapter[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapters?includeChildren=${includeChildren}`);
+    getChapters(bookId: string, includeChildren = false) {
+        return http.get<IChapter[]>(`api/Scriptures/Book/${bookId}/Chapters?includeChildren=${includeChildren}`);
     },
-    getChapter(translationId: string, bookId: string, chapterId: string, includeChildren = false) {
-        return http.get<IChapter>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapter/${chapterId}?includeChildren=${includeChildren}`);
+    getChapter(chapterId: string, includeChildren = false) {
+        return http.get<IChapter>(`api/Scriptures/Chapter/${chapterId}?includeChildren=${includeChildren}`);
     },
-    getVerses(translationId: string, bookId: string, chapterId: string, to = 0, from = 0, includeChildren = false) {
-        return http.get<IVerse[]>(`api/Scriptures/Translation/${translationId}/Book/${bookId}/Chapter/${chapterId}/Verses?to=${to}&from=${from}&includeChildren=${includeChildren}`);
+    getVerses(chapterId: string, to = 0, from = 0) {
+        return http.get<IVerse[]>(`api/Scriptures/Chapter/${chapterId}/Verses?to=${to}&from=${from}`);
     },
 };
 

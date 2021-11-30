@@ -3,38 +3,39 @@
     <Loader :loading="initialized === false">
         <router-view />
     </Loader>
-    <Notification-group />
+    <NotificationGroup />
 </template>
+
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { NotificationGroup } from "@/components/notification";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import SplashScreen from "@/components/SplashScreen.vue";
 
-@Options({
+export default defineComponent({
+    name: "app",
     components: {
         NotificationGroup,
         SplashScreen,
     },
-    name: "app",
-})
-export default class App extends Vue {
-    public store = useStore();
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        initialized() {
+            return useStore().getters.initialized;
+        },
+    },
+    mounted() {
         if (!window.location.pathname.startsWith("/login")) {
             this.store.commit(
                 SessionMutationTypes.REDIRECT,
                 window.location.pathname,
             );
         }
-    }
-
-    public get initialized() {
-        return useStore().getters.initialized;
-    }
-}
+    },
+});
 </script>
 
 <style lang="scss">

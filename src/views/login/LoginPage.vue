@@ -10,34 +10,34 @@
     </div>
     <Loader v-else :loading="true"></Loader>
 </template>
+
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "login-page",
-})
-export default class LoginPage extends Vue {
-    private store = useStore();
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        user() {
+            return this.store.getters.user;
+        },
+        initialized() {
+            return this.store.getters.initialized;
+        },
+    },
+    mounted() {
         if (this.user) {
             this.$router.push({ name: "main" });
         }
-    }
-    
-    public get user() {
-        return this.store.getters.user;
-    }
-
-    public get initialized() {
-        return this.store.getters.initialized;
-    }
-}
+    },
+});
 </script>
+
 <style lang="scss">
 .pattern {
-    background-color: #213f47;
     background-image: url("/img/login-bg.svg");
 }
 </style>

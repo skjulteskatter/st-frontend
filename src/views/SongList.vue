@@ -30,7 +30,7 @@
                         />
                         <select
                             class="p-2 pr-6 bg-white border border-black/20 rounded-md block text-sm md:hidden dark:bg-secondary dark:border-white/20"
-                            @input="setListType($event.target.value)"
+                            @input="setListType"
                         >
                             <option
                                 v-for="category in buttons"
@@ -118,9 +118,8 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { CollectionItem, ListEntry, Song } from "@/classes";
-
 import { SongListCard } from "@/components/songs";
 import {
     ButtonGroup,
@@ -137,7 +136,8 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
 
-@Options({
+export default defineComponent({
+    name: "song-list",
     components: {
         SongListCard,
         ButtonGroup,
@@ -152,152 +152,134 @@ import { Country, Theme } from "@/classes/items";
         ViewBoardsIcon,
         LockClosedIcon,
     },
-    name: "song-list",
-})
-export default class SongList extends Vue {
-    private store = useStore();
-
-    public searchString = "";
-    public cId = "";
-    public list: ListEntry[] = [];
-    public loadingList = false;
-
-    public showCta = false;
-
-    public get isAdmin() {
-        return this.store.getters.isAdmin;
-    }
-
-    public get searchNumber() {
-        return this.searchString.replace(/[^0-9]/g, "");
-    }
-
-    public get songs() {
-        return this.list.reduce((a, b) => [...a, ...b.songs], [] as Song[]);
-    }
-
-    public get viewType() {
-        return this.collection?.viewType ?? "boards";
-    }
-
-    public set viewType(v) {
-        if (this.collection)
-            this.collection.viewType = v;
-    }
-
-    public get loading() {
-        return this.collection?.loading === true;
-    }
-    
-    public get buttons() {
-        return this.collection?.buttons.map(i => {
-            const r = Object.assign({}, i);
-            r.label = this.$t(i.label);
-            return r;
-        }) ?? [];
-    }
-
-    public set listType(value: Sort) {
-        if (this.collection)
-            this.collection.listType = value;
-    }
-
-    public get listType() {
-        return this.collection?.listType ?? "title";
-    }
-
-    public get collection() {
-        return this.store.getters.collection;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public toggleViewType() {
-        this.viewType = this.viewType === "boards" ? "grid" : "boards";
-    }
-
-    public search() {
-        this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
-        this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
-        this.$router.push({
-            name: "search",
-        });
-    }
-
-    private async loadCollection() {
-        this.cId = this.$route.params.collection as string; 
-        if (!this.collection?.getKeys().includes(this.cId)) {
-            await this.store.dispatch(
-                SongsActionTypes.SELECT_COLLECTION,
-                this.$route.params.collection as string,
-            );
-        }
-        await this.loadList();
-    }
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+        searchString: "",
+        cId: "",
+        list: [] as ListEntry[],
+        loadingList: false,
+        showCta: false,
+    }),
+    computed: {
+        isAdmin() {
+            return this.store.getters.isAdmin;
+        },
+        searchNumber() {
+            return this.searchString.replace(/[^0-9]/g, "");
+        },
+        songs() {
+            return this.list.reduce((a, b) => [...a, ...b.songs as Song[]], [] as Song[]);
+        },
+        viewType: {
+            get() {
+                return this.collection?.viewType ?? "boards";
+            },
+            set(v: "boards" | "grid") {
+                if (this.collection)
+                    this.collection.viewType = v;
+            },
+        },
+        loading() {
+            return this.collection?.loading === true;
+        },
+        buttons() {
+            return this.collection?.buttons.map(i => {
+                const r = Object.assign({}, i);
+                r.label = this.$t(i.label);
+                return r;
+            }) ?? [];
+        },
+        listType: {
+            get() {
+                return this.collection?.listType ?? "title";
+            },
+            set(value: Sort) {
+                if (this.collection)
+                    this.collection.listType = value;
+            },
+        },
+        collection() {
+            return this.store.getters.collection;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+    async mounted() {
         await this.loadCollection();
-    }
-
-    public updated() {
+    },
+    updated() {
         if (this.$route.params.collection !== this.cId) {
             this.loadCollection();
         }
-    }
-
-    public async setListType(value: Sort) {
-        if (this.listType !== value) {
-            this.listType = value;
-            this.searchString = "";
-            await this.loadList();
-        }
-    }
-
-    public filterByNumber() {
-        if(!this.collection) return;
-        this.list = this.collection.Lists[this.listType](this.searchNumber);
-    }
-
-    public async loadList() {
-        this.loadingList = true;
-        if (this.collection) {
-            await new Promise(r => setTimeout(r, 1));
-            this.collection.getList(this.listType);
-            this.filterByNumber();
-        }
-        this.loadingList = false;
-    }
-
-    public themeSongs(theme: CollectionItem<Theme>) {
-        return this.songs.filter((s: Song) =>
-            theme?.songIds.includes(s.id),
-        );
-    }
-
-    public countrySongs(country: CollectionItem<Country>) {
-        return this.songs.filter((s: Song) =>
-            country?.songIds.includes(s.id),
-        );
-    }
-
-    public gotoContributor(contributor: ApiContributor) {
-        if (this.collection) {
+    },
+    methods: {
+        toggleViewType() {
+            this.viewType = this.viewType === "boards" ? "grid" : "boards";
+        },
+        search() {
+            this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
+            this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
             this.$router.push({
-                name: "contributor",
-                params: {
-                    collection: this.collection.key,
-                    contributor: contributor.id,
-                },
+                name: "search",
             });
-        }
-    }
-
-    public closeCta() {
-        this.showCta = false;
-    }
-}
+        },
+        async loadCollection() {
+            this.cId = this.$route.params.collection as string; 
+            if (!this.collection?.getKeys().includes(this.cId)) {
+                await this.store.dispatch(
+                    SongsActionTypes.SELECT_COLLECTION,
+                    this.$route.params.collection as string,
+                );
+            }
+            await this.loadList();
+        },
+        async setListType(value: Sort) {
+            if (this.listType !== value) {
+                this.listType = value;
+                this.searchString = "";
+                await this.loadList();
+            }
+        },
+        filterByNumber() {
+            if(!this.collection) return;
+            this.list = this.collection.Lists[this.listType](this.searchNumber);
+        },
+        async loadList() {
+            this.loadingList = true;
+            if (this.collection) {
+                await new Promise(r => setTimeout(r, 1));
+                this.collection.getList(this.listType);
+                this.filterByNumber();
+            }
+            this.loadingList = false;
+        },
+        themeSongs(theme: CollectionItem<Theme>) {
+            return this.songs.filter((s: Song) =>
+                theme?.songIds.includes(s.id),
+            );
+        },
+        countrySongs(country: CollectionItem<Country>) {
+            return this.songs.filter((s: Song) =>
+                country?.songIds.includes(s.id),
+            );
+        },
+        gotoContributor(contributor: ApiContributor) {
+            if (this.collection) {
+                this.$router.push({
+                    name: "contributor",
+                    params: {
+                        collection: this.collection.key,
+                        contributor: contributor.id,
+                    },
+                });
+            }
+        },
+        closeCta() {
+            this.showCta = false;
+        },
+    },
+});
 </script>
 
 <style lang="scss">

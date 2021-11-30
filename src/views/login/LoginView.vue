@@ -33,7 +33,7 @@
                                     alt="GOOGLE"
                                     src="/img/google.svg"
                                     width="80"
-                                    class="h-full login-image"
+                                    class="h-full object-contain"
                                 />
                                 <span>Google</span>
                             </button>
@@ -47,7 +47,7 @@
                                     alt="APPLE"
                                     src="/img/apple.svg"
                                     width="80"
-                                    class="h-full login-image"
+                                    class="h-full object-contain"
                                 />
                                 <span>Apple</span>
                             </button>
@@ -110,7 +110,7 @@
                                     alt="GOOGLE"
                                     src="/img/google.svg" 
                                     width="80"
-                                    class="h-full login-image"
+                                    class="h-full object-contain"
                                 />
                                 <span>Google</span>
                             </button>
@@ -124,7 +124,7 @@
                                     alt="APPLE"
                                     src="/img/apple.svg" 
                                     width="80"
-                                    class="h-full login-image"
+                                    class="h-full object-contain"
                                 />
                                 <span>Apple</span>
                             </button>
@@ -161,7 +161,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -170,7 +170,8 @@ import { BaseModal } from "@/components";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { MailIcon } from "@heroicons/vue/outline";
 
-@Options({
+export default defineComponent({
+    name: "login-view",
     components: {
         BaseInput,
         BaseModal,
@@ -181,85 +182,74 @@ import { MailIcon } from "@heroicons/vue/outline";
         Tab,
         MailIcon,
     },
-    name: "login-view",
-})
-export default class Login extends Vue {
-    public form = {
-        email: "",
-        password: "",
-    };
-    public noAccount = false;
-    public wrongPassword = false;
-    public stayLoggedIn = false;
-    public showEmail = false;
-    private store = useStore();
-    public providers: string[] = [];
-
-    public loading: {
-        [key: string]: boolean | undefined;
-    } = {};
-
-    public createUserModal = false;
-    public forgotPassword = false;
-    public forgotPasswordSent = false;
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+        form: {
+            email: "",
+            password: "",
+        },
+        noAccount: false,
+        wrongPassword: false,
+        stayLoggedIn: false,
+        showEmail: false,
+        providers: [] as string[],
+        loading: {} as {
+            [key: string]: boolean | undefined;
+        },
+        createUserModal: false,
+        forgotPassword: false,
+        forgotPasswordSent: false,
+    }),
+    computed: {
+        user() {
+            return this.store.getters.user;
+        },
+        initialized() {
+            return this.store.getters.initialized;
+        },
+    },
+    mounted() {
         if (this.user) {
             this.$router.push({ name: "main" });
         }
-    }
-
-    public async submitForm() {
-        this.loading.login = true;
-        if (this.form.email && !this.form.password) {
-            this.noAccount = false;
-            this.providers = await auth.getProviders(this.form.email);
-            if (!this.providers?.length) {
-                this.noAccount = true;
+    },
+    methods: {
+        async submitForm() {
+            this.loading.login = true;
+            if (this.form.email && !this.form.password) {
+                this.noAccount = false;
+                this.providers = await auth.getProviders(this.form.email);
+                if (!this.providers?.length) {
+                    this.noAccount = true;
+                }
+            } else {
+                try {
+                    await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
+                        email: this.form.email,
+                        password: this.form.password,
+                        stayLoggedIn: this.stayLoggedIn,
+                    });
+                }
+                catch {
+                    this.wrongPassword = true;
+                }
             }
-        } else {
-            try {
-                await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
-                    email: this.form.email,
-                    password: this.form.password,
-                    stayLoggedIn: this.stayLoggedIn,
-                });
+            this.loading.login = false;
+        },
+        async sendForgotEmail() {
+            if (!this.forgotPasswordSent && this.form.email) {
+                this.forgotPasswordSent = true;
+                await auth.forgotPassword(this.form.email);
             }
-            catch {
-                this.wrongPassword = true;
-            }
-        }
-        this.loading.login = false;
-    }
-
-    public async sendForgotEmail() {
-        if (!this.forgotPasswordSent && this.form.email) {
-            this.forgotPasswordSent = true;
-            await auth.forgotPassword(this.form.email);
-        }
-    }
-
-    public createUser() {
-        this.$router.push({ name: "create-user" });
-    }
-
-    public get user() {
-        return this.store.getters.user;
-    }
-
-    public async login(provider: string) {
-        this.loading.login = true;
-        this.loading["provider" + provider] = true;
-        await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
-    }
-
-    public get initialized() {
-        return this.store.getters.initialized;
-    }
-}
+        },
+        createUser() {
+            this.$router.push({ name: "create-user" });
+        },
+        async login(provider: string) {
+            this.loading.login = true;
+            this.loading["provider" + provider] = true;
+            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
+        },
+    },
+});
 </script>
-<style lang="scss">
-.login-image {
-    object-fit: contain;
-}
-</style>

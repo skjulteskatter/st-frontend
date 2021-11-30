@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { SearchInput } from "@/components/inputs";
 import EditUser from "@/components/admin/EditUser.vue";
 import { useStore } from "@/store";
@@ -76,7 +76,7 @@ import api from "@/services/api";
 import { User } from "@/classes";
 import { RefreshIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "users-list",
     components: {
         SearchInput,
@@ -85,64 +85,57 @@ import { RefreshIcon } from "@heroicons/vue/solid";
     },
     props: {
         users: {
-            type: Array,
+            type: Array as PropType<User[]>,
         },
         currentUser: {
-            type: Object,
+            type: Object as PropType<User>,
         },
     },
-})
-export default class UsersList extends Vue {
-    public store = useStore();
-    public users?: User[];
-    public currentUser?: User;
-    public disableButton = false;
-    public loading: {
-        [key: string]: boolean;
-    } = {};
-
-    public userQuery = "";
-
-    public async mounted() {
-        // await this.store.dispatch(UsersActionTypes.GET_USERS);
+    data: () => ({
+        store: useStore(),
+        disableButton: false,
+        loading: {} as {
+            [key: string]: boolean;
+        },
+        userQuery: "",
+    }),
+    computed: {
+        Users() {
+            return this.users ?? [];
+        },
+        User() {
+            return this.currentUser;
+        },
+        roles() {
+            return this.store.state.users.roles;
+        },
+    },
+    async mounted() {
         await this.store.dispatch(UsersActionTypes.GET_ROLES);
-    }
+    },
+    methods: {
+        async searchUser() {
+            this.loading["search"] = true;
+            if (this.userQuery) {
+                this.store.commit(UsersMutationTypes.SET_USERS, (await api.admin.getUsers(this.userQuery)).map(i => new User(i)));
+            }
+            this.loading["search"] = false;
+        },
+        async refreshUsers() {
+            this.loading["refresh"] = true;
+            this.disableButton = true;
+            await this.searchUser();
 
-    public async searchUser() {
-        this.loading["search"] = true;
-        if (this.userQuery) {
-            this.store.commit(UsersMutationTypes.SET_USERS, (await api.admin.getUsers(this.userQuery)).map(i => new User(i)));
-        }
-        this.loading["search"] = false;
-    }
-
-    public async refreshUsers() {
-        this.loading["refresh"] = true;
-        this.disableButton = true;
-        await this.searchUser();
-
-        notify("success", this.$t("notification_fetchedusers"), "check", undefined, undefined, undefined, false);
-        this.loading["refresh"] = false;
-        this.disableButton = false;
-    }
-
-    public get Users() {
-        return this.users ?? [];
-    }
-
-    public get User() {
-        return this.currentUser;
-    }
-
-    public get roles() {
-        return this.store.state.users.roles;
-    }
-
-    public async saveRoles(user: User) {
-        this.loading["save"] = true;
-        await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
-        notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
-        this.loading["save"] = false;
-    }
-}
+            notify("success", this.$t("notification_fetchedusers"), "check", undefined, undefined, undefined, false);
+            this.loading["refresh"] = false;
+            this.disableButton = false;
+        },
+        async saveRoles(user: User) {
+            this.loading["save"] = true;
+            await this.store.dispatch(UsersActionTypes.SET_ROLES, user);
+            notify("success", this.$t("notification_saved"), "check", undefined, undefined, undefined, false);
+            this.loading["save"] = false;
+        },
+    },
+});
 </script>

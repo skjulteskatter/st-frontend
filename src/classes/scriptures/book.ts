@@ -25,7 +25,7 @@ export default class Book implements IBook {
 
     public view() {
         router.push({
-            name: "chapter-list",
+            name: "book-view",
             params: {
                 bookId: this.number,
             },

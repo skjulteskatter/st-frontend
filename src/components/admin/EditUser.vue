@@ -34,7 +34,7 @@
 								:checked="
 									User.roles.find(
 										(r) => r == role
-									)
+									) != undefined
 								"
 								@change="toggleRole(User, role)"
 							/>
@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import SlidePanel from "@/components/SlidePanel.vue";
 import { TrashIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
@@ -88,7 +88,7 @@ import api, { admin } from "@/services/api";
 import { User } from "@/classes";
 import { ISubscription } from "songtreasures";
 
-@Options({
+export default defineComponent({
 	name: "edit-user",
 	components: {
 		SlidePanel,
@@ -96,81 +96,75 @@ import { ISubscription } from "songtreasures";
 	},
 	props: {
 		user: {
-			type: Object,
+			type: Object as PropType<User>,
 			required: true,
 		},
 	},
+	data: () => ({
+		store: useStore(),
+		loading: false,
+		show: false,
+	}),
 	emits: ["save"],
-})
-export default class EditUser extends Vue {
-	public store = useStore();
-	public user?: User;
+	computed: {
+		User() {
+			return this.user as User;
+		},
+		roles() {
+			return this.store.state.users.roles;
+		},
+		newSubs() {
+			return adminService.NewSubs;
+		},
+		validTo() {
+			return adminService.ValidTo;
+		},
+	},
+	methods: {
+		async showModal() {
+			this.show = true;
+			this.loading = true;
+			const id = this.User.id;
+			this.User.subscriptions = (await admin.getUser(id)).subscriptions;
+			this.newSubs[id] = {};
+			this.validTo[id] = "";
+			this.loading = false;
+		},
+		hideModal() {
+			this.show = false;
+		},
+		toggleRole(user: User, role: string) {
+			this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
+		},
+		getCollections(subscription: ISubscription) {
+			return this.store.getters.collections.filter(i => subscription.collectionIds?.includes(i.id));
+		},
+		getUnownedCollections(subscriptions: ISubscription[]) {
+			return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
+		},
+		async addSubscriptions(user: User) {
+			const cols = [];
 
-	public get User() {
-		return this.user as User;
-	}
+			for (const v of Object.entries(this.newSubs[user.id])) {
+				if (v[1] === true)
+					cols.push(v[0]);
+			}
 
-    public loading = false;
-	public show = false;
+			if (cols.length > 0 && this.validTo[user.id]) {
+				const sub = await api.admin.createSubscription(user.id, {
+					collectionIds: cols,
+					validTo: this.validTo[user.id],
+				});
 
-    public get roles() {
-        return this.store.state.users.roles;
-    }
-
-	public newSubs = adminService.NewSubs;
-
-	public validTo = adminService.ValidTo;
-
-	public async showModal() {
-		this.show = true;
-		this.loading = true;
-		const id = this.User.id;
-		this.User.subscriptions = (await admin.getUser(id)).subscriptions;
-		this.newSubs[id] = {};
-		this.validTo[id] = "";
-		this.loading = false;
-	}
-
-	public hideModal() {
-		this.show = false;
-	}
-
-    public toggleRole(user: User, role: string) {
-        this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
-    }
-
-    public getCollections(subscription: ISubscription) {
-        return this.store.getters.collections.filter(i => subscription.collectionIds?.includes(i.id));
-    }
-
-    public getUnownedCollections(subscriptions: ISubscription[]) {
-        return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
-    }
-
-    public async addSubscriptions(user: User) {
-        const cols = [];
-
-        for (const v of Object.entries(this.newSubs[user.id])) {
-            if (v[1] === true)
-                cols.push(v[0]);
-        }
-
-        if (cols.length > 0 && this.validTo[user.id]) {
-            const sub = await api.admin.createSubscription(user.id, {
-                collectionIds: cols,
-                validTo: this.validTo[user.id],
-            });
-
-            user.subscriptions.push(sub);
-            this.newSubs[user.id] = {};
-            delete this.validTo[user.id];
-        }
-            
-    }
-
-    public async deleteSub(user: User, subscription: ISubscription) {
-        await api.admin.deleteSubcription(user.id, subscription.id);
-        user.subscriptions = user.subscriptions.filter(i => i.id != subscription.id);
-    }
-}
+				user.subscriptions.push(sub);
+				this.newSubs[user.id] = {};
+				delete this.validTo[user.id];
+			}	
+		},
+		async deleteSub(user: User, subscription: ISubscription) {
+			await api.admin.deleteSubcription(user.id, subscription.id);
+			user.subscriptions = user.subscriptions.filter(i => i.id != subscription.id);
+		},
+	},
+});
 </script>

@@ -23,9 +23,9 @@ export default class BaseScriptures {
     }
 
     public async get(id: string): Promise<Scripture> {
-        let scripture = this.scriptures?.find(s => s.id === id || Object.keys(s.key).includes(id));
+        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.key).contains(id));
         if (!scripture) {
-            scripture = new Scripture(await scriptures.getScripture(id));
+            throw new Error("Scripture not found");
         }
         return scripture;
     }
@@ -68,7 +68,7 @@ export default class BaseScriptures {
     public async getChapters(translationId: string, bookId: string): Promise<Chapter[]> {
         const book = await this.getBook(translationId, bookId);
         if (book.chapters === null) {
-            book.chapters = (await scriptures.getChapters(translationId, book.id))
+            book.chapters = (await scriptures.getChapters(book.id))
                 .map(c => new Chapter(c))
                 .sort((a, b) => a.number > b.number ? 1 : -1);
         }
@@ -88,7 +88,7 @@ export default class BaseScriptures {
     public async getVerses(translationId: string, bookId: string, chapterId: string) {
         const chapter = await this.getChapter(translationId, bookId, chapterId);
         if (chapter.verses === null) {
-            chapter.verses = (await scriptures.getVerses(translationId, chapter.bookId, chapter.id)).map(v => new Verse(v));
+            chapter.verses = (await scriptures.getVerses(chapter.id)).map(v => new Verse(v));
         }
         return chapter.verses;
     }

@@ -1,6 +1,6 @@
 <template>
-    <BaseButton @click="show = !show" class="mb-2">Select Translation</BaseButton>
-    <div v-if="show">
+    <BaseButton @click="show = !show" class="mb-2">{{translation?.title}}</BaseButton>
+    <Modal :show="show" @close="show = false">
         <CheckboxList
             v-if="checkboxData"
             :items="checkboxData"
@@ -8,15 +8,20 @@
             @change="checkboxData = checkboxData"
         />
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
-            <TranslationCard :translation="translation" @click="setTranslation(translation)" />
+            <TranslationCard 
+                class="cursor-pointer"
+                :translation="translation" 
+                @click="setTranslation(translation)"
+            />
         </div>
-    </div>
+    </Modal>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import Translation from "@/classes/scriptures/translation";
 import { CheckboxList } from "@/components/inputs";
 import TranslationCard from "./TranslationCard.vue";
+import { BaseModal } from "@/components";
 
 type CheckboxData = {
     key: string;
@@ -29,6 +34,7 @@ export default defineComponent({
     components: {
         CheckboxList,
         TranslationCard,
+        Modal: BaseModal,
     },
     props: {
         translation: {

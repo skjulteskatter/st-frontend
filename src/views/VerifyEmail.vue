@@ -20,35 +20,33 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import auth from "@/services/auth";
-import { Options, Vue } from "vue-class-component";
-
 import { BaseButton } from "@/components";
 import { CheckIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "verify-email",
     components: {
         BaseButton,
         CheckIcon,
     },
-})
-export default class VerifyEmail extends Vue {
-    public verificationEmailSent = false;
-
-    public sentEmail = false;
-
-    public mounted() {
+    data: () => ({
+        verificationEmailSent: false,
+        sentEmail: false,
+    }),
+    mounted() {
         this.verificationEmailSent = auth.verificationEmailSent;
 
         if (auth.emailVerified) {
             this.$router.push({ name: "main" });
         }
-    }
-
-    public async sendVerificationEmail() {
-        this.sentEmail = true;
-        await auth.sendLinkToEmail();
-    }
-}
+    },
+    methods: {
+        async sendVerificationEmail() {
+            this.sentEmail = true;
+            await auth.sendLinkToEmail();
+        },
+    },
+});
 </script>

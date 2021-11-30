@@ -12,28 +12,28 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
-
 import {
     ActivityFeed,
     Playlists,
     OwnedCollections,
 } from "@/components/dashboard";
 
-@Options({
+export default defineComponent({
     name: "dashboard",
     components: {
         ActivityFeed,
         Playlists,
         OwnedCollections,
     },
-})
-export default class Dashboard extends Vue {
-    public store = useStore();
-
-    public get user() {
-        return this.store.getters.user;
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        user() {
+            return this.store.getters.user;
+        },
+    },
+});
 </script>

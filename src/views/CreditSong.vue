@@ -65,10 +65,10 @@
     </section>
 </template>
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { songs } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 import { Song } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon } from "@heroicons/vue/solid";
 
@@ -96,7 +96,7 @@ const saveByteArray = (function () {
     };
 }());
 
-@Options({
+export default defineComponent({
     name: "credit-song-view",
     components: {
         ArrowRightIcon,
@@ -105,69 +105,66 @@ const saveByteArray = (function () {
         BookOpenIcon,
         HashtagIcon,
     },
-})
-export default class CreditSongView extends Vue {
-    private store = useStore();
-    public collection = "";
-    public number: number | null = null;
-    public song: Song | null = null;
-    public loading = false;
-    public step = 1;
+    data: () => ({
+        store: useStore(),
+        collection: "",
+        number: null as number | null,
+        song: null as Song | null,
+        loading: false,
+        step: 1,
+    }),
+    computed: {
+        downloadReady() {
+            return this.song != undefined;
+        },
+        Collections() {
+            return appSession.collections;
+        },
+        Language() {
+            return this.store.getters.languageKey;
+        },
+    },
+    methods: {
+        nextStep() {
+            if(this.step >= 2) return;
+            this.step ++;
+            this.getSong();
+        },
+        previousStep() {
+            if(this.step <= 1) return;
+            this.step --;
+        },
+        creditSong() {
+            const el = document.getElementById("credit-file-input") as HTMLInputElement;
 
-    public nextStep() {
-        if(this.step >= 2) return;
-        this.step ++;
-        this.getSong();
-    }
+            if (el.files?.length) {
+                this.loading = true;
+                const reader = new FileReader();
+                
+                reader.onload = async () => {
+                    const buffer = reader.result as ArrayBuffer;
 
-    public previousStep() {
-        if(this.step <= 1) return;
-        this.step --;
-    }
+                    const stuff = arrayBufferToBase64(buffer);
 
-    public get downloadReady() {
-        return this.song != undefined;
-    }
+                    if (this.number && this.collection){
+                        const r = await songs.creditSong(this.collection, this.number, this.Language, stuff);
+                        const file = await r?.arrayBuffer();
 
-    public creditSong() {
-        const el = document.getElementById("credit-file-input") as HTMLInputElement;
-
-        if (el.files?.length) {
-            this.loading = true;
-            const reader = new FileReader();
-            
-            reader.onload = async () => {
-                const buffer = reader.result as ArrayBuffer;
-
-                const stuff = arrayBufferToBase64(buffer);
-
-                if (this.number && this.collection){
-                    const r = await songs.creditSong(this.collection, this.number, this.Language, stuff);
-                    const file = await r?.arrayBuffer();
-
-                    if (file) {
-                        saveByteArray([file], `${this.Collections.find(c => c.id == this.collection)?.key} ${this.number} - ${this.song?.getName(this.Language)}.mp3`);
-                        this.loading = false;
+                        if (file) {
+                            saveByteArray([file], `${this.Collections.find(c => c.id == this.collection)?.key} ${this.number} - ${this.song?.getName(this.Language)}.mp3`);
+                            this.loading = false;
+                        }
                     }
-                }
-            };
+                };
 
-            reader.readAsArrayBuffer(el.files[0]);
-        }
+                reader.readAsArrayBuffer(el.files[0]);
+            }
 
-    }
-
-    public get Collections() {
-        return appSession.collections;
-    }
-
-    public async getSong() {
-        if (this.collection && this.number)
-            this.song = appSession.songs.find(s => s.collectionIds.includes(this.collection) && s.getNumber(this.collection) == this.number) ?? null;
-    }
-
-    public get Language() {
-        return this.store.getters.languageKey;
-    }
-}
+        },
+        async getSong() {
+            if (this.collection && this.number)
+                this.song = appSession.songs.find(s => s.collectionIds.includes(this.collection) && s.getNumber(this.collection) == this.number) ?? null;
+        },
+    },
+});
 </script>

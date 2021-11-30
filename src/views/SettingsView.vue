@@ -57,36 +57,33 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { SettingsCard } from "@/components";
-import { BaseInput } from "@/components/inputs";
-import { LogoutIcon, UserIcon, CogIcon, TagIcon, MicrophoneIcon } from "@heroicons/vue/solid";
+import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
-@Options({
+export default defineComponent({
+    name: "settings-view",
     components: {
         SettingsCard,
-        BaseInput,
         LogoutIcon,
         UserIcon,
         CogIcon,
-        TagIcon,
-        MicrophoneIcon,
     },
-    name: "settings-view",
-})
-export default class SettingsView extends Vue {
-    private store = useStore();
-    public loading = false;
-    public category: "general" | "user" = "general";
-
-    public logout() {
-        this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
-            window.location.replace("/login");
-        });
-    }
-}
+    data: () => ({
+        store: useStore(),
+        loading: false,
+        category: "general" as "general" | "user",
+    }),
+    methods: {
+        logout() {
+            this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+                window.location.replace("/login");
+            });
+        },
+    },
+});
 </script>
 
 <style lang="scss" >
