@@ -8,7 +8,7 @@
 							<img class="h-8 w-8" src="/img/logo/icon.svg" alt="SongTreasures logo" width="32" height="32" />
 						</router-link>
 					</div>
-					<div class="hidden md:block">
+					<div class="hidden lg:block">
 						<div class="ml-10 flex items-baseline space-x-4">
 							<template v-for="item in Links" :key="item.name">
 								<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
@@ -24,7 +24,7 @@
 
 				<FullSearchInput class="md:ml-auto" :disabled="$route.name == 'search'" />
 				
-				<div class="hidden md:block">
+				<div class="hidden lg:block">
 					<div class="ml-4 flex items-center md:ml-6">
 						<StoreCart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
 						<Feedback />
@@ -35,7 +35,7 @@
 							<div>
 								<MenuButton class="max-w-xs rounded-full flex items-center text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white">
 									<span class="sr-only">Open user menu</span>
-									<img loading="lazy" class="h-8 w-8 rounded-full border border-black/20 dark:border-white/20" :src="image" :alt="user.displayName + ' profile picture'" width="32" height="32" />
+									<img loading="lazy" class="h-8 w-8 rounded-full border border-black/20 dark:border-white/20 flex-shrink-0" :src="image" :alt="user.displayName + ' profile picture'" width="32" height="32" />
 								</MenuButton>
 							</div>
 							<transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -51,7 +51,7 @@
 						</Menu>
 					</div>
 				</div>
-				<div class="-mr-2 flex md:hidden">
+				<div class="-mr-2 flex lg:hidden">
 					<!-- Mobile menu button -->
 					<DisclosureButton class="hover:bg-black/5 dark:hover:bg-white/10 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 focus-visible:ring-white">
 						<span class="sr-only">Open main menu</span>
@@ -63,7 +63,7 @@
 		</div>
 
 		<!-- Mobile -->
-		<DisclosurePanel class="md:hidden">
+		<DisclosurePanel class="lg:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<template v-for="item in Links" :key="item.name">
 					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
@@ -72,7 +72,7 @@
 			<div class="pt-4 pb-3 border-t border-gray-300">
 				<div class="flex items-center px-5">
 					<div class="flex-shrink-0">
-						<img loading="lazy" class="h-10 w-10 rounded-full border border-black/20 dark:border-white/20" :src="image" :alt="user.displayName + ' profile picture'" width="40" height="40" />
+						<img loading="lazy" class="h-10 w-10 rounded-full border border-black/20 dark:border-white/20 flex-shrink-0" :src="image" :alt="user.displayName + ' profile picture'" width="40" height="40" />
 					</div>
 					<div class="ml-3">
 						<div class="text-base leading-tight font-medium">{{ user.displayName }}</div>
