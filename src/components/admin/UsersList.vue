@@ -58,7 +58,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p v-else class="w-full text-center text-gray-500">No users to show</p>
+                <p v-else class="text-center opacity-50 p-4">No users to show</p>
             </Loader>
         </div>
     </BaseCard>
