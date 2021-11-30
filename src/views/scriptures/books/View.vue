@@ -1,13 +1,13 @@
 <template>
     <div v-if="book">
-        <BookCard :book="book" />
-        <div class="mb-2" />
+        <!-- <BookCard :book="book" />
+        <div class="mb-2" /> -->
         <ChapterList />
     </div>
 </template>
 <script lang="ts">
 import Book from "@/classes/scriptures/book";
-import { BookCard } from "@/components/scriptures";
+// import { BookCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
 import { defineComponent } from "@vue/runtime-core";
 import ChapterList from "./chapters/List.vue";
@@ -15,7 +15,7 @@ import ChapterList from "./chapters/List.vue";
 export default defineComponent({
     name: "book-view",
     components: {
-        BookCard,
+        // BookCard,
         ChapterList,
     },
     data() {

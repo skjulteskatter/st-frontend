@@ -98,19 +98,27 @@ class Scriptures extends BaseScriptures {
         }
     }
 
-    public async setBook(number: number) {
+    public async setBook(number?: number) {
         const translation = await this.getCurrentTranslation();
         if (translation) {
-            const book = await this.getBook(translation.id, number.toString());
-            this._bookId[translation.scriptureId] = book.number;
+            if (number) {
+                const book = await this.getBook(translation.id, number.toString());
+                this._bookId[translation.scriptureId] = book.number;
+            } else {
+                delete this._bookId[translation.scriptureId];
+            }
         }
     }
 
-    public async setChapter(number: number) {
+    public async setChapter(number?: number) {
         const book = await this.getCurrentBook();
         if (book) {
-            const chapter = await this.getChapter(book.translationId, book.id, number.toString());
-            this._chapterId[book.number] = chapter.number;
+            if (number) {
+                const chapter = await this.getChapter(book.translationId, book.id, number.toString());
+                this._chapterId[book.number] = chapter.number;
+            } else {
+                delete this._chapterId[book.number];
+            }
         }
     }
 

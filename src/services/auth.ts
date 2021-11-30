@@ -180,6 +180,10 @@ class Auth {
                 alert("Email already in use");
                 useStore().commit(SessionMutationTypes.ERROR, "Email already in use");
                 return;
+            case "auth/weak-password":
+                notify("error", "Weak password", "error");
+                useStore().commit(SessionMutationTypes.ERROR, "Weak password");
+                return;
         }
     }
 

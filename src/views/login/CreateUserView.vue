@@ -65,6 +65,7 @@ export default defineComponent({
                     password: this.form.password,
                     displayName: this.form.displayName,
                 });
+                this.creatingAccount = false;
             }
         },
     },
