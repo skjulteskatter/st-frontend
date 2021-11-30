@@ -15,30 +15,27 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import Checkbox from "./Checkbox.vue";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
 	name: "checkbox-list",
 	components: {
 		Checkbox,
 	},
 	props: {
         items: {
-            type: Array,
+            type: Array as PropType<CheckboxListData>,
             required: true,
         },
         title: {
             type: String,
         },
 	},
-})
-export default class CheckboxList extends Vue {
-	public items?: CheckboxListData;
-    public title?: string;
-
-    public get Items() {
-        return this.items as CheckboxListData;
-    }
-}
+	computed: {
+		Items() {
+			return this.items as CheckboxListData;
+		},
+	},
+});
 </script>

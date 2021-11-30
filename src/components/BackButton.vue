@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "back-button",
     components: {
         ArrowLeftIcon,
@@ -17,23 +17,21 @@ import { ArrowLeftIcon } from "@heroicons/vue/solid";
     props: {
         to: String,
     },
-})
-export default class BackButton extends Vue {
-    public previous: string | null = null;
-    public to?: string;
-
-    public mounted() {
+    data: () => ({
+        previous: null as string | null,
+    }),
+    mounted() {
         this.previous = this.$router.options.history.state.back as string ?? null;
-    }
-
-    public navigate() {
-        if(this.to) this.$router.push(this.to);
-
-        else if (!this.previous) {
-            this.$router.push({name: "main"});
-        } else {
-            this.$router.back();
-        }
-    }
-}
+    },
+    methods: {
+        navigate() {
+            if(this.to) this.$router.push(this.to);
+            else if (!this.previous) {
+                this.$router.push({name: "main"});
+            } else {
+                this.$router.back();
+            }
+        },
+    },
+});
 </script>

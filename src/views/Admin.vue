@@ -2,7 +2,7 @@
     <div v-if="isAdmin">
         <div class="mb-4 flex gap-4">
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
-            <CopyToClipboard :content="token" label="API token" title="Copy API token" />
+            <CopyToClipboard v-if="token" :content="token" label="API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-4">
             <UsersList :users="users" :currentUser="currentUser" />
@@ -13,44 +13,42 @@
     </div>
 </template>
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { UsersList } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { User } from "@/classes";
 
-@Options({
+export default defineComponent({
+    name: "admin",
     components: {
         UsersList,
         CopyToClipboard,
     },
-    name: "admin",
-})
-export default class Subscriptions extends Vue {
-    public store = useStore();
-    public token? = "";
+    data: () => ({
+        store: useStore(),
+        token: "" as string | undefined,
+    }),
+    computed: {
+        users(): User[] {
+            const maxUsers = 50;
+            const users = this.store.state.users.users;
 
-    public async mounted() {
+            if (users.length > maxUsers)
+                return users.splice(maxUsers, users.length);
+
+            return users ?? [];
+        },
+        currentUser() {
+            return this.store.getters.user;
+        },
+        isAdmin(): boolean {
+            return this.store.getters.isAdmin;
+        },
+    },
+    async mounted() {
         this.token = await auth.getToken();
-    }
-
-    get users(): User[] {
-        const maxUsers = 50;
-        const users = this.store.state.users.users;
-
-        if (users.length > maxUsers)
-            return users.splice(maxUsers, users.length);
-
-        return users ?? [];
-    }
-
-    public get currentUser() {
-        return this.store.getters.user;
-    }
-
-    public get isAdmin(): boolean {
-        return this.store.getters.isAdmin;
-    }
-}
+    },
+});
 </script>

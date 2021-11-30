@@ -24,13 +24,14 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType} from "vue";
-import {debouncer} from "@/classes/debouncer";
+import { defineComponent, PropType } from "vue";
+import { debouncer } from "@/classes/debouncer";
 
 // just set to false if you want to disable the feature, without removing code
 const FIGHT_BROWSER_ZOOM = true;
 
 export default defineComponent({
+	name: "presentation-lyrics",
 	data() {
 		return {
 			container: null as HTMLElement | null,

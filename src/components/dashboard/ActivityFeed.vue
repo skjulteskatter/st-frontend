@@ -36,28 +36,27 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 
-@Options({
+export default defineComponent({
     name: "activity-feed",
-})
-export default class ActivityFeed extends Vue {
-    private store = useStore();
-
-    public get collections() {
-        return appSession.collections;
-    }
-
-    public get activitiesInitialized() {
-        return this.store.state.session.activities != undefined;
-    }
-
-    public get activities() {
-        return this.store.getters.activities;
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        collections() {
+            return appSession.collections;
+        },
+        activitiesInitialized() {
+            return this.store.state.session.activities != undefined;
+        },
+        activities() {
+            return this.store.getters.activities;
+        },
+    },
+});
 </script>
 
 <style lang="scss">

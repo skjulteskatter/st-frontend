@@ -8,9 +8,7 @@ import { scriptures } from "../api";
 export default class BaseScriptures {
     protected scriptures: Scripture[] = [];
     protected translations: Translation[] = [];
-    protected books: {
-        [translationId: string]: Book[];
-    } = {};
+    protected books: Book[] = [];
 
     private _initializing = false;
     private _initialized = false;
@@ -25,9 +23,9 @@ export default class BaseScriptures {
     }
 
     public async get(id: string): Promise<Scripture> {
-        let scripture = this.scriptures?.find(s => s.id === id || Object.keys(s.key).includes(id));
+        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.key).contains(id));
         if (!scripture) {
-            scripture = new Scripture(await scriptures.getScripture(id));
+            throw new Error("Scripture not found");
         }
         return scripture;
     }
@@ -48,12 +46,13 @@ export default class BaseScriptures {
     }
 
     public async getBooks(translationId: string): Promise<Book[]> {
-        if (this.books[translationId] === undefined) {
-            this.books[translationId] = (await scriptures.getBooks(translationId))
+        if (!this.books.some(i => i.translationId === translationId)) {
+            this.books.push(...(await scriptures.getBooks(translationId))
                 .map(i => new Book(i))
-                .sort((a, b) => a.number > b.number ? 1 : -1);
+                .sort((a, b) => a.number > b.number ? 1 : -1),
+            );
         }
-        return this.books[translationId];
+        return this.books.filter(b => b.translationId === translationId);
     }
 
     public async getBook(translationId: string, id: string): Promise<Book> {
@@ -69,7 +68,7 @@ export default class BaseScriptures {
     public async getChapters(translationId: string, bookId: string): Promise<Chapter[]> {
         const book = await this.getBook(translationId, bookId);
         if (book.chapters === null) {
-            book.chapters = (await scriptures.getChapters(translationId, book.id))
+            book.chapters = (await scriptures.getChapters(book.id))
                 .map(c => new Chapter(c))
                 .sort((a, b) => a.number > b.number ? 1 : -1);
         }
@@ -89,7 +88,7 @@ export default class BaseScriptures {
     public async getVerses(translationId: string, bookId: string, chapterId: string) {
         const chapter = await this.getChapter(translationId, bookId, chapterId);
         if (chapter.verses === null) {
-            chapter.verses = (await scriptures.getVerses(translationId, chapter.bookId, chapter.id)).map(v => new Verse(v));
+            chapter.verses = (await scriptures.getVerses(chapter.id)).map(v => new Verse(v));
         }
         return chapter.verses;
     }

@@ -11,26 +11,26 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import SlidePanel from "@/components/SlidePanel.vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/outline";
 
-@Options({
+export default defineComponent({
 	name: "feedback",
 	components: {
 		SlidePanel,
 		QuestionMarkCircleIcon,
 	},
-})
-export default class Feedback extends Vue {
-	public open = false;
-
-	public openPanel() {
-		this.open = true;
-	}
-
-	public closePanel() {
-		this.open = false;
-	}
-}
+	data: () => ({
+		open: false,
+	}),
+	methods: {
+		openPanel() {
+			this.open = true;
+		},
+		closePanel() {
+			this.open = false;
+		},
+	},
+});
 </script>

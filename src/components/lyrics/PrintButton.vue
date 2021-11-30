@@ -9,17 +9,18 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { PrinterIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
+	name: "print-button",
 	components: {
 		PrinterIcon,
 	},
-})
-export default class PrintButton extends Vue {
-	public print() {
-		this.$router.push("/print");
-	}
-}
+	methods: {
+		print() {
+			this.$router.push("/print");
+		},
+	},
+});
 </script>

@@ -115,8 +115,8 @@
     </BaseCard>
 </template>
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Collection, Lyrics, Song } from "@/classes";
-import { Options, Vue } from "vue-class-component";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
@@ -132,7 +132,8 @@ import { SongChanger } from "@/components/songs";
 import { PencilAltIcon } from "@heroicons/vue/solid";
 import { SongViewType } from "@/store/modules/songs/state";
 
-@Options({
+export default defineComponent({
+    name: "lyrics-card",
     components: {
         TransposedLyricsViewer,
         PerformanceViewer,
@@ -146,142 +147,123 @@ import { SongViewType } from "@/store/modules/songs/state";
     },
     props: {
         lyrics: {
-            type: Object,
+            type: Object as PropType<Lyrics>,
         },
         song: {
-            type: Object,
+            type: Object as PropType<Song>,
         },
         collection: {
-            type: Object,
+            type: Object as PropType<Collection>,
         },
         loading: {
             type: Boolean,
         },
         type: {
-            type: String,
+            type: String as PropType<SongViewType>,
         },
     },
-    name: "lyrics-card",
+    data: () => ({
+        store: useStore(),
+        selectedLanguage: "",
+        selectedFormat: "default" as SongViewType,
+    }),
+    computed: {
+        SelectedFormat: {
+            get() {
+                return this.store.state.songs.view;
+            },
+            set(v: SongViewType) {
+                this.selectedFormat = v;
+            },
+        },
+        SelectedLanguage: {
+            get() {
+                return this.lyrics?.languageKey ?? "";
+            },
+            set(v: string) {
+                this.selectedLanguage = v;
+            },
+        },
+        chordsEnabled() {
+            return this.lyrics?.ContainsChords === true;
+        },
+        relativeTranspositions(): {
+            value: number;
+            view: string;
+            key: string;
+            original: string;
+        }[] {
+            const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
+                this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
+                this.defaultTransposition,
+                this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
+            ) : [];
+            return ts;
+        },
+        selectedTransposition() {
+            return this.store.state.songs.transposition ?? 0;
+        },
+        newMelodyView: {
+            get() {
+                return this.store.state.songs.newMelody;
+            },
+            set(v: boolean) {
+                this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
+            },
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        languages() {
+            const languages = appSession.languages;
+            return languages.filter((l) => this.song?.name[l.key]);
+        },
+        defaultTransposition() {
+            return this.store.getters.user?.settings?.defaultTransposition ?? "C";
+        },
+        transposeLanguages() {
+            return this.languages.filter(l => this.collection?.hasChords[l.key]);
+        },
+        newMelodyLanguages() {
+            return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
+        },
+        editor() {
+            return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+        },
+    },
     emits: [
         "translate",
         "transpose",
         "setView",
     ],
-})
-export default class LyricsCard extends Vue {
-    private store = useStore();
-    public song?: Song;
-    public lyrics?: Lyrics;
-    public collection?: Collection;
-    public type?: SongViewType;
-    private selectedLanguage = "";
-
-    private selectedFormat: SongViewType = "default";
-
-    public get SelectedFormat() {
-        return this.store.state.songs.view;
-    }
-    public set SelectedFormat(v) {
-        this.selectedFormat = v;
-    }
-
-    public loading?: boolean;
-
-    public get SelectedLanguage() {
-        return this.lyrics?.languageKey ?? "";
-    }
-
-    public set SelectedLanguage(v) {
-        this.selectedLanguage = v;
-    }
-
-    public get chordsEnabled() {
-        return this.lyrics?.ContainsChords === true;
-    }
-
-    public get relativeTranspositions(): {
-        value: number;
-        view: string;
-        key: string;
-        original: string;
-    }[] {
-        const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
-            this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
-            this.defaultTransposition,
-            this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
-        ) : [];
-        return ts;
-    }
-
-    public get selectedTransposition() {
-        return this.store.state.songs.transposition ?? 0;
-    }
-
-    public get newMelodyView() {
-        return this.store.state.songs.newMelody;
-    }
-
-    public set newMelodyView(v) {
-        this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get languages() {
-        const languages = appSession.languages;
-
-        return languages.filter((l) => this.song?.name[l.key]);
-    }
-
-    public format() {
-        this.setView(this.selectedFormat);
-    }
-
-    public translateTo() {
-        this.$emit("translate", this.selectedLanguage);
-    }
-
-    public transpose(n?: number) {
-        if (n !== undefined) {
-            n += (n > 0 ? 0 : 12);
-            while(n > 0 && !Object.values(this.relativeTranspositions).some(i => i.value == n)) {
-                n -= 12;
+    methods: {
+        format() {
+            this.setView(this.selectedFormat);
+        },
+        translateTo() {
+            this.$emit("translate", this.selectedLanguage);
+        },
+        transpose(n?: number) {
+            if (n !== undefined) {
+                n += (n > 0 ? 0 : 12);
+                while(n > 0 && !Object.values(this.relativeTranspositions).some(i => i.value == n)) {
+                    n -= 12;
+                }
             }
-        }
-        this.$emit("transpose", n);
-    }
-
-    public setView(type: SongViewType) {
-        this.$emit("setView", type);
-    }
-
-    public newMelody() {
-        this.newMelodyView = !this.newMelodyView;
-        this.transpose();
-    }
-
-    public get defaultTransposition() {
-        return this.store.getters.user?.settings?.defaultTransposition ?? "C";
-    }
-
-    public get transposeLanguages() {
-        return this.languages.filter(l => this.collection?.hasChords[l.key]);
-    }
-
-    public get newMelodyLanguages() {
-        return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
-    }
-
-    public edit() {
-        window.open(`https://songtreasures.sanity.studio/desk/lyrics;${this.lyrics?.id}`);
-    }
-
-    public get editor() {
-        return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
-    }
-}
+            this.$emit("transpose", n);
+        },
+        setView(type: SongViewType) {
+            this.$emit("setView", type);
+        },
+        newMelody() {
+            this.newMelodyView = !this.newMelodyView;
+            this.transpose();
+        },
+        edit() {
+            window.open(`https://songtreasures.sanity.studio/desk/lyrics;${this.lyrics?.id}`);
+        },
+    },
+});
 </script>
 
 <style lang="scss">

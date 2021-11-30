@@ -8,24 +8,21 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Lyrics } from "@/classes";
 import VerseView from "./VerseView.vue";
 
-@Options({
+export default defineComponent({
     name: "transposed-lyrics-viewer",
     components: {
         VerseView,
     },
     props: {
         lyrics: {
-            type: Object,
+            type: Object as PropType<Lyrics>,
         },
     },
-})
-export default class TransposedLyricsViewer extends Vue {
-    public lyrics?: Lyrics;
-}
+});
 </script>
 
 <style lang="scss">

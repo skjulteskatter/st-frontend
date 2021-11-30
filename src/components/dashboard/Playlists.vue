@@ -19,7 +19,7 @@
                 class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
                 v-for="p in playlists"
                 :key="p.id"
-                :to="playlistLink(p)"
+                :to="getPlaylistLink(p)"
             >
                 <FolderIcon class="w-4 h-4 mr-2 opacity-40" />
                 <div>
@@ -40,46 +40,45 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ICustomCollection } from "songtreasures";
 import { PlusIcon, FolderIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "dashboard-playlists",
     components: {
         CreatePlaylistModal,
         PlusIcon,
         FolderIcon,
     },
-})
-export default class Playlists extends Vue {
-    private store = useStore();
-
-    public createPlaylist = false;
-
-    public openCreatePlaylist() {
-        this.createPlaylist = true;
-    }
-
-    public closeCreatePlaylist() {
-        this.createPlaylist = false;
-    }
-
-    public playlistLink(playlist: ICustomCollection) {
-        return {
-            name: "playlist-view",
-            params: {
-                id: playlist.id,
-            },
-        };
-    }
-
-    public get playlists(): ICustomCollection[] {
-        return this.store.state.session.playlists;
-    }
-}
+    data: () => ({
+        store: useStore(),
+        createPlaylist: false,
+    }),
+    computed: {
+        playlists(): ICustomCollection[] {
+            return this.store.state.session.playlists;
+        },
+    },
+    methods: {
+        openCreatePlaylist() {
+            this.createPlaylist = true;
+        },
+        closeCreatePlaylist() {
+            this.createPlaylist = false;
+        },
+        getPlaylistLink(playlist: ICustomCollection) {
+            return {
+                name: "playlist-view",
+                params: {
+                    id: playlist.id,
+                },
+            };
+        },
+    },
+});
 </script>
 
 <style lang="scss">

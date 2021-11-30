@@ -17,50 +17,47 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
 	name: "country-list",
 	props: {
 		analytics: {
-			type: Object,
+			type: Object as PropType<AnalyticsItem>,
 			required: true,
 		},
 	},
-})
-export default class CountryList extends Vue {
-	public analytics?: AnalyticsItem;
-
-	public get sortedCountries() {
-		const countries: {
-			country: string;
-			count: number;
-		}[] = [];
-		for (const a of this.Analytics.activity ?? []) {
-			for (const c of a.countries ?? []) {
-				let item = countries.find(i => i.country == c.country);
-				if (!item) {
-					item = {
-						country: c.country,
-						count: 0,
-					};
-					countries.push(item);
+	computed: {
+		sortedCountries() {
+			const countries: {
+				country: string;
+				count: number;
+			}[] = [];
+			for (const a of this.Analytics.activity ?? []) {
+				for (const c of a.countries ?? []) {
+					let item = countries.find(i => i.country == c.country);
+					if (!item) {
+						item = {
+							country: c.country,
+							count: 0,
+						};
+						countries.push(item);
+					}
+					item.count += c.count;
 				}
-				item.count += c.count;
 			}
-		}
 
-		return countries.sort((a, b) => a.count > b.count ? -1 : 1);
-	}
-
-	public get Analytics() {
-		return this.analytics ?? {
-			count: 0,
-			activity: [],
-			lyrics: [],
-		};
-	}
-}
+			return countries.sort((a, b) => a.count > b.count ? -1 : 1);
+		},
+		Analytics() {
+			return this.analytics ?? {
+				count: 0,
+				activity: [],
+				lyrics: [],
+			};
+		},
+	},
+});
 </script>
 
 <style lang="scss">

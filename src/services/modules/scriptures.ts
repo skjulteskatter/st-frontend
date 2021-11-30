@@ -9,6 +9,9 @@ class Scriptures extends BaseScriptures {
     private _bookId: {
         [scriptureId: string]: number | undefined;
     } = {};
+    private _chapterId: {
+        [bookNumber: number]: number | undefined;
+    } = {};
 
     public get Scriptures() {
         return this.scriptures;
@@ -58,6 +61,25 @@ class Scriptures extends BaseScriptures {
         }
     }
 
+    public async getCurrentChapter() {
+        try {
+            const book = await this.getCurrentBook();
+            if (book) {
+                const number = this._chapterId[book.number];
+                
+                if (number) {
+                    const chapter = await this.getChapter(book.translationId, book.id, number.toString());
+                    this._chapterId[book.number] = chapter.number;
+                    return book;
+                }
+            }
+            return null;
+        }
+        catch {
+            return null;
+        }
+    }
+
     public async setScripture(id: string) {
         const scripture = await this.get(id);
         if (scripture) {
@@ -76,12 +98,62 @@ class Scriptures extends BaseScriptures {
         }
     }
 
-    public async setBook(number: number) {
+    public async setBook(number?: number) {
         const translation = await this.getCurrentTranslation();
         if (translation) {
-            const book = await this.getBook(translation.id, number.toString());
-            this._bookId[translation.scriptureId] = book.number;
+            if (number) {
+                const book = await this.getBook(translation.id, number.toString());
+                this._bookId[translation.scriptureId] = book.number;
+            } else {
+                delete this._bookId[translation.scriptureId];
+            }
         }
+    }
+
+    public async setChapter(number?: number) {
+        const book = await this.getCurrentBook();
+        if (book) {
+            if (number) {
+                const chapter = await this.getChapter(book.translationId, book.id, number.toString());
+                this._chapterId[book.number] = chapter.number;
+            } else {
+                delete this._chapterId[book.number];
+            }
+        }
+    }
+
+    public get CurrentScripture() {
+        return this._scriptureId ? this.scriptures.find(s => s.id === this._scriptureId) : null;
+    }
+
+    public get CurrentTranslation() {
+        const scripture = this.CurrentScripture;
+        if (scripture) {
+            return this._translationId[scripture.id] ? 
+                this.translations.find(t => t.id === this._translationId[scripture.id])
+                ?? null : null;
+        }
+        return null;
+    }
+
+    public get CurrentBook() {
+        const translation = this.CurrentTranslation;
+        if (translation) {
+            return this._bookId[translation.scriptureId] ? 
+                this.books.find(t => t.number === this._bookId[translation.scriptureId] && t.translationId === translation.id)
+                ?? null : null;
+        }
+        return null;
+    }
+
+    public get CurrentChapter() {
+        const book = this.CurrentBook;
+        if (book) {
+            return this._chapterId[book.number] ?
+                book.chapters?.find(c => c.number === this._chapterId[book.number])
+                ?? null : null;
+        }
+        return null;
     }
 }
 

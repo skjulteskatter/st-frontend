@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "collection-view",
-})
-export default class Store extends Vue {}
+});
 </script>

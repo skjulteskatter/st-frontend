@@ -34,27 +34,24 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 
-@Options({
+export default defineComponent({
+    name: "song-list-item-card",
     props: {
         song: {
-            type: Object,
+            type: Object as PropType<Song>,
         },
         context: {
             type: String,
         },
     },
-    name: "song-list-item-card",
-})
-export default class SongListItemCard extends Vue {
-    public song?: Song;
-    public context?: string;
-
-    public get languageKey() {
-        return useStore().getters.languageKey;
-    }
-}
+    computed: {
+        languageKey() {
+            return useStore().getters.languageKey;
+        },
+    },
+});
 </script>

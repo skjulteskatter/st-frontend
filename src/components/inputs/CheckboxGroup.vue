@@ -16,10 +16,14 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import Checkbox from "./Checkbox.vue";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+type Values = {
+	[id: string]: boolean;
+}
+
+export default defineComponent({
 	name: "checkbox-group",
 	components: {
 		Checkbox,
@@ -29,30 +33,22 @@ import { Options, Vue } from "vue-class-component";
 			type: String,
 		},
 		labels: {
-			type: Array,
+			type: Array as PropType<string[]>,
 		},
 		values: {
-			type: Object,
+			type: Object as PropType<Values>,
 		},
 		action: {
 			type: Function,
 		},
 	},
-})
-export default class CheckboxGroup extends Vue {
-	public name?: string;
-	public labels?: string[];
-	public values?: {
-		[id: string]: boolean;
-	};
-	public action?: () => undefined;
-
-	public get Values() {
-		return this.values ?? {};
-	}
-
-	public get Labels() {
-		return this.labels ?? [];
-	}
-}
+	computed: {
+		Values() {
+			return this.values ?? {};
+		},
+		Labels() {
+			return this.labels ?? [];
+		},
+	},
+});
 </script>

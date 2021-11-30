@@ -62,23 +62,22 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { RefreshIcon, ArrowSmLeftIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
+    name: "presentation-controlpanel",
     components: {
         RefreshIcon,
         ArrowSmLeftIcon,
         ArrowSmRightIcon,
     },
-    name: "presentation-controlpanel",
     emits: [
         "next",
         "previous",
         "refresh",
         "mute",
+        "open",
     ],
-})
-export default class PresentationControlPanel extends Vue {
-}
+});
 </script>

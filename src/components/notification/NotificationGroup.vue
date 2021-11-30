@@ -15,30 +15,29 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { notifications } from "@/services/notifications";
 import { useStore } from "@/store";
-import { Options, Vue } from "vue-class-component";
 import Notification from "./NotificationItem.vue";
 
-@Options({
+export default defineComponent({
     name: "notification-group",
     components: {
         Notification,
     },
-})
-export default class NotificationGroup extends Vue {
-    private store = useStore();
-
-    public async mounted() {
+    data: () => ({
+        store: useStore(),
+    }),
+    async mounted() {
         await notifications.init();
-    }
-
-    public get notifications() {
-        return this.store.getters.notifications.filter(n => {
-            const diff = new Date().getTime() - n.dateTime.getTime();
-
-            return diff < 5000;
-        });
-    }
-}
+    },
+    computed: {
+        notifications() {
+            return this.store.getters.notifications.filter(n => {
+                const diff = new Date().getTime() - n.dateTime.getTime();
+                return diff < 5000;
+            });
+        },
+    },
+});
 </script>

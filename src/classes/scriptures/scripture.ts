@@ -23,7 +23,7 @@ export default class Scripture implements IScripture {
         router.push({
             name: "book-list",
             params: {
-                scriptureId: this.id,
+                scriptureId: this.key.default,
             },
         });
     }

@@ -21,51 +21,51 @@
         </router-link>
     </div>
 </template>
+
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { Options, Vue } from "vue-class-component";
 
-@Options({
+export default defineComponent({
     name: "success",
-})
-export default class Success extends Vue {
-    public store = useStore();
-	public selectedLanguage: Language = {} as Language;
-    public languageSet = false;
-
-    public mounted() {
+    data: () => ({
+        store: useStore(),
+        selectedLanguage: {} as Language,
+        languageSet: false,
+    }),
+    computed: {
+        user() {
+            return this.store.getters.user;
+        },
+        languages(): Language[] {
+            return appSession.languages || [];
+        },
+    },
+    mounted() {
         this.selectedLanguage =
             this.languages.find(
                 (l) => l.key == this.user?.settings?.languageKey,
             ) ??
             this.languages.find((l) => l.key == "no") ??
             ({} as Language);
-    }
-
-    public async save() {
-        await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
-	}
-
-	public setLanguage() {
-        const settings = Object.assign({}, this.user?.settings);
-        const language = this.selectedLanguage;
-        if (language) {
-            settings.languageKey = language.key;
-            this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
-			this.save();
-        }
-        this.languageSet = true;
-    }
-
-    public get user() {
-		return this.store.getters.user;
-	}
-
-	public get languages(): Language[] {
-        return appSession.languages || [];
-    }
-}
+    },
+    methods: {
+        async save() {
+            await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
+        },
+        setLanguage() {
+            const settings = Object.assign({}, this.user?.settings);
+            const language = this.selectedLanguage;
+            if (language) {
+                settings.languageKey = language.key;
+                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
+                this.save();
+            }
+            this.languageSet = true;
+        },
+    },
+});
 </script>

@@ -11,9 +11,9 @@
     </label>
 </template>
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
     name: "checkbox",
     props: {
         modelValue: {
@@ -26,9 +26,5 @@ import { Options, Vue } from "vue-class-component";
     emits: [
         "update:modelValue",
     ],
-})
-export default class Checkbox extends Vue {
-    public name?: string;
-    public modelValue?: boolean;
-}
+});
 </script>

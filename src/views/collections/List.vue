@@ -42,74 +42,71 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-
+import { defineComponent } from "@vue/runtime-core";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { notify } from "@/services/notify";
+import { Product } from "@/classes";
 
-@Options({
+export default defineComponent({
+    name: "collections-home",
     components: {
         ProductSlider,
         StoreCart,
         RefreshIcon,
         CreditCardIcon,
     },
-    name: "collections-home",
-})
-export default class StoreHome extends Vue {
-    private store = useStore();
-    public loading = false;
-    public loadingSubs = false;
+    data: () => ({
+        store: useStore(),
+        loading: false,
+        loadingSubs: false,
+    }),
+    computed: {
+        products() {
+            const prods = this.store.getters.products;
+            return prods
+                .sort((a, b) => b.priority - a.priority)
+                .filter((p) => p.collections.length == 1) as Product[];
+        },
+        ownedProducts() {
+            return this.products.filter((p) => this.productIds.includes(p.id));
+        },
+        availableProducts() {
+            return this.products.filter((p) => !this.productIds.includes(p.id));
+        },
+        user() {
+            return useStore().getters.user;
+        },
+        productIds() {
+            const ids: string[] = [];
 
-    public async portal() {
-        this.loading = true;
-        await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
-            window.location = (result as unknown) as Location;
-        });
-        // this.loading = false;
-    }
-
-    public get products() {
-        return this.store.getters.products
-            .sort((a, b) => b.priority - a.priority)
-            .filter((p) => p.collections.length == 1);
-    }
-
-    public get ownedProducts() {
-        return this.products.filter((p) => this.productIds.includes(p.id));
-    }
-
-    public get availableProducts() {
-        return this.products.filter((p) => !this.productIds.includes(p.id));
-    }
-
-    public get user() {
-        return useStore().getters.user;
-    }
-
-    public get productIds() {
-        const ids: string[] = [];
-
-        for (const s of this.user?.subscriptions ?? []) {
-            for (const id in s.productIds) {
-                if (!ids.includes(id)) ids.push(id);
+            for (const s of this.user?.subscriptions ?? []) {
+                for (const id in s.productIds) {
+                    if (!ids.includes(id)) ids.push(id);
+                }
             }
-        }
 
-        return ids;
-    }
+            return ids;
+        },
+    },
+    methods: {
+        async portal() {
+            this.loading = true;
+            await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+                window.location = (result as unknown) as Location;
+            });
+        },
+        async refreshSubscriptions() {
+            this.loadingSubs = true;
+            await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
+            this.loadingSubs = false;
 
-    public async refreshSubscriptions() {
-        this.loadingSubs = true;
-        await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
-        this.loadingSubs = false;
-
-        notify("success", this.$t("common_subscriptionsRefreshed"), "check");
-    }
-}
+            notify("success", this.$t("common_subscriptionsRefreshed"), "check");
+        },
+    },
+});
 </script>
 
 <style lang="scss">

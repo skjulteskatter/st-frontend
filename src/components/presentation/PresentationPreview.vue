@@ -36,70 +36,53 @@
     </BaseCard>
 </template>
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import {
-    TransposedLyricsViewer,
-    LyricsViewer,
-    PrintButton,
-} from "../lyrics";
-import { SongChanger } from "@/components/songs";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { CheckCircleIcon } from "@heroicons/vue/solid";
 import { MinusCircleIcon } from "@heroicons/vue/outline";
 
-@Options({
+type Text = {
+    name: string;
+    content: string[];
+}
+
+export default defineComponent({
+    name: "lyrics-card",
     components: {
-        TransposedLyricsViewer,
-        LyricsViewer,
-        PrintButton,
-        SongChanger,
         CheckCircleIcon,
         MinusCircleIcon,
     },
     props: {
-        song: {
-            type: Object,
-        },
         text: {
-            type: Array,
+            type: Array as PropType<Text[]>,
         },
         availableVerses: {
-            type: Array,
+            type: Array as PropType<string[]>,
         },
         currentVerses: {
-            type: Array,
+            type: Array as PropType<string[]>,
         },
     },
-    name: "lyrics-card",
     emits: [
         "toggleAll",
         "toggle",
         "mounted",
     ],
-})
-export default class LyricsCard extends Vue {
-    public text?: {
-        name: string;
-        content: string[];
-    }[];
-
-    public mounted() {
+    data: () => ({
+        unset: false,
+    }),
+    computed: {
+        Text() {
+            return this.text ?? [];
+        },
+    },
+    mounted() {
         this.$emit("mounted");
-    }
-
-    public toggleAll() {
-        this.$emit("toggleAll");
-        this.unset = !this.unset;
-    }
-
-    public get Text() {
-        return this.text ?? [];
-    }
-
-    public loaded = false;
-    public unset = false;
-
-    public availableVerses?: string[];
-
-    public currentVerses?: string[];
-}
+    },
+    methods: {
+        toggleAll() {
+            this.$emit("toggleAll");
+            this.unset = !this.unset;
+        },
+    },
+});
 </script>

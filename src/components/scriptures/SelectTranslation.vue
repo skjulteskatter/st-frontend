@@ -1,6 +1,6 @@
 <template>
-    <BaseButton @click="show = !show" class="mb-2">Select Translation</BaseButton>
-    <div v-if="show">
+    <BaseButton @click="show = !show" class="mb-2">{{translation?.title}}</BaseButton>
+    <Modal :show="show" @close="show = false">
         <CheckboxList
             v-if="checkboxData"
             :items="checkboxData"
@@ -8,80 +8,83 @@
             @change="checkboxData = checkboxData"
         />
         <div class="mb-2" v-for="translation in Translations" :key="translation.id">
-            <TranslationCard :translation="translation" @click="setTranslation(translation)" />
+            <TranslationCard 
+                class="cursor-pointer"
+                :translation="translation" 
+                @click="setTranslation(translation)"
+            />
         </div>
-    </div>
+    </Modal>
 </template>
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import Translation from "@/classes/scriptures/translation";
-import { Options, Vue } from "vue-class-component";
 import { CheckboxList } from "@/components/inputs";
 import TranslationCard from "./TranslationCard.vue";
+import { BaseModal } from "@/components";
 
-@Options({
+type CheckboxData = {
+    key: string;
+    label: string;
+    value: boolean;
+}
+
+export default defineComponent({
     name: "select-translation",
     components: {
         CheckboxList,
         TranslationCard,
+        Modal: BaseModal,
     },
     props: {
         translation: {
-            type: Object,
+            type: Object as PropType<Translation>,
         },
         translations: {
-            type: Array,
+            type: Array as PropType<Translation[]>,
             required: true,
         },
         languages: {
-            type: Array,
+            type: Array as PropType<Language[]>,
             required: true,
         },
         filterOnLanguages: {
-            type: Object,
+            type: Object as PropType<ILocale<boolean>>,
         },
     },
+    data: () => ({
+        show: false,
+    }),
     emits: [
         "setTranslation",
     ],
-})
-export default class SelectTranslation extends Vue {
-    public show = false;
-
-    public translation?: Translation;
-    private translations?: Translation[];
-    public languages?: Language[];
-    public filterOnLanguages?: ILocale<boolean>;
-
-    public get checkboxData() {
-        return this.languages?.map(l => {
-            return {
-                key: l.key,
-                label: l.name,
-                value: this.FilterOnLanguages[l.key] === true,
-            };
-        }) ?? [];
-    }
-
-    public set checkboxData(v) {
-        for (const data of v) {
-            this.FilterOnLanguages[data.key] = data.value;
-        }
-    }
-    public get FilterOnLanguages() {
-        return this.filterOnLanguages ?? {};
-    }
-
-    public set FilterOnLanguages(v) {
-        this.filterOnLanguages = v;
-    }
-
-    public get Translations() {
-        return this.translations?.filter(i => this.FilterOnLanguages[i.language] === true) ?? [];
-    }
-
-    public setTranslation(translation: Translation) {
-        this.$emit("setTranslation", translation);
-        this.show = false;
-    }
-}
+    computed: {
+        checkboxData: {
+            get() {
+                return this.languages?.map(l => ({
+                    key: l.key,
+                    label: l.name,
+                    value: this.FilterOnLanguages[l.key] === true,
+                })) ?? [];
+            },
+            set(v: CheckboxData[]) {
+                for (const data of v) {
+                    this.FilterOnLanguages[data.key] = data.value;
+                }
+            },
+        },
+        FilterOnLanguages() {
+            return this.filterOnLanguages ?? {};
+        },
+        Translations() {
+            return this.translations?.filter(i => this.FilterOnLanguages[i.language] === true) ?? [];
+        },
+    },
+    methods: {
+        setTranslation(translation: Translation) {
+            this.$emit("setTranslation", translation);
+            this.show = false;
+        },
+    },
+});
 </script>

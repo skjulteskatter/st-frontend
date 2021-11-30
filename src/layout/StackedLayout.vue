@@ -74,7 +74,6 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import { ref } from "@vue/reactivity";
 
 import { useStore } from "@/store";
@@ -92,8 +91,9 @@ import themes from "@/classes/themes";
 import { notify } from "@/services/notify";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { cache } from "@/services/cache";
+import { defineComponent } from "@vue/runtime-core";
 
-@Options({
+export default defineComponent({
 	name: "stacked-layout",
 	components: {
 		TheNavbar,
@@ -105,16 +105,34 @@ import { cache } from "@/services/cache";
 		PrivacyPolicyAccept,
 		AddedToCart,
 	},
-})
-export default class StackedLayout extends Vue {
-	public store = useStore();
-    public osmdLoading = false;
-    public show = true;
-
-	public get initialized() {
-        return ref(appSession.initialized).value;
-    }
-
+	data: () => ({
+		store: useStore(),
+		osmdLoading: false,
+		show: false,
+	}),
+	computed: {
+		initialized() {
+			return ref(appSession.initialized).value;
+		},
+		sheetMusicOptions() {
+			return this.store.state.songs.sheetMusic;
+		},
+		user() {
+			return this.store.getters.user;
+		},
+		splash: {
+			get() {
+				return this.store.state.session.splash;
+			},
+			set(v: {
+				title: string;
+				content: string;
+				callback?: () => Promise<void>;
+			}) {
+				this.store.commit(SessionMutationTypes.SPLASH, v);
+			},
+		},
+	},
 	async mounted() {
 		themes.load();
         const route = this.$route.name;
@@ -134,37 +152,20 @@ export default class StackedLayout extends Vue {
             }
             await appSession.init();
         }
-    }
-
-	public close() {
-        if(this.sheetMusicOptions) {
-            this.sheetMusicOptions.show = false;
-        }
-    }
-
-    public closeSplash() {
-        this.show = false;
-
-        setTimeout(() => {
-            this.splash = undefined;
-            this.show = true;
-        }, 500);
-    }
-
-    public get sheetMusicOptions() {
-        return this.store.state.songs.sheetMusic;
-    }
-
-    public get user() {
-        return this.store.getters.user;
-    }
-
-    public set splash(v) {
-        this.store.commit(SessionMutationTypes.SPLASH, v);
-    }
-
-    public get splash() {
-        return this.store.state.session.splash;
-    }
-}
+    },
+	methods: {
+		close() {
+			if(this.sheetMusicOptions) {
+				this.sheetMusicOptions.show = false;
+			}
+		},
+		closeSplash() {
+			this.show = false;
+			setTimeout(() => {
+				this.splash = undefined;
+				this.show = true;
+			}, 500);
+		},
+	},
+});
 </script>

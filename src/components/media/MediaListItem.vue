@@ -23,12 +23,12 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { MediaFile } from "songtreasures";
-import { Options, Vue } from "vue-class-component";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
     name: "media-playlist",
     props: {
         type: {
@@ -37,7 +37,7 @@ import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
             default: "sheetmusic",
         },
         files: {
-            type: Array,
+            type: Array as PropType<MediaFile[]>,
             required: true,
         },
         callback: {
@@ -48,19 +48,16 @@ import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
         MusicNoteIcon,
         VolumeUpIcon,
     },
-})
-export default class MediaListItem extends Vue {
-    public store = useStore();
-    public type?: string;
-    public files?: MediaFile[];
-    public callback?: Function;
-
-    public get Files() {
-        return this.files ?? [];
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-}
+    data: () => ({
+        store: useStore(),
+    }),
+    computed: {
+        Files() {
+            return this.files ?? [];
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+});
 </script>

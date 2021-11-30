@@ -7,7 +7,7 @@ import {
     LoginView,
     BookList, 
     BookView, 
-    ChapterList, 
+    // ChapterList, 
     ChapterView,
     ScriptureList, 
     Scriptures, 
@@ -229,18 +229,18 @@ const routes: Array<RouteRecordRaw> = [
                                 path: ":bookId",
                                 name: "book-view",
                                 component: getComponent(BookView),
-                                children: [
-                                    {
-                                        path: "",
-                                        name: "chapter-list",
-                                        component: getComponent(ChapterList),
-                                    },
-                                    {
-                                        path: ":chapterId",
-                                        name: "chapter-view",
-                                        component: getComponent(ChapterView),
-                                    },
-                                ],
+                                // children: [
+                                //     {
+                                //         path: "",
+                                //         name: "chapter-list",
+                                //         component: getComponent(ChapterList),
+                                //     },
+                                // ],
+                            },
+                            {
+                                path: ":bookId/:chapterId",
+                                name: "chapter-view",
+                                component: getComponent(ChapterView),
                             },
                         ],
                     },

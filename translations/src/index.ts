@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
+import { getTranslations } from "./crowdin";
 
 function CSVToArray(strData: string, strDelimiter: string) {
     strDelimiter = (strDelimiter || ",");
@@ -88,7 +89,7 @@ function main() {
     }
 }
 
-main();
+// main();
 
 function getAllFiles(dirPath: string, arrayOfFiles: string[] | null) {
     const files = readdirSync(dirPath);
@@ -162,6 +163,6 @@ function toCsv() {
     }
 }
 
-toCsv();
+// toCsv();
 
-
+getTranslations().then(() => main());

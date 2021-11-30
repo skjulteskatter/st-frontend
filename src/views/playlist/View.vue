@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { BackButton, BaseModal } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
@@ -152,7 +152,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
-import { PublicUser, ShareKey } from "songtreasures";
+import { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures";
 import { reactive } from "@vue/reactivity";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
@@ -161,7 +161,7 @@ import { CopyToClipboard } from "@/components/inputs";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
-@Options({
+export default defineComponent({
     name: "playlist-view",
     components: {
         BackButton,
@@ -178,205 +178,183 @@ const keys = reactive<{value?: ShareKey[]}>({value: undefined});
         Draggable,
         CopyToClipboard,
     },
-})
-export default class PlaylistView extends Vue {
-    private store = useStore();
-    public drag = false;
-    public editName = false;
-    public orders: {
-        [key: string]: string[];
-    } = {};
-    public newPlaylistName = "";
-    public show = false;
-    public showDelete = false;
-
-    public get entries() {
-        return this.playlist?.entries ?? [];
-    }
-
-    public set entries(v) {
-        if (this.playlist)
-            this.playlist.entries = v;
-    }
-
-    public get canEdit() {
-        return this.playlist?.userId === this.store.getters.user?.id;
-    }
-
-    public get originalEntryOrder(): string[] {
-        if (!this.playlist) return [];
-        let order = this.orders[this.playlist.id];
-
-        if (!order) {
-            order = this.playlist.entries.map(e => e.id);
-            this.orders[this.playlist.id] = order;
-        }
-
-        return order;
-    }
-
-    public get currentEntryOrder() {
-        return this.playlist?.entries.map(e => e.id) ?? [];
-    }
-
-    public get entryOrderEdited() {
-        for (let i = 0; i < this.currentEntryOrder.length; i++) {
-            if (this.currentEntryOrder[i] != this.originalEntryOrder[i]) return true;
-        }
-        return false;
-    }
-
-    public loading: {
-        [key: string]: boolean;
-    } = {};
-    public deleted: {
-        [key: string]: boolean;
-    } = {};
-    public loadingKeys = false;
-    public sharingPlaylist = false;
-
-    public get Keys() {
-        return keys.value?.filter(k => k.itemId == this.playlist?.id) ?? [];
-    }
-
-    public users?: PublicUser[];
-
-    public get Users() {
-        return this.users ?? [];
-    }
-
-    public get Show() {
-        return this.show;
-    }
-
-    public showModal() {
-        this.show = true;
-    }
-
-    public hideModal() {
-        this.show = false;
-    }
-
-    public getLink(key: string) {
-        return `https://${window.location.host}/sharing?token=${key}`;
-    }
-
-    public async deletePlaylist() {
-        const name = this.playlist?.name;
-
-        await this.store.dispatch(
-            SessionActionTypes.PLAYLIST_DELETE,
-            this.playlist?.id,
-        );
-        this.$router.push("/playlists");
-
-        notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${name}"`, undefined, undefined, false);
-    }
-
-    public async toggleSharePlaylist() {
-        this.loading["share"] = true;
-        if (!this.show) {
-            if (keys.value == undefined && this.playlist) {
-                await this.loadKeys();
-                this.users = this.users ?? await playlists.getUsers(this.playlist.id);
+    data: () => ({
+        store: useStore(),
+        drag: false,
+        editName: false,
+        orders: {} as {
+            [key: string]: string[];
+        },
+        newPlaylistName: "",
+        show: false,
+        showDelete: false,
+        loading: {} as {
+            [key: string]: boolean;
+        },
+        deleted: {} as {
+            [key: string]: boolean;
+        },
+        loadingKeys: false,
+        sharingPlaylist: false,
+        users: [] as PublicUser[],
+    }),
+    computed: {
+        entries: {
+            get() {
+                return this.playlist?.entries ?? [];
+            },
+            set(v: ICustomCollectionEntry[]) {
+                if (this.playlist)
+                    this.playlist.entries = v;
+            },
+        },
+        canEdit() {
+            return this.playlist?.userId === this.store.getters.user?.id;
+        },
+        currentEntryOrder() {
+            return this.playlist?.entries.map(e => e.id) ?? [];
+        },
+        entryOrderEdited() {
+            for (let i = 0; i < this.currentEntryOrder.length; i++) {
+                if (this.currentEntryOrder[i] != this.getOriginalEntryOrder()[i]) return true;
             }
-            this.showModal();
-        } else {
-            this.hideModal();
-        }
-        this.loading["share"] = false;
-    }
+            return false;
+        },
+        Keys() {
+            return keys.value?.filter(k => k.itemId == this.playlist?.id) ?? [];
+        },
+        Users() {
+            return this.users ?? [];
+        },
+        Show() {
+            return this.show;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+        playlist() {
+            return this.store.getters.playlists.find(
+                (p) => p.id == this.$route.params.id,
+            );
+        },
+        userId() {
+            return this.store.getters.user?.id;
+        },
+    },
+    methods: {
+        showModal() {
+            this.show = true;
+        },
+        hideModal() {
+            this.show = false;
+        },
+        getLink(key: string) {
+            return `https://${window.location.host}/sharing?token=${key}`;
+        },
+        getOriginalEntryOrder(): string[] {
+            if (!this.playlist) return [];
+            let order = this.orders[this.playlist.id];
 
-    public async loadKeys() {
-        this.loadingKeys = true;
-        keys.value = await appSession.getKeys();
-        this.loadingKeys = false;
-    }
-
-    public async sharePlaylist() {
-        if (this.playlist) {
-            this.sharingPlaylist = true;
-            const key = await sharing.shareItem(this.playlist.id, "playlist");
-
-            appSession.addKey(key);
-            keys.value?.push(key);
-            this.sharingPlaylist = false;
-        }
-    }
-
-    public async deleteKey(key: ShareKey) {
-        this.loading[key.key] = true;
-        await sharing.deleteKey(key.key);
-        this.loading[key.key] = false;
-        this.deleted[key.key] = true;
-    }
-
-    public async deleteUser(user: PublicUser) {
-        this.loading[user.id] = true;
-        if (this.playlist)
-            await playlists.deleteUser(this.playlist.id, user.id);
-        this.loading[user.id] = false;
-        this.deleted[user.id] = true;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-
-    public get playlist() {
-        return this.store.getters.playlists.find(
-            (p) => p.id == this.$route.params.id,
-        );
-    }
-
-    public get userId() {
-        return this.store.getters.user?.id;
-    }
-
-    public async saveName() {
-        // console.log("savingName");
-
-        if (this.editName) {
-            this.editName = false;
-            if (this.playlist && this.newPlaylistName) {
-                this.playlist.name = this.newPlaylistName;
-
-                await playlists.updatePlaylist(this.playlist.id, {
-                    name: this.newPlaylistName,
-                });
-
-                this.newPlaylistName = "";
+            if (!order) {
+                order = this.playlist.entries.map(e => e.id);
+                this.orders[this.playlist.id] = order;
             }
-        } else {
-            this.editName = true;
-        }
-    }
 
-    public async saveOrder() {
-        if (this.entryOrderEdited) {
-            this.loading["entryOrder"] = true;
+            return order;
+        },
+        async deletePlaylist() {
+            const name = this.playlist?.name;
+
+            await this.store.dispatch(
+                SessionActionTypes.PLAYLIST_DELETE,
+                this.playlist?.id,
+            );
+            this.$router.push("/playlists");
+
+            notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${name}"`, undefined, undefined, false);
+        },
+        async toggleSharePlaylist() {
+            this.loading["share"] = true;
+            if (!this.show) {
+                if (keys.value == undefined && this.playlist) {
+                    await this.loadKeys();
+                    this.users = this.users ?? await playlists.getUsers(this.playlist.id);
+                }
+                this.showModal();
+            } else {
+                this.hideModal();
+            }
+            this.loading["share"] = false;
+        },
+        async loadKeys() {
+            this.loadingKeys = true;
+            keys.value = await appSession.getKeys();
+            this.loadingKeys = false;
+        },
+        async sharePlaylist() {
             if (this.playlist) {
-                await playlists.updatePlaylist(this.playlist.id, {
-                    entryOrder: this.currentEntryOrder,
-                });
+                this.sharingPlaylist = true;
+                const key = await sharing.shareItem(this.playlist.id, "playlist");
 
-                this.orders[this.playlist.id] = this.currentEntryOrder;
+                appSession.addKey(key);
+                keys.value?.push(key);
+                this.sharingPlaylist = false;
             }
-            this.loading["entryOrder"] = false;
-        }
-    }
+        },
+        async deleteKey(key: ShareKey) {
+            this.loading[key.key] = true;
+            await sharing.deleteKey(key.key);
+            this.loading[key.key] = false;
+            this.deleted[key.key] = true;
+        },
+        async deleteUser(user: PublicUser) {
+            this.loading[user.id] = true;
+            if (this.playlist)
+                await playlists.deleteUser(this.playlist.id, user.id);
+            this.loading[user.id] = false;
+            this.deleted[user.id] = true;
+        },
+        async saveName() {
+            if (this.editName) {
+                this.editName = false;
+                if (this.playlist && this.newPlaylistName) {
+                    this.playlist.name = this.newPlaylistName;
 
-    public async removeEntry(id: string) {
-        const title = this.$t("playlist_removed");
-        const content = this.$t("notification_removedsong");
+                    await playlists.updatePlaylist(this.playlist.id, {
+                        name: this.newPlaylistName,
+                    });
 
-        if (!this.playlist?.id || !id) return;
-        await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
-            playlistId: this.playlist.id,
-            entryId: id,
-        });
+                    this.newPlaylistName = "";
+                }
+            } else {
+                this.editName = true;
+            }
+        },
+        async saveOrder() {
+            if (this.entryOrderEdited) {
+                this.loading["entryOrder"] = true;
+                if (this.playlist) {
+                    await playlists.updatePlaylist(this.playlist.id, {
+                        entryOrder: this.currentEntryOrder,
+                    });
 
-        notify("success", title, "trash", content, undefined, undefined, false);
-    }
-}
+                    this.orders[this.playlist.id] = this.currentEntryOrder;
+                }
+                this.loading["entryOrder"] = false;
+            }
+        },
+        async removeEntry(id: string) {
+            const title = this.$t("playlist_removed");
+            const content = this.$t("notification_removedsong");
+
+            if (!this.playlist?.id || !id) return;
+            await this.store.dispatch(SessionActionTypes.PLAYLIST_REMOVE_ENTRY, {
+                playlistId: this.playlist.id,
+                entryId: id,
+            });
+
+            notify("success", title, "trash", content, undefined, undefined, false);
+        },
+    },
+});
 </script>

@@ -18,41 +18,44 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent, PropType } from "@vue/runtime-core";
 
-@Options({
+type Button = {
+    label: string;
+    value: string;
+    selected: () => boolean;
+}
+
+type Loading = {
+    [key: string]: boolean;
+}
+
+export default defineComponent({
     name: "button-group",
     props: {
         buttons: {
-            type: Array,
+            type: Array as PropType<Button[]>,
         },
         action: {
             type: Function,
         },
     },
-})
-export default class ButtonGroup extends Vue {
-    public buttons?: {
-        label: string;
-        value: string;
-        selected: () => boolean;
-    }[];
-    public action?: Function;
-
-    public loading: {
-        [value: string]: boolean;
-    } = {};
-
-    public async clickButton(value: string) {
-        if (this.action) {
-            this.loading[value] = true;
-            await this.action(value);
-            this.loading[value] = false;
-        }
-    }
-
-    public get Buttons() {
-        return this.buttons ?? [];
-    }
-}
+    data: () => ({
+        loading: {} as Loading,
+    }),
+    computed: {
+        Buttons() {
+            return this.buttons ?? [];
+        },
+    },
+    methods: {
+        async clickButton(value: string) {
+            if (this.action) {
+                this.loading[value] = true;
+                await this.action(value);
+                this.loading[value] = false;
+            }
+        },
+    },
+});
 </script>

@@ -22,11 +22,11 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { defineComponent } from "@vue/runtime-core";
 import { TransitionRoot } from "@headlessui/vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/solid";
 
-@Options({
+export default defineComponent({
 	name: "tooltip",
 	props: {
 		text: {
@@ -38,45 +38,44 @@ import { QuestionMarkCircleIcon } from "@heroicons/vue/solid";
 		TransitionRoot,
 		QuestionMarkCircleIcon,
 	},
-})
-export default class Tooltip extends Vue {
-	public text?: string;
-	private open = false;
-	public position = "left";
+	data: () => ({
+		open: false,
+		position: "left",
+	}),
+	computed: {
+		positionClasses() {
+			switch(this.position) {
+				case "left": 
+					return "-left-2";
+				case "right":
+					return "-right-2";
+				case "center":
+					return "left-1/2 -translate-x-1/2";
+				default:
+					return "left-1/2 -translate-x-1/2";
+			}
+		},
+	},
+	methods: {
+		handlePosition(e: MouseEvent) {
+			const left = window.innerWidth / 2 - window.innerWidth / 6;
+			const right = (window.innerWidth - window.innerWidth / 2) + window.innerWidth / 6;
 
-	public get positionClasses() {
-		switch(this.position) {
-			case "left": 
-				return "-left-2";
-			case "right":
-				return "-right-2";
-			case "center":
-				return "left-1/2 -translate-x-1/2";
-			default:
-				return "left-1/2 -translate-x-1/2";
-		}
-	}
-
-	public handlePosition(e: MouseEvent) {
-		const left = window.innerWidth / 2 - window.innerWidth / 6;
-		const right = (window.innerWidth - window.innerWidth / 2) + window.innerWidth / 6;
-
-		if(e.clientX < left) {
-			this.position = "left";
-		} else if(e.clientX > right) {
-			this.position = "right";
-		} else {
-			this.position = "center";
-		}
-	}
-
-	public showTooltip(e: MouseEvent) {
-		this.handlePosition(e);
-		this.open = true;
-	}
-
-	public hideTooltip() {
-		this.open = false;
-	}
-}
+			if(e.clientX < left) {
+				this.position = "left";
+			} else if(e.clientX > right) {
+				this.position = "right";
+			} else {
+				this.position = "center";
+			}
+		},
+		showTooltip(e: MouseEvent) {
+			this.handlePosition(e);
+			this.open = true;
+		},
+		hideTooltip() {
+			this.open = false;
+		},
+	},
+});
 </script>

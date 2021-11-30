@@ -2,14 +2,26 @@
     <div v-if="scripture">
         <div>
             <h1 class="text-xl">{{scripture.title.default}}</h1>
-            <SelectTranslation
-                v-if="loaded"
-                :filterOnLanguages="filterOnLanguages" 
-                :languages="languages"
-                :translation="translation"
-                :translations="translations"
-                @setTranslation="setTranslation"
-            />
+            <div class="flex gap-2">
+                <SelectTranslation
+                    v-if="loaded"
+                    :filterOnLanguages="filterOnLanguages" 
+                    :languages="languages"
+                    :translation="translation"
+                    :translations="translations"
+                    @setTranslation="setTranslation"
+                />
+                <BaseButton 
+                    class="mb-2"
+                    v-if="scriptures.CurrentBook"
+                    @click="selectBook()"
+                >{{scriptures.CurrentBook.title}}</BaseButton>
+                <BaseButton 
+                    class="mb-2"
+                    v-if="scriptures.CurrentChapter"
+                    @click="selectChapter()"
+                >{{scriptures.CurrentChapter.number}}</BaseButton>
+            </div>
         </div>
         <div class="scripture-content" v-if="translation">
             <router-view />
@@ -37,6 +49,7 @@ export default defineComponent({
             languages: null as Language[]| null,
             filterOnLanguages: null as ILocale<boolean> | null,
             loaded: false,
+            scriptures,
         };
     },
     async mounted() {
@@ -66,6 +79,14 @@ export default defineComponent({
             await scriptures.setTranslation(translation.id);
             translation.view();
             this.translation = translation;
+        },
+        selectBook() {
+            this.scriptures.CurrentScripture?.view();
+            this.scriptures.setBook(undefined);
+        },
+        selectChapter() {
+            this.scriptures.CurrentBook?.view();
+            this.scriptures.setChapter(undefined);
         },
     },
 });

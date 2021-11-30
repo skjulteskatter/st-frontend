@@ -74,18 +74,53 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
 import { LyricsContent } from "songtreasures";
-import { Vue } from "vue-class-component";
 
-export default class PrintView extends Vue {
-	public store = useStore();
-	public printed = false;
+export default defineComponent({
+	name: "print-view",
+	data: () => ({
+		store: useStore(),
+		printed: false,
+		lyrics: null as Lyrics | null,
+	}),
+	computed: {
+		formattedTitle() {
+			if(this.collection && this.song) {
+				const collection = this.collection.key;
+				const number = this.song.getNumber(this.collection.id);
+				const name = this.song.getName(this.languageKey);
 
-	public lyrics: Lyrics | null = null;
-
-	public async mounted() {
+				return `${collection}${number} - ${name}`;
+			}
+			return "";
+		},
+		languageKey() {
+			return this.store.getters.languageKey;
+		},
+		collection(): Collection | undefined {
+			return this.store.getters.collection as Collection | undefined;
+		},
+		song() {
+			return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
+		},
+		verses() {
+			return (this.lyrics?.content ?? {}) as LyricsContent;
+		},
+		identicalCopyright() {
+			return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
+		},
+		melodyOrigin() {
+			return (
+				this.song?.melodyOrigin?.description?.[this.languageKey] ??
+				this.song?.melodyOrigin?.description?.no ??
+				undefined
+			);
+		},
+	},
+	async mounted() {
 		const imageElement = document.getElementById("st-logo-print") as HTMLImageElement;
 
 		if(this.song){
@@ -98,56 +133,18 @@ export default class PrintView extends Vue {
 				window.print();
 			this.printed = true;
 		};
-	}
-
-	public get formattedTitle() {
-		if(this.collection && this.song) {
-			const collection = this.collection.key;
-			const number = this.song.getNumber(this.collection.id);
-			const name = this.song.getName(this.languageKey);
-
-			return `${collection}${number} - ${name}`;
-		}
-		return "";
-	}
-
-	public get languageKey() {
-		return this.store.getters.languageKey;
-	}
-
-	public get collection(): Collection | undefined {
-		return this.store.getters.collection;
-	}
-
-	public get song() {
-        return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
-    }
-
-	public get verses() {
-		return (this.lyrics?.content ?? {}) as LyricsContent;
-	}
-
-    public getLocaleString(dictionary: { [key: string]: string }) {
-        if (!dictionary) return "";
-        return (
-            dictionary[this.languageKey] ??
-            dictionary.en ??
-            dictionary[Object.keys(dictionary)[0]]
-        );
-    }
-
-    public get identicalCopyright() {
-        return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
-    }
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.description?.[this.languageKey] ??
-            this.song?.melodyOrigin?.description?.no ??
-            undefined
-        );
-    }
-}
+	},
+	methods: {
+		getLocaleString(dictionary: { [key: string]: string }) {
+			if (!dictionary) return "";
+			return (
+				dictionary[this.languageKey] ??
+				dictionary.en ??
+				dictionary[Object.keys(dictionary)[0]]
+			);
+		},
+	},
+});
 </script>
 
 <style scoped>
