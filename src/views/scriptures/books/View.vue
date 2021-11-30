@@ -2,7 +2,7 @@
     <div v-if="book">
         <BookCard :book="book" />
         <div class="mb-2" />
-        <router-view/>
+        <ChapterList />
     </div>
 </template>
 <script lang="ts">
@@ -10,11 +10,13 @@ import Book from "@/classes/scriptures/book";
 import { BookCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
 import { defineComponent } from "@vue/runtime-core";
+import ChapterList from "./chapters/List.vue";
 
 export default defineComponent({
     name: "book-view",
     components: {
         BookCard,
+        ChapterList,
     },
     data() {
         return {

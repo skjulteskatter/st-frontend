@@ -74,7 +74,6 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import { ref } from "@vue/reactivity";
 
 import { useStore } from "@/store";
