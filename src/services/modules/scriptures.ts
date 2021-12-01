@@ -1,3 +1,4 @@
+import { Book, Chapter } from "@/classes/scriptures";
 import { cache } from "../cache";
 import BaseScriptures from "./baseScriptures";
 
@@ -68,7 +69,7 @@ class Scriptures extends BaseScriptures {
                 const number = this._chapterId[book.number];
                 
                 if (number) {
-                    const chapter = await this.getChapter(book.translationId, book.id, number.toString());
+                    const chapter = await this.getChapter(book.id, number.toString());
                     this._chapterId[book.number] = chapter.number;
                     return book;
                 }
@@ -103,8 +104,10 @@ class Scriptures extends BaseScriptures {
         if (translation) {
             if (number) {
                 const book = await this.getBook(translation.id, number.toString());
+                this.onBookSelected?.(book);
                 this._bookId[translation.scriptureId] = book.number;
             } else {
+                this.onBookSelected?.(null);
                 delete this._bookId[translation.scriptureId];
             }
         }
@@ -114,9 +117,11 @@ class Scriptures extends BaseScriptures {
         const book = await this.getCurrentBook();
         if (book) {
             if (number) {
-                const chapter = await this.getChapter(book.translationId, book.id, number.toString());
+                const chapter = await this.getChapter(book.id, number.toString());
+                this.onChapterSelected?.(chapter);
                 this._chapterId[book.number] = chapter.number;
             } else {
+                this.onChapterSelected?.(null);
                 delete this._chapterId[book.number];
             }
         }
@@ -155,6 +160,17 @@ class Scriptures extends BaseScriptures {
         }
         return null;
     }
+
+    public get Chapters() {
+        return this.CurrentBook?.chapters ?? [];
+    }
+
+    public get Books() {
+        return this.books ?? [];
+    }
+
+    public onBookSelected?: (book: Book | null) => void;
+    public onChapterSelected?: (chapter: Chapter | null) => void;
 }
 
 export default new Scriptures();

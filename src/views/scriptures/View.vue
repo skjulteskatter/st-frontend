@@ -13,14 +13,14 @@
                 />
                 <BaseButton 
                     class="mb-2"
-                    v-if="scriptures.CurrentBook"
+                    v-if="book"
                     @click="selectBook()"
-                >{{scriptures.CurrentBook.title}}</BaseButton>
+                >{{book.title}}</BaseButton>
                 <BaseButton 
                     class="mb-2"
-                    v-if="scriptures.CurrentChapter"
+                    v-if="chapter"
                     @click="selectChapter()"
-                >{{scriptures.CurrentChapter.number}}</BaseButton>
+                >{{chapter.number}}</BaseButton>
             </div>
         </div>
         <div class="scripture-content" v-if="translation">
@@ -29,7 +29,7 @@
     </div>
 </template>
 <script lang="ts">
-import { Translation } from "@/classes/scriptures";
+import { Book, Chapter, Translation } from "@/classes/scriptures";
 import Scripture from "@/classes/scriptures/scripture";
 import scriptures from "@/services/modules/scriptures";
 import { appSession } from "@/services/session";
@@ -49,7 +49,8 @@ export default defineComponent({
             languages: null as Language[]| null,
             filterOnLanguages: null as ILocale<boolean> | null,
             loaded: false,
-            scriptures,
+            book: null as Book | null,
+            chapter: null as Chapter | null,
         };
     },
     async mounted() {
@@ -72,6 +73,13 @@ export default defineComponent({
                 }, {} as ILocale<boolean>);
                 this.loaded = true;
             }
+
+            scriptures.onBookSelected = (book) => {
+                this.book = book;
+            };
+            scriptures.onChapterSelected = (chapter) => {
+                this.chapter = chapter;
+            };
         },
         async setTranslation(translation: Translation) {
             this.scripture?.view();
@@ -81,12 +89,13 @@ export default defineComponent({
             this.translation = translation;
         },
         selectBook() {
-            this.scriptures.CurrentScripture?.view();
-            this.scriptures.setBook(undefined);
+            this.book = null;
+            this.chapter = null;
+            scriptures.CurrentScripture?.view();
         },
         selectChapter() {
-            this.scriptures.CurrentBook?.view();
-            this.scriptures.setChapter(undefined);
+            this.chapter = null;
+            scriptures.CurrentBook?.view();
         },
     },
 });

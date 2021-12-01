@@ -37,7 +37,7 @@ export default defineComponent({
                     this.book = await scriptures.getBook(translation.id, bookId);
 
                 if (this.book) {
-                    scriptures.setBook(this.book.number);
+                    await scriptures.setBook(this.book.number);
                 }
             }
         },

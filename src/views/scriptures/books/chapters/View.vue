@@ -5,10 +5,10 @@
                 <template #header>
                     {{chapter.number}}
                 </template>
-                    <p class="mb-2" v-for="v in Verses" :key="v.key">
-                        <span class="text-lg mr-2">{{v.number}}</span>
-                        <span :style="{'text-decoration': selectedWords[v.key]?.[i] ? 'underline' : ''}" @click="selectWord(v.key, i)" v-for="(word, i) in v.content" :key="i" v-html="word + ' '"/>
-                    </p>
+                <p class="mb-2" v-for="v in Verses" :key="v.key">
+                    <span class="text-lg mr-2">{{v.number}}</span>
+                    <span :style="{'text-decoration': selectedWords[v.key]?.[i] ? 'underline' : ''}" @click="selectWord(v.key, i)" v-for="(word, i) in v.content" :key="i" v-html="word + ' '"/>
+                </p>
             </BaseCard>
         </Loader>
     </div>
@@ -54,8 +54,14 @@ export default defineComponent({
             const translation = await scriptures.getCurrentTranslation();
 
             if (translation && bookId && chapterId) {
-                this.chapter = await scriptures.getChapter(translation.id, bookId, chapterId);
-                this.verses = await scriptures.getVerses(translation.id, bookId, chapterId);
+                const book = await scriptures.getBook(translation.id, bookId);
+
+                this.chapter = await scriptures.getChapter(book.id, chapterId);
+                this.verses = await scriptures.getVerses(book.id, chapterId);
+
+                if (this.chapter.id !== scriptures.CurrentChapter?.id) {
+                    await scriptures.setChapter(this.chapter.number);
+                }
             }
             this.loading = false;
         },
