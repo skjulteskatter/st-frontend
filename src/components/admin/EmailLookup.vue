@@ -20,6 +20,10 @@
 						<p>{{ response.user.displayName }}</p>
 					</div>
 					<div>
+						<small class="opacity-50">Last Login</small>
+						<p>{{ new Date(response.user.lastLogin).toLocaleString() }}</p>
+					</div>
+					<div>
 						<small class="opacity-50">Accepted Policies</small>
 						<span class="flex gap-2 items-center">
 							<CheckCircleIcon class="w-4 h-4 opacity-50 text-green-700" v-if="response.user.privacyPolicy" />
@@ -32,16 +36,21 @@
 							Terms of Service
 						</span>
 					</div>
-					<div>
+					<div v-if="response.user.settings">
 						<small class="opacity-50">User Settings</small>
 						<table class="table">
 							<tbody>
 								<tr v-for="[key, value] in Object.entries(response.user.settings)" :key="key" class="table-row">
-									<td class="px-2 table-column">{{key}}</td>
-									<td class="px-2 table-column">{{value}}</td>
+									<td class="pr-4 table-column">{{key}}</td>
+									<td class="table-column">{{value}}</td>
 								</tr>
 							</tbody>
 						</table>
+					</div>
+					<div>
+						<small class="opacity-50">Subscriptions</small>
+						<p v-for="sub in response.user.subscriptions" :key="sub.id">{{ sub.productIds }}</p>
+						<p v-if="!response.user.subscriptions.length">No subscriptions</p>
 					</div>
 				</div>
 				<div class="flex gap-4 flex-col">
@@ -97,8 +106,16 @@ export default defineComponent({
 	methods: {
 		async lookupEmail() {
 			this.loading = true;
-			this.response = await api.admin.emailLookup(this.email);
-			this.loading = false;
+
+			try {
+				this.response = await api.admin.emailLookup(this.email);
+			}
+			catch {
+				throw new Error("Not a valid email address.");
+			}
+			finally {
+				this.loading = false;
+			}
 		},
 	},
 });
