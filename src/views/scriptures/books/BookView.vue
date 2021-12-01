@@ -10,7 +10,7 @@ import Book from "@/classes/scriptures/book";
 // import { BookCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
 import { defineComponent } from "@vue/runtime-core";
-import ChapterList from "./chapters/List.vue";
+import ChapterList from "./ChapterList.vue";
 
 export default defineComponent({
     name: "book-view",
@@ -37,7 +37,7 @@ export default defineComponent({
                     this.book = await scriptures.getBook(translation.id, bookId);
 
                 if (this.book) {
-                    scriptures.setBook(this.book.number);
+                    await scriptures.setBook(this.book.number);
                 }
             }
         },

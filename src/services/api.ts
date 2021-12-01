@@ -346,11 +346,11 @@ export const scriptures = {
     getBook(bookId: string) {
         return http.get<IBook[]>(`api/Scriptures/Book/${bookId}`);
     },
-    getChapters(bookId: string, includeChildren = false) {
-        return http.get<IChapter[]>(`api/Scriptures/Book/${bookId}/Chapters?includeChildren=${includeChildren}`);
+    getChapters(bookId: string, includeChildren = false, includePreview = true) {
+        return http.get<IChapter[]>(`api/Scriptures/Book/${bookId}/Chapters?includeChildren=${includeChildren}&includePreview=${includePreview}`);
     },
-    getChapter(chapterId: string, includeChildren = false) {
-        return http.get<IChapter>(`api/Scriptures/Chapter/${chapterId}?includeChildren=${includeChildren}`);
+    getChapter(chapterId: string, includeChildren = false, includePreview = true) {
+        return http.get<IChapter>(`api/Scriptures/Chapter/${chapterId}?includeChildren=${includeChildren}&includePreview=${includePreview}`);
     },
     getVerses(chapterId: string, to = 0, from = 0) {
         return http.get<IVerse[]>(`api/Scriptures/Chapter/${chapterId}/Verses?to=${to}&from=${from}`);

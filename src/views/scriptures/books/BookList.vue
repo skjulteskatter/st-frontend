@@ -30,6 +30,7 @@ export default defineComponent({
     },
     methods: {
         async load() {
+            await scriptures.setBook(undefined);
             const { scriptureId } = this.$route.params as {[key: string]: string | undefined};
             const translation = await scriptures.getCurrentTranslation();
             if (scriptureId && translation) {

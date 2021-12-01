@@ -1,5 +1,5 @@
 <template>
-    <BaseButton @click="show = !show" class="mb-2">{{translation?.title}}</BaseButton>
+    <BaseButton @click="show = !show" class="mb-2">{{translation?.title ?? $t('common_translation')}}</BaseButton>
     <Modal :show="show" @close="show = false">
         <CheckboxList
             v-if="checkboxData"
@@ -55,6 +55,11 @@ export default defineComponent({
     data: () => ({
         show: false,
     }),
+    mounted() {
+        if (!this.translation) {
+            this.show = true;
+        }
+    },
     emits: [
         "setTranslation",
     ],

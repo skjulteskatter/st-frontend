@@ -301,6 +301,7 @@ declare module "songtreasures" {
         bookId: string;
         number: number;
         title: string;
+        preview: string | null;
         verses: IVerse[] | null;
     }
 

@@ -8,6 +8,7 @@ export default class Chapter implements IChapter {
     public bookId;
     public number;
     public title;
+    public preview;
     public verses: Verse[] | null;
 
     constructor(i: IChapter) {
@@ -16,6 +17,7 @@ export default class Chapter implements IChapter {
         this.bookId = i.bookId;
         this.number = i.number;
         this.title = i.title;
+        this.preview = i.preview ?? null;
         this.verses = i.verses ? i.verses.map(v => new Verse(v)) : null;
     }
 

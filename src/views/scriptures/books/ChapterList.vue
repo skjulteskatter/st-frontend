@@ -1,6 +1,13 @@
 <template>
     <div class="flex justify-center">
-        <BaseList :items="Chapters" :clickCallback="view" :nameSelector="(i) => i.number"/>
+        <Loader :loading="loading">
+            <BaseList 
+                :items="Chapters" 
+                :clickCallback="view" 
+                :nameSelector="(i) => i.number"
+                :previewSelector="(i) => i.preview"
+            />
+        </Loader>
     </div>
 </template>
 <script lang="ts">
@@ -17,6 +24,7 @@ export default defineComponent({
     data() {
         return {
             chapters: null as Chapter[] | null,
+            loading: false,
         };
     },
     computed: {
@@ -29,12 +37,16 @@ export default defineComponent({
     },
     methods: {
         async load() {
+            this.loading = true;
+            await scriptures.setChapter(undefined);
             const { bookId } = this.$route.params as {[key: string]: string | undefined};
             const translation = await scriptures.getCurrentTranslation();
 
             if (translation && bookId) {
-                this.chapters = await scriptures.getChapters(translation.id, bookId);
+                const book = await scriptures.getBook(translation.id, bookId);
+                this.chapters = await scriptures.getChapters(book.id);
             }
+            this.loading = false;
         },
         async view(chapter: Chapter) {
             await scriptures.setChapter(chapter.number);

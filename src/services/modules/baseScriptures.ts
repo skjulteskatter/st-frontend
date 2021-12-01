@@ -9,6 +9,7 @@ export default class BaseScriptures {
     protected scriptures: Scripture[] = [];
     protected translations: Translation[] = [];
     protected books: Book[] = [];
+    protected chapters: Chapter[] = [];
 
     private _initializing = false;
     private _initialized = false;
@@ -65,19 +66,19 @@ export default class BaseScriptures {
         return book;
     }
 
-    public async getChapters(translationId: string, bookId: string): Promise<Chapter[]> {
-        const book = await this.getBook(translationId, bookId);
-        if (book.chapters === null) {
-            book.chapters = (await scriptures.getChapters(book.id))
-                .map(c => new Chapter(c))
-                .sort((a, b) => a.number > b.number ? 1 : -1);
+    public async getChapters(bookId: string): Promise<Chapter[]> {
+        if (!this.chapters.some(i => i.bookId === bookId)) {
+            this.chapters.push(...(await scriptures.getChapters(bookId))
+                .map(i => new Chapter(i))
+                .sort((a, b) => a.number > b.number ? 1 : -1),
+            );
         }
-        return book.chapters;
+        return this.chapters.filter(i => i.bookId === bookId);
     }
 
-    public async getChapter(translationId: string, bookId: string, id: string): Promise<Chapter> {
+    public async getChapter(bookId: string, id: string): Promise<Chapter> {
         const number = parseInt(id);
-        const chapters = await this.getChapters(translationId, bookId);
+        const chapters = await this.getChapters(bookId);
         const chapter = chapters.find(t => t.id === id || t.number === number);
         if (!chapter) {
             throw new Error("Chapter not found");
@@ -85,8 +86,8 @@ export default class BaseScriptures {
         return chapter;
     }
 
-    public async getVerses(translationId: string, bookId: string, chapterId: string) {
-        const chapter = await this.getChapter(translationId, bookId, chapterId);
+    public async getVerses(bookId: string, chapterId: string) {
+        const chapter = await this.getChapter(bookId, chapterId);
         if (chapter.verses === null) {
             chapter.verses = (await scriptures.getVerses(chapter.id)).map(v => new Verse(v));
         }
