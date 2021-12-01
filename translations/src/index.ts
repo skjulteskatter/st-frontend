@@ -80,7 +80,14 @@ function main() {
             }
     
             if (Object.values(entries).length) {
-                writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries, null, 4));
+                const result = Object.entries(entries)
+                    .sort((a, b) => a[0] > b[0] ? 1 : -1)
+                    .reduce((a, b) => {
+                        a[b[0]] = b[1];
+                        return a;
+                    }, {} as {[key: string]: string},
+                );
+                writeFileSync("./public/translations/v1/" + language.split("-")[0] + ".json", JSON.stringify(result, null, 4));
             }
         }
         catch {
