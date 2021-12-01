@@ -80,7 +80,7 @@ function main() {
             }
     
             if (Object.values(entries).length) {
-                writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries));
+                writeFileSync("./translations/out/" + language.split("-")[0] + ".json", JSON.stringify(entries, null, 4));
             }
         }
         catch {
