@@ -3,24 +3,34 @@
         <div>
             <h1 class="text-xl">{{scripture.title.default}}</h1>
             <div class="flex gap-2">
-                <SelectTranslation
-                    v-if="loaded"
-                    :filterOnLanguages="filterOnLanguages" 
-                    :languages="languages"
-                    :translation="translation"
-                    :translations="translations"
-                    @setTranslation="setTranslation"
-                />
-                <BaseButton 
-                    class="mb-2"
-                    v-if="book"
-                    @click="selectBook()"
-                >{{book.title}}</BaseButton>
-                <BaseButton 
-                    class="mb-2"
-                    v-if="chapter"
-                    @click="selectChapter()"
-                >{{chapter.number}}</BaseButton>
+                <div>
+                    <h3 class="text-sm">{{$t('common_translation')}}</h3>
+                    <hr class="mb-2" />
+                    <SelectTranslation
+                        v-if="loaded"
+                        :filterOnLanguages="filterOnLanguages" 
+                        :languages="languages"
+                        :translation="translation"
+                        :translations="translations"
+                        @setTranslation="setTranslation"
+                    />
+                </div>
+                <div v-if="book">
+                    <h3 class="text-sm">{{$t('common_book')}}</h3>
+                    <hr class="mb-2" />
+                    <BaseButton 
+                        class="mb-2"
+                        @click="selectBook()"
+                    >{{book.title}}</BaseButton>
+                </div>
+                <div v-if="chapter">
+                    <h3 class="text-sm">{{$t('common_chapter')}}</h3>
+                    <hr class="mb-2" />
+                    <BaseButton 
+                        class="mb-2"
+                        @click="selectChapter()"
+                    >{{chapter.number}}</BaseButton>
+                </div>
             </div>
         </div>
         <div class="scripture-content" v-if="translation">
@@ -58,9 +68,9 @@ export default defineComponent({
     },
     methods: {
         async load() {
-            const id = this.$route.params.scriptureId as string | undefined;
-            if (id) {
-                this.scripture = await scriptures.get(id);
+            const {scriptureId, bookId, chapterId} = this.$route.params as {[key: string]: string | undefined};
+            if (scriptureId) {
+                this.scripture = await scriptures.get(scriptureId);
                 await scriptures.setScripture(this.scripture.id);
                 this.translation = await scriptures.getCurrentTranslation();
 
@@ -71,6 +81,14 @@ export default defineComponent({
                     a[b.key] = appSession.user.settings.languageKey === b.key;
                     return a;
                 }, {} as ILocale<boolean>);
+
+                if (bookId && this.translation) {
+                    this.book = await scriptures.getBook(this.translation.id, bookId);
+                }
+                if (chapterId && this.book) {
+                    this.chapter = await scriptures.getChapter(this.book.id, chapterId);
+                }
+
                 this.loaded = true;
             }
 

@@ -1,6 +1,14 @@
 <template>
-    <BaseButton @click="show = !show" class="mb-2">{{translation?.title ?? $t('common_translation')}}</BaseButton>
-    <Modal :show="show" @close="show = false">
+    <BaseButton 
+        @click="show = !show" 
+        class="mb-2"
+    >
+        {{translation?.title ?? $t('common_translation')}}
+    </BaseButton>
+    <Modal
+        :show="show" 
+        @close="show = false"
+    >
         <CheckboxList
             v-if="checkboxData"
             :items="checkboxData"
