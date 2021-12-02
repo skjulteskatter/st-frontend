@@ -212,9 +212,10 @@ export default defineComponent({
 @import "../style/mixins";
 
 .sheetmusic-viewer {
-    height: 100vh;
+    min-height: 100vh;
     max-width: 1600px;
     margin: auto;
+    padding-bottom: 3em;
 
     &__info {
         margin-bottom: var(--st-spacing);
