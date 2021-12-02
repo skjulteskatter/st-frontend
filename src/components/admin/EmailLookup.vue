@@ -38,11 +38,11 @@
 					</div>
 					<div v-if="response.user.settings">
 						<small class="opacity-50">User Settings</small>
-						<table class="table">
+						<table>
 							<tbody>
-								<tr v-for="[key, value] in Object.entries(response.user.settings)" :key="key" class="table-row">
-									<td class="pr-4 table-column">{{key}}</td>
-									<td class="table-column">{{value}}</td>
+								<tr v-for="(value, key, i) in response.user.settings" :key="`${key}-${i}`">
+									<td class="pr-4">{{key}}</td>
+									<td>{{value}}</td>
 								</tr>
 							</tbody>
 						</table>
