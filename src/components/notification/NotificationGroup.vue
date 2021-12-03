@@ -4,7 +4,6 @@
             v-for="notification in notifications"
             :key="notification.title"
             :title="notification.title"
-            :icon="notification.icon"
             :type="notification.type"
             :body="notification.content"
             :timeout="notification.timeout"

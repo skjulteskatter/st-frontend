@@ -3,12 +3,7 @@
         <PopoverButton class="cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:ring-offset-secondary">
             <div class="bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 dark:bg-secondary dark:border-white/20" v-if="label">
                 <span>{{ label }}</span>
-                <Icon
-                    :name="icon"
-                    size="18"
-                    v-if="icon"
-                />
-                <ChevronDownIcon v-else class="w-4 h-4" />
+                <ChevronDownIcon class="w-4 h-4" />
             </div>
             <slot name="button" v-else></slot>
         </PopoverButton>
@@ -50,9 +45,6 @@ export default defineComponent({
     },
     props: {
         label: {
-            type: String,
-        },
-        icon: {
             type: String,
         },
         origin: {

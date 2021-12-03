@@ -13,8 +13,12 @@
 					class="flex-shrink-0"
 					theme="secondary"
 					@click="getAnalytics"
-					icon="refresh"
-				>{{ $t('statistics_update') }}</BaseButton>
+				>
+					<template #icon>
+						<RefreshIcon class="w-4 h-4" />
+					</template>
+					{{ $t('statistics_update') }}
+				</BaseButton>
 			</div>
 		</header>
 		<Loader :loading="loading" />
@@ -41,6 +45,7 @@ import { analytics } from "@/services/api";
 import { LineChart, CountryList } from "@/components/statistics";
 import { appSession } from "@/services/session";
 import { EyeIcon } from "@heroicons/vue/outline";
+import { RefreshIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({ 
 	name: "song-statistics",
@@ -48,6 +53,7 @@ export default defineComponent({
 		LineChart,
 		CountryList,
 		EyeIcon,
+		RefreshIcon,
 	},
 	data: () => ({
 		store: useStore(),

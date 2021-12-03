@@ -26,7 +26,6 @@
 				class="p-2 rounded-md bg-transparent max-w-sm relative flex gap-2 border border-black/10 dark:border-white/10"
 				@click="n.callback?.()"
 			>
-				<Icon v-if="n.icon" :name="n.icon" size="18" :class="{ 'text-green-700': n.type == 'success', 'text-red-700 dark:text-red-400': n.type == 'error' }" />
 				<div class="flex-grow text-xs">
 					<strong class="block">{{ n.title }} </strong>
 					<span v-if="n.content" style="">{{ n.content }}</span>

@@ -5,8 +5,7 @@
         :disabled="loading || disabled"
         v-bind="$attrs"
     >
-        <Icon size="18" v-if="icon && !$slots.icon" :name="icon" class="inline-block" />
-        <span v-else-if="$slots.icon">
+        <span v-if="$slots.icon">
             <slot name="icon" />
         </span>
         <span :class="{ 'text-sm': size == 'medium', 'text-xs': size == 'small', 'text-base': size == 'large' }" v-if="$slots.default">
@@ -45,10 +44,6 @@ export default defineComponent({
         loadingLabel: {
             type: String,
             default: "Loading...",
-        },
-        icon: {
-            type: String,
-            default: "",
         },
         disabled: {
             type: Boolean,

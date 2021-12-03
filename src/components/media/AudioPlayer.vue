@@ -37,10 +37,11 @@
             <audio id="audio-player" :src="audio.directUrl"></audio>
         </div>
         <div class="hidden md:block">
-            <BaseButton theme="tertiary" @click="closePlayer" icon="error">
-                <span>
-                    {{ $t("common_close") }}
-                </span>
+            <BaseButton theme="tertiary" @click="closePlayer">
+                <template #icon>
+                    <XIcon class="w-4 h-4" />
+                </template>
+                {{ $t("common_close") }}
             </BaseButton>
         </div>
     </div>

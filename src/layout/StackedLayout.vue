@@ -39,7 +39,12 @@
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
 				>
 					<div class="p-4 flex justify-end bg-white w-full">
-						<BaseButton icon="error" theme="error" @click="close()">{{$t('common_close')}}</BaseButton>
+						<BaseButton theme="error" @click="close()">
+							<template #icon>
+								<XIcon class="w-4 h-4" />
+							</template>
+							{{$t('common_close')}}
+						</BaseButton>
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
@@ -74,6 +79,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "@vue/runtime-core";
 import { ref } from "@vue/reactivity";
 
 import { useStore } from "@/store";
@@ -91,7 +97,7 @@ import themes from "@/classes/themes";
 import { notify } from "@/services/notify";
 import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { cache } from "@/services/cache";
-import { defineComponent } from "@vue/runtime-core";
+import { XIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "stacked-layout",
@@ -104,6 +110,7 @@ export default defineComponent({
 		Tos,
 		PrivacyPolicyAccept,
 		AddedToCart,
+		XIcon,
 	},
 	data: () => ({
 		store: useStore(),
