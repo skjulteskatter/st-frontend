@@ -8,7 +8,7 @@
 		</template>
 		<Loader :loading="loading" position="local">
 			<div v-if="response.user" class="grid md:grid-cols-2 gap-4">
-				<div class="rounded-md p-4 flex flex-col gap-4">
+				<div class="p-4 flex flex-col gap-4">
 					<img :src="response.user.image" class="rounded h-24 w-24 object-cover" />
 					<div v-if="response.userId">
 						<small>UserID</small>
@@ -47,26 +47,35 @@
 							</tbody>
 						</table>
 					</div>
-					<div>
-						<small class="opacity-50">Subscriptions</small>
-						<p v-for="sub in response.user.subscriptions" :key="sub.id">{{ sub.productIds }}</p>
-						<p v-if="!response.user.subscriptions.length">No subscriptions</p>
-					</div>
 				</div>
-				<div class="flex gap-4 flex-col">
-					<div
-						class="p-4 rounded-md border"
-						:class="[response.stripeStatus[0].toLowerCase().match(/^no/) ? 'bg-red-500/5 border-red-500 text-red-700' : 'bg-green-500/5 border-green-500 text-green-700']"
-					>
-						<small class="opacity-50">Stripe</small>
-						<p>{{ response.stripeStatus[0] }}</p>
+				<div class="flex gap-4 flex-col p-4">
+					<div class="flex flex-col gap-2">
+						<small class="opacity-50">Status</small>
+						<div
+							class="p-4 rounded-md border"
+							:class="[response.stripeStatus[0].toLowerCase().match(/^no/) ? 'bg-red-500/5 border-red-500 text-red-700' : 'bg-green-500/5 border-green-500 text-green-700']"
+						>
+							<small class="opacity-50">Stripe</small>
+							<p>{{ response.stripeStatus[0] }}</p>
+						</div>
+						<div
+							class="p-4 rounded-md border"
+							:class="[response.firebaseStatus[0].toLowerCase().match(/^no/) ? 'bg-red-500/5 border-red-500 text-red-700' : 'bg-green-500/5 border-green-500 text-green-700']"
+						>
+							<small class="opacity-50">Firebase</small>
+							<p>{{ response.firebaseStatus[0] }}</p>
+						</div>
 					</div>
-					<div
-						class="p-4 rounded-md border"
-						:class="[response.firebaseStatus[0].toLowerCase().match(/^no/) ? 'bg-red-500/5 border-red-500 text-red-700' : 'bg-green-500/5 border-green-500 text-green-700']"
-					>
-						<small class="opacity-50">Firebase</small>
-						<p>{{ response.firebaseStatus[0] }}</p>
+					<div class="flex flex-col gap-2">
+						<small class="opacity-50">Subscriptions</small>
+						<div v-for="sub in response.stripeSubscriptions" :key="sub.id" class="rounded-md bg-black/5 p-4">
+							<small class="opacity-50 inline-block">Stripe</small>
+							<p v-for="p in sub.productIds" :key="sub.id + p">{{ p }}</p>
+						</div>
+						<div v-for="sub in response.firebaseSubscriptions" :key="sub.id" class="rounded-md bg-black/5 p-4">
+							<small class="opacity-50 inline-block">Firebase</small>
+							<p v-for="p in sub.productIds" :key="sub.id + p">{{ p }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -79,7 +88,7 @@
 import { defineComponent } from "@vue/runtime-core";
 import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
-import { IUser } from "songtreasures";
+import { ISubscription, IUser } from "songtreasures";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/solid";
 
 type EmailLookupResponse = {
@@ -89,6 +98,8 @@ type EmailLookupResponse = {
 	stripeStatus: string[];
 	firebaseStatus: string[];
 	user: IUser;
+	stripeSubscriptions: ISubscription[];
+	firebaseSubscriptions: ISubscription[];
 }
 
 export default defineComponent({
