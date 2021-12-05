@@ -15,14 +15,12 @@ import {
     Loader,
     Tooltip,
 } from "@/components";
-import { Icon } from "./components/icon";
 import { BaseDropdown, BaseInput } from "./components/inputs";
 
 createApp(App)
     .use(store)
     .use(router)
     .use(i18n)
-    .component("Icon", Icon)
     .component("Loader", Loader)
     .component("BaseButton", BaseButton)
     .component("BaseCard", BaseCard)

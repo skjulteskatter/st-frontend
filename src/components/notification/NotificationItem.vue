@@ -9,11 +9,11 @@
         leave-to="opacity-0"
     >
         <div
-            class="p-2 rounded-md bg-white shadow-md max-w-sm relative flex gap-2 border border-black/20 dark:border-white/10 dark:bg-secondary"
+            class="p-2 rounded-md bg-white shadow-md max-w-sm relative flex gap-2 border dark:bg-secondary"
+            :class="[type == 'success' ? 'border-green-500' : (type == 'error' ? 'border-red-500' : 'border-black/20 dark:border-white/10')]"
             v-if="show"
             @click="callback ? callback() : undefined"
         >
-            <Icon v-if="icon" :name="icon" size="18" :class="{ 'text-green-700': type == 'success', 'text-red-700': type == 'error', 'text-primary': type == 'primary' }" />
             <div class="flex-grow text-xs">
                 <strong class="block">{{ title }} </strong>
                 <span v-if="body" style="">{{ body }}</span>
@@ -40,14 +40,12 @@ export default defineComponent({
         },
         type: {
             type: String,
+            validator: (v: string) => ["success", "error", "primary"].includes(v),
         },
         title: {
             type: [String, Number],
         },
         body: {
-            type: String,
-        },
-        icon: {
             type: String,
         },
         persist: {
@@ -72,12 +70,6 @@ export default defineComponent({
         if (!this.persist) {
             setTimeout(() => (this.show = false), this.timeout ?? 5000);
         }
-    },
-    computed: {
-        typeClass() {
-            if (!this.type) return "";
-            return `notification--${this.type}`;
-        },
     },
     methods: {
         async remove() {
