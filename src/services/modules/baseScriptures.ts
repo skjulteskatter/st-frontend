@@ -4,6 +4,7 @@ import Scripture from "@/classes/scriptures/scripture";
 import Translation from "@/classes/scriptures/translation";
 import Verse from "@/classes/scriptures/verse";
 import { scriptures } from "../api";
+import { cache } from "../cache";
 
 export default class BaseScriptures {
     protected scriptures: Scripture[] = [];
@@ -38,8 +39,9 @@ export default class BaseScriptures {
         return this.translations.filter(t => t.scriptureId === scriptureId);
     }
 
-    public async getTranslation(scriptureId: string, id: string): Promise<Translation> {
-        const translation = (await this.getTranslations(scriptureId)).find(t => t.id === id || t.sourceName === id);
+    public async getTranslation(id: string): Promise<Translation> {
+        const translation = this.translations.find(i => i.id === id) ?? 
+            new Translation(await cache.getOrCreate("translations", id, () => scriptures.getTranslation(id)));
         if (!translation) {
             throw new Error("Translation not found");
         }

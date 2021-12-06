@@ -338,7 +338,7 @@ export const scriptures = {
         return http.get<ITranslation[]>(`api/Scriptures/${scriptureId}/Translations`);
     },
     getTranslation(id: string) {
-        return http.get<ITranslation>(`api/Translation/${id}`);
+        return http.get<ITranslation>(`api/Scriptures/Translation/${id}`);
     },
     getBooks(translationId: string) {
         return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books`);
