@@ -42,7 +42,7 @@ class ModuleCache {
         "scriptures",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
-    private version = 29;
+    private version = 1;
 
     private db() {
         const v = this.version;
