@@ -1,11 +1,10 @@
 <template>
     <div v-if="scripture">
         <div>
-            <h1 class="text-xl">{{scripture.title.default}}</h1>
+            <h1 class="text-xl mb-4 font-bold">{{scripture.title.default}}</h1>
             <div class="flex gap-2">
-                <div>
-                    <h3 class="text-sm">{{$t('common_translation')}}</h3>
-                    <hr class="mb-2" />
+                <div class="py-2 px-3 rounded border border-black/10">
+                    <small class="text-sm opacity-50 block">{{$t('common_translation')}}</small>
                     <SelectTranslation
                         v-if="loaded"
                         :filterOnLanguages="filterOnLanguages" 
@@ -15,22 +14,14 @@
                         @setTranslation="setTranslation"
                     />
                 </div>
-                <div v-if="book">
-                    <h3 class="text-sm">{{$t('common_book')}}</h3>
-                    <hr class="mb-2" />
-                    <BaseButton 
-                        class="mb-2"
-                        @click="selectBook()"
-                    >{{book.title}}</BaseButton>
-                </div>
-                <div v-if="chapter">
-                    <h3 class="text-sm">{{$t('common_chapter')}}</h3>
-                    <hr class="mb-2" />
-                    <BaseButton 
-                        class="mb-2"
-                        @click="selectChapter()"
-                    >{{chapter.number}}</BaseButton>
-                </div>
+                <button @click="selectBook()" v-if="book" class="text-left py-2 px-3 rounded border border-black/10">
+                    <small class="text-sm opacity-50">{{$t('common_book')}}</small>
+                    <p>{{book.title}}</p>
+                </button>
+                <button @click="selectChapter()" v-if="chapter" class="text-left py-2 px-3 rounded border border-black/10">
+                    <small class="text-sm opacity-50">{{$t('common_chapter')}}</small>
+                    <p>{{chapter.number}}</p>
+                </button>
             </div>
         </div>
         <div class="scripture-content" v-if="translation">
