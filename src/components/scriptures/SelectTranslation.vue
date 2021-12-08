@@ -1,12 +1,12 @@
 <template>
-    <button @click="show = !show">
+    <button @click="show = !show" :title="$t('common_translation')">
         {{translation?.title ?? $t('common_translation')}}
     </button>
     <Modal
         :show="show" 
         @close="show = false"
     >
-        <div class="w-72">
+        <template #title>
             <small class="opacity-50 uppercase text-xs tracking-wider mb-1">{{ $t("common_language") }}</small>
             <BaseDropdown>
                 <template #button>
@@ -24,7 +24,9 @@
                     @change="checkboxData = checkboxData"
                 />
             </BaseDropdown>
-            <div class="flex flex-col gap-2 mt-4">
+        </template>
+        <div class="md:w-80 w-full">
+            <div class="flex flex-col gap-2">
                 <template v-for="translation in Translations" :key="translation.id">
                     <TranslationCard
                         :translation="translation"
