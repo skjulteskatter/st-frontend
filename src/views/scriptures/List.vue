@@ -1,6 +1,6 @@
 <template>
     <!-- TODO: Define correct classes. -->
-    <div v-if="Scriptures.length">
+    <template v-if="Scriptures.length">
         <ScriptureCard
             class="max-w-md cursor-pointer"
             @click="scripture.view()" 
@@ -8,7 +8,7 @@
             :key="scripture.id"
             :scripture="scripture"
         />
-    </div>
+    </template>
 </template>
 
 <script lang="ts">

@@ -1,33 +1,30 @@
 <template>
-    <div v-if="scripture">
-        <div>
+    <template v-if="scripture">
+        <header>
             <h1 class="text-xl mb-4 font-bold">{{scripture.title.default}}</h1>
-            <div class="flex gap-2">
-                <div class="py-2 px-3 rounded border border-black/10">
-                    <small class="text-sm opacity-50 block">{{$t('common_translation')}}</small>
-                    <SelectTranslation
-                        v-if="loaded"
-                        :filterOnLanguages="filterOnLanguages" 
-                        :languages="languages"
-                        :translation="translation"
-                        :translations="translations"
-                        @setTranslation="setTranslation"
-                    />
-                </div>
-                <button @click="selectBook()" v-if="book" class="text-left py-2 px-3 rounded border border-black/10">
-                    <small class="text-sm opacity-50">{{$t('common_book')}}</small>
-                    <p>{{book.title}}</p>
+            <div class="flex gap-2 items-center mb-2 underline">
+                <SelectTranslation
+                    v-if="loaded"
+                    :filterOnLanguages="filterOnLanguages" 
+                    :languages="languages"
+                    :translation="translation"
+                    :translations="translations"
+                    @setTranslation="setTranslation"
+                />
+                <ChevronRightIcon class="w-4 h-4" v-if="book" />
+                <button @click="selectBook()" v-if="book" :title="$t('common_book')">
+                    {{book.title}}
                 </button>
-                <button @click="selectChapter()" v-if="chapter" class="text-left py-2 px-3 rounded border border-black/10">
-                    <small class="text-sm opacity-50">{{$t('common_chapter')}}</small>
-                    <p>{{chapter.number}}</p>
+                <ChevronRightIcon class="w-4 h-4" v-if="chapter" />
+                <button @click="selectChapter()" v-if="chapter" :title="$t('common_chapter')">
+                    {{chapter.number}}
                 </button>
             </div>
-        </div>
-        <div class="scripture-content" v-if="translation">
+        </header>
+        <template v-if="translation">
             <router-view />
-        </div>
-    </div>
+        </template>
+    </template>
 </template>
 <script lang="ts">
 import { Book, Chapter, Translation } from "@/classes/scriptures";
@@ -36,11 +33,13 @@ import scriptures from "@/services/modules/scriptures";
 import { appSession } from "@/services/session";
 import { SelectTranslation } from "@/components/scriptures";
 import { defineComponent } from "@vue/runtime-core";
+import { ChevronRightIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
     name: "scripture-view",
     components: {
         SelectTranslation,
+        ChevronRightIcon,
     },
     data() {
         return {

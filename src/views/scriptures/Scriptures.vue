@@ -1,7 +1,7 @@
 <template>
-    <div v-if="loaded">
+    <template v-if="loaded">
         <router-view />
-    </div>
+    </template>
 </template>
 <script lang="ts">
 import scriptures from "@/services/modules/scriptures";

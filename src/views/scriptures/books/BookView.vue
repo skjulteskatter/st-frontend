@@ -1,9 +1,9 @@
 <template>
-    <div v-if="book">
+    <template v-if="book">
         <!-- <BookCard :book="book" />
         <div class="mb-2" /> -->
         <ChapterList />
-    </div>
+    </template>
 </template>
 <script lang="ts">
 import Book from "@/classes/scriptures/book";
