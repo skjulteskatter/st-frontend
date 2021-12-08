@@ -211,15 +211,13 @@ class CacheService {
         try {
             const expiry = await this.get("config", module + "_expiry") as number | undefined;
 
-            const tx = await this.tx(module, true);
-
             if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
-                tx.store.clear?.();
+                (await this.tx(module, true)).store.clear?.();
 
                 const items = await factory();
 
                 for (const i of Object.entries(items)) {
-                    await tx.store.put?.(i[1], i[0]);
+                    await this.set(module, i[0], i[1]);
                 }
 
                 await this.set("config", module + "_expiry", expiration);
@@ -227,7 +225,7 @@ class CacheService {
                 return Object.values(items);
             }
 
-            return await tx.store.getAll() as Entry<S>[];
+            return await (await this.tx(module)).store.getAll() as Entry<S>[];
         }
         catch {
             return Object.values(await factory());
