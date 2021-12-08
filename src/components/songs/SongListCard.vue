@@ -1,5 +1,5 @@
 <template>
-    <BaseCard class="theme-card" v-if="title && Songs.length > 0">
+    <BaseCard class="theme-card" v-if="title && songs.length > 0">
         <template #header>
             <div class="flex justify-between">
                 <b
@@ -8,12 +8,12 @@
                 >
                     {{ title }}
                 </b>
-                <b class="text-gray-500" v-if="count">{{ Songs.length }}</b>
+                <b class="text-gray-500" v-if="count">{{ songs.length }}</b>
             </div>
         </template>
         <ul class="text-xs">
             <li
-                v-for="song in Songs"
+                v-for="song in songs"
                 :key="song.id"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(),
@@ -56,9 +56,11 @@ export default defineComponent({
     props: {
         title: {
             type: String,
+            required: true,
         },
         songs: {
             type: Array as PropType<Song[]>,
+            required: true,
         },
         count: {
             type: Boolean,
@@ -71,9 +73,6 @@ export default defineComponent({
     },
     emits: ["showCta"],
     computed: {
-        Songs() {
-            return this.songs ?? [];
-        },
         songsWithAudioFiles() {
             return appSession.files.filter(i => i.type === "audio").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
         },
@@ -87,9 +86,10 @@ export default defineComponent({
     methods: {
         viewSong(song: Song) {
             if(!song.available) {
-                return this.$emit("showCta");
+                this.$emit("showCta");
+            } else {
+                song.view();
             }
-            song.view();
         },
     },
 });

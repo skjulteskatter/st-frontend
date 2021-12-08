@@ -38,4 +38,8 @@ export default class User implements IUser {
     public async saveProfile() {
         await session.saveProfile({});
     }
+
+    public get Admin() {
+        return this.roles.includes("administrator");
+    }
 }

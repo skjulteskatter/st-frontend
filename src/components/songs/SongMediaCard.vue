@@ -83,9 +83,7 @@ import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Collection, Song } from "@/classes";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { MediaFile } from "songtreasures";
-import { useStore } from "@/store";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 
@@ -100,19 +98,24 @@ export default defineComponent({
     props: {
         song: {
             type: Object as PropType<Song>,
+            required: true,
+        },
+        collection: {
+            type: Object as PropType<Collection>,
+            required: true,
         },
     },
+    emits: [
+        "setSheetMusic",
+        "setAudioTrack",
+    ],
     data: () => ({
-        store: useStore(),
         showVideo: false,
         activeVideo: "",
     }),
     computed: {
         videoUrls() {
             return this.song?.videoFiles.map(f => f.directUrl) ?? [];
-        },
-        transposition() {
-            return this.store.state.songs.transposition;
         },
     },
     methods: {
@@ -131,7 +134,7 @@ export default defineComponent({
                 show: true,
                 url: sheet?.directUrl,
                 originalKey: this.song?.originalKey ?? "C",
-                transposition: this.transposition,
+                transposition: undefined,
                 type: sheet?.type,
                 clef: "treble",
             };
@@ -142,14 +145,14 @@ export default defineComponent({
                 "song_id": this.song?.id,
             });
 
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
+            this.$emit("setSheetMusic", options);
         },
         selectAudio(audio: MediaFile) {
             const track: AudioTrack = {
                 file: audio,
-                collection: this.store.getters.collection as Collection,
+                collection: this.collection,
             };
-            this.store.commit(SongsMutationTypes.SET_AUDIO, track);
+            this.$emit("setAudioTrack", track);
         },
     },
 });

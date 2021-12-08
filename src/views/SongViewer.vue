@@ -75,8 +75,10 @@
                     <div class="flex flex-col gap-4 md:col-span-2">
                         <SongInfoCard
                             :song="song"
-                            :languageKey="languageKey"
+                            :language="languageKey"
                             :viewCount="viewCount"
+                            :collection="collection"
+                            :isAdmin="isAdmin"
                             class="md:col-span-2"
                         />
                         <LyricsCard
@@ -108,8 +110,9 @@
                         <SongMediaCard
                             v-if="!isExtended"
                             :song="song"
-                            :lyrics="lyrics ?? undefined"
-                            :languageKey="languageKey ?? undefined"
+                            :collection="collection"
+                            @setAudioTrack="(t) => audioTrack = t"
+                            @setSheetMusic="(m) => sheetMusicOptions = m"
                             class="sticky top-20"
                         />
                         <div v-else class="sticky top-20 flex flex-col gap-4">
@@ -183,7 +186,7 @@ import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
-import { SongViewType } from "@/store/modules/songs/state";
+import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 
 export default defineComponent({
     name: "song-viewer",
@@ -234,13 +237,26 @@ export default defineComponent({
             return appSession.favorites;
         },
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         admin() {
-            return this.store.state.session.currentUser?.roles.some(r => ["editor", "administrator"].includes(r));
+            return appSession.user.roles.some(r => ["editor", "administrator"].includes(r));
         },
-        sheetMusicOptions(): SheetMusicOptions | undefined {
-            return this.store.state.songs.sheetMusic;
+        sheetMusicOptions: {
+            get() {
+                return this.store.state.songs.sheetMusic;
+            },
+            set(v: SheetMusicOptions) {
+                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, v);
+            },
+        },
+        audioTrack: {
+            get() {
+                return undefined;
+            },
+            set(v: AudioTrack) {
+                this.store.commit(SongsMutationTypes.SET_AUDIO, v);
+            },
         },
         playlists() {
             return this.store.state.session.playlists.filter(p => p.userId == this.user?.id);
@@ -273,7 +289,7 @@ export default defineComponent({
             return this.store.state.songs.view;
         },
         defaultTransposition() {
-            return this.store.getters.user?.settings?.defaultTransposition ?? "C";
+            return this.user.settings?.defaultTransposition ?? "C";
         },
         selectedTransposition: {
             get() {
