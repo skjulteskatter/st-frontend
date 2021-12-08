@@ -1,5 +1,5 @@
 <template>
-    <template v-if="scripture">
+    <div v-if="scripture">
         <header>
             <h1 class="text-xl mb-4 font-bold">{{scripture.title.default}}</h1>
             <div class="flex gap-2 items-center mb-2 underline">
@@ -24,7 +24,7 @@
         <template v-if="translation">
             <router-view />
         </template>
-    </template>
+    </div>
 </template>
 <script lang="ts">
 import { Book, Chapter, Translation } from "@/classes/scriptures";
