@@ -1,5 +1,5 @@
 <template>
-    <BaseModal :show="!termsAccepted && cart.length > 0">
+    <BaseModal :show="!termsAccepted && storeService.cart.length > 0">
         <template #icon>
             <InformationCircleIcon class="w-6 h-6 opacity-50 flex-shrink-0" />
         </template>
@@ -32,6 +32,8 @@ import { useStore } from "@/store";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
 import { CheckIcon } from "@heroicons/vue/solid";
+import { storeService } from "@/services/modules";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "tos-accept",
@@ -45,13 +47,12 @@ export default defineComponent({
         terms: false,
         loading: false,
         disabled: false,
+        storeService,
+        user: appSession.user,
     }),
     computed: {
         termsAccepted() {
-            return this.store.getters.user?.termsAndConditions === true;
-        },
-        cart() {
-            return this.store.getters.cartItems;
+            return this.user.termsAndConditions === true;
         },
     },
     methods: {

@@ -46,9 +46,9 @@ import { defineComponent } from "@vue/runtime-core";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { notify } from "@/services/notify";
 import { Product } from "@/classes";
+import { storeService } from "@/services/modules";
 
 export default defineComponent({
     name: "collections-home",
@@ -62,14 +62,9 @@ export default defineComponent({
         store: useStore(),
         loading: false,
         loadingSubs: false,
+        products: [] as Product[],
     }),
     computed: {
-        products() {
-            const prods = this.store.getters.products;
-            return prods
-                .sort((a, b) => b.priority - a.priority)
-                .filter((p) => p.collections.length == 1) as Product[];
-        },
         ownedProducts() {
             return this.products.filter((p) => this.productIds.includes(p.id));
         },
@@ -91,16 +86,19 @@ export default defineComponent({
             return ids;
         },
     },
+    async mounted() {
+        this.products = (await storeService.getProducts())
+                .sort((a, b) => b.priority - a.priority)
+                .filter((p) => p.collections.length == 1) as Product[];
+    },
     methods: {
         async portal() {
             this.loading = true;
-            await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
-                window.location = (result as unknown) as Location;
-            });
+            window.location.href = await storeService.portal();
         },
         async refreshSubscriptions() {
             this.loadingSubs = true;
-            await this.store.dispatch(StripeActionTypes.REFRESH_COLLECTIONS);
+            await storeService.refreshSubscriptions();
             this.loadingSubs = false;
 
             notify("success", this.$t("common_subscriptionsRefreshed"), "check");

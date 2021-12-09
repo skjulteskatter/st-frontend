@@ -1,8 +1,8 @@
 <template>
-    <BaseDropdown v-if="cartItems.length" origin="right" class="text-sm" :show="show">
+    <BaseDropdown v-if="cartItems.length" origin="right" class="text-sm" :show="true">
         <template #button>
             <ShoppingCartIcon class="w-6 h-6 relative opacity-50" />
-            <span v-if="cartItems.length" class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
+            <span class="w-4 h-4 bg-primary rounded-full text-xs text-white flex justify-center items-center absolute -top-1 -right-1">
 				{{ cartItems.length }}
 			</span>
         </template>
@@ -36,7 +36,7 @@
                 >
                     <img :src="i.collections.find(c => i.collectionIds.includes(c.id))?.image" class="max-h-12 rounded mr-4 inline-block" height="48" />
                     <div class="inline-block mr-4">
-                        <span>{{ i.getName(languageKey) }}</span>
+                        <span>{{ i.getName() }}</span>
                         <PriceDiv class="opacity-50 text-xs" :product="i" :country="country" />
                     </div>
                     <button class="ml-auto cursor-pointer opacity-50" @click="removeProduct(i.id)">
@@ -51,7 +51,7 @@
                 <span>{{ $t("store_total") }}:</span>
                 <span>{{ totalPrice }}</span>
             </p>
-            <BaseButton theme="secondary" :disabled="checkingOut || !cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
+            <BaseButton theme="secondary" :disabled="!cartItems.length" @click="checkout" :loading="checkingOut" class="w-full">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
@@ -63,14 +63,12 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import http from "@/services/http";
-import { useStore } from "@/store";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/outline";
 import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
 import { Product } from "@/classes";
+import { storeService } from "@/services/modules";
 
 export default defineComponent({
     name: "store-cart",
@@ -84,17 +82,18 @@ export default defineComponent({
         ArrowRightIcon,
     },
     data: () => ({
-        store: useStore(),
         checkingOut: false,
         country: "",
         mouseOn: false,
         yearlySub: true,
+        cartItems: [] as Product[],
+        storeService,
     }),
     computed: {
         totalPrice() {
             let total = 0;
             const prices = this.cartItems.map(i => {
-                const price = i.prices?.find(p => p.type == this.type);
+                const price = i.prices?.find(p => p.type === this.storeService.type);
 
                 if(price) {
                     return parseInt(price.value.replace(/(\D+)/g, ""));
@@ -107,28 +106,18 @@ export default defineComponent({
                 }
             }
 
-            return this.formatPriceFromNumber(total, this.type);
-        },
-        cartItems() {
-            return this.store.getters.cartItems as Product[];
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
-        type: {
-            get() {
-                return this.store.state.stripe.type;
-            },
-            set(v: "year" | "month") {
-                this.store.commit(StripeMutationTypes.CART_TYPE, v);
-            },
-        },
-        show() {
-            return this.store.state.stripe.showCart == true || this.mouseOn;
+            return this.formatPriceFromNumber(total, this.storeService.type);
         },
     },
     async mounted() {
+        this.cartItems = await storeService.getCartItems();
         this.country = await http.getCountry();
+        storeService.registerHook("productsUpdated", async () => {
+            this.cartItems = await storeService.getCartItems();
+        });
+        storeService.registerHook("checkout", () => {
+            this.checkingOut = true;
+        });
     },
     methods: {
         formatPrices(prices: Price[], type: string) {
@@ -144,18 +133,18 @@ export default defineComponent({
             return `NOK ${num / 100} / ${this.$t(type).toLocaleLowerCase()}`;
         },
         toggleType() {
-            this.type = this.type == "year" ? "month" : "year";
+            this.storeService.type = this.storeService.type === "year" ? "month" : "year";
         },
         async checkout() {
             this.checkingOut = true;
-            await this.store.dispatch(StripeActionTypes.START_SESSION);
+            await this.storeService.checkout();
             this.checkingOut = false;
         },
         clearCart() {
-            this.store.commit(StripeMutationTypes.CART_CLEAR);
+            this.storeService.cart = [];
         },
         removeProduct(id: string) {
-            this.store.commit(StripeMutationTypes.CART_REMOVE_PRODUCT, id);
+            this.storeService.removeProduct(id);
         },
     },
 });

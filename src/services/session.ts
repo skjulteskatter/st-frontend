@@ -13,7 +13,7 @@ import {
 } from "@/classes";
 import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, ShareKey } from "songtreasures";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
-import { analytics as googleAnalytics } from "./auth";
+import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
@@ -353,6 +353,14 @@ export class Session {
             this.keys = [];
         }
         return this.Keys;
+    }
+
+    public get Language() {
+        return this._user?.settings.languageKey ?? "en";
+    }
+
+    public async clear() {
+        await auth.logout();
     }
 }
 

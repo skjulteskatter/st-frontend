@@ -26,7 +26,7 @@
 				
 				<div class="hidden lg:block">
 					<div class="ml-4 flex items-center md:ml-6">
-						<StoreCart v-if="store.state.stripe.cart.length > 0" class="mr-2" />
+						<StoreCart v-if="showCart" class="mr-2" />
 						<Feedback />
 						<Notification-list />
 
@@ -93,7 +93,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { FullSearchInput } from "@/components/inputs";
 import { StoreCart } from "@/components/store";
-import { useStore } from "vuex";
 import { 
 	Disclosure,
 	DisclosureButton,
@@ -106,7 +105,8 @@ import {
 import NotificationList from "@/components/notification/NotificationList.vue";
 import Feedback from "@/components/feedback/Feedback.vue";
 import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/vue/solid";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { storeService } from "@/services/modules";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "the-navbar",
@@ -127,18 +127,19 @@ export default defineComponent({
 		XIcon,
 	},
 	data: () => ({
-		store: useStore(),
 		open: false,
+		storeService,
+		showCart: false,
 	}),
 	computed: {
 		image() {
 			return this.user?.image ?? "/img/portrait-placeholder.png";
 		},
 		isAdmin() {
-			return this.store.getters.isAdmin;
+			return this.user.Admin;
 		},
 		user() {
-			return this.store.getters.user;
+			return appSession.user;
 		},
 		Links() {
 			return [
@@ -171,11 +172,14 @@ export default defineComponent({
 			];
 		},
 	},
+	async mounted() {
+		this.storeService.registerHook("productsUpdated", () => {
+			this.showCart = this.storeService.cart.length > 0;
+		});
+	},
 	methods: {
 		logout() {
-			this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
-				window.location.replace("/login");
-			});
+			appSession.clear();
 		},
 	},
 });

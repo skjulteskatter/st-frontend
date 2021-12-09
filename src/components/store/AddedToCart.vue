@@ -1,13 +1,13 @@
 <template>
     <Loader :loading="checkingOut" position="global">
-        <BaseModal :show="Show" @close="cancel = true">
+        <BaseModal :show="products.length > 0 && !cancel" @close="cancel = true">
             <template #title>
                 <div class="flex gap-4 justify-between w-full">
                     <h3 class="text-lg font-bold">{{$t('store_addedToCart')}}</h3>
                     <SwitchGroup as="div" class="flex items-center gap-2 cursor-pointer">
                         <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("store_buyYearly") }}</SwitchLabel>
                         <Switch
-                            @click="toggleType()"
+                            @click="storeService.toggleType()"
                             v-model="yearlySub"
                             class="focus-visible:outline-none"
                         >
@@ -26,7 +26,7 @@
             </template>
             <div class="flex flex-col gap-2 items-center py-2">
                 <div
-                    v-for="p in Products"
+                    v-for="p in products"
                     :key="p.id"
                     class="flex items-center"
                 >
@@ -47,7 +47,7 @@
                 <div class="flex gap-4 justify-end">
                     <BaseButton theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</BaseButton>
                     <BaseButton theme="primary" @click="addAllItemsCheckout">{{$t('store_allItems')}}</BaseButton>
-                    <BaseButton theme="secondary" @click="checkout" :loading="checkingOut">
+                    <BaseButton theme="secondary" @click="checkout" :disabled="checkingOut" :loading="checkingOut">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
@@ -61,13 +61,13 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
-import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import { BaseModal } from "..";
 import PriceDiv from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
+import { storeService } from "@/services/modules";
+import { appSession } from "@/services/session";
+import { Product } from "@/classes";
 
 export default defineComponent({
     name: "added-to-cart",
@@ -80,43 +80,32 @@ export default defineComponent({
         ShoppingCartIcon,
     },
     data: () => ({
-        store: useStore(),
         cancel: false,
         checkingOut: false,
         yearlySub: true,
+        storeService,
+        products: [] as Product[],
     }),
-    computed: {
-        type: {
-            get() {
-                return this.store.state.stripe.type;
-            },
-            set(v: "year" | "month") {
-                this.store.commit(StripeMutationTypes.CART_TYPE, v);
-            },
-        },
-        Show() {
-            return this.checkingOut || (this.store.state.stripe.cart.length == 1 && !this.cancel && this.store.getters.user?.termsAndConditions == true);
-        },
-        Products() {
-            return this.store.getters.cartItems;
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
-    },
     methods: {
-        toggleType() {
-            this.type = (this.type == "year" ? "month" : "year");
-        },
         async checkout() {
             this.checkingOut = true;
-            await this.store.dispatch(StripeActionTypes.START_SESSION);
+            await this.storeService.checkout();
             this.checkingOut = false;
         },
         async addAllItemsCheckout() {
-            this.store.commit(StripeMutationTypes.CART_SET, this.store.getters.products.filter(i => i.collections[0]?.enabled && !this.store.getters.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id));
+            const products = await storeService.getProducts();
+            this.storeService.cart = products.filter(i => i.collections[0]?.enabled && !appSession.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id);
             await this.checkout();
         },
+    },
+    async mounted() {
+        this.storeService.registerHook("productsUpdated", async () => {
+            this.cancel = false;
+            this.products = await storeService.getCartItems();
+        });
+        this.storeService.registerHook("checkout", () => {
+            this.checkingOut = true;
+        });
     },
 });
 </script>

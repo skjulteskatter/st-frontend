@@ -11,35 +11,32 @@
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { Product } from "@/classes";
 import http from "@/services/http";
-import { useStore } from "@/store";
+import { storeService } from "@/services/modules";
 
 export default defineComponent({
     name: "price",
     props: {
         product: {
             type: Object as PropType<Product>,
+            required: true,
         },
     },
+    async setup() {
+        const country = await http.getCountry();
+        return {
+            country,
+        };
+    },
     data: () => ({
-        store: useStore(),
-        country: "no",
+        storeService,
     }),
     computed: {
         yearly() {
-            return this.store.state.stripe.type == "year";
-        },
-        Country() {
-            return this.country ?? "";
+            return this.storeService.type === "year";
         },
         discounted() {
-            return this.product?.discounted(this.Country) === true;
+            return this.product?.discounted(this.country) === true;
         },
-        Price() {
-            return this.product?.price;
-        },
-    },
-    async mounted() {
-        this.country = await http.getCountry();
     },
 });
 </script>

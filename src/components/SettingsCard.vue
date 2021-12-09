@@ -163,7 +163,7 @@ import {
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
+import { storeService } from "@/services/modules";
 
 export default defineComponent({
     name: "settings-card",
@@ -363,7 +363,7 @@ export default defineComponent({
         },
         async portal() {
             this.loading["subscriptions"] = true;
-            await this.store.dispatch(StripeActionTypes.GET_PORTAL).then((result) => {
+            await storeService.portal().then((result) => {
                 window.location = (result as unknown) as Location;
             });
             // this.loading["subscriptions"] = false;
