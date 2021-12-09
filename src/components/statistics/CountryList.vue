@@ -33,7 +33,7 @@ export default defineComponent({
 				country: string;
 				count: number;
 			}[] = [];
-			for (const a of this.Analytics.activity ?? []) {
+			for (const a of this.analytics.activity ?? []) {
 				for (const c of a.countries ?? []) {
 					let item = countries.find(i => i.country == c.country);
 					if (!item) {
@@ -48,13 +48,6 @@ export default defineComponent({
 			}
 
 			return countries.sort((a, b) => a.count > b.count ? -1 : 1);
-		},
-		Analytics() {
-			return this.analytics ?? {
-				count: 0,
-				activity: [],
-				lyrics: [],
-			};
 		},
 	},
 });

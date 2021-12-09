@@ -51,7 +51,6 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song, Tag } from "@/classes";
 import { tags } from "@/services/api";
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
 import { XIcon, PlusIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
@@ -66,7 +65,6 @@ export default defineComponent({
         },
     },
     data: () => ({
-        store: useStore(),
         tags: [] as Tag[],
         songTags: [] as Tag[],
         tagFilter: "",
