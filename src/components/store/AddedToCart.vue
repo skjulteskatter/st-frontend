@@ -104,7 +104,7 @@ export default defineComponent({
     async mounted() {
         this.storeService.registerHook("productsUpdated", async () => {
             this.cancel = false;
-            this.products = await storeService.getCartItems() as Product[];
+            this.products = await storeService.getCartItems();
         });
         this.storeService.registerHook("checkout", () => {
             this.checkingOut = true;

@@ -37,7 +37,12 @@
                     <img :src="i.collections.find(c => i.collectionIds.includes(c.id))?.image" class="max-h-12 rounded mr-4 inline-block" height="48" />
                     <div class="inline-block mr-4">
                         <span>{{ i.getName() }}</span>
-                        <PriceDiv class="opacity-50 text-xs" :product="i" :country="country" />
+                        <suspense>
+                            <template #fallback>{{ $t("common_loading") }}</template>
+                            <template #default>
+                                <Price class="opacity-50 text-xs" :product="i" :country="country" />
+                            </template>
+                        </suspense>
                     </div>
                     <button class="ml-auto cursor-pointer opacity-50" @click="removeProduct(i.id)">
                         <XIcon class="w-4 h-4" />
@@ -63,7 +68,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import http from "@/services/http";
-import PriceDiv from "./Price.vue";
+import Price from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/outline";
 import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
@@ -73,7 +78,7 @@ import { storeService } from "@/services/modules";
 export default defineComponent({
     name: "store-cart",
     components: {
-        PriceDiv,
+        Price,
         SwitchGroup,
         Switch,
         SwitchLabel,
