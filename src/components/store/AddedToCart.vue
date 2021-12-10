@@ -103,8 +103,9 @@ export default defineComponent({
     },
     async mounted() {
         this.storeService.registerHook("productsUpdated", async () => {
-            this.cancel = false;
             this.products = await storeService.getCartItems();
+            if(!this.products.length)
+                this.cancel = false;
         });
         this.storeService.registerHook("checkout", () => {
             this.checkingOut = true;
