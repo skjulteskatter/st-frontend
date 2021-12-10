@@ -13,7 +13,7 @@
 							<template v-for="item in Links" :key="item.name">
 								<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
 									<span class="flex items-center gap-2">
-										<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3" />
+										<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" />
 										{{ item.name }}
 									</span>
 								</router-link>
@@ -66,7 +66,12 @@
 		<DisclosurePanel class="lg:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<template v-for="item in Links" :key="item.name">
-					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</router-link>
+					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">
+						<span class="flex items-center gap-2">
+							<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" />
+							{{ item.name }}
+						</span>
+					</router-link>
 				</template>
 			</div>
 			<div class="pt-4 pb-3 border-t border-gray-300">
