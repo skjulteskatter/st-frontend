@@ -106,16 +106,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-@import "../../style/mixins";
-
-@include breakpoint("small") {
-    .refresh-button,
-    .manage-button {
-        .button__content {
-            display: none;
-        }
-    }
-}
-</style>

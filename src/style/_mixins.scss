@@ -1,25 +1,3 @@
-@mixin breakpoint($breakpoint) {
-	$breakpoints: (
-		'small': 620px,
-		'medium': 1000px,
-		'large': 1200px
-	) !default;
-
-	// If the key exists in the map
-	@if map-has-key($breakpoints, $breakpoint) {
-		// Prints a media query based on the value
-		@media (max-width: map-get($breakpoints, $breakpoint)) {
-			@content;
-		}
-	}
-
-	// If the key doesn't exist in the map
-	@else {
-		@warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
-			+ "Available breakpoints are: #{map-keys($breakpoints)}.";
-	}
-}
-
 @mixin scrollShadow($color: white) {
 	background:
 	/* Shadow covers */ linear-gradient($color 30%, rgba(255, 255, 255, 0)),

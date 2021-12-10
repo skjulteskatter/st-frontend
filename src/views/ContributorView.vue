@@ -12,32 +12,32 @@
                         />
                     </div>
                     <BaseCard class="md:col-span-3">
+                        <div class="contributor__biography__header mb-6">
+                            <BaseButton
+                                v-if="isEditor"
+                                @click="goToEditPage()"
+                                theme="tertiary"
+                                class="mb-4 hidden lg:flex"
+                            >
+                                <template #icon>
+                                    <PencilAltIcon class="w-4 h-4" />
+                                </template>
+                                {{ $t('common_edit') }}
+                            </BaseButton>
+                            <p class="text-primary">
+                                {{ $t("song_contributor") }}
+                            </p>
+                            <h1 class="font-bold text-2xl">
+                                {{ contributor.name }}
+                            </h1>
+                            <small
+                                class="text-gray-500 italic"
+                                v-if="contributor.subtitle"
+                            >
+                                {{ contributor.subtitle }}
+                            </small>
+                        </div>
                         <div class="contributor__biography">
-                            <div class="contributor__biography__header mb-6">
-                                <BaseButton
-                                    v-if="isEditor"
-                                    @click="goToEditPage()"
-                                    theme="tertiary"
-                                    class="mb-4 hidden lg:flex"
-                                >
-                                    <template #icon>
-                                        <PencilAltIcon class="w-4 h-4" />
-                                    </template>
-                                    {{ $t('common_edit') }}
-                                </BaseButton>
-                                <p class="text-primary">
-                                    {{ $t("song_contributor") }}
-                                </p>
-                                <h1 class="font-bold text-2xl">
-                                    {{ contributor.name }}
-                                </h1>
-                                <small
-                                    class="text-gray-500 italic"
-                                    v-if="contributor.subtitle"
-                                >
-                                    {{ contributor.subtitle }}
-                                </small>
-                            </div>
                             <div
                                 v-html="contributor.getBiography(languageKey)"
                                 class="text-sm"
@@ -191,16 +191,7 @@ export default defineComponent({
 
 .contributor {
     &__biography {
-        columns: auto 325px;
-
-        @include breakpoint("small") {
-            flex-direction: column;
-            align-items: initial;
-
-            .contributor__biography__header__portrait {
-                max-width: 100%;
-            }
-        }
+        columns: auto 325px !important;
 
         &__header {
             break-inside: avoid;
