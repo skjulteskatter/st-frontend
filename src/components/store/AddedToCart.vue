@@ -38,8 +38,13 @@
                         height="48"
                     >
                     <span>
-                        <p class="text-base">{{ p.getName() }}</p>
-                        <PriceDiv class="opacity-50 text-sm" :product="p"/>
+                        <h4 class="text-base">{{ p.getName() }}</h4>
+                        <suspense>
+                            <template #fallback>{{ $t("common_loading") }}</template>
+                            <template #default>
+                                <Price class="opacity-50" :product="p"/>
+                            </template>
+                        </suspense>
                     </span>
                 </div>
             </div>
@@ -50,12 +55,7 @@
             <template #footer>
                 <div class="flex gap-2 justify-end">
                     <BaseButton theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</BaseButton>
-                    <BaseButton theme="secondary" @click="checkout" :disabled="checkingOut" :loading="checkingOut">
-                        <template #icon>
-                            <ShoppingCartIcon class="w-4 h-4" />
-                        </template>
-                        {{$t('store_checkout')}}
-                    </BaseButton>
+                    <BaseButton theme="secondary" @click="checkout" :disabled="checkingOut" :loading="checkingOut">{{$t('store_checkout')}}</BaseButton>
                 </div>
             </template>
         </BaseModal>
@@ -65,7 +65,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { BaseModal } from "..";
-import PriceDiv from "./Price.vue";
+import Price from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
 import { storeService } from "@/services/modules";
@@ -76,7 +76,7 @@ export default defineComponent({
     name: "added-to-cart",
     components: {
         BaseModal,
-        PriceDiv,
+        Price,
         SwitchGroup,
         Switch,
         SwitchLabel,

@@ -15,10 +15,13 @@
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between gap-2 items-start mb-4">
                 <span>
-                    <h2 class="font-bold leading-tight mb-2">
-                        {{ product.getName() }}
-                    </h2>
-                    <price class="opacity-50" v-if="!product.owned" :product="product" />
+                    <h2 class="font-bold leading-tight mb-2">{{ product.getName() }}</h2>
+                    <suspense>
+                        <template #fallback>{{ $t("common_loading") }}</template>
+                        <template #default>
+                            <Price class="opacity-50" v-if="!product.owned" :product="product" />
+                        </template>
+                    </suspense>
                 </span>
                 <button
                     :title="$t('store_learnMore')"
