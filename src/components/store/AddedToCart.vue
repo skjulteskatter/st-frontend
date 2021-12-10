@@ -24,11 +24,11 @@
                     </SwitchGroup>
                 </div>
             </template>
-            <div class="flex flex-col gap-2 items-center py-2">
+            <div class="flex flex-col gap-2 mb-4">
                 <div
                     v-for="p in products"
                     :key="p.id"
-                    class="flex items-center"
+                    class="flex items-center p-2 rounded-md bg-black/5 dark:bg-white/5"
                 >
                     <img
                         :src="p.collections[0].image"
@@ -43,10 +43,13 @@
                     </span>
                 </div>
             </div>
+            <button @click="addAllItemsCheckout" class="opacity-50 p-4 w-full flex justify-center gap-2 items-center text-sm rounded-md hover:opacity-100 border border-transparent hover:border-black/20">
+                <ShoppingCartIcon class="w-4 h-4 opacity-50" />
+                <span>{{$t('store_allItems')}}</span>
+            </button>
             <template #footer>
-                <div class="flex gap-4 justify-end">
+                <div class="flex gap-2 justify-end">
                     <BaseButton theme="tertiary" @click="cancel = true">{{$t('store_continue')}}</BaseButton>
-                    <BaseButton theme="primary" @click="addAllItemsCheckout">{{$t('store_allItems')}}</BaseButton>
                     <BaseButton theme="secondary" @click="checkout" :disabled="checkingOut" :loading="checkingOut">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
@@ -101,7 +104,7 @@ export default defineComponent({
     async mounted() {
         this.storeService.registerHook("productsUpdated", async () => {
             this.cancel = false;
-            this.products = await storeService.getCartItems();
+            this.products = await storeService.getCartItems() as Product[];
         });
         this.storeService.registerHook("checkout", () => {
             this.checkingOut = true;
