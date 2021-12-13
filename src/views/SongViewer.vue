@@ -33,7 +33,9 @@
                                     <h3 class="font-bold">
                                         {{ $t('common_select') }} {{ $t("common_collection").toLocaleLowerCase() }}
                                     </h3>
-                                    <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">+</button>
+                                    <button aria-label="Create new collection" title="Create new collection" class="ml-auto rounded-md px-2 py-1 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 font-bold" @click="showPlaylistModal = true">
+                                        <PlusIcon class="w-4 h-4" />
+                                    </button>
                                 </div>
                             </template>
                             <CreatePlaylistModal :show="showPlaylistModal" @close="showPlaylistModal = false" />
@@ -172,7 +174,7 @@ import {
     SongSelector,
 } from "@/components/presentation";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
-import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon, PlusIcon } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
@@ -209,6 +211,7 @@ export default defineComponent({
         ArrowLeftIcon,
         PencilAltIcon,
         HeartIcon,
+        PlusIcon,
         HeartOutline,
         SwitchGroup,
         Switch,
