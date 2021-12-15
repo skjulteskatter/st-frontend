@@ -13,9 +13,14 @@
                 <h1 class="text-xl md:text-2xl font-bold">
                     {{ product.getName() }}
                 </h1>
-                <p class="text-gray-500 text-sm mb-4 dark:text-gray-400">
-                    <PriceDiv :product="product" :country="country" />
-                </p>
+                <div class="opacity-50 py-2">
+                    <suspense>
+                        <template #fallback>{{ $t("common_loading") }}</template>
+                        <template #default>
+                            <PriceDiv :product="product" :country="country" />
+                        </template>
+                    </suspense>
+                </div>
                 <div class="mb-4">
                     <BaseButton
                         theme="secondary"
