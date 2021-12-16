@@ -21,12 +21,7 @@
 					:key="c.id"
 					class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
 					:disabled="!c?.available"
-					@click="$router.push({
-						name: 'song-list',
-						params: {
-							collection: c.key,
-						}
-					})"
+					@click="c.view()"
 				>
 					<img
 						loading="lazy"
@@ -60,6 +55,7 @@ import { defineComponent } from "@vue/runtime-core";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "owned-collections",
@@ -72,7 +68,7 @@ export default defineComponent({
 	}),
 	computed: {
 		collections(): Collection[] {
-			return this.store.getters.collections.filter(c => c.available) as Collection[] ?? [];
+			return appSession.collections.filter(c => c.available && c.type === "song").sort((a, b) => b.priority - a.priority) as Collection[] ?? [];
 		},
 	},
 });

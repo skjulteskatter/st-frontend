@@ -33,6 +33,7 @@ import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import SearchResult from "@/classes/search/searchResult";
 import SearchResultItem from "@/classes/search/searchResultItem";
 import { ApiContributor } from "songtreasures";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "complete-search",
@@ -69,7 +70,7 @@ export default defineComponent({
             return this.searchResult?.songs as SearchResultItem<Song>[] ?? [];
         },
         collections(): Collection[] {
-            return this.store.getters.collections as Collection[];
+            return appSession.collections as Collection[];
         },
         languageKey() {
             return this.store.getters.languageKey;

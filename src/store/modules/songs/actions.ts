@@ -25,7 +25,7 @@ export interface Actions {
 export const actions: ActionTree<State, RootState> & Actions = {
     async [SongsActionTypes.SELECT_COLLECTION]({ state, commit, getters }, id: string): Promise<void> {
         if (!state.initialized) {
-            commit(SongsMutationTypes.COLLECTIONS, getters.collections);
+            commit(SongsMutationTypes.COLLECTIONS, appSession.collections);
         }
 
         commit(SongsMutationTypes.LANGUAGE, getters.languageKey);

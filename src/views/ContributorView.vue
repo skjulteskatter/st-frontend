@@ -135,7 +135,7 @@ export default defineComponent({
                 ) as Song[];
         },
         collections(): Collection[] {
-            return this.store.getters.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id))) as Collection[];
+            return appSession.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id))) as Collection[];
         },
         isEditor() {
             return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;

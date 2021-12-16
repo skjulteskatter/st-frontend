@@ -130,7 +130,10 @@ export class Session {
         }
 
         this._initialized = false;
-        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
+        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? [])
+        // TODO: remove filter on song;
+            .filter(c => this.user.Extended || c.type === "song")
+            .map(c => new Collection(c));
 
         const lastCacheClear = await cache.get("config", "last_cache_clear") as Date | undefined;
 
@@ -148,7 +151,7 @@ export class Session {
             await cache.set("config", "last_updated", new Date());
         }
 
-        const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
+        const ownedCols = this.collections.filter(c => c.available && c.type == "song").map(c => c.id);
 
         const previousCols = await cache.get("config", "owned_collections") as string[] | undefined;
 

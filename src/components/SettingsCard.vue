@@ -244,7 +244,7 @@ export default defineComponent({
         },
         collections() {
             const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
-            return this.store.getters.collections.filter(i => colIds.includes(i.id));
+            return appSession.collections.filter(i => colIds.includes(i.id));
         },
     },
     async mounted() {

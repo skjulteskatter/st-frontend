@@ -1,13 +1,14 @@
+import { Collection } from "@/classes";
 import Book from "@/classes/scriptures/book";
 import Chapter from "@/classes/scriptures/chapter";
-import Scripture from "@/classes/scriptures/scripture";
 import Translation from "@/classes/scriptures/translation";
 import Verse from "@/classes/scriptures/verse";
 import { scriptures } from "../api";
 import { cache } from "../cache";
+import { appSession } from "../session";
 
 export default class BaseScriptures {
-    protected scriptures: Scripture[] = [];
+    protected scriptures: Collection[] = [];
     protected translations: Translation[] = [];
     protected books: Book[] = [];
     protected chapters: Chapter[] = [];
@@ -18,14 +19,14 @@ export default class BaseScriptures {
     public async initialize() {
         if (!this._initialized && !this._initializing) {
             this._initializing = true;
-            this.scriptures = (await scriptures.getAll()).map(s => new Scripture(s));
+            this.scriptures = appSession.collections.filter(c => c.type === "scripture");
             this._initialized = true;
             this._initializing = false;
         }
     }
 
-    public async get(id: string): Promise<Scripture> {
-        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.key).contains(id));
+    public async get(id: string): Promise<Collection> {
+        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.keys).contains(id));
         if (!scripture) {
             throw new Error("Scripture not found");
         }

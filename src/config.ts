@@ -1,11 +1,3 @@
-let basePath = "https://songtreasures.azurewebsites.net/";
-
-if (process.env.NODE_ENV == "development") {
-    basePath = 
-    // "https://localhost:44301/";
-    "https://songtreasures.azurewebsites.net/";
-}
-
 export const firebaseConfig = {
     apiKey: "AIzaSyDTZsQJxCT3w7cIQzYJ6T3YxNLIF-2LEpk",
     authDomain: "songtreasures.firebaseapp.com",
@@ -16,9 +8,57 @@ export const firebaseConfig = {
     measurementId: "G-YWMEW6TKB8",
 };
 
-export default {
+const basePath = "https://songtreasures.azurewebsites.net/";
+
+const config = {
     api: {
-        basePath: basePath,
+        basePath,
     },
     firebaseConfig,
 };
+
+if (process.env.NODE_ENV === "development") {
+    const savedBasePath = localStorage.getItem("api_base_path");
+    if (savedBasePath) {
+        config.api.basePath = savedBasePath;
+    }
+
+    const localBasePath = "https://localhost:44301/";
+
+    const keyPresses = {
+        L: false,
+        CTRL: false,
+    };
+
+    const setBasePath = () => {
+        if (savedBasePath !== localBasePath) {
+            localStorage.setItem("api_base_path", localBasePath);
+        } else {
+            localStorage.setItem("api_base_path", basePath);
+        }
+        window.location.reload();
+    };
+
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "l") {
+            keyPresses.L = true;
+            if (keyPresses.CTRL) {
+                setBasePath();
+            }
+        } else if (event.key === "Control") {
+            keyPresses.CTRL = true;
+            if (keyPresses.L) {
+                setBasePath();
+            }
+        }
+    });
+    window.addEventListener("keyup", (event) => {
+        if (event.key === "l") {
+            keyPresses.L = false;
+        } else if (event.key === "Control") {
+            keyPresses.CTRL = false;
+        }
+    });
+}
+
+export default config;
