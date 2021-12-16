@@ -37,7 +37,18 @@
                 </BaseButton>
             </div>
         </div>
-        <ProductSlider class="mb-4" :products="products" v-if="products.length" />
+        <ProductSlider class="mb-4" :products="products" v-if="products.length">
+            <div class="bg-white dark:bg-secondary shadow-md rounded-lg overflow-hidden">
+                <img src="/img/Tutorials.png" alt="" class="w-full cursor-pointer">
+                <div class="border-t border-gray-300 dark:bg-secondary dark:border-none p-4">
+                    <div class="flex gap-4 justify-between items-center">
+                        <h3 class="font-bold">Tutorials</h3>
+                        <span class="uppercase text-xs rounded-md bg-green-500/20 px-2 py-1 text-green-700">{{ $t("free") }}</span>
+                    </div>
+                    <p class="opacity-50 mt-2 text-sm">Learn how to play with our free tutorials!</p>
+                </div>
+            </div>
+        </ProductSlider>
     </div>
 </template>
 
