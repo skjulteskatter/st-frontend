@@ -53,7 +53,7 @@ export default defineComponent({
     emits: ["apply"],
     data: () => ({
         store: useStore(),
-        videoTypes: ["karaoke"],
+        videoTypes: ["karaoke", "tutorial"],
         audioTypes: [
             "gathering",
             "studio",
