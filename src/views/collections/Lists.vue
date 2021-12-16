@@ -33,7 +33,7 @@ export default defineComponent({
     computed: {
         collection(): Collection {
             return this.store.getters.collection;
-        }
+        },
     },
     methods: {
         async loadCollection() {
