@@ -9,16 +9,32 @@ export class PresentationControl extends PresentationBase {
             addEventListener("keydown", (e) => {
                 if (e.key == "ArrowRight") {
                     this.next();
+                    return;
                 }
                 if (e.key == "ArrowLeft") {
                     this.previous();
+                    return;
                 }
 
                 if (e.ctrlKey && e.key === "o") {
                     this.open();
+                    return;
                 }
                 if (e.ctrlKey && e.key === "m") {
                     this.mute();
+                    return;
+                }
+
+                if (e.key === "Home") {
+                    this.firstPage();
+                    e.preventDefault();
+                    return;
+                }
+
+                if (e.key === "End") {
+                    this.lastPage();
+                    e.preventDefault();
+                    return;
                 }
             });
         }

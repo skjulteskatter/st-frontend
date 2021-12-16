@@ -240,6 +240,28 @@ export class PresentationBase {
         }
     }
 
+    public firstPage(): void {
+        if (this.settings) {
+            const settings = Object.assign({}, this.settings);
+            settings.currentIndex = 0;
+            settings.muted = false;
+            this.settings = settings;
+            this.commit();
+            this.executeCallback("control");
+        }
+    }
+
+    public lastPage(): void {
+        if (this.settings) {
+            const settings = Object.assign({}, this.settings);
+            settings.currentIndex = this.AvailableVerses.length - settings.size;
+            settings.muted = true;
+            this.settings = settings;
+            this.commit();
+            this.executeCallback("control");
+        }
+    }
+
     public toggleSidebar() {
         const settings = Object.assign({}, this.settings);
         settings.showSideBar = !settings.showSideBar;
