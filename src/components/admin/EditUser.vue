@@ -87,6 +87,7 @@ import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
 import { User } from "@/classes";
 import { ISubscription } from "songtreasures";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "edit-user",
@@ -137,10 +138,10 @@ export default defineComponent({
 			this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
 		},
 		getCollections(subscription: ISubscription) {
-			return this.store.getters.collections.filter(i => subscription.collectionIds?.includes(i.id));
+			return appSession.collections.filter(i => subscription.collectionIds?.includes(i.id));
 		},
 		getUnownedCollections(subscriptions: ISubscription[]) {
-			return this.store.getters.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
+			return appSession.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
 		},
 		async addSubscriptions(user: User) {
 			const cols = [];

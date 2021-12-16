@@ -45,10 +45,10 @@
 import { defineComponent } from "@vue/runtime-core";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
-import { useStore } from "@/store";
 import { notify } from "@/services/notify";
 import { Product } from "@/classes";
 import { storeService } from "@/services/modules";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "collections-home",
@@ -59,7 +59,6 @@ export default defineComponent({
         CreditCardIcon,
     },
     data: () => ({
-        store: useStore(),
         loading: false,
         loadingSubs: false,
         products: [] as Product[],
@@ -72,7 +71,7 @@ export default defineComponent({
             return this.products.filter((p) => !this.productIds.includes(p.id));
         },
         user() {
-            return useStore().getters.user;
+            return appSession.user;
         },
         productIds() {
             const ids: string[] = [];

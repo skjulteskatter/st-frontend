@@ -79,7 +79,7 @@ export default defineComponent({
 			return this.$route.params.id as string | undefined;
 		},
 		collections() {
-			return this.store.getters.collections;
+			return appSession.collections;
 		},
 		MostViewed() {
 			const mostViewed = Object.keys(this.mostViewed);

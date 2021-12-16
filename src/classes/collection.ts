@@ -7,6 +7,7 @@ import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import router from "@/router";
 import SongFilter from "./songFilter";
+import LocaleString from "./localeString";
 
 type CollectionSettings = {
     offline: boolean;
@@ -17,8 +18,9 @@ export default class Collection extends BaseClass implements ICollection {
     public id;
     private _key;
     public enabled;
+    public type;
     public freeSongs;
-    public keys: ILocaleString;
+    public keys;
     public defaultType;
 
     private _defaultSort: Sort;
@@ -81,13 +83,14 @@ export default class Collection extends BaseClass implements ICollection {
         super();
         this._key = collection.key;
         this.enabled = collection.enabled;
+        this.type = collection.type;
         this.freeSongs = collection.freeSongs;
-        this.keys = collection.keys ?? {};
+        this.keys = new LocaleString(collection.keys ?? {});
         this.defaultType = collection.defaultType;
         this._defaultSort = collection.defaultSort;
         this.listType = this.defaultSort;
         this.id = collection.id;
-        this.name = collection.name;
+        this.name = new LocaleString(collection.name ?? {});
         this.image = collection.image;
         this._available = collection.available;
         this.details = collection.details;
@@ -415,5 +418,29 @@ export default class Collection extends BaseClass implements ICollection {
             }
         }
         return this._lists[value];
+    }
+
+    public view() {
+        if (this.type === "song") {
+            router.push({
+                name: "song-list",
+                params: {
+                    collection: this.key ?? this.id,
+                },
+            });
+        }
+
+        if (this.type === "scripture") {
+            router.push({
+                name: "book-list",
+                params: {
+                    scriptureId: this.keys.default,
+                },
+            });
+        }
+    }
+
+    public get title() {
+        return this.name;
     }
 }

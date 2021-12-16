@@ -28,12 +28,12 @@
 </template>
 <script lang="ts">
 import { Book, Chapter, Translation } from "@/classes/scriptures";
-import Scripture from "@/classes/scriptures/scripture";
 import scriptures from "@/services/modules/scriptures";
 import { appSession } from "@/services/session";
 import { SelectTranslation } from "@/components/scriptures";
 import { defineComponent } from "@vue/runtime-core";
 import { ChevronRightIcon } from "@heroicons/vue/outline";
+import { Collection } from "@/classes";
 
 export default defineComponent({
     name: "scripture-view",
@@ -43,7 +43,7 @@ export default defineComponent({
     },
     data() {
         return {
-            scripture: null as Scripture | null,
+            scripture: null as Collection | null,
             translation: null as Translation | null,
             translations: null as Translation[] | null,
             languages: null as Language[]| null,

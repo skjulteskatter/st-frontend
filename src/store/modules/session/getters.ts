@@ -1,15 +1,12 @@
-import { Collection, User } from "@/classes";
+import { User } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
 import { IActivity, ICustomCollection } from "songtreasures";
 import { Activity } from "@/classes/activity";
-import { appSession } from "@/services/session";
 
 
 export type Getters = {
-    allCollections(state: State): Collection[];
-    collections(state: State): Collection[];
     user(state: State): User | undefined;
     initialized(state: State): boolean;
     isAdmin(state: State): boolean;
@@ -20,23 +17,6 @@ export type Getters = {
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
-    allCollections(): Collection[] {
-        return appSession.collections;
-    },
-    collections(state): Collection[] {
-        if (state.currentUser) {
-            return appSession.collections;
-            // if (state.currentUser.roles.some(r => ["administrator", "extended"].includes(r))) {
-            //     return state.collections;
-            // }
-            // const subscriptions = state.currentUser.subscriptions;
-            // return state.collections.filter(c => subscriptions
-            //     .map(s => s.collectionIds)
-            //     .some(i => i.includes(c.id)));
-        } else {
-            return [];
-        }
-    },
     user(state) {
         return state.currentUser;
     },
