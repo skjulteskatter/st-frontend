@@ -68,7 +68,7 @@ export default defineComponent({
 	}),
 	computed: {
 		collections(): Collection[] {
-			return appSession.collections.filter(c => c.available) as Collection[] ?? [];
+			return appSession.collections.filter(c => c.available && c.type === "song") as Collection[] ?? [];
 		},
 	},
 });
