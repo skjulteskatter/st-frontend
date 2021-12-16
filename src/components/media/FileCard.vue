@@ -5,11 +5,12 @@
 		@click="callback"
 		:title="$t(`types_${file.type}`)"
 	>
-		<h3 class="font-semibold">{{ file.name }}</h3>
+		<h3 class="font-semibold">{{ song?.getName() }}</h3>
 		<span class="w-max flex gap-2 items-center mt-2 px-2 py-1 rounded-md bg-black/5 uppercase text-xs tracking-wider">
 			<component :is="icon" class="w-4 h-4 opacity-50" />
 			<span v-if="file.category">{{ $t(`types_${file.category}`) }}</span>
 		</span>
+		<!-- TODO: add link to song if .available -->
 	</button>
 </template>
 
@@ -21,6 +22,7 @@ import { Collection } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "file-card",
@@ -43,6 +45,9 @@ export default defineComponent({
 	computed: {
 		icon() {
 			return this.file.type == "video" ? "PlayIcon" : "VolumeUpIcon";
+		},
+		song() {
+			return appSession.songs.find(s => s.id == this.file.songId);
 		},
 	},
 	methods: {

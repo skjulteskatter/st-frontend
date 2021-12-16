@@ -1,9 +1,10 @@
 <template>
     <section>
         <!-- TODO: Header should be the same for SongList and this (?) -->
-        <h1 class="font-bold text-xl md:text-2xl mb-4">{{ $t("types_video") }}</h1>
+        <h1 class="font-bold text-xl md:text-2xl mb-4">Files</h1>
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <FileCard v-for="file in videos" :key="file.id" :file="file" @selectVideo="selectVideo" />
+            <FileCard v-for="file in audio" :key="file.id" :file="file" />
         </div>
         <BaseModal :show="showVideo" @close="closeVideo()">
             <video :src="videoUrl" autoplay controls>

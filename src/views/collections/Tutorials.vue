@@ -3,6 +3,7 @@
         <!-- TODO: Header should be the same for SongList and this (?) -->
         <h1 class="font-bold text-xl md:text-2xl mb-4">{{ $t("types_tutorial") }}</h1>
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <!-- TODO: sort by collections -->
             <FileCard v-for="file in videos" :key="file.id" :file="file" @selectVideo="selectVideo" />
         </div>
         <BaseModal :show="showVideo" @close="closeVideo()">
