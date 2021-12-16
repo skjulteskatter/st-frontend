@@ -35,6 +35,23 @@
 						{{ c.getName() }}
 					</span>
 				</button>
+				<button
+					class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
+					@click="$router.push({ name: 'tutorials' })"
+				>
+					<img
+						loading="lazy"
+						src="/img/Tutorials.png"
+						alt="Tutorials"
+						class="max-h-10 rounded border"
+						width="40"
+						height="40"
+					/>
+					<span class="text-xs font-medium tracking-wide flex justify-between items-center">
+						Tutorials
+					</span>
+					<span class="w-2 h-2 rounded-full bg-green-500"></span>
+				</button>
 			</div>
 			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md flex flex-col items-center">
 				<div class="mb-4 p-4 rounded-full bg-black/5 dark:bg-white/5">
@@ -68,7 +85,7 @@ export default defineComponent({
 	}),
 	computed: {
 		collections(): Collection[] {
-			return appSession.collections.filter(c => c.available && c.type === "song") as Collection[] ?? [];
+			return appSession.collections.filter(c => c.available && c.type === "song").sort((a, b) => b.priority - a.priority) as Collection[] ?? [];
 		},
 	},
 });

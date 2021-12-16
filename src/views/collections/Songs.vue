@@ -5,14 +5,15 @@
                 <BackButton class="mb-4" to="/collections" />
                 <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                     <h1 class="font-bold text-2xl md:text-3xl">
-                        {{ collection.name[languageKey] }}
+                        {{ collection.name.default }}
                     </h1>
-                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <!-- <BaseButton theme="secondary" @click="collection?.Product.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_buy') }}
-                    </BaseButton>
+                    </BaseButton> -->
+                    <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                         <ViewBoardsIcon class="w-5 h-5" v-else />
@@ -119,7 +120,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { CollectionItem, ListEntry, Song } from "@/classes";
+import { Collection, CollectionItem, ListEntry, Song } from "@/classes";
 import { SongListCard } from "@/components/songs";
 import {
     ButtonGroup,
@@ -128,30 +129,36 @@ import {
     SongFilterSelect,
 } from "@/components/inputs";
 import { BackButton, BaseModal } from "@/components";
-import { ShoppingCartIcon, CheckIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
+import { 
+    //ShoppingCartIcon, 
+    CheckIcon, 
+    ViewGridIcon, 
+    ViewBoardsIcon,
+} from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "song-list",
     components: {
-        SongListCard,
-        ButtonGroup,
-        SongFilterDropdown,
-        SongFilterSelect,
-        BackButton,
-        BaseModal,
-        SearchInput,
-        ShoppingCartIcon,
-        CheckIcon,
-        ViewGridIcon,
-        ViewBoardsIcon,
-        LockClosedIcon,
-    },
+    SongListCard,
+    ButtonGroup,
+    SongFilterDropdown,
+    SongFilterSelect,
+    BackButton,
+    BaseModal,
+    SearchInput,
+    // ShoppingCartIcon,
+    CheckIcon,
+    ViewGridIcon,
+    ViewBoardsIcon,
+    LockClosedIcon,
+},
     data: () => ({
         store: useStore(),
         searchString: "",
@@ -159,10 +166,14 @@ export default defineComponent({
         list: [] as ListEntry[],
         loadingList: false,
         showCta: false,
+        showFiles: false,
     }),
     computed: {
         isAdmin() {
             return this.store.getters.isAdmin;
+        },
+        hasFiles() {
+            return appSession.files.some(f => this.songs.some(s => s.id === f.songId));
         },
         searchNumber() {
             return this.searchString.replace(/[^0-9]/g, "");
@@ -199,7 +210,7 @@ export default defineComponent({
             },
         },
         collection() {
-            return this.store.getters.collection;
+            return this.store.getters.collection as Collection;
         },
         languageKey() {
             return this.store.getters.languageKey;
@@ -207,10 +218,12 @@ export default defineComponent({
     },
     async mounted() {
         await this.loadCollection();
+        // await this.loadFiles();
     },
     updated() {
         if (this.$route.params.collection !== this.cId) {
             this.loadCollection();
+            // this.loadFiles();
         }
     },
     methods: {
@@ -281,21 +294,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-@keyframes fade-in {
-    0% {opacity: 0;}
-    100% {opacity: unset;}
-}
-
-.song-list {
-    animation: fade-in 0.1s linear;
-
-    &__items {
-        columns: 325px;
-        column-gap: var(--st-spacing);
-    }
-}
-</style>

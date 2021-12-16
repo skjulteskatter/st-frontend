@@ -58,6 +58,7 @@ declare module "songtreasures" {
         id: string;
         enabled: boolean;
         type: CollectionType;
+        priority: number;
         defaultType: string;
         defaultSort: Sort;
         freeSongs: boolean;
@@ -191,12 +192,11 @@ declare module "songtreasures" {
 
     type MediaType = "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
 
-    interface MediaFile {
+    interface IMediaFile {
         id: string;
         songId: string;
         name: string;
         type: MediaType;
-        collectionIds: string[];
         category: string;
         number: number;
         languageKey: string;

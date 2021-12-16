@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, MediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse } from "songtreasures";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse } from "songtreasures";
 import http from "./http";
 
 export const activity = {
@@ -152,14 +152,14 @@ export const songs = {
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
-    getFiles(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
+    getFiles(lastUpdated?: string) {
+        return http.getWithResult<IMediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
     },
     getFile(fileId: string) {
-        return http.get<MediaFile>(`api/Files/${fileId}?expand=song`);
+        return http.get<IMediaFile>(`api/Files/${fileId}?expand=song`);
     },
     getSongFiles(songId: string) {
-        return http.get<MediaFile[]>(`api/Files?songId=${songId}&type=sheetmusic-pdf`);
+        return http.get<IMediaFile[]>(`api/Files?songId=${songId}&type=sheetmusic-pdf`);
     },
     getSongLyrics(songId: string, language: string, format: Format, transpose: number, transcode: string, newMelody = false) {
         return http.get<ILyrics>(`api/Songs/${songId}/Lyrics?language=${language}&format=${format}&transpose=${transpose}&transcode=${transcode}&newMelody=${newMelody}`);

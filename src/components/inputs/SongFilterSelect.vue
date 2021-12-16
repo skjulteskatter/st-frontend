@@ -32,7 +32,7 @@ export default defineComponent({
 				"demo",
 				"playback",
 			],
-			video: ["karaoke"],
+			video: ["karaoke", "tutorial"],
 			sheetmusic: ["leadsheet", "5part"],
 		} as FilterValues,
 	}),

@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-2">
         <button
             class="cursor-pointer p-2 rounded-md hover:bg-black/5 flex focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none dark:hover:bg-white/10"
-            v-for="file in Files"
+            v-for="file in files"
             :key="file.id"
             @click="callback ? callback(file) : undefined"
         >
@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { useStore } from "@/store";
-import { MediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
             default: "sheetmusic",
         },
         files: {
-            type: Array as PropType<MediaFile[]>,
+            type: Array as PropType<IMediaFile[]>,
             required: true,
         },
         callback: {
@@ -52,9 +52,6 @@ export default defineComponent({
         store: useStore(),
     }),
     computed: {
-        Files() {
-            return this.files ?? [];
-        },
         languageKey() {
             return this.store.getters.languageKey;
         },
