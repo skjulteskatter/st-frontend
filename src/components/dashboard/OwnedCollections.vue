@@ -21,12 +21,7 @@
 					:key="c.id"
 					class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
 					:disabled="!c?.available"
-					@click="$router.push({
-						name: 'song-list',
-						params: {
-							collection: c.key,
-						}
-					})"
+					@click="c.view()"
 				>
 					<img
 						loading="lazy"
@@ -42,7 +37,9 @@
 				</button>
 			</div>
 			<router-link to="/collections" v-else class="p-8 hover:bg-black/5 dark:hover:bg-white/10 rounded-md flex flex-col items-center">
-				<CollectionIcon class="w-10 h-10 mb-4 opacity-50" />
+				<div class="mb-4 p-4 rounded-full bg-black/5 dark:bg-white/5">
+					<CollectionIcon class="w-6 h-6 opacity-50" />
+				</div>
 				<small class="text-xs tracking-wide text-center">{{$t('dashboard_noCollections')}}</small>
 				<p class="font-semibold flex gap-2 items-center">
 					{{ $t('dashboard_goToCollections') }}
@@ -55,9 +52,10 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/solid";
+import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "owned-collections",
@@ -70,7 +68,7 @@ export default defineComponent({
 	}),
 	computed: {
 		collections(): Collection[] {
-			return this.store.getters.collections.filter(c => c.available) as Collection[] ?? [];
+			return appSession.collections.filter(c => c.available) as Collection[] ?? [];
 		},
 	},
 });

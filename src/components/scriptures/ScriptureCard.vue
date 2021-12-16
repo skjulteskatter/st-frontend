@@ -7,13 +7,13 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { Scripture } from "@/classes/scriptures";
+import { Collection } from "@/classes";
 
 export default defineComponent({
     name: "scripture-card",
     props: {
         scripture: {
-            type: Object as PropType<Scripture>,
+            type: Object as PropType<Collection>,
         },
     },
 });

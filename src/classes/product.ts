@@ -1,6 +1,7 @@
 import { ApiProduct } from "checkout";
 import BaseClass from "./baseClass";
 import { Collection } from ".";
+import { appSession } from "@/services/session";
 
 const discountedCountries = [
     "AR",
@@ -54,9 +55,9 @@ export default class Product extends BaseClass implements ApiProduct {
     public priority;
     public collectionIds;
 
-    constructor(product: ApiProduct, collections: Collection[]) {
+    constructor(product: ApiProduct) {
         super();
-        this._collections = collections?.filter(c => product.collectionIds.includes(c.id));
+        this._collections = appSession.collections?.filter(c => product.collectionIds.includes(c.id));
         this.id = product.id;
         this.name = this._collections[0]?.name ?? {};
         this.prices = product.prices;

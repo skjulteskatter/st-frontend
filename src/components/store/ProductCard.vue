@@ -9,16 +9,19 @@
                 height="250"
                 :src="image"
                 @click="goToCollection"
-                :alt="product.getName(languageKey)"
+                :alt="product.getName()"
             />
         </div>
         <div class="w-full p-4 bg-white flex flex-col flex-grow justify-between border-t border-gray-300 dark:bg-secondary dark:border-none">
             <div class="flex justify-between gap-2 items-start mb-4">
                 <span>
-                    <h2 class="font-bold leading-tight mb-2">
-                        {{ product.getName(languageKey) }}
-                    </h2>
-                    <price class="opacity-50" v-if="!product.owned" :product="product" :country="languageKey" />
+                    <h2 class="font-bold leading-tight mb-2">{{ product.getName() }}</h2>
+                    <suspense>
+                        <template #fallback>{{ $t("common_loading") }}</template>
+                        <template #default>
+                            <Price class="opacity-50" v-if="!product.owned" :product="product" />
+                        </template>
+                    </suspense>
                 </span>
                 <button
                     :title="$t('store_learnMore')"
@@ -45,13 +48,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType, ref } from "@vue/runtime-core";
 import { Product } from "@/classes";
-import { useStore } from "@/store";
 import Price from "./Price.vue";
 import { ShoppingCartIcon, CheckIcon, LockClosedIcon } from "@heroicons/vue/solid";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
 import { appSession } from "@/services/session";
+import { storeService } from "@/services/modules";
 
 export default defineComponent({
     name: "product-card",
@@ -65,27 +68,26 @@ export default defineComponent({
     props: {
         product: {
             type: Object as PropType<Product>,
+            required: true,
         },
     },
-    data: () => ({
-        store: useStore(),
-    }),
+    setup(props) {
+        const inCart = ref(false);
+
+        storeService.registerHook("productsUpdated", async () => {
+           inCart.value = await storeService.contains(props.product.id);
+        });
+
+        return {
+            inCart,
+            storeService,
+        };
+    },
     computed: {
-        inCart() {
-            return this.product
-                ? this.store.state.stripe.cart.includes(this.product.id)
-                : false;
-        },
-        isAvailable() {
-            return this.collection?.available;
-        },
         image() {
             return this.collection?.image
                 ? `${this.collection?.image}?w=300&q=50`
                 : "/img/placeholder.png";
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
         },
         collection() {
             return appSession.collections.find(
@@ -95,7 +97,7 @@ export default defineComponent({
     },
     methods: {
         addToCart() {
-            this.collection?.addToCart();
+            this.storeService.addProduct(this.product?.id);
         },
         goToCollection() {
             const collectionKey = this.collection?.key;

@@ -2,11 +2,7 @@
     <div>
         <div class="flex justify-between items-center mb-4">
             <h1 class="font-bold text-xl lg:text-2xl">{{ $t("common_settings") }}</h1>
-            <BaseButton
-                theme="error"
-                @click="logout"
-                class="settings-page__logout"
-            >
+            <BaseButton theme="error" @click="logout">
                 <template #icon>
                     <LogoutIcon class="w-4 h-4" />
                 </template>
@@ -85,17 +81,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss" >
-@import "../style/mixins";
-
-.settings-page {
-    &__logout {
-        @include breakpoint("small") {
-            .button__content {
-                display: none;
-            }
-        }
-    }
-}
-</style>

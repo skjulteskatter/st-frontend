@@ -5,23 +5,22 @@ import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
-import { StripeMutationTypes } from "@/store/modules/stripe/mutation-types";
 import router from "@/router";
 import SongFilter from "./songFilter";
+import LocaleString from "./localeString";
 
 type CollectionSettings = {
     offline: boolean;
     lastSynced?: string;
 }
 
-let closeId: string | null = null;
-
 export default class Collection extends BaseClass implements ICollection {
     public id;
     private _key;
     public enabled;
+    public type;
     public freeSongs;
-    public keys: ILocaleString;
+    public keys;
     public defaultType;
 
     private _defaultSort: Sort;
@@ -84,13 +83,14 @@ export default class Collection extends BaseClass implements ICollection {
         super();
         this._key = collection.key;
         this.enabled = collection.enabled;
+        this.type = collection.type;
         this.freeSongs = collection.freeSongs;
-        this.keys = collection.keys ?? {};
+        this.keys = new LocaleString(collection.keys ?? {});
         this.defaultType = collection.defaultType;
         this._defaultSort = collection.defaultSort;
         this.listType = this.defaultSort;
         this.id = collection.id;
-        this.name = collection.name;
+        this.name = new LocaleString(collection.name ?? {});
         this.image = collection.image;
         this._available = collection.available;
         this.details = collection.details;
@@ -228,38 +228,7 @@ export default class Collection extends BaseClass implements ICollection {
         return this._loading;
     }
 
-    public get product() {
-        return this.store.state.stripe.products.find(p => p.collectionIds.includes(this.id));
-    }
-
-    // public get owned() {
-    //     const prod = this.product;
-
-    //     return prod && this.store.getters.user?.subscriptions.some(s => s.productIds.includes(prod.id));
-    // }
-
-    public get inCart() {
-        return this.product ? this.store.state.stripe.cart.includes(this.product?.id) : false;
-    }
-
-    public addToCart() {
-        const prod = this.product;
-        this.store.commit(StripeMutationTypes.CART_ADD_PRODUCT, prod?.id);
-
-        if (this.store.state.stripe.cart.length > 1) {
-            this.store.commit(StripeMutationTypes.CART_SHOW, true);
-            closeId = this.id;
-
-            setTimeout(() => {
-                if (closeId !== null && closeId === this.id) {
-                    this.store.commit(StripeMutationTypes.CART_SHOW, false);
-                    closeId = null;
-                }
-            }, 3000);
-        }
-    }
-
-    public getDetails(language: string){
+    public getDetails(language?: string){
         return this.getTranslatedProperty(this.details, language);
     }
 
@@ -449,5 +418,29 @@ export default class Collection extends BaseClass implements ICollection {
             }
         }
         return this._lists[value];
+    }
+
+    public view() {
+        if (this.type === "song") {
+            router.push({
+                name: "song-list",
+                params: {
+                    collection: this.key ?? this.id,
+                },
+            });
+        }
+
+        if (this.type === "scripture") {
+            router.push({
+                name: "book-list",
+                params: {
+                    scriptureId: this.keys.default,
+                },
+            });
+        }
+    }
+
+    public get title() {
+        return this.name;
     }
 }

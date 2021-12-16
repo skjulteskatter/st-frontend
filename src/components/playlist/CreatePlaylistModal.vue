@@ -10,12 +10,17 @@
 				v-model="playlistName"
 				required
 			/>
-			<BaseButton :loading="loading" theme="secondary" type="submit">
-				<template #icon>
-					<CheckIcon class="w-4 h-4" />
-				</template>
-				Ok
-			</BaseButton>
+			<div class="grid grid-cols-2 gap-2">
+				<BaseButton theme="neutral" @click="$emit('close')">
+					{{ $t("common_cancel") }}
+				</BaseButton>
+				<BaseButton :loading="loading" theme="secondary" type="submit">
+					<template #icon>
+						<CheckIcon class="w-4 h-4" />
+					</template>
+					Ok
+				</BaseButton>
+			</div>
 		</form>
 	</BaseModal>
 </template>

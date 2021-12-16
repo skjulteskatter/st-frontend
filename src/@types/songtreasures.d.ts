@@ -52,9 +52,12 @@ declare module "songtreasures" {
 
     type Format = "json" | "performance";
 
+    type CollectionType = "song" | "scripture" | "publication";
+
     interface ICollection {
         id: string;
         enabled: boolean;
+        type: CollectionType;
         defaultType: string;
         defaultSort: Sort;
         freeSongs: boolean;

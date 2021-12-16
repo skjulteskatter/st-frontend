@@ -5,7 +5,7 @@
                 <span class="opacity-50 text-lg mr-2">{{ song.getNumber(song.collectionIds[0]) }}</span>
                 <div class="flex flex-col">
                     <h1 class="font-bold text-lg mb-1 leading-tight">{{ song.getName(languageKey) }}</h1>
-                    <span class="text-gray-400 text-sm tracking-wide leading-snug flex flex-col">
+                    <span class="text-gray-400 text-sm md:text-base tracking-wide leading-snug md:leading-tight flex flex-col">
                         <small v-if="Authors.length">
                             <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
                             <span
@@ -209,51 +209,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "../style/mixins";
-
 .sheetmusic-viewer {
     min-height: 100vh;
     max-width: 1600px;
     margin: auto;
     padding-bottom: 3em;
-
-    &__info {
-        margin-bottom: var(--st-spacing);
-
-        &__author,
-        &__composer {
-            color: var(--st-color-primary);
-            margin: 0.5em 0;
-        }
-
-        &__title {
-            margin-top: 0;
-            margin-bottom: calc(var(--st-spacing) / 2);
-        }
-    }
-}
-
-#pb-canvas .control-panel {
-    background-color: var(--st-color-background-medium);
-    border-radius: var(--st-border-radius);
-    width: 350px;
-    left: unset;
-}
-
-.sheetmusic-controlpanel {
-    position: fixed;
-    bottom: calc(var(--st-spacing) * 2);
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: var(--st-spacing);
-
-    @include breakpoint("small") {
-        bottom: var(--st-spacing);
-    }
 }
 
 .sheetmusic-wrapper {
@@ -264,17 +224,5 @@ export default defineComponent({
 #pb-canvas {
     width: 100%;
     text-align: center;
-}
-
-.pbcontrol-toggle {
-    position: fixed;
-    z-index: 50;
-    bottom: 10px;
-
-    @include breakpoint("small") {
-        .button__content {
-            display: none;
-        }
-    }
 }
 </style>

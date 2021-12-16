@@ -1,5 +1,5 @@
 <template>
-	<Loader :loading="!(user && initialized)">
+	<Loader :loading="!(initialized && user)">
 		<div class="flex flex-col h-full">
 			<TheNavbar />
 			<main class="flex-grow">
@@ -95,7 +95,6 @@ import PrivacyPolicyAccept from "@/components/PrivacyPolicyAccept.vue";
 import AddedToCart from "@/components/store/AddedToCart.vue";
 import themes from "@/classes/themes";
 import { notify } from "@/services/notify";
-import { StripeActionTypes } from "@/store/modules/stripe/action-types";
 import { cache } from "@/services/cache";
 import { XIcon } from "@heroicons/vue/solid";
 
@@ -152,11 +151,6 @@ export default defineComponent({
         if (!this.user) {
             this.$router.push({ name: "login-view" });
         } else {
-            if (!this.store.getters.stripeInitialized) {
-                await this.store.dispatch(
-                    StripeActionTypes.SETUP,
-                );
-            }
             await appSession.init();
         }
     },

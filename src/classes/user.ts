@@ -38,4 +38,12 @@ export default class User implements IUser {
     public async saveProfile() {
         await session.saveProfile({});
     }
+
+    public get Admin() {
+        return this.roles.includes("administrator");
+    }
+
+    public get Extended() {
+        return this.roles.includes("extended") || this.Admin;
+    }
 }

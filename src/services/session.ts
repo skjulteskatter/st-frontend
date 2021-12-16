@@ -13,7 +13,7 @@ import {
 } from "@/classes";
 import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, ShareKey } from "songtreasures";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
-import { analytics as googleAnalytics } from "./auth";
+import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
@@ -130,7 +130,10 @@ export class Session {
         }
 
         this._initialized = false;
-        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? []).map(c => new Collection(c));
+        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? [])
+        // TODO: remove filter on song;
+            .filter(c => this.user.Extended || c.type === "song")
+            .map(c => new Collection(c));
 
         const lastCacheClear = await cache.get("config", "last_cache_clear") as Date | undefined;
 
@@ -148,7 +151,7 @@ export class Session {
             await cache.set("config", "last_updated", new Date());
         }
 
-        const ownedCols = this.collections.filter(c => c.available).map(c => c.id);
+        const ownedCols = this.collections.filter(c => c.available && c.type == "song").map(c => c.id);
 
         const previousCols = await cache.get("config", "owned_collections") as string[] | undefined;
 
@@ -353,6 +356,14 @@ export class Session {
             this.keys = [];
         }
         return this.Keys;
+    }
+
+    public get Language() {
+        return this._user?.settings.languageKey ?? "en";
+    }
+
+    public async clear() {
+        await auth.logout();
     }
 }
 

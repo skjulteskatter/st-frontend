@@ -1,18 +1,12 @@
 import { stripe as api } from "@/services/api";
 import  { loadStripe, Stripe } from "@stripe/stripe-js";
 
-class StripeService {
+export default class StripeService {
     private service: Stripe | null = null;
-    private key = "";
+    private key;
 
-    public async init(publicKey: string) {
-        this.key = publicKey;
-        // const stripe = await loadStripe(publicKey);
-        // if (stripe === null) {
-        //     throw new Error("Stripe failed to load");
-        // }
-
-        // this.service = stripe;
+    constructor(key: string) {
+        this.key = key;
     }
 
     public setup() {
@@ -37,7 +31,3 @@ class StripeService {
         return api.refreshSubscriptions();
     }
 }
-
-const stripeService = new StripeService();
-
-export default stripeService;

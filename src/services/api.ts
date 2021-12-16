@@ -147,7 +147,7 @@ export const songs = {
         return http.get<ISong>("api/Songs/Id/" + songId + (expand ? "?expand=" + expand : ""));
     },
     getCollections() {
-        return http.get<ICollection[]>("api/Collections");
+        return http.get<ICollection[]>("api/Collections?allCollections=true");
     },
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
@@ -338,7 +338,7 @@ export const scriptures = {
         return http.get<ITranslation[]>(`api/Scriptures/${scriptureId}/Translations`);
     },
     getTranslation(id: string) {
-        return http.get<ITranslation>(`api/Translation/${id}`);
+        return http.get<ITranslation>(`api/Scriptures/Translation/${id}`);
     },
     getBooks(translationId: string) {
         return http.get<IBook[]>(`api/Scriptures/Translation/${translationId}/Books`);

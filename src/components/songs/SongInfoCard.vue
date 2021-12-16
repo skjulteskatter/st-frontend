@@ -10,7 +10,7 @@
                     class="text-sm text-primary hover:underline"
                     v-if="collection"
                 >
-                    {{ collection.getName(Language) }}
+                    {{ collection.getName(language) }}
                 </router-link>
                 <router-link v-if="isAdmin" :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
                     {{ $t('song_seeStatistics') }}
@@ -77,7 +77,7 @@
                             identicalCopyright
                         "
                     >
-                        © {{ getLocaleString(song.copyright.melody.name) }}
+                        © {{ song.copyright.melody.getName(language) }}
                     </small>
                     <div v-else>
                         <small
@@ -85,14 +85,14 @@
                             v-if="song.copyright.text"
                         >
                             {{ $t("song_text") }} ©:
-                            {{ getLocaleString(song.copyright.text.name) }}
+                            {{ song.copyright.text.getName(language) }}
                         </small>
                         <small
                             class="flex gap-2"
                             v-if="song.copyright.melody"
                         >
                             {{ $t("song_melody") }} ©:
-                            {{ getLocaleString(song.copyright.melody.name) }}
+                            {{ song.copyright.melody.getName(language) }}
                         </small>
                     </div>
                     <small class="flex gap-2">
@@ -135,14 +135,24 @@ export default defineComponent({
         EyeIcon,
     },
     props: {
-        languageKey: {
+        language: {
             type: String,
+            required: true,
         },
         song: {
             type: Object as PropType<Song>,
+            required: true,
+        },
+        collection: {
+            type: Object as PropType<Collection>,
+            required: true,
         },
         viewCount: {
             type: Number,
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
         },
     },
     data: () => ({
@@ -151,26 +161,12 @@ export default defineComponent({
         showDescription: false,
     }),
     computed: {
-        Language() {
-            return this.languageKey ?? "en";
-        },
-        isAdmin() {
-            return this.store.getters.isAdmin;
-        },
-        collection(): Collection | undefined {
-            const id = this.store.state.songs.collectionId;
-            if (!id) return undefined;
-            const collection = this.store.state.songs.collections.find((c) =>
-                Object.values(c.keys).includes(id),
-            );
-            return collection as Collection;
-        },
         title() {
-            return this.song?.getName(this.Language);
+            return this.song?.getName(this.language);
         },
         melodyOrigin() {
             return (
-                this.song?.melodyOrigin?.description?.[this.Language] ??
+                this.song?.melodyOrigin?.description?.[this.language] ??
                 this.song?.melodyOrigin?.description?.no ??
                 undefined
             );
@@ -200,16 +196,6 @@ export default defineComponent({
                 this.imageLoaded = true;
             }
         }
-    },
-    methods: {
-        getLocaleString(dictionary: { [key: string]: string }) {
-            if (!dictionary) return "";
-            return (
-                dictionary[this.Language] ??
-                dictionary.en ??
-                dictionary[Object.keys(dictionary)[0]]
-            );
-        },
     },
 });
 </script>

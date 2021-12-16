@@ -33,7 +33,7 @@ class Scriptures extends BaseScriptures {
             const id = this._translationId[scripture.id] ?? 
                 await cache.get("config", `translation:${scripture.id}`) as string | undefined;
             if (id) {
-                const translation = await this.getTranslation(scripture.id, id);
+                const translation = await this.getTranslation(id);
                 if (translation) {
                     this._translationId[scripture.id] = translation.id;
                     return translation;
@@ -91,7 +91,7 @@ class Scriptures extends BaseScriptures {
     public async setTranslation(id: string) {
         const scripture = await this.getCurrentScripture();
         if (scripture) {
-            const translation = await this.getTranslation(scripture.id, id);
+            const translation = await this.getTranslation(id);
             if (translation) {
                 this._translationId[scripture.id] = translation.id;
                 await cache.set("config", `translation:${scripture.id}`, translation.id);

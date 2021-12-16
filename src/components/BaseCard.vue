@@ -1,12 +1,12 @@
 <template>
     <div class="bg-white rounded-lg shadow-md dark:bg-secondary flex flex-col">
-        <div class="p-4 border-b border-black/10 dark:border-white/10" v-if="$slots.header">
+        <div class="px-4 py-3 border-b border-black/10 dark:border-white/10" v-if="$slots.header">
             <slot name="header" />
         </div>
         <div class="p-4 flex-grow" v-if="$slots.default">
             <slot name="default" />
         </div>
-        <div class="p-4 border-t border-black/10 dark:border-white/10" v-if="$slots.footer">
+        <div class="px-4 py-3 border-t border-black/10 dark:border-white/10" v-if="$slots.footer">
             <slot name="footer" />
         </div>
     </div>

@@ -1,7 +1,12 @@
 import { Lyrics } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile } from "songtreasures";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, IChapter, IBook, ITranslation, IScripture } from "songtreasures";
 import { openDB } from "idb";
 import { Notification } from "songtreasures";
+
+type EntryWithExpiry<T> = {
+    expiry: Date;
+    entry: T;
+}
 
 type StoreTypes = {
     songs: ISong;
@@ -20,11 +25,28 @@ type StoreTypes = {
     };
     tags: ITag;
     custom_collections: ICustomCollection;
+    chapters: IChapter;
+    books: IBook;
+    translations: ITranslation;
+    scriptures: IScripture;
 }
 
-type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general" | "tags" | "custom_collections";
+type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general"
+ | "tags" | "custom_collections" | StoreWithExpiry;
+
+export type StoreWithExpiry = "chapters" | "books" | "translations" | "scriptures";
+
+export type StoreWithParent = "chapters" | "books" | "translations";
 
 type Entry<S extends Store> = StoreTypes[S];
+
+const parentMapping: {
+    [key: string]: string;
+} = {
+    translations: "scriptureid",
+    books: "bookid",
+    chapters: "chapterid",
+};
 
 class CacheService {
     private dbName = "songtreasures";
@@ -39,9 +61,13 @@ class CacheService {
         "general",
         "tags",
         "custom_collections",
+        "translations",
+        "chapters",
+        "books",
+        "scriptures",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
-    private version = 28;
+    private version = 30;
 
     private db() {
         const v = this.version;
@@ -53,12 +79,17 @@ class CacheService {
                     //     db.deleteObjectStore(store);
                     //     db.createObjectStore(store);
                     // }
+                    let objectStore;
                     if (db.objectStoreNames.contains(store)) {
                         db.deleteObjectStore(store);
-                        db.createObjectStore(store);
+                        objectStore = db.createObjectStore(store);
                     }
                     if (!db.objectStoreNames.contains(store)) {     
-                        db.createObjectStore(store);
+                        objectStore = db.createObjectStore(store);
+                    }
+
+                    if (["translations", "chapters", "books"].includes(store)) {
+                        objectStore?.createIndex("parentid", parentMapping[store], {unique: false});
                     }
                 }
             },
@@ -91,7 +122,7 @@ class CacheService {
         await tx.done;
     }
 
-    public async get<S extends Store>(store: S, key: string): Promise<Entry<S>> {
+    public async get<S extends Store>(store: S, key: string): Promise<Entry<S> | undefined> {
         const tx = await this.tx(store);
 
         const result = await tx.objectStore(store).get(key);
@@ -180,15 +211,13 @@ class CacheService {
         try {
             const expiry = await this.get("config", module + "_expiry") as number | undefined;
 
-            const tx = await this.tx(module, true);
-
             if (!expiry || new Date(expiry).getTime() < new Date().getTime()) {
-                tx.store.clear?.();
+                (await this.tx(module, true)).store.clear?.();
 
                 const items = await factory();
 
                 for (const i of Object.entries(items)) {
-                    await tx.store.put?.(i[1], i[0]);
+                    await this.set(module, i[0], i[1]);
                 }
 
                 await this.set("config", module + "_expiry", expiration);
@@ -196,11 +225,38 @@ class CacheService {
                 return Object.values(items);
             }
 
-            return await tx.store.getAll() as Entry<S>[];
+            return await (await this.tx(module)).store.getAll() as Entry<S>[];
         }
         catch {
             return Object.values(await factory());
         }
+    }
+
+    /**
+     * 
+     * @param store 
+     * @param key 
+     * @param factory 
+     * @param expiry Expiry in seconds
+     */
+    public async getOrCreate<S extends StoreWithExpiry>(store: S, key: string, factory: () => Promise<Entry<S>>, expiry = 60): Promise<Entry<S>> {
+        const nowDate = new Date();
+
+        let result = (await (await this.tx(store, false)).objectStore(store).get(key)) as EntryWithExpiry<Entry<S>> | undefined;
+
+        if (!result || (result.expiry < nowDate)) {
+            const expireDate = new Date();
+            expireDate.setSeconds(nowDate.getSeconds() + expiry);
+
+            result = {
+                expiry: expireDate,
+                entry: await factory(),
+            };
+
+            await (await this.tx(store, true)).objectStore(store).put?.(result, key);
+        }
+
+        return result.entry;
     }
 }
 
