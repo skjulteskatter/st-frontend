@@ -1,13 +1,13 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SearchResult from "@/classes/search/searchResult";
 import SongFilter from "@/classes/songFilter";
-import { ApiContributor, MediaFile } from "songtreasures";
+import { ApiContributor, IMediaFile } from "songtreasures";
 
 
 export type SongViewType = "default" | "performance" | "chords";
 
 export type AudioTrack = {
-    file: MediaFile;
+    file: IMediaFile;
     collection?: Collection;
 }
 

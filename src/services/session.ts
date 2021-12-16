@@ -10,8 +10,9 @@ import {
     Theme,
     Tag,
     User,
+    MediaFile,
 } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, ShareKey } from "songtreasures";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures";
 import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
@@ -174,7 +175,7 @@ export class Session {
                 //     a[b.id] = b;
                 //     return a;
                 // }, {} as {
-                //     [id: string]: MediaFile;
+                //     [id: string]: IMediaFile;
                 // }));
 
                 const c = await songs.getContributors();
@@ -229,7 +230,7 @@ export class Session {
                         a[b.id] = b;
                         return a;
                     }, {} as {
-                        [id: string]: MediaFile;
+                        [id: string]: IMediaFile;
                     }));
 
                     await cache.set("config", key, new Date(updateSongs.lastUpdated));
@@ -238,10 +239,10 @@ export class Session {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const error = e as any;
                 notify("error", "Error fetching files", "warning", error);
-                this.files = (await songs.getFiles()).result;
+                this.files = (await songs.getFiles()).result.map(i => new MediaFile(i));
             }
 
-            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
+            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files")).map(i => new MediaFile(i));
         };
 
         const fetchContributors = async () => {

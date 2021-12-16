@@ -291,11 +291,6 @@ export default defineComponent({
         closeCta() {
             this.showCta = false;
         },
-        // async loadFiles() {
-        //     if(!this.collection) return [];
-        //     const allFiles = await api.songs.getFiles([this.collection.id]);
-        //     this.files = allFiles.result.filter((f: MediaFile) => f.type != "sheetmusic");
-        // },
     },
 });
 </script>

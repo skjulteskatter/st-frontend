@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { MediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures";
 import { PlayIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 import { Collection } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
@@ -30,7 +30,7 @@ export default defineComponent({
 	},
 	props: {
 		file: {
-			type: Object as PropType<MediaFile>,
+			type: Object as PropType<IMediaFile>,
 			required: true,
 		},
 		collection: {

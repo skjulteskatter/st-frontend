@@ -11,12 +11,12 @@
     </div>
 </template>
 <script lang="ts">
-import { Collection } from "@/classes";
+import { Collection, MediaFile } from "@/classes";
 import { BaseModal } from "@/components";
 import { FileCard } from "@/components/media";
 import { appSession } from "@/services/session";
 import { defineComponent } from "@vue/runtime-core";
-import { MediaFile, MediaType } from "songtreasures";
+import { MediaType } from "songtreasures";
 
 export default defineComponent({
     name: "collection-files",

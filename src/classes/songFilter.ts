@@ -1,4 +1,4 @@
-import { MediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures";
 import { Song } from ".";
 
 export type TSongFilter = {
@@ -49,7 +49,7 @@ export default class SongFilter implements TSongFilter {
     }
 
     public GetSongs() {
-        const hasFiles = (filter: string[], files: MediaFile[]) => {
+        const hasFiles = (filter: string[], files: IMediaFile[]) => {
             return filter.length === 0 || filter.every(f => files.some(i => i.category === f));
         };
         const hasIds = (filter: string[], prop: string[] | string) => {
