@@ -19,6 +19,7 @@ export default class Collection extends BaseClass implements ICollection {
     private _key;
     public enabled;
     public type;
+    public priority;
     public freeSongs;
     public keys;
     public defaultType;
@@ -84,6 +85,7 @@ export default class Collection extends BaseClass implements ICollection {
         this._key = collection.key;
         this.enabled = collection.enabled;
         this.type = collection.type;
+        this.priority = collection.priority;
         this.freeSongs = collection.freeSongs;
         this.keys = new LocaleString(collection.keys ?? {});
         this.defaultType = collection.defaultType;

@@ -58,6 +58,7 @@ declare module "songtreasures" {
         id: string;
         enabled: boolean;
         type: CollectionType;
+        priority: number;
         defaultType: string;
         defaultSort: Sort;
         freeSongs: boolean;
