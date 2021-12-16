@@ -71,7 +71,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { osmd } from "@/services/osmd";
-import { MediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -94,7 +94,7 @@ export default defineComponent({
         searchParams: new URLSearchParams(window.location.search),
         osmd: osmd,
         pdfType: SheetMusicTypes.PDF,
-        files: [] as MediaFile[],
+        files: [] as IMediaFile[],
         song: null as Song | null,
         user: {} as User,
         showFiles: true,
@@ -188,7 +188,7 @@ export default defineComponent({
         this.loaded = true;
     },
     methods: {
-        async setFile(file: MediaFile) {
+        async setFile(file: IMediaFile) {
             this.loaded = false;
 
             await new Promise(r => setTimeout(r, 10));

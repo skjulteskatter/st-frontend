@@ -192,12 +192,11 @@ declare module "songtreasures" {
 
     type MediaType = "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
 
-    interface MediaFile {
+    interface IMediaFile {
         id: string;
         songId: string;
         name: string;
         type: MediaType;
-        collectionIds: string[];
         category: string;
         number: number;
         languageKey: string;

@@ -83,7 +83,7 @@ import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Collection, Song } from "@/classes";
-import { MediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 
@@ -129,7 +129,7 @@ export default defineComponent({
             this.activeVideo = url;
             this.openVideo();
         },
-        selectSheetMusic(sheet: MediaFile) {
+        selectSheetMusic(sheet: IMediaFile) {
             const options: SheetMusicOptions = {
                 show: true,
                 url: sheet?.directUrl,
@@ -147,7 +147,7 @@ export default defineComponent({
 
             this.$emit("setSheetMusic", options);
         },
-        selectAudio(audio: MediaFile) {
+        selectAudio(audio: IMediaFile) {
             const track: AudioTrack = {
                 file: audio,
                 collection: this.collection,

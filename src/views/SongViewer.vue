@@ -178,7 +178,7 @@ import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilA
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, MediaFile } from "songtreasures";
+import { ICustomCollection, Format, IMediaFile } from "songtreasures";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -221,7 +221,7 @@ export default defineComponent({
         store: useStore(),
         control: control,
         number: 0 as number | string,
-        selectedSheetMusic: {} as MediaFile,
+        selectedSheetMusic: {} as IMediaFile,
         songViewCount: null as number | null,
         show: false,
         unset: false,
