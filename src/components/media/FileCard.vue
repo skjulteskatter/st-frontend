@@ -5,7 +5,8 @@
 		@click="callback"
 		:title="$t(`types_${file.type}`)"
 	>
-		<h3 class="font-semibold">{{ song?.getName() }}</h3>
+		<h1 v-if="collection">{{collection.key}} {{file.getSong().getNumber(collection?.id)}}</h1>
+		<h3 class="font-semibold">{{ file.getSong().name.default }}</h3>
 		<span class="w-max flex gap-2 items-center mt-2 px-2 py-1 rounded-md bg-black/5 uppercase text-xs tracking-wider">
 			<component :is="icon" class="w-4 h-4 opacity-50" />
 			<span v-if="file.category">{{ $t(`types_${file.category}`) }}</span>
@@ -16,13 +17,11 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { IMediaFile } from "songtreasures";
 import { PlayIcon, VolumeUpIcon } from "@heroicons/vue/solid";
-import { Collection } from "@/classes";
+import { Collection, MediaFile } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { appSession } from "@/services/session";
 
 export default defineComponent({
 	name: "file-card",
@@ -32,7 +31,7 @@ export default defineComponent({
 	},
 	props: {
 		file: {
-			type: Object as PropType<IMediaFile>,
+			type: Object as PropType<MediaFile>,
 			required: true,
 		},
 		collection: {
@@ -44,19 +43,16 @@ export default defineComponent({
 	}),
 	computed: {
 		icon() {
-			return this.file.type == "video" ? "PlayIcon" : "VolumeUpIcon";
-		},
-		song() {
-			return appSession.songs.find(s => s.id == this.file.songId);
+			return this.file.type === "video" ? "PlayIcon" : "VolumeUpIcon";
 		},
 	},
 	methods: {
-		async callback() {
-			if(this.file.type == "audio") {
+		callback() {
+			if(this.file.type === "audio") {
 				this.selectAudio();
 			}
-			else if(this.file.type == "video") {
-				this.selectVideo();
+			else if(this.file.type === "video") {
+				this.$emit("selectVideo", this.file.directUrl);
 			}
 		},
 		selectAudio() {
@@ -66,9 +62,6 @@ export default defineComponent({
             };
             this.store.commit(SongsMutationTypes.SET_AUDIO, track);
         },
-		selectVideo() {
-			this.$emit("selectVideo", this.file.directUrl);
-		},
 	},
 });
 </script>

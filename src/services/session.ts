@@ -134,7 +134,8 @@ export class Session {
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? [])
         // TODO: remove filter on song;
             .filter(c => this.user.Extended || c.type === "song")
-            .map(c => new Collection(c));
+            .map(c => new Collection(c))
+            .sort((a, b) => b.priority - a.priority);
 
         const lastCacheClear = await cache.get("config", "last_cache_clear") as Date | undefined;
 
