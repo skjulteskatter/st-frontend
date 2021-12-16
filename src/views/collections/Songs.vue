@@ -13,7 +13,7 @@
                         </template>
                         {{ $t('store_buy') }}
                     </BaseButton> -->
-                    <BaseButton v-if="files.length" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
+                    <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                         <ViewBoardsIcon class="w-5 h-5" v-else />
@@ -136,12 +136,12 @@ import {
     ViewBoardsIcon,
 } from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
-import { ApiContributor, MediaFile, Sort } from "songtreasures";
+import { ApiContributor, Sort } from "songtreasures";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
-import api from "@/services/api";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "song-list",
@@ -167,11 +167,13 @@ export default defineComponent({
         loadingList: false,
         showCta: false,
         showFiles: false,
-        files: [] as MediaFile[],
     }),
     computed: {
         isAdmin() {
             return this.store.getters.isAdmin;
+        },
+        hasFiles() {
+            return appSession.files.some(f => this.songs.some(s => s.id === f.songId));
         },
         searchNumber() {
             return this.searchString.replace(/[^0-9]/g, "");
@@ -216,12 +218,12 @@ export default defineComponent({
     },
     async mounted() {
         await this.loadCollection();
-        await this.loadFiles();
+        // await this.loadFiles();
     },
     updated() {
         if (this.$route.params.collection !== this.cId) {
             this.loadCollection();
-            this.loadFiles();
+            // this.loadFiles();
         }
     },
     methods: {
@@ -289,11 +291,11 @@ export default defineComponent({
         closeCta() {
             this.showCta = false;
         },
-        async loadFiles() {
-            if(!this.collection) return [];
-            const allFiles = await api.songs.getFiles([this.collection.id]);
-            this.files = allFiles.result.filter((f: MediaFile) => f.type != "sheetmusic");
-        },
+        // async loadFiles() {
+        //     if(!this.collection) return [];
+        //     const allFiles = await api.songs.getFiles([this.collection.id]);
+        //     this.files = allFiles.result.filter((f: MediaFile) => f.type != "sheetmusic");
+        // },
     },
 });
 </script>
