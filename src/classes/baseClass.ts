@@ -1,9 +1,10 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
+import LocaleString from "./localeString";
 
 export default class BaseClass {
     protected store = useStore();
-    public name: ILocaleString = {};
+    public name: LocaleString = new LocaleString({});
 
     public getName(language?: string) {
         language ??= appSession.Language;

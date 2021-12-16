@@ -1,5 +1,5 @@
 import { Lyrics } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, MediaFile, IChapter, IBook, ITranslation, IScripture } from "songtreasures";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation, IScripture } from "songtreasures";
 import { openDB } from "idb";
 import { Notification } from "songtreasures";
 
@@ -17,7 +17,7 @@ type StoreTypes = {
         id: string;
         value: unknown;
     };
-    files: MediaFile;
+    files: IMediaFile;
     notifications: Notification;
     general: {
         expiry: number;

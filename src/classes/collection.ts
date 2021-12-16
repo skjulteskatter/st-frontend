@@ -127,8 +127,8 @@ export default class Collection extends BaseClass implements ICollection {
             if (this.available) {
                 this.songs = appSession.songs.filter(s => s.collectionIds.some(c => this.id == c)).sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
             } else {
-                const files = await api.songs.getFiles([this.id]);
-                appSession.files.push(...files.result);
+                // const files = await api.songs.getFiles([this.id]);
+                // appSession.files.push(...files.result);
                 this.songs = ((await api.songs.getAllSongs([this.id])).result.map(s => new Song(s))).sort((a, b) => a.getNumber(this.id) - b.getNumber(this.id));
             }
 
