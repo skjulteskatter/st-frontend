@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
         if (savedBasePath !== localBasePath) {
             localStorage.setItem("api_base_path", localBasePath);
         } else {
-            localStorage.setItem("api_base_path", basePath);
+            localStorage.removeItem("api_base_path");
         }
         window.location.reload();
     };
