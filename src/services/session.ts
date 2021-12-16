@@ -13,11 +13,12 @@ import {
     MediaFile,
 } from "@/classes";
 import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures";
-import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
+import { analytics, instruments, items, playlists, session, sharing, songs, tags } from "./api";
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
+import Instrument from "@/classes/instrument";
 
 export class Session {
     private _initialized?: boolean;
@@ -29,6 +30,9 @@ export class Session {
     }
 
     private _preFetch = [
+        async () => {
+            this.instruments = (await cache.getOrCreateAsync("instruments", instruments.list, this.expiry) ?? []).map(i => new Instrument(i));
+        },
         async () => {
             this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, this.expiry) ?? []).map(i => new Country(i));
         },
@@ -78,6 +82,9 @@ export class Session {
     public collections: Collection[] = [];
     public files: MediaFile[] = [];
     public contributors: CollectionItem<ApiContributor>[] = [];
+    
+
+    public instruments: Instrument[] = [];
 
     public favorites = new Favorites();
 
