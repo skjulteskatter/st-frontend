@@ -39,7 +39,7 @@
         </div>
         <ProductSlider class="mb-4" :products="products" v-if="products.length">
             <div class="bg-white dark:bg-secondary shadow-md rounded-lg overflow-hidden">
-                <img src="/img/Tutorials.png" alt="" class="w-full cursor-pointer">
+                <img src="/img/Tutorials.png" alt="" class="w-full cursor-pointer" @click="$router.push({ name: 'tutorials' })">
                 <div class="border-t border-gray-300 dark:bg-secondary dark:border-none p-4">
                     <div class="flex gap-4 justify-between items-center">
                         <h3 class="font-bold">Tutorials</h3>

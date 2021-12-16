@@ -20,6 +20,7 @@ import {
     CollectionFiles,
     CollectionSongs,
     CollectionLists,
+    Tutorials,
 } from "@/views";
 
 import { RouteRecordRaw } from "vue-router";
@@ -125,6 +126,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: "statistics/:id",
                 name: "song-stats",
                 component: getComponent(SongStatistics),
+            },
+            {
+                path: "tutorials",
+                name: "tutorials",
+                component: getComponent(Tutorials),
             },
             // TODO: Move away from /songs/ to /collection/
             {
