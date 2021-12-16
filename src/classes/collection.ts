@@ -103,7 +103,7 @@ export default class Collection extends BaseClass implements ICollection {
     }
 
     public get key() {
-        return this.keys[this.store.getters.languageKey] ?? this._key;
+        return this.keys[appSession.Language] ?? this._key;
     }
 
     public getKeys() {
