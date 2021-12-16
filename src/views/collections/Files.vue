@@ -5,7 +5,7 @@
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <FileCard v-for="file in videos" :key="file.id" :file="file" @selectVideo="selectVideo" />
         </div>
-        <BaseModal :show="showVideo" @close="showVideo = false">
+        <BaseModal :show="showVideo" @close="closeVideo()">
             <video :src="videoUrl" autoplay controls>
                 Video is not supported
             </video>
@@ -53,6 +53,10 @@ export default defineComponent({
         selectVideo(url: string) {
             this.videoUrl = url;
             this.showVideo = true;
+        },
+        closeVideo() {
+            this.showVideo = false;
+            this.videoUrl = "";
         },
     },
 });
