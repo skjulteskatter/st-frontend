@@ -2,6 +2,17 @@
     <section>
         <!-- TODO: Header should be the same for SongList and this (?) -->
         <h1 class="font-bold text-xl md:text-2xl mb-4">{{ $t("types_tutorial") }}</h1>
+        <!-- <select
+            v-model="instrumentId"
+        >
+            <option 
+                v-for="instrument in instruments" 
+                :key="instrument.id"
+                :value="instrument.id"
+            >
+                {{$t("instrument_" + instrument.identifier)}}
+            </option>
+        </select> -->
         <div v-for="collection in collections" :key="collection.id" class="mb-4">
             <BaseButton
                 class="mb-4"
@@ -11,7 +22,15 @@
             </BaseButton>
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <!-- TODO: sort by collections -->
-                <FileCard v-for="file in videos(collection)" :collection="collection" :key="file.id" :file="file" @selectVideo="selectVideo" />
+                <SongFileCard 
+                    v-for="song in collectionSongs(collection)" 
+                    :key="song.id"
+                    :song="song"
+                    :collection="collection" 
+                    :files="songFiles(song)"
+                    :defaultInstrumentId="instrumentId"
+                    @selectVideo="selectVideo" 
+                />
             </div>
         </div>
         <BaseModal :show="showVideo" @close="closeVideo()">
@@ -23,9 +42,9 @@
 </template>
 
 <script lang="ts">
-import { Collection, MediaFile } from "@/classes";
+import { Collection, MediaFile, Song } from "@/classes";
 import { BaseModal } from "@/components";
-import { FileCard } from "@/components/media";
+import { SongFileCard } from "@/components/media";
 import { appSession } from "@/services/session";
 import { defineComponent } from "@vue/runtime-core";
 import { MediaType } from "songtreasures";
@@ -33,17 +52,22 @@ import { MediaType } from "songtreasures";
 export default defineComponent({
     name: "collection-tutorials",
     components: {
-        FileCard,
+        SongFileCard,
         BaseModal,
     },
     setup() {
-        const supportedTypes: MediaType[] = ["video"];
+        const supportedTypes: MediaType[] = ["video", "audio"];
         const supportedCategories = ["tutorial"];
         const files = appSession.files.filter(f => supportedTypes.includes(f.type) && supportedCategories.includes(f.category));
+        const songs = appSession.songs.filter(s => files.some(f => f.songId === s.id));
         const collections = appSession.collections.filter(c => files.some(f => f.getSong().collectionIds.includes(c.id)));
 
+        const instruments = appSession.instruments;
+
         return {
+            instruments,
             files,
+            songs,
             collections,
         };
     },
@@ -51,6 +75,7 @@ export default defineComponent({
         return {
             videoUrl: "",
             showVideo: false,
+            instrumentId: appSession.instruments[0].id,
         };
     },
     methods: {
@@ -62,9 +87,12 @@ export default defineComponent({
             this.videoUrl = "";
             this.showVideo = false;
         },
-        videos(collection: Collection): MediaFile[] {
-            const items = this.files.filter(v => appSession.songs.some(s => s.collectionIds.includes(collection.id) && v.songId === s.id));
-            return items.sort((a, b) => a.getSong().getNumber(collection.id) - b.getSong().getNumber(collection.id));
+        songFiles(song: Song): MediaFile[] {
+            return this.files.filter(f => f.songId === song.id);
+        },
+        collectionSongs(collection: Collection): Song[] {
+            const items = this.songs.filter(s => s.collectionIds.includes(collection.id));
+            return items.sort((a, b) => a.getNumber(collection.id) - b.getNumber(collection.id));
         },
     },
 });

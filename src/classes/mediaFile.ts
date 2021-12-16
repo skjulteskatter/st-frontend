@@ -34,4 +34,8 @@ export default class MediaFile implements IMediaFile {
     public getSong() {
         return appSession.songs.find(i => i.id === this.songId) as Song;
     }
+
+    public getInstrument() {
+        return appSession.instruments.find(i => i.id === this.instrumentId);
+    }
 }
