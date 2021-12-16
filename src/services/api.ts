@@ -152,8 +152,8 @@ export const songs = {
     getAllSongs(collectionIds: string[], lastUpdated?: string) {
         return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
-    getFiles(collectionIds: string[], lastUpdated?: string) {
-        return http.getWithResult<MediaFile[]>(`api/Files?collections=${collectionIds.join(",")}` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
+    getFiles(lastUpdated?: string) {
+        return http.getWithResult<MediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
     },
     getFile(fileId: string) {
         return http.get<MediaFile>(`api/Files/${fileId}?expand=song`);

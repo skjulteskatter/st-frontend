@@ -168,14 +168,14 @@ export class Session {
                     [id: string]: ISong;
                 }));
 
-                const f = await songs.getFiles(fetchSongs);
+                // const f = await songs.getFiles(fetchSongs);
 
-                await cache.replaceEntries("files", f.result.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: MediaFile;
-                }));
+                // await cache.replaceEntries("files", f.result.reduce((a, b) => {
+                //     a[b.id] = b;
+                //     return a;
+                // }, {} as {
+                //     [id: string]: MediaFile;
+                // }));
 
                 const c = await songs.getContributors();
 
@@ -223,7 +223,7 @@ export class Session {
                 const key = "last_updated_files";
                 const lastUpdated = await cache.get("config", key) as Date | undefined;
                 if (shouldUpdate) {
-                    const updateSongs = await songs.getFiles(ownedCols, lastUpdated?.toISOString());
+                    const updateSongs = await songs.getFiles(lastUpdated?.toISOString());
 
                     await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
                         a[b.id] = b;
@@ -238,7 +238,7 @@ export class Session {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const error = e as any;
                 notify("error", "Error fetching files", "warning", error);
-                this.files = (await songs.getFiles(ownedCols)).result;
+                this.files = (await songs.getFiles()).result;
             }
 
             this.files = this.files.length > 0 ? this.files : (await cache.getAll("files"));
