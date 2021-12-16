@@ -5,15 +5,15 @@
                 <BackButton class="mb-4" to="/collections" />
                 <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                     <h1 class="font-bold text-2xl md:text-3xl">
-                        {{ collection.name[languageKey] }}
+                        {{ collection.name.default }}
                     </h1>
-                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <!-- <BaseButton theme="secondary" @click="collection?.Product.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_buy') }}
-                    </BaseButton>
-                    <BaseButton v-if="files.length" theme="neutral" @click="showFiles = !showFiles">Show files</BaseButton>
+                    </BaseButton> -->
+                    <BaseButton v-if="files.length" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                         <ViewBoardsIcon class="w-5 h-5" v-else />
@@ -62,12 +62,9 @@
                     </div>
                 </div>
                 <Loader :loading="loadingList" v-if="!loading">
-                    <div v-if="showFiles" class="song-list song-list__items">
-                        <FileCard v-for="f in files" :key="f.id" :file="f" @selectVideo="selectVideo" />
-                    </div>
                     <div
                         class="song-list song-list__items"
-                        v-else-if="!showFiles && list?.length && viewType === 'boards'"
+                        v-if="list?.length && viewType === 'boards'"
                     >
                         <SongListCard
                             :collection="collection"
@@ -118,17 +115,12 @@
                 </div>
             </BaseModal>
         </Loader>
-        <BaseModal :show="showVideo" @close="showVideo = false">
-            <video :src="videoUrl" autoplay controls>
-                Video is not supported
-            </video>
-        </BaseModal>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { CollectionItem, ListEntry, Song } from "@/classes";
+import { Collection, CollectionItem, ListEntry, Song } from "@/classes";
 import { SongListCard } from "@/components/songs";
 import {
     ButtonGroup,
@@ -137,7 +129,12 @@ import {
     SongFilterSelect,
 } from "@/components/inputs";
 import { BackButton, BaseModal } from "@/components";
-import { ShoppingCartIcon, CheckIcon, ViewGridIcon, ViewBoardsIcon } from "@heroicons/vue/solid";
+import { 
+    //ShoppingCartIcon, 
+    CheckIcon, 
+    ViewGridIcon, 
+    ViewBoardsIcon,
+} from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { ApiContributor, MediaFile, Sort } from "songtreasures";
 import { useStore } from "@/store";
@@ -145,7 +142,6 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { Country, Theme } from "@/classes/items";
 import api from "@/services/api";
-import { FileCard } from "@/components/media";
 
 export default defineComponent({
     name: "song-list",
@@ -157,12 +153,11 @@ export default defineComponent({
     BackButton,
     BaseModal,
     SearchInput,
-    ShoppingCartIcon,
+    // ShoppingCartIcon,
     CheckIcon,
     ViewGridIcon,
     ViewBoardsIcon,
     LockClosedIcon,
-    FileCard,
 },
     data: () => ({
         store: useStore(),
@@ -173,8 +168,6 @@ export default defineComponent({
         showCta: false,
         showFiles: false,
         files: [] as MediaFile[],
-        showVideo: false,
-        videoUrl: "",
     }),
     computed: {
         isAdmin() {
@@ -215,7 +208,7 @@ export default defineComponent({
             },
         },
         collection() {
-            return this.store.getters.collection;
+            return this.store.getters.collection as Collection;
         },
         languageKey() {
             return this.store.getters.languageKey;
@@ -301,28 +294,6 @@ export default defineComponent({
             const allFiles = await api.songs.getFiles([this.collection.id]);
             this.files = allFiles.result.filter((f: MediaFile) => f.type != "sheetmusic");
         },
-        selectVideo(url: string) {
-            this.videoUrl = url;
-            this.showVideo = true;
-        },
     },
 });
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-@keyframes fade-in {
-    0% {opacity: 0;}
-    100% {opacity: unset;}
-}
-
-.song-list {
-    animation: fade-in 0.1s linear;
-
-    &__items {
-        columns: 325px;
-        column-gap: var(--st-spacing);
-    }
-}
-</style>

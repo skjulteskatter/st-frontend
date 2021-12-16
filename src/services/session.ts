@@ -365,6 +365,10 @@ export class Session {
     public async clear() {
         await auth.logout();
     }
+
+    public getCollection(key: string) {
+        return this.collections.find(c => c.id === key || Object.values(c.keys).includes(key));
+    }
 }
 
 export const appSession = new Session();

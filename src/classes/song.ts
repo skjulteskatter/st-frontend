@@ -5,6 +5,7 @@ import router from "@/router";
 import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
 import { Lyrics, Participant } from ".";
+import LocaleString from "./localeString";
 
 export default class Song extends BaseClass implements ISong {
     public id: string;
@@ -78,7 +79,7 @@ export default class Song extends BaseClass implements ISong {
         this.collections = song.collections;
         this.available = song.available;
         this.id = song.id;
-        this.name = song.name;
+        this.name = new LocaleString(song.name);
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
         this.yearWritten = song.yearWritten;
         this.yearComposed = song.yearComposed;

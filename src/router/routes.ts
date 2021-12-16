@@ -17,6 +17,9 @@ import {
     PlaylistView,
     TagList,
     TagView,
+    CollectionFiles,
+    CollectionSongs,
+    CollectionLists,
 } from "@/views";
 
 import { RouteRecordRaw } from "vue-router";
@@ -42,9 +45,6 @@ const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongS
     window.location.reload();
 });
 const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
-    window.location.reload();
-});
-const SongList = () => import(/* webpackChunkName: 'songList' */ "../views/SongList.vue").catch(() => {
     window.location.reload();
 });
 const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ "../views/SongViewer.vue").catch(() => {
@@ -126,6 +126,7 @@ const routes: Array<RouteRecordRaw> = [
                 name: "song-stats",
                 component: getComponent(SongStatistics),
             },
+            // TODO: Move away from /songs/ to /collection/
             {
                 path: "songs",
                 name: "songs",
@@ -133,8 +134,20 @@ const routes: Array<RouteRecordRaw> = [
                 children: [
                     {
                         path: ":collection",
-                        name: "song-list",
-                        component: getComponent(SongList),
+                        name: "collection-lists",
+                        component: getComponent(CollectionLists),
+                        children: [
+                            {
+                                path: "",
+                                name: "song-list",
+                                component: getComponent(CollectionSongs),
+                            },
+                            {
+                                path: "files",
+                                name: "collection-files",
+                                component: getComponent(CollectionFiles),
+                            },
+                        ],
                     },
                     {
                         path: ":collection/:number",

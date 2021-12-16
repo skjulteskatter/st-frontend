@@ -1,4 +1,4 @@
-import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 
 export default class LocaleString implements ILocaleString {
     [key: string]: string;
@@ -10,6 +10,6 @@ export default class LocaleString implements ILocaleString {
     }
 
     public get default() {
-        return this[useStore().getters.languageKey] ?? this.en ?? Object.values(this)[0];
+        return this[appSession.Language] ?? this.en ?? Object.values(this)[0];
     }
 }
