@@ -203,7 +203,15 @@ declare module "songtreasures" {
         transposition: string;
         information: string;
         directUrl: string;
+        instrumentId?: string;
         participants: IParticipant[];
+    }
+
+    interface IInstrument {
+        id: string;
+        updatedAt: string;
+        identifier: string;
+        icon: string;
     }
 
     interface CreditSong {

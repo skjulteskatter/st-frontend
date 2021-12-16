@@ -13,6 +13,7 @@ export default class MediaFile implements IMediaFile {
     public transposition: string;
     public information: string;
     public directUrl: string;
+    public instrumentId?: string | undefined;
     public participants: Participant[];
     
     constructor(i: IMediaFile) {
@@ -26,10 +27,15 @@ export default class MediaFile implements IMediaFile {
         this.transposition = i.transposition;
         this.information = i.information;
         this.directUrl = i.directUrl;
+        this.instrumentId = i.instrumentId;
         this.participants = i.participants.map(i => new Participant(i));
     }
 
     public getSong() {
         return appSession.songs.find(i => i.id === this.songId) as Song;
+    }
+
+    public getInstrument() {
+        return appSession.instruments.find(i => i.id === this.instrumentId);
     }
 }

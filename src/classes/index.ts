@@ -5,6 +5,7 @@ import Contributor from "./contributor";
 import Favorites from "./favorites";
 import Lyrics from "./lyrics";
 import MediaFile from "./mediaFile";
+import Instrument from "./instrument";
 import Participant from "./participant";
 import Product from "./product";
 import Song from "./song";
@@ -37,6 +38,7 @@ export {
     Favorites,
     Lyrics,
     MediaFile,
+    Instrument,
     Participant,
     Product,
     Tag,

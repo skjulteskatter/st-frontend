@@ -3,7 +3,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "checkout";
 import { ApiSearchResult } from "songtreasures/search";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse } from "songtreasures";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument } from "songtreasures";
 import http from "./http";
 
 export const activity = {
@@ -20,6 +20,15 @@ export const activity = {
         }));
     },
 };
+
+const modelService = <T>(endpoint: string) => {
+    return {
+        get: (id: string) => http.get<T>(`api/${endpoint}/${id}`),
+        list: () => http.get<T[]>(`api/${endpoint}`),
+    };
+};
+
+export const instruments = modelService<IInstrument>("Instruments");
 
 export const session = {
     async getCurrentUser() {
