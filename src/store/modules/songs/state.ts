@@ -1,6 +1,7 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SearchResult from "@/classes/search/searchResult";
 import SongFilter from "@/classes/songFilter";
+import { SheetMusicOptions } from "songtreasures";
 import { ApiContributor, IMediaFile } from "songtreasures-api";
 
 

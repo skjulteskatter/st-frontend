@@ -81,10 +81,10 @@ export class PresentationBase {
     }
     
     protected callbacks: {
-        [key: string]: Function;
+        [key: string]: () => void;
     } = {};
 
-    public registerCallback(key: Key | "control" | "preview", callback: Function) {
+    public registerCallback(key: Key | "control" | "preview", callback: () => void) {
         this.callbacks[key] = callback;
     }
 

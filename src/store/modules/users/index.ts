@@ -9,7 +9,6 @@ import {
 import { RootState } from "../..";
   
 import { state } from "./state";
-import { getters, Getters } from "./getters";
 import { mutations, Mutations } from "./mutations";
 import { actions, Actions } from "./actions";
   
@@ -30,15 +29,10 @@ export type UserStore<S = State> = Omit<VuexStore<S>, "getters" | "commit" | "di
         payload?: Parameters<Actions[K]>[1],
         options?: DispatchOptions
     ): ReturnType<Actions[K]>;
-} & {
-    getters: {
-        [K in keyof Getters]: ReturnType<Getters[K]>
-    };
 };
   
 export const store: Module<State, RootState> = {
     state,
-    getters,
     mutations,
     actions,
     // TODO: With namespaced option turned on, having problem how to use dispatch with action types...

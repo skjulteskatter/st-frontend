@@ -27,7 +27,7 @@ import { TransitionRoot } from "@headlessui/vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
-	name: "tooltip",
+	name: "tooltip-component",
 	props: {
 		text: {
 			type: String,

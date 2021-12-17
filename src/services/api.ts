@@ -3,8 +3,9 @@ import { CollectionItem, Lyrics } from "@/classes";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
 import { ApiSearchResult } from "songtreasures-api/search";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument } from "songtreasures-api";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
+import { Language } from "songtreasures";
 
 export const activity = {
     async getActivities() {
@@ -261,7 +262,7 @@ export const sharing = {
 
 export const analytics = {
     getForSong(songId: string, fromDate: Date, toDate?: Date) {
-        return http.get<AnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
+        return http.get<IAnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
     },
     viewSong(songId: string) {
         return http.post<number>("api/Analytics/View/" + songId);

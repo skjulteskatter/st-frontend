@@ -19,6 +19,7 @@ import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
 import Instrument from "@/classes/instrument";
+import { Language } from "songtreasures";
 
 export class Session {
     private _initialized?: boolean;

@@ -45,6 +45,7 @@ import { CheckboxList, BaseDropdown } from "@/components/inputs";
 import TranslationCard from "./TranslationCard.vue";
 import { BaseModal } from "@/components";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ILocale, Language } from "songtreasures";
 
 type CheckboxData = {
     key: string;

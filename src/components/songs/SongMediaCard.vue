@@ -86,6 +86,7 @@ import { Collection, Song } from "@/classes";
 import { IMediaFile } from "songtreasures-api";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "song-media-card",

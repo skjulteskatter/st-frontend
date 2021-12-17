@@ -1,6 +1,12 @@
 declare module "songtreasures-api" {
     type GenderType = "male" | "female" | "unknown";
 
+    interface ILocale<T> {
+        [code: string]: T;
+    }
+    
+    type ILocaleString = ILocale<string>;
+    
     interface IUser {
         id: string;
         displayName: string;
@@ -339,43 +345,30 @@ declare module "songtreasures-api" {
         callback?: () => void;
         store?: boolean;
     }
-}
-
-interface Verse {
-    type: string;
-    name: string;
-    content: string[];
-}
-
-interface Price {
-    id: string;
-    value: string;
-    name: string;
-    type: "month" | "year";
-}
-
-interface Result<T> {
-    result: T;
-    success: boolean;
-    error: string;
-    lastUpdated: string;
-}
-
-interface AnalyticsItem {
-    count: number; 
-    activity: {
-        dateHour: Date;
-        countries: {
-            country: string;
+    
+    interface IAnalyticsItem {
+        count: number; 
+        activity: {
+            dateHour: Date;
+            countries: {
+                country: string;
+                count: number;
+            }[];
             count: number;
         }[];
-        count: number;
-    }[];
-    lyrics: {
-        language: string;
-        dateHour: Date;
-        count: string;
-    }[];
+        lyrics: {
+            language: string;
+            dateHour: Date;
+            count: string;
+        }[];
+    }
+
+    interface IPrice {
+        id: string;
+        value: string;
+        name: string;
+        type: "month" | "year";
+    }
 }
 
 declare module "songtreasures-api/search" {

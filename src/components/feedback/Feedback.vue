@@ -16,7 +16,7 @@ import SlidePanel from "@/components/SlidePanel.vue";
 import { QuestionMarkCircleIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
-	name: "feedback",
+	name: "feedback-component",
 	components: {
 		SlidePanel,
 		QuestionMarkCircleIcon,

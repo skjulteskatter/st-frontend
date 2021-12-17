@@ -189,6 +189,7 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "song-viewer",

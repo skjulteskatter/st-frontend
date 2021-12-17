@@ -8,6 +8,7 @@ import { appSession } from "@/services/session";
 import router from "@/router";
 import SongFilter from "./songFilter";
 import LocaleString from "./localeString";
+import { ILocaleString, Origin } from "songtreasures";
 
 type CollectionSettings = {
     offline: boolean;

@@ -8,7 +8,7 @@ import scriptures from "@/services/modules/scriptures";
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
-    name: "scriptures",
+    name: "scriptures-route",
     async mounted() {
         await scriptures.initialize();
         this.loaded = true;

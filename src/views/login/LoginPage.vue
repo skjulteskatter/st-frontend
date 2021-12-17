@@ -38,7 +38,6 @@ export default defineComponent({
 
 <style lang="scss">
 .pattern {
-    // eslint-disable-next-line
-    background-image: url("/img/login-bg.svg");
+    background-image: url("../../../public/img/login-bg.svg");
 }
 </style>

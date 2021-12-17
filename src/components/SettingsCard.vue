@@ -164,6 +164,7 @@ import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { session } from "@/services/api";
 import { storeService } from "@/services/modules";
+import { Language } from "songtreasures";
 
 export default defineComponent({
     name: "settings-card",

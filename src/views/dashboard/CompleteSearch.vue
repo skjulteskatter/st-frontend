@@ -34,6 +34,7 @@ import SearchResult from "@/classes/search/searchResult";
 import SearchResultItem from "@/classes/search/searchResultItem";
 import { ApiContributor } from "songtreasures-api";
 import { appSession } from "@/services/session";
+import { ILocaleString } from "songtreasures";
 
 export default defineComponent({
     name: "complete-search",

@@ -4,7 +4,7 @@
 			{{ title }}
 		</label>
 		<Checkbox 
-			v-for="item in Items"
+			v-for="item in items"
 			:key="item.key"
 			v-model="item.value"
 			:name="item.label"
@@ -25,17 +25,13 @@ export default defineComponent({
 	},
 	props: {
         items: {
-            type: Array as PropType<CheckboxListData>,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            type: Array as PropType<any[]>,
             required: true,
         },
         title: {
             type: String,
         },
-	},
-	computed: {
-		Items() {
-			return this.items as CheckboxListData;
-		},
 	},
 });
 </script>

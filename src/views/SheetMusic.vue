@@ -80,6 +80,7 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "sheet-music",
