@@ -1,10 +1,10 @@
-import { ICollection, ISong, Format, IMediaFile } from "songtreasures-api";
+import { ICollection, ISong, Format } from "songtreasures-api";
 import BaseClass from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";
 import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
-import { Lyrics, Participant } from ".";
+import { Lyrics, MediaFile, Participant } from ".";
 import LocaleString from "./localeString";
 import { ILocaleString } from "songtreasures";
 
@@ -46,22 +46,22 @@ export default class Song extends BaseClass implements ISong {
     public yearWritten;
     public yearComposed;
 
-    private _files?: IMediaFile[];
+    private _files?: MediaFile[];
 
-    public get files(): IMediaFile[] {
+    public get files(): MediaFile[] {
         if (!this._files) {
             this._files = appSession.files.filter(f => f.songId == this.id);
         }
         return this._files;
     }
 
-    public get audioFiles(): IMediaFile[] {
+    public get audioFiles(): MediaFile[] {
         return this.files.filter(f => f.type === "audio");
     }
-    public get videoFiles(): IMediaFile[] {
+    public get videoFiles(): MediaFile[] {
         return this.files.filter(f => f.type === "video");
     }
-    public get sheetMusic(): IMediaFile[] {
+    public get sheetMusic(): MediaFile[] {
         return this.files.filter(f => f.type.startsWith("sheetmusic"));
     }
 
