@@ -21,7 +21,7 @@ import {
 } from "@/components/dashboard";
 
 export default defineComponent({
-    name: "dashboard",
+    name: "dashboard-view",
     components: {
         ActivityFeed,
         Playlists,

@@ -43,7 +43,7 @@
 import { defineComponent } from "@vue/runtime-core";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
-import { ICustomCollection } from "songtreasures";
+import { ICustomCollection } from "songtreasures-api";
 import { PlusIcon, FolderIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({

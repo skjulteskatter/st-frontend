@@ -38,6 +38,6 @@ export default defineComponent({
 
 <style lang="scss">
 .pattern {
-    background-image: url("/img/login-bg.svg");
+    background-image: url("../../../public/img/login-bg.svg");
 }
 </style>

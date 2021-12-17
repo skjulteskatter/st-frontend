@@ -18,12 +18,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
+import { IAnalyticsItem } from "songtreasures-api";
 
 export default defineComponent({
 	name: "country-list",
 	props: {
 		analytics: {
-			type: Object as PropType<AnalyticsItem>,
+			type: Object as PropType<IAnalyticsItem>,
 			required: true,
 		},
 	},

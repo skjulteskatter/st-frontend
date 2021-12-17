@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { debouncer } from "@/classes/debouncer";
+import { LyricsVerse } from "@/classes/lyrics";
 
 // just set to false if you want to disable the feature, without removing code
 const FIGHT_BROWSER_ZOOM = true;
@@ -46,7 +47,7 @@ export default defineComponent({
 	},
 	props: {
 		verses: {
-			type: Array as PropType<Verse[]>,
+			type: Array as PropType<LyricsVerse[]>,
 			required: true,
 		},
 		songId: {

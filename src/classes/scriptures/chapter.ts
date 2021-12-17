@@ -1,5 +1,5 @@
 import router from "@/router";
-import { IChapter } from "songtreasures";
+import { IChapter } from "songtreasures-api";
 import Verse from "./verse";
 
 export default class Chapter implements IChapter {

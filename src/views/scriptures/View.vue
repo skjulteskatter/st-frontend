@@ -34,6 +34,7 @@ import { SelectTranslation } from "@/components/scriptures";
 import { defineComponent } from "@vue/runtime-core";
 import { ChevronRightIcon } from "@heroicons/vue/outline";
 import { Collection } from "@/classes";
+import { ILocale, Language } from "songtreasures";
 
 export default defineComponent({
     name: "scripture-view",

@@ -22,7 +22,7 @@ import { useStore } from "@/store";
 import { User } from "@/classes";
 
 export default defineComponent({
-    name: "admin",
+    name: "admin-view",
     components: {
         UsersList,
         EmailLookup,

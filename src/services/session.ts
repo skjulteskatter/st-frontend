@@ -12,13 +12,14 @@ import {
     User,
     MediaFile,
 } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures-api";
 import { analytics, instruments, items, playlists, session, sharing, songs, tags } from "./api";
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
 import Instrument from "@/classes/instrument";
+import { Language } from "songtreasures";
 
 export class Session {
     private _initialized?: boolean;

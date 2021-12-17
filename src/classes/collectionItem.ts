@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures";
+import { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures-api";
 
 export default class CollectionItem<T extends (ApiContributor | ICountry | ITheme | ICategory)> implements ICollectionItem<T> {
     private store = useStore();

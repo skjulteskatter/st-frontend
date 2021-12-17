@@ -28,9 +28,10 @@ import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import { Language } from "songtreasures";
 
 export default defineComponent({
-    name: "success",
+    name: "success-view",
     data: () => ({
         store: useStore(),
         selectedLanguage: {} as Language,

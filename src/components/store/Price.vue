@@ -14,7 +14,7 @@ import http from "@/services/http";
 import { storeService } from "@/services/modules";
 
 export default defineComponent({
-    name: "price",
+    name: "price-div",
     props: {
         product: {
             type: Object as PropType<Product>,

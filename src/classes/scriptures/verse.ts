@@ -1,4 +1,4 @@
-import { IVerse } from "songtreasures";
+import { IVerse } from "songtreasures-api";
 
 export default class Verse implements IVerse {
     public key;
