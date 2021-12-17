@@ -1,5 +1,5 @@
 <template>
-    <div class="sheetmusic-viewer">
+    <div class="min-h-screen max-w-screen-2xl m-auto pb-12">
         <div v-if="song" class="mb-2 p-4 bg-white">
             <div class="flex items-baseline">
                 <span class="opacity-50 text-lg mr-2">{{ song.getNumber(song.collectionIds[0]) }}</span>
@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="sheetmusic-wrapper">
+        <div class="w-full h-5/6">
             <OpenSheetMusicDisplay
                 v-if="
                     loaded &&
@@ -208,22 +208,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-.sheetmusic-viewer {
-    min-height: 100vh;
-    max-width: 1600px;
-    margin: auto;
-    padding-bottom: 3em;
-}
-
-.sheetmusic-wrapper {
-    width: 100%;
-    height: 90%;
-}
-
-#pb-canvas {
-    width: 100%;
-    text-align: center;
-}
-</style>

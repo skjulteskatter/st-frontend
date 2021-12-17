@@ -51,21 +51,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-@import "../../style/mixins";
-
-@keyframes fade-in {
-    0% {opacity: 0;}
-    100% {opacity: unset;}
-}
-
-.song-list {
-    animation: fade-in 0.1s linear;
-
-    &__items {
-        columns: 325px;
-        column-gap: var(--st-spacing);
-    }
-}
-</style>

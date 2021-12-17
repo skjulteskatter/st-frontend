@@ -12,7 +12,7 @@
                         />
                     </div>
                     <BaseCard class="md:col-span-3">
-                        <div class="contributor__biography__header mb-6">
+                        <div class="break-inside-avoid mb-6">
                             <BaseButton
                                 v-if="isEditor"
                                 @click="goToEditPage()"
@@ -37,7 +37,7 @@
                                 {{ contributor.subtitle }}
                             </small>
                         </div>
-                        <div class="contributor__biography">
+                        <div class="columns-sm">
                             <div
                                 v-html="contributor.getBiography(languageKey)"
                                 class="text-sm"
@@ -45,10 +45,10 @@
                         </div>
                     </BaseCard>
                 </div>
-                <div class="mt-8 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="c in collections" :key="c.id">
                         <h2 class="font-bold mb-2">{{ c.getName(languageKey) }}</h2>
-                        <div class="contributor__songs__wrapper">
+                        <div class="flex flex-col gap-4">
                             <SongListCard
                                 :collection="c"
                                 :title="$t('song_author')"
@@ -185,30 +185,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-@import "../style/mixins";
-
-.contributor {
-    &__biography {
-        columns: auto 325px !important;
-
-        &__header {
-            break-inside: avoid;
-        }
-    }
-
-    &__songs {
-        margin-top: calc(var(--st-spacing) * 2);
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        grid-gap: var(--st-spacing);
-
-        &__wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: var(--st-spacing);
-        }
-    }
-}
-</style>
