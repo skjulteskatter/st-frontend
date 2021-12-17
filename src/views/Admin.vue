@@ -7,6 +7,7 @@
         <div class="flex flex-col gap-6">
             <UsersList :users="users" :currentUser="currentUser" />
             <EmailLookup />
+            <DownloadEmails />
         </div>
     </div>
     <div v-else>
@@ -15,7 +16,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { UsersList, EmailLookup } from "@/components/admin";
+import { UsersList, EmailLookup, DownloadEmails } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -27,6 +28,7 @@ export default defineComponent({
         UsersList,
         EmailLookup,
         CopyToClipboard,
+        DownloadEmails,
     },
     data: () => ({
         store: useStore(),

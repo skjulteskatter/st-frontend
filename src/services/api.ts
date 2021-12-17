@@ -150,6 +150,9 @@ export const admin = {
             email,
         });
     },
+    getEmails(createdAt: Date) {
+        return http.get<string>("api/Admin/Emails?createdAt=" + createdAt.toISOString());
+    },
 };
 
 export const songs = {
