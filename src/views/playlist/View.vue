@@ -81,6 +81,8 @@
                         <CopyToClipboard :label="$t('playlist_copyLink')" :content="getLink(key.key)" />
                         <BaseButton
                             theme="error"
+                            size="small"
+                            title="Delete link"
                             :disabled="deleted[key.key]"
                             :loading="loading[key.key]"
                             @click="deleteKey(key)"
