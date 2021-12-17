@@ -2,25 +2,33 @@
 	<BaseCard>
 		<template #header>
 			<div class="flex justify-between items-baseline">
-				<h3 class="font-bold">Download emails</h3>
+				<h3 class="font-bold">Download email adresses</h3>
 			</div>
 		</template>
 		<Loader :loading="loading" position="local">
-			<div>
-				<h3 class="mb-2 text-l">From date</h3>
-				<input v-model="dateCreatedAt" class="mb-2" type="date" />
-				<BaseButton :loading="loadingDownload" @click="downloadEmails">Download</BaseButton>
-			</div>
+			<BaseInput v-model="dateCreatedAt" type="date" label="From date" />
 		</Loader>
+		<template #footer>
+			<BaseButton theme="secondary" :loading="loadingDownload" @click="downloadEmails" class="ml-auto">
+				<template #icon>
+					<DownloadIcon class="w-4 h-4" />
+				</template>
+				Download
+			</BaseButton>
+		</template>
 	</BaseCard>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import api from "@/services/api";
+import { DownloadIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
     name: "download-emails",
+	components: {
+		DownloadIcon,
+	},
 	data: () => ({
 		loading: false,
 		loadingDownload: false,

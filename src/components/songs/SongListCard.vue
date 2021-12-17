@@ -1,5 +1,5 @@
 <template>
-    <BaseCard class="theme-card" v-if="title && songs.length > 0">
+    <BaseCard class="break-inside-avoid" v-if="title && songs.length > 0">
         <template #header>
             <div class="flex justify-between">
                 <b
@@ -94,13 +94,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-.theme-card {
-    break-inside: avoid;
-
-    @supports not (gap: 1rem) {
-        margin-bottom: var(--st-spacing);
-    }
-}
-</style>
