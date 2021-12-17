@@ -162,7 +162,7 @@ export const songs = {
         return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(lastUpdated?: string) {
-        return http.getWithResult<IMediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<IMediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "?updatedAt=" + lastUpdated : ""));
     },
     getFile(fileId: string) {
         return http.get<IMediaFile>(`api/Files/${fileId}?expand=song`);
