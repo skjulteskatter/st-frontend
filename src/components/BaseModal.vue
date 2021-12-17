@@ -60,7 +60,7 @@ import {
 } from "@headlessui/vue";
 
 export default defineComponent({
-    name: "modal",
+    name: "base-modal",
     components: {
         TransitionRoot,
         TransitionChild,

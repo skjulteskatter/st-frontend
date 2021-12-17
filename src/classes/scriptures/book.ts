@@ -1,5 +1,5 @@
 import router from "@/router";
-import { IBook } from "songtreasures";
+import { IBook } from "songtreasures-api";
 import Chapter from "./chapter";
 
 export default class Book implements IBook {

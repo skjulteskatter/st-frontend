@@ -77,7 +77,7 @@
 import { defineComponent } from "@vue/runtime-core";
 import { Collection, Lyrics } from "@/classes";
 import { useStore } from "@/store";
-import { LyricsContent } from "songtreasures";
+import { LyricsContent } from "songtreasures-api";
 
 export default defineComponent({
 	name: "print-view",

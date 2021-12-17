@@ -12,7 +12,7 @@
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
-    name: "loader",
+    name: "loader-component",
     props: {
         loading: {
             type: Boolean,

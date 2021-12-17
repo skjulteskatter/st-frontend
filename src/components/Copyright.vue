@@ -9,7 +9,7 @@ import { useStore } from "@/store";
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
-    name: "copyright",
+    name: "copyright-component",
     data: () => ({
         store: useStore(),
     }),

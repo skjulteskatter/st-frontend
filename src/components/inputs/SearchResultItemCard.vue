@@ -40,7 +40,7 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { UserCircleIcon } from "@heroicons/vue/outline";
 import SearchResultItem from "@/classes/search/searchResultItem";
 import { CollectionItem, Song } from "@/classes";
-import { ApiContributor } from "songtreasures";
+import { ApiContributor } from "songtreasures-api";
 
 export default defineComponent({
     props: {

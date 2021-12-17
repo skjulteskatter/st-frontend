@@ -1,4 +1,4 @@
-import { ICollection, ISong, Format, IMediaFile } from "songtreasures";
+import { ICollection, ISong, Format, IMediaFile } from "songtreasures-api";
 import BaseClass from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";
@@ -6,6 +6,7 @@ import { songs } from "@/services/api";
 import { logs } from "@/services/logs";
 import { Lyrics, Participant } from ".";
 import LocaleString from "./localeString";
+import { ILocaleString } from "songtreasures";
 
 export default class Song extends BaseClass implements ISong {
     public id: string;

@@ -1,5 +1,5 @@
 import router from "@/router";
-import { ITranslation } from "songtreasures";
+import { ITranslation } from "songtreasures-api";
 
 export default class Translation implements ITranslation {
     public id;

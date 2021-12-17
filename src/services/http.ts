@@ -2,6 +2,13 @@ import config from "../config";
 import auth from "./auth";
 import { notify } from "./notify";
 
+export type Result<T> = {
+    result: T;
+    success: boolean;
+    error: string;
+    lastUpdated: string;
+}
+
 type ResultError = {
     status: number;
     value: string;

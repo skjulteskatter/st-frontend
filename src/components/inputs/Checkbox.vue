@@ -14,7 +14,7 @@
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
-    name: "checkbox",
+    name: "checkbox-component",
     props: {
         modelValue: {
             type: Boolean,

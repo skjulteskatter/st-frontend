@@ -71,7 +71,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { osmd } from "@/services/osmd";
-import { IMediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures-api";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -80,6 +80,7 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "sheet-music",

@@ -88,7 +88,7 @@
 import { defineComponent } from "@vue/runtime-core";
 import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
-import { ISubscription, IUser } from "songtreasures";
+import { ISubscription, IUser } from "songtreasures-api";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/solid";
 
 type EmailLookupResponse = {

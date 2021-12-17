@@ -1,5 +1,5 @@
 import { Product } from "@/classes";
-import { SetupResponse } from "checkout";
+import { SetupResponse } from "songtreasures-api/checkout";
 import { stripe } from "../api";
 import StripeService from "../stripe";
 

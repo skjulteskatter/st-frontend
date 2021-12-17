@@ -1,5 +1,6 @@
 import { useStore } from "@/store";
-import { ICategory } from "songtreasures";
+import { ILocaleString } from "songtreasures";
+import { ICategory } from "songtreasures-api";
 
 export default class Category implements ICategory {
     protected store = useStore();

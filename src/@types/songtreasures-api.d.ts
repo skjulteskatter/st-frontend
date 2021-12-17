@@ -1,7 +1,12 @@
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-declare module "songtreasures" {
+declare module "songtreasures-api" {
     type GenderType = "male" | "female" | "unknown";
 
+    interface ILocale<T> {
+        [code: string]: T;
+    }
+    
+    type ILocaleString = ILocale<string>;
+    
     interface IUser {
         id: string;
         displayName: string;
@@ -337,49 +342,36 @@ declare module "songtreasures" {
         content?: string;
         timeout?: number;
         dateTime?: Date;
-        callback?: Function;
+        callback?: () => void;
         store?: boolean;
+    }
+    
+    interface IAnalyticsItem {
+        count: number; 
+        activity: {
+            dateHour: Date;
+            countries: {
+                country: string;
+                count: number;
+            }[];
+            count: number;
+        }[];
+        lyrics: {
+            language: string;
+            dateHour: Date;
+            count: string;
+        }[];
+    }
+
+    interface IPrice {
+        id: string;
+        value: string;
+        name: string;
+        type: "month" | "year";
     }
 }
 
-interface Verse {
-    type: string;
-    name: string;
-    content: string[];
-}
-
-interface Price {
-    id: string;
-    value: string;
-    name: string;
-    type: "month" | "year";
-}
-
-interface Result<T> {
-    result: T;
-    success: boolean;
-    error: string;
-    lastUpdated: string;
-}
-
-interface AnalyticsItem {
-    count: number; 
-    activity: {
-        dateHour: Date;
-        countries: {
-            country: string;
-            count: number;
-        }[];
-        count: number;
-    }[];
-    lyrics: {
-        language: string;
-        dateHour: Date;
-        count: string;
-    }[];
-}
-
-declare module "songtreasures/search" {
+declare module "songtreasures-api/search" {
     interface ApiSearchResultItem {
         id: string;
         context: {
@@ -390,5 +382,41 @@ declare module "songtreasures/search" {
     interface ApiSearchResult {
         songs: ApiSearchResultItem[];
         contributors: ApiSearchResultItem[];
+    }
+}
+
+declare module "songtreasures-api/checkout" {
+    interface SessionRequest {
+        productIds: string[];
+        successUrl: string;
+        cancelUrl: string;
+        country?: string;
+        type: "year" | "month";
+    }
+
+    interface SessionResponse {
+        sessionId: string;
+    }
+
+    interface PortalRequest {
+        sessionId: string;
+    }
+    
+    interface SetupResponseCollection {
+        id: string;
+        name: string;
+    }
+
+    interface SetupResponse {
+        key: string;
+        products: ApiProduct[];
+    }
+    
+    interface ApiProduct {
+        id: string;
+        name: ILocaleString;
+        collectionIds: string[];
+        prices: Price[];
+        priority: number;
     }
 }

@@ -1,4 +1,4 @@
-import { ISettings } from "songtreasures";
+import { ISettings } from "songtreasures-api";
 
 export default class UserSettings implements ISettings {
     public defaultTranscode;

@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { ICustomCollection } from "songtreasures";
+import { ICustomCollection } from "songtreasures-api";
 import { BaseModal } from "@/components";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
 import { TrashIcon } from "@heroicons/vue/solid";

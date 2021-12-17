@@ -178,7 +178,7 @@ import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilA
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, IMediaFile } from "songtreasures";
+import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -189,6 +189,7 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "song-viewer",
@@ -520,7 +521,7 @@ export default defineComponent({
                     this.store.state.songs.language,
                     undefined,
                     this.store.state.songs.newMelody,
-                    this.lyrics?.format
+                    this.lyrics?.format,
                 );
             }
         },

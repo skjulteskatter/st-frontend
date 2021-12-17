@@ -139,6 +139,7 @@ import { Collection, transposer } from "@/classes";
 import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
 import { XIcon } from "@heroicons/vue/solid";
+import { SheetMusicOptions } from "songtreasures";
 
 @Options({
     props: {

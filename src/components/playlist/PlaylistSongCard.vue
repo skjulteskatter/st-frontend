@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { ICustomCollectionEntry } from "songtreasures";
+import { ICustomCollectionEntry } from "songtreasures-api";
 import { Song } from "@/classes";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";

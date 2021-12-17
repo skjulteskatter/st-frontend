@@ -1,4 +1,4 @@
-import { ICopyright } from "songtreasures";
+import { ICopyright } from "songtreasures-api";
 import BaseItem from "./base";
 
 export default class Copyright extends BaseItem implements ICopyright {

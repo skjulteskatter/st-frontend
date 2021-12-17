@@ -1,5 +1,11 @@
-import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures";
+import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
 import { transposer } from "./transposer";
+
+export type LyricsVerse = {
+    type: string;
+    name: string;
+    content: string[];
+}
 
 export default class Lyrics implements ILyrics {
     id: string;
@@ -39,16 +45,16 @@ export default class Lyrics implements ILyrics {
 
     public get verses() {
         const verses: {
-            [key: string]: Verse;
+            [key: string]: LyricsVerse;
         } = {};
 
         let number = 1;
-        let chorus: Verse = {} as Verse;
+        let chorus: LyricsVerse = {} as LyricsVerse;
 
         for (const key of Object.keys(this.content)) {
             const type = key.split("_")[0];
 
-            const verse: Verse = {
+            const verse: LyricsVerse = {
                 name: (this.content as LyricsContent)[key].name,
                 content: (this.content as LyricsContent)[key].content,
                 type,
@@ -90,7 +96,7 @@ export default class Lyrics implements ILyrics {
 
         if (content) {
             for (const key of Object.keys(content)) {
-                const verse: Verse = {
+                const verse: LyricsVerse = {
                     name: (content as LyricsContent)[key].name,
                     content: (content as LyricsContent)[key].content,
                     type:
