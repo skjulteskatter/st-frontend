@@ -16,7 +16,7 @@
                 {{$t("instrument_" + instrument.identifier)}}
             </option>
         </select> -->
-        <div v-for="collection in collections" :key="collection.id" class="mb-4">
+        <div v-for="collection in collections" :key="collection.id" class="mb-8">
             <BaseButton
                 class="mb-4"
                 theme="neutral"
