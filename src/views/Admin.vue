@@ -2,7 +2,7 @@
     <div v-if="isAdmin">
         <div class="mb-4 flex gap-4">
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
-            <CopyToClipboard v-if="token" :content="token" label="API token" title="Copy API token" />
+            <CopyToClipboard v-if="token" :content="token" label="Copy API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-6">
             <UsersList :users="users" :currentUser="currentUser" />
