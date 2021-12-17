@@ -1,7 +1,7 @@
 import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
-import { SessionRequest, SetupResponse } from "checkout";
+import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
 import { ApiSearchResult } from "songtreasures-api/search";
 import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument } from "songtreasures-api";
 import http from "./http";

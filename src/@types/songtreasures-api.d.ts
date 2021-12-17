@@ -392,7 +392,7 @@ declare module "songtreasures-api/search" {
     }
 }
 
-declare module "checkout" {
+declare module "songtreasures-api/checkout" {
     interface SessionRequest {
         productIds: string[];
         successUrl: string;
