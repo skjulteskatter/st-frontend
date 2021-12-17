@@ -1,16 +1,18 @@
 <template>
 	<div
 		v-if="song"
-		class="rounded-lg p-4 bg-white shadow-md file-card w-full text-left hover:ring-2 hover:ring-gray-400"
+		class="rounded-lg p-4 bg-white shadow-md file-card w-full text-left"
 		:title="song.name.default"
 	>
-		<h1 v-if="collection">{{collection.key}} {{song.getNumber(collection?.id)}}</h1>
-		<h3 class="font-semibold">{{ song.name.default }}</h3>
-		<button v-for="file in files" @click="callback(file)" :key="file.id" class="w-max cursor-pointer flex gap-2 items-center mt-2 px-2 py-1 rounded-md bg-black/5 uppercase text-xs tracking-wider">
-			<component :is="icon(file)" class="w-4 h-4 opacity-50" />
+		<p v-if="collection" class="opacity-50 text-sm">{{collection.key}} {{song.getNumber(collection?.id)}}</p>
+		<h3 class="font-semibold mb-2">{{ song.name.default }}</h3>
+		<BaseButton size="small" theme="neutral" v-for="file in files" @click="callback(file)" :key="file.id">
+			<template #icon>
+				<component :is="icon(file)" class="w-4 h-4 opacity-50" />
+			</template>
 			<span v-if="file.getInstrument()">{{ $t(`instrument_${file.getInstrument()?.identifier}`) }}</span>
 			<span v-else-if="file.category">{{ $t(`types_${file.category}`) }}</span>
-		</button>
+		</BaseButton>
 		<!-- TODO: add link to song if .available -->
 	</div>
 </template>

@@ -16,6 +16,7 @@
         <div v-for="collection in collections" :key="collection.id" class="mb-4">
             <BaseButton
                 class="mb-4"
+                theme="neutral"
                 @click="$router.push({name: 'song-list', params: {collection: collection.key}})"
             >
                 {{collection.name.default}}
