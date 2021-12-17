@@ -9,6 +9,7 @@ import router from "@/router";
 import SongFilter from "./songFilter";
 import LocaleString from "./localeString";
 import { ILocaleString, Origin } from "songtreasures";
+import { storeService } from "@/services/modules";
 
 type CollectionSettings = {
     offline: boolean;
@@ -445,5 +446,25 @@ export default class Collection extends BaseClass implements ICollection {
 
     public get title() {
         return this.name;
+    }
+
+    private async getProduct() {
+        return (await storeService.getProducts()).find(p => p.collectionIds.includes(this.id));
+    }
+
+    public async addToCart() {
+        const product = await this.getProduct();
+        if (product) {
+            storeService.addProduct(product.id);
+        }
+    }
+
+    public async inCart() {
+        const product = await this.getProduct();
+
+        if (product) {
+            return storeService.cart.includes(product.id);
+        }
+        return false;
     }
 }

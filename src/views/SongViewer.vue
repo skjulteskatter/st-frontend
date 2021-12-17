@@ -521,7 +521,7 @@ export default defineComponent({
                     this.store.state.songs.language,
                     undefined,
                     this.store.state.songs.newMelody,
-                    this.lyrics?.format
+                    this.lyrics?.format,
                 );
             }
         },

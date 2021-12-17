@@ -131,7 +131,7 @@ export default defineComponent({
                 ?.value;
             const formattedPrice = unformattedPrice?.slice(
                 0,
-                unformattedPrice.length - 2
+                unformattedPrice.length - 2,
             );
             return `${formattedPrice} /${type}`;
         },
