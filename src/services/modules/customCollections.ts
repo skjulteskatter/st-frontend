@@ -1,5 +1,5 @@
 import { CustomCollection } from "@/classes";
-import { ICustomCollection } from "songtreasures";
+import { ICustomCollection } from "songtreasures-api";
 import api from "../api";
 import BaseCustomModule from "./baseCustomModule";
 

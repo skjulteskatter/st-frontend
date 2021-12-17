@@ -83,7 +83,7 @@ import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Collection, Song } from "@/classes";
-import { IMediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures-api";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 

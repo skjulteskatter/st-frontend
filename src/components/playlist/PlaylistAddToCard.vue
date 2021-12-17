@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { ICustomCollection } from "songtreasures";
+import { ICustomCollection } from "songtreasures-api";
 import { FolderIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({

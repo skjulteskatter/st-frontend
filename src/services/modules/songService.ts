@@ -1,5 +1,5 @@
 import { Song } from "@/classes";
-import { ISong } from "songtreasures";
+import { ISong } from "songtreasures-api";
 import api from "../api";
 import { cache } from "../cache";
 import { notify } from "../notify";

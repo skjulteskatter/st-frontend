@@ -86,7 +86,7 @@ import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
 import { User } from "@/classes";
-import { ISubscription } from "songtreasures";
+import { ISubscription } from "songtreasures-api";
 import { appSession } from "@/services/session";
 
 export default defineComponent({

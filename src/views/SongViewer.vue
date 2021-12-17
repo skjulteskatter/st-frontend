@@ -178,7 +178,7 @@ import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilA
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, IMediaFile } from "songtreasures";
+import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";

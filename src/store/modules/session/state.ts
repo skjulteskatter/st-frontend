@@ -1,5 +1,5 @@
 import { User } from "@/classes";
-import { IActivity, ICustomCollection, ITag } from "songtreasures";
+import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 
 export type State = {
     currentUser?: User;

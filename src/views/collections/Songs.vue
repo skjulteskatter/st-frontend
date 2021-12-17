@@ -136,7 +136,7 @@ import {
     ViewBoardsIcon,
 } from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
-import { ApiContributor, Sort } from "songtreasures";
+import { ApiContributor, Sort } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";

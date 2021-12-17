@@ -1,5 +1,5 @@
 import { Collection } from "@/classes";
-import { ICollection } from "songtreasures";
+import { ICollection } from "songtreasures-api";
 import api from "../api";
 import { appSession } from "../session";
 import BaseModule from "./baseModule";

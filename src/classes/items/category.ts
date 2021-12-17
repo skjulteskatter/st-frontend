@@ -1,4 +1,4 @@
-import { ICategory } from "songtreasures";
+import { ICategory } from "songtreasures-api";
 import BaseItem from "./base";
 
 export default class Category extends BaseItem implements ICategory {

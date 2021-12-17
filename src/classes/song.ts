@@ -1,4 +1,4 @@
-import { ICollection, ISong, Format, IMediaFile } from "songtreasures";
+import { ICollection, ISong, Format, IMediaFile } from "songtreasures-api";
 import BaseClass from "./baseClass";
 import { appSession } from "@/services/session";
 import router from "@/router";

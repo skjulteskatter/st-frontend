@@ -12,7 +12,7 @@ import {
     User,
     MediaFile,
 } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures-api";
 import { analytics, instruments, items, playlists, session, sharing, songs, tags } from "./api";
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";

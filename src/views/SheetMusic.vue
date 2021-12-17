@@ -71,7 +71,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { osmd } from "@/services/osmd";
-import { IMediaFile } from "songtreasures";
+import { IMediaFile } from "songtreasures-api";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";

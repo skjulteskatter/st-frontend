@@ -1,5 +1,5 @@
 import { Tag } from "@/classes";
-import { ITag } from "songtreasures";
+import { ITag } from "songtreasures-api";
 import api from "../api";
 import BaseCustomModule from "./baseCustomModule";
 

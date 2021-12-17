@@ -1,4 +1,4 @@
-import { ICustomCollection, ITag } from "songtreasures";
+import { ICustomCollection, ITag } from "songtreasures-api";
 import { cache } from "../cache";
 import { Deleteable, Refreshable } from "../interfaces";
 import BaseModule from "./baseModule";

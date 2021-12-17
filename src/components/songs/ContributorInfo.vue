@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { ApiContributor } from "songtreasures";
+import { ApiContributor } from "songtreasures-api";
 
 export default defineComponent({
     name: "contributor-info",

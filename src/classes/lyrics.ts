@@ -1,4 +1,4 @@
-import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures";
+import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
 import { transposer } from "./transposer";
 
 export default class Lyrics implements ILyrics {

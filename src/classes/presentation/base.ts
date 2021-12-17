@@ -1,6 +1,6 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { ApiContributor, ILyrics, ISong } from "songtreasures";
+import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
 import { Lyrics } from "@/classes";
 
 export type Settings = {

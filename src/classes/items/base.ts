@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import { IItem } from "songtreasures";
+import { IItem } from "songtreasures-api";
 
 export default class BaseItem implements IItem {
     public id;

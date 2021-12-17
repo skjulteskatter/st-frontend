@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ICollection, ApiContributor, Sort } from "songtreasures";
+import { ICollection, ApiContributor, Sort } from "songtreasures-api";
 import { ListEntry, Lyrics, Song, CollectionItem } from ".";
 import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";

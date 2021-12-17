@@ -32,7 +32,7 @@ import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import SearchResult from "@/classes/search/searchResult";
 import SearchResultItem from "@/classes/search/searchResultItem";
-import { ApiContributor } from "songtreasures";
+import { ApiContributor } from "songtreasures-api";
 import { appSession } from "@/services/session";
 
 export default defineComponent({

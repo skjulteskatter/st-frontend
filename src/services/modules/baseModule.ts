@@ -1,4 +1,4 @@
-import { ICollection, ICustomCollection, ITag } from "songtreasures";
+import { ICollection, ICustomCollection, ITag } from "songtreasures-api";
 import { cache, StoreWithExpiry } from "../cache";
 import { Refreshable } from "../interfaces";
 

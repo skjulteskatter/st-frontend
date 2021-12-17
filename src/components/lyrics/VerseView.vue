@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { LyricsChordContent } from "songtreasures";
+import { LyricsChordContent } from "songtreasures-api";
 
 export default defineComponent({
     name: "verse-view",

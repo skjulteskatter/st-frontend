@@ -1,5 +1,5 @@
 import { User, UserSettings } from "@/classes";
-import { IActivity, ICustomCollection, ITag } from "songtreasures";
+import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";
