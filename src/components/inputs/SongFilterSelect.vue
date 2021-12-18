@@ -42,6 +42,7 @@ export default defineComponent({
 			const video = this.selectedValues.filter(v => this.filterValues["video"].includes(v));
 			const sheetMusic = this.selectedValues.filter(v => this.filterValues["sheetmusic"].includes(v));
 			const types = this.selectedValues.filter(v => this.contentTypes.includes(v));
+			const categories = this.selectedValues.filter(v => this.filterValues["category"].includes(v));
 
 			const filter: SongFilter = this.store.state.songs.filter;
 
@@ -49,6 +50,7 @@ export default defineComponent({
 			filter.videoFiles = video;
 			filter.sheetMusicTypes = sheetMusic;
 			filter.contentTypes = types;
+			filter.categoryIds = categories;
 
 			this.store.commit(SongsMutationTypes.SET_FILTER, filter);
 			this.$emit("apply");

@@ -1,10 +1,11 @@
 import { useStore } from "@/store";
 import { ICategory } from "songtreasures";
+import LocaleString from "./localeString";
 
 export default class Category implements ICategory {
     protected store = useStore();
     public id;
-    public name: ILocaleString = {};
+    public name: LocaleString;
     
     public getName(language?: string) {
         language ??= this.store.getters.languageKey;
@@ -13,6 +14,6 @@ export default class Category implements ICategory {
 
     constructor(props: ICategory) {
         this.id = props.id;
-        this.name = props.name;
+        this.name = new LocaleString(props.name ?? {});
     }
 }

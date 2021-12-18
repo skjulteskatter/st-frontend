@@ -42,6 +42,7 @@ export const state: State = {
         videoFiles: [],
         audioFiles: [],
         origins: [],
+        categoryIds: [],
         contentTypes: [],
         sheetMusicTypes: [],
         hasAudioFiles: false,
