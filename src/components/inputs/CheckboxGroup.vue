@@ -6,11 +6,11 @@
 		<Checkbox
 			v-for="(label, i) in Labels"
 			:key="i"
-			v-model="Values[label]"
+			v-model="Values[label.key]"
 			@change="action"
-			:name="$t(`types_${label}`)"
+			:name="label.title"
 		>
-			{{ $t(`types_${label}`) }}
+			{{ label.title }}
 		</Checkbox>
 	</div>
 </template>
@@ -23,6 +23,11 @@ type Values = {
 	[id: string]: boolean;
 }
 
+type Label = {
+	key: string;
+	title: string;
+}
+
 export default defineComponent({
 	name: "checkbox-group",
 	components: {
@@ -33,7 +38,7 @@ export default defineComponent({
 			type: String,
 		},
 		labels: {
-			type: Array as PropType<string[]>,
+			type: Array as PropType<Label[]>,
 		},
 		values: {
 			type: Object as PropType<Values>,

@@ -58,7 +58,7 @@
                             @search="search"
                             @keyup="filterByNumber"
                         />
-                        <SongFilterDropdown @apply="loadList" class="hidden md:flex" />
+                        <SongFilterDropdown :songs="collection.songs" @apply="loadList" class="hidden md:flex" />
                     </div>
                 </div>
                 <Loader :loading="loadingList" v-if="!loading">
