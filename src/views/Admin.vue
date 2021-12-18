@@ -2,11 +2,12 @@
     <div v-if="isAdmin">
         <div class="mb-4 flex gap-4">
             <h1 class="font-bold text-xl lg:text-2xl">Admin</h1>
-            <CopyToClipboard v-if="token" :content="token" label="API token" title="Copy API token" />
+            <CopyToClipboard v-if="token" :content="token" label="Copy API token" title="Copy API token" />
         </div>
         <div class="flex flex-col gap-6">
             <UsersList :users="users" :currentUser="currentUser" />
             <EmailLookup />
+            <DownloadEmails />
         </div>
     </div>
     <div v-else>
@@ -15,18 +16,19 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { UsersList, EmailLookup } from "@/components/admin";
+import { UsersList, EmailLookup, DownloadEmails } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { User } from "@/classes";
 
 export default defineComponent({
-    name: "admin",
+    name: "admin-view",
     components: {
         UsersList,
         EmailLookup,
         CopyToClipboard,
+        DownloadEmails,
     },
     data: () => ({
         store: useStore(),

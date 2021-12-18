@@ -1,7 +1,7 @@
 import router from "@/router";
 import { appSession } from "@/services/session";
-import { ApiContributor } from "songtreasures";
-import { ApiSearchResultItem } from "songtreasures/search";
+import { ApiContributor } from "songtreasures-api";
+import { ApiSearchResultItem } from "songtreasures-api/search";
 import { CollectionItem, Song } from "..";
 
 type SearchResultItemTypes = "song" | "contributor";

@@ -1,5 +1,5 @@
 import { appSession } from "@/services/session";
-import { IMediaFile, MediaType } from "songtreasures";
+import { IMediaFile, MediaType } from "songtreasures-api";
 import { Participant, Song } from ".";
 
 export default class MediaFile implements IMediaFile {

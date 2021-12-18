@@ -1,4 +1,5 @@
 import { appSession } from "@/services/session";
+import { ILocaleString } from "songtreasures";
 
 export default class LocaleString implements ILocaleString {
     [key: string]: string;

@@ -1,4 +1,4 @@
-import { IGenre } from "songtreasures";
+import { IGenre } from "songtreasures-api";
 import BaseItem from "./base";
 
 export default class Genre extends BaseItem implements IGenre {

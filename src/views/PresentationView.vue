@@ -68,6 +68,7 @@ import { viewer } from "@/classes/presentation/viewer";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { PresentationLyrics } from "@/components/presentation";
+import { LyricsVerse } from "@/classes/lyrics";
 
 export default defineComponent({
     name: "presentation-view",
@@ -79,7 +80,7 @@ export default defineComponent({
         viewer: viewer,
         lyrics: null as Lyrics | null,
         song: null as Song | null,
-        verses: null as Verse[] | null,
+        verses: null as LyricsVerse[] | null,
         theme: "dark" as "dark" | "light",
         muted: false,
         showSidebar: true,

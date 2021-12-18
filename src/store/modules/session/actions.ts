@@ -3,7 +3,7 @@ import api from "@/services/api";
 import auth from "@/services/auth";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { RootState } from "../..";
-import { IActivity, ApiContributor, ISong } from "songtreasures";
+import { IActivity, ApiContributor, ISong } from "songtreasures-api";
 import { ActionContext, ActionTree, Commit } from "vuex";
 import { SessionActionTypes } from "./action-types";
 import { SessionMutationTypes } from "./mutation-types";

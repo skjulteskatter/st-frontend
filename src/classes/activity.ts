@@ -1,6 +1,6 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
-import { IActivity } from "songtreasures";
+import { IActivity } from "songtreasures-api";
 import { RouteLocationRaw } from "vue-router";
 import { Collection } from ".";
 import { Song } from ".";

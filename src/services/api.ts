@@ -1,10 +1,11 @@
 import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
-import { SessionRequest, SetupResponse } from "checkout";
-import { ApiSearchResult } from "songtreasures/search";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument } from "songtreasures";
+import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
+import { ApiSearchResult } from "songtreasures-api/search";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
+import { Language } from "songtreasures";
 
 export const activity = {
     async getActivities() {
@@ -149,6 +150,9 @@ export const admin = {
             email,
         });
     },
+    getEmails(createdAt: Date) {
+        return http.get<string>("api/Admin/Emails?createdAt=" + createdAt.toISOString());
+    },
 };
 
 export const songs = {
@@ -162,7 +166,7 @@ export const songs = {
         return http.getWithResult<ISong[]>(`api/Songs?collections=${collectionIds.join(",")}&expand=details,transpositions` + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "&updatedAt=" + lastUpdated : ""));
     },
     getFiles(lastUpdated?: string) {
-        return http.getWithResult<IMediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "&updatedAt=" + lastUpdated : ""));
+        return http.getWithResult<IMediaFile[]>("api/Files" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01") ? "?updatedAt=" + lastUpdated : ""));
     },
     getFile(fileId: string) {
         return http.get<IMediaFile>(`api/Files/${fileId}?expand=song`);
@@ -261,7 +265,7 @@ export const sharing = {
 
 export const analytics = {
     getForSong(songId: string, fromDate: Date, toDate?: Date) {
-        return http.get<AnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
+        return http.get<IAnalyticsItem>("api/Analytics/" + songId + `?fromDate=${fromDate.toISOString()}` + (toDate ? `&toDate=${toDate?.toISOString()}` : ""));
     },
     viewSong(songId: string) {
         return http.post<number>("api/Analytics/View/" + songId);

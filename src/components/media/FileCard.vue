@@ -5,12 +5,14 @@
 		@click="callback"
 		:title="$t(`types_${file.type}`)"
 	>
-		<h1 v-if="collection">{{collection.key}} {{file.getSong().getNumber(collection?.id)}}</h1>
-		<h3 class="font-semibold">{{ file.getSong().name.default }}</h3>
-		<span class="w-max flex gap-2 items-center mt-2 px-2 py-1 rounded-md bg-black/5 uppercase text-xs tracking-wider">
-			<component :is="icon" class="w-4 h-4 opacity-50" />
+		<p v-if="collection" class="opacity-50">{{collection.key}} {{file.getSong().getNumber(collection?.id)}}</p>
+		<h3 class="font-semibold mb-2">{{ file.getSong().name.default }}</h3>
+		<BaseButton theme="neutral" size="small">
+			<template #icon>
+				<component :is="icon" class="w-4 h-4 opacity-50" />
+			</template>
 			<span v-if="file.category">{{ $t(`types_${file.category}`) }}</span>
-		</span>
+		</BaseButton>
 		<!-- TODO: add link to song if .available -->
 	</button>
 </template>

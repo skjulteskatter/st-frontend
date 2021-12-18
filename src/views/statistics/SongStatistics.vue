@@ -46,6 +46,7 @@ import { LineChart, CountryList } from "@/components/statistics";
 import { appSession } from "@/services/session";
 import { EyeIcon } from "@heroicons/vue/outline";
 import { RefreshIcon } from "@heroicons/vue/solid";
+import { IAnalyticsItem } from "songtreasures-api";
 
 export default defineComponent({ 
 	name: "song-statistics",
@@ -57,7 +58,7 @@ export default defineComponent({
 	},
 	data: () => ({
 		store: useStore(),
-		analytics: {} as AnalyticsItem,
+		analytics: {} as IAnalyticsItem,
 		date: new Date(),
 		loading: false,
 		mostViewed: {} as {
@@ -126,7 +127,7 @@ export default defineComponent({
 	},
 	methods: {
 		getAnalyticsBase(fromDate: string, endDate: string) {
-			const analytics: AnalyticsItem = {
+			const analytics: IAnalyticsItem = {
 				count: 0,
 				activity: [],
 				lyrics: [],

@@ -86,6 +86,7 @@ const saveByteArray = (function () {
     const a = document.createElement("a");
     document.body.appendChild(a);
     a.style.setProperty("display", "none");
+    // eslint-disable-next-line no-undef
     return function (data: BlobPart[], name: string) {
         const blob = new Blob(data, {type: "audio/mpeg"}),
             url = window.URL.createObjectURL(blob);

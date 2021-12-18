@@ -2,7 +2,7 @@ import { User } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
-import { IActivity, ICustomCollection } from "songtreasures";
+import { IActivity, ICustomCollection } from "songtreasures-api";
 import { Activity } from "@/classes/activity";
 
 

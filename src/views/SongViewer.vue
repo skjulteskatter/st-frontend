@@ -17,9 +17,8 @@
                             </template>
                             {{ $t('common_edit') }}
                         </BaseButton>
-                        <button v-if="isAdmin" @click="favorites.toggle(song?.id)" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
-                            <HeartIcon class="w-6 h-6 text-red-500 dark:text-red-400" v-if="favorites.has(song?.id)" />
-                            <HeartOutline class="w-6 h-6 opacity-50" v-else />
+                        <button @click="toggleFavorite" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
+                            <component :is="favorite ? 'HeartIcon' : 'HeartOutline'" :class="[favorite ? 'text-red-500 dark:text-red-400' : 'opacity-50', 'w-6 h-6']" />
                         </button>
                         <BaseButton theme="secondary" @click="openAdder()" v-if="playlists.length" class="playlist-adder">
                             <template #icon>
@@ -178,7 +177,7 @@ import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilA
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, IMediaFile } from "songtreasures";
+import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -189,6 +188,7 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
+import { SheetMusicOptions } from "songtreasures";
 
 export default defineComponent({
     name: "song-viewer",
@@ -231,6 +231,7 @@ export default defineComponent({
             [key: string]: boolean;
         },
         fullLoading: false,
+        favorite: false,
     }),
     computed: {
         selectedLanguage() {
@@ -310,14 +311,16 @@ export default defineComponent({
         await this.load();
     },
     mounted() {
-      this.onKeyDown = this.onKeyDown.bind(this);
-      addEventListener("keydown", this.onKeyDown);
+        this.onKeyDown = this.onKeyDown.bind(this);
+        addEventListener("keydown", this.onKeyDown);
+        this.favorite = this.favorites.has(this.song?.id);
     },
     async updated() {
         await this.load();
+        this.favorite = this.favorites.has(this.song?.id);
     },
     unmounted() {
-      removeEventListener("keydown", this.onKeyDown);
+        removeEventListener("keydown", this.onKeyDown);
     },
     methods: {
         setSong(songId: string) {
@@ -520,9 +523,13 @@ export default defineComponent({
                     this.store.state.songs.language,
                     undefined,
                     this.store.state.songs.newMelody,
-                    this.lyrics?.format
+                    this.lyrics?.format,
                 );
             }
+        },
+        async toggleFavorite() {
+            await this.favorites.toggle(this.song?.id);
+            this.favorite = !this.favorite;
         },
     },
 });

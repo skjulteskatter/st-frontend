@@ -1,5 +1,6 @@
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
+import { ILocaleString } from "songtreasures";
 import LocaleString from "./localeString";
 
 export default class BaseClass {

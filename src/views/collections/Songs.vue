@@ -7,12 +7,12 @@
                     <h1 class="font-bold text-2xl md:text-3xl">
                         {{ collection.name.default }}
                     </h1>
-                    <!-- <BaseButton theme="secondary" @click="collection?.Product.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_buy') }}
-                    </BaseButton> -->
+                    </BaseButton>
                     <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
@@ -63,7 +63,7 @@
                 </div>
                 <Loader :loading="loadingList" v-if="!loading">
                     <div
-                        class="song-list song-list__items"
+                        class="song-list columns-xs gap-4"
                         v-if="list?.length && viewType === 'boards'"
                     >
                         <SongListCard
@@ -130,13 +130,13 @@ import {
 } from "@/components/inputs";
 import { BackButton, BaseModal } from "@/components";
 import { 
-    //ShoppingCartIcon, 
+    ShoppingCartIcon, 
     CheckIcon, 
     ViewGridIcon, 
     ViewBoardsIcon,
 } from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
-import { ApiContributor, Sort } from "songtreasures";
+import { ApiContributor, Sort } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -153,7 +153,7 @@ export default defineComponent({
     BackButton,
     BaseModal,
     SearchInput,
-    // ShoppingCartIcon,
+    ShoppingCartIcon,
     CheckIcon,
     ViewGridIcon,
     ViewBoardsIcon,
@@ -294,3 +294,14 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="scss">
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: unset;}
+}
+
+.song-list {
+    animation: fade-in 0.1s linear;
+}
+</style>

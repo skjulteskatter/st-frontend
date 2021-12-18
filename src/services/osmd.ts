@@ -9,6 +9,7 @@ import {
     // PlaybackManager, 
     TransposeCalculator 
 } from "opensheetmusicdisplay";
+import { SheetMusicOptions } from "songtreasures";
 import { logs } from "./logs";
 // const timingSource = new LinearTimingSource();
 // const playbackManager = new PlaybackManager(timingSource, undefined as any, new BasicAudioPlayer(), undefined as any);

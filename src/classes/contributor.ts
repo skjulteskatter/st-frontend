@@ -1,4 +1,4 @@
-import { ApiContributor } from "songtreasures";
+import { ApiContributor } from "songtreasures-api";
 import { Converter } from "showdown";
 const converter = new Converter();
 

@@ -1,5 +1,5 @@
-import { ApiContributor } from "songtreasures";
-import { ApiSearchResult } from "songtreasures/search";
+import { ApiContributor } from "songtreasures-api";
+import { ApiSearchResult } from "songtreasures-api/search";
 import { CollectionItem, Song } from "..";
 import SearchResultItem from "./searchResultItem";
 

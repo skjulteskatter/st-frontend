@@ -1,6 +1,6 @@
 import { tags } from "@/services/api";
 import { cache } from "@/services/cache";
-import { ITag } from "songtreasures";
+import { ITag } from "songtreasures-api";
 
 export default class Tag implements ITag {
     public id;

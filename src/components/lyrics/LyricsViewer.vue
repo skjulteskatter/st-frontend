@@ -1,7 +1,7 @@
 <template>
-    <div class="lyrics-content">
+    <div class="columns-1 md:columns-2">
         <div
-            class="flex-col w-full whitespace-pre-line mb-4"
+            class="flex-col w-full whitespace-pre-line mb-4 break-inside-avoid"
             v-for="(verse, i) in text"
             :key="i"
         >
@@ -36,17 +36,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style lang="scss">
-.lyrics-content {
-	column-count: 1;
-
-    @media screen and (min-width: 600px) {
-        column-count: 2;
-    }
-}
-
-.lyrics-content > div {
-	break-inside: avoid;
-}
-</style>

@@ -11,7 +11,7 @@ import { defineComponent } from "@vue/runtime-core";
 import { sharing } from "@/services/api";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { ICustomCollection, ITag } from "songtreasures";
+import { ICustomCollection, ITag } from "songtreasures-api";
 
 export default defineComponent({
     name: "redeem-token",

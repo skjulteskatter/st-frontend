@@ -1,4 +1,4 @@
-import { ICustomCollection, ISong, ITag, IChapter, IBook, ITranslation, IScripture } from "songtreasures";
+import { ICustomCollection, ISong, ITag, IChapter, IBook, ITranslation, IScripture } from "songtreasures-api";
 import { openDB } from "idb";
 
 type EntryWithExpiry<T> = {

@@ -1,7 +1,10 @@
 <template>
     <section>
         <!-- TODO: Header should be the same for SongList and this (?) -->
-        <h1 class="font-bold text-xl md:text-2xl mb-4">{{ $t("types_tutorial") }}</h1>
+        <header class="flex gap-4 items-center mb-4">
+            <h1 class="font-bold text-xl md:text-2xl">{{ $t("types_tutorial") }}</h1>
+            <span class="bg-green-500/20 text-green-700 px-2 py-1 rounded-md uppercase tracking-wide text-xs">free</span>
+        </header>
         <!-- <select
             v-model="instrumentId"
         >
@@ -13,9 +16,10 @@
                 {{$t("instrument_" + instrument.identifier)}}
             </option>
         </select> -->
-        <div v-for="collection in collections" :key="collection.id" class="mb-4">
+        <div v-for="collection in collections" :key="collection.id" class="mb-8">
             <BaseButton
                 class="mb-4"
+                theme="neutral"
                 @click="$router.push({name: 'song-list', params: {collection: collection.key}})"
             >
                 {{collection.name.default}}
@@ -47,7 +51,7 @@ import { BaseModal } from "@/components";
 import { SongFileCard } from "@/components/media";
 import { appSession } from "@/services/session";
 import { defineComponent } from "@vue/runtime-core";
-import { MediaType } from "songtreasures";
+import { MediaType } from "songtreasures-api";
 
 export default defineComponent({
     name: "collection-tutorials",

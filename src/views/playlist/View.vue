@@ -81,6 +81,8 @@
                         <CopyToClipboard :label="$t('playlist_copyLink')" :content="getLink(key.key)" />
                         <BaseButton
                             theme="error"
+                            size="small"
+                            title="Delete link"
                             :disabled="deleted[key.key]"
                             :loading="loading[key.key]"
                             @click="deleteKey(key)"
@@ -152,7 +154,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
-import { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures";
+import { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures-api";
 import { reactive } from "@vue/reactivity";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
