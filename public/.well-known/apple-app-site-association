@@ -4,7 +4,7 @@
         "details": [
             {
                 "appID": "L3B7XGC46A.no.sssf.songtreasures",
-                "paths": [ "/playlists", "/playlists/*, "/tags", "/tags/*", "/songs", "/songs/*"]
+                "paths": [ "/playlists", "/playlists/*", "/tags", "/tags/*", "/songs", "/songs/*"]
             }
         ]
     }
