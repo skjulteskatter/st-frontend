@@ -6,6 +6,7 @@ export type TSongFilter = {
     origins: string[];
     videoFiles: string[];
     audioFiles: string[];
+    categoryIds: string[];
     contentTypes: string[];
     sheetMusicTypes: string[];
     hasLyrics: boolean;
@@ -17,6 +18,7 @@ export type TSongFilter = {
 export default class SongFilter implements TSongFilter {
     public themes;
     public origins;
+    public categoryIds;
     public videoFiles;
     public audioFiles;
     public contentTypes;
@@ -32,6 +34,7 @@ export default class SongFilter implements TSongFilter {
         }
         this.themes = i.themes;
         this.origins = i.origins;
+        this.categoryIds = i.categoryIds;
         this.videoFiles = i.videoFiles;
         this.audioFiles = i.audioFiles;
         this.contentTypes = i.contentTypes;
@@ -66,7 +69,8 @@ export default class SongFilter implements TSongFilter {
             && hasFiles(this.sheetMusicTypes, s.sheetMusic)
             && hasIds(this.contentTypes, [s.type])
             && hasIds(this.themes, s.themeIds)
-            && hasIds(this.origins, s.origins.map(o => o.country)),
+            && hasIds(this.origins, s.origins.map(o => o.country))
+            && hasIds(this.categoryIds, s.categoryIds),
         );
     }
 }

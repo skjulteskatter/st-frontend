@@ -58,12 +58,12 @@
                             @search="search"
                             @keyup="filterByNumber"
                         />
-                        <SongFilterDropdown @apply="loadList" class="hidden md:flex" />
+                        <SongFilterDropdown :songs="collection.songs" @apply="loadList" class="hidden md:flex" />
                     </div>
                 </div>
                 <Loader :loading="loadingList" v-if="!loading">
                     <div
-                        class="song-list song-list__items"
+                        class="song-list columns-xs gap-4"
                         v-if="list?.length && viewType === 'boards'"
                     >
                         <SongListCard
@@ -130,7 +130,7 @@ import {
 } from "@/components/inputs";
 import { BackButton, BaseModal } from "@/components";
 import { 
-    //ShoppingCartIcon, 
+    ShoppingCartIcon, 
     CheckIcon, 
     ViewGridIcon, 
     ViewBoardsIcon,
@@ -153,7 +153,7 @@ export default defineComponent({
     BackButton,
     BaseModal,
     SearchInput,
-    // ShoppingCartIcon,
+    ShoppingCartIcon,
     CheckIcon,
     ViewGridIcon,
     ViewBoardsIcon,
@@ -294,3 +294,14 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="scss">
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: unset;}
+}
+
+.song-list {
+    animation: fade-in 0.1s linear;
+}
+</style>

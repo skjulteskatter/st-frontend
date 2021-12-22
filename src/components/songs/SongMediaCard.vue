@@ -49,6 +49,7 @@
                         <PlayIcon class="w-4 h-4 mr-2 opacity-50 inline" />
                         <div class="flex-grow inline-flex gap-4 justify-between items-center">
                             <span>{{ $t(`types_${video.category}`) }}</span>
+                            <span v-if="video.getInstrument()">{{ $t(`instrument_${video.getInstrument()?.identifier}`) }}</span>
                             <span v-if="video.languageKey" class="text-xs uppercase tracking-wider opacity-50 ml-auto">{{ video.languageKey }}</span>
                         </div>
                     </button>
@@ -82,8 +83,7 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
-import { Collection, Song } from "@/classes";
-import { IMediaFile } from "songtreasures-api";
+import { Collection, MediaFile, Song } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 import { SheetMusicOptions } from "songtreasures";
@@ -130,7 +130,7 @@ export default defineComponent({
             this.activeVideo = url;
             this.openVideo();
         },
-        selectSheetMusic(sheet: IMediaFile) {
+        selectSheetMusic(sheet: MediaFile) {
             const options: SheetMusicOptions = {
                 show: true,
                 url: sheet?.directUrl,
@@ -148,7 +148,7 @@ export default defineComponent({
 
             this.$emit("setSheetMusic", options);
         },
-        selectAudio(audio: IMediaFile) {
+        selectAudio(audio: MediaFile) {
             const track: AudioTrack = {
                 file: audio,
                 collection: this.collection,

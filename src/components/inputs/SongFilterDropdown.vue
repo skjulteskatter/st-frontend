@@ -28,27 +28,35 @@
                 />
                 <span>{{ $t("types_lyrics") }}</span>
             </label>
-            <CheckboxGroup :name="$t('types_video')" :labels="videoTypes" :values="videoValues" :action="apply" />
-            <CheckboxGroup :name="$t('types_sheetmusic')" :labels="sheetMusicTypes" :values="sheetMusicValues" :action="apply" />
-            <CheckboxGroup :name="$t('types_audio')" :labels="audioTypes" :values="audioValues" :action="apply" />
+            <CheckboxGroup :name="$t('types_video')" :labels="typeLabels(videoTypes)" :values="videoValues" :action="apply" />
+            <CheckboxGroup :name="$t('types_sheetmusic')" :labels="typeLabels(sheetMusicTypes)" :values="sheetMusicValues" :action="apply" />
+            <CheckboxGroup :name="$t('types_audio')" :labels="typeLabels(audioTypes)" :values="audioValues" :action="apply" />
+            <CheckboxGroup v-if="categoryTypes.length > 0" :name="$t('song_category')" :labels="categoryTypes" :values="categoryValues" :action="apply"/>
         </div>
     </BaseDropdown>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-import { Collection } from "@/classes";
+import { defineComponent, PropType } from "@vue/runtime-core";
+import { Collection, Song } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import CheckboxGroup from "./CheckboxGroup.vue";
 import { AdjustmentsIcon } from "@heroicons/vue/solid";
 import SongFilter from "@/classes/songFilter";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "song-filter-dropdown",
     components: {
         CheckboxGroup,
         AdjustmentsIcon,
+    },
+    props: {
+        songs: {
+            type: Array as PropType<Song[]>,
+            required: true,
+        },
     },
     emits: ["apply"],
     data: () => ({
@@ -64,6 +72,7 @@ export default defineComponent({
         ],
         contentTypes: ["lyrics", "audio", "video", "sheetmusic"],
         sheetMusicTypes: ["leadsheet", "5part"],
+        categoryTypes: [] as {key: string; title: string}[],
         audioValues: {} as {
             [id: string]: boolean;
         },
@@ -74,6 +83,9 @@ export default defineComponent({
             [id: string]: boolean;
         },
         typeValues: {} as {
+            [id: string]: boolean;
+        },
+        categoryValues: {} as {
             [id: string]: boolean;
         },
     }),
@@ -95,6 +107,12 @@ export default defineComponent({
         },
     },
     mounted() {
+        this.categoryTypes = appSession.categories.filter(c => this.songs.some(s => s.categoryIds.includes(c.id))).map(i => {
+            return {
+                key: i.id,
+                title: i.name.default,
+            };
+        });
         const filter = Object.assign({}, this.store.state.songs.filter);
 
         for (const t of filter.audioFiles) {
@@ -112,6 +130,22 @@ export default defineComponent({
         for (const t of filter.contentTypes) {
             this.typeValues[t] = true;
         }
+
+        for (const c of filter.categoryIds) {
+            this.categoryValues[c] = true;
+        }
+        
+
+        const params = new URLSearchParams(window.location.search);
+        const categoryId = params.get("category");
+        if (categoryId) {
+            this.categoryValues[categoryId] = true;
+
+            this.apply();
+
+            this.$router.replace({query: undefined});
+        }
+
     },
     methods: {
         removeFilters() {
@@ -134,15 +168,27 @@ export default defineComponent({
             const sheetMusic = this.sheetMusicTypes.filter(
                 (t) => this.sheetMusicValues[t] == true,
             );
+            const categories = this.categoryTypes.filter(
+                (i) => this.categoryValues[i.key] === true,
+            ).map(i => i.key);
 
             const filter = this.store.state.songs.filter as SongFilter;
             filter.videoFiles = videos;
             filter.audioFiles = audio;
             filter.contentTypes = types;
             filter.sheetMusicTypes = sheetMusic;
+            filter.categoryIds = categories;
 
             this.store.commit(SongsMutationTypes.SET_FILTER, filter);
             this.$emit("apply");
+        },
+        typeLabels(types: string[]) {
+            return types.map(type => {
+                return {
+                    key: type,
+                    title: this.$t(`types_${type}`),
+                };
+            });
         },
     },
 });
