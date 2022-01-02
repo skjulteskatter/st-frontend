@@ -67,7 +67,7 @@ class CacheService {
         "scriptures",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
-    private version = 30;
+    private version = 32;
 
     private db() {
         const v = this.version;
@@ -88,9 +88,9 @@ class CacheService {
                         objectStore = db.createObjectStore(store);
                     }
 
-                    if (["translations", "chapters", "books"].includes(store)) {
-                        objectStore?.createIndex("parentid", parentMapping[store], {unique: false});
-                    }
+                    // if (["translations", "chapters", "books"].includes(store)) {
+                    //     objectStore?.createIndex("parentid", parentMapping[store], {unique: false});
+                    // }
                 }
             },
         });

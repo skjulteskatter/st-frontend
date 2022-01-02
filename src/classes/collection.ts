@@ -18,7 +18,6 @@ type CollectionSettings = {
 
 export default class Collection extends BaseClass implements ICollection {
     public id;
-    private _key;
     public enabled;
     public type;
     public priority;
@@ -84,7 +83,6 @@ export default class Collection extends BaseClass implements ICollection {
 
     constructor(collection: ICollection) {
         super();
-        this._key = collection.key;
         this.enabled = collection.enabled;
         this.type = collection.type;
         this.priority = collection.priority;
@@ -105,7 +103,7 @@ export default class Collection extends BaseClass implements ICollection {
     }
 
     public get key() {
-        return this.keys[appSession.Language] ?? this._key;
+        return this.keys.default;
     }
 
     public getKeys() {

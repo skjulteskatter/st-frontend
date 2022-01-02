@@ -130,7 +130,7 @@ export default class Song extends BaseClass implements ISong {
             router.push({
                 name: "song",
                 params: {
-                    collection: col.key,
+                    collection: col.key ?? col.id,
                     number: this.getNumber(col.id) ?? this.id,
                 },
             });
