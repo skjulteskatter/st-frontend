@@ -158,7 +158,7 @@ export const admin = {
             [key: number]: string;
         }
     }) {
-        return http.apifetch(`api/Admin/Subtitles/${collection}?codepage=${codepage ?? "null"}&languages=${languages?.join(",") ?? "null"}`, {headers: {"content-type": "application/json"}, method: "post", body: JSON.stringify(replaceLyrics)}, false, false);
+        return http.apifetch(`api/Admin/Subtitles/${collection}?codepage=${codepage ?? ""}&languages=${languages?.join(",") ?? ""}`, {headers: {"content-type": "application/json"}, method: "post", body: JSON.stringify(replaceLyrics)}, false, false);
     },
 };
 
