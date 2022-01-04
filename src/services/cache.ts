@@ -40,13 +40,13 @@ export type StoreWithParent = "chapters" | "books" | "translations";
 
 type Entry<S extends Store> = StoreTypes[S];
 
-const parentMapping: {
-    [key: string]: string;
-} = {
-    translations: "scriptureid",
-    books: "bookid",
-    chapters: "chapterid",
-};
+// const parentMapping: {
+//     [key: string]: string;
+// } = {
+//     translations: "scriptureid",
+//     books: "bookid",
+//     chapters: "chapterid",
+// };
 
 class CacheService {
     private dbName = "songtreasures";
@@ -79,13 +79,12 @@ class CacheService {
                     //     db.deleteObjectStore(store);
                     //     db.createObjectStore(store);
                     // }
-                    let objectStore;
                     if (db.objectStoreNames.contains(store)) {
                         db.deleteObjectStore(store);
-                        objectStore = db.createObjectStore(store);
+                        db.createObjectStore(store);
                     }
                     if (!db.objectStoreNames.contains(store)) {     
-                        objectStore = db.createObjectStore(store);
+                        db.createObjectStore(store);
                     }
 
                     // if (["translations", "chapters", "books"].includes(store)) {

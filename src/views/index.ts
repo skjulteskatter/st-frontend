@@ -9,6 +9,7 @@ const CreditSongView = () => import("./CreditSong.vue");
 const DashboardView = () => import("./Dashboard.vue");
 const SearchView = () => import("./dashboard/CompleteSearch.vue");
 const Tutorials = () => import(/* webpackChunkName: 'tutorials' */ "./Tutorials.vue");
+const ToolsView = () => import(/* webpackChunkName: 'tools' */ "./ToolsView.vue");
 
 export {
     ContributorView,
@@ -16,4 +17,5 @@ export {
     DashboardView,
     SearchView,
     Tutorials,
+    ToolsView,
 };
