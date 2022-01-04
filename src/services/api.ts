@@ -54,8 +54,8 @@ export const session = {
             city: string;
             country: string;
         };
-    }) {
-        return http.patch<IUser>("api/Session/Profile", options);
+    }, firstTimeRegistration = false) {
+        return http.patch<IUser>("api/Session/Profile?firstTimeRegistration=" + firstTimeRegistration, options);
     },
     acceptPrivacyPolicy() {
         return http.get("api/Session/AcceptPolicies?privacyPolicy=true");

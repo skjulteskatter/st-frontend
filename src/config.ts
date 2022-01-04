@@ -20,6 +20,11 @@ const config = {
 if (process.env.NODE_ENV === "development") {
     const savedBasePath = localStorage.getItem("api_base_path");
     if (savedBasePath) {
+        const div = document.createElement("div");
+        div.innerText = "LOCAL";
+        div.style.position = "fixed";
+        div.style.bottom = "0";
+        window.document.body.appendChild(div);
         config.api.basePath = savedBasePath;
     }
 
