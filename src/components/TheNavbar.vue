@@ -143,6 +143,9 @@ export default defineComponent({
 		isAdmin() {
 			return this.user.Admin;
 		},
+		isTechnician() {
+			return this.user.Techinican;
+		},
 		user() {
 			return appSession.user;
 		},
@@ -173,6 +176,11 @@ export default defineComponent({
 					name: "Scriptures",
 					path: "/scriptures",
 					condition: this.isAdmin,
+				},
+				{
+					name: "Tools",
+					path: "/tools",
+					condition: this.isTechnician,
 				},
 			];
 		},

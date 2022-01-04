@@ -3,24 +3,43 @@
         <h1 class="text-xl">
             Tools
         </h1>
-        <BaseCard>
-            <template #header>Subtitles</template>
-            <select v-model="collectionId">
-                <option 
-                    :value="collection.id" 
-                    v-for="collection in collections" 
-                    :key="collection.id"
+        <div class="grid grid-cols-4 gap-4">
+            <BaseCard class="col-span-2">
+                <template #header>Subtitles</template>
+                <select 
+                    v-model="collectionId"
+                    class="mb-2"
                 >
-                    {{collection.name.default}}
-                </option>
-            </select>
-            <input v-model="codepage" class="mb-2" type="number" placeholder="Codepage"/>
-            <BaseButton @click="downloadSubtitles" :loading="loading">Download</BaseButton>
-            <div class="mb-2" v-for="language in languages" :key="language.key">
-                <Checkbox v-model="includeLanguages[language.key]"><h3>{{language.name}}</h3></Checkbox>
-                <FileSelector @files="(files) => setFiles(language, files)"/>
-            </div>
-        </BaseCard>
+                    <option 
+                        :value="collection.id" 
+                        v-for="collection in collections" 
+                        :key="collection.id"
+                    >
+                        {{collection.name.default}}
+                    </option>
+                </select>
+                <input v-model="codepage" class="mb-2" type="number" placeholder="Codepage"/>
+                <BaseButton 
+                    @click="showCustomFiles = !showCustomFiles"
+                    class="mb-2"
+                >
+                    Custom Files
+                </BaseButton>
+                <div class="mb-2" v-for="language in languages" :key="language.key">
+                    <Checkbox class="cursor-pointer select-none" v-model="includeLanguages[language.key]"><h3>{{language.name}}</h3></Checkbox>
+                    <FileSelector v-if="showCustomFiles" @files="(files) => setFiles(language, files)"/>
+                </div>
+                <template #footer>
+                    <BaseButton 
+                        @click="downloadSubtitles" 
+                        :loading="loading"
+                        class="mb-2 float-right"
+                    >
+                        Download
+                    </BaseButton>
+                </template>
+            </BaseCard>
+        </div>
     </div>
 </template>
 <script lang="ts">
@@ -55,6 +74,7 @@ export default defineComponent({
             loading: false,
             includeLanguages: {} as {[key: string]: boolean},
             codepage: null as number | null,
+            showCustomFiles: false,
         };
     },
     mounted() {
@@ -62,13 +82,15 @@ export default defineComponent({
             a[b.key] = true;
             return a;
         }, {} as {[key: string]: boolean});
+
+        this.collectionId = this.collections.find(c => c.keys["no"] === "HV")?.id ?? null;
     },
     computed: {
         languages(): Language[] {
             return appSession.languages.filter(l => ["no", "de", "nl", "en", "fr", "ro", "es", "pl"].includes(l.key));
         },
         collections(): Collection[] {
-            return appSession.collections;
+            return appSession.collections.filter(c => c.enabled && c.type === "song");
         },
     },
     methods: {
