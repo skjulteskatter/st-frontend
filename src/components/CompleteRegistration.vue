@@ -1,46 +1,55 @@
 <template>
-    <BaseModal :show="!user.privacyPolicy && user.registered">
+    <BaseModal :show="!user.registered">
         <template #icon>
             <InformationCircleIcon class="w-6 h-6 opacity-50" />
         </template>
         <template #title>
-            <h1 class="text-xl font-bold mb-2">{{$t('policies_privacyPolicy')}}</h1>
+            <h1 class="text-xl font-bold mb-2">{{$t('registration_title').replace("$fullName", user.displayName)}}</h1>
         </template>
         <template #description>
-            <p class="max-w-sm text-sm opacity-50">{{$t('policies_acceptPrivacyPolicy')}}</p>
+            <p class="max-w-sm text-sm opacity-50">{{$t('registration_description')}}</p>
         </template>
-        <div class="flex flex-col gap-4 items-center text-center">
-            <a href="#" @click="openWindow()" class="hover:underline text-blue-600">{{$t('common_readHere')}}</a>
+        <div class="flex gap-4">
+            <BaseButton
+                @click="cancel"
+            >   <template #icon>
+                    <XCircleIcon class="w-4 h-4" />
+                </template>
+                {{$t('common_cancel')}}
+            </BaseButton>
             <BaseButton
                 :loading="loading"
                 :disabled="disabled"
-                @click="acceptPrivacyPolicy"
+                @click="completeRegistration"
                 theme="secondary"
             >
                 <template #icon>
                     <CheckIcon class="w-4 h-4" />
                 </template>
-                {{$t('policies_agree')}}
+                {{$t('registration_complete')}}
             </BaseButton>
         </div>
     </BaseModal>
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { session } from "@/services/api";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
-import { CheckIcon } from "@heroicons/vue/solid";
+import { CheckIcon, XCircleIcon } from "@heroicons/vue/solid";
 import { appSession } from "@/services/session";
 import { reactive } from "vue";
+import auth from "@/services/auth";
+import BaseButton from "./BaseButton.vue";
 
 export default defineComponent({
-    name: "privacy-policy-accept",
+    name: "complete-registration",
     components: {
-        BaseModal,
-        InformationCircleIcon,
-        CheckIcon,
-    },
+    BaseModal,
+    InformationCircleIcon,
+    CheckIcon,
+    XCircleIcon,
+    BaseButton,
+},
     data: () => ({
         loading: false,
         disabled: false,
@@ -51,15 +60,14 @@ export default defineComponent({
         },
     },
     methods: {
-        async acceptPrivacyPolicy() {
+        async completeRegistration() {
             this.loading = true;
-            await session.acceptPrivacyPolicy();
-            this.user.privacyPolicy = true;
+            await this.user.completeRegistration();
             this.loading = false;
             this.disabled = true;
         },
-        openWindow() {
-            window.open("https://songtreasures.org/privacy-policy/");
+        cancel() {
+            auth.logout();
         },
     },
 });

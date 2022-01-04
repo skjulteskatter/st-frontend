@@ -1,4 +1,5 @@
 import { session } from "@/services/api";
+import { cache } from "@/services/cache";
 import { IUser } from "songtreasures-api";
 import UserSettings from "./userSettings";
 
@@ -15,6 +16,7 @@ export default class User implements IUser {
     public settings: UserSettings;
     public subscriptions;
     public termsAndConditions;
+    public registered;
 
     constructor(i: IUser) {
         this.id = i.id;
@@ -29,14 +31,28 @@ export default class User implements IUser {
         this.settings = new UserSettings(i.settings ?? {});
         this.subscriptions = i.subscriptions;
         this.termsAndConditions = i.termsAndConditions;
+        this.registered = i.registered;
     }
 
     public async saveSettings() {
         await session.saveUser(this.settings ?? {});
+        await cache.delete("general", "user");
     }
 
     public async saveProfile() {
         await session.saveProfile({});
+        await cache.delete("general", "user");
+    }
+
+    public async completeRegistration() {
+        await session.saveProfile({}, true);
+        this.registered = true;
+        await cache.delete("general", "user");
+    }
+
+    public async acceptPrivacyPolicy() {
+        await session.acceptPrivacyPolicy();
+        this.privacyPolicy = true;
     }
 
     public get Admin() {

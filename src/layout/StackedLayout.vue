@@ -46,7 +46,7 @@
 							{{$t('common_close')}}
 						</BaseButton>
 					</div>
-					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
+					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '\#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
 				</div>
 			</main>
 			<footer>
@@ -57,6 +57,7 @@
 
 		<!-- Modals -->
 		<PrivacyPolicyAccept />
+		<CompleteRegistration />
 		<AddedToCart />
 		<Tos />
 		<BaseModal
@@ -97,20 +98,22 @@ import themes from "@/classes/themes";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
 import { XIcon } from "@heroicons/vue/solid";
+import CompleteRegistration from "@/components/CompleteRegistration.vue";
 
 export default defineComponent({
 	name: "stacked-layout",
 	components: {
-		TheNavbar,
-		Copyright,
-		BaseModal,
-		AudioPlayer,
-		OpenSheetMusicDisplay,
-		Tos,
-		PrivacyPolicyAccept,
-		AddedToCart,
-		XIcon,
-	},
+    TheNavbar,
+    Copyright,
+    BaseModal,
+    AudioPlayer,
+    OpenSheetMusicDisplay,
+    Tos,
+    PrivacyPolicyAccept,
+    AddedToCart,
+    XIcon,
+    CompleteRegistration,
+},
 	data: () => ({
 		store: useStore(),
 		osmdLoading: false,

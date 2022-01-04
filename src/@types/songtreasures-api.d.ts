@@ -20,6 +20,7 @@ declare module "songtreasures-api" {
         lastLogin: Date;
         privacyPolicy: boolean;
         termsAndConditions: boolean;
+        registered: boolean;
     }
 
     type ThemeType = "light" | "dark";
