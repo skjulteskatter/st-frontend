@@ -153,6 +153,13 @@ export const admin = {
     getEmails(createdAt: Date) {
         return http.get<string>("api/Admin/Emails?createdAt=" + createdAt.toISOString());
     },
+    exportSubtitles(collection: string, codepage?: number, languages?: string[], replaceLyrics?: {
+        [key: string]: {
+            [key: number]: string;
+        }
+    }) {
+        return http.apifetch(`api/Admin/Subtitles/${collection}?codepage=${codepage ?? "null"}&languages=${languages?.join(",") ?? "null"}`, {headers: {"content-type": "application/json"}, method: "post", body: JSON.stringify(replaceLyrics)}, false, false);
+    },
 };
 
 export const songs = {

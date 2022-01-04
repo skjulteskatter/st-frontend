@@ -21,6 +21,7 @@ import {
     CollectionSongs,
     CollectionLists,
     Tutorials,
+    ToolsView,
 } from "@/views";
 
 import { RouteRecordRaw } from "vue-router";
@@ -111,6 +112,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: "admin",
                 name: "admin",
                 component: getComponent(Admin),
+            },
+            {
+                path: "tools",
+                name: "tools",
+                component: getComponent(ToolsView),
             },
             {
                 path: "tags",

@@ -46,4 +46,8 @@ export default class User implements IUser {
     public get Extended() {
         return this.roles.includes("extended") || this.Admin;
     }
+
+    public get Techinican() {
+        return this.roles.includes("technician") || this.Admin;
+    }
 }

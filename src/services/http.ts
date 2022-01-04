@@ -43,14 +43,17 @@ class Http {
         });
     }
 
-    public async parseJson(response: Response) {
-        const result = await response.text();
-        try {
-            return JSON.parse(result);
+    public async parseJson(response: Response, json = true) {
+        if (json) {
+            const result = await response.text();
+            try {
+                return JSON.parse(result);
+            }
+            catch {
+                return result;
+            }
         }
-        catch {
-            return result;
-        }
+        return await response.arrayBuffer();
     }
 
     /**
@@ -226,7 +229,7 @@ class Http {
         }
     }
 
-    public async apifetch(path: string, options: RequestInit, bypassAuth = false) {
+    public async apifetch(path: string, options: RequestInit, bypassAuth = false, json = true) {
         path = `${config.api.basePath}${path}`;
         const token = this._token ?? await auth.getToken();
         if (!token && !bypassAuth) throw new Error("No Authorization token available " + path);
@@ -241,7 +244,7 @@ class Http {
         try {
             const result = await fetch(path, o)
                 .then(this.validateResponse)
-                .then(this.parseJson);
+                .then((r) => this.parseJson(r, json));
             return result;
         }
         catch (e) {
