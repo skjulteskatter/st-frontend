@@ -1,3 +1,9 @@
+interface ILocale<T> {
+    [code: string]: T;
+}
+
+type ILocaleString = ILocale<string>;
+
 declare module "songtreasures-api" {
     type GenderType = "male" | "female" | "unknown";
 
@@ -419,5 +425,41 @@ declare module "songtreasures-api/checkout" {
         collectionIds: string[];
         prices: Price[];
         priority: number;
+    }
+}
+
+declare module "songtreasures-api/publications" {
+    interface IPublication {
+        id: string;
+        updatedAt: string;
+        collectionId: string;
+        datePublished: string;
+        title: string;
+        key: ILocaleString;
+        description: string;
+        icon: string;
+        image: string;
+    }
+
+    interface IArticleContent {
+        articleId: string;
+        translationId: string | null;
+        translatorId: string | null;
+        updatedAt: string;
+        language: string;
+        introduction: string;
+        content: string;
+    }
+
+    interface IArticle {
+        id: string;
+        updatedAt: string;
+        publicationId: string;
+        authorId: string;
+        dateWritten: string;
+        icon: string;
+        image: string;
+        title: string;
+        content: IArticleContent | null;
     }
 }

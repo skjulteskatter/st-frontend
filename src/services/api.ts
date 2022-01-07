@@ -6,6 +6,7 @@ import { ApiSearchResult } from "songtreasures-api/search";
 import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
 import { Language } from "songtreasures";
+import { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
 
 export const activity = {
     async getActivities() {
@@ -29,7 +30,50 @@ const modelService = <T>(endpoint: string) => {
     };
 };
 
+const buildUrl = (baseUrl: string, params: {
+    [key: string]: boolean | string | null;
+}) => {
+    const query: string[] = [];
+    for (const [key, value] of Object.entries(params)) {
+        if (value != null) {
+            query.push(`${key}=${value}`);
+        }
+    }
+    if (query.length) {
+        baseUrl += "?" + query.join("&");
+    }
+    return baseUrl;
+};
+
 export const instruments = modelService<IInstrument>("Instruments");
+
+export const publications = {
+    list(collectionId: string) {
+        return http.get<IPublication[]>(`api/Collections/${collectionId}/Publications`);
+    },
+    get(publicationId: string) {
+        return http.get<IPublication>(`api/Publications/${publicationId}`);
+    },
+    articles: {
+        list(publicationId: string, withContent = false, language: string | null = null) {
+            return http.get<IArticle[]>(buildUrl(`api/Publications/${publicationId}/Articles`, {
+                withContent,
+                language,
+            }));
+        },
+        get(articleId: string, withContent = false, language: string | null = null) {
+            return http.get<IArticle>(buildUrl(`api/Publications/Article/${articleId}`, {
+                withContent, 
+                language,
+            }));
+        },
+        content(articleId: string, language: string | null = null) {
+            return http.get<IArticleContent>(buildUrl(`api/Publications/Article/${articleId}/Content`, {
+                language,
+            }));
+        },
+    },
+};
 
 export const session = {
     async getCurrentUser() {
