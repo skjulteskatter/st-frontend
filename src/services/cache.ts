@@ -1,5 +1,5 @@
 import { Lyrics } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation, IScripture } from "songtreasures-api";
+import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation } from "songtreasures-api";
 import { openDB } from "idb";
 import { Notification } from "songtreasures-api";
 
@@ -28,13 +28,10 @@ type StoreTypes = {
     chapters: IChapter;
     books: IBook;
     translations: ITranslation;
-    scriptures: IScripture;
 }
 
 type Store = "songs" | "contributors" | "lyrics" | "config" | "items" | "files" | "notifications" | "general"
- | "tags" | "custom_collections" | StoreWithExpiry;
-
-export type StoreWithExpiry = "chapters" | "books" | "translations" | "scriptures";
+ | "tags" | "custom_collections" | StoreWithParent;
 
 export type StoreWithParent = "chapters" | "books" | "translations";
 
@@ -64,7 +61,6 @@ class CacheService {
         "translations",
         "chapters",
         "books",
-        "scriptures",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
     private version = 32;
@@ -238,7 +234,7 @@ class CacheService {
      * @param factory 
      * @param expiry Expiry in seconds
      */
-    public async getOrCreate<S extends StoreWithExpiry>(store: S, key: string, factory: () => Promise<Entry<S>>, expiry = 60): Promise<Entry<S>> {
+    public async getOrCreate<S extends StoreWithParent>(store: S, key: string, factory: () => Promise<Entry<S>>, expiry = 60): Promise<Entry<S>> {
         const nowDate = new Date();
 
         let result = (await (await this.tx(store, false)).objectStore(store).get(key)) as EntryWithExpiry<Entry<S>> | undefined;
