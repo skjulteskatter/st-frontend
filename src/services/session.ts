@@ -377,7 +377,15 @@ export class Session {
     }
 
     public getCollection(key: string) {
-        return this.collections.find(c => c.id === key || Object.values(c.keys).includes(key));
+        return this.collections.find(c => c.id === key || Object.values(c.keys).includes(key)) ?? null;
+    }
+
+    public collection(key: string) {
+        const collection = this.getCollection(key);
+        if (!collection) {
+            throw new Error("Collection not found");
+        }
+        return collection;
     }
 }
 

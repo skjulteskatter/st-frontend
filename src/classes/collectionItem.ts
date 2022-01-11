@@ -1,9 +1,7 @@
-import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 import { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures-api";
 
 export default class CollectionItem<T extends (ApiContributor | ICountry | ITheme | ICategory)> implements ICollectionItem<T> {
-    private store = useStore();
-
     public id;
     public item: T;
     public songIds;
@@ -24,7 +22,7 @@ export default class CollectionItem<T extends (ApiContributor | ICountry | IThem
         if (typeof(this.item.name) == "string") {
             return this.item.name;
         }
-        const l = this.store.getters.languageKey;
+        const l = appSession.Language;
         return this.item.name[l] ?? this.item.name.en ?? Object.values(this.item.name)[0];
     }
 }

@@ -1,5 +1,6 @@
 import { ICustomCollection, ISong, ITag, IChapter, IBook, ITranslation, IScripture } from "songtreasures-api";
 import { openDB } from "idb";
+import { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
 
 type EntryWithExpiry<T> = {
     expiry: Date;
@@ -14,11 +15,14 @@ type StoreTypes = {
     books: IBook;
     translations: ITranslation;
     scriptures: IScripture;
+    publications: IPublication;
+    articles: IArticle;
+    article_contents: IArticleContent;
 }
 
-type Store = "songs" | "tags" | "custom_collections" | StoreWithParent | "scriptures";
+type Store = "songs" | "tags" | "custom_collections" | StoreWithParent | "scriptures" | "publications";
 
-export type StoreWithParent = "chapters" | "books" | "translations";
+export type StoreWithParent = "chapters" | "books" | "translations" | "articles" | "article_contents";
 
 type Entry<S extends Store> = StoreTypes[S];
 
@@ -40,9 +44,12 @@ class ModuleCache {
         "chapters",
         "books",
         "scriptures",
+        "publications",
+        "articles",
+        "article_contents",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
-    private version = 1;
+    private version = 2;
 
     private db() {
         const v = this.version;

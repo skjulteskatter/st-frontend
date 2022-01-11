@@ -427,7 +427,7 @@ export default class Collection extends BaseClass implements ICollection {
             router.push({
                 name: "song-list",
                 params: {
-                    collection: this.key ?? this.id,
+                    collection: this.keys.default ?? this.id,
                 },
             });
         }
@@ -437,6 +437,15 @@ export default class Collection extends BaseClass implements ICollection {
                 name: "book-list",
                 params: {
                     scriptureId: this.keys.default,
+                },
+            });
+        }
+
+        if (this.type === "publication") {
+            router.push({
+                name: "publication-collection",
+                params: {
+                    collectionId: this.keys.default ?? this.id,
                 },
             });
         }

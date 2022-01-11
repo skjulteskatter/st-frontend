@@ -17,7 +17,6 @@
                 :key="song.id"
                 :class="{
                     'text-red-700': song.available && song.anotherLanguage(),
-                    'text-green-700': song.available && !songsWithSheetMusic.includes(song.id),
                     'opacity-40': !song.available,
                 }"
             >

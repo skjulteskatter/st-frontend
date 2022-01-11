@@ -23,7 +23,9 @@ if (process.env.NODE_ENV === "development") {
         const div = document.createElement("div");
         div.innerText = "LOCAL";
         div.style.position = "fixed";
-        div.style.bottom = "0";
+        div.style.bottom = "10px";
+        div.style.zIndex = "10000";
+        div.style.fontSize = "30px";
         window.document.body.appendChild(div);
         config.api.basePath = savedBasePath;
     }
