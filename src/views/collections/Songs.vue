@@ -7,7 +7,7 @@
                     <h1 class="font-bold text-2xl md:text-3xl">
                         {{ collection.name.default }}
                     </h1>
-                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="collection.inCart" v-if="!collection.available">
+                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="inCart" v-if="!collection.available">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
@@ -167,6 +167,7 @@ export default defineComponent({
         loadingList: false,
         showCta: false,
         showFiles: false,
+        inCart: false,
     }),
     computed: {
         isAdmin() {
@@ -245,6 +246,7 @@ export default defineComponent({
                     this.$route.params.collection as string,
                 );
             }
+            this.inCart = await this.collection.inCart();
             await this.loadList();
         },
         async setListType(value: Sort) {
