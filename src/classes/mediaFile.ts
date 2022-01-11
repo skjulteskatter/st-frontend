@@ -15,6 +15,7 @@ export default class MediaFile implements IMediaFile {
     public directUrl: string;
     public instrumentId?: string | undefined;
     public participants: Participant[];
+    public collectionIds: string[];
     
     constructor(i: IMediaFile) {
         this.id = i.id;
@@ -29,6 +30,7 @@ export default class MediaFile implements IMediaFile {
         this.directUrl = i.directUrl;
         this.instrumentId = i.instrumentId;
         this.participants = i.participants.map(i => new Participant(i));
+        this.collectionIds = i.collectionIds;
     }
 
     private _song: Song | null = null;
