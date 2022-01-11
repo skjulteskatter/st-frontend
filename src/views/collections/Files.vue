@@ -44,10 +44,10 @@ export default defineComponent({
     },
     computed: {
         videos(): MediaFile[] {
-            return this.files.filter(f => f.type === "video");
+            return this.files.filter(f => f.type === "video") as MediaFile[];
         },
         audio(): MediaFile[] {
-            return this.files.filter(f => f.type === "audio");
+            return this.files.filter(f => f.type === "audio") as MediaFile[];
         },
     },
     methods: {
