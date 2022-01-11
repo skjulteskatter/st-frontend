@@ -217,6 +217,7 @@ declare module "songtreasures-api" {
         directUrl: string;
         instrumentId?: string;
         participants: IParticipant[];
+        collectionIds: string[];
     }
 
     interface IInstrument {

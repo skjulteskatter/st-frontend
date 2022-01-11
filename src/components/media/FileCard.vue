@@ -5,8 +5,8 @@
 		@click="callback"
 		:title="$t(`types_${file.type}`)"
 	>
-		<p v-if="collection" class="opacity-50">{{collection.key}} {{file.getSong().getNumber(collection?.id)}}</p>
-		<h3 class="font-semibold mb-2">{{ file.getSong().name.default }}</h3>
+		<p v-if="collection && file.getSong()" class="opacity-50">{{collection.key}} {{file.getSong()?.getNumber(collection?.id)}}</p>
+		<h3 class="font-semibold mb-2">{{ file.getSong()?.name.default ?? file.name }}</h3>
 		<BaseButton theme="neutral" size="small">
 			<template #icon>
 				<component :is="icon" class="w-4 h-4 opacity-50" />

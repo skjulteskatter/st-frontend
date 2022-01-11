@@ -169,7 +169,7 @@ export class Session {
             const fetchSongs = ownedCols.filter(c => !previousCols.includes(c));
 
             if (fetchSongs.length) {
-                const s = await songs.getAllSongs(fetchSongs);
+                const s = await songs.getAllSongs([]);
 
                 await cache.replaceEntries("songs", s.result.reduce((a, b) => {
                     a[b.id] = b;
@@ -206,7 +206,7 @@ export class Session {
                 const lastUpdated = await cache.get("config", key) as Date | undefined;
 
                 if (shouldUpdate) {
-                    const updateSongs = await songs.getAllSongs(ownedCols, lastUpdated?.toISOString());
+                    const updateSongs = await songs.getAllSongs([], lastUpdated?.toISOString());
 
                     await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
                         a[b.id] = b;
