@@ -64,7 +64,7 @@ export default defineComponent({
         const supportedCategories = ["tutorial"];
         const files = appSession.files.filter(f => supportedTypes.includes(f.type) && supportedCategories.includes(f.category));
         const songs = appSession.songs.filter(s => files.some(f => f.songId === s.id));
-        const collections = appSession.collections.filter(c => files.some(f => f.collectionIds.includes(c.id)));
+        const collections = appSession.collections.filter(c => files.some(f => f.getSong()?.collectionIds.includes(c.id)));
 
         const instruments = appSession.instruments;
 
