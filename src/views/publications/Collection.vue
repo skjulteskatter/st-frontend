@@ -1,6 +1,3 @@
-<script lang="ts" setup>
-import { PublicationCard } from "@/components/publications";
-</script>
 <template>
     <div v-if="collection">
         <BaseCard
@@ -21,40 +18,34 @@ import { PublicationCard } from "@/components/publications";
         </Loader>
     </div>
 </template>
-<script lang="ts">
-import { Collection } from "@/classes";
-import { Publication } from "@/classes/publications";
-import Article from "@/classes/publications/article";
-import publications from "@/services/modules/publications";
+<script lang="ts" setup>
+import { PublicationCard } from "@/components/publications";
+import { Article, Publication } from "@/classes/publications";
+import { useRoute } from "vue-router";
+import service from "@/services/modules/publications";
 import { appSession } from "@/services/session";
-import { defineComponent } from "vue";
+import { ref } from "vue";
 
-export default defineComponent({
-    name: "publication-collection",
-    data() {
-        return {
-            collection: null as Collection | null,
-            publications: [] as Publication[],
-            loading: true,
-            articles: {} as {
-                [publicationId: string]: Article[] | null;
-            },
-        };
-    },
-    async mounted() {
-        const collectionId = this.$route.params.collectionId as string;
-        this.collection = appSession.collection(collectionId);
-        this.publications = await publications.list(this.collection.id);
-        this.loading = false;
-    },
-    methods: {
-        async clickPublication(publication: Publication) {
-            if (!this.articles[publication.id]) {
-                this.articles[publication.id] = await publications.articles.list(publication.id);
-            } else {
-                delete this.articles[publication.id];
-            }
-        },
-    },
+const route = useRoute();
+
+const collectionId = route.params.collectionId as string;
+const collection = appSession.collection(collectionId);
+
+const articles = ref({} as {
+    [key: string]: Article[] | undefined;
+});
+const clickPublication = async (publication: Publication) => {
+    if (!articles.value[publication.id]) {
+        articles.value[publication.id] = await service.articles.list(publication.id);
+    } else {
+        delete articles.value[publication.id];
+    }
+};
+
+let publications = ref([] as Publication[]);
+let loading = ref(false);
+service.list(collection.id).then(r => {
+    publications.value = r;
+    loading.value = false;
 });
 </script>

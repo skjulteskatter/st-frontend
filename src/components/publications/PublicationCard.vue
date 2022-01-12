@@ -5,7 +5,7 @@ import { Publication, Article } from "@/classes/publications";
 
 interface Props {
     publication: Publication;
-    articles?: Article[];
+    articles?: Article[] | null;
 }
 
 const props = defineProps<Props>();
