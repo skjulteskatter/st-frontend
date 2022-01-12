@@ -458,6 +458,7 @@ declare module "songtreasures-api/publications" {
         publicationId: string;
         authorId: string;
         dateWritten: string;
+        number: number;
         icon: string;
         image: string;
         title: string;

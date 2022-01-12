@@ -66,7 +66,7 @@ class ArticleService {
         if (!this.articles.some(a => a.publicationId === publication.id)) {
             this.articles.push(...(await publications.articles.list(publication.id, true, this.language)).map(a => new Article(a)));
         }
-        return this.articles.filter(a => a.publicationId === publication.id);
+        return this.articles.filter(a => a.publicationId === publication.id).sort((a, b) => a.number - b.number);
     }
 }
 

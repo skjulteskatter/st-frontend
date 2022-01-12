@@ -1,3 +1,6 @@
+<script lang="ts" setup>
+import { PublicationCard } from "@/components/publications";
+</script>
 <template>
     <div v-if="collection">
         <BaseCard
@@ -25,7 +28,6 @@ import Article from "@/classes/publications/article";
 import publications from "@/services/modules/publications";
 import { appSession } from "@/services/session";
 import { defineComponent } from "vue";
-import { PublicationCard } from "@/components/publications";
 
 export default defineComponent({
     name: "publication-collection",
@@ -45,7 +47,6 @@ export default defineComponent({
         this.publications = await publications.list(this.collection.id);
         this.loading = false;
     },
-    components: { PublicationCard },
     methods: {
         async clickPublication(publication: Publication) {
             if (!this.articles[publication.id]) {

@@ -1,13 +1,29 @@
+<script setup lang="ts">
+import { defineProps, computed } from "vue";
+import ArticleCard from "./ArticleCard.vue";
+import { Publication, Article } from "@/classes/publications";
+
+interface Props {
+    publication: Publication;
+    articles?: Article[];
+}
+
+const props = defineProps<Props>();
+
+const Articles = computed(() => {
+    return props.articles ?? [];
+});
+</script>
 <template>
     <BaseCard>
         <template #header>
             {{publication.title}}
             <BaseButton @click="clicked">Read</BaseButton>
         </template>
-        <div v-if="articles?.length && articles.length > 0">
+        <div v-if="Articles.length > 0">
             <ArticleCard
                 class="mb-2"
-                v-for="article in articles"
+                v-for="article in Articles"
                 :key="article.id"
                 :article="article"
             ></ArticleCard>
@@ -15,22 +31,10 @@
     </BaseCard>
 </template>
 <script lang="ts">
-import { Publication } from "@/classes/publications";
-import Article from "@/classes/publications/article";
-import { defineComponent, PropType } from "vue";
-import ArticleCard from "./ArticleCard.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "publication-card",
-    props: {
-        publication: {
-            type: Object as PropType<Publication>,
-            required: true,
-        },
-        articles: {
-            type: Array as PropType<Article[] | null>,
-        },
-    },
     methods: {
         clicked() {
             this.$emit("clicked");
@@ -39,6 +43,5 @@ export default defineComponent({
     emits: [
         "clicked",
     ],
-    components: { ArticleCard },
 });
 </script>
