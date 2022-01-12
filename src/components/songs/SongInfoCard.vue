@@ -1,6 +1,49 @@
+<script setup lang="ts">
+import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
+import { defineProps, computed, ref } from "vue";
+import { Collection, Song } from "@/classes";
+import { appSession } from "@/services/session";
+import { EyeIcon } from "@heroicons/vue/outline";
+import ContributorInfo from "./ContributorInfo.vue";
+
+interface Props {
+    language: string;
+    song: Song;
+    collection: Collection;
+    viewCount?: number;
+    isAdmin?: boolean;
+}
+
+const props = defineProps<Props>();
+const title = computed(() => props.song.name.default);
+const melodyOrigin = computed(() => {
+    const desc = props.song.melodyOrigin?.description ?? {};
+    return desc[appSession.Language] ?? desc.no;
+});
+const identicalCopyright = computed(() => {
+    return props.song.copyrights[0]?.copyrightId === props.song.copyrights[1]?.copyrightId;
+});
+
+let showDescription = ref(false);
+let imageLoaded = false;
+if (props.song.image) {
+    const image = document.getElementById(
+        "song-details-image",
+    ) as HTMLImageElement;
+
+    image.style.display = "none";
+
+    image.onload = () => {
+        image.classList.add("song-details-transition");
+        imageLoaded = true;
+        image.style.display = "";
+    };
+} else {
+    imageLoaded = true;
+}
+</script>
 <template>
     <BaseCard
-        v-if="song"
         v-cloak
     >
         <template #header v-if="collection || isAdmin">
@@ -8,7 +51,6 @@
                 <router-link
                     :to="`/songs/${collection.key}`"
                     class="text-sm text-primary hover:underline"
-                    v-if="collection"
                 >
                     {{ collection.getName(language) }}
                 </router-link>
@@ -40,6 +82,7 @@
                         id="song-details-image"
                         class="flex gap-2 rounded"
                         height="100"
+                        :src="song.image"
                     />
                 </div>
                 <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" :class="{'hidden': !imageLoaded }">
@@ -118,88 +161,6 @@
         </div>
     </BaseCard>
 </template>
-<script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
-import { Collection, Song } from "@/classes";
-import { useStore } from "@/store";
-import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { EyeIcon } from "@heroicons/vue/outline";
-import ContributorInfo from "./ContributorInfo.vue";
-
-export default defineComponent({
-    name: "song-info-card",
-    components: {
-        ContributorInfo,
-        InformationCircleIcon,
-        ArrowSmRightIcon,
-        EyeIcon,
-    },
-    props: {
-        language: {
-            type: String,
-            required: true,
-        },
-        song: {
-            type: Object as PropType<Song>,
-            required: true,
-        },
-        collection: {
-            type: Object as PropType<Collection>,
-            required: true,
-        },
-        viewCount: {
-            type: Number,
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    data: () => ({
-        store: useStore(),
-        imageLoaded: false,
-        showDescription: false,
-    }),
-    computed: {
-        title() {
-            return this.song?.getName(this.language);
-        },
-        melodyOrigin() {
-            return (
-                this.song?.melodyOrigin?.description?.[this.language] ??
-                this.song?.melodyOrigin?.description?.no ??
-                undefined
-            );
-        },
-        identicalCopyright() {
-            return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
-        },
-    },
-    mounted() {
-        if (this.song) {
-            if (this.song.image) {
-
-                const image = document.getElementById(
-                    "song-details-image",
-                ) as HTMLImageElement;
-
-                image.style.display = "none";
-
-                image.src = this.song.image;
-
-                image.onload = () => {
-                    image.classList.add("song-details-transition");
-                    this.imageLoaded = true;
-                    image.style.display = "";
-                };
-            } else {
-                this.imageLoaded = true;
-            }
-        }
-    },
-});
-</script>
-
 <style scoped>
 [v-cloak] {
     display: none;

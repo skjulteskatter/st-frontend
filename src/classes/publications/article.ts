@@ -12,6 +12,7 @@ export default class Article implements IArticle {
     public image: string;
     public title: string;
     public content;
+    public number;
 
     public get Date() {
         return new Date(this.dateWritten);
@@ -31,5 +32,6 @@ export default class Article implements IArticle {
         this.image = i.image;
         this.title = i.title;
         this.content = i.content ? new ArticleContent(i.content) : null;
+        this.number = i.number;
     }
 }
