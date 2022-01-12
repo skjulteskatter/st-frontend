@@ -106,10 +106,10 @@ export default defineComponent({
             return this.user?.settings?.languageKey;
         },
         Authors() {
-            return this.song?.participants.filter(i => i.type === "author").map(i => i.contributor as Contributor) ?? [];
+            return this.song?.participants.filter(i => i.type === "author" && i.contributor).map(i => i.contributor as Contributor) ?? [];
         },
         Composers() {
-            return this.song?.participants.filter(i => i.type === "composer").map(i => i.contributor as Contributor) ?? [];
+            return this.song?.participants.filter(i => i.type === "composer" && i.contributor).map(i => i.contributor as Contributor) ?? [];
         },
         options() {
             return this.store.state.songs.sheetMusic;
