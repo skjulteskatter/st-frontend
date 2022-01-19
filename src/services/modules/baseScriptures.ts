@@ -26,7 +26,7 @@ export default class BaseScriptures {
     }
 
     public async get(id: string): Promise<Collection> {
-        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.keys).contains(id));
+        const scripture = this.scriptures?.find(s => s.id === id || Object.values(s.keys).includes(id));
         if (!scripture) {
             throw new Error("Scripture not found");
         }

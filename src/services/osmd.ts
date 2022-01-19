@@ -1,14 +1,5 @@
 /* eslint-disable */
-import { 
-    // BasicAudioPlayer, 
-    // ControlPanel, 
-    // IAudioMetronomePlayer, 
-    // IMessageViewer, 
-    // LinearTimingSource, 
-    OpenSheetMusicDisplay, 
-    // PlaybackManager, 
-    TransposeCalculator 
-} from "opensheetmusicdisplay";
+import * as opensheetmusicdisplay from "opensheetmusicdisplay";
 import { SheetMusicOptions } from "songtreasures";
 import { logs } from "./logs";
 // const timingSource = new LinearTimingSource();
@@ -18,7 +9,7 @@ import { logs } from "./logs";
 
 class OSMD {
     private initialized = false;
-    private osmd: OpenSheetMusicDisplay = {} as OpenSheetMusicDisplay;
+    private osmd: opensheetmusicdisplay.OpenSheetMusicDisplay = {} as opensheetmusicdisplay.OpenSheetMusicDisplay;
     public canvas: HTMLElement = {} as HTMLElement;
     // public pbcanvas: HTMLElement = {} as HTMLElement;
     public originalKey?: string;
@@ -62,7 +53,7 @@ class OSMD {
             this.canvas = canvas;
             // this.pbcanvas = pbcanvas;
             
-            this.osmd = new OpenSheetMusicDisplay(this.canvas, {
+            this.osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(this.canvas, {
                 autoResize: true,
                 backend: "canvas",
                 drawingParameters: "default", // try compact (instead of default)
@@ -205,7 +196,7 @@ class OSMD {
         
         await this.osmd.load(sheetMusic.url);
 
-        this.osmd.TransposeCalculator = new TransposeCalculator();
+        this.osmd.TransposeCalculator = new (opensheetmusicdisplay as any).TransposeCalculator();
 
         this.osmd.Sheet.Transpose = sheetMusic.clef == "bass" ? this.transposition - 12 : this.transposition;
 

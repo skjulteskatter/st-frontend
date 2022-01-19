@@ -147,12 +147,12 @@ export default class Lyrics implements ILyrics {
         for (const v of this.content as LyricsChordContent[]) {
             if (v.key.startsWith("chorus")) {
                 chorus = v;
-            } else if(chorus && !verses.last()?.key.startsWith("chorus")) {
+            } else if(chorus && !verses[verses.length - 1]?.key.startsWith("chorus")) {
                 verses.push(chorus);
             }
             verses.push(v);
         }
-        if(chorus && !verses.last()?.key.startsWith("chorus")) {
+        if(chorus && !verses[verses.length - 1]?.key.startsWith("chorus")) {
             verses.push(chorus);
         }
         return verses;
