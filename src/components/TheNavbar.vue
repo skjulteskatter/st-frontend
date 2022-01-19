@@ -11,9 +11,9 @@
 					<div class="hidden lg:block">
 						<div class="ml-10 flex items-baseline space-x-4">
 							<template v-for="item in Links" :key="item.name">
-								<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
+								<router-link :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 px-3 py-2 rounded-md text-sm font-medium">
 									<span class="flex items-center gap-2">
-										<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" />
+										<!-- <LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" /> -->
 										{{ item.name }}
 									</span>
 								</router-link>
@@ -43,6 +43,17 @@
 									<MenuItem v-slot="{ active }">
 										<router-link to="/settings" :class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']">{{ $t('common_settings') }}</router-link>
 									</MenuItem>
+									<MenuItem
+										v-for="link in dropDownLinks"
+										:key="link.name" 
+										:id="link.name"
+										v-slot="{ active }"
+									>
+										<router-link
+											:to="link.path"
+											:class="[active ? 'bg-black/5 dark:bg-white/10' : '', 'block px-4 py-2 text-sm']"
+										>{{link.name}}</router-link>
+									</MenuItem>
 									<MenuItem>
 										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-500/10">{{ $t('common_logout') }}</button>
 									</MenuItem>
@@ -66,9 +77,9 @@
 		<DisclosurePanel class="lg:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<template v-for="item in Links" :key="item.name">
-					<router-link v-if="item.condition !== false" :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">
+					<router-link :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">
 						<span class="flex items-center gap-2">
-							<LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" />
+							<!-- <LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" /> -->
 							{{ item.name }}
 						</span>
 					</router-link>
@@ -87,6 +98,12 @@
 				</div>
 				<div class="mt-3 px-2 space-y-1">
 					<router-link to="/settings" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10">{{ $t('common_settings') }}</router-link>
+					<router-link 
+						v-for="link in dropDownLinks" 
+						:key="link.name" 
+						:to="link.path"
+						class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10"
+					>{{link.name}}</router-link>
 					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-500/10 text-red-500" @click="logout()">{{ $t('common_logout') }}</button>
 				</div>
 			</div>
@@ -109,7 +126,11 @@ import {
 } from "@headlessui/vue";
 import NotificationList from "@/components/notification/NotificationList.vue";
 import Feedback from "@/components/feedback/Feedback.vue";
-import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/vue/solid";
+import { 
+	// LockClosedIcon, 
+	MenuIcon, 
+	XIcon,
+} from "@heroicons/vue/solid";
 import { storeService } from "@/services/modules";
 import { appSession } from "@/services/session";
 
@@ -127,7 +148,7 @@ export default defineComponent({
 		MenuItems,
 		Feedback,
 		NotificationList,
-		LockClosedIcon,
+		// LockClosedIcon,
 		MenuIcon,
 		XIcon,
 	},
@@ -167,14 +188,38 @@ export default defineComponent({
 					name: this.$t("favorites"),
 					path: "/favorites",
 				},
+				// {
+				// 	name: "Admin",
+				// 	path: "/admin",
+				// 	condition: this.isAdmin,
+				// },
+				// {
+				// 	name: "Scriptures",
+				// 	path: "/scriptures",
+				// 	condition: this.isAdmin,
+				// },
+				// {
+				// 	name: "Tools",
+				// 	path: "/tools",
+				// 	condition: this.isTechnician,
+				// },
+			];
+		},
+		dropDownLinks() {
+			return [
 				{
 					name: "Admin",
 					path: "/admin",
 					condition: this.isAdmin,
 				},
 				{
-					name: "Scriptures",
+					name: this.$t("scriptures_title"),
 					path: "/scriptures",
+					condition: this.isAdmin,
+				},
+				{
+					name: this.$t("publications_title"),
+					path: "/publications",
 					condition: this.isAdmin,
 				},
 				{
@@ -182,7 +227,7 @@ export default defineComponent({
 					path: "/tools",
 					condition: this.isTechnician,
 				},
-			];
+			].filter(i => i.condition);
 		},
 	},
 	async mounted() {
@@ -198,7 +243,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .router-link-exact-active {
 	@apply text-primary;
 }
