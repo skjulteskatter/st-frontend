@@ -36,7 +36,7 @@
                     </option>
                 </select>
             </label>
-            <label class="flex flex-col gap-1">
+            <label class="flex flex-col gap-1" v-if="song.hasChords">
                 <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song_lyricsType') }}</span>
                 <select
                     class="rounded-md border-gray-300 dark:bg-secondary dark:border-gray-500"
