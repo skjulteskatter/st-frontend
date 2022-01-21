@@ -149,7 +149,7 @@ export default class Song extends BaseClass implements ISong {
         this.loadingLyrics = true;
         try {
             language = language ?? this.store.getters.languageKey;
-            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language);
+            let lyrics = appSession.lyrics.find(l => l.songId === this.id && l.languageKey === language && l.format === "json");
             if (!lyrics) {
                 lyrics = new Lyrics(await songs.getSongLyrics(this.id, language, "json", 0, "common"));
                 appSession.lyrics.push(lyrics);
