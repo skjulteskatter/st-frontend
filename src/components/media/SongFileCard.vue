@@ -16,7 +16,7 @@
 					<span v-else-if="file.category">{{ $t(`types_${file.category}`) }}<span v-if="file.getLanguage()" class="ml-1">({{file.getLanguage()?.name}})</span></span>
 				</BaseButton>
 			</div>
-			<div v-if="tutorialFiles.length" class="mt-4"></div>
+			<div v-if="tutorialFiles.length && karaokeFiles.length" class="mt-4"></div>
 			<div class="flex gap-2 flex-wrap" v-if="karaokeFiles.length">
 				<BaseButton size="small" theme="neutral" v-for="file in karaokeFiles" @click="callback(file)" :key="file.id">
 					<template #icon>
