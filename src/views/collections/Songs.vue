@@ -164,7 +164,7 @@ export default defineComponent({
         searchString: "",
         cId: "",
         list: [] as ListEntry[],
-        loadingList: false,
+        loadingList: true,
         showCta: false,
         showFiles: false,
         inCart: false,

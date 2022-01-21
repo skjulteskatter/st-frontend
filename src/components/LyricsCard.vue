@@ -1,5 +1,5 @@
 <template>
-    <BaseCard v-if="song" class="overflow-visible">
+    <BaseCard class="overflow-visible">
         <template #header>
             <div class="w-full flex items-center gap-2">
                 <h3 class="font-bold">{{ $t("song_lyrics") }}</h3>
@@ -147,10 +147,11 @@ export default defineComponent({
     },
     props: {
         lyrics: {
-            type: Object as PropType<Lyrics>,
+            type: Object as PropType<Lyrics | null>,
         },
         song: {
             type: Object as PropType<Song>,
+            required: true,
         },
         collection: {
             type: Object as PropType<Collection>,
