@@ -7,7 +7,7 @@
             <template #footer>
                 <div class="flex flex-col gap-2">
                     <BaseButton class="flex-grow" theme="tertiary" @click="sendVerificationEmail" :disabled="sentEmail || verificationEmailSent">Resend email</BaseButton>
-                    <BaseButton class="flex-grow" theme="secondary" @click="$router.push({name: 'login'})">
+                    <BaseButton class="flex-grow" theme="secondary" @click="$router.push({name: 'login-view'})">
                         <template #icon>
                             <CheckIcon class="w-4 h-4" />
                         </template>
