@@ -59,7 +59,7 @@ export default defineComponent({
                 this.chapter = await scriptures.getChapter(book.id, chapterId);
                 this.verses = await scriptures.getVerses(book.id, chapterId);
 
-                if (this.chapter.id !== scriptures.CurrentChapter?.id) {
+                if (this.chapter?.id !== scriptures.CurrentChapter?.id) {
                     await scriptures.setChapter(this.chapter.number);
                 }
             }

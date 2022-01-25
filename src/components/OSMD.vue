@@ -118,7 +118,13 @@
                 </label>
                 <label class="flex flex-col">
                     <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
-                    <SongChanger :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()" />
+                    <SongChanger 
+                        :label="octave.toString()" 
+                        @next="increaseOctave()" 
+                        @previous="decreaseOctave()"
+                        :hasNext="true"
+                        :hasPrevious="true"
+                    />
                 </label>
                 <button
                     v-if="$route.name == 'song'"

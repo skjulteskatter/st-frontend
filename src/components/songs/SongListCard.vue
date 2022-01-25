@@ -16,7 +16,6 @@
                 v-for="song in songs"
                 :key="song.id"
                 :class="{
-                    'text-red-700': song.available && song.anotherLanguage(),
                     'opacity-40': !song.available,
                 }"
             >

@@ -42,4 +42,8 @@ export default class MediaFile implements IMediaFile {
     public getInstrument() {
         return appSession.instruments.find(i => i.id === this.instrumentId);
     }
+
+    public getLanguage() {
+        return this.languageKey ? appSession.languages.find(i => i.key === this.languageKey) : null;
+    }
 }

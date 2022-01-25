@@ -141,7 +141,6 @@ export class Session {
         this._initialized = false;
         this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? [])
         // TODO: remove filter on song;
-            .filter(c => this.user.Extended || c.type === "song")
             .map(c => new Collection(c))
             .sort((a, b) => b.priority - a.priority);
 

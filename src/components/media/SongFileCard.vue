@@ -6,14 +6,26 @@
 	>
 		<p v-if="collection" class="opacity-50 text-sm">{{collection.key}} {{song.getNumber(collection?.id)}}</p>
 		<h3 class="font-semibold mb-2">{{ song.name.default }}</h3>
-		<div class="flex gap-2">
-			<BaseButton size="small" theme="neutral" v-for="file in files" @click="callback(file)" :key="file.id">
-				<template #icon>
-					<component :is="icon(file)" class="w-4 h-4 opacity-50" />
-				</template>
-				<span v-if="file.getInstrument()">{{ $t(`instrument_${file.getInstrument()?.identifier}`) }}</span>
-				<span v-else-if="file.category">{{ $t(`types_${file.category}`) }}</span>
-			</BaseButton>
+		<div>
+			<div class="flex gap-2 flex-wrap" v-if="tutorialFiles.length">
+				<BaseButton size="small" theme="neutral" v-for="file in tutorialFiles" @click="callback(file)" :key="file.id">
+					<template #icon>
+						<component :is="icon(file)" class="w-4 h-4 opacity-50" />
+					</template>
+					<span v-if="file.getInstrument()">{{ $t(`instrument_${file.getInstrument()?.identifier}`) }}</span>
+					<span v-else-if="file.category">{{ $t(`types_${file.category}`) }}<span v-if="file.getLanguage()" class="ml-1">({{file.getLanguage()?.name}})</span></span>
+				</BaseButton>
+			</div>
+			<div v-if="tutorialFiles.length && karaokeFiles.length" class="mt-4"></div>
+			<div class="flex gap-2 flex-wrap" v-if="karaokeFiles.length">
+				<BaseButton size="small" theme="neutral" v-for="file in karaokeFiles" @click="callback(file)" :key="file.id">
+					<template #icon>
+						<component :is="icon(file)" class="w-4 h-4 opacity-50" />
+					</template>
+					<span v-if="file.getInstrument()">{{ $t(`instrument_${file.getInstrument()?.identifier}`) }}</span>
+					<span v-else-if="file.category">{{ $t(`types_${file.category}`) }}<span v-if="file.getLanguage()" class="ml-1">({{file.getLanguage()?.name}})</span></span>
+				</BaseButton>
+			</div>
 		</div>
 		<!-- TODO: add link to song if .available -->
 	</div>
@@ -53,10 +65,21 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		language: {
+			type: String,
+		},
 	},
 	data: () => ({
 		store: useStore(),
 	}),
+	computed: {
+		tutorialFiles() {
+			return this.files.filter(i => i.category === "tutorial");
+		},
+		karaokeFiles() {
+			return this.files.filter(i => i.category === "karaoke");
+		},
+	},
 	methods: {
 		callback(file?: MediaFile) {
 			if (!file) {

@@ -33,6 +33,7 @@
                     :collection="collection" 
                     :files="songFiles(song)"
                     :defaultInstrumentId="instrumentId"
+                    :language="language"
                     @selectVideo="selectVideo" 
                 />
             </div>
@@ -61,7 +62,7 @@ export default defineComponent({
     },
     setup() {
         const supportedTypes: MediaType[] = ["video", "audio"];
-        const supportedCategories = ["tutorial"];
+        const supportedCategories = ["tutorial", "karaoke"];
         const files = appSession.files.filter(f => supportedTypes.includes(f.type) && supportedCategories.includes(f.category));
         const songs = appSession.songs.filter(s => files.some(f => f.songId === s.id));
         const collections = appSession.collections.filter(c => files.some(f => f.getSong()?.collectionIds.includes(c.id)));
@@ -73,6 +74,7 @@ export default defineComponent({
             files,
             songs,
             collections,
+            language: appSession.Language,
         };
     },
     data() {
