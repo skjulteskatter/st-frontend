@@ -180,6 +180,16 @@ export default defineComponent({
             this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
             if (this.files.length == 1) {
                 this.setFile(this.files[0]);
+            } else {
+                const initialFileId = this.searchParams.get("fileid");
+
+                if (initialFileId) {
+                    const file = this.files.find(i => i.id === initialFileId);
+
+                    if (file) {
+                        this.setFile(file);
+                    }
+                }
             }
         }
         else {
