@@ -20,7 +20,7 @@
     "idb": "^6.1.5",
     "isomorphic-fetch": "^3.0.0",
     "less-loader": "^7.3.0",
-    "opensheetmusicdisplay": "^1.4.3",
+    "opensheetmusicdisplay": "^1.4.5",
     "plyr": "^3.6.9",
     "regenerator-runtime": "^0.13.9",
     "showdown": "^1.9.1",
