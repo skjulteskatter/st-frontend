@@ -62,7 +62,7 @@
 							<br/>
 							<span class="text-sm">Valid To</span>
 							<input type="date" v-model="validTo[User.id]"/>
-							<BaseButton class="mb-2" :disabled="!Object.values(newSubs[User.id]).includes(true) || !validTo[User.id]" @click="addSubscriptions(User)">Save</BaseButton>
+							<BaseButton class="mb-2" @click="addSubscriptions(User)">Add</BaseButton>
 						</BaseDropdown>
 					</div>
 				</div>
