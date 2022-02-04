@@ -7,7 +7,7 @@
             <FileCard v-for="file in audio" :key="file.id" :file="file" />
         </div>
         <BaseModal :show="showVideo" @close="closeVideo()">
-            <video :src="videoUrl" autoplay controls>
+            <video :src="videoUrl" autoplay controls controlsList="nodownload">
                 Video is not supported
             </video>
         </BaseModal>

@@ -68,6 +68,7 @@
                         controls
                         autoplay
                         fullscreen
+                        controlsList="nodownload"
                     >
                         Sorry, your browser doesn't support embedded videos.
                     </video>

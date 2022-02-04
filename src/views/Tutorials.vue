@@ -39,7 +39,7 @@
             </div>
         </div>
         <BaseModal :show="showVideo" @close="closeVideo()">
-            <video v-if="videoUrl" :src="videoUrl" autoplay controls>
+            <video v-if="videoUrl" :src="videoUrl" autoplay controls controlsList="nodownload">
                 Video is not supported
             </video>
         </BaseModal>
