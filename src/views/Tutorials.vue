@@ -3,7 +3,7 @@
         <!-- TODO: Header should be the same for SongList and this (?) -->
         <header class="flex gap-4 items-center mb-4">
             <h1 class="font-bold text-xl md:text-2xl">{{ $t("types_tutorial") }}</h1>
-            <span class="bg-green-500/20 text-green-700 px-2 py-1 rounded-md uppercase tracking-wide text-xs">free</span>
+            <!-- <span class="bg-green-500/20 text-green-700 px-2 py-1 rounded-md uppercase tracking-wide text-xs">free</span> -->
         </header>
         <!-- <select
             v-model="instrumentId"
