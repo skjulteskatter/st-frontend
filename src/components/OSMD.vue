@@ -134,6 +134,8 @@
                     <XIcon class="w-4 h-4" />
                 </button>
             </div>
+            <div v-if="svg" v-html="svg">
+            </div>
         </Loader>
     </div>
 </template>
@@ -146,6 +148,7 @@ import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
 import { XIcon } from "@heroicons/vue/solid";
 import { SheetMusicOptions } from "songtreasures";
+import { sheetService } from "@/services/sheetService";
 
 @Options({
     props: {
@@ -172,6 +175,7 @@ export default class OSMD extends Vue {
     public zoom = 1;
     public options?: SheetMusicOptions;
     public octave = 0;
+    public svg: string[] | null = null;
     
     public loading: {
         [key: string]: boolean;
@@ -193,10 +197,9 @@ export default class OSMD extends Vue {
     }
 
     public async mounted() {
-        this.options ??= { show: false, originalKey: "C", clef: "treble" };
+        this.options ??= { fileId: "", show: false, originalKey: "C", clef: "treble" };
         this.transposition = this.options.transposition ?? 0;
         this.zoom = this.osmd.zoom;
-        const c = document.getElementById("osmd-canvas");
 
         const originalKey = this.options.originalKey;
 
@@ -204,12 +207,12 @@ export default class OSMD extends Vue {
 
         this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions);
 
-        await this.osmd.init(c, null);
+        if (this.options.show) {
+            const svg = await sheetService.render({
+                id: this.options.fileId,
+            });
 
-        try {
-            await this.osmd.load(this.options);
-        } catch (e) {
-            //console.log(e);
+            this.svg = svg as string[];
         }
     }
 

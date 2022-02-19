@@ -16,7 +16,7 @@
     "@stripe/stripe-js": "^1.21.1",
     "apexcharts": "^3.31.0",
     "firebase": "^9.5.0",
-    "hiddentreasures-js": "^1.1.7",
+    "hiddentreasures-js": "^1.1.8",
     "i18n-iso-countries": "^6.8.0",
     "idb": "^6.1.5",
     "isomorphic-fetch": "^3.0.0",

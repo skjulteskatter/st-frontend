@@ -204,6 +204,7 @@ export default defineComponent({
 
             await new Promise(r => setTimeout(r, 10));
             const options: SheetMusicOptions = {
+                fileId: file.id,
                 show: true,
                 originalKey: this.song?.originalKey ?? "C",
                 url: file.directUrl,

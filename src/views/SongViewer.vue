@@ -387,6 +387,7 @@ export default defineComponent({
             }
             this.fullLoading = true;
             this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
+                fileId: "",
                 show: false,
                 clef: "treble",
                 originalKey: "C",
