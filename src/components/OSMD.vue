@@ -1,6 +1,10 @@
 <template>
-    <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
-        <Loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
+    <div
+        class="sticky bottom-0 md:overflow-y-auto"
+        :class="{'hidden': !options?.show || options?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
+    >
+        <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
+            <Loader :loading="osmdLoading || loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
             <div v-if="song && collection">
                 <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                 <div class="flex gap-2 items-center opacity-50 tracking-wide">
@@ -134,9 +138,10 @@
                     <XIcon class="w-4 h-4" />
                 </button>
             </div>
-            <div v-if="svg" v-html="svg">
-            </div>
         </Loader>
+    </div>
+    <div v-if="svg" v-html="svg">
+    </div>
     </div>
 </template>
 
