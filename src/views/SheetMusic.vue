@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { osmd } from "@/services/osmd";
+// import { osmd } from "@/services/osmd";
 import { IMediaFile } from "songtreasures-api";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
@@ -93,7 +93,7 @@ export default defineComponent({
     data: () => ({
         store: useStore(),
         searchParams: new URLSearchParams(window.location.search),
-        osmd: osmd,
+        // osmd: osmd,
         pdfType: SheetMusicTypes.PDF,
         files: [] as IMediaFile[],
         song: null as Song | null,
@@ -165,10 +165,10 @@ export default defineComponent({
         },
     },
     async mounted() {
-        const c = document.getElementById("osmd-canvas");
-        const pbc = document.getElementById("pb-canvas");
+        // const c = document.getElementById("osmd-canvas");
+        // const pbc = document.getElementById("pb-canvas");
         const token = this.searchParams.get("token");
-        await osmd.init(c, pbc);
+        // await osmd.init(c, pbc);
 
         if (token) {
             http.setToken(token);
