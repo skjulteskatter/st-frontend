@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { defineProps, computed, ref } from "vue";
+import { computed, ref } from "vue";
 import { Collection, Song } from "@/classes";
 import { appSession } from "@/services/session";
 import { EyeIcon } from "@heroicons/vue/outline";

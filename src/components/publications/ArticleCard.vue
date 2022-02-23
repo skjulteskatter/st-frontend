@@ -11,7 +11,6 @@
     </BaseCard>
 </template>
 <script setup lang="ts">
-import { defineProps } from "vue";
 import { Article } from "@/classes/publications";
 
 interface Props {
