@@ -16,6 +16,7 @@ declare module "songtreasures" {
     }
     
     type SheetMusicOptions = {
+        fileId: string;
         show: boolean;
         url?: string;
         type?: string;

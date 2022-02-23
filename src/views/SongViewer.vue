@@ -94,6 +94,11 @@
                             @transpose="transpose"
                             @setView="setView"
                         />
+                        <OpenSheetMusicDisplay
+                            v-if="sheetMusicOptions?.show === true"
+                            :options="sheetMusicOptions"
+                            :relativeKey="user?.settings?.defaultTransposition"
+                        />
                         <PresentationPreview
                             v-if="song.hasLyrics && isExtended && lyrics"
                             :text="lyrics?.getText({
@@ -166,6 +171,7 @@ import {
     BackButton,
     BaseModal,
 } from "@/components";
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import {
     PresentationControlPanel,
     PresentationPreview,
@@ -203,6 +209,7 @@ export default defineComponent({
         SongTags,
         BackButton,
         BaseModal,
+        OpenSheetMusicDisplay,
         PlaylistCard: PlaylistAddToCard,
         CreatePlaylistModal,
         FolderAddIcon,
@@ -222,6 +229,7 @@ export default defineComponent({
         control: control,
         number: 0 as number | string,
         selectedSheetMusic: {} as IMediaFile,
+        sheetMusicOptions: null as SheetMusicOptions | null,
         songViewCount: null as number | null,
         show: false,
         unset: false,
@@ -232,6 +240,7 @@ export default defineComponent({
         },
         fullLoading: false,
         favorite: false,
+        showSheet: false,
     }),
     computed: {
         selectedLanguage() {
@@ -245,14 +254,6 @@ export default defineComponent({
         },
         admin() {
             return appSession.user.roles.some(r => ["editor", "administrator"].includes(r));
-        },
-        sheetMusicOptions: {
-            get() {
-                return this.store.state.songs.sheetMusic;
-            },
-            set(v: SheetMusicOptions) {
-                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, v);
-            },
         },
         audioTrack: {
             get() {
@@ -387,6 +388,7 @@ export default defineComponent({
             }
             this.fullLoading = true;
             this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
+                fileId: "",
                 show: false,
                 clef: "treble",
                 originalKey: "C",

@@ -20,20 +20,14 @@
 					</router-view>
 				</div>
 				<!-- OSMD -->
-				<div
-					class="sticky bottom-0 md:overflow-y-auto"
-					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type == 'sheetmusic-pdf' || $route.name != 'song' }"
-				>
-					<OpenSheetMusicDisplay
-						v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
-						:options="sheetMusicOptions"
-						:relativeKey="user?.settings?.defaultTransposition"
-						@startLoading="osmdLoading = true"
-						@finishLoading="osmdLoading = false"
-					/>
-					<div id="osmd-canvas" class="bg-white"></div>
-					<Loader :loading="osmdLoading" />
-				</div>
+				<!-- <OpenSheetMusicDisplay
+					v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
+					:options="sheetMusicOptions"
+					:relativeKey="user?.settings?.defaultTransposition"
+					@startLoading="osmdLoading = true"
+					@finishLoading="osmdLoading = false"
+				/>
+				<Loader :loading="osmdLoading" /> -->
 				<div
 					class="w-full h-full flex flex-col fixed top-20"
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"

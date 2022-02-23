@@ -134,6 +134,7 @@ export default defineComponent({
         selectSheetMusic(sheet: MediaFile) {
             const options: SheetMusicOptions = {
                 show: true,
+                fileId: sheet?.id,
                 url: sheet?.directUrl,
                 originalKey: this.song?.originalKey ?? "C",
                 transposition: undefined,
