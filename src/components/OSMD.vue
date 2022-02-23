@@ -101,6 +101,25 @@
                             </div>
                         </BaseDropdown>
                     </label>
+                    <label class="flex flex-col mr-2" v-if="sheetDetails && sheetDetails.instruments.length > 1">
+                        <span class="text-sm text-gray-500">{{ $t('common_instruments') }}</span>
+                        <select
+                            class="p-2 rounded-md border-gray-300 pr-8"
+                            name="zoom"
+                            id="zoom"
+                            v-model="instruments"
+                            multiple
+                            @change="load"
+                        >
+                            <option
+                                v-for="instrument in sheetDetails.instruments"
+                                :key="instrument"
+                                :value="instrument"
+                            >
+                                {{instrument}}
+                            </option>
+                        </select>
+                    </label>
                     <label class="flex flex-col mr-2">
                         <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
                         <select
@@ -163,6 +182,7 @@ import { SongChanger } from "@/components/songs";
 import { XIcon } from "@heroicons/vue/solid";
 import { SheetMusicOptions } from "songtreasures";
 import { sheetService } from "@/services/sheetService";
+import { Sheet } from "hiddentreasures-js";
 
 @Options({
     props: {
@@ -190,6 +210,8 @@ export default class OSMD extends Vue {
     public octave = 0;
     public size: "sm" | "md" | "lg" | "xl" = "lg";
     public svg: string[] | null = null;
+    public sheetDetails: Sheet | null = null;
+    public instruments: string[] = [];
     
     public loading: {
         [key: string]: boolean;
@@ -221,6 +243,8 @@ export default class OSMD extends Vue {
         this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions);
 
         if (this.options.show) {
+            this.sheetDetails = await sheetService.get(this.options.fileId);
+            console.log(this.sheetDetails);
             await this.load();
         }
     }
