@@ -75,7 +75,7 @@ import { IMediaFile } from "songtreasures-api";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import OpenSheetMusicDisplay from "@/components/OSMD.vue";
+import OpenSheetMusicDisplay from "@/components/LegacyOSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
 import { MediaListItem } from "@/components/media";
