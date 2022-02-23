@@ -131,6 +131,13 @@
                 </div>
             </div>
         </Loader>
+        <BaseModal :show="sheetMusicOptions?.show === true">
+            <OpenSheetMusicDisplay
+                v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
+                :options="sheetMusicOptions"
+                :relativeKey="user?.settings?.defaultTransposition"
+            />
+        </BaseModal>
         <BaseModal :show="song ? !song.available : false">
             <div class="flex flex-col items-center">
                 <LockClosedIcon class="w-10 h-10 text-primary my-4" />
@@ -166,6 +173,7 @@ import {
     BackButton,
     BaseModal,
 } from "@/components";
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import {
     PresentationControlPanel,
     PresentationPreview,
@@ -203,6 +211,7 @@ export default defineComponent({
         SongTags,
         BackButton,
         BaseModal,
+        OpenSheetMusicDisplay,
         PlaylistCard: PlaylistAddToCard,
         CreatePlaylistModal,
         FolderAddIcon,

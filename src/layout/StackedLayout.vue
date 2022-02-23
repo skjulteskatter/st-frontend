@@ -20,14 +20,14 @@
 					</router-view>
 				</div>
 				<!-- OSMD -->
-				<OpenSheetMusicDisplay
+				<!-- <OpenSheetMusicDisplay
 					v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
 					:options="sheetMusicOptions"
 					:relativeKey="user?.settings?.defaultTransposition"
 					@startLoading="osmdLoading = true"
 					@finishLoading="osmdLoading = false"
 				/>
-				<Loader :loading="osmdLoading" />
+				<Loader :loading="osmdLoading" /> -->
 				<div
 					class="w-full h-full flex flex-col fixed top-20"
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
