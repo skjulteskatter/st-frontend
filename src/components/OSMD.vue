@@ -101,7 +101,7 @@
                             </div>
                         </BaseDropdown>
                     </label>
-                    <!-- <label class="flex flex-col mr-2">
+                    <label class="flex flex-col mr-2">
                         <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
                         <select
                             class="p-2 rounded-md border-gray-300 pr-8"
@@ -114,22 +114,22 @@
                                 :key="`size-sm`"
                                 value="sm"
                             >
-                                {{ $t('size_sm') }}
+                                Small
                             </option>
                             <option
                                 :key="`size-md`"
                                 value="md"
                             >
-                                {{ $t('size_medium') }}
+                                Medium
                             </option>
                             <option
                                 :key="`size-lg`"
                                 value="lg"
                             >
-                                {{ $t('size_large') }}
+                                Large
                             </option>
                         </select>
-                    </label> -->
+                    </label>
                     <label class="flex flex-col">
                         <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
                         <SongChanger 
@@ -188,7 +188,7 @@ export default class OSMD extends Vue {
     public zoom = 1;
     public options?: SheetMusicOptions;
     public octave = 0;
-    public size: "sm" | "md" | "lg" = "md";
+    public size: "sm" | "md" | "lg" | "xl" = "lg";
     public svg: string[] | null = null;
     
     public loading: {
