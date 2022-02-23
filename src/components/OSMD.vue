@@ -101,24 +101,35 @@
                             </div>
                         </BaseDropdown>
                     </label>
-                    <label class="flex flex-col mr-2">
+                    <!-- <label class="flex flex-col mr-2">
                         <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
                         <select
                             class="p-2 rounded-md border-gray-300 pr-8"
                             name="zoom"
                             id="zoom"
-                            v-model="zoom"
+                            v-model="size"
                             @change="setZoom"
                         >
                             <option
-                                v-for="i in 10"
-                                :key="`zoom-${i+3}`"
-                                :value="(i+3)/10"
+                                :key="`size-sm`"
+                                value="sm"
                             >
-                                {{ (i+3)*10 }}%
+                                {{ $t('size_sm') }}
+                            </option>
+                            <option
+                                :key="`size-md`"
+                                value="md"
+                            >
+                                {{ $t('size_medium') }}
+                            </option>
+                            <option
+                                :key="`size-lg`"
+                                value="lg"
+                            >
+                                {{ $t('size_large') }}
                             </option>
                         </select>
-                    </label>
+                    </label> -->
                     <label class="flex flex-col">
                         <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
                         <SongChanger 
@@ -177,6 +188,7 @@ export default class OSMD extends Vue {
     public zoom = 1;
     public options?: SheetMusicOptions;
     public octave = 0;
+    public size: "sm" | "md" | "lg" = "md";
     public svg: string[] | null = null;
     
     public loading: {
@@ -229,12 +241,12 @@ export default class OSMD extends Vue {
     public async load() {
         if (this.options) {
             const octave = 12 * this.octave;
-            const transposition = this.transposition ? this.transposition + octave : undefined;
+            const transposition = this.transposition !== undefined ? this.transposition + octave : undefined;
             this.svg = await sheetService.render({
                 id: this.options.fileId,
                 clef: this.options.clef,
                 format: "endless",
-                size: "lg",
+                size: this.size,
                 transposition,
             }) as string[];
 
@@ -254,6 +266,7 @@ export default class OSMD extends Vue {
         this.loading["octave"] = true;
 
         this.octave += 1;
+        await this.load();
 
         this.loading["octave"] = false;
     }
@@ -262,6 +275,7 @@ export default class OSMD extends Vue {
         this.loading["octave"] = true;
 
         this.octave -= 1;
+        await this.load();
 
         this.loading["octave"] = false;
     }
