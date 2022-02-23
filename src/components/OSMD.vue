@@ -244,7 +244,6 @@ export default class OSMD extends Vue {
 
         if (this.options.show) {
             this.sheetDetails = await sheetService.get(this.options.fileId);
-            console.log(this.sheetDetails);
             await this.load();
         }
     }

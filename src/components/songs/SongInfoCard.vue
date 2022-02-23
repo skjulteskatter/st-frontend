@@ -139,7 +139,7 @@ if (props.song.image) {
                         </small>
                     </div>
                     <small class="flex gap-2">
-                        <span v-if="song.originCountry">{{ $t(song.originCountry) }}</span>
+                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
                         <span v-if="song.originCountry">&middot;</span>
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
                         <span v-if="song.originalKey">&middot;</span>
