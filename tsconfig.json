@@ -15,9 +15,9 @@
     "baseUrl": ".",
     "preserveConstEnums": true,
     "types": [
-      "webpack-env",
       "mocha",
-      "chai"
+      "chai",
+      "node"
     ],
     "paths": {
       "@/*": [

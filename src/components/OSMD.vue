@@ -271,6 +271,7 @@ export default class OSMD extends Vue {
                 format: "endless",
                 size: this.size,
                 transposition,
+                instruments: this.instruments.length ? this.instruments : undefined,
             }) as string[];
 
             setTimeout(() => {
