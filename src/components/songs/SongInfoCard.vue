@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { defineProps, computed, ref } from "vue";
+import { computed, ref } from "vue";
 import { Collection, Song } from "@/classes";
 import { appSession } from "@/services/session";
 import { EyeIcon } from "@heroicons/vue/outline";
@@ -139,7 +139,7 @@ if (props.song.image) {
                         </small>
                     </div>
                     <small class="flex gap-2">
-                        <span v-if="song.originCountry">{{ $t(song.originCountry) }}</span>
+                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
                         <span v-if="song.originCountry">&middot;</span>
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
                         <span v-if="song.originalKey">&middot;</span>

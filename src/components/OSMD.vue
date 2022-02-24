@@ -244,7 +244,6 @@ export default class OSMD extends Vue {
 
         if (this.options.show) {
             this.sheetDetails = await sheetService.get(this.options.fileId);
-            console.log(this.sheetDetails);
             await this.load();
         }
     }
@@ -272,6 +271,7 @@ export default class OSMD extends Vue {
                 format: "endless",
                 size: this.size,
                 transposition,
+                instruments: this.instruments.length ? this.instruments : undefined,
             }) as string[];
 
             setTimeout(() => {

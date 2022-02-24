@@ -2,10 +2,11 @@
   "name": "songtreasures",
   "version": "2.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "deploy": "firebase deploy",
     "auth": "vsts-npm-auth -config .npmrc",
     "translations": "tsc ./translations/src/index.ts --outDir ./translations/dist && node ./translations/dist/"
@@ -42,18 +43,12 @@
     "@types/chai": "^4.2.22",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/mocha": "^5.2.4",
-    "@types/node": "^14.17.34",
+    "@types/node": "^14.18.12",
     "@types/showdown": "^1.9.4",
     "@types/unzipper": "^0.10.4",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
-    "@vue/cli-plugin-babel": "^5.0.0-rc.1",
-    "@vue/cli-plugin-eslint": "^5.0.0-rc.1",
-    "@vue/cli-plugin-router": "^5.0.0-rc.1",
-    "@vue/cli-plugin-typescript": "^5.0.0-rc.1",
-    "@vue/cli-plugin-unit-mocha": "^5.0.0-rc.1",
-    "@vue/cli-plugin-vuex": "^5.0.0-rc.1",
-    "@vue/cli-service": "^5.0.0-rc.1",
+    "@vitejs/plugin-vue": "^2.2.2",
     "@vue/compiler-sfc": "^3.2.23",
     "@vue/eslint-config-typescript": "^10.0.0",
     "@vue/test-utils": "^2.0.0-rc.17",
@@ -65,10 +60,9 @@
     "less": "^4.1.2",
     "postcss": "^8.4.5",
     "sass": "^1.45.0",
-    "sass-loader": "^12.4.0",
     "tailwindcss": "^3.0.6",
     "tslib": "^2.3.1",
     "typescript": "^4.5.2",
-    "vue-cli-plugin-tailwind": "^2.2.18"
+    "vite": "^2.8.4"
   }
 }

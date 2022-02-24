@@ -260,6 +260,14 @@ export default class Song extends BaseClass implements ISong {
 
     public get originCountry() {
         const country = this.origins.find(o => o.type === "text")?.country;
+        if (country) {
+            try {
+                const regionNames = new Intl.DisplayNames([appSession.Language, "en"], {type: "region"});
+                return regionNames.of(country.toUpperCase());
+            } catch {
+                // in case browser doesn't support Intl
+            }
+        }
         return country?.toUpperCase();
     }
 
