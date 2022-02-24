@@ -127,7 +127,7 @@
                             name="zoom"
                             id="zoom"
                             v-model="size"
-                            @change="setZoom"
+                            @change="load"
                         >
                             <option
                                 :key="`size-sm`"
@@ -175,7 +175,6 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import { Collection, transposer } from "@/classes";
 import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
@@ -183,163 +182,137 @@ import { XIcon } from "@heroicons/vue/solid";
 import { SheetMusicOptions } from "songtreasures";
 import { sheetService } from "@/services/sheetService";
 import { Sheet } from "hiddentreasures-js";
+import { defineComponent, PropType } from "vue";
 
-@Options({
+export default defineComponent({
+    name: "open-sheet-music-display",
+    components: {
+        SongChanger,
+        XIcon,
+    },
     props: {
         options: {
-            type: Object,
+            type: Object as PropType<SheetMusicOptions>,
+            required: true,
         },
         relativeKey: {
             type: String,
+            required: true,
         },
         showInfo: {
             type: Boolean,
         },
     },
-    components: {
-        SongChanger,
-        XIcon,
-    },
-    name: "OSMD",
-})
-export default class OSMD extends Vue {
-    public store = useStore();
-    public originalKey?: string;
-    public transposition = 0;
-    public relativeKey?: string;
-    public showInfo: boolean | null = null;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public zoom = 1;
-    public options?: SheetMusicOptions;
-    public octave = 0;
-    public size: "sm" | "md" | "lg" | "xl" = "md";
-    public svg: string[] | null = null;
-    public sheetDetails: Sheet | null = null;
-    public instruments: string[] = [];
-    
-    public loading: {
-        [key: string]: boolean;
-    } = {};
-
-    public relativeTranspositions: {
-        value: number;
-        view: string;
-        key: string;
-        original: string;
-    }[] = [];
-
-    public get melodyOrigin() {
-        return (
-            this.song?.melodyOrigin?.description?.[this.languageKey] ??
-            this.song?.melodyOrigin?.description?.no ??
-            undefined
-        );
-    }
-
-    public async mounted() {
-        this.options ??= { fileId: "", show: false, originalKey: "C", clef: "treble" };
-        this.transposition = this.options.transposition ?? 0;
-
+    data() {
         const originalKey = this.options.originalKey;
 
         const transpositions = transposer.getTranspositions(originalKey, true);
 
-        this.relativeTranspositions = transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions);
-
+     
+        return {
+            store: useStore(),
+            svg: [] as string[],
+            octave: 0,
+            transposition: 0,
+            size: "md" as "sm" | "md" | "lg" | "xl",
+            sheetDetails: null as Sheet | null,
+            instruments: [] as string[],
+            loading: {} as {
+                [key: string]: boolean;
+            },
+            relativeTranspositions: transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions),
+        };
+    },
+    async mounted() {
         if (this.options.show) {
             this.sheetDetails = await sheetService.get(this.options.fileId);
             await this.load();
         }
-    }
+    },
+    methods: {
+        close() {
+            if (this.options) {
+                // eslint-disable-next-line vue/no-mutating-props
+                this.options.show = false;
+            }
+        },
+        async load() {
+            if (this.options) {
+                const octave = 12 * this.octave;
+                const transposition = this.transposition !== undefined ? this.transposition + octave : undefined;
+                this.svg = await sheetService.render({
+                    id: this.options.fileId,
+                    clef: this.options.clef,
+                    format: "endless",
+                    size: this.size,
+                    transposition,
+                    instruments: this.instruments.length ? this.instruments : undefined,
+                }) as string[];
 
-    public async setClef(c: "bass" | "treble" | "alto") {
-        if (this.options) {
-            this.options.clef = c;
+                setTimeout(() => {
+                    const elements = document.getElementById("osmd-svg");
+                    elements?.childNodes.forEach(n => {
+                        const node = n as SVGElement;
 
+                        node.removeAttribute("height");
+                        node.removeAttribute("width");
+                    });
+                }, 10);
+            }
+        },
+        async increaseOctave() {
+            this.loading["octave"] = true;
+
+            this.octave += 1;
             await this.load();
-        }
-    }
 
-    public close() {
-        if (this.options)
-            this.options.show = false;
-    }
+            this.loading["octave"] = false;
+        },
+        async decreaseOctave() {
+            this.loading["octave"] = true;
 
-    public async load() {
-        if (this.options) {
-            const octave = 12 * this.octave;
-            const transposition = this.transposition !== undefined ? this.transposition + octave : undefined;
-            this.svg = await sheetService.render({
-                id: this.options.fileId,
-                clef: this.options.clef,
-                format: "endless",
-                size: this.size,
-                transposition,
-                instruments: this.instruments.length ? this.instruments : undefined,
-            }) as string[];
-
-            setTimeout(() => {
-                const elements = document.getElementById("osmd-svg");
-                elements?.childNodes.forEach(n => {
-                    const node = n as SVGElement;
-
-                    node.removeAttribute("height");
-                    node.removeAttribute("width");
-                });
-            }, 10);
-        }
-    }
-
-    public async increaseOctave() {
-        this.loading["octave"] = true;
-
-        this.octave += 1;
-        await this.load();
-
-        this.loading["octave"] = false;
-    }
-
-    public async decreaseOctave() {
-        this.loading["octave"] = true;
-
-        this.octave -= 1;
-        await this.load();
-
-        this.loading["octave"] = false;
-    }
-
-    public async transpose(n: number) {
-        this.loading["transpose"] = true;
-        this.transposition = n;
-
-        if (this.transposition == n) {
+            this.octave -= 1;
             await this.load();
-        }
-        this.loading["transpose"] = false;
-    }
 
-    public async setZoom() {
-        this.loading["zoom"] = true;
-        const n = this.zoom;
+            this.loading["octave"] = false;
+        },
+        async transpose(n: number) {
+            this.loading["transpose"] = true;
+            this.transposition = n;
 
-        if (this.zoom == n) {
-            await this.load();
-        }
-        this.loading["zoom"] = false;
-    }
+            if (this.transposition == n) {
+                await this.load();
+            }
+            this.loading["transpose"] = false;
+        },
+        async setClef(c: "bass" | "treble" | "alto") {
+            if (this.options) {
+                // eslint-disable-next-line vue/no-mutating-props
+                this.options.clef = c;
 
-    public get song() {
-        return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
-    }
-
-    public get collection(): Collection | undefined {
-        return this.store.getters.collection;
-    }
-
-    public get languageKey() {
-        return this.store.getters.languageKey;
-    }
-}
+                await this.load();
+            }
+        },
+    },
+    computed: {
+        melodyOrigin() {
+            return (
+                this.song?.melodyOrigin?.description?.[this.languageKey] ??
+                this.song?.melodyOrigin?.description?.no ??
+                undefined
+            );
+        },
+        song() {
+            return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
+        },
+        collection(): Collection | undefined {
+            return this.store.getters.collection as Collection;
+        },
+        languageKey() {
+            return this.store.getters.languageKey;
+        },
+    },
+});
 </script>
 
 <style lang="scss">
