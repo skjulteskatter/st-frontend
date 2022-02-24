@@ -4,7 +4,7 @@
     >
         <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
             <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
-                <div v-if="song && collection">
+                <div v-if="song && collection && showInfo">
                     <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                     <div class="flex gap-2 items-center opacity-50 tracking-wide">
                         <small v-if="collection.name">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
@@ -192,6 +192,9 @@ import { Sheet } from "hiddentreasures-js";
         relativeKey: {
             type: String,
         },
+        showInfo: {
+            type: Boolean,
+        },
     },
     components: {
         SongChanger,
@@ -204,11 +207,12 @@ export default class OSMD extends Vue {
     public originalKey?: string;
     public transposition = 0;
     public relativeKey?: string;
+    public showInfo: boolean | null = null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public zoom = 1;
     public options?: SheetMusicOptions;
     public octave = 0;
-    public size: "sm" | "md" | "lg" | "xl" = "lg";
+    public size: "sm" | "md" | "lg" | "xl" = "md";
     public svg: string[] | null = null;
     public sheetDetails: Sheet | null = null;
     public instruments: string[] = [];
