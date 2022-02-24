@@ -28,7 +28,7 @@
 					@finishLoading="osmdLoading = false"
 				/>
 				<Loader :loading="osmdLoading" /> -->
-				<div
+				<!-- <div
 					class="w-full h-full flex flex-col fixed top-20"
 					:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
 				>
@@ -41,7 +41,7 @@
 						</BaseButton>
 					</div>
 					<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '\#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
-				</div>
+				</div> -->
 			</main>
 			<footer>
 				<Copyright />

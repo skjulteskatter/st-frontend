@@ -201,7 +201,6 @@ export default defineComponent({
         },
         song: {
             type: Object as PropType<Song>,
-            required: true,
         },
         collection: {
             type: Object as PropType<Collection>,

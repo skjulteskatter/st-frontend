@@ -95,10 +95,33 @@
                             @setView="setView"
                         />
                         <OpenSheetMusicDisplay
-                            v-if="sheetMusicOptions?.show === true"
+                            v-if="sheetMusicOptions?.show === true && sheetMusicOptions?.type === 'sheetmusic'"
                             :options="sheetMusicOptions"
                             :relativeKey="user?.settings?.defaultTransposition"
+                            :languageKey="languageKey"
                         />
+                        <div
+                            v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic-pdf'"
+                            class="w-full h-full"
+                        >
+                            <div class="p-4 flex justify-end bg-white w-full">
+                                <BaseButton theme="error" @click="sheetMusicOptions.show = false">
+                                    <template #icon>
+                                        <XIcon class="w-4 h-4" />
+                                    </template>
+                                    {{$t('common_close')}}
+                                </BaseButton>
+                            </div>
+                            <object 
+                                :key="sheetMusicOptions?.url" 
+                                :data="sheetMusicOptions?.url + '\#toolbar=0'" 
+                                type="application/pdf" 
+                                class="flex-grow" 
+                                title="PDF cannot be displayed." 
+                                width="100%"
+                                height="720px"
+                            ></object>
+                        </div>
                         <PresentationPreview
                             v-if="song.hasLyrics && isExtended && lyrics"
                             :text="lyrics?.getText({
@@ -179,7 +202,7 @@ import {
     SongSelector,
 } from "@/components/presentation";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
-import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon, PlusIcon } from "@heroicons/vue/solid";
+import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon, PlusIcon, XIcon } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
@@ -223,6 +246,7 @@ export default defineComponent({
         SwitchGroup,
         Switch,
         SwitchLabel,
+        XIcon,
     },
     data: () => ({
         store: useStore(),
