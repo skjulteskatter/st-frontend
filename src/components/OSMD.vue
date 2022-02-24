@@ -1,9 +1,7 @@
 <template>
-    <div
-        class="sticky bottom-0 md:overflow-y-auto"
-    >
-        <div class="relative p-4 border-t border-b border-gray-300 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full dark:bg-secondary dark:border-none">
-            <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
+    <BaseCard>
+        <template #header>
+        <div>
                 <div v-if="song && collection && showInfo">
                     <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
                     <div class="flex gap-2 items-center opacity-50 tracking-wide">
@@ -167,11 +165,13 @@
                         <XIcon class="w-4 h-4" />
                     </button>
                 </div>
-            </Loader>
         </div>
-        <div id="osmd-svg" v-if="svg" v-html="svg">
+        </template>
+        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
+        </Loader>
+        <div id="osmd-svg" :style="{display: loading['transpose'] || loading['zoom'] || loading['octave'] ? 'none' : ''}">
         </div>
-    </div>
+    </BaseCard>
 </template>
 
 <script lang="ts">
@@ -240,24 +240,25 @@ export default defineComponent({
             if (this.options) {
                 const octave = 12 * this.octave;
                 const transposition = this.transposition !== undefined ? this.transposition + octave : undefined;
-                this.svg = await sheetService.render({
+                this.svg = (await sheetService.render({
                     id: this.options.fileId,
                     clef: this.options.clef,
                     format: "endless",
                     size: this.size,
                     transposition,
                     instruments: this.instruments.length ? this.instruments : undefined,
-                }) as string[];
+                }) as string[]);
 
-                setTimeout(() => {
-                    const elements = document.getElementById("osmd-svg");
-                    elements?.childNodes.forEach(n => {
-                        const node = n as SVGElement;
+                const element = document.getElementById("osmd-svg");
+                if(element) {
+                    element.innerHTML = this.svg.join("\n");
 
+                    element.childNodes.forEach(n => {
+                        const node = n as HTMLElement;
                         node.removeAttribute("height");
                         node.removeAttribute("width");
                     });
-                }, 10);
+                }
             }
         },
         async increaseOctave() {
@@ -311,6 +312,9 @@ export default defineComponent({
         languageKey() {
             return this.store.getters.languageKey;
         },
+        osmdDiv() {
+            return document.getElementById("osmd-svg") as HTMLDivElement;
+        },
     },
 });
 </script>
@@ -325,6 +329,12 @@ export default defineComponent({
 .dark {
     .shadow-scroll {
         @include scrollShadow(#213F47);
+    }
+}
+#osmd-svg {
+    svg {
+        width: unset !important;
+        height: unset !important;
     }
 }
 </style>
