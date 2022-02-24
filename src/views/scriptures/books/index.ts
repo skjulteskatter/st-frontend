@@ -1,7 +1,7 @@
-const BookView = () => import(/* webpackChunkName: 'scriptures' */ "./BookView.vue");
-const BookList = () => import(/* webpackChunkName: 'scriptures' */ "./BookList.vue");
-const ChapterList = () => import(/* webpackChunkName: 'scriptures' */ "./ChapterList.vue");
-const ChapterView = () => import(/* webpackChunkName: 'scriptures' */ "./ChapterView.vue");
+const BookView = () => import("./BookView.vue");
+const BookList = () => import("./BookList.vue");
+const ChapterList = () => import("./ChapterList.vue");
+const ChapterView = () => import("./ChapterView.vue");
 
 export {
     BookList,

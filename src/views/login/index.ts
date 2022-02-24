@@ -1,6 +1,6 @@
-const LoginView = () => import(/* webpackChunkName: 'loginView' */ "./LoginView.vue");
-const LoginPage = () => import(/* webpackChunkName: 'login' */ "./LoginPage.vue");
-const CreateUserView = () => import(/* webpackChunkName: 'loginCreateUserView' */ "./CreateUserView.vue");
+const LoginView = () => import("./LoginView.vue");
+const LoginPage = () => import("./LoginPage.vue");
+const CreateUserView = () => import("./CreateUserView.vue");
 
 export {
     LoginView,

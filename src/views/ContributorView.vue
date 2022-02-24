@@ -39,7 +39,7 @@
                         </div>
                         <div class="columns-sm">
                             <div
-                                v-html="contributor.getBiography(languageKey)"
+                                v-html="contributor.biography?.default"
                                 class="text-sm"
                             ></div>
                         </div>

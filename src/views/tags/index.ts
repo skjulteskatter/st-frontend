@@ -1,5 +1,5 @@
-const TagList = () => import(/* webpackChunkName: 'tags' */ "./List.vue");
-const TagView = () => import(/* webpackChunkName: 'tags' */ "./View.vue");
+const TagList = () => import("./List.vue");
+const TagView = () => import("./View.vue");
 
 export {
     TagList,

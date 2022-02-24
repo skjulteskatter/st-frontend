@@ -1,9 +1,9 @@
-const Collections = () => import(/* webpackChunkName: 'collections' */ "./Collections.vue");
-const CollectionList = () => import(/* webpackChunkName: 'collections' */ "./List.vue");
-const CollectionLists = () => import(/* webpackChunkName: 'collections' */ "./Lists.vue");
-const CollectionView = () => import(/* webpackChunkName: 'collections' */ "./View.vue");
-const CollectionFiles = () => import(/* webpackChunkName: 'files' */ "./Files.vue");
-const CollectionSongs = () => import(/* webpackChunkName: 'songs' */ "./Songs.vue");
+const Collections = () => import("./Collections.vue");
+const CollectionList = () => import("./List.vue");
+const CollectionLists = () => import("./Lists.vue");
+const CollectionView = () => import("./View.vue");
+const CollectionFiles = () => import("./Files.vue");
+const CollectionSongs = () => import("./Songs.vue");
 
 export {
     Collections,

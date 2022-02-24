@@ -35,60 +35,60 @@ function getComponent<T>(func: () => Promise<T>) {
     });
 } 
 
-const Dashboard = () => import(/* webpackChunkName: 'dashboard' */ "../views/Dashboard.vue").catch(() => {
+const Dashboard = () => import("../views/Dashboard.vue").catch(() => {
     window.location.reload();
 });
-const Admin = () => import(/* webpackChunkName: 'users' */ "../views/Admin.vue").catch(() => {
+const Admin = () => import("../views/Admin.vue").catch(() => {
     window.location.reload();
 });
-const SettingsView = () => import(/* webpackChunkName: 'settings' */ "../views/SettingsView.vue").catch(() => {
+const SettingsView = () => import("../views/SettingsView.vue").catch(() => {
     window.location.reload();
 });
-const SongSelector = () => import(/* webpackChunkName: 'song' */ "../views/SongSelector.vue").catch(() => {
+const SongSelector = () => import("../views/SongSelector.vue").catch(() => {
     window.location.reload();
 });
-const PresentationView = () => import(/* webpackChunkName: 'presentationView' */ "../views/PresentationView.vue").catch(() => {
+const PresentationView = () => import("../views/PresentationView.vue").catch(() => {
     window.location.reload();
 });
-const SongViewer = () => import(/* webpackChunkName: 'songSettings' */ "../views/SongViewer.vue").catch(() => {
+const SongViewer = () => import("../views/SongViewer.vue").catch(() => {
     window.location.reload();
 });
-const ContributorView = () => import(/* webpackChunkName: 'contributor' */ "../views/ContributorView.vue").catch(() => {
-    window.location.reload();
-});
-
-const CompleteSearch = () => import(/* webpackChunkName: 'completeSearch' */ "../views/dashboard/CompleteSearch.vue").catch(() => {
+const ContributorView = () => import("../views/ContributorView.vue").catch(() => {
     window.location.reload();
 });
 
-const Success = () => import(/* webpackChunkName: 'success' */ "../views/Success.vue").catch(() => {
+const CompleteSearch = () => import("../views/dashboard/CompleteSearch.vue").catch(() => {
     window.location.reload();
 });
 
-const NotFound = () => import(/* webpackChunkName: 'notFound' */ "../views/NotFound.vue").catch(() => {
-    window.location.reload();
-});
-const VerifyEmail = () => import(/* webpackChunkName: 'notFound' */ "../views/VerifyEmail.vue").catch(() => {
+const Success = () => import("../views/Success.vue").catch(() => {
     window.location.reload();
 });
 
-const SheetMusic = () => import(/* webpackChunkName: 'sheetMusic' */ "../views/SheetMusic.vue").catch(() => {
+const NotFound = () => import("../views/NotFound.vue").catch(() => {
     window.location.reload();
 });
-const SongStatistics = () => import(/* webpackChunkName: 'songStatistics' */ "../views/statistics/SongStatistics.vue").catch(() => {
-    window.location.reload();
-});
-const CreditSong = () => import(/* webpackChunkName: 'songStatistics' */ "../views/CreditSong.vue").catch(() => {
-    window.location.reload();
-});
-const RedeemToken = () => import(/* webpackChunkName: 'redeemToken' */ "../views/RedeemToken.vue").catch(() => {
-    window.location.reload();
-});
-const PrintView = () => import(/* webpackChunkName: 'printView' */ "../views/PrintView.vue").catch(() => {
+const VerifyEmail = () => import("../views/VerifyEmail.vue").catch(() => {
     window.location.reload();
 });
 
-const FavoritesView = () => import(/* webpackChunkName: 'favoritesView' */ "../views/Favorites.vue").catch(() => {
+const SheetMusic = () => import("../views/SheetMusic.vue").catch(() => {
+    window.location.reload();
+});
+const SongStatistics = () => import("../views/statistics/SongStatistics.vue").catch(() => {
+    window.location.reload();
+});
+const CreditSong = () => import("../views/CreditSong.vue").catch(() => {
+    window.location.reload();
+});
+const RedeemToken = () => import("../views/RedeemToken.vue").catch(() => {
+    window.location.reload();
+});
+const PrintView = () => import("../views/PrintView.vue").catch(() => {
+    window.location.reload();
+});
+
+const FavoritesView = () => import("../views/Favorites.vue").catch(() => {
     window.location.reload();
 });
 
