@@ -175,7 +175,7 @@
 </template>
 
 <script lang="ts">
-import { Collection, transposer } from "@/classes";
+import { Collection, Song, transposer } from "@/classes";
 import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
 import { XIcon } from "@heroicons/vue/solid";
@@ -199,6 +199,17 @@ export default defineComponent({
             type: String,
             required: true,
         },
+        song: {
+            type: Object as PropType<Song>,
+            required: true,
+        },
+        collection: {
+            type: Object as PropType<Collection>,
+        },
+        languageKey: {
+            type: String,
+            required: true,
+        },
         showInfo: {
             type: Boolean,
         },
@@ -207,7 +218,6 @@ export default defineComponent({
         const originalKey = this.options.originalKey;
 
         const transpositions = transposer.getTranspositions(originalKey, true);
-
      
         return {
             store: useStore(),
@@ -220,7 +230,7 @@ export default defineComponent({
             loading: {} as {
                 [key: string]: boolean;
             },
-            relativeTranspositions: transposer.getRelativeTranspositions(this.options.originalKey ?? "C", this.relativeKey ?? "C", transpositions),
+            relativeTranspositions: transposer.getRelativeTranspositions(this.options.originalKey, this.relativeKey, transpositions),
         };
     },
     async mounted() {
@@ -297,20 +307,7 @@ export default defineComponent({
     },
     computed: {
         melodyOrigin() {
-            return (
-                this.song?.melodyOrigin?.description?.[this.languageKey] ??
-                this.song?.melodyOrigin?.description?.no ??
-                undefined
-            );
-        },
-        song() {
-            return this.collection?.songs.find(s => s.id == this.store.state.songs.songId);
-        },
-        collection(): Collection | undefined {
-            return this.store.getters.collection as Collection;
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
+            return this.song?.melodyOrigin?.description?.default;
         },
         osmdDiv() {
             return document.getElementById("osmd-svg") as HTMLDivElement;

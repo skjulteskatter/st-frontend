@@ -1,7 +1,6 @@
 <template>
     <div class="min-h-screen max-w-screen-2xl m-auto pb-12">
-        <div v-if="song" class="mb-2 p-4 bg-white">
-            <div class="flex items-baseline">
+            <!-- <div class="flex items-baseline">
                 <span class="opacity-50 text-lg mr-2">{{ song.getNumber(song.collectionIds[0]) }}</span>
                 <div class="flex flex-col">
                     <h1 class="font-bold text-lg mb-1 leading-tight">{{ song.getName(languageKey) }}</h1>
@@ -30,16 +29,15 @@
                         <small v-if="song.verses">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
                     </span>
                 </div>
-            </div>
+            </div> -->
 
-            <div v-if="files.length > 1" class="mt-3 rounded-md border p-1">
-                <button @click="showFiles = !showFiles" class="px-1 w-full flex gap-2 justify-between items-center text-gray-500 text-sm tracking-wide uppercase">
-                    <small>{{ $t('song_sheetmusic') }}</small>
-                    <ChevronUpIcon class="w-4 h-4" v-if="showFiles" />
-                    <ChevronDownIcon class="w-4 h-4" v-else />
-                </button>
-                <MediaListItem :files="files" :callback="setFile" v-if="showFiles" class="mt-2" />
-            </div>
+        <div v-if="files.length > 1" class="mt-3 rounded-md border p-1">
+            <button @click="showFiles = !showFiles" class="px-1 w-full flex gap-2 justify-between items-center text-gray-500 text-sm tracking-wide uppercase">
+                <small>{{ $t('song_sheetmusic') }}</small>
+                <ChevronUpIcon class="w-4 h-4" v-if="showFiles" />
+                <ChevronDownIcon class="w-4 h-4" v-else />
+            </button>
+            <MediaListItem :files="files" :callback="setFile" v-if="showFiles" class="mt-2" />
         </div>
 
         <div class="w-full h-5/6">
@@ -52,6 +50,10 @@
                     ['sheet-music', 'sheet-music-embed'].includes(routeName)
                 "
                 :options="options"
+                :relativeKey="user?.settings.defaultTransposition ?? 'C'"
+                :showInfo="true"
+                :song="(song as any)"
+                :languageKey="languageKey"
             ></OpenSheetMusicDisplay>
             <object
                 v-if="type == pdfType && options"
@@ -70,17 +72,17 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { osmd } from "@/services/osmd";
 import { IMediaFile } from "songtreasures-api";
 import { Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import OpenSheetMusicDisplay from "@/components/LegacyOSMD.vue";
+import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { SheetMusicOptions } from "songtreasures";
+import client from "@/services/client";
 
 export default defineComponent({
     name: "sheet-music",
@@ -93,7 +95,6 @@ export default defineComponent({
     data: () => ({
         store: useStore(),
         searchParams: new URLSearchParams(window.location.search),
-        osmd: osmd,
         pdfType: SheetMusicTypes.PDF,
         files: [] as IMediaFile[],
         song: null as Song | null,
@@ -165,12 +166,13 @@ export default defineComponent({
         },
     },
     async mounted() {
-        const c = document.getElementById("osmd-canvas");
-        const pbc = document.getElementById("pb-canvas");
+        // const c = document.getElementById("osmd-canvas");
+        // const pbc = document.getElementById("pb-canvas");
         const token = this.searchParams.get("token");
-        await osmd.init(c, pbc);
+        // await osmd.init(c, pbc);
 
         if (token) {
+            client.setToken(token);
             http.setToken(token);
 
             const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));

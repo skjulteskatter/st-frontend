@@ -35,7 +35,7 @@ export default class Song extends BaseClass implements ISong {
     public origins: {
         type: "text" | "melody";
         country: string;
-        description: ILocaleString;
+        description: LocaleString;
     }[];
 
     public themeIds: string[];
@@ -94,7 +94,11 @@ export default class Song extends BaseClass implements ISong {
         this.verses = song.verses;
         this.image = song.image;
 
-        this.origins = song.origins ?? [];
+        this.origins = song.origins ? song.origins.map(i => ({
+            country: i.country,
+            description: new LocaleString(i.description ?? {}),
+            type: i.type,
+        })) : [];
         this.themeIds = song.themeIds ?? [];
         this.categoryIds = song.categoryIds ?? [];
         this.genreIds = song.genreIds ?? [];
