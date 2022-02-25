@@ -11,15 +11,17 @@ interface Props {
 const props = defineProps<Props>();
 
 const Articles = computed(() => {
-    return props.articles ?? [];
+    return (props.articles ?? []).sort((a, b) => a.number - b.number);
 });
 </script>
 <template>
-    <BaseCard>
-        <template #header>
-            {{publication.title}}
-            <BaseButton @click="clicked">Read</BaseButton>
-        </template>
+    <div>
+        <BaseCard class="mb-4">
+            <template #header>
+                {{publication.title}}
+                <BaseButton @click="clicked">Read</BaseButton>
+            </template>
+        </BaseCard>
         <div v-if="Articles.length > 0">
             <ArticleCard
                 class="mb-2"
@@ -28,7 +30,7 @@ const Articles = computed(() => {
                 :article="article"
             ></ArticleCard>
         </div>
-    </BaseCard>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";

@@ -1,12 +1,12 @@
 <template>
     <BaseCard>
         <template #header>{{article.title}}</template>
-        <img v-if="article.image"
+        <img class="h-40" v-if="article.image"
             :src="article.image"
         >
-        <div v-if="article.content?.introduction" v-html="article.content?.introduction"></div>
-        <hr v-if="article.content?.introduction" />
-        <div v-if="article.content" v-html="article.content?.content"></div>
+        <div class="article-introduction" v-if="article.content?.introduction" v-html="article.content?.introduction"></div>
+        <hr class="mb-4" v-if="article.content?.introduction" />
+        <div class="article-content" v-if="article.content" v-html="article.content?.content"></div>
         <template #footer>{{new Date(article.dateWritten).toLocaleDateString()}} - {{author?.name}}</template>
     </BaseCard>
 </template>
@@ -27,3 +27,8 @@ contributorService.get(props.article.authorId).then(r => {
     author.value = r;
 });
 </script>
+<style lang="scss" scoped>
+.article-content, .article-introduction {
+    line-height: 200%;
+}
+</style>
