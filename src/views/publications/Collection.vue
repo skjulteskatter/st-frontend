@@ -20,11 +20,12 @@
 </template>
 <script lang="ts" setup>
 import { PublicationCard } from "@/components/publications";
-import { Article, Publication } from "@/classes/publications";
 import { useRoute } from "vue-router";
-import service from "@/services/modules/publications";
 import { appSession } from "@/services/session";
 import { ref } from "vue";
+import { articleService, publicationService } from "@/services/publications";
+import { Article, Publication } from "hiddentreasures-js";
+import { ListOptions } from "hiddentreasures-js/build/services/baseChildService";
 
 const route = useRoute();
 
@@ -36,7 +37,10 @@ const articles = ref({} as {
 });
 const clickPublication = async (publication: Publication) => {
     if (!articles.value[publication.id]) {
-        articles.value[publication.id] = await service.articles.list(publication.id);
+        articles.value[publication.id] = await articleService.retrieve({
+            parentIds: [publication.id],
+            withContent: true,
+        } as ListOptions);
     } else {
         delete articles.value[publication.id];
     }
@@ -44,7 +48,9 @@ const clickPublication = async (publication: Publication) => {
 
 let publications = ref([] as Publication[]);
 let loading = ref(false);
-service.list(collection.id).then(r => {
+publicationService.retrieve({
+    parentIds: [collection.id],
+}).then(r => {
     publications.value = r;
     loading.value = false;
 });

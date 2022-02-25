@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import ArticleCard from "./ArticleCard.vue";
-import { Publication, Article } from "@/classes/publications";
+import { Publication, Article } from "hiddentreasures-js";
 
 interface Props {
     publication: Publication;
