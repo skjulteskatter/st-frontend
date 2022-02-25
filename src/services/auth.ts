@@ -32,6 +32,7 @@ import { notify } from "./notify";
 import { firebaseConfig } from "@/config";
 import http from "./http";
 import { cache } from "./cache";
+import { appSession } from "./session";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const analyticsApp = getAnalytics(firebaseApp);
@@ -349,7 +350,7 @@ onAuthStateChanged(a, async s => {
         await auth.loginWithToken(token);
     }
 
-    useStore().commit(SessionMutationTypes.INITIALIZED);
+    appSession.ready();
 });
 
 export default auth;

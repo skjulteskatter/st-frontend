@@ -13,7 +13,6 @@ import { SongsMutationTypes } from "../songs/mutation-types";
 import { appSession } from "@/services/session";
 import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
-import { User } from "@/classes";
 
 
 
@@ -51,7 +50,6 @@ async function init(state: State, commit: Commit): Promise<void> {
         });
     }
 
-    commit(SessionMutationTypes.SET_USER, user);
     try {
         await appSession.init();
         commit(SessionMutationTypes.SET_TAGS, appSession.tags);
@@ -86,21 +84,12 @@ export interface Actions {
      * @param param0 
      */
     [SessionActionTypes.SESSION_START]({ state, commit }: AugmentedActionContext): Promise<void>;
-    [SessionActionTypes.SESSION_CLEAR]({ commit }: AugmentedActionContext): Promise<void>;
     [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit }: AugmentedActionContext, payload: string): Promise<void>;
     [SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD]({ state, commit }: AugmentedActionContext, payload: {
         email: string;
         password: string;
         stayLoggedIn: boolean;
     }): Promise<void>;
-    [SessionActionTypes.SESSION_CREATE_USER]({ state, commit }: AugmentedActionContext, payload: { 
-        email: string; 
-        password: string; 
-        displayName: string;
-    }): Promise<void>;
-    [SessionActionTypes.SESSION_SAVE_SETTINGS]({ commit }: AugmentedActionContext): Promise<void>;
-
-    [SessionActionTypes.SET_DISPLAY_NAME]({ state, commit }: AugmentedActionContext, payload: string): Promise<void>;
     
     [SessionActionTypes.PLAYLIST_CREATE]({ commit }: AugmentedActionContext, payload: { name: string }): Promise<void>;
     [SessionActionTypes.PLAYLIST_DELETE]({ commit }: AugmentedActionContext, payload: string): Promise<void>;
@@ -131,9 +120,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
             }
         }
     },
-    async [SessionActionTypes.SESSION_CLEAR]({ commit }): Promise<void> {
+    async [SessionActionTypes.SESSION_CLEAR](): Promise<void> {
         await auth.logout();
-        commit(SessionMutationTypes.CLEAR_SESSION, undefined);
     },
     async [SessionActionTypes.SESSION_LOGIN_SOCIAL]({ state, commit }, provider): Promise<void> {
         await auth.login(provider);
@@ -161,22 +149,6 @@ export const actions: ActionTree<State, RootState> & Actions = {
         //     await init(state, commit);
         // }
     },
-    async [SessionActionTypes.SESSION_SAVE_SETTINGS]({ state, commit }): Promise<void> {
-        if (state.currentUser?.settings) {
-            appSession.user = new User(await api.session.saveUser(state.currentUser.settings));
-            commit(SessionMutationTypes.SET_USER, appSession.user);
-            await ensureLanguageIsFetched();
-        }
-    },
-
-    async [SessionActionTypes.SET_DISPLAY_NAME]({ state, commit }, name: string): Promise<void> {
-        await auth.setDisplayName(name);
-        
-        commit(SessionMutationTypes.SET_USER, Object.assign({
-            displayName: name,
-        }, state.currentUser));
-    },
-
     // PLAYLIST RELATED ACTIONS
     async [SessionActionTypes.PLAYLIST_CREATE]({ commit }, obj: { name: string }): Promise<void> {
         const res = await api.playlists.createPlaylist(obj.name);

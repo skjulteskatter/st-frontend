@@ -148,8 +148,6 @@ import { defineComponent } from "@vue/runtime-core";
 import themes from "@/classes/themes";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { 
@@ -194,6 +192,7 @@ export default defineComponent({
         offline: false,
         gender: "unknown" as "male" | "female" | "unknown",
         birthDay: "",
+        theme: appSession.user.settings.theme,
         transpositions: [
             "Ab",
             "A",
@@ -230,9 +229,6 @@ export default defineComponent({
         },
         initDate() {
             return this.user?.birthDay ? new Date(this.user.birthDay) : new Date();
-        },
-        theme() {
-            return this.user?.settings?.theme ?? "light";
         },
         token() {
             return localStorage.getItem("id_token");
@@ -295,7 +291,7 @@ export default defineComponent({
                 //
             }
             this.themes.setTheme(this.theme);
-            await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
+            await this.user.saveSettings();
             this.submitImage();
             if (this.newDisplayName) {
                 this.setDisplayName();
@@ -317,34 +313,28 @@ export default defineComponent({
             }
         },
         setLanguage() {
-            const settings = Object.assign({}, this.user?.settings);
+            const settings = this.user.settings;
             const language = this.selectedLanguage;
             if (language) {
                 settings.languageKey = language.key;
-                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
             }
         },
         setKey() {
-            const settings = Object.assign({}, this.user?.settings);
+            const settings = this.user.settings;
             const key = this.selectedKey;
             if (key) {
                 settings.defaultTransposition = key;
-                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
             }
         },
         setTranscode() {
-            const settings = Object.assign({}, this.user?.settings);
+            const settings = this.user.settings;
             const transcode = this.selectedTranscode;
             if (transcode) {
                 settings.defaultTranscode = transcode;
-                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
             }
         },
         async setDisplayName() {
-            await this.store.dispatch(
-                SessionActionTypes.SET_DISPLAY_NAME,
-                this.newDisplayName,
-            );
+            await auth.setDisplayName(this.newDisplayName);
         },
         async submitImage() {
             if (this.fileName && this.selectedImage) {

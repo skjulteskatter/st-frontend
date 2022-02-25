@@ -24,49 +24,8 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { appSession } from "@/services/session";
-import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { Language } from "songtreasures";
 
 export default defineComponent({
     name: "success-view",
-    data: () => ({
-        store: useStore(),
-        selectedLanguage: {} as Language,
-        languageSet: false,
-    }),
-    computed: {
-        user() {
-            return appSession.user;
-        },
-        languages(): Language[] {
-            return appSession.languages || [];
-        },
-    },
-    mounted() {
-        this.selectedLanguage =
-            this.languages.find(
-                (l) => l.key == this.user?.settings?.languageKey,
-            ) ??
-            this.languages.find((l) => l.key == "no") ??
-            ({} as Language);
-    },
-    methods: {
-        async save() {
-            await this.store.dispatch(SessionActionTypes.SESSION_SAVE_SETTINGS);
-        },
-        setLanguage() {
-            const settings = Object.assign({}, this.user?.settings);
-            const language = this.selectedLanguage;
-            if (language) {
-                settings.languageKey = language.key;
-                this.store.commit(SessionMutationTypes.SET_SETTINGS, settings);
-                this.save();
-            }
-            this.languageSet = true;
-        },
-    },
 });
 </script>

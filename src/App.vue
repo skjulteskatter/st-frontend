@@ -1,6 +1,6 @@
 <template>
-    <SplashScreen :loading="initialized === false" />
-    <Loader :loading="initialized === false">
+    <SplashScreen :loading="ready === false" />
+    <Loader :loading="ready === false">
         <router-view />
     </Loader>
     <NotificationGroup />
@@ -12,6 +12,7 @@ import { NotificationGroup } from "@/components/notification";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import SplashScreen from "@/components/SplashScreen.vue";
+import { appSession } from "./services/session";
 
 export default defineComponent({
     name: "app",
@@ -21,13 +22,12 @@ export default defineComponent({
     },
     data: () => ({
         store: useStore(),
+        ready: false,
     }),
-    computed: {
-        initialized() {
-            return useStore().getters.initialized;
-        },
-    },
     mounted() {
+        appSession.onReady(() => {
+            this.ready = true;
+        });
         if (!window.location.pathname.startsWith("/login")) {
             this.store.commit(
                 SessionMutationTypes.REDIRECT,

@@ -1,8 +1,4 @@
 export enum SessionMutationTypes {
-    SET_USER = "SET_USER",
-    CLEAR_SESSION = "CLEAR_SESSION",
-
-    SET_SETTINGS = "SET_SETTINGS",
     SET_LANGUAGES = "SET_LANGUAGES",
 
     INITIALIZED = "INITIALIZED",

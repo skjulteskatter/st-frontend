@@ -386,6 +386,16 @@ export class Session {
         }
         return collection;
     }
+
+    private _onReady: (() => void)[] = [];
+    public onReady(f: () => void) {
+        this._onReady.push(f);
+    }
+    public ready() {
+        for (const r of this._onReady) {
+            r();
+        }
+    }
 }
 
 export const appSession = new Session();

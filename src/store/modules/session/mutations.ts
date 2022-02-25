@@ -1,14 +1,9 @@
-import { User, UserSettings } from "@/classes";
 import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";
 
 export type Mutations<S = State> = {
-    [SessionMutationTypes.SET_USER](state: S, payload: User): void;
-    [SessionMutationTypes.CLEAR_SESSION](state: S): void;
-    [SessionMutationTypes.SET_SETTINGS](state: S, payload: UserSettings): void;
-
     [SessionMutationTypes.SET_LOG_ITEMS](state: S, payload: IActivity[]): void;
     [SessionMutationTypes.CLEAR_LOGS](state: S): void;
 
@@ -38,18 +33,6 @@ export type Mutations<S = State> = {
 }
 
 export const mutations: MutationTree<State> & Mutations = {
-    [SessionMutationTypes.SET_USER](state: State, user: User): void {
-        state.currentUser = user;
-        if (user.settings?.languageKey) localStorage.setItem("languageKey", user.settings.languageKey);
-    },
-    [SessionMutationTypes.CLEAR_SESSION](state: State): void {
-        state.currentUser = undefined;
-    },
-    [SessionMutationTypes.SET_SETTINGS](state, settings): void {
-        if (state.currentUser) {
-            state.currentUser.settings = settings;
-        }
-    },
     [SessionMutationTypes.SET_LOG_ITEMS](state, value: IActivity[]): void {
         state.activities = state.activities ?? [];
         state.activities = state.activities.slice(0, 20 - value.length); 
