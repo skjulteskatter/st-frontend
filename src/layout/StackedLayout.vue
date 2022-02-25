@@ -121,7 +121,7 @@ export default defineComponent({
 			return this.store.state.songs.sheetMusic;
 		},
 		user() {
-			return this.store.getters.user;
+			return appSession.user;
 		},
 		splash: {
 			get() {

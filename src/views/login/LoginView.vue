@@ -169,6 +169,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { BaseModal } from "@/components";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { MailIcon } from "@heroicons/vue/outline";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "login-view",
@@ -202,7 +203,7 @@ export default defineComponent({
     }),
     computed: {
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         initialized() {
             return this.store.getters.initialized;

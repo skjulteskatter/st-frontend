@@ -1,8 +1,6 @@
-import { User } from "@/classes";
 import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 
 export type State = {
-    currentUser?: User;
     initialized: boolean;
     extend: boolean;
     error: string;

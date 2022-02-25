@@ -66,7 +66,7 @@ export default class Product extends BaseClass implements ApiProduct {
     }
 
     public get owned() {
-        return this.store.getters.user?.subscriptions.some(i => i.productIds.includes(this.id));
+        return appSession.user?.subscriptions.some(i => i.productIds.includes(this.id));
     }
 
     public get collections() {

@@ -1,13 +1,12 @@
-import { User } from "@/classes";
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
 import { IActivity, ICustomCollection } from "songtreasures-api";
 import { Activity } from "@/classes/activity";
+import { appSession } from "@/services/session";
 
 
 export type Getters = {
-    user(state: State): User | undefined;
     initialized(state: State): boolean;
     isAdmin(state: State): boolean;
     languageKey(state: State): string;
@@ -17,20 +16,17 @@ export type Getters = {
 }
 
 export const getters: GetterTree<State, RootState> & Getters = {
-    user(state) {
-        return state.currentUser;
-    },
     initialized(state) {
         return state.initialized;
     },
-    isAdmin(state): boolean {
-        return state.currentUser?.roles.includes("administrator") == true;
+    isAdmin(): boolean {
+        return appSession.user.roles.includes("administrator") == true;
     },
-    languageKey(state): string {
-        return state.currentUser?.settings?.languageKey ?? "en";
+    languageKey(): string {
+        return appSession.Language;
     },
-    extended(state): boolean {
-        return state.currentUser?.roles.some(r => r == "administrator" || r == "extended") == true;
+    extended(): boolean {
+        return appSession.user.roles.some(r => r == "administrator" || r == "extended") == true;
     },
     playlists(state): ICustomCollection[] {
         return state.playlists;

@@ -18,6 +18,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "user-card",
@@ -29,7 +30,7 @@ export default defineComponent({
             return this.user?.image ?? "/img/portrait-placeholder.png";
         },
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
     },
 });

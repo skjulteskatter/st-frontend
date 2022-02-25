@@ -14,6 +14,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "login-page",
@@ -22,7 +23,7 @@ export default defineComponent({
     }),
     computed: {
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         initialized() {
             return this.store.getters.initialized;

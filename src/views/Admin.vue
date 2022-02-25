@@ -21,6 +21,7 @@ import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
 import { User } from "@/classes";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "admin-view",
@@ -45,7 +46,7 @@ export default defineComponent({
             return users ?? [];
         },
         currentUser() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         isAdmin(): boolean {
             return this.store.getters.isAdmin;

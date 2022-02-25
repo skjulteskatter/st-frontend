@@ -138,7 +138,7 @@ export default defineComponent({
             return appSession.collections.filter(c => this.songs.some(s => s.collectionIds.some(col => col == c.id))) as Collection[];
         },
         isEditor() {
-            return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+            return appSession.user.roles.some(r => ["administrator", "editor"].includes(r)) == true;
         },
     },
     async beforeMount() {

@@ -241,10 +241,10 @@ export default defineComponent({
             return appSession.languages || [];
         },
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         collections() {
-            const colIds = this.store.getters.user?.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
+            const colIds = this.user.subscriptions.reduce((a, b) => a.concat(b.collectionIds), [] as string[]) ?? [];
             return appSession.collections.filter(i => colIds.includes(i.id));
         },
     },
@@ -308,7 +308,7 @@ export default defineComponent({
         setOffline() {
             cache.set("config", "offline", this.offline);
         },
-        handleImage(e: InputEvent) {
+        handleImage(e: Event) {
             const target = e.target as HTMLInputElement | undefined;
             const file = target?.files?.[0];
             if (file) {

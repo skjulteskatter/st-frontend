@@ -63,7 +63,7 @@ export default defineComponent({
     emits: ["remove"],
     computed: {
         userId() {
-            return this.store.getters.user?.id;
+            return appSession.user.id;
         },
         disabled() {
             return this.song?.available !== true;

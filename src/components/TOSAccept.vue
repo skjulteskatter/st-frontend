@@ -59,8 +59,7 @@ export default defineComponent({
         async acceptTermsOfService() {
             this.loading = true;
             await session.acceptTermsOfService();
-            if (this.store.getters.user)
-                this.store.getters.user.termsAndConditions = true;
+            appSession.user.termsAndConditions = true;
             this.loading = false;
             this.disabled = true;
         },

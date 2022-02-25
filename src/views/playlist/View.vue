@@ -211,7 +211,7 @@ export default defineComponent({
             },
         },
         canEdit() {
-            return this.playlist?.userId === this.store.getters.user?.id;
+            return this.playlist?.userId === appSession.user.id;
         },
         currentEntryOrder() {
             return this.playlist?.entries.map(e => e.id) ?? [];
@@ -240,7 +240,7 @@ export default defineComponent({
             );
         },
         userId() {
-            return this.store.getters.user?.id;
+            return appSession.user.id;
         },
     },
     methods: {

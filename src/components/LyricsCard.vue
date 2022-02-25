@@ -220,7 +220,7 @@ export default defineComponent({
             return languages.filter((l) => this.song?.name[l.key]);
         },
         defaultTransposition() {
-            return this.store.getters.user?.settings?.defaultTransposition ?? "C";
+            return appSession.user.settings?.defaultTransposition ?? "C";
         },
         transposeLanguages() {
             return this.languages.filter(l => this.collection?.hasChords[l.key]);
@@ -229,7 +229,7 @@ export default defineComponent({
             return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
         },
         editor() {
-            return this.store.getters.user?.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+            return appSession.user.roles.some(r => ["administrator", "editor"].includes(r)) == true;
         },
     },
     emits: [

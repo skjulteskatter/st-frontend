@@ -47,6 +47,7 @@ import { ICustomCollection } from "songtreasures-api";
 import { useStore } from "@/store";
 import { FolderIcon } from "@heroicons/vue/outline";
 import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "playlist-card",
@@ -68,8 +69,8 @@ export default defineComponent({
     }),
     emits: ["delete"],
     computed: {
-        userId(){
-            return this.store.getters.user?.id;
+        userId() {
+            return appSession.user.id;
         },
     },
     methods: {

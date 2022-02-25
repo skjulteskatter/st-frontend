@@ -39,7 +39,7 @@ export default defineComponent({
     }),
     computed: {
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
         languages(): Language[] {
             return appSession.languages || [];

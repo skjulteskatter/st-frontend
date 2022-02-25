@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import {
     ActivityFeed,
     Playlists,
     OwnedCollections,
 } from "@/components/dashboard";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "dashboard-view",
@@ -27,12 +27,9 @@ export default defineComponent({
         Playlists,
         OwnedCollections,
     },
-    data: () => ({
-        store: useStore(),
-    }),
     computed: {
         user() {
-            return this.store.getters.user;
+            return appSession.user;
         },
     },
 });
