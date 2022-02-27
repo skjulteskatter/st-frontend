@@ -97,7 +97,7 @@ export default defineComponent({
         },
         async addAllItemsCheckout() {
             const products = await storeService.getProducts();
-            this.storeService.cart = products.filter(i => i.collections.every(c => c.enabled && !Object.values(c.keys).includes("RB")) && !appSession.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id);
+            this.storeService.cart = products.filter(i => i.collections.every(c => c.enabled) && !appSession.user?.subscriptions.some(s => s.productIds.includes(i.id))).map(i => i.id);
             await this.checkout();
         },
     },
