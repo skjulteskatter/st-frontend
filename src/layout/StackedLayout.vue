@@ -1,5 +1,5 @@
 <template>
-	<Loader :loading="!(initialized && user)">
+	<Loader :loading="!(session.initialized && user)">
 		<div class="flex flex-col h-full">
 			<TheNavbar />
 			<main class="flex-grow">
@@ -75,7 +75,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { ref } from "@vue/reactivity";
 
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
@@ -93,6 +92,7 @@ import { notify } from "@/services/notify";
 import { cache } from "@/services/cache";
 import { XIcon } from "@heroicons/vue/solid";
 import CompleteRegistration from "@/components/CompleteRegistration.vue";
+import { reactive } from "vue";
 
 export default defineComponent({
 	name: "stacked-layout",
@@ -114,14 +114,14 @@ export default defineComponent({
 		show: false,
 	}),
 	computed: {
-		initialized() {
-			return ref(appSession.initialized).value;
+		session() {
+			return reactive(appSession);
 		},
 		sheetMusicOptions() {
 			return this.store.state.songs.sheetMusic;
 		},
 		user() {
-			return appSession.user;
+			return this.session.User;
 		},
 		splash: {
 			get() {
@@ -140,7 +140,7 @@ export default defineComponent({
 		themes.load();
         const route = this.$route.name;
         setTimeout(() => {
-            if (this.initialized == false && this.$route.name == route) {
+            if (this.session.initialized == false && this.$route.name == route) {
                 notify("error", "Something is wrong", "exclamation", "Click here to reload", 30000, () => cache.clearCache(), false);
             }
         }, 5000);
