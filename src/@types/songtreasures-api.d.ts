@@ -92,6 +92,7 @@ declare module "songtreasures-api" {
     interface ISong {
         id: string;
         available: boolean;
+        enabled: boolean;
         collections: {
             id: string;
             collection?: ICollection;

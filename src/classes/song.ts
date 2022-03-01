@@ -12,6 +12,7 @@ export default class Song extends BaseClass implements ISong {
     public id: string;
     public type: string;
     public available: boolean;
+    public enabled: boolean;
     public image?: string;
 
     public get number() {
@@ -79,6 +80,7 @@ export default class Song extends BaseClass implements ISong {
 
         this.collections = song.collections;
         this.available = song.available;
+        this.enabled = song.enabled;
         this.id = song.id;
         this.name = new LocaleString(song.name);
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
