@@ -27,6 +27,10 @@ export class AdminService {
         this.users = (await api.admin.getUsers(query)).map(i => new User(i));
     }
 
+    public async getUsersWithRoles() {
+        this.users = (await api.admin.getUsersWithRoles()).map(i => new User(i));
+    }
+
     public async getUser(id: string) {
         return await api.admin.getUser(id);
     }

@@ -150,6 +150,9 @@ export const admin = {
     getUsers(query: string) {
         return http.get<IUser[]>("api/Admin/Users?query=" + query);
     },
+    getUsersWithRoles() {
+        return http.get<IUser[]>("api/Admin/RoleAssignments");
+    },
     getUser(uid: string) {
         return http.get<IUser>("api/Admin/User/" + uid);
     },
