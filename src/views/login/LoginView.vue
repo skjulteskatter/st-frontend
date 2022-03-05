@@ -170,6 +170,7 @@ import { BaseModal } from "@/components";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { MailIcon } from "@heroicons/vue/outline";
 import { appSession } from "@/services/session";
+import { User } from "@/classes";
 
 export default defineComponent({
     name: "login-view",
@@ -200,16 +201,17 @@ export default defineComponent({
         createUserModal: false,
         forgotPassword: false,
         forgotPasswordSent: false,
+        user: null as User | null,
     }),
     computed: {
-        user() {
-            return appSession.user;
-        },
         initialized() {
             return this.store.getters.initialized;
         },
     },
     mounted() {
+        appSession.onReady(() => {
+            this.user = appSession.User;
+        });
         if (this.user) {
             this.$router.push({ name: "main" });
         }

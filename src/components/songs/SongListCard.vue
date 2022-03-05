@@ -19,7 +19,11 @@
                     'opacity-40': !song.available,
                 }"
             >
-                <button @click="viewSong(song)" class="w-full text-left flex hover:text-primary hover:underline cursor-pointer dark:opacity-90">
+                <button 
+                    @click="viewSong(song)" 
+                    class="w-full text-left flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
+                    :class="{'text-yellow-700': !song.enabled}"
+                >
                     <b class="w-6 flex-shrink-0 mr-2 text-right">
                         {{ song.number }}
                     </b>

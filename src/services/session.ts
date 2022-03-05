@@ -74,10 +74,15 @@ export class Session {
         }
         return this._user;
     }
-
+    
     public set user(v) {
         this._user = v;
     }
+
+    public get User() {
+        return this._user ?? null;
+    }
+
 
     public songs: Song[] = [];
     public collections: Collection[] = [];
@@ -392,10 +397,13 @@ export class Session {
         this._onReady.push(f);
     }
     public ready() {
-        for (const r of this._onReady) {
-            r();
+        for (const f of this._onReady) {
+            f();
         }
+        this._onReady = [];
+        this.Ready = true;
     }
+    public Ready = false;
 }
 
 export const appSession = new Session();

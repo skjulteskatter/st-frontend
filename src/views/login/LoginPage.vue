@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen w-screen grid lg:grid-cols-2" v-if="initialized && !user">
+    <div class="h-screen w-screen grid lg:grid-cols-2" v-if="session.Ready && !user">
         <router-view />
         <section class="hidden lg:flex lg:flex-col lg:items-center bg-secondary pattern">
             <div class="w-full h-full max-w-xl flex flex-col justify-center">
@@ -15,18 +15,19 @@
 import { defineComponent } from "@vue/runtime-core";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
+import { User } from "@/classes";
+import { reactive } from "vue";
 
 export default defineComponent({
     name: "login-page",
     data: () => ({
         store: useStore(),
+        user: null as User | null,
+        ready: false,
     }),
     computed: {
-        user() {
-            return appSession.user;
-        },
-        initialized() {
-            return this.store.getters.initialized;
+        session() {
+            return reactive(appSession);
         },
     },
     mounted() {
@@ -39,6 +40,6 @@ export default defineComponent({
 
 <style lang="scss">
 .pattern {
-    background-image: url("../../../public/img/login-bg.svg");
+    background-image: url("/img/login-bg.svg");
 }
 </style>
