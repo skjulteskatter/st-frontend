@@ -1,4 +1,4 @@
-import { ArticleService } from "hiddentreasures-js/build/services/publications/articleService";
+import { ArticleService } from "hiddentreasures-js";
 import client from "../client";
 
 export default new ArticleService(client);
