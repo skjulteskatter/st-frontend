@@ -1,4 +1,4 @@
-import { PublicationService } from "hiddentreasures-js/build/services/publications/publicationService";
+import { PublicationService } from "hiddentreasures-js";
 import client from "../client";
 
 export default new PublicationService(client);
