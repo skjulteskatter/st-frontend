@@ -7,6 +7,16 @@
                     <SearchInput class="flex-grow" v-model="userQuery" @search="searchUser" :placeholder="`${$t('common_search')} ${$t('admin_email').toLocaleLowerCase()}`" />
                     <BaseButton
                         :class="{ disabled: disableButton }"
+                        @click="getUsersWithRoles"
+                        :loading="loading['roles']"
+                        theme="primary"
+                    >
+                        <template #icon>
+                            <UserGroupIcon class="w-4 h-4" />
+                        </template>
+                    </BaseButton>
+                    <BaseButton
+                        :class="{ disabled: disableButton }"
                         @click="refreshUsers"
                         :loading="loading['refresh']"
                         theme="tertiary"
@@ -44,8 +54,8 @@
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">{{ u.email }}</td>
                             <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
-                                <span v-if="u.roles[0]" :class="[u.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2']">
-                                    {{ u.roles[0] }}
+                                <span v-for="role in u.roles" :key="role" :class="[role == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2']">
+                                    {{ role }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
@@ -74,7 +84,7 @@ import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
 import api from "@/services/api";
 import { User } from "@/classes";
-import { RefreshIcon } from "@heroicons/vue/solid";
+import { RefreshIcon, UserGroupIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
     name: "users-list",
@@ -82,6 +92,7 @@ export default defineComponent({
         SearchInput,
         EditUser,
         RefreshIcon,
+        UserGroupIcon,
     },
     props: {
         users: {
@@ -120,6 +131,12 @@ export default defineComponent({
                 this.store.commit(UsersMutationTypes.SET_USERS, (await api.admin.getUsers(this.userQuery)).map(i => new User(i)));
             }
             this.loading["search"] = false;
+        },
+        async getUsersWithRoles() {
+            this.loading["roles"] = true;
+            const users = await api.admin.getUsersWithRoles();
+            this.store.commit(UsersMutationTypes.SET_USERS, users.map(i => new User(i)));
+            this.loading["roles"] = false;
         },
         async refreshUsers() {
             this.loading["refresh"] = true;
