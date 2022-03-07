@@ -51,7 +51,10 @@ export default class Lyrics implements ILyrics {
         let number = 1;
         let chorus: LyricsVerse = {} as LyricsVerse;
 
-        for (const key of Object.keys(this.content)) {
+        const keys = Object.keys(this.content);
+
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
             const type = key.split("_")[0];
 
             const verse: LyricsVerse = {
@@ -61,9 +64,9 @@ export default class Lyrics implements ILyrics {
             };
 
             if (type == "chorus") {
-                if (chorus.name) {
-                    number--;
-                }
+                // if (chorus.name) {
+                //     number--;
+                // }
                 verses[number] = verse;
                 number++;
                 chorus = verse;
@@ -71,6 +74,10 @@ export default class Lyrics implements ILyrics {
                 verses[number] = verse;
                 number++;
                 if (chorus.name) {
+                    const nextVerseKey = keys[i + 1];
+                    if (nextVerseKey && nextVerseKey.split("_")[0] === "chorus") {
+                        continue;
+                    }
                     verses[number] = Object.assign({}, chorus);
                     number++;
                 }
