@@ -250,6 +250,7 @@ class Http {
         catch (e) {
             const error = e as ResultError;
             notify("error", error.status.toString(), "warning", error.value);
+            throw e;
         }
     }
 }
