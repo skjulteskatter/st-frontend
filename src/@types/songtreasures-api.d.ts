@@ -345,7 +345,7 @@ declare module "songtreasures-api" {
     
     interface Notification {
         id?: string;
-        type: "warning" | "error" | "success" | "info";
+        type: "primary" | "error";
         title: string;
         icon: string;
         content?: string;
@@ -353,6 +353,8 @@ declare module "songtreasures-api" {
         dateTime?: Date;
         callback?: () => void;
         store?: boolean;
+        delete?: () => Promise<void>;
+        read?: () => Promise<void>;
     }
     
     interface IAnalyticsItem {

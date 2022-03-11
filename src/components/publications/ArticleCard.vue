@@ -19,7 +19,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
 const author = ref(null as Contributor | null);
 
 contributorService.get(props.article.authorId).then(r => {

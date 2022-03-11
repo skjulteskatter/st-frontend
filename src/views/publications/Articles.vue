@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import router from "@/router";
 import { articleService, publicationService } from "@/services/publications";
 import ArticleCard from "@/components/publications/ArticleCard.vue";
 import { reactive } from "vue";
 import { Publication, Article } from "hiddentreasures-js";
 import { appSession } from "@/services/session";
-const { publicationId, collectionId } = router.currentRoute.value.params;
+import { useRoute } from "vue-router";
+
+const { publicationId, collectionId } = useRoute().params;
 
 const data = reactive({
     articles: [] as Article[],

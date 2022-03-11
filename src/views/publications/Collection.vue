@@ -7,8 +7,12 @@
                 v-for="publication in publications"
                 :key="publication.id"
                 :publication="publication"
-                :articles="articles[publication.id]"
-                @clicked="clickPublication(publication)"
+                @clicked="$router.push({
+                    name: 'article-list',
+                    params: {
+                        publicationId: publication.id,
+                    },
+                })"
             />
         </Loader>
     </div>
@@ -17,42 +21,27 @@
 import { PublicationCard } from "@/components/publications";
 import { useRoute } from "vue-router";
 import { appSession } from "@/services/session";
-import { ref } from "vue";
+import { computed, reactive } from "vue";
 import { publicationService } from "@/services/publications";
-import { Article, Publication } from "hiddentreasures-js";
-import router from "@/router";
+import { Publication } from "hiddentreasures-js";
 
 const route = useRoute();
 
 const collectionId = route.params.collectionId as string;
 const collection = appSession.collection(collectionId);
 
-const articles = ref({} as {
-    [key: string]: Article[] | undefined;
-});
-const clickPublication = async (publication: Publication) => {
-    router.push({
-        name: "article-list",
-        params: {
-            publicationId: publication.id,
-        },
-    });
-    // if (!articles.value[publication.id]) {
-    //     articles.value[publication.id] = await articleService.retrieve({
-    //         parentIds: [publication.id],
-    //         withContent: true,
-    //     } as ListOptions);
-    // } else {
-    //     delete articles.value[publication.id];
-    // }
-};
+const publications = computed(() => data.publications);
+const loading = computed(() => data.loading);
 
-let publications = ref([] as Publication[]);
-let loading = ref(false);
+const data = reactive({
+    publications: [] as Publication[],
+    loading: false,
+});
+
 publicationService.retrieve({
     parentIds: [collection.id],
 }).then(r => {
-    publications.value = r;
-    loading.value = false;
+    data.publications = r;
+    data.loading = false;
 });
 </script>

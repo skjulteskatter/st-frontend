@@ -315,7 +315,6 @@ export class Session {
             // ignore the errors
         }
 
-
         this._initialized = true;
     }
 

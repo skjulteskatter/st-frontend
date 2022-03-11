@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import ArticleCard from "./ArticleCard.vue";
 import { ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { Publication, Article } from "hiddentreasures-js";
+import { Publication } from "hiddentreasures-js";
 
 interface Props {
     publication: Publication;
-    articles?: Article[] | null;
 }
 
 interface Emits {
     (event: "clicked"): void;
 }
 
-const props = defineProps<Props>();
-const emit = defineEmits<Emits>();
+defineProps<Props>();
 
-const Articles = computed(() => {
-    return (props.articles ?? []).sort((a, b) => a.number - b.number);
-});
+const emit = defineEmits<Emits>();
 
 function onClick() {
     emit("clicked");
@@ -38,14 +32,6 @@ function onClick() {
                 </BaseButton>
             </div>
         </BaseCard>
-        <div v-if="Articles.length > 0">
-            <ArticleCard
-                class="mb-2"
-                v-for="article in Articles"
-                :key="article.id"
-                :article="article"
-            ></ArticleCard>
-        </div>
     </div>
 </template>
 
