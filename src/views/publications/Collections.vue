@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div class="flex grid grid-cols-2 gap-4">
         <BaseCard
             v-for="collection in collections"
             :key="collection.id"
             class="cursor-pointer"
             @click="collection.view()"
         >
-            <template #header>{{collection.name.default}}</template>
+            <template v-if="!collection.image" #header>{{collection.name.default}}</template>
             <img v-if="collection.image" :src="collection.image" />
         </BaseCard>
     </div>

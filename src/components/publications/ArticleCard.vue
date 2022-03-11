@@ -4,7 +4,7 @@
         <img class="h-48 m-4 float-left" v-if="article.image" :src="article.image" />
         <em v-if="article.content?.introduction" v-html="article.content?.introduction"></em>
         <div v-if="article.content" v-html="article.content?.content"></div>
-        <i class="opacity-50">
+        <i class="opacity-80">
             {{ new Date(article.dateWritten).toLocaleDateString() }} - {{ author?.name }}
         </i>
     </div>

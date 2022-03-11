@@ -35,12 +35,15 @@ articleService.retrieve({
 </script>
 <template>
     <div v-if="collection" class="bg-white shadow-md dark:bg-secondary">
-        <img v-if="collection.image" :src="collection.image" />
+        <img class="max-w-lg mx-auto object-center" v-if="collection.image" :src="collection.image" />
+        <h1 
+            class="text-xl mr-8 text-right align-text-bottom" 
+            v-if="data.publication"
+        >
+            {{data.publication.title}}
+        </h1>
         <Loader :loading="loading.articles || loading.publication">
             <div class="columns-sm p-4 gap-4">
-                <h1 class="font-bold text-xl mb-4" v-if="data.publication">
-                    {{data.publication.title}}
-                </h1>
                 <ArticleCard
                     class="mb-6"
                     v-for="article in data.articles"
@@ -51,3 +54,5 @@ articleService.retrieve({
         </Loader>
     </div>
 </template>
+<style lang="scss">
+</style>
