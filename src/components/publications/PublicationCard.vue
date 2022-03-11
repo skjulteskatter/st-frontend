@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import ArticleCard from "./ArticleCard.vue";
-import { ArrowSmRightIcon } from "@heroicons/vue/solid"
+import { ArrowSmRightIcon } from "@heroicons/vue/solid";
 import { Publication, Article } from "hiddentreasures-js";
 
 interface Props {

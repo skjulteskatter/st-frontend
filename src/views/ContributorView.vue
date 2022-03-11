@@ -37,10 +37,10 @@
                                 {{ contributor.subtitle }}
                             </small>
                         </div>
-                        <div class="columns-sm">
+                        <div class="columns-sm gap-6">
                             <div
+                                class="text-justify prose prose-sm dark:prose-invert"
                                 v-html="contributor.biography?.default"
-                                class="text-sm"
                             ></div>
                         </div>
                     </BaseCard>
