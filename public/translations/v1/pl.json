@@ -57,5 +57,7 @@
     "song_changeSong": "Zmień pieśń",
     "song_chorus": "Refren",
     "song_clef": "Klucz",
-    "song_composer": "Kompozytor"
+    "song_composer": "Kompozytor",
+    "song_text": "Tekst",
+    "song_writtenInBy": "Napisane w $year przez $authors"
 }

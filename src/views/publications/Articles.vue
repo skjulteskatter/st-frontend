@@ -37,11 +37,12 @@ articleService.retrieve({
     <div v-if="collection" class="bg-white shadow-md dark:bg-secondary">
         <img class="max-w-lg mx-auto object-center" v-if="collection.image" :src="collection.image" />
         <h1 
-            class="text-xl mr-8 text-right align-text-bottom" 
+            class="text-lg mr-8 text-right align-text-bottom" 
             v-if="data.publication"
         >
             {{data.publication.title}}
         </h1>
+        <hr/>
         <Loader :loading="loading.articles || loading.publication">
             <div class="columns-sm p-4 gap-4">
                 <ArticleCard
