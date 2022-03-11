@@ -27,7 +27,7 @@ import {
 import { RouteRecordRaw } from "vue-router";
 
 import StackedLayout from "@/layout/StackedLayout.vue";
-import { PublicationCollection, PublicationCollections, PublicationsRoute } from "@/views/publications";
+import { ArticleList, PublicationCollection, PublicationCollections, PublicationsRoute } from "@/views/publications";
 
 function getComponent<T>(func: () => Promise<T>) {
     return () => func().catch(() => {
@@ -286,6 +286,11 @@ const routes: Array<RouteRecordRaw> = [
                         path: ":collectionId",
                         name: "publication-collection",
                         component: getComponent(PublicationCollection),
+                    },
+                    {
+                        path: ":collectionId/:publicationId",
+                        name: "article-list",
+                        component: getComponent(ArticleList),
                     },
                 ],
             },

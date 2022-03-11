@@ -18,9 +18,9 @@ import { PublicationCard } from "@/components/publications";
 import { useRoute } from "vue-router";
 import { appSession } from "@/services/session";
 import { ref } from "vue";
-import { articleService, publicationService } from "@/services/publications";
+import { publicationService } from "@/services/publications";
 import { Article, Publication } from "hiddentreasures-js";
-import { ListOptions } from "hiddentreasures-js/build/services/baseChildService";
+import router from "@/router";
 
 const route = useRoute();
 
@@ -31,14 +31,20 @@ const articles = ref({} as {
     [key: string]: Article[] | undefined;
 });
 const clickPublication = async (publication: Publication) => {
-    if (!articles.value[publication.id]) {
-        articles.value[publication.id] = await articleService.retrieve({
-            parentIds: [publication.id],
-            withContent: true,
-        } as ListOptions);
-    } else {
-        delete articles.value[publication.id];
-    }
+    router.push({
+        name: "article-list",
+        params: {
+            publicationId: publication.id,
+        },
+    });
+    // if (!articles.value[publication.id]) {
+    //     articles.value[publication.id] = await articleService.retrieve({
+    //         parentIds: [publication.id],
+    //         withContent: true,
+    //     } as ListOptions);
+    // } else {
+    //     delete articles.value[publication.id];
+    // }
 };
 
 let publications = ref([] as Publication[]);
