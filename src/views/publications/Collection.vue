@@ -1,10 +1,6 @@
 <template>
     <div v-if="collection">
-        <BaseCard
-            class="mb-2"
-        >
-            <h3 class="text-lg">{{collection.name.default}}</h3>
-        </BaseCard>
+        <h1 class="text-2xl font-bold mb-4">{{ collection.name.default }}</h1>
         <Loader :loading="loading">
             <PublicationCard
                 class="mb-2"
@@ -13,8 +9,7 @@
                 :publication="publication"
                 :articles="articles[publication.id]"
                 @clicked="clickPublication(publication)"
-            >
-            </PublicationCard>
+            />
         </Loader>
     </div>
 </template>
