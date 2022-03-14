@@ -86,8 +86,10 @@ export default defineComponent({
             if (this.tagFilter == "" || this.tags.find(t => t.name == this.tagFilter)) {
                 return;
             }
-            const newTag = await tags.create(this.tagFilter, "#BD9B60", this.Song.id);
-            appSession.tags.push(new Tag(newTag));
+            const newTag = await tags.create(this.tagFilter, null, this.Song.id);
+            const tag = new Tag(newTag);
+            await tag.save();
+            appSession.tags.push(tag);
 
             this.tagFilter = "";
         },

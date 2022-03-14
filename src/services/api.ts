@@ -339,7 +339,7 @@ export const tags = {
     get(id: string) {
         return http.get<ITag>("api/Tags/" + id);
     },
-    create(name: string, color: string, songId: string) {
+    create(name: string, color: string | null, songId: string) {
         return http.post<ITag, unknown>("api/Tags", {name, color, songId});
     },
     update(id: string, name?: string, color?: string, addIds?: string[], removeIds?: string[]) {
