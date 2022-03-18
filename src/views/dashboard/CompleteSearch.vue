@@ -20,7 +20,7 @@
             </div>
         </div>
         <div v-if="Articles.length">
-            <h3 class="uppercase tracking-wide mb-2">{{ $t('common_songs') }}</h3>
+            <h3 class="uppercase tracking-wide mb-2">{{ $t('common_articles') }}</h3>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <SearchResultItemCard v-for="context in Articles" :key="context.id" :context="context" type="article"/>
             </div>
