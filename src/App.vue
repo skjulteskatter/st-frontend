@@ -54,6 +54,8 @@ html {
     background-color: var(--st-color-background-dark);
     color: var(--st-color-text);
     overflow-y: scroll;
+    
+    scroll-behavior: smooth;
 
     &.dark {
         --st-color-secondary: #ffffff;

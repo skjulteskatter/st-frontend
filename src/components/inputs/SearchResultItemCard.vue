@@ -104,6 +104,7 @@ export default defineComponent({
                             params: {
                                 collectionId: collection?.keys.default,
                                 publicationId: p.id,
+                                articleId: this.article?.id,
                             },
                         });
                     });

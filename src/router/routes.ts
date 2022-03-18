@@ -288,7 +288,7 @@ const routes: Array<RouteRecordRaw> = [
                         component: getComponent(PublicationCollection),
                     },
                     {
-                        path: ":collectionId/:publicationId",
+                        path: ":collectionId/:publicationId/:articleId?",
                         name: "article-list",
                         component: getComponent(ArticleList),
                     },
