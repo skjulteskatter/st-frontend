@@ -35,7 +35,7 @@ articleService.retrieve({
 </script>
 <template>
     <div v-if="collection" class="bg-white shadow-md dark:bg-secondary">
-        <img class="max-w-lg mx-auto object-center" v-if="collection.image" :src="collection.image" />
+        <img class="mx-auto object-center" v-if="collection.image" :src="collection.image" />
         <h1 
             class="text-lg mr-8 text-right align-text-bottom" 
             v-if="data.publication"
