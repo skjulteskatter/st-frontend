@@ -28,8 +28,8 @@
                         }}</b>
                         <small class="block text-xs text-primary">{{$t('song_contributor')}}</small>
                     </div>
-                    <div class="text-sm text-gray-400 flex flex-col">
-                        <small v-if="Contributor?.item.subtitle">{{ Contributor.item.subtitle }}</small>
+                    <div v-if="Contributor?.item.subtitle" class="text-sm text-gray-400 flex flex-col">
+                        <small>{{ Contributor.item.subtitle }}</small>
                     </div>
                 </div>
             </div>
@@ -40,9 +40,9 @@
                         <b>{{article.title}}</b>
                         <small class="block text-xs text-primary">{{$t('common_article')}}</small>
                     </div>
-                    <!-- <div class="text-sm text-gray-400 flex flex-col">
-                        <small v-if="Contributor.item.subtitle">{{ Contributor.item.subtitle }}</small>
-                    </div> -->
+                    <div v-if="contributor?.name" class="text-sm text-gray-400 flex flex-col">
+                        <small>{{ contributor.name }}</small>
+                    </div>
                 </div>
             </div>
         </BaseCard>
@@ -84,6 +84,7 @@ export default defineComponent({
     },
     data: () => ({
         article: null as Article | null,
+        contributor: null as ApiContributor | null,
         loading: true,
     }),
     async mounted() {
@@ -92,6 +93,7 @@ export default defineComponent({
                 itemIds: [this.context.id],
                 withContent: true,
             }))[0];
+            this.contributor = appSession.contributors.find(c => c.id === this.article?.authorId)?.item ?? null;
         }
         this.loading = false;
     },
