@@ -88,7 +88,10 @@ export default defineComponent({
     }),
     async mounted() {
         if (this.type === "article") {
-            this.article = await articleService.get(this.context.id);
+            this.article = (await articleService.retrieve({
+                itemIds: [this.context.id],
+                withContent: true,
+            }))[0];
         }
         this.loading = false;
     },
