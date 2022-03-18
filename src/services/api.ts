@@ -2,7 +2,6 @@ import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
-import { ApiSearchResult } from "songtreasures-api/search";
 import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
 import { Language } from "songtreasures";
@@ -385,15 +384,6 @@ export const stripe = {
     },
 };
 
-export const search = {
-    search(query: string, collectionIds?: string[]) {
-        return http.post<ApiSearchResult, unknown>("api/Search", {
-            query,
-            collectionIds,
-        });
-    },
-};
-
 export const scriptures = {
     getAll() {
         return http.get<IScripture[]>("api/Scriptures");
@@ -434,6 +424,5 @@ export default {
     activity,
     tags,
     analytics,
-    search,
     scriptures,
 };

@@ -1,6 +1,6 @@
 import { Collection, CollectionItem, Song } from "@/classes";
-import SearchResult from "@/classes/search/searchResult";
 import SongFilter from "@/classes/songFilter";
+import { ISearchResultGroup } from "hiddentreasures-js/build/models/searchResultGroup";
 import { SheetMusicOptions } from "songtreasures";
 import { ApiContributor } from "songtreasures-api";
 import { MutationTree } from "vuex";
@@ -33,7 +33,7 @@ export type Mutations<S = State> = {
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
 
     [SongsMutationTypes.SEARCH](state: S, payload?: string): void;
-    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: SearchResult): void;
+    [SongsMutationTypes.SEARCH_RESULT](state: S, payload: ISearchResultGroup): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {

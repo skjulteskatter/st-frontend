@@ -15,7 +15,6 @@ import UserSettings from "./userSettings";
 
 export * from "./transposer";
 export * from "./base64";
-export * from "./search";
 export * from "./items";
 
 export enum SheetMusicTypes {

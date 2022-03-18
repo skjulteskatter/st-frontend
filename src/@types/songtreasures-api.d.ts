@@ -382,20 +382,6 @@ declare module "songtreasures-api" {
     }
 }
 
-declare module "songtreasures-api/search" {
-    interface ApiSearchResultItem {
-        id: string;
-        context: {
-            [key: string]: string;
-        };
-    }
-
-    interface ApiSearchResult {
-        songs: ApiSearchResultItem[];
-        contributors: ApiSearchResultItem[];
-    }
-}
-
 declare module "songtreasures-api/checkout" {
     interface SessionRequest {
         productIds: string[];
