@@ -33,7 +33,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { SearchInput, SearchResultItemCard } from "@/components/inputs";
 import { Collection } from "@/classes";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
 import { ILocaleString } from "songtreasures";
 import { searchService } from "@/services/searchService";
@@ -54,16 +53,10 @@ export default defineComponent({
             get() {
                 return this.store.state.songs.search;
             },
-            set(value: string) {
-                this.store.commit(SongsMutationTypes.SEARCH, value);
-            },
         },
         searchResult: {
             get() {
                 return this.store.state.songs.searchResult;
-            },
-            set(value: SearchResultGroup) {
-                this.store.commit(SongsMutationTypes.SEARCH_RESULT, value);
             },
         },
         Contributors() {

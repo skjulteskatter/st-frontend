@@ -123,13 +123,11 @@ import {
     PrintButton,
     PerformanceViewer,
 } from "./lyrics";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
 import { PencilAltIcon } from "@heroicons/vue/solid";
-import { SongViewType } from "@/store/modules/songs/state";
 
 export default defineComponent({
     name: "lyrics-card",
@@ -199,23 +197,9 @@ export default defineComponent({
             ) : [];
             return ts;
         },
-        selectedTransposition() {
-            return this.store.state.songs.transposition ?? 0;
-        },
-        newMelodyView: {
-            get() {
-                return this.store.state.songs.newMelody;
-            },
-            set(v: boolean) {
-                this.store.commit(SongsMutationTypes.SET_NEW_MELODY, v);
-            },
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
         languages() {
             const languages = appSession.languages;
-            return languages.filter((l) => this.song?.name[l.key]);
+            return languages.filter((l) => this.song?.title);
         },
         defaultTransposition() {
             return appSession.user.settings?.defaultTransposition ?? "C";

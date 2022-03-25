@@ -7,7 +7,7 @@
             :value="modelValue"
             :disabled="disabled"
             :placeholder="placeholder"
-            @input="(event) => $emit('update:modelValue', event.target.value)"
+            @input="(event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
         />
     </label>
 </template>

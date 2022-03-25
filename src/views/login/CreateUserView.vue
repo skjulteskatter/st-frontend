@@ -27,7 +27,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 export default defineComponent({
     name: "create-user-view",

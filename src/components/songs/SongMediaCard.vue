@@ -85,7 +85,6 @@ import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Collection, Song } from "@/classes";
-import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 import { SheetMusicOptions } from "songtreasures";
 import { MediaFile } from "hiddentreasures-js";

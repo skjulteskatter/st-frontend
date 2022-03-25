@@ -5,18 +5,18 @@
                 <BackButton class="mb-4" to="/collections" />
                 <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
                     <h1 class="font-bold text-2xl md:text-3xl">
-                        {{ collection.name.default }}
+                        {{ collection.title }}
                     </h1>
-                    <BaseButton theme="secondary" @click="collection?.addToCart()" :disabled="inCart" v-if="!collection.available">
+                    <BaseButton theme="secondary" :disabled="inCart" v-if="!collection.owned">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
                         {{ $t('store_buy') }}
                     </BaseButton>
                     <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
-                    <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
-                        <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
-                        <ViewBoardsIcon class="w-5 h-5" v-else />
+                    <button aria-label="Toggle list type" title="Toggle list type" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
+                        <!-- <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" /> -->
+                        <ViewBoardsIcon class="w-5 h-5" />
                     </button>
                 </div>
                 <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-8">
@@ -117,10 +117,16 @@
         </Loader>
     </div>
 </template>
+<script lang="ts" setup>
+const collectionId = useRoute().params.collection as string;
 
+const loading = reactive(false);
+
+const collection = appSession.getCollection(collectionId);
+</script>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-import { Collection, CollectionItem, ListEntry, Song } from "@/classes";
+import { defineComponent, reactive } from "@vue/runtime-core";
+import { ListEntry, Song } from "@/classes";
 import { SongListCard } from "@/components/songs";
 import {
     ButtonGroup,
@@ -136,11 +142,8 @@ import {
     ViewBoardsIcon,
 } from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
-import { ApiContributor, Sort } from "songtreasures-api";
-import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { Country, Theme } from "@/classes/items";
 import { appSession } from "@/services/session";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
     name: "song-list",
@@ -168,9 +171,6 @@ export default defineComponent({
         inCart: false,
     }),
     computed: {
-        isAdmin() {
-            return this.store.getters.isAdmin;
-        },
         hasFiles() {
             return appSession.files.some(f => this.songs.some(s => s.id === f.songId));
         },
@@ -180,113 +180,15 @@ export default defineComponent({
         songs() {
             return this.list.reduce((a, b) => [...a, ...b.songs as Song[]], [] as Song[]);
         },
-        viewType: {
-            get() {
-                return this.collection?.viewType ?? "boards";
-            },
-            set(v: "boards" | "grid") {
-                if (this.collection)
-                    this.collection.viewType = v;
-            },
-        },
-        loading() {
-            return this.collection?.loading === true;
-        },
-        buttons() {
-            return this.collection?.buttons.map(i => {
-                const r = Object.assign({}, i);
-                r.label = this.$t(i.label);
-                return r;
-            }) ?? [];
-        },
-        listType: {
-            get() {
-                return this.collection?.listType ?? "title";
-            },
-            set(value: Sort) {
-                if (this.collection)
-                    this.collection.listType = value;
-            },
-        },
-        collection() {
-            return this.store.getters.collection as Collection;
-        },
         languageKey() {
-            return this.store.getters.languageKey;
+            return appSession.Language;
         },
-    },
-    async mounted() {
-        await this.loadCollection();
-        // await this.loadFiles();
-    },
-    updated() {
-        if (this.$route.params.collection !== this.cId) {
-            this.loadCollection();
-            // this.loadFiles();
-        }
     },
     methods: {
-        toggleViewType() {
-            this.viewType = this.viewType === "boards" ? "grid" : "boards";
-        },
         search() {
-            this.store.commit(SongsMutationTypes.SEARCH, this.searchString);
-            this.store.commit(SongsMutationTypes.SEARCH_RESULT, undefined);
             this.$router.push({
                 name: "search",
             });
-        },
-        async loadCollection() {
-            this.cId = this.$route.params.collection as string; 
-            if (!this.collection?.getKeys().includes(this.cId)) {
-                await this.store.dispatch(
-                    SongsActionTypes.SELECT_COLLECTION,
-                    this.$route.params.collection as string,
-                );
-            }
-            this.inCart = await this.collection.inCart();
-            await this.loadList();
-        },
-        async setListType(value: Sort) {
-            if (this.listType !== value) {
-                this.listType = value;
-                this.searchString = "";
-                await this.loadList();
-            }
-        },
-        filterByNumber() {
-            if(!this.collection) return;
-            this.list = this.collection.Lists[this.listType](this.searchNumber);
-        },
-        async loadList() {
-            this.loadingList = true;
-            if (this.collection) {
-                await new Promise(r => setTimeout(r, 1));
-                this.collection.getList(this.listType);
-                this.filterByNumber();
-            }
-            this.loadingList = false;
-        },
-        themeSongs(theme: CollectionItem<Theme>) {
-            return this.songs.filter((s: Song) =>
-                theme?.songIds.includes(s.id),
-            );
-        },
-        countrySongs(country: CollectionItem<Country>) {
-            return this.songs.filter((s: Song) =>
-                country?.songIds.includes(s.id),
-            );
-        },
-        gotoContributor(contributor: ApiContributor) {
-            if (this.collection) {
-                this.$router.push({
-                    name: "contributor",
-                    params: {
-                        collection: this.collection.key,
-                        contributor: contributor.id,
-                    },
-                });
-            }
         },
         closeCta() {
             this.showCta = false;

@@ -124,13 +124,6 @@ export default defineComponent({
 			get() {
 				return this.store.state.session.splash;
 			},
-			set(v: {
-				title: string;
-				content: string;
-				callback?: () => Promise<void>;
-			}) {
-				this.store.commit(SessionMutationTypes.SPLASH, v);
-			},
 		},
 	},
 	async mounted() {

@@ -9,7 +9,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { sharing } from "@/services/api";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { ICustomCollection, ITag } from "songtreasures-api";
 
 export default defineComponent({
@@ -23,7 +22,6 @@ export default defineComponent({
             const r = await sharing.activateKey(this.token);
             this.result = r;
             if (r.type == "playlist") {
-                this.store.commit(SessionMutationTypes.SET_PLAYLIST, r);
                 this.$router.push({name: "playlist-view", params: {id: r.id}});
             }
         }

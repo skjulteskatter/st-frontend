@@ -149,7 +149,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BackButton, BaseModal } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";

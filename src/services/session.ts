@@ -1,25 +1,22 @@
 import {
-    Category,
     Collection,
     CollectionItem,
-    Copyright,
-    Country,
-    Genre,
     Lyrics,
     Song,
-    Theme,
     Tag,
     User,
     MediaFile,
 } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, ShareKey } from "songtreasures-api";
-import { analytics, instruments, items, playlists, session, sharing, songs, tags } from "./api";
+import { ICollectionItem, ApiContributor, ICustomCollection, ITag, ShareKey } from "songtreasures-api";
+import { analytics, items, playlists, session, sharing, songs, tags } from "./api";
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
 import Favorites from "@/classes/favorites";
 import Instrument from "@/classes/instrument";
 import { Language } from "songtreasures";
+import collectionService from "./collectionService";
+import { ISong } from "hiddentreasures-js";
 
 export class Session {
     private _initialized?: boolean;
@@ -31,24 +28,6 @@ export class Session {
     }
 
     private _preFetch = [
-        async () => {
-            this.instruments = (await cache.getOrCreateAsync("instruments", instruments.list, this.expiry) ?? []).map(i => new Instrument(i));
-        },
-        async () => {
-            this.countries = (await cache.getOrCreateAsync("countries", items.getCountries, this.expiry) ?? []).map(i => new Country(i));
-        },
-        async () => {
-            this.copyrights = (await cache.getOrCreateAsync("copyrights", items.getCopyrights, this.expiry) ?? []).map(i => new Copyright(i));
-        },
-        async () => {
-            this.themes = (await cache.getOrCreateAsync("themes", items.getThemes, this.expiry) ?? []).map(i => new Theme(i));
-        },
-        async () => {
-            this.genres = (await cache.getOrCreateAsync("genres", items.getGenres, this.expiry) ?? []).map(i => new Genre(i));
-        },
-        async () => {
-            this.categories = (await cache.getOrCreateAsync("categories", items.getCategories, this.expiry) ?? []).map(i => new Category(i));
-        },
         async () => {
             this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, this.expiry)) ?? [];
         },
@@ -94,13 +73,8 @@ export class Session {
 
     public favorites = new Favorites();
 
-    public themes: Theme[] = [];
-    public categories: Category[] = [];
     public tags: Tag[] = [];
     public customCollections: ICustomCollection[] = [];
-    public countries: Country[] = [];
-    public genres: Genre[] = [];
-    public copyrights: Copyright[] = [];
     public languages: Language[] = [];
 
     public lyrics: Lyrics[] = [];
@@ -144,10 +118,7 @@ export class Session {
         }
 
         this._initialized = false;
-        this.collections = (await cache.getOrCreateAsync("collections", songs.getCollections, new Date().getTime() + 60000) ?? [])
-        // TODO: remove filter on song;
-            .map(c => new Collection(c))
-            .sort((a, b) => b.priority - a.priority);
+        this.collections = await collectionService.list();
 
         const lastCacheClear = await cache.get("config", "last_cache_clear") as Date | undefined;
 
@@ -165,7 +136,7 @@ export class Session {
             await cache.set("config", "last_updated", new Date());
         }
 
-        const ownedCols = this.collections.filter(c => c.available && c.type == "song").map(c => c.id);
+        const ownedCols = this.collections.filter(c => c.type == "song").map(c => c.id);
 
         const previousCols = await cache.get("config", "owned_collections") as string[] | undefined;
 
@@ -202,62 +173,6 @@ export class Session {
             }
         }
 
-        await cache.set("config", "owned_collections", ownedCols);
-
-        const fetchSongs = async () => {
-            try {
-                const key = "last_updated_songs";
-                const lastUpdated = await cache.get("config", key) as Date | undefined;
-
-                if (shouldUpdate) {
-                    const updateSongs = await songs.getAllSongs([], lastUpdated?.toISOString());
-
-                    await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: ISong;
-                    }));
-
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
-                }
-            }
-            catch (e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error occured", "warning", error);
-                this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
-            }
-
-            this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
-        };
-
-        const fetchFiles = async () => {
-            try {
-                const key = "last_updated_files";
-                const lastUpdated = await cache.get("config", key) as Date | undefined;
-                if (shouldUpdate) {
-                    const updateSongs = await songs.getFiles(lastUpdated?.toISOString());
-
-                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: IMediaFile;
-                    }));
-
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
-                }
-            } catch (e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error fetching files", "warning", error);
-                this.files = (await songs.getFiles()).result.map(i => new MediaFile(i));
-            }
-
-            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files")).map(i => new MediaFile(i));
-        };
-
         const fetchContributors = async () => {
             try {
                 const key = "last_updated_contributors";
@@ -286,8 +201,6 @@ export class Session {
         };
 
         const fetchAll = [fetchContributors()];
-
-        fetchAll.push(fetchSongs(), fetchFiles());
 
         for (const f of this._preFetch) {
             fetchAll.push(f());

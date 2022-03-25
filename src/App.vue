@@ -25,12 +25,6 @@ export default defineComponent({
         appSession.onReady(() => {
             this.ready = true;
         });
-        if (!window.location.pathname.startsWith("/login")) {
-            this.store.commit(
-                SessionMutationTypes.REDIRECT,
-                window.location.pathname,
-            );
-        }
     },
 });
 </script>

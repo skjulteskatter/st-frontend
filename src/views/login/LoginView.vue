@@ -164,7 +164,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { BaseModal } from "@/components";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { MailIcon } from "@heroicons/vue/outline";
@@ -201,11 +200,6 @@ export default defineComponent({
         forgotPasswordSent: false,
         user: null as User | null,
     }),
-    computed: {
-        initialized() {
-            return this.store.getters.initialized;
-        },
-    },
     mounted() {
         appSession.onReady(() => {
             this.user = appSession.User;
@@ -223,17 +217,6 @@ export default defineComponent({
                 if (!this.providers?.length) {
                     this.noAccount = true;
                 }
-            } else {
-                try {
-                    await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_EMAIL_PASSWORD, {
-                        email: this.form.email,
-                        password: this.form.password,
-                        stayLoggedIn: this.stayLoggedIn,
-                    });
-                }
-                catch {
-                    this.wrongPassword = true;
-                }
             }
             this.loading.login = false;
         },
@@ -249,7 +232,7 @@ export default defineComponent({
         async login(provider: string) {
             this.loading.login = true;
             this.loading["provider" + provider] = true;
-            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
+            await auth.login(provider);
         },
     },
 });

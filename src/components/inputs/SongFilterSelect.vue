@@ -5,7 +5,6 @@
 		</optgroup>
 	</select>
 </template>
-
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import SongFilter from "@/classes/songFilter";
@@ -49,7 +48,6 @@ export default defineComponent({
 			filter.contentTypes = types;
 			filter.categoryIds = categories;
 
-			this.store.commit(SongsMutationTypes.SET_FILTER, filter);
 			this.$emit("apply");
 		},
 	},

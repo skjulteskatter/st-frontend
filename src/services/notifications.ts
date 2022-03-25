@@ -54,12 +54,10 @@ export class Notifications {
                 this.notifications[n.id] = n;
             }
         }
-        this.store.commit(NotificationMutationTypes.ADD_NOTIFICATIONS, nots);
     }
 
     public async clear() {
         await cache.clearStore("notifications");
-        this.store.commit(NotificationMutationTypes.CLEAR_NOTIFICATIONS);
     }
 
     public get Notifications() {
@@ -68,7 +66,6 @@ export class Notifications {
 
     public async notify(n: N) {
         const not = new Notification(n);
-        this.store.commit(NotificationMutationTypes.ADD_NOTIFICATION, not);
         if ((n.callback == undefined && n.title != undefined) || n.store)
             await this.setNotification(not);
     }

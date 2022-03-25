@@ -35,8 +35,6 @@
 import { defineComponent, PropType } from "vue";
 import { PlayIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 import { Collection, MediaFile, Song } from "@/classes";
-import { AudioTrack } from "@/store/modules/songs/state";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 export default defineComponent({
 	name: "song-file-card",
@@ -91,13 +89,6 @@ export default defineComponent({
 		icon(file: MediaFile) {
 			return file.type === "video" ? "PlayIcon" : "VolumeUpIcon";
 		},
-		selectAudio(file: MediaFile) {
-            const track: AudioTrack = {
-                file,
-                collection: this.collection,
-            };
-            this.store.commit(SongsMutationTypes.SET_AUDIO, track);
-        },
 	},
 });
 </script>

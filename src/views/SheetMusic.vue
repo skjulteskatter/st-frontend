@@ -217,7 +217,6 @@ export default defineComponent({
                 zoom: this.zoom,
                 clef: "treble",
             };
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, options);
             this.loaded = true;
         },
     },

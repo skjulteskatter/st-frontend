@@ -16,13 +16,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { ApiContributor } from "songtreasures-api";
+import { IContributor } from "hiddentreasures-js";
 
 export default defineComponent({
     name: "contributor-info",
     props: {
         contributors: {
-            type: Array as PropType<ApiContributor[]>,
+            type: Array as PropType<IContributor[]>,
             required: true,
         },
     },

@@ -80,8 +80,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Contributor, Song } from "@/classes";
-import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { appSession } from "@/services/session";
 import { PencilAltIcon } from "@heroicons/vue/solid";
 

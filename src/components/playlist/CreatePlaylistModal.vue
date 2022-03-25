@@ -29,7 +29,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { CheckIcon } from "@heroicons/vue/solid";
 

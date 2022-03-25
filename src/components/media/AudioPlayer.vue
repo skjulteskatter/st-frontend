@@ -84,11 +84,6 @@ export default defineComponent({
             return this.store.getters.languageKey;
         },
     },
-    methods: {
-        closePlayer() {
-            this.store.commit(SongsMutationTypes.SET_AUDIO, undefined);
-        },
-    },
 });
 </script>
 

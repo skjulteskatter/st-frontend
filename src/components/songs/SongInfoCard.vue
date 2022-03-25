@@ -68,32 +68,28 @@
                     >
                         {{ melodyOrigin }}
                     </small>
-                    <!-- <small
+                    <small
                         class="flex gap-2"
-                        v-if="
-                            song.copyright.melody &&
-                            song.copyright.text &&
-                            identicalCopyright
-                        "
+                        v-if="identicalCopyright"
                     >
-                        © {{ song.copyright.melody.getName(language) }}
+                        © {{ copyright.melody?.name }}
                     </small>
                     <div v-else>
                         <small
                             class="flex gap-2"
-                            v-if="song.copyright.text"
+                            v-if="copyright.text"
                         >
                             {{ $t("song_text") }} ©:
-                            {{ song.copyright.text.getName(language) }}
+                            {{ copyright.text.name }}
                         </small>
                         <small
                             class="flex gap-2"
-                            v-if="song.copyright.melody"
+                            v-if="copyright.melody"
                         >
                             {{ $t("song_melody") }} ©:
-                            {{ song.copyright.melody.getName(language) }}
+                            {{ copyright.melody.name }}
                         </small>
-                    </div> -->
+                    </div>
                     <small class="flex gap-2">
                         <!-- <span v-if="song.originCountry">{{ song.originCountry }}</span> -->
                         <!-- <span v-if="song.originCountry">&middot;</span> -->
@@ -119,12 +115,12 @@
 </template>
 <script setup lang="ts">
 import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { Collection, Song } from "@/classes";
 import { EyeIcon } from "@heroicons/vue/outline";
 import ContributorInfo from "./ContributorInfo.vue";
-import { Contributor } from "hiddentreasures-js";
 import contributorService from "@/services/contributorService";
+import copyrightService from "@/services/items/copyrightService";
 
 interface Props {
     language: string;
@@ -140,9 +136,6 @@ const title = computed(() => props.song.title);
 const melodyOrigin = computed(() => {
     return props.song.origins.find(o => o.type === "melody")?.description ?? null;
 });
-const identicalCopyright = computed(() => {
-    return props.song.copyrights[0]?.referenceId === props.song.copyrights[1]?.referenceId;
-});
 const contributors = await contributorService.retrieve({
     itemIds: props.song.participants.map(i => i.contributorId),
 });
@@ -151,6 +144,20 @@ const authors = computed(() => {
 });
 const composers = computed(() => {
     return contributors.filter(c => props.song.participants.some(p => p.type === "composer" && p.contributorId === c.id));
+});
+const copyrights = await copyrightService.list();
+const copyright = computed(() => {
+    const songCopyrights = {
+        text: props.song.copyrights.find(c => c.type === "text") ?? null,
+        melody: props.song.copyrights.find(c => c.type === "melody") ?? null,
+    };
+    return {
+        text: copyrights.find(c => c.id === songCopyrights.text?.referenceId) ?? null,
+        melody: copyrights.find(c => c.id === songCopyrights.melody?.referenceId) ?? null,
+    };
+});
+const identicalCopyright = computed(() => {
+    return copyright.value.melody && copyright.value.text && (copyright.value.melody.id && copyright.value.text.id);
 });
 
 const number = computed(() => {
