@@ -139,24 +139,6 @@ declare module "songtreasures-api" {
         canEdit: boolean;
     }
 
-    type MediaType = "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
-
-    interface IMediaFile {
-        id: string;
-        songId: string;
-        name: string;
-        type: MediaType;
-        category: string;
-        number: number;
-        languageKey: string;
-        transposition: string;
-        information: string;
-        directUrl: string;
-        instrumentId?: string;
-        participants: IParticipant[];
-        collectionIds: string[];
-    }
-
     interface IInstrument {
         id: string;
         updatedAt: string;

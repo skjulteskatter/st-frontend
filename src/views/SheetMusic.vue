@@ -2,24 +2,24 @@
     <div class="min-h-screen max-w-screen-2xl m-auto pb-12">
         <div v-if="song" class="mb-2 p-4 bg-white">
             <div class="flex items-baseline">
-                <span class="opacity-50 text-lg mr-2">{{ song.getNumber(song.collectionIds[0]) }}</span>
+                <span class="opacity-50 text-lg mr-2">{{ number }}</span>
                 <div class="flex flex-col">
-                    <h1 class="font-bold text-lg mb-1 leading-tight">{{ song.getName(languageKey) }}</h1>
+                    <h1 class="font-bold text-lg mb-1 leading-tight">{{ song.title }}</h1>
                     <span class="text-gray-400 text-sm md:text-base tracking-wide leading-snug md:leading-tight flex flex-col">
-                        <small v-if="Authors.length">
+                        <small v-if="authors.length">
                             <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
                             <span
-                                v-for="c in Authors"
+                                v-for="c in authors"
                                 :key="c.id"
                                 class="mr-1"
                             >
                                 {{ c.name }}
                             </span>
                         </small>
-                        <small v-if="Composers.length">
+                        <small v-if="composers.length">
                             <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
                             <span
-                                v-for="c in Composers"
+                                v-for="c in composers"
                                 :key="c.id"
                                 class="mr-1"
                             >
@@ -72,11 +72,36 @@
         </div>
     </div>
 </template>
+<script lang="ts" setup>
+const searchParams = new URLSearchParams(window.location.search);
+const token = searchParams.get("token");
 
+if (!token) {
+    throw new Error("Token not present");
+}
+client.setToken(token);
+
+const songId = useRoute().params.songId;
+const song = await songService.get(songId as string);
+const collectionId = song.collections[0]?.collectionId ?? null;
+const collection = collectionId ? await collectionService.get(collectionId) : null;
+
+const number =  song.collections.find(c => c.collectionId === collectionId)?.number ?? null;
+
+const contributors = await contributorService.retrieve({
+    itemIds: song.participants.map(i => i.contributorId),
+});
+const authors = computed(() => {
+    return contributors.filter(c => song.participants.some(p => p.type === "author" && p.contributorId === c.id));
+});
+const composers = computed(() => {
+    return contributors.filter(c => song.participants.some(p => p.type === "composer" && p.contributorId === c.id));
+});
+
+</script>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-import { ICollection, IMediaFile } from "songtreasures-api";
-import { Collection, Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
+import { defineComponent, computed } from "@vue/runtime-core";
+import { Collection, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
 import http from "@/services/http";
 import { session, songs } from "@/services/api";
@@ -84,6 +109,11 @@ import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 import { SheetMusicOptions } from "songtreasures";
 import client from "@/services/client";
+import songService from "@/services/songs/songService";
+import { useRoute } from "vue-router";
+import { IMediaFile } from "hiddentreasures-js";
+import collectionService from "@/services/collectionService";
+import contributorService from "@/services/contributorService";
 
 export default defineComponent({
     name: "sheet-music",
@@ -98,127 +128,10 @@ export default defineComponent({
         pdfType: SheetMusicTypes.PDF,
         files: [] as IMediaFile[],
         song: null as Song | null,
-        collection: null as Collection | null,
-        user: {} as User,
         showFiles: true,
         loaded: false,
     }),
-    computed: {
-        languageKey() {
-            return this.user?.settings?.languageKey;
-        },
-        Authors() {
-            return this.song?.participants.filter(i => i.type === "author" && i.contributor).map(i => i.contributor as Contributor) ?? [];
-        },
-        Composers() {
-            return this.song?.participants.filter(i => i.type === "composer" && i.contributor).map(i => i.contributor as Contributor) ?? [];
-        },
-        options() {
-            return this.store.state.songs.sheetMusic;
-        },
-        sheetMusic() {
-            return this.store.state.songs.sheetMusic ?? {} as SheetMusicOptions;
-        },
-        url() {
-            return (
-                this.sheetMusic.url ??
-                `https://dmb-cdn.azureedge.net/files/${this.$route.params.id}`
-            );
-        },
-        originalKey() {
-            return (
-                this.sheetMusic.originalKey ??
-                this.searchParams
-                    .get("originalKey")
-                    ?.replace("sharp", "#")
-                    .replace("flat", "b")
-            );
-        },
-        routeName() {
-            return this.$route.name?.toString() ?? "";
-        },
-        transposeKey() {
-            return this.searchParams.get("transposition");
-        },
-        transposition() {
-            return (
-                this.sheetMusic.transposition ??
-                (this.transposeKey ? parseInt(this.transposeKey) : undefined)
-            );
-        },
-        embed() {
-            const query = this.searchParams.get("embed");
-            const embed = ["", "true"].includes(query ?? "false");
-            return embed;
-        },
-        zoom() {
-            const query = this.searchParams.get("zoom");
-            const zoom = query ? parseInt(query) / 100 : undefined;
-            return zoom;
-        },
-        showSheetMusic() {
-            return this.sheetMusic.show;
-        },
-        type() {
-            return (
-                this.sheetMusic.type ??
-                this.searchParams.get("type")
-            );
-        },
-    },
-    async mounted() {
-        // const c = document.getElementById("osmd-canvas");
-        // const pbc = document.getElementById("pb-canvas");
-        const token = this.searchParams.get("token");
-        // await osmd.init(c, pbc);
-
-        if (token) {
-            client.setToken(token);
-            http.setToken(token);
-
-            const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));
-            this.collection = new Collection((await songs.getCollections()).find(i => song.collections.some(c => c.id === i.id)) ?? {} as ICollection);
-            this.user = new User(await session.getCurrentUser());
-
-            this.song = song;
-            this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
-            if (this.files.length == 1) {
-                this.setFile(this.files[0]);
-            } else {
-                const initialFileId = this.searchParams.get("fileid");
-
-                if (initialFileId) {
-                    const file = this.files.find(i => i.id === initialFileId);
-
-                    if (file) {
-                        this.setFile(file);
-                    }
-                }
-            }
-        }
-        else {
-            throw new Error("No token present");
-        }
-
-        this.loaded = true;
-    },
     methods: {
-        async setFile(file: IMediaFile) {
-            this.loaded = false;
-
-            await new Promise(r => setTimeout(r, 10));
-            const options: SheetMusicOptions = {
-                fileId: file.id,
-                show: true,
-                originalKey: this.song?.originalKey ?? "C",
-                url: file.directUrl,
-                type: file.type,
-                transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true),
-                zoom: this.zoom,
-                clef: "treble",
-            };
-            this.loaded = true;
-        },
     },
 });
 </script>
