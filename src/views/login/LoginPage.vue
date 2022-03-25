@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { User } from "@/classes";
 import { reactive } from "vue";
@@ -21,7 +20,6 @@ import { reactive } from "vue";
 export default defineComponent({
     name: "login-page",
     data: () => ({
-        store: useStore(),
         user: null as User | null,
         ready: false,
     }),

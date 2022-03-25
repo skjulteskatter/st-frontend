@@ -39,8 +39,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { Collection, Song } from "@/classes";
-import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import CheckboxGroup from "./CheckboxGroup.vue";
 import { AdjustmentsIcon } from "@heroicons/vue/solid";
 import SongFilter from "@/classes/songFilter";
@@ -60,7 +58,6 @@ export default defineComponent({
     },
     emits: ["apply"],
     data: () => ({
-        store: useStore(),
         videoTypes: ["karaoke", "tutorial"],
         audioTypes: [
             "gathering",

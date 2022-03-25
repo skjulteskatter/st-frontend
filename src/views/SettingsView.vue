@@ -56,8 +56,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { SettingsCard } from "@/components";
 import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
-import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 export default defineComponent({
     name: "settings-view",
@@ -68,7 +66,6 @@ export default defineComponent({
         CogIcon,
     },
     data: () => ({
-        store: useStore(),
         loading: false,
         category: "general" as "general" | "user",
     }),

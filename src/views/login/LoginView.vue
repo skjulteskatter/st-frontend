@@ -164,7 +164,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BaseInput } from "@/components/inputs";
 import auth from "@/services/auth";
-import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { BaseModal } from "@/components";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
@@ -185,7 +184,6 @@ export default defineComponent({
         MailIcon,
     },
     data: () => ({
-        store: useStore(),
         form: {
             email: "",
             password: "",

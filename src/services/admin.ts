@@ -1,9 +1,7 @@
 import { User } from "@/classes";
-import { useStore } from "@/store";
 import api from "./api";
 
 export class AdminService {
-    private store = useStore();
     private initialized = false;
 
     private users: User[] = [];

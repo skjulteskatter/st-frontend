@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "vuex";
 import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
@@ -49,7 +48,6 @@ export default defineComponent({
 		CheckIcon,
 	},
 	data: () => ({
-		store: useStore(),
 		playlistName: "",
 		loading: false,
 	}),

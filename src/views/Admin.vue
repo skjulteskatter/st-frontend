@@ -19,7 +19,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { UsersList, EmailLookup, DownloadEmails } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";
-import { useStore } from "@/store";
 import { User } from "@/classes";
 import { appSession } from "@/services/session";
 
@@ -32,7 +31,6 @@ export default defineComponent({
         DownloadEmails,
     },
     data: () => ({
-        store: useStore(),
         token: "" as string | undefined,
     }),
     computed: {

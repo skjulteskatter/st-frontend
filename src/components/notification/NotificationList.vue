@@ -40,16 +40,12 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BellIcon } from "@heroicons/vue/outline";
 import { notifications } from "@/services/notifications";
-import { useStore } from "@/store";
 
 export default defineComponent({
 	name: "notification-list",
 	components: {
 		BellIcon,
 	},
-	data: () => ({
-		store: useStore(),
-	}),
 	computed: {
 		notifications() {
 			const nots = this.store.getters.notifications;

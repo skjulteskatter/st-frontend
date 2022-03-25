@@ -50,8 +50,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import Plyr from "plyr";
-import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
 import { XIcon } from "@heroicons/vue/solid";
 
@@ -61,7 +59,6 @@ export default defineComponent({
         XIcon,
     },
     data: () => ({
-        store: useStore(),
         player: {} as Plyr,
     }),
     updated() {

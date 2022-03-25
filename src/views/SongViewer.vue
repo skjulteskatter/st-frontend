@@ -165,8 +165,8 @@
                 <h2 class="text-2xl font-bold">{{ $t('store_limitedAccess') }}</h2>
                 <p class="text-center">{{ $t('store_gainAccess') }}</p>
                 <div class="p-2 rounded-md border border-gray-300 mt-4 flex items-center gap-4" v-if="collection">
-                    <img class="max-h-12 rounded" height="48" :src="collection.image" :alt="collection.getName(languageKey)">
-                    <p>{{ collection.getName(languageKey) }}</p>
+                    <img class="max-h-12 rounded" height="48" :src="collection.image" :alt="collection.title">
+                    <p>{{ collection.title }}</p>
                 </div>
                 <div class="flex gap-4 mt-8">
                     <BaseButton theme="tertiary" @click="$router.back()">
@@ -175,7 +175,7 @@
                         </template>
                         {{ $t('common_back') }}
                     </BaseButton>
-                    <BaseButton theme="secondary" @click="collection?.addToCart">
+                    <BaseButton theme="secondary">
                         <template #icon>
                             <ShoppingCartIcon class="w-4 h-4" />
                         </template>
@@ -207,16 +207,9 @@ import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
 import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
-import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
-import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
-import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
 import songService from "@/services/songs/songService";
 
@@ -250,7 +243,6 @@ export default defineComponent({
         XIcon,
     },
     data: () => ({
-        store: useStore(),
         control: control,
         selectedSheetMusic: {} as IMediaFile,
         sheetMusicOptions: null as SheetMusicOptions | null,
@@ -270,9 +262,6 @@ export default defineComponent({
         songs: null as Song[] | null,
     }),
     computed: {
-        selectedLanguage() {
-            return this.languageKey;
-        },
         favorites() {
             return appSession.favorites;
         },
@@ -282,42 +271,8 @@ export default defineComponent({
         admin() {
             return appSession.user.roles.some(r => ["editor", "administrator"].includes(r));
         },
-        audioTrack: {
-            get() {
-                return undefined;
-            },
-            set(v: AudioTrack) {
-                this.store.commit(SongsMutationTypes.SET_AUDIO, v);
-            },
-        },
-        playlists() {
-            return this.store.state.session.playlists.filter(p => p.userId == this.user?.id);
-        },
-        extended() {
-            return this.store.getters.extended;
-        },
-        isExtended() {
-            return this.store.state.session.extend;
-        },
-        isAdmin() {
-            return this.store.getters.isAdmin;
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
-        type() {
-            return this.store.state.songs.view;
-        },
         defaultTransposition() {
             return this.user.settings?.defaultTransposition ?? "C";
-        },
-        selectedTransposition: {
-            get() {
-                return this.store.state.songs.transposition ?? 0;
-            },
-            set(v: number) {
-                this.store.commit(SongsMutationTypes.SET_TRANSPOSITION, v);
-            },
         },
         viewCount() {
             return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
@@ -402,13 +357,6 @@ export default defineComponent({
                 return;
             }
             this.fullLoading = true;
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
-                fileId: "",
-                show: false,
-                clef: "treble",
-                originalKey: "C",
-            });
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
             const {collection, number} = this.$route.params as {[key: string]: string};
             this.collection = appSession.getCollection(collection);
             if (!this.collection)
@@ -450,10 +398,7 @@ export default defineComponent({
                 }
 
                 this.componentLoading[playlist.id] = true;
-                await this.store.dispatch(SessionActionTypes.PLAYLIST_ADD_SONG, {
-                    playlistId: playlist.id,
-                    songId: song.id,
-                });
+
                 this.componentLoading[playlist.id] = false;
 
                 notify("success", "Added to playlist",  "check", `Added "${song.title}" to playlist ${playlist.name}`, undefined, undefined, false);
@@ -471,7 +416,6 @@ export default defineComponent({
                     this.control.setLyrics(this.lyrics);
                 this.refresh();
             }
-            this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
         },
         async toggleFavorite() {
             await this.favorites.toggle(this.song?.id);

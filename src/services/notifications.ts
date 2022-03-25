@@ -1,8 +1,6 @@
 import { cache } from "./cache";
 import { Notification as N } from "songtreasures-api";  
 import { reactive, readonly } from "vue";
-import { useStore } from "@/store";
-import { NotificationMutationTypes } from "@/store/modules/notifications/mutation-types";
 
 export class Notification implements N {
     public id: string;
@@ -29,7 +27,6 @@ export class Notification implements N {
 }
 
 export class Notifications {
-    private store = useStore();
     private notifications: {
         [key: string]: Notification;
     } = reactive({});

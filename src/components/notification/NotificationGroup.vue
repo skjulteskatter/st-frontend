@@ -16,7 +16,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { notifications } from "@/services/notifications";
-import { useStore } from "@/store";
 import Notification from "./NotificationItem.vue";
 
 export default defineComponent({
@@ -24,19 +23,8 @@ export default defineComponent({
     components: {
         Notification,
     },
-    data: () => ({
-        store: useStore(),
-    }),
     async mounted() {
         await notifications.init();
-    },
-    computed: {
-        notifications() {
-            return this.store.getters.notifications.filter(n => {
-                const diff = new Date().getTime() - n.dateTime.getTime();
-                return diff < 5000;
-            });
-        },
     },
 });
 </script>

@@ -80,7 +80,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Contributor, Song } from "@/classes";
-import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { appSession } from "@/services/session";
@@ -94,7 +93,6 @@ export default defineComponent({
         PencilAltIcon,
     },
     data: () => ({
-        store: useStore(),
         loading: false,
         songs: [] as Song[],
     }),

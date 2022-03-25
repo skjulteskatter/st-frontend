@@ -32,7 +32,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { Song, Tag } from "@/classes";
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
 import { SongListItemCard } from "@/components/songs";
 import { TagIcon } from "@heroicons/vue/solid";
 
@@ -43,7 +42,6 @@ export default defineComponent({
         TagIcon,
     },
     data: () => ({
-        store: useStore(),
         tag: undefined as Tag | undefined,
         songs: [] as Song[],
     }),

@@ -66,7 +66,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { Lyrics, Song } from "@/classes";
 import { viewer } from "@/classes/presentation/viewer";
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
 import { PresentationLyrics } from "@/components/presentation";
 import { LyricsVerse } from "@/classes/lyrics";
 
@@ -76,7 +75,6 @@ export default defineComponent({
         PresentationLyrics,
     },
     data: () => ({
-        store: useStore(),
         viewer: viewer,
         lyrics: null as Lyrics | null,
         song: null as Song | null,

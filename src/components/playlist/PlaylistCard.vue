@@ -44,7 +44,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { ICustomCollection } from "songtreasures-api";
-import { useStore } from "@/store";
 import { FolderIcon } from "@heroicons/vue/outline";
 import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";
 import { appSession } from "@/services/session";
@@ -63,7 +62,6 @@ export default defineComponent({
         UsersIcon,
     },
     data: () => ({
-        store: useStore(),
         hover: false,
         showModal: false,
     }),

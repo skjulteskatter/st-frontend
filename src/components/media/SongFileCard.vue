@@ -36,7 +36,6 @@ import { defineComponent, PropType } from "vue";
 import { PlayIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 import { Collection, MediaFile, Song } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
-import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 export default defineComponent({
@@ -69,9 +68,6 @@ export default defineComponent({
 			type: String,
 		},
 	},
-	data: () => ({
-		store: useStore(),
-	}),
 	computed: {
 		tutorialFiles() {
 			return this.files.filter(i => i.category === "tutorial");

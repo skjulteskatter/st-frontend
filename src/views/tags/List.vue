@@ -24,20 +24,15 @@
 import { defineComponent } from "@vue/runtime-core";
 import { appSession } from "@/services/session";
 import { Tag } from "@/classes";
-import { useStore } from "@/store";
 
 export default defineComponent({
     name: "tag-list",
     data: () => ({
-        store: useStore(),
         tags: [] as Tag[],
     }),
     computed: {
         Tags() {
             return this.tags;
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
         },
     },
     async beforeMount() {

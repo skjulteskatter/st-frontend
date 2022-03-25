@@ -27,7 +27,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";
-import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
 export default defineComponent({
@@ -37,7 +36,6 @@ export default defineComponent({
         BaseInput,
     },
     data: () => ({
-        store: useStore(),
         form: {
             displayName: "",
             email: "",

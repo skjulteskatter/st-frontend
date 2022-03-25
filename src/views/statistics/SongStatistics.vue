@@ -40,7 +40,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { analytics } from "@/services/api";
 import { LineChart, CountryList } from "@/components/statistics";
 import { appSession } from "@/services/session";
@@ -57,7 +56,6 @@ export default defineComponent({
 		RefreshIcon,
 	},
 	data: () => ({
-		store: useStore(),
 		analytics: {} as IAnalyticsItem,
 		date: new Date(),
 		loading: false,

@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { Lyrics } from "@/classes";
 
 export default defineComponent({
@@ -23,9 +22,6 @@ export default defineComponent({
             type: Object as PropType<Lyrics>,
         },
     },
-    data: () => ({
-        store: useStore(),
-    }),
     computed: {
         text() {
            return this.lyrics?.getText({

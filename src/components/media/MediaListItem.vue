@@ -24,7 +24,6 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { IMediaFile } from "songtreasures-api";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 
@@ -47,14 +46,6 @@ export default defineComponent({
     components: {
         MusicNoteIcon,
         VolumeUpIcon,
-    },
-    data: () => ({
-        store: useStore(),
-    }),
-    computed: {
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
     },
 });
 </script>

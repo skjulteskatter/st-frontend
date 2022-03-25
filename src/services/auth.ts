@@ -25,9 +25,6 @@ import { getAnalytics, logEvent, setUserId } from "firebase/analytics";
 import "firebase/compat/performance";
 import router from "@/router";
 import api, { session } from "./api";
-import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { notify } from "./notify";
 import { firebaseConfig } from "@/config";
 import http from "./http";
@@ -53,11 +50,9 @@ function invalidProvider() {
 
 async function loginUser(auth: Auth, user: User): Promise<boolean> {
     if (user.emailVerified) {
-        useStore()?.commit(SessionMutationTypes.ERROR, "");
         analytics.logEvent("login");
         return true;
     } else {
-        useStore()?.commit(SessionMutationTypes.ERROR, "EMAIL_NOT_VERIFIED");
         router.push({name: "verify-email"});
         return false;
     }
@@ -171,7 +166,6 @@ class Auth {
         switch (code) {
             case "auth/wrong-password":
                 notify("error", "Wrong Password", "warning");
-                useStore().commit(SessionMutationTypes.ERROR, "Wrong password");
                 break;
             case "auth/too-many-requests":
                 notify("error", "Too many requests. Wait a few minutes", "warning");
@@ -179,11 +173,9 @@ class Auth {
             case "auth/email-already-in-use": 
                 notify("error", "Email already in use", "warning");
                 alert("Email already in use");
-                useStore().commit(SessionMutationTypes.ERROR, "Email already in use");
                 return;
             case "auth/weak-password":
                 notify("error", "Weak password", "error");
-                useStore().commit(SessionMutationTypes.ERROR, "Weak password");
                 return;
         }
     }
@@ -340,9 +332,6 @@ class Auth {
 const auth = new Auth();
 
 onAuthStateChanged(a, async s => {
-    if (s) {
-        await useStore().dispatch(SessionActionTypes.SESSION_START);
-    }
     const params = new URLSearchParams(window.location.search);
     const token = params.get("authToken");
 

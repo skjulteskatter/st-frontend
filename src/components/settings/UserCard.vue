@@ -17,14 +17,10 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "user-card",
-    data: () => ({
-        store: useStore(),
-    }),
     computed: {
         image() {
             return this.user?.image ?? "/img/portrait-placeholder.png";

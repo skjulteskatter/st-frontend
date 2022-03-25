@@ -81,8 +81,6 @@
 import { defineComponent, PropType } from "@vue/runtime-core";
 import SlidePanel from "@/components/SlidePanel.vue";
 import { TrashIcon } from "@heroicons/vue/solid";
-import { useStore } from "@/store";
-import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
 import { User } from "@/classes";
@@ -102,7 +100,6 @@ export default defineComponent({
 		},
 	},
 	data: () => ({
-		store: useStore(),
 		loading: false,
 		show: false,
 	}),

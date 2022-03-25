@@ -21,9 +21,6 @@
 import { defineComponent, PropType } from "vue";
 import { PlayIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 import { Collection, MediaFile } from "@/classes";
-import { AudioTrack } from "@/store/modules/songs/state";
-import { useStore } from "@/store";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 
 export default defineComponent({
 	name: "file-card",
@@ -40,9 +37,6 @@ export default defineComponent({
 			type: Object as PropType<Collection>,
 		},
 	},
-	data: () => ({
-		store: useStore(),
-	}),
 	computed: {
 		icon() {
 			return this.file.type === "video" ? "PlayIcon" : "VolumeUpIcon";

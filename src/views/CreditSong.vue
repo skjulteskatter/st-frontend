@@ -68,7 +68,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { songs } from "@/services/api";
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
 import { Song } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon } from "@heroicons/vue/solid";
 
@@ -107,7 +106,6 @@ export default defineComponent({
         HashtagIcon,
     },
     data: () => ({
-        store: useStore(),
         collection: "",
         number: null as number | null,
         song: null as Song | null,

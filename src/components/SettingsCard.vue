@@ -147,7 +147,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import themes from "@/classes/themes";
 import auth from "@/services/auth";
-import { useStore } from "@/store";
 import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
 import { 
@@ -181,7 +180,6 @@ export default defineComponent({
         },
     },
     data: () => ({
-        store: useStore(),
         cache: cache,
         selectedLanguage: {} as Language,
         selectedKey: "",

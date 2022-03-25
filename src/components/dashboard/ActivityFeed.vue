@@ -37,23 +37,13 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "activity-feed",
-    data: () => ({
-        store: useStore(),
-    }),
     computed: {
         collections() {
             return appSession.collections;
-        },
-        activitiesInitialized() {
-            return this.store.state.session.activities != undefined;
-        },
-        activities() {
-            return this.store.getters.activities;
         },
     },
 });

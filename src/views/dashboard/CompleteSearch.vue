@@ -33,7 +33,6 @@ import { defineComponent } from "@vue/runtime-core";
 import { BackButton } from "@/components";
 import { SearchInput, SearchResultItemCard } from "@/components/inputs";
 import { Collection } from "@/classes";
-import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
 import { ILocaleString } from "songtreasures";
@@ -48,7 +47,6 @@ export default defineComponent({
         BackButton,
     },
     data: () => ({
-        store: useStore(),
         loading: false,
     }),
     computed: {

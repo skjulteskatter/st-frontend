@@ -78,9 +78,6 @@
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { SearchInput } from "@/components/inputs";
 import EditUser from "@/components/admin/EditUser.vue";
-import { useStore } from "@/store";
-import { UsersActionTypes } from "@/store/modules/users/action-types";
-import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { notify } from "@/services/notify";
 import api from "@/services/api";
 import { User } from "@/classes";
@@ -103,7 +100,6 @@ export default defineComponent({
         },
     },
     data: () => ({
-        store: useStore(),
         disableButton: false,
         loading: {} as {
             [key: string]: boolean;
@@ -120,9 +116,6 @@ export default defineComponent({
         roles() {
             return this.store.state.users.roles;
         },
-    },
-    async mounted() {
-        await this.store.dispatch(UsersActionTypes.GET_ROLES);
     },
     methods: {
         async searchUser() {

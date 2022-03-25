@@ -36,7 +36,6 @@
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { ICustomCollectionEntry } from "songtreasures-api";
 import { Song } from "@/classes";
-import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { songs } from "@/services/api";
 import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
@@ -57,7 +56,6 @@ export default defineComponent({
         TrashIcon,
     },
     data: () => ({
-        store: useStore(),
         song: null as Song | null,
     }),
     emits: ["remove"],

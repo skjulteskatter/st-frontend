@@ -49,7 +49,6 @@ import { BaseModal } from "@/components";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
 import { TrashIcon } from "@heroicons/vue/solid";
 import { FolderAddIcon, ExclamationIcon } from "@heroicons/vue/outline";
-import { useStore } from "@/store";
 import { notify } from "@/services/notify";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 
@@ -64,7 +63,6 @@ export default defineComponent({
         ExclamationIcon,
     },
     data: () => ({
-        store: useStore(),
         createPlaylist: false,
         showModal: false,
         playlistId: "",

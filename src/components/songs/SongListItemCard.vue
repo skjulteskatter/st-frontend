@@ -36,7 +36,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song } from "@/classes";
-import { useStore } from "@/store";
 
 export default defineComponent({
     name: "song-list-item-card",
@@ -46,11 +45,6 @@ export default defineComponent({
         },
         context: {
             type: String,
-        },
-    },
-    computed: {
-        languageKey() {
-            return useStore().getters.languageKey;
         },
     },
 });

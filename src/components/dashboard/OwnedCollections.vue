@@ -70,7 +70,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
-import { useStore } from "@/store";
 import { Collection } from "@/classes";
 import { appSession } from "@/services/session";
 
@@ -80,12 +79,9 @@ export default defineComponent({
 		ArrowRightIcon,
 		CollectionIcon,
 	},
-	data: () => ({
-		store: useStore(),
-	}),
 	computed: {
 		collections(): Collection[] {
-			return appSession.collections.filter(c => c.available && c.type === "song").sort((a, b) => b.priority - a.priority) as Collection[] ?? [];
+			return appSession.collections.filter(c => c.type === "song").sort((a, b) => b.priority - a.priority) as Collection[] ?? [];
 		},
 	},
 });

@@ -76,8 +76,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 
-import { useStore } from "@/store";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { appSession } from "@/services/session";
 
 import TheNavbar from "@/components/TheNavbar.vue";
@@ -109,7 +107,6 @@ export default defineComponent({
     CompleteRegistration,
 },
 	data: () => ({
-		store: useStore(),
 		osmdLoading: false,
 		show: false,
 	}),
