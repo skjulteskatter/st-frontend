@@ -15,6 +15,10 @@ import {
     Tooltip,
 } from "@/components";
 import { BaseDropdown, BaseInput } from "./components/inputs";
+import { onAuthStateChanged } from "firebase/auth";
+import auth, { a } from "./services/auth";
+import { appSession } from "./services/session";
+import client from "./services/client";
 
 createApp(App)
     .use(router)
@@ -27,3 +31,16 @@ createApp(App)
     .component("BaseDropdown", BaseDropdown)
     .component("BaseInput", BaseInput)
     .mount("#app");
+
+onAuthStateChanged(a, async s => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("authToken");
+
+    if (token) {
+        await auth.loginWithToken(token);
+    }
+
+    appSession.user = await client.getUser();
+
+    appSession.ready(s !== null);
+});

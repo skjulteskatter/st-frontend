@@ -11,7 +11,6 @@ import {
     getAuth, 
     GoogleAuthProvider, 
     OAuthProvider, 
-    onAuthStateChanged, 
     signInWithCustomToken, 
     signInWithEmailAndPassword, 
     signInWithPopup, 
@@ -29,7 +28,6 @@ import { notify } from "./notify";
 import { firebaseConfig } from "@/config";
 import http from "./http";
 import { cache } from "./cache";
-import { appSession } from "./session";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const analyticsApp = getAnalytics(firebaseApp);
@@ -329,17 +327,4 @@ class Auth {
     }
 }
 
-const auth = new Auth();
-
-onAuthStateChanged(a, async s => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("authToken");
-
-    if (token) {
-        await auth.loginWithToken(token);
-    }
-
-    appSession.ready(s !== null);
-});
-
-export default auth;
+export default new Auth();

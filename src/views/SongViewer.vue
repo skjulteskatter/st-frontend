@@ -206,7 +206,7 @@ import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilA
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
+import { ICustomCollection, Format } from "songtreasures-api";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
@@ -267,9 +267,6 @@ export default defineComponent({
         },
         user() {
             return appSession.user;
-        },
-        admin() {
-            return appSession.user.roles.some(r => ["editor", "administrator"].includes(r));
         },
         defaultTransposition() {
             return this.user.settings?.defaultTransposition ?? "C";
