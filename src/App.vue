@@ -9,8 +9,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { NotificationGroup } from "@/components/notification";
-import { useStore } from "@/store";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import SplashScreen from "@/components/SplashScreen.vue";
 import { appSession } from "./services/session";
 
@@ -21,7 +19,6 @@ export default defineComponent({
         SplashScreen,
     },
     data: () => ({
-        store: useStore(),
         ready: false,
     }),
     mounted() {

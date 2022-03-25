@@ -14,7 +14,6 @@ import { Collection } from "@/classes";
 // import { BackButton } from "@/components";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { defineComponent } from "@vue/runtime-core";
-import { useStore } from "vuex";
 
 export default defineComponent({
     name: "collection-lists",
@@ -26,7 +25,6 @@ export default defineComponent({
     },
     data() {
         return {
-            store: useStore(),
             loaded: false,
         };
     },

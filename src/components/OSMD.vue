@@ -3,9 +3,9 @@
         <template #header>
         <div>
                 <div v-if="song && collection && showInfo">
-                    <h2 class="text-xl font-bold">{{ song.getName(languageKey) }}</h2>
+                    <h2 class="text-xl font-bold">{{ song.title }}</h2>
                     <div class="flex gap-2 items-center opacity-50 tracking-wide">
-                        <small v-if="collection.name">{{ collection.getName(languageKey) }} {{ song.getNumber(collection.id) }}</small>
+                        <small>{{ collection.title }} {{ collection.songOptions.useNumbers ? song.collections.find(c => c.collectionId === collection?.id)?.number : '' }}</small>
                         <span>&middot;</span>
                         <small v-if="song.verses">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
                     </div>
@@ -176,7 +176,6 @@
 
 <script lang="ts">
 import { Collection, Song, transposer } from "@/classes";
-import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
 import { XIcon } from "@heroicons/vue/solid";
 import { SheetMusicOptions } from "songtreasures";
@@ -219,7 +218,6 @@ export default defineComponent({
         const transpositions = transposer.getTranspositions(originalKey, true);
      
         return {
-            store: useStore(),
             svg: [] as string[],
             octave: 0,
             transposition: 0,

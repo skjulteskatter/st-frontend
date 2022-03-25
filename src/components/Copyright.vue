@@ -5,17 +5,13 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "@/store";
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
     name: "copyright-component",
-    data: () => ({
-        store: useStore(),
-    }),
     computed: {
         hide() {
-            return this.store.getters.collection?.loading;
+            return false;
         },
     },
 });

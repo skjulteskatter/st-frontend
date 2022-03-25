@@ -9,8 +9,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import SongFilter from "@/classes/songFilter";
-import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { useStore } from "vuex";
 
 type FilterValues = {
 	[key: string]: string[];
@@ -19,7 +17,6 @@ type FilterValues = {
 export default defineComponent({
 	name: "song-filter-select",
 	data: () => ({
-		store: useStore(),
 		contentTypes: ["lyrics", "audio", "video", "sheetmusic"],
 		selectedValues: [],
 		filterValues: {

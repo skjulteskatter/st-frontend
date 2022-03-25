@@ -1,5 +1,4 @@
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
 import { IActivity } from "songtreasures-api";
 import { RouteLocationRaw } from "vue-router";
 import { Collection } from ".";
@@ -8,7 +7,6 @@ import { Song } from ".";
 
 export class Activity {
     private activity: IActivity;
-    private store = useStore();
 
     constructor(activity: IActivity) {
         this.activity = activity;
@@ -23,13 +21,10 @@ export class Activity {
     }
 
     public get name() {
-        const name = this.item?.name;
-        if (!name) return null;
-        if (typeof(name) == "string") {
-            return name;
-        } else {
-            return name[this.store.getters.languageKey] ?? name.en ?? Object.values(name)[0];
+        if (this.item instanceof Song) {
+            return this.item.title;
         }
+        return this.item?.name;
     }
 
     public getRouterLink(collections: Collection[]): RouteLocationRaw {
@@ -48,13 +43,13 @@ export class Activity {
         return link;
     }
 
-    public getImage(collections: Collection[]): string | undefined {
+    public getImage(collections: Collection[]) {
         return this.type == "song" ? collections.find(c => this.collectionIds.some(col => col == c.id))?.image : this.item?.image ?? "/img/portrait-placeholder.png";
     }
 
     public timeSince() {
         try {
-            const rtfl = new Intl.RelativeTimeFormat(this.store.getters.languageKey, {
+            const rtfl = new Intl.RelativeTimeFormat(appSession.Language, {
                 localeMatcher: "best fit",
                 numeric: "auto",
                 style: "long",
@@ -91,7 +86,7 @@ export class Activity {
     }
 
     public get collectionIds(): string[] {
-        return this.activity.type == "song" ? (this.item as Song | undefined)?.collections.map(c => c.id) ?? [] : [];
+        return this.activity.type == "song" ? (this.item as Song | undefined)?.collections.map(c => c.collectionId) ?? [] : [];
     }
 
     public get type() {

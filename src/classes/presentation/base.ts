@@ -1,7 +1,7 @@
 import { appSession } from "@/services/session";
-import { useStore } from "@/store";
-import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
+import { ApiContributor, ILyrics } from "songtreasures-api";
 import { Lyrics } from "@/classes";
+import { ISong } from "hiddentreasures-js";
 
 export type Settings = {
     size: number;
@@ -27,7 +27,6 @@ type KeyEntry<K extends Key> = KeyTypes[K];
 
 export class PresentationBase {
     protected initialized = false;
-    protected store = useStore();
 
     public get Song() {
         return appSession.songs.find(i => i.id == this.Lyrics?.songId);

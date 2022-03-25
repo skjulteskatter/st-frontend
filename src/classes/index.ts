@@ -1,4 +1,3 @@
-import Category from "./category";
 import CollectionItem from "./collectionItem";
 import Contributor from "./contributor";
 import Favorites from "./favorites";
@@ -14,7 +13,6 @@ import { Song, Collection } from "hiddentreasures-js";
 
 export * from "./transposer";
 export * from "./base64";
-export * from "./items";
 
 export enum SheetMusicTypes {
     PDF = "sheetmusic-pdf",
@@ -29,7 +27,6 @@ export type ListEntry = {
 };
 
 export {
-    Category,
     CollectionItem,
     Contributor,
     Favorites,

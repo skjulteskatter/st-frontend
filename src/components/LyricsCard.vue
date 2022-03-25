@@ -123,7 +123,6 @@ import {
     PrintButton,
     PerformanceViewer,
 } from "./lyrics";
-import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { transposer } from "@/classes/transposer";
 import { appSession } from "@/services/session";
@@ -164,7 +163,6 @@ export default defineComponent({
         },
     },
     data: () => ({
-        store: useStore(),
         selectedLanguage: "",
         selectedFormat: "default" as SongViewType,
     }),
