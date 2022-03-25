@@ -28,7 +28,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { session } from "@/services/api";
-import { useStore } from "@/store";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
 import { CheckIcon } from "@heroicons/vue/solid";
@@ -43,7 +42,6 @@ export default defineComponent({
         CheckIcon,
     },
     data: () => ({
-        store: useStore(),
         terms: false,
         loading: false,
         disabled: false,
