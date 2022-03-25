@@ -152,7 +152,7 @@
                                 @previous="previous()"
                                 @mute="control.mute()"
                             />
-                            <SongSelector :songs="collection?.songs" @setSong="setSong" />
+                            <SongSelector :songs="songs" @setSong="setSong" />
                             <ThemeSelector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
                         </div>
                     </aside>
@@ -218,6 +218,7 @@ import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
+import songService from "@/services/songs/songService";
 
 export default defineComponent({
     name: "song-viewer",
@@ -251,7 +252,6 @@ export default defineComponent({
     data: () => ({
         store: useStore(),
         control: control,
-        number: 0 as number | string,
         selectedSheetMusic: {} as IMediaFile,
         sheetMusicOptions: null as SheetMusicOptions | null,
         songViewCount: null as number | null,
@@ -265,6 +265,9 @@ export default defineComponent({
         fullLoading: false,
         favorite: false,
         showSheet: false,
+        song: null as Song | null,
+        collection: null as Collection | null,
+        songs: null as Song[] | null,
     }),
     computed: {
         selectedLanguage() {
@@ -299,20 +302,8 @@ export default defineComponent({
         isAdmin() {
             return this.store.getters.isAdmin;
         },
-        loading() {
-            return this.collection?.loading === true;
-        },
-        loadingLyrics() {
-            return this.song?.loadingLyrics === true;
-        },
-        song() {
-            return this.collection?.songs.find(s => s.id == this.store.state.songs.songId) as Song;
-        },
         languageKey() {
             return this.store.getters.languageKey;
-        },
-        collection() {
-            return this.store.getters.collection as Collection;
         },
         type() {
             return this.store.state.songs.view;
@@ -418,54 +409,30 @@ export default defineComponent({
                 originalKey: "C",
             });
             this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
-            this.number = this.$route.params.number as string;
-            if (
-                !this.store.getters.collection
-                    ?.getKeys()
-                    .includes(this.$route.params.collection as string)
-            ) {
-                await this.store.dispatch(
-                    SongsActionTypes.SELECT_COLLECTION,
-                    this.$route.params.collection as string,
-                );
-            }
+            const {collection, number} = this.$route.params as {[key: string]: string};
+            this.collection = appSession.getCollection(collection);
+            if (!this.collection)
+                throw new Error("Collection not found");
 
-            while (this.collection?.loading) {
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
-
-            await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
-
-            if (this.song?.hasLyrics && this.collection)
-            {
-                if (this.lyrics?.ContainsChords) {
-                    this.lyrics = await this.song?.transposeLyrics( 
-                        this.store.state.songs.transposition ?? 0,
-                        this.selectedLanguage,
-                    );
+            this.songs = await songService.childrenOf(this.collection.id);
+            for (const song of this.songs) {
+                if (song.id === number) {
+                    this.song = song;
                 }
-                else {
-                    this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);
-                }  
+                const parsedNumber = parseInt(number);
+
+                if (parsedNumber) {
+                    for (const c of song.collections) {
+                        if (c.collectionId === this.collection.id && c.number === parsedNumber) {
+                            this.song = song;
+                        }
+                    }
+                }
             }
 
-            const route = this.$route.fullPath;
-            const log = () => {
-                if (route == this.$route.fullPath && this.song) {
-                    analytics.viewSong(this.song.id).then(r => {
-                        this.songViewCount = r;
-                        if (this.song)
-                            appSession.Views[this.song.id] = r;
-                    });
-                    this.store.dispatch(
-                        SessionActionTypes.LOG_SONG_ITEM,
-                        this.song,
-                    );
-                }
-            };
-            setTimeout(log, 5000);
-            this.setLyrics();
-            this.setView(this.store.state.songs.view);
+            if (!this.song)
+                throw new Error("Song not found");
+            
             this.fullLoading = false;
         },
         async addToPlaylist(playlist: ICustomCollection) {
@@ -489,7 +456,7 @@ export default defineComponent({
                 });
                 this.componentLoading[playlist.id] = false;
 
-                notify("success", "Added to playlist",  "check", `Added "${song.getName()}" to playlist ${playlist.name}`, undefined, undefined, false);
+                notify("success", "Added to playlist",  "check", `Added "${song.title}" to playlist ${playlist.name}`, undefined, undefined, false);
             }
             // Close the modal
             this.closeAdder();
@@ -505,53 +472,6 @@ export default defineComponent({
                 this.refresh();
             }
             this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
-        },
-        getTransposedLyrics(language?: string, format?: Format) {
-            return this.song?.transposeLyrics(transposer.getRelativeTransposition(this.defaultTransposition), language ?? this.store.state.songs.language, undefined, this.store.state.songs.newMelody, format ?? "performance");
-        },
-        async translate(language: string) {
-            if (this.song?.hasLyrics === true) {
-                switch(this.store.state.songs.view) {
-                    case "chords":
-                    case "performance":
-                        this.lyrics = await this.getTransposedLyrics(language, "performance") as Lyrics;
-                        break;
-                    default:
-                        this.lyrics = await this.song.getLyrics(language);
-                }
-                this.store.commit(
-                    SongsMutationTypes.LANGUAGE,
-                    language,
-                );
-            }
-        },
-        async setView(type: SongViewType) {
-            if (this.type !== type)
-                this.store.commit(SongsMutationTypes.VIEW, type);
-
-            if (!this.song?.hasLyrics)
-                return;
-
-            if (type === "chords" || type === "performance") {
-                this.lyrics = await this.getTransposedLyrics(undefined, "performance") as Lyrics;
-            } else {
-                this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);
-            }
-        },
-        async transpose(n?: number) {
-            if (n !== undefined) {
-                this.selectedTransposition = n;
-            }
-
-            if (this.song) {
-                this.lyrics = await this.song?.transposeLyrics(
-                    this.selectedTransposition,
-                    this.store.state.songs.language,
-                    undefined,
-                    this.store.state.songs.newMelody,
-                    this.lyrics?.format,
-                );
-            }
         },
         async toggleFavorite() {
             await this.favorites.toggle(this.song?.id);

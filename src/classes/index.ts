@@ -1,5 +1,4 @@
 import Category from "./category";
-import Collection from "./collection";
 import CollectionItem from "./collectionItem";
 import Contributor from "./contributor";
 import Favorites from "./favorites";
@@ -8,10 +7,10 @@ import MediaFile from "./mediaFile";
 import Instrument from "./instrument";
 import Participant from "./participant";
 import Product from "./product";
-import Song from "./song";
 import Tag from "./tag";
 import User from "./user";
 import UserSettings from "./userSettings";
+import { Song, Collection } from "hiddentreasures-js";
 
 export * from "./transposer";
 export * from "./base64";
@@ -31,7 +30,6 @@ export type ListEntry = {
 
 export {
     Category,
-    Collection,
     CollectionItem,
     Contributor,
     Favorites,
@@ -44,4 +42,5 @@ export {
     Song,
     User,
     UserSettings,
+    Collection,
 };

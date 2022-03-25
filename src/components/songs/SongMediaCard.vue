@@ -84,10 +84,12 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
-import { Collection, MediaFile, Song } from "@/classes";
+import { Collection, Song } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 import { SheetMusicOptions } from "songtreasures";
+import { MediaFile } from "hiddentreasures-js";
+import fileService from "@/services/songs/fileService";
 
 export default defineComponent({
     name: "song-media-card",
@@ -114,10 +116,23 @@ export default defineComponent({
     data: () => ({
         showVideo: false,
         activeVideo: "",
+        files: null as MediaFile[] | null,
     }),
+    async mounted() {
+        this.files = await fileService.childrenOf(this.song.id);
+    },
     computed: {
         videoUrls() {
-            return this.song?.videoFiles.map(f => f.directUrl) ?? [];
+            return this.videoFiles.map(f => f.directUrl) ?? [];
+        },
+        videoFiles() {
+            return this.files?.filter(i => i.type === "video") ?? [];
+        },
+        audioFiles() {
+            return this.files?.filter(i => i.type === "audio") ?? [];
+        },
+        sheetMusic() {
+            return this.files?.filter(i => i.type === "sheetmusic" || i.type === "sheetmusic-pdf") ?? [];
         },
     },
     methods: {

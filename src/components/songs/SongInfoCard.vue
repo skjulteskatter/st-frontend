@@ -1,47 +1,3 @@
-<script setup lang="ts">
-import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
-import { computed, ref } from "vue";
-import { Collection, Song } from "@/classes";
-import { appSession } from "@/services/session";
-import { EyeIcon } from "@heroicons/vue/outline";
-import ContributorInfo from "./ContributorInfo.vue";
-
-interface Props {
-    language: string;
-    song: Song;
-    collection: Collection;
-    viewCount?: number;
-    isAdmin?: boolean;
-}
-
-const props = defineProps<Props>();
-const title = computed(() => props.song.name.default);
-const melodyOrigin = computed(() => {
-    const desc = props.song.melodyOrigin?.description ?? {};
-    return desc[appSession.Language] ?? desc.no;
-});
-const identicalCopyright = computed(() => {
-    return props.song.copyrights[0]?.copyrightId === props.song.copyrights[1]?.copyrightId;
-});
-
-let showDescription = ref(false);
-let imageLoaded = false;
-if (props.song.image) {
-    const image = document.getElementById(
-        "song-details-image",
-    ) as HTMLImageElement;
-
-    image.style.display = "none";
-
-    image.onload = () => {
-        image.classList.add("song-details-transition");
-        imageLoaded = true;
-        image.style.display = "";
-    };
-} else {
-    imageLoaded = true;
-}
-</script>
 <template>
     <BaseCard
         v-cloak
@@ -49,10 +5,10 @@ if (props.song.image) {
         <template #header v-if="collection || isAdmin">
             <span class="flex justify-between items-center">
                 <router-link
-                    :to="`/songs/${collection.key}`"
+                    :to="`/songs/${collection.keys.no}`"
                     class="text-sm text-primary hover:underline"
                 >
-                    {{ collection.getName(language) }}
+                    {{ collection.title }}
                 </router-link>
                 <router-link v-if="isAdmin" :to="{ name: 'song-stats', params: { id: song.id } }" class="ml-auto px-2 py-1 rounded-md flex gap-1 items-center text-xs hover:bg-black/5 dark:hover:bg-white/10">
                     {{ $t('song_seeStatistics') }}
@@ -61,8 +17,8 @@ if (props.song.image) {
             </span>
         </template>
         <div class="flex items-start gap-4">
-            <span class="text-gray-400 text-xl font-bold">
-                {{ song.number }}
+            <span class="text-gray-400 text-xl font-bold" v-if="number">
+                {{ number }}
             </span>
             <div class="flex-grow">
                 <h2 class="flex items-start text-xl font-bold mb-2">
@@ -88,31 +44,31 @@ if (props.song.image) {
                 <div class="text-gray-500 text-base flex flex-col gap-1 dark:text-gray-400" :class="{'hidden': !imageLoaded }">
                     <small
                         class="flex gap-2"
-                        v-if="song.Authors.length"
+                        v-if="authors.length"
                     >
                         <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
-                        <ContributorInfo :contributors="song.Authors" />
+                        <ContributorInfo :contributors="authors" />
                     </small>
                     <small
-                        v-if="song.Composers.length"
+                        v-if="composers.length"
                         class="flex gap-2"
                     >
                         <span>{{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}</span>
-                        <ContributorInfo :contributors="song.Composers" />
+                        <ContributorInfo :contributors="composers" />
                     </small>
-                    <small 
+                    <!-- <small 
                         v-if="!song.Composers.length && !melodyOrigin"
                         class="flex gap-2"
                     >
                         <span>{{$t("song_unknownComposer")}}</span>
-                    </small>
+                    </small> -->
                     <small
                         class="flex gap-2"
                         v-if="melodyOrigin"
                     >
                         {{ melodyOrigin }}
                     </small>
-                    <small
+                    <!-- <small
                         class="flex gap-2"
                         v-if="
                             song.copyright.melody &&
@@ -137,22 +93,22 @@ if (props.song.image) {
                             {{ $t("song_melody") }} ©:
                             {{ song.copyright.melody.getName(language) }}
                         </small>
-                    </div>
+                    </div> -->
                     <small class="flex gap-2">
-                        <span v-if="song.originCountry">{{ song.originCountry }}</span>
-                        <span v-if="song.originCountry">&middot;</span>
+                        <!-- <span v-if="song.originCountry">{{ song.originCountry }}</span> -->
+                        <!-- <span v-if="song.originCountry">&middot;</span> -->
                         <span v-if="song.originalKey">{{ song.originalKey }}</span>
                         <span v-if="song.originalKey">&middot;</span>
-                        <span v-if="song.verses">{{ song.verses }}</span>
+                        <!-- <span v-if="song.verses">{{ song.verses }}</span> -->
                     </small>
                 </div>
             </div>
         </div>
-        <div v-if="song.Description" class="flex flex-col gap-4 relative">
+        <div v-if="song.description" class="flex flex-col gap-4 relative">
             <div
                 class="mt-8 text-sm song-description"
                 :class="{ 'hidden': !showDescription }"
-                v-html="song.Description"
+                v-html="song.description"
             ></div>
             <button v-if="!showDescription" aria-label="Show song details" @click="showDescription = !showDescription" class="mt-4 text-gray-500 mx-auto hover:bg-black/5 dark:hover:bg-white/5 dark:text-gray-400 px-3 py-1 rounded-md flex gap-2 items-center">
                 <InformationCircleIcon class="w-4 h-4" />
@@ -161,6 +117,67 @@ if (props.song.image) {
         </div>
     </BaseCard>
 </template>
+<script setup lang="ts">
+import { InformationCircleIcon, ArrowSmRightIcon } from "@heroicons/vue/solid";
+import { computed, reactive, ref } from "vue";
+import { Collection, Song } from "@/classes";
+import { EyeIcon } from "@heroicons/vue/outline";
+import ContributorInfo from "./ContributorInfo.vue";
+import { Contributor } from "hiddentreasures-js";
+import contributorService from "@/services/contributorService";
+
+interface Props {
+    language: string;
+    song: Song;
+    collection: Collection;
+    viewCount?: number;
+    isAdmin?: boolean;
+}
+
+
+const props = defineProps<Props>();
+const title = computed(() => props.song.title);
+const melodyOrigin = computed(() => {
+    return props.song.origins.find(o => o.type === "melody")?.description ?? null;
+});
+const identicalCopyright = computed(() => {
+    return props.song.copyrights[0]?.referenceId === props.song.copyrights[1]?.referenceId;
+});
+const contributors = await contributorService.retrieve({
+    itemIds: props.song.participants.map(i => i.contributorId),
+});
+const authors = computed(() => {
+    return contributors.filter(c => props.song.participants.some(p => p.type === "author" && p.contributorId === c.id));
+});
+const composers = computed(() => {
+    return contributors.filter(c => props.song.participants.some(p => p.type === "composer" && p.contributorId === c.id));
+});
+
+const number = computed(() => {
+    if ((props.collection as unknown as {useNumbers: boolean}).useNumbers ?? false) {
+        return props.song.collections.find(c => c.collectionId === props.collection.id)?.number ?? 0;
+    }
+    return null;
+});
+
+let showDescription = ref(false);
+let imageLoaded = false;
+if (props.song.image) {
+    const image = document.getElementById(
+        "song-details-image",
+    ) as HTMLImageElement;
+
+    image.style.display = "none";
+
+    image.onload = () => {
+        image.classList.add("song-details-transition");
+        imageLoaded = true;
+        image.style.display = "";
+    };
+} else {
+    imageLoaded = true;
+}
+</script>
 <style scoped>
 [v-cloak] {
     display: none;
