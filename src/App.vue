@@ -24,6 +24,9 @@ export default defineComponent({
     mounted() {
         appSession.onReady(() => {
             this.ready = true;
+            this.$router.push({
+                name: "dashboard",
+            });
         });
     },
 });

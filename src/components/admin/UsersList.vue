@@ -120,15 +120,11 @@ export default defineComponent({
     methods: {
         async searchUser() {
             this.loading["search"] = true;
-            if (this.userQuery) {
-                this.store.commit(UsersMutationTypes.SET_USERS, (await api.admin.getUsers(this.userQuery)).map(i => new User(i)));
-            }
             this.loading["search"] = false;
         },
         async getUsersWithRoles() {
             this.loading["roles"] = true;
             const users = await api.admin.getUsersWithRoles();
-            this.store.commit(UsersMutationTypes.SET_USERS, users.map(i => new User(i)));
             this.loading["roles"] = false;
         },
         async refreshUsers() {

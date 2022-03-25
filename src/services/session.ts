@@ -98,6 +98,8 @@ export class Session {
 
         const user = await cache.getOrCreateAsync("user", session.getCurrentUser, new Date().getTime() + 10000);
 
+        console.log(user);
+
         if (!user) {
             throw new Error("User not authenticated");
         }
@@ -308,14 +310,16 @@ export class Session {
     public onReady(f: () => void) {
         this._onReady.push(f);
     }
-    public ready() {
+    public ready(authenticated = false) {
         for (const f of this._onReady) {
             f();
         }
         this._onReady = [];
         this.Ready = true;
+        this.Authenticated = authenticated;
     }
     public Ready = false;
+    public Authenticated = false;
 }
 
 export const appSession = new Session();

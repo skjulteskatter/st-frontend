@@ -131,9 +131,6 @@ export default defineComponent({
 		hideModal() {
 			this.show = false;
 		},
-		toggleRole(user: User, role: string) {
-			this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
-		},
 		getCollections(subscription: ISubscription) {
 			return appSession.collections.filter(i => subscription.collectionIds?.includes(i.id));
 		},

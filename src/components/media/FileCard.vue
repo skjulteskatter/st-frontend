@@ -51,13 +51,6 @@ export default defineComponent({
 				this.$emit("selectVideo", this.file.directUrl);
 			}
 		},
-		selectAudio() {
-            const track: AudioTrack = {
-                file: this.file,
-                collection: this.collection,
-            };
-            this.store.commit(SongsMutationTypes.SET_AUDIO, track);
-        },
 	},
 });
 </script>

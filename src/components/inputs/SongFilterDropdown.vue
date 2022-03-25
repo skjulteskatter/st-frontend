@@ -176,7 +176,6 @@ export default defineComponent({
             filter.sheetMusicTypes = sheetMusic;
             filter.categoryIds = categories;
 
-            this.store.commit(SongsMutationTypes.SET_FILTER, filter);
             this.$emit("apply");
         },
         typeLabels(types: string[]) {

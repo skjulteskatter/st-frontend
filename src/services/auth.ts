@@ -339,7 +339,7 @@ onAuthStateChanged(a, async s => {
         await auth.loginWithToken(token);
     }
 
-    appSession.ready();
+    appSession.ready(s !== null);
 });
 
 export default auth;

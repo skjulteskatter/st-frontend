@@ -109,21 +109,14 @@ export default defineComponent({
 	data: () => ({
 		osmdLoading: false,
 		show: false,
+		splash: undefined,
 	}),
 	computed: {
 		session() {
 			return reactive(appSession);
 		},
-		sheetMusicOptions() {
-			return this.store.state.songs.sheetMusic;
-		},
 		user() {
 			return this.session.User;
-		},
-		splash: {
-			get() {
-				return this.store.state.session.splash;
-			},
 		},
 	},
 	async mounted() {
@@ -142,11 +135,6 @@ export default defineComponent({
         }
     },
 	methods: {
-		close() {
-			if(this.sheetMusicOptions) {
-				this.sheetMusicOptions.show = false;
-			}
-		},
 		closeSplash() {
 			this.show = false;
 			setTimeout(() => {
