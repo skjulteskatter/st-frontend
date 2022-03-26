@@ -1,6 +1,7 @@
 import { Product } from "@/classes";
 import { SetupResponse } from "songtreasures-api/checkout";
 import { stripe } from "../api";
+import collectionService from "../collectionService";
 import StripeService from "../stripe";
 
 type Hooks = "productsUpdated" | "checkout"
@@ -42,7 +43,8 @@ class StoreService {
     }
 
     public async getProducts() {
-        return (await this.getSetup()).products.map(i => new Product(i));
+        const collections = await collectionService.list();
+        return (await this.getSetup()).products.map(i => new Product(i, collections));
     }
 
     public async checkout() {

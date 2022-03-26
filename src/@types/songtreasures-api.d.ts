@@ -329,7 +329,7 @@ declare module "songtreasures-api/checkout" {
     
     interface ApiProduct {
         id: string;
-        name: ILocaleString;
+        name: string;
         collectionIds: string[];
         prices: Price[];
         priority: number;

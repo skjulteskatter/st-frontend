@@ -85,21 +85,14 @@ export default defineComponent({
             return appSession.user;
         },
         productIds() {
-            const ids: string[] = [];
-
-            for (const s of this.user?.subscriptions ?? []) {
-                for (const id in s.productIds) {
-                    if (!ids.includes(id)) ids.push(id);
-                }
-            }
-
-            return ids;
+            return this.products.filter(p => p.owned).map(i => i.id);
         },
     },
     async mounted() {
         this.products = (await storeService.getProducts())
                 .sort((a, b) => b.priority - a.priority)
                 .filter((p) => p.collections.length == 1) as Product[];
+        console.log(this.products);
     },
     methods: {
         async portal() {

@@ -20,7 +20,7 @@
 			</div>
 		</template>
 		<div class="flex flex-col gap-2 min-w-max overflow-y-auto max-h-80 shadow-scroll" v-if="filteredNotifications.length">
-			<div
+			<!-- <div
 				v-for="n in filteredNotifications"
 				:key="n.id"
 				class="p-2 rounded-md bg-transparent max-w-sm relative flex gap-2 border border-black/10 dark:border-white/10"
@@ -30,7 +30,7 @@
 					<strong class="block">{{ n.title }} </strong>
 					<span v-if="n.content" style="">{{ n.content }}</span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<p v-else class="p-4 text-center text-sm rounded-md whitespace-nowrap">{{ $t('notifications_noNotifications') }}</p>
 	</BaseDropdown>
@@ -53,7 +53,7 @@ export default defineComponent({
 			// return nots.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);
 		},
 		filteredNotifications() {
-			return this.notifications.filter(n => n.store);
+			return [];
 		},
 	},
 	methods: {

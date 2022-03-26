@@ -182,21 +182,6 @@ export default defineComponent({
 					name: this.$t("favorites"),
 					path: "/favorites",
 				},
-				// {
-				// 	name: "Admin",
-				// 	path: "/admin",
-				// 	condition: this.isAdmin,
-				// },
-				// {
-				// 	name: "Scriptures",
-				// 	path: "/scriptures",
-				// 	condition: this.isAdmin,
-				// },
-				// {
-				// 	name: "Tools",
-				// 	path: "/tools",
-				// 	condition: this.isTechnician,
-				// },
 			];
 		},
 		dropDownLinks() {
@@ -204,22 +189,22 @@ export default defineComponent({
 				{
 					name: "Admin",
 					path: "/admin",
-					condition: this.isAdmin,
+					condition: true,
 				},
 				{
 					name: this.$t("scriptures_title"),
 					path: "/scriptures",
-					condition: this.isAdmin,
+					condition: true,
 				},
 				{
 					name: this.$t("publications_title"),
 					path: "/publications",
-					condition: this.isAdmin,
+					condition: true,
 				},
 				{
 					name: "Tools",
 					path: "/tools",
-					condition: this.isTechnician,
+					condition: true,
 				},
 			].filter(i => i.condition);
 		},
