@@ -1,5 +1,5 @@
 <template>
-    <BaseModal :show="!user.privacyPolicy && user.registered">
+    <BaseModal :show="!user.privacyPolicyAccepted && user.registered">
         <template #icon>
             <InformationCircleIcon class="w-6 h-6 opacity-50" />
         </template>
@@ -54,7 +54,7 @@ export default defineComponent({
         async acceptPrivacyPolicy() {
             this.loading = true;
             await session.acceptPrivacyPolicy();
-            this.user.privacyPolicy = true;
+            this.user.privacyPolicyAccepted = true;
             this.loading = false;
             this.disabled = true;
         },

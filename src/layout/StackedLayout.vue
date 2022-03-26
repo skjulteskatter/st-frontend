@@ -18,29 +18,6 @@
 					</transition>
 				</router-view>
 			</div>
-			<!-- OSMD -->
-			<!-- <OpenSheetMusicDisplay
-				v-if="sheetMusicOptions?.show && ['sheetmusic-musicxml', 'sheetmusic'].includes(sheetMusicOptions.type ?? '')"
-				:options="sheetMusicOptions"
-				:relativeKey="user?.settings?.defaultTransposition"
-				@startLoading="osmdLoading = true"
-				@finishLoading="osmdLoading = false"
-			/>
-			<Loader :loading="osmdLoading" /> -->
-			<!-- <div
-				class="w-full h-full flex flex-col fixed top-20"
-				:class="{'hidden': !sheetMusicOptions?.show || sheetMusicOptions?.type != 'sheetmusic-pdf' }"
-			>
-				<div class="p-4 flex justify-end bg-white w-full">
-					<BaseButton theme="error" @click="close()">
-						<template #icon>
-							<XIcon class="w-4 h-4" />
-						</template>
-						{{$t('common_close')}}
-					</BaseButton>
-				</div>
-				<object :key="sheetMusicOptions?.url" :data="sheetMusicOptions?.url + '\#toolbar=0'" type="application/pdf" class="flex-grow">PDF cannot be displayed.</object>
-			</div> -->
 		</main>
 		<footer>
 			<Copyright />

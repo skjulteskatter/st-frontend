@@ -1,5 +1,4 @@
 import client from "@/services/client";
-import { appSession } from "@/services/session";
 import { createI18n } from "vue-i18n";
 
 const i18n = createI18n({

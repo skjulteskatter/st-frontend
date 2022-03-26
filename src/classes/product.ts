@@ -2,6 +2,7 @@ import { ApiProduct } from "songtreasures-api/checkout";
 import BaseClass from "./baseClass";
 import { Collection } from ".";
 import { appSession } from "@/services/session";
+import LocaleString from "./localeString";
 
 const discountedCountries = [
     "AR",
@@ -57,17 +58,16 @@ export default class Product extends BaseClass implements ApiProduct {
 
     constructor(product: ApiProduct) {
         super();
-        this._collections = appSession.collections?.filter(c => product.collectionIds.includes(c.id));
         this.id = product.id;
-        this.name = this._collections[0]?.name ?? {};
+        this.name = new LocaleString(product.name);
         this.prices = product.prices;
         this.priority = product.priority;
         this.collectionIds = product.collectionIds;
     }
 
-    public get owned() {
-        return appSession.user?.subscriptions.some(i => i.productIds.includes(this.id));
-    }
+    // public get owned() {
+    //     return appSession.user?.subscriptions.some(i => i.productIds.includes(this.id));
+    // }
 
     public get collections() {
         return this._collections ?? [];
