@@ -39,6 +39,7 @@
                 </div>
                 <BaseButton
                     theme="secondary"
+                    :disabled="!p.collection.enabled"
                     v-if="!p.product.owned"
                     @click="addToCart(p.product)"
                 >
