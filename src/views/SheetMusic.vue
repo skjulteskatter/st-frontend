@@ -208,15 +208,14 @@ export default defineComponent({
     methods: {
         async setFile(file: IMediaFile) {
             this.loaded = false;
-
-            await new Promise(r => setTimeout(r, 10));
+            const transposition = (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true);
             const options: SheetMusicOptions = {
                 fileId: file.id,
                 show: true,
                 originalKey: this.song?.originalKey ?? "C",
                 url: file.directUrl,
                 type: file.type,
-                transposition: (this.transposeKey ? parseInt(this.transposeKey) : undefined) ?? transposer.getRelativeTransposition(this.user?.settings.defaultTransposition ?? "C", true),
+                transposition,
                 zoom: this.zoom,
                 clef: "treble",
             };

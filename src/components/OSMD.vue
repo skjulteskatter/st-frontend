@@ -234,6 +234,7 @@ export default defineComponent({
     },
     async mounted() {
         if (this.options.show) {
+            this.transposition = this.options.transposition ?? 0;
             this.sheetDetails = await sheetService.get(this.options.fileId);
             await this.load();
         }
