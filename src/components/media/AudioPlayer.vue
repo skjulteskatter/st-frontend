@@ -72,17 +72,17 @@ export default defineComponent({
     },
     computed: {
         audio() {
-            return this.store.state.songs.audio?.file;
+            return null;
         },
-        Song() {
-            return appSession.songs.find(s => s.id == this.audio?.songId) ?? this.store.getters.collection?.songs.find(s => s.id == this.audio?.songId);
-        },
-        collection(): string | undefined {
-            return this.store.getters.collection?.key;
-        },
-        languageKey() {
-            return this.store.getters.languageKey;
-        },
+        // Song() {
+        //     return appSession.songs.find(s => s.id == this.audio?.songId) ?? this.store.getters.collection?.songs.find(s => s.id == this.audio?.songId);
+        // },
+        // collection(): string | undefined {
+        //     return this.store.getters.collection?.key;
+        // },
+        // languageKey() {
+        //     return this.store.getters.languageKey;
+        // },
     },
 });
 </script>

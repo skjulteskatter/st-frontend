@@ -48,8 +48,9 @@ export default defineComponent({
 	},
 	computed: {
 		notifications() {
-			const nots = this.store.getters.notifications;
-			return nots.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);
+			return [];
+			// const nots = this.store.getters.notifications;
+			// return nots.sort((a, b) => a.dateTime > b.dateTime ? -1 : 1);
 		},
 		filteredNotifications() {
 			return this.notifications.filter(n => n.store);

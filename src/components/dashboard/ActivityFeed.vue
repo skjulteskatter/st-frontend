@@ -34,18 +34,16 @@
         </Loader>
     </BaseCard>
 </template>
+<script lang="ts" setup>import collectionService from "@/services/collectionService";
 
+const collections = await collectionService.list();
+</script>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "activity-feed",
-    computed: {
-        collections() {
-            return appSession.collections;
-        },
-    },
 });
 </script>
 

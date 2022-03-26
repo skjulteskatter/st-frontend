@@ -161,12 +161,6 @@ export default defineComponent({
 		image() {
 			return this.user?.image ?? "/img/portrait-placeholder.png";
 		},
-		isAdmin() {
-			return this.user.Admin;
-		},
-		isTechnician() {
-			return this.user.Techinican;
-		},
 		user() {
 			return appSession.user;
 		},

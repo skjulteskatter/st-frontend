@@ -20,19 +20,18 @@
 					v-for="c in collections"
 					:key="c.id"
 					class="flex items-center gap-4 p-2 text-xs text-left relative rounded-md bg-white hover:bg-black/5 dark:bg-secondary dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
-					:disabled="!c?.available"
-					@click="c.view()"
+					:disabled="!c?.owned"
 				>
 					<img
 						loading="lazy"
 						:src="c.image"
-						:alt="c.getName()"
+						:alt="c.title"
 						class="max-h-10 rounded border"
 						width="40"
 						height="40"
 					/>
 					<span class="text-xs font-medium tracking-wide w-full flex justify-between items-center">
-						{{ c.getName() }}
+						{{ c.title }}
 					</span>
 				</button>
 				<button
@@ -66,23 +65,21 @@
 		</div>
 	</BaseCard>
 </template>
-
+<script lang="ts" setup>
+const collections = (await collectionService.list()).filter(i => i.owned);
+</script>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
 import { Collection } from "@/classes";
 import { appSession } from "@/services/session";
+import collectionService from "@/services/collectionService";
 
 export default defineComponent({
 	name: "owned-collections",
 	components: {
 		ArrowRightIcon,
 		CollectionIcon,
-	},
-	computed: {
-		collections(): Collection[] {
-			return appSession.collections.filter(c => c.type === "song").sort((a, b) => b.priority - a.priority) as Collection[] ?? [];
-		},
 	},
 });
 </script>

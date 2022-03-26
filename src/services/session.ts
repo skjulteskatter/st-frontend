@@ -90,6 +90,8 @@ export class Session {
                 this.settings.defaultLanguage = "en";
             }
         }
+
+        this._initialized = true;
     }
 
     private views?: {

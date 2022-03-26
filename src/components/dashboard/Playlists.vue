@@ -14,7 +14,7 @@
                 <CreatePlaylistModal :show="createPlaylist" @close="closeCreatePlaylist" />
             </div>
         </template>
-        <div class="flex flex-col gap-2 shadow-scroll" v-if="playlists.length">
+        <!-- <div class="flex flex-col gap-2 shadow-scroll" v-if="playlists.length">
             <router-link
                 class="flex p-2 text-xs relative rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2"
                 v-for="p in playlists"
@@ -32,8 +32,8 @@
                     </small>
                 </div>
             </router-link>
-        </div>
-        <p class="p-4 opacity-50 text-center" v-else>
+        </div> -->
+        <p class="p-4 opacity-50 text-center">
             {{ $t("common_noAmount") }} {{ $t('common_collections').toLocaleLowerCase() }}
         </p>
     </BaseCard>

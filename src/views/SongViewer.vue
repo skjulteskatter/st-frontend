@@ -212,6 +212,7 @@ import { appSession } from "@/services/session";
 import { control } from "@/classes/presentation/control";
 import { SheetMusicOptions } from "songtreasures";
 import songService from "@/services/songs/songService";
+import SongView from "@/classes/views/songView";
 
 export default defineComponent({
     name: "song-viewer",
@@ -244,7 +245,6 @@ export default defineComponent({
     },
     data: () => ({
         control: control,
-        selectedSheetMusic: {} as IMediaFile,
         sheetMusicOptions: null as SheetMusicOptions | null,
         songViewCount: null as number | null,
         show: false,
@@ -257,7 +257,7 @@ export default defineComponent({
         fullLoading: false,
         favorite: false,
         showSheet: false,
-        song: null as Song | null,
+        song: null as SongView | null,
         collection: null as Collection | null,
         songs: null as Song[] | null,
     }),
@@ -362,14 +362,16 @@ export default defineComponent({
             this.songs = await songService.childrenOf(this.collection.id);
             for (const song of this.songs) {
                 if (song.id === number) {
-                    this.song = song;
+                    this.song = new SongView(song as Song);
+                    break;
                 }
                 const parsedNumber = parseInt(number);
 
                 if (parsedNumber) {
                     for (const c of song.collections) {
                         if (c.collectionId === this.collection.id && c.number === parsedNumber) {
-                            this.song = song;
+                            this.song = new SongView(song as Song);
+                            break;
                         }
                     }
                 }
@@ -377,6 +379,8 @@ export default defineComponent({
 
             if (!this.song)
                 throw new Error("Song not found");
+
+            await this.song.load();
             
             this.fullLoading = false;
         },

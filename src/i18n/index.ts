@@ -1,3 +1,4 @@
+import client from "@/services/client";
 import { appSession } from "@/services/session";
 import { createI18n } from "vue-i18n";
 
@@ -37,7 +38,12 @@ export async function setLocale(locale: string) {
 let englishIsFetched = false;
 
 export async function ensureLanguageIsFetched() {
-    const lan = appSession.Language;
+    let lan: string | null = null;
+    try {
+        lan = (await client.getSettings()).defaultLanguage;
+    } catch {
+        lan = "en";
+    }
     if (!englishIsFetched) {
         englishIsFetched = true;
         const english = await fetchTranslations("en");
