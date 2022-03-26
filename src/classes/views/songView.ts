@@ -4,20 +4,7 @@ import songService from "@/services/songs/songService";
 import { Contributor, Copyright, Song } from "hiddentreasures-js";
 import BaseView from "./baseView";
 
-export default class SongView extends BaseView {
-    private item: Song | null = null;
-    private itemId: string;
-
-    constructor(item: string | Song) {
-        super();
-        if (item instanceof Song) {
-            this.item = item;
-            this.itemId = item.id;
-        } else {
-            this.itemId = item;
-        }
-    }
-
+export default class SongView extends BaseView<Song> {
     private _contributors: Contributor[] | null = null;
     public get contributors() {
         if (!this._contributors)
@@ -32,7 +19,7 @@ export default class SongView extends BaseView {
         return this._copyrights;
     }
 
-    public async load() {
+    protected async doLoad() {
         if (!this.item) {
             this.item = await songService.get(this.itemId);
         }

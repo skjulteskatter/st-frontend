@@ -21,7 +21,7 @@
                     {{ $t("common_refreshSubscriptions") }}
                 </BaseButton>
                 <BaseButton
-                    v-if="productIds.length"
+                    v-if="collections.some(c => c.owned)"
                     @click="portal"
                     theme="tertiary"
                     :loading="loading"
@@ -37,7 +37,7 @@
                 </BaseButton>
             </div>
         </div>
-        <ProductSlider class="mb-4" :products="products" v-if="products.length">
+        <CollectionSlider class="mb-4" :collections="collections" v-if="collections.length > 0">
             <div class="bg-white dark:bg-secondary shadow-md rounded-lg overflow-hidden">
                 <img src="/img/Tutorials.png" alt="" class="w-full cursor-pointer" @click="$router.push({ name: 'tutorials' })">
                 <div class="border-t border-gray-300 dark:bg-secondary dark:border-none p-4">
@@ -48,23 +48,23 @@
                     <p class="opacity-50 mt-2 text-sm">Learn how to play with our free tutorials!</p>
                 </div>
             </div>
-        </ProductSlider>
+        </CollectionSlider>
     </div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { ProductSlider, StoreCart } from "@/components/store";
+import { CollectionSlider, StoreCart } from "@/components/store";
 import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
-import { Product } from "@/classes";
 import { storeService } from "@/services/modules";
 import { appSession } from "@/services/session";
+import { Collection } from "hiddentreasures-js";
+import collectionService from "@/services/collectionService";
 
 export default defineComponent({
     name: "collections-home",
     components: {
-        ProductSlider,
+        CollectionSlider,
         StoreCart,
         RefreshIcon,
         CreditCardIcon,
@@ -72,27 +72,15 @@ export default defineComponent({
     data: () => ({
         loading: false,
         loadingSubs: false,
-        products: [] as Product[],
+        collections: [] as Collection[],
     }),
     computed: {
-        ownedProducts() {
-            return this.products.filter((p) => this.productIds.includes(p.id));
-        },
-        availableProducts() {
-            return this.products.filter((p) => !this.productIds.includes(p.id));
-        },
         user() {
             return appSession.user;
         },
-        productIds() {
-            return this.products.filter(p => p.owned).map(i => i.id);
-        },
     },
     async mounted() {
-        this.products = (await storeService.getProducts())
-                .sort((a, b) => b.priority - a.priority)
-                .filter((p) => p.collections.length == 1) as Product[];
-        console.log(this.products);
+        this.collections = (await collectionService.list()).filter(c => c.type === "song");
     },
     methods: {
         async portal() {

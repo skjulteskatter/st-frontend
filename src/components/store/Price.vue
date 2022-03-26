@@ -1,15 +1,15 @@
 <template>
-    <div v-if="product" class="text-sm">
-        {{ product.currency?.toUpperCase() }} 
-        <span v-if="discounted" class="line-through text-gray-400">{{yearly ? product.originalPrice * 12 : product.originalPrice}}</span>
-        <span v-if="discounted" class="ml-1">{{yearly ? product.discountedPrice * 12 : product.discountedPrice}}</span>
-        <span v-else>{{yearly ? product.originalPrice * 12 : product.originalPrice}}</span> / {{$t(yearly ? 'year' : 'month').toLowerCase()}}
+    <div v-if="price" class="text-sm">
+        {{ price.currency?.toUpperCase() }} 
+        <span v-if="discounted" class="line-through text-gray-400">{{price.value}}</span>
+        <span v-if="discounted" class="ml-1">{{price.value}}</span>
+        <span v-else>{{price.value}}</span> / {{$t(yearly ? 'year' : 'month').toLowerCase()}}
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { Product } from "@/classes";
+import { Product } from "hiddentreasures-js";
 import http from "@/services/http";
 import { storeService } from "@/services/modules";
 
@@ -23,6 +23,7 @@ export default defineComponent({
     },
     async setup() {
         const country = await http.getCountry();
+        
         return {
             country,
         };
@@ -34,8 +35,11 @@ export default defineComponent({
         yearly() {
             return this.storeService.type === "year";
         },
+        price() {
+            return this.product.prices.find(p => p.type === this.storeService.type);
+        },
         discounted() {
-            return this.product?.discounted(this.country) === true;
+            return false;
         },
     },
 });
