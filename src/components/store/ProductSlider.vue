@@ -54,7 +54,7 @@
 </template>
 <script lang="ts" setup>
 import { CheckIcon, InformationCircleIcon, LockClosedIcon, ShoppingCartIcon } from "@heroicons/vue/outline";
-import { useRouter } from "vue-router";
+import router from "@/router";
 const image = (collection: Collection) => (collection.image ? `${collection.image}?w=300&q=50` : "/img/placeholder.png");
 
 const addToCart = (product: ApiProduct) => {
@@ -62,7 +62,7 @@ const addToCart = (product: ApiProduct) => {
 };
 
 const goToItem = (product: ApiProduct) => {
-    useRouter().push({
+    router.push({
         name: "collection-item",
         params: {
             id: product.id,
@@ -73,7 +73,7 @@ const goToItem = (product: ApiProduct) => {
 const goToCollection = (product: ApiProduct, collection: ICollection) => {
     const collectionKey = collection?.key;
     if (collectionKey) {
-        useRouter().push({
+        router.push({
             name: "song-list",
             params: {
                 collection: collectionKey,
