@@ -24,7 +24,7 @@
 				>
 					<img
 						loading="lazy"
-						:src="c.image"
+						:src="c.image ?? undefined"
 						:alt="c.title"
 						class="max-h-10 rounded border"
 						width="40"
@@ -66,20 +66,21 @@
 	</BaseCard>
 </template>
 <script lang="ts" setup>
-const collections = (await collectionService.list()).filter(i => i.owned);
-</script>
-<script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
-import { Collection } from "@/classes";
-import { appSession } from "@/services/session";
 import collectionService from "@/services/collectionService";
+import { computed, reactive } from "@vue/reactivity";
+import { Collection } from "hiddentreasures-js";
 
-export default defineComponent({
-	name: "owned-collections",
-	components: {
-		ArrowRightIcon,
-		CollectionIcon,
-	},
+const data = reactive({
+	collections: null as Collection[] | null,
+});
+
+const collections = computed(() => {
+	return data.collections;
+});
+
+collectionService.list().then(result => {
+	data.collections = result.filter(i => i.owned && i.type === "song");
 });
 </script>
+
