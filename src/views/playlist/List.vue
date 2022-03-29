@@ -6,17 +6,16 @@
         </h1>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
             <PlaylistCard
-                v-for="playlist in playlists"
-                :key="playlist.id"
-                :playlist="playlist"
-                @delete="confirmDelete"
+                v-for="playlist in collections"
+                :key="playlist.item.id"
+                :view="playlist"
             />
-            <button @click="openCreatePlaylist" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-transparent dark:border-white/5 dark:hover:bg-white/5 dark:hover:border-transparent">
+            <button @click="createPlaylist = true" class="p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center hover:bg-black/5 hover:border-transparent dark:border-white/5 dark:hover:bg-white/5 dark:hover:border-transparent">
                 <FolderAddIcon class="w-8 h-8 opacity-50" />
                 <p class="tracking-wide">{{ $t('playlist_createnew') }}</p>
             </button>
         </div>
-        <CreatePlaylistModal :show="createPlaylist" @close="closeCreatePlaylist" />
+        <CreatePlaylistModal :show="createPlaylist" @close="createPlaylist = false" />
         <BaseModal :show="showModal" @close="showModal = false">
             <template #icon>
                 <ExclamationIcon class="w-6 h-6 text-red-500" />
@@ -31,7 +30,7 @@
                 <BaseButton theme="tertiary" @click="showModal = false">
                     {{ $t('common_cancel') }}
                 </BaseButton>
-                <BaseButton theme="error" @click="deletePlaylist">
+                <BaseButton theme="error">
                     <template #icon>
                         <TrashIcon class="w-4 h-4" />
                     </template>
@@ -41,61 +40,27 @@
         </BaseModal>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
-import { ICustomCollection } from "songtreasures-api";
+<script lang="ts" setup>
 import { BaseModal } from "@/components";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";
 import { TrashIcon } from "@heroicons/vue/solid";
 import { FolderAddIcon, ExclamationIcon } from "@heroicons/vue/outline";
-import { notify } from "@/services/notify";
+import { computed, reactive } from "vue";
+import customCollectionService from "@/services/customCollectionService";
+import CustomCollectionView from "@/classes/views/customCollectionView";
 
-export default defineComponent({
-    name: "playlist-list",
-    components: {
-        BaseModal,
-        PlaylistCard,
-        CreatePlaylistModal,
-        FolderAddIcon,
-        TrashIcon,
-        ExclamationIcon,
-    },
-    data: () => ({
-        createPlaylist: false,
-        showModal: false,
-        playlistId: "",
-        playlistName: "",
-    }),
-    computed: {
-        playlists(): ICustomCollection[] {
-            return this.store.getters.playlists;
-        },
-    },
-    methods: {
-        confirmDelete(playlist: {
-            id: string;
-            name: string;
-        }) {
-            this.playlistId = playlist.id;
-            this.playlistName = playlist.name;
-            this.showModal = true;
-        },
-        async deletePlaylist() {
-            await this.store.dispatch(
-                SessionActionTypes.PLAYLIST_DELETE,
-                this.playlistId,
-            );
-            this.showModal = false;
+let showModal = false;
+let createPlaylist = false;
 
-            notify("success",  this.$t("playlist_deletedplaylist"), "trash", `${this.$t("playlist_deletedplaylist")} "${this.playlistName}"`, undefined, undefined, false);
-        },
-        closeCreatePlaylist() {
-            this.createPlaylist = false;
-        },
-        openCreatePlaylist() {
-            this.createPlaylist = true;
-        },
-    },
+const data = reactive({
+    collections: null as CustomCollectionView[] | null,
+});
+
+const collections = computed(() => {
+    return data.collections;
+});
+
+customCollectionService.list().then(result => {
+    data.collections = result.map(i => new CustomCollectionView(i));
 });
 </script>

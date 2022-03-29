@@ -21,12 +21,17 @@ export default abstract class BaseView<T extends {id: string}> {
     }
 
     protected abstract doLoad(): Promise<void>;
+    protected abstract getItem(): Promise<T>;
 
     public loaded = false;
+    public loading = false;
 
     public async load() {
         if (!this.loaded) {
+            this.loading = true;
+            this._item ??= await this.getItem();
             await this.doLoad();
+            this.loading = false;
             this.loaded = true;
         }
     }

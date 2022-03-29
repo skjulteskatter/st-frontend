@@ -9,10 +9,11 @@ export default class CollectionView extends BaseView<Collection> {
         return this._product;
     }
 
+    protected getItem(): Promise<Collection> {
+        return collectionService.get(this.itemId);
+    }
+
     protected async doLoad() {
-        if (!this.item) {
-            this.item = await collectionService.get(this.itemId);
-        }
         this._product ??= (await productService.list()).find(i => i.collectionIds.includes(this.itemId)) ?? null;
     }
 }

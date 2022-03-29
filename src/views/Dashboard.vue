@@ -1,5 +1,5 @@
 <template>
-    <div v-if="user">
+    <div>
         <h1 class="font-bold text-2xl mb-4">
             {{ $t("common_welcome") }}, {{ user.displayName }}
         </h1>
@@ -10,9 +10,7 @@
         </div>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+<script lang="ts" setup>
 import {
     ActivityFeed,
     Playlists,
@@ -20,17 +18,5 @@ import {
 } from "@/components/dashboard";
 import { appSession } from "@/services/session";
 
-export default defineComponent({
-    name: "dashboard-view",
-    components: {
-        ActivityFeed,
-        Playlists,
-        OwnedCollections,
-    },
-    computed: {
-        user() {
-            return appSession.user;
-        },
-    },
-});
+const user = appSession.user;
 </script>
