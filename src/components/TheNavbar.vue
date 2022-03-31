@@ -76,7 +76,7 @@
 		<!-- Mobile -->
 		<DisclosurePanel class="lg:hidden">
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-				<template v-for="item in Links" :key="item.name">
+				<template v-for="(item, i) in Links" :key="i">
 					<router-link :to="item.path" class="hover:bg-black/5 dark:hover:bg-white/10 block px-3 py-2 rounded-md text-base font-medium">
 						<span class="flex items-center gap-2">
 							<!-- <LockClosedIcon v-if="item.condition != undefined" class="w-3 h-3 opacity-50" /> -->

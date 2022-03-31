@@ -2,7 +2,7 @@
 	<div class="flex flex-col h-full">
 		<TheNavbar />
 		<main class="flex-grow">
-			<div class="h-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+			<div class="h-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8" v-if="loaded">
 				<!-- Route transitions -->
 				<router-view v-slot="{ Component }">
 					<transition
@@ -66,6 +66,7 @@ import { cache } from "@/services/cache";
 import { XIcon } from "@heroicons/vue/solid";
 import CompleteRegistration from "@/components/CompleteRegistration.vue";
 import { reactive } from "vue";
+import { ensureLanguageIsFetched } from "@/i18n";
 
 export default defineComponent({
 	name: "stacked-layout",
@@ -85,6 +86,7 @@ export default defineComponent({
 		osmdLoading: false,
 		show: false,
 		splash: undefined,
+		loaded: false,
 	}),
 	computed: {
 		session() {
@@ -107,6 +109,8 @@ export default defineComponent({
             this.$router.push({ name: "login-view" });
         } else {
             await appSession.init();
+			await ensureLanguageIsFetched();
+			this.loaded = true;
         }
     },
 	methods: {

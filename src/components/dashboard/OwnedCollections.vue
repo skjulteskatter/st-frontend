@@ -1,11 +1,10 @@
 <template>
-	<BaseCard class="2xl:col-span-2">
+	<BaseCard class="2xl:col-span-2" v-if="collections">
 		<template #header>
 			<div class="flex items-center">
 				<h2 class="font-bold mr-4">{{ $t('common_collections') }}</h2>
 				<Tooltip :text="$t('tooltip_ownedCollections')" />
 				<router-link
-					v-if="collections?.length"
 					to="/collections"
 					class="flex gap-2 items-center px-2 py-1 rounded-md ml-auto text-sm hover:bg-black/5 dark:hover:bg-white/10"
 				>

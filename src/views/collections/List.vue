@@ -58,8 +58,8 @@ import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
 import { storeService } from "@/services/modules";
 import { appSession } from "@/services/session";
-import { Collection } from "hiddentreasures-js";
 import collectionService from "@/services/collectionService";
+import CollectionView from "@/classes/views/collectionView";
 
 export default defineComponent({
     name: "collections-home",
@@ -72,7 +72,7 @@ export default defineComponent({
     data: () => ({
         loading: false,
         loadingSubs: false,
-        collections: [] as Collection[],
+        collections: [] as CollectionView[],
     }),
     computed: {
         user() {
@@ -80,7 +80,9 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.collections = (await collectionService.list()).filter(c => c.type === "song");
+        this.collections = (await collectionService.list()).filter(c => c.type === "song").map(i => new CollectionView(i));
+
+        await Promise.all(this.collections.map(i => i.load));
     },
     methods: {
         async portal() {

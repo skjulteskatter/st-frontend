@@ -8,8 +8,9 @@ import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import Favorites from "@/classes/favorites";
 import { Language } from "songtreasures";
-import { Settings, User } from "hiddentreasures-js";
+import { Collection, Settings, User } from "hiddentreasures-js";
 import client from "./client";
+import collectionService from "./collectionService";
 
 export class Session {
     private _initialized?: boolean;
@@ -50,6 +51,8 @@ export class Session {
         return new Date().getTime() + 3600000;
     }
 
+    public collections: Collection[] = [];
+
     public favorites = new Favorites();
 
     public tags: Tag[] = [];
@@ -80,6 +83,8 @@ export class Session {
         this.languages = (await cache.getOrCreateAsync("languages", items.getLanguages, this.expiry)) ?? [];
 
         await this.favorites.init();
+
+        this.collections = await collectionService.list();
 
         // Set users initial language
         if(!this.settings.defaultLanguage) {
@@ -169,6 +174,14 @@ export class Session {
     }
     public Ready = false;
     public Authenticated = false;
+
+    public getCollection(key: string) {
+        const collection = this.collections.find(i => i.id === key || i.key === key || Object.values(i.keys).includes(key));
+        if (!collection) {
+            throw new Error("Collection not found");
+        }
+        return collection;
+    }
 }
 
 export const appSession = new Session();

@@ -2,7 +2,7 @@
     <div class="gap-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div 
             class="flex flex-col rounded-lg overflow-hidden shadow-md relative" 
-            v-for="v in Collections" 
+            v-for="v in collections" 
             :key="v.item.id"
         >
             <LockClosedIcon v-if="!v.item.owned" class="w-8 h-8 text-red-800 absolute top-4 left-4 p-2 rounded-full bg-red-500/20" />
@@ -40,7 +40,7 @@
                 <BaseButton
                     theme="secondary"
                     :disabled="!v.item.enabled"
-                    v-if="v.product && !v.item.owned"
+                    v-if="v.product && !v.product.owned"
                     @click="addToCart(v.product)"
                 >
                     <template #icon>
@@ -62,15 +62,9 @@ import CollectionView from "@/classes/views/collectionView";
 import { computed } from "vue";
 import Price from "./Price.vue";
 
-const props = defineProps<{
-    collections: Collection[];
+defineProps<{
+    collections: CollectionView[];
 }>();
-
-const views = props.collections.map(i => new CollectionView(i));
-
-const Collections = computed(() => views);
-
-views.forEach(v => v.load());
 
 const image = (collection: ICollection) => (collection.image ? `${collection.image}?w=300&q=50` : "/img/placeholder.png");
 
