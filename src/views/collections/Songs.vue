@@ -59,40 +59,38 @@
                 <SongFilterDropdown :songs="collection.songs" @apply="loadList" class="hidden md:flex" />
             </div> -->
         </div>
-        <Loader :loading="false">
-            <div
-                class="song-list columns-xs gap-4"
-                v-if="list?.length && viewType === 'boards'"
+        <div
+            class="song-list columns-xs gap-4"
+            v-if="songs?.length"
+        >
+            <SongListCard
+                :collection="collection"
+                v-for="(e, i) in songs"
+                :key="i"
+                :songs="e.songs"
+                :title="e.title"
+                :action="e.action"
+                :count="e.count"
+                :isAdmin="isAdmin"
+                @showCta="showCta = true"
+                class="mb-4"
+                />
+        </div>
+        <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+            <button
+                v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
+                :key="s?.id ?? Math.random()"
+                class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
+                @click="s.view()"
+                aria-label="Open song"
+                title="Open song"
             >
-                <SongListCard
-                    :collection="collection"
-                    v-for="(e, i) in list"
-                    :key="i"
-                    :songs="e.songs"
-                    :title="e.title"
-                    :action="e.action"
-                    :count="e.count"
-                    :isAdmin="isAdmin"
-                    @showCta="showCta = true"
-                    class="mb-4"
-                    />
-            </div>
-            <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
-                <button
-                    v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
-                    :key="s?.id ?? Math.random()"
-                    class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
-                    @click="s.view()"
-                    aria-label="Open song"
-                    title="Open song"
-                >
-                    {{ s.number }}
-                </button>
-            </div>
-            <h1 class="opacity-50" v-if="!songs.length && !loading">
-                No results
-            </h1>
-        </Loader>
+                {{ s.number }}
+            </button>
+        </div>
+        <h1 class="opacity-50" v-if="!songs.length && !loading">
+            No results
+        </h1>
         <BaseModal
             :show="showCta"
             @close="closeCta"
@@ -132,8 +130,9 @@ import { appSession } from "@/services/session";
 import { useRoute } from "vue-router";
 import { computed, reactive, ref } from "vue";
 import { MediaFile, Song } from "hiddentreasures-js";
-import songService from "@/services/songs/songService";
+import songService, { getList } from "@/services/songs/songService";
 import fileService from "@/services/songs/fileService";
+import { ListEntry } from "@/classes";
 const collectionId = useRoute().params.collection as string;
 
 const loading = ref(true);
@@ -142,14 +141,14 @@ const hasFiles = ref(false);
 const collection = appSession.getCollection(collectionId);
 
 const data = reactive({
-    songs: null as Song[] | null,
+    songs: null as ListEntry[] | null,
     files: null as MediaFile[] | null,
 });
 
 const songs = computed(() => data.songs);
 
 songService.childrenOf(collection.id).then(r => {
-    data.songs = r;
+    data.songs = getList("title", r, collection);
     fileService.retrieve({
         parentIds: r.map(i => i.id),
     }).then(f => {

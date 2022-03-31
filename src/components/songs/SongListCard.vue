@@ -28,7 +28,7 @@
                         {{ song.number }}
                     </b>
                     <span>
-                        {{ song.getName() }}
+                        {{ song.title }}
                     </span>
                     <div class="flex-grow flex items-baseline ml-2">
                         <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
