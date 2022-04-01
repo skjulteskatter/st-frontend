@@ -196,7 +196,6 @@ declare module "songtreasures-api" {
         [key: string]: {
             name: string;
             content: string[];
-            bibleReferences: BibleReference[];
         };
     }
     

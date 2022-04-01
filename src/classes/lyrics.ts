@@ -1,10 +1,54 @@
-import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
+import { LyricsContent } from "hiddentreasures-js";
+import { ILyrics, LyricsChordContent } from "songtreasures-api";
 import { transposer } from "./transposer";
 
 export type LyricsVerse = {
     type: string;
     name: string;
     content: string[];
+}
+
+export function getVerses(content: LyricsContent) {
+    const verses: {
+        [key: string]: LyricsVerse;
+    } = {};
+
+    let number = 1;
+    let chorus: LyricsVerse = {} as LyricsVerse;
+
+    const keys = Object.keys(content);
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const type = key.split("_")[0];
+
+        const verse: LyricsVerse = {
+            name: content[key].name,
+            content: content[key].content,
+            type,
+        };
+
+        if (type == "chorus") {
+            // if (chorus.name) {
+            //     number--;
+            // }
+            verses[number] = verse;
+            number++;
+            chorus = verse;
+        } else {
+            verses[number] = verse;
+            number++;
+            if (chorus.name) {
+                const nextVerseKey = keys[i + 1];
+                if (nextVerseKey && nextVerseKey.split("_")[0] === "chorus") {
+                    continue;
+                }
+                verses[number] = Object.assign({}, chorus);
+                number++;
+            }
+        }
+    }
+    return verses;
 }
 
 export default class Lyrics implements ILyrics {
@@ -43,49 +87,6 @@ export default class Lyrics implements ILyrics {
         return this.transposedToKey ? transposer.getTransposition(this.originalKey, this.transposedToKey) : [-12, 0];
     }
 
-    public get verses() {
-        const verses: {
-            [key: string]: LyricsVerse;
-        } = {};
-
-        let number = 1;
-        let chorus: LyricsVerse = {} as LyricsVerse;
-
-        const keys = Object.keys(this.content);
-
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const type = key.split("_")[0];
-
-            const verse: LyricsVerse = {
-                name: (this.content as LyricsContent)[key].name,
-                content: (this.content as LyricsContent)[key].content,
-                type,
-            };
-
-            if (type == "chorus") {
-                // if (chorus.name) {
-                //     number--;
-                // }
-                verses[number] = verse;
-                number++;
-                chorus = verse;
-            } else {
-                verses[number] = verse;
-                number++;
-                if (chorus.name) {
-                    const nextVerseKey = keys[i + 1];
-                    if (nextVerseKey && nextVerseKey.split("_")[0] === "chorus") {
-                        continue;
-                    }
-                    verses[number] = Object.assign({}, chorus);
-                    number++;
-                }
-            }
-        }
-        return verses;
-    }
-
     public getText(translations: {
         chorus: string;
         bridge: string;
@@ -99,7 +100,7 @@ export default class Lyrics implements ILyrics {
             "[Bridge]": "bridge",
         };
 
-        const content = presentation ? this.verses : this.content as LyricsContent;
+        const content = presentation ? getVerses(this.content as LyricsContent) : this.content as LyricsContent;
 
         if (content) {
             for (const key of Object.keys(content)) {

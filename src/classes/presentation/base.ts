@@ -1,6 +1,6 @@
-import { appSession } from "@/services/session";
 import { ApiContributor } from "songtreasures-api";
-import { ILyrics, ISong, Lyrics } from "hiddentreasures-js";
+import { ILyrics, ISong, Lyrics, LyricsContent } from "hiddentreasures-js";
+import { getVerses } from "../lyrics";
 
 export type Settings = {
     size: number;
@@ -26,10 +26,6 @@ type KeyEntry<K extends Key> = KeyTypes[K];
 
 export class PresentationBase {
     protected initialized = false;
-
-    public get Song() {
-        return appSession.songs.find(i => i.id == this.Lyrics?.songId);
-    }
 
     private _lyrics?: ILyrics;
 
@@ -154,10 +150,10 @@ export class PresentationBase {
         const settings = this.settings;
         if (settings) {
             settings.availableVerses[index] = !settings.availableVerses[index];
-            const verse = this.Lyrics?.verses[index];
+            const verse = getVerses(this.lyrics?.content as LyricsContent)[index];
             if (verse?.type === "verse") {
                 const nextIndex = (parseInt(index) + 1).toString();
-                const nextVerse = this.Lyrics?.verses[nextIndex];
+                const nextVerse = getVerses(this.lyrics?.content as LyricsContent)[nextIndex];
                 if (nextVerse?.type === "chorus") {
                     settings.availableVerses[nextIndex] = false;
                 }
@@ -172,7 +168,7 @@ export class PresentationBase {
         if (this.AvailableVerses.length) {
             settings.availableVerses = {};
         } else {
-            settings.availableVerses = Object.keys(this.Lyrics?.verses ?? {}).reduce((a, b) => { a[b] = true; return a; }, {} as {
+            settings.availableVerses = Object.keys(getVerses(this.lyrics?.content as LyricsContent) ?? {}).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             });
         }
