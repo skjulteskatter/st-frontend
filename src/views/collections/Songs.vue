@@ -5,7 +5,7 @@
             <h1 class="font-bold text-2xl md:text-3xl">
                 {{ collection.title }}
             </h1>
-            <BaseButton theme="secondary" :disabled="inCart" v-if="!collection.owned">
+            <BaseButton theme="secondary" v-if="!collection.owned">
                 <template #icon>
                     <ShoppingCartIcon class="w-4 h-4" />
                 </template>
@@ -71,12 +71,10 @@
                 :title="e.title"
                 :action="e.action"
                 :count="e.count"
-                :isAdmin="isAdmin"
-                @showCta="showCta = true"
                 class="mb-4"
                 />
         </div>
-        <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+        <!-- <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
             <button
                 v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
                 :key="s?.id ?? Math.random()"
@@ -87,11 +85,11 @@
             >
                 {{ s.number }}
             </button>
-        </div>
-        <h1 class="opacity-50" v-if="!songs.length && !loading">
+        </div> -->
+        <h1 class="opacity-50" v-if="!songs?.length && !loading">
             No results
         </h1>
-        <BaseModal
+        <!-- <BaseModal
             :show="showCta"
             @close="closeCta"
         >
@@ -108,7 +106,7 @@
                     OK
                 </BaseButton>
             </div>
-        </BaseModal>
+        </BaseModal> -->
     </Loader>
 </template>
 <script lang="ts" setup>

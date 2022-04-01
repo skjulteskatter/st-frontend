@@ -1,7 +1,6 @@
 import { appSession } from "@/services/session";
-import { ApiContributor, ILyrics } from "songtreasures-api";
-import { Lyrics } from "@/classes";
-import { ISong } from "hiddentreasures-js";
+import { ApiContributor } from "songtreasures-api";
+import { ILyrics, ISong, Lyrics } from "hiddentreasures-js";
 
 export type Settings = {
     size: number;

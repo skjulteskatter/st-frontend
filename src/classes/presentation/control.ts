@@ -1,4 +1,4 @@
-import { Lyrics } from "@/classes";
+import { Lyrics } from "hiddentreasures-js";
 import { PresentationBase, Settings } from "./base";
 
 export class PresentationControl extends PresentationBase {
@@ -47,7 +47,7 @@ export class PresentationControl extends PresentationBase {
     }
 
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
-        this.lyrics = lyrics.raw;
+        this.lyrics = lyrics;
         this.settings = settings ?? {
             size: lyrics.size <= this.threshold ? 2 : 1,
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {

@@ -8,12 +8,27 @@ import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import Favorites from "@/classes/favorites";
 import { Language } from "songtreasures";
-import { Collection, Settings, User } from "hiddentreasures-js";
+import { Collection, Settings, User, Session as HTSession } from "hiddentreasures-js";
 import client from "./client";
 import collectionService from "./collectionService";
 
 export class Session {
     private _initialized?: boolean;
+    private _session: HTSession | null = null;
+
+    public get session() {
+        if (!this._session)
+            throw new Error("Session not found");
+        return this._session;
+    }
+
+    public set session(v) {
+        this._session = v;
+    }
+
+    public get Session() {
+        return this._user ?? null;
+    }
 
     private _user: User | null = null;
 
@@ -75,6 +90,7 @@ export class Session {
         if (this.initialized)
             return;
 
+        this._session ??= await client.getSession();
         this._user ??= await client.getUser();
         this._settings ??= await client.getSettings();
 

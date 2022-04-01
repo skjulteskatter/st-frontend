@@ -204,10 +204,6 @@ export default defineComponent({
         collection: {
             type: Object as PropType<Collection>,
         },
-        languageKey: {
-            type: String,
-            required: true,
-        },
         showInfo: {
             type: Boolean,
         },

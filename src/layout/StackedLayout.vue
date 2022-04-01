@@ -5,7 +5,7 @@
 			<div class="h-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8" v-if="loaded">
 				<!-- Route transitions -->
 				<router-view v-slot="{ Component }">
-					<transition
+					<!-- <transition
 						mode="out-in"
 						enter-active-class="transition duration-100 ease-out"
 						enter-from-class="opacity-0 -translate-x-1"
@@ -13,9 +13,9 @@
 						leave-active-class="transition duration-50 ease-in"
 						leave-from-class="opacity-100 translate-x-0"
 						leave-to-class="opacity-0 translate-x-1"
-					>
+					> -->
 						<component :is="Component"/>
-					</transition>
+					<!-- </transition> -->
 				</router-view>
 			</div>
 		</main>

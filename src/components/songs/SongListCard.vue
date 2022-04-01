@@ -25,74 +25,43 @@
                     :class="{'text-yellow-700': !song.enabled}"
                 >
                     <b class="w-6 flex-shrink-0 mr-2 text-right">
-                        {{ song.number }}
+                        {{ song.getNumber(collection.id) }}
                     </b>
                     <span>
                         {{ song.title }}
                     </span>
-                    <div class="flex-grow flex items-baseline ml-2">
+                    <!-- <div class="flex-grow flex items-baseline ml-2">
                         <StarIcon class="w-3 h-3 text-primary ml-1" v-if="song.newMelody" />
                         <span class="ml-auto opacity-50 flex items-center gap-1" v-if="isAdmin">
                             {{ song.Views }}
                             <EyeIcon class="w-3 h-3 opacity-50" />
                         </span>
-                    </div>
+                    </div> -->
                 </button>
             </li>
         </ul>
     </BaseCard>
 </template>
+<script lang="ts" setup>
+// import { StarIcon, EyeIcon } from "@heroicons/vue/outline";
+import router from "@/router";
+import { Collection, Song } from "hiddentreasures-js";
 
-<script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
-import { appSession } from "@/services/session";
-import { StarIcon, EyeIcon } from "@heroicons/vue/solid";
-import { Song } from "@/classes";
+const props = defineProps<{
+    songs: Song[];
+    collection: Collection;
+    title: string;
+    count: boolean;
+    action?: () => void;
+}>();
 
-export default defineComponent({
-    name: "song-list-card",
-    components: {
-        StarIcon,
-        EyeIcon,
-    },
-    props: {
-        title: {
-            type: String,
-            required: true,
+const viewSong = (song: Song) => {
+    router.push({
+        name: "song",
+        params: {
+            collection: props.collection.key,
+            number: song.getNumber(props.collection.id),
         },
-        songs: {
-            type: Array as PropType<Song[]>,
-            required: true,
-        },
-        count: {
-            type: Boolean,
-            default: true,
-        },
-        action: {
-            type: Function,
-        },
-        isAdmin: Boolean,
-    },
-    emits: ["showCta"],
-    computed: {
-        songsWithAudioFiles() {
-            return appSession.files.filter(i => i.type === "audio").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-        },
-        songsWithVideoFiles() {
-            return appSession.files.filter(i => i.type === "video").map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-        },
-        songsWithSheetMusic() {
-            return appSession.files.filter(i => ["sheetmusic", "sheetmusic-pdf"].includes(i.type)).map(i => i.songId).reduce((a, b) => !a.includes(b) ? [...a, b] : a, [] as string[]);
-        },
-    },
-    methods: {
-        viewSong(song: Song) {
-            if(!song.available) {
-                this.$emit("showCta");
-            } else {
-                song.view();
-            }
-        },
-    },
-});
+    });
+};
 </script>

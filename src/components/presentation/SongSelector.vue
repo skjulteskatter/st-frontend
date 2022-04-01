@@ -19,8 +19,8 @@
 				class="text-left text-sm p-3 rounded-md border border-black/10 dark:border-white/10 hover:ring-2 hover:ring-gray-400"
                 @click="selectSong(i.id)"
             >
-                <b>{{ i.number }}</b>
-                <p>{{ i.getName() }}</p>
+                <b>{{ i.getNumber(collection.id) }}</b>
+                <p>{{ i.title }}</p>
             </button>
 		</div>
 	</BaseCard>
@@ -28,13 +28,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { Song } from "@/classes";
+import { Collection, Song } from "hiddentreasures-js";
 
 export default defineComponent({
 	name: "presentation-theme-selector",
 	props: {
 		songs: {
 			type: Array as PropType<Song[]>,
+			required: true,
+		},
+		collection: {
+			type: Object as PropType<Collection>,
+			required: true,
 		},
 	},
 	data: () => ({
@@ -48,7 +53,7 @@ export default defineComponent({
 		filteredSongs() {
 			const number = this.number;
 			if (number) {
-				const song = this.Songs.find(i => i.number == number);
+				const song = this.Songs.find(i => i.getNumber(this.collection.id) === number);
 				if (song)
 					return [song];
 			}
