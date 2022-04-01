@@ -116,7 +116,6 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
-import { Collection, Lyrics, Song } from "@/classes";
 import {
     TransposedLyricsViewer,
     LyricsViewer,
@@ -128,6 +127,7 @@ import { appSession } from "@/services/session";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import { SongChanger } from "@/components/songs";
 import { PencilAltIcon } from "@heroicons/vue/solid";
+import { Collection, Lyrics, Song } from "hiddentreasures-js";
 
 export default defineComponent({
     name: "lyrics-card",
@@ -144,7 +144,7 @@ export default defineComponent({
     },
     props: {
         lyrics: {
-            type: Object as PropType<Lyrics | null>,
+            type: Object as PropType<Lyrics>,
         },
         song: {
             type: Object as PropType<Song>,
@@ -152,37 +152,38 @@ export default defineComponent({
         },
         collection: {
             type: Object as PropType<Collection>,
+            required: true,
         },
         loading: {
             type: Boolean,
         },
         type: {
-            type: String as PropType<SongViewType>,
+            type: String,
         },
     },
     data: () => ({
         selectedLanguage: "",
-        selectedFormat: "default" as SongViewType,
+        selectedFormat: "default",
     }),
     computed: {
         SelectedFormat: {
             get() {
-                return this.store.state.songs.view;
+                return this.selectedFormat;
             },
-            set(v: SongViewType) {
+            set(v: string) {
                 this.selectedFormat = v;
             },
         },
         SelectedLanguage: {
             get() {
-                return this.lyrics?.languageKey ?? "";
+                return this.lyrics?.language ?? "";
             },
             set(v: string) {
                 this.selectedLanguage = v;
             },
         },
         chordsEnabled() {
-            return this.lyrics?.ContainsChords === true;
+            return this.lyrics?.format === "performance";
         },
         relativeTranspositions(): {
             value: number;
@@ -193,7 +194,6 @@ export default defineComponent({
             const ts = this.lyrics || this.song ? transposer.getRelativeTranspositions(
                 this.lyrics?.secondaryChords ? this.lyrics?.originalKey : this.song?.originalKey ?? "C",
                 this.defaultTransposition,
-                this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
             ) : [];
             return ts;
         },
@@ -202,7 +202,7 @@ export default defineComponent({
             return languages.filter((l) => this.song?.title);
         },
         defaultTransposition() {
-            return appSession.user.settings?.defaultTransposition ?? "C";
+            return appSession.settings.defaultTransposition ?? "C";
         },
         transposeLanguages() {
             return this.languages.filter(l => this.collection?.hasChords[l.key]);
@@ -211,7 +211,7 @@ export default defineComponent({
             return this.transposeLanguages.filter(l => this.song?.newMelodies.includes(l.key));
         },
         editor() {
-            return appSession.user.roles.some(r => ["administrator", "editor"].includes(r)) == true;
+            return appSession.session.roles.some(r => r.fulfills("editor")) === true;
         },
     },
     emits: [
@@ -235,7 +235,7 @@ export default defineComponent({
             }
             this.$emit("transpose", n);
         },
-        setView(type: SongViewType) {
+        setView(type: string) {
             this.$emit("setView", type);
         },
         newMelody() {

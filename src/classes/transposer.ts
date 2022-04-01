@@ -164,9 +164,7 @@ class Transposer {
         return diff < 0 ? [diff, diff + 12] : [diff - 12, diff];
     }
 
-    public getRelativeTranspositions(originalKey: string, relativeKey: string, transpositions: {
-        [key: string]: number;
-    }): {
+    public getRelativeTranspositions(originalKey: string, relativeKey: string): {
         key: string;
         value: number;
         view: string;
@@ -178,7 +176,7 @@ class Transposer {
             view: string;
             original: string;
         }[] = [];
-        for (const e of Object.entries(transpositions)) {
+        for (const e of Object.entries(this.getTranspositions(originalKey))) {
             let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
 
             while(t % 12 > 12) {
