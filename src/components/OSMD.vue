@@ -167,10 +167,8 @@
                 </div>
         </div>
         </template>
-        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
-        </Loader>
-        <div id="osmd-svg" :style="{display: loading['transpose'] || loading['zoom'] || loading['octave'] ? 'none' : ''}">
-        </div>
+        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'" />
+        <div id="osmd-svg"></div>
     </BaseCard>
 </template>
 
