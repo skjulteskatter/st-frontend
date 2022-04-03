@@ -163,6 +163,7 @@ import { appSession } from "@/services/session";
 import { session } from "@/services/api";
 import { storeService } from "@/services/modules";
 import { Language } from "songtreasures";
+import { ensureLanguageIsFetched } from "@/i18n";
 
 export default defineComponent({
     name: "settings-card",
@@ -292,6 +293,7 @@ export default defineComponent({
             }
             this.themes.setTheme(this.theme);
             await this.user.saveSettings();
+            await ensureLanguageIsFetched();
             this.submitImage();
             if (this.newDisplayName) {
                 this.setDisplayName();

@@ -33,26 +33,25 @@
                         <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
                         <span>{{ song.verses }}</span>
                         <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
-                        <p
-                            class="text-base tracking-wide"
+                        <div 
+                            class="flex gap-4"
                             v-if="
                                 song.copyright.melody &&
                                 song.copyright.text &&
                                 identicalCopyright
-                            "
-                        >
-                            © {{ getLocaleString(song.copyright.melody.name) }}
-                        </p>
+                            ">
+                            <p>© {{ getLocaleString(song.copyright.melody.name) }}</p>
+                        </div>
                         <div v-else class="flex gap-4">
                             <p v-if="song.copyright.text">
                                 {{ $t("song_text") }} ©
                                 {{ getLocaleString(song.copyright.text.name) }}
                             </p>
-                            <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
+                            <!-- <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
                             <p v-if="song.copyright.melody">
                                 {{ $t("song_melody") }} ©
                                 {{ getLocaleString(song.copyright.melody.name) }}
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </div>

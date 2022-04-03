@@ -58,6 +58,7 @@ import { SettingsCard } from "@/components";
 import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
+import auth from "@/services/auth";
 
 export default defineComponent({
     name: "settings-view",
@@ -74,7 +75,7 @@ export default defineComponent({
     }),
     methods: {
         logout() {
-            this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+            auth.logout().then(() => {
                 window.location.replace("/login");
             });
         },
