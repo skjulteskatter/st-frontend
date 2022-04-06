@@ -58,6 +58,7 @@
                 <span class="text-xs uppercase tracking-wider opacity-50">{{ $t('song_key') }}</span>
                 <BaseDropdown
                     origin="left"
+                    v-if="relativeTranspositions"
                     :label="
                         relativeTranspositions.find(
                             (r) => r.value == selectedTransposition
@@ -67,7 +68,7 @@
                     <div class="overflow-y-auto max-h-64 shadow-scroll">
                         <button
                             :class="{
-                                'bg-gray-200 dark:bg-gray-800': lyrics?.originalKey == t.original && selectedTransposition != t.value,
+                                'bg-gray-200 dark:bg-gray-800': t.original === song.originalKey && selectedTransposition != t.value,
                                 'bg-primary text-white': selectedTransposition == t.value,
                             }"
                             class="py-1 px-2 w-full rounded flex justify-between gap-4"
@@ -199,6 +200,15 @@ export default defineComponent({
                 this.defaultTransposition,
                 this.lyrics?.secondaryChords ? this.lyrics?.transpositions : this.song?.transpositions ?? {},
             ) : [];
+
+            if (this.song.minor){
+                for (const t of ts) {
+                    t.key += "m";
+                    t.original += "m";
+                    t.view = `${t.key} (${t.original})`;
+                }
+            }
+
             return ts;
         },
         selectedTransposition() {

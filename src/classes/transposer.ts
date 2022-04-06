@@ -178,6 +178,8 @@ class Transposer {
             view: string;
             original: string;
         }[] = [];
+        originalKey = originalKey.replace("m", "");
+
         for (const e of Object.entries(transpositions)) {
             let t = this.getRelativeTransposition(originalKey) + this.getRelativeTransposition(relativeKey) - e[1];
 

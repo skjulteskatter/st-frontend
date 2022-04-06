@@ -105,6 +105,7 @@ declare module "songtreasures-api" {
         yearWritten?: number;
         yearComposed?: number;
         originalKey: string;
+        minor: boolean;
         hasLyrics: boolean;
         hasChords: boolean;
         themeIds: string[];

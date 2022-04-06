@@ -31,6 +31,7 @@ export default class Song extends BaseClass implements ISong {
         [key: string]: number;
     };
     public originalKey: string;
+    public minor;
     public verses: number;
 
     public origins: {
@@ -92,6 +93,7 @@ export default class Song extends BaseClass implements ISong {
         this.hasLyrics = song.hasLyrics;
         this.hasChords = song.hasChords;
         this.originalKey = song.originalKey;
+        this.minor = song.minor;
         this.transpositions = song.transpositions ?? {};
         this.verses = song.verses;
         this.image = song.image;
