@@ -3,7 +3,8 @@ const CollectionList = () => import("./List.vue");
 const CollectionLists = () => import("./Lists.vue");
 const CollectionView = () => import("./View.vue");
 const CollectionFiles = () => import("./Files.vue");
-const CollectionSongs = () => import("./Songs.vue");
+
+export * from "./songs";
 
 export {
     Collections,
@@ -11,5 +12,4 @@ export {
     CollectionLists,
     CollectionView,
     CollectionFiles,
-    CollectionSongs,
 };

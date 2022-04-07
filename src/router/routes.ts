@@ -18,10 +18,10 @@ import {
     TagList,
     TagView,
     CollectionFiles,
-    CollectionSongs,
     CollectionLists,
     Tutorials,
     ToolsView,
+    SongList,
 } from "@/views";
 
 import { RouteRecordRaw } from "vue-router";
@@ -153,7 +153,7 @@ const routes: Array<RouteRecordRaw> = [
                             {
                                 path: "",
                                 name: "song-list",
-                                component: getComponent(CollectionSongs),
+                                component: getComponent(SongList),
                             },
                             {
                                 path: "files",
