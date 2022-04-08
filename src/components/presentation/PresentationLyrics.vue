@@ -103,7 +103,7 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			this.fontSize = (Math.min(rect.width / this.verseLines.length / 8 * 1.25, 32)) + 32;
+			this.fontSize = (Math.min(rect.height / this.verseLines.length / 8 * 1.25, 32)) + 32;
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(3 / this.verseLines.length, 0.25) + 1.25;
