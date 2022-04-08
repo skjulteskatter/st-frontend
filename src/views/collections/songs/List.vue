@@ -59,33 +59,35 @@
                 <SongFilterDropdown :songs="collection.songs" @apply="loadList" class="hidden md:flex" />
             </div> -->
         </div>
-        <div
-            class="song-list columns-xs gap-4"
-            v-if="songs?.length"
-        >
-            <SongListCard
-                :collection="collection"
-                v-for="(e, i) in songs"
-                :key="i"
-                :songs="e.songs"
-                :title="e.title"
-                :action="e.action"
-                :count="e.count"
-                class="mb-4"
-                />
-        </div>
-        <!-- <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
-            <button
-                v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
-                :key="s?.id ?? Math.random()"
-                class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
-                @click="s.view()"
-                aria-label="Open song"
-                title="Open song"
+        <div v-if="lists !== null && songs !== null">
+            <div
+                class="song-list columns-xs gap-4"
+                v-if="viewType === 'boards'"
             >
-                {{ s.number }}
-            </button>
-        </div> -->
+                <SongListCard
+                    :collection="collection"
+                    v-for="(e, i) in lists"
+                    :key="i"
+                    :songs="e.songs"
+                    :title="e.title"
+                    :action="e.action"
+                    :count="e.count"
+                    class="mb-4"
+                    />
+            </div>
+            <div v-else-if="viewType == 'grid'" class="flex gap-2 flex-wrap">
+                <button
+                    v-for="s in songs.sort((a, b) => a.number > b.number ? 1 : -1)"
+                    :key="s?.id ?? Math.random()"
+                    class="tracking-wide text-sm cursor-pointer shadow px-2 py-1 rounded-md hover:ring-2 hover:ring-gray-400 bg-white dark:bg-secondary flex-grow"
+                    @click="s.view()"
+                    aria-label="Open song"
+                    title="Open song"
+                >
+                    {{ s.number }}
+                </button>
+            </div>
+        </div>
         <h1 class="opacity-50" v-if="!songs?.length && !loading">
             No results
         </h1>
@@ -136,17 +138,22 @@ const collectionId = useRoute().params.collection as string;
 const loading = ref(true);
 const hasFiles = ref(false);
 
+const viewType = ref("boards");
+
 const collection = appSession.getCollection(collectionId);
 
 const data = reactive({
-    songs: null as ListEntry[] | null,
+    songs: null as Song[] | null,
+    lists: null as ListEntry[] | null,
     files: null as MediaFile[] | null,
 });
 
+const lists = computed(() => data.lists);
 const songs = computed(() => data.songs);
 
 songService.childrenOf(collection.id).then(r => {
-    data.songs = getList("title", r, collection);
+    data.songs = r;
+    data.lists = getList(collection.defaultSort as "title" | "number" ?? "number", r, collection);
     fileService.retrieve({
         parentIds: r.map(i => i.id),
     }).then(f => {
