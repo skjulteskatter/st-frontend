@@ -12,8 +12,9 @@
 				class="text-sm rounded-md bg-transparent border-black/20 dark:border-white/20 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-primary"
 				v-model="number"
 				type="number"
+        @keyup="onInputKeyUp"
 			/>
-            <button 
+            <button
                 v-for="i in filteredSongs"
                 :key="i.id"
 				class="text-left text-sm p-3 rounded-md border border-black/10 dark:border-white/10 hover:ring-2 hover:ring-gray-400"
@@ -60,6 +61,14 @@ export default defineComponent({
 			this.number = null;
 			this.$emit("setSong", songId);
 		},
+
+    onInputKeyUp(e: KeyboardEvent): void {
+      if(e.key === "Enter") {
+        if(this.filteredSongs.length === 1) {
+          this.selectSong(this.filteredSongs[0].id);
+        }
+      }
+    },
 	},
 });
 </script>
