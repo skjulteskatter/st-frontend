@@ -14,14 +14,13 @@
 				type="number"
         @keyup="onInputKeyUp"
 			/>
-            <button
-                v-for="i in filteredSongs"
-                :key="i.id"
+            <button v-if="filteredSong"
+                :key="filteredSong.id"
 				class="text-left text-sm p-3 rounded-md border border-black/10 dark:border-white/10 hover:ring-2 hover:ring-gray-400"
-                @click="selectSong(i.id)"
+                @click="selectSong(filteredSong.id)"
             >
-                <b>{{ i.number }}</b>
-                <p>{{ i.getName() }}</p>
+                <b>{{ filteredSong.number }}</b>
+                <p>{{ filteredSong.getName() }}</p>
             </button>
 		</div>
 	</BaseCard>
@@ -32,7 +31,7 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song } from "@/classes";
 
 export default defineComponent({
-	name: "presentation-theme-selector",
+	name: "SongSelector",
 	props: {
 		songs: {
 			type: Array as PropType<Song[]>,
@@ -43,17 +42,17 @@ export default defineComponent({
 	}),
 	emits: ["setSong"],
 	computed: {
-		Songs() {
+		Songs(): Song[] {
 			return this.songs ?? [];
 		},
-		filteredSongs() {
+		filteredSong(): Song | null {
 			const number = this.number;
 			if (number) {
 				const song = this.Songs.find(i => i.number == number);
 				if (song)
-					return [song];
+					return song;
 			}
-			return [];
+			return null;
 		},
 	},
 	methods: {
@@ -64,8 +63,8 @@ export default defineComponent({
 
     onInputKeyUp(e: KeyboardEvent): void {
       if(e.key === "Enter") {
-        if(this.filteredSongs.length === 1) {
-          this.selectSong(this.filteredSongs[0].id);
+        if(this.filteredSong) {
+          this.selectSong(this.filteredSong.id);
         }
       }
     },
