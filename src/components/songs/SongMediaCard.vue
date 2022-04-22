@@ -84,10 +84,11 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
-import { Collection, MediaFile, Song } from "@/classes";
+import { Collection, MediaFile, Song, transposer } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
 import { SheetMusicOptions } from "songtreasures";
+import { appSession } from "@/services/session";
 
 export default defineComponent({
     name: "song-media-card",
@@ -137,7 +138,7 @@ export default defineComponent({
                 fileId: sheet?.id,
                 url: sheet?.directUrl,
                 originalKey: this.song?.originalKey ?? "C",
-                transposition: undefined,
+                transposition: transposer.getRelativeTransposition(appSession.user.settings.defaultTransposition, true),
                 type: sheet?.type,
                 clef: "treble",
             };
