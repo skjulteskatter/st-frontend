@@ -99,6 +99,7 @@
                             :options="sheetMusicOptions"
                             :relativeKey="user?.settings?.defaultTransposition"
                             :languageKey="languageKey"
+                            @close="() => sheetMusicOptions ? sheetMusicOptions.show = false : undefined"
                         />
                         <div
                             v-if="sheetMusicOptions?.show && sheetMusicOptions?.type == 'sheetmusic-pdf'"

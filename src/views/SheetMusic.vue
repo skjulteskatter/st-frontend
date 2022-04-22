@@ -178,29 +178,25 @@ export default defineComponent({
         if (token) {
             client.setToken(token);
             http.setToken(token);
+        }
+        const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));
+        this.collection = new Collection((await songs.getCollections()).find(i => song.collections.some(c => c.id === i.id)) ?? {} as ICollection);
+        this.user = new User(await session.getCurrentUser());
 
-            const song = new Song(await songs.getSongById(this.$route.params.id as string, "participants/contributor"));
-            this.collection = new Collection((await songs.getCollections()).find(i => song.collections.some(c => c.id === i.id)) ?? {} as ICollection);
-            this.user = new User(await session.getCurrentUser());
+        this.song = song;
+        this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
+        if (this.files.length == 1) {
+            this.setFile(this.files[0]);
+        } else {
+            const initialFileId = this.searchParams.get("fileid");
 
-            this.song = song;
-            this.files = (await songs.getSongFiles(song.id)).filter(f => f.type.startsWith("sheetmusic") && !f.type.includes("sibelius")) ?? [];
-            if (this.files.length == 1) {
-                this.setFile(this.files[0]);
-            } else {
-                const initialFileId = this.searchParams.get("fileid");
+            if (initialFileId) {
+                const file = this.files.find(i => i.id === initialFileId);
 
-                if (initialFileId) {
-                    const file = this.files.find(i => i.id === initialFileId);
-
-                    if (file) {
-                        this.setFile(file);
-                    }
+                if (file) {
+                    this.setFile(file);
                 }
             }
-        }
-        else {
-            throw new Error("No token present");
         }
 
         this.loaded = true;
