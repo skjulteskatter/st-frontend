@@ -229,6 +229,7 @@ export default defineComponent({
     async mounted() {
         if (this.options.show) {
             this.transposition = this.options.transposition ?? 0;
+            this.setSvg();
             this.sheetDetails = await sheetService.get(this.options.fileId);
             await this.load();
         }
@@ -240,21 +241,23 @@ export default defineComponent({
                 this.$emit("close");
             }
         },
+        setSvg() {
+            const element = document.getElementById("osmd-svg");
+            if (element) {
+                element.innerHTML = this.svg.join("\n");
+
+                element.childNodes.forEach(n => {
+                    const node = n as HTMLElement;
+                    node.removeAttribute("height");
+                    node.removeAttribute("width");
+                });
+            }
+        },
         async load() {
             if (this.options) {
                 this.loading.sheet = true;
                 this.svg = [];
-
-                const element = document.getElementById("osmd-svg");
-                if (element) {
-                    element.innerHTML = this.svg.join("\n");
-
-                    element.childNodes.forEach(n => {
-                        const node = n as HTMLElement;
-                        node.removeAttribute("height");
-                        node.removeAttribute("width");
-                    });
-                }
+                this.setSvg();
 
                 const octave = 12 * this.octave;
                 const transposition =
@@ -270,15 +273,7 @@ export default defineComponent({
                     instruments: this.instruments.length ? this.instruments : undefined,
                 })) as string[];
 
-                if (element) {
-                    element.innerHTML = this.svg.join("\n");
-
-                    element.childNodes.forEach(n => {
-                        const node = n as HTMLElement;
-                        node.removeAttribute("height");
-                        node.removeAttribute("width");
-                    });
-                }
+                this.setSvg();
                 this.loading.sheet = false;
             }
         },
