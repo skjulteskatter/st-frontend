@@ -9,6 +9,7 @@ import CopyToClipboard from "./CopyToClipboard.vue";
 import SongFilterSelect from "./SongFilterSelect.vue";
 import Checkbox from "./Checkbox.vue";
 import CheckboxList from "./CheckboxList.vue";
+import ListSelect from "./ListSelect.vue";
 
 export {
     ButtonGroup,
@@ -22,4 +23,5 @@ export {
     BaseInput,
     CopyToClipboard,
     SongFilterSelect,
+    ListSelect,
 };

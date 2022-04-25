@@ -102,13 +102,35 @@
                         <span class="text-sm text-gray-500">{{
                                 $t('common_instruments')
                         }}</span>
-                        <select class="p-2 rounded-md border-gray-300 pr-8" name="zoom" id="zoom" v-model="instruments"
+                        <BaseDropdown
+                            :label="instrumentsLabel"
+                        >
+                            <ListSelect
+                                :data="sheetDetails.instruments.map(i => ({
+                                    display: i,
+                                    value: i,
+                                    checked: instruments.includes(i),
+                                }))"
+                                :multiSelect="true"
+                                @select="(row, checked) => {
+                                    if (checked) {
+                                        if (!instruments.includes(row.value)) {
+                                            instruments.push(row.value);
+                                        }
+                                    } else {
+                                        instruments = instruments.filter(i => i !== row.value);
+                                    }
+                                    load();
+                                }"
+                            ></ListSelect>
+                        </BaseDropdown>
+                        <!-- <select class="p-2 rounded-md border-gray-300 pr-8" name="zoom" id="zoom" v-model="instruments"
                             multiple @change="load">
                             <option v-for="instrument in sheetDetails.instruments" :key="instrument"
                                 :value="instrument">
                                 {{ instrument }}
                             </option>
-                        </select>
+                        </select> -->
                     </label>
                     <label class="mr-2">
                         <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
@@ -133,7 +155,7 @@
                 </div>
             </div>
         </template>
-        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'" />
+        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave'] || loading['sheet']" :position="'local'" />
         <div id="osmd-svg"></div>
     </BaseCard>
 </template>
@@ -147,13 +169,17 @@ import { SheetMusicOptions } from "songtreasures";
 import { sheetService } from "@/services/songs/sheetService";
 import { Sheet } from "hiddentreasures-js";
 import { defineComponent, PropType } from "vue";
+import ListSelect from "./inputs/ListSelect.vue";
+import BaseDropdown from "./inputs/BaseDropdown.vue";
 
 export default defineComponent({
     name: "open-sheet-music-display",
     components: {
-        SongChanger,
-        XIcon,
-    },
+    SongChanger,
+    XIcon,
+    ListSelect,
+    BaseDropdown,
+},
     props: {
         options: {
             type: Object as PropType<SheetMusicOptions>,
@@ -216,6 +242,20 @@ export default defineComponent({
         },
         async load() {
             if (this.options) {
+                this.loading.sheet = true;
+                this.svg = [];
+
+                const element = document.getElementById("osmd-svg");
+                if (element) {
+                    element.innerHTML = this.svg.join("\n");
+
+                    element.childNodes.forEach(n => {
+                        const node = n as HTMLElement;
+                        node.removeAttribute("height");
+                        node.removeAttribute("width");
+                    });
+                }
+
                 const octave = 12 * this.octave;
                 const transposition =
                     this.transposition !== undefined
@@ -230,7 +270,6 @@ export default defineComponent({
                     instruments: this.instruments.length ? this.instruments : undefined,
                 })) as string[];
 
-                const element = document.getElementById("osmd-svg");
                 if (element) {
                     element.innerHTML = this.svg.join("\n");
 
@@ -240,6 +279,7 @@ export default defineComponent({
                         node.removeAttribute("width");
                     });
                 }
+                this.loading.sheet = false;
             }
         },
         async increaseOctave() {
@@ -285,6 +325,16 @@ export default defineComponent({
         },
         onSongViewer() {
             return this.$route.name === "song";
+        },
+        instrumentsLabel() {
+            switch (this.instruments.length) {
+                case 0:
+                    return this.$t("sheets_chooseInstrument");
+                case 1:
+                    return this.instruments[0];
+                default:
+                    return this.instruments[0] + ", +" + (this.instruments.length - 1);
+            }
         },
     },
 });
