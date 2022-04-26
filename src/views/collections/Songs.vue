@@ -13,7 +13,7 @@
                         </template>
                         {{ $t('store_buy') }}
                     </BaseButton>
-                    <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">Show files</BaseButton>
+                    <BaseButton v-if="hasFiles" theme="neutral" @click="$router.push({name: 'collection-files', params: $route.params})">{{$t('collection_showFiles')}}</BaseButton>
                     <button aria-label="Toggle list type" title="Toggle list type" @click="toggleViewType" class="ml-auto text-gray-500 dark:text-white/50 p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10">
                         <ViewGridIcon class="w-5 h-5" v-if="viewType == 'boards'" />
                         <ViewBoardsIcon class="w-5 h-5" v-else />
