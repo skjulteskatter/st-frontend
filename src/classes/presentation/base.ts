@@ -12,6 +12,7 @@ export type Settings = {
     muted: boolean;
     theme: "dark" | "light";
     showSideBar: boolean;
+    singleVerse: boolean;
 }
 
 type KeyTypes = {
@@ -189,7 +190,7 @@ export class PresentationBase {
         const verses: string[] = [];
         if (this.Settings) {
             const index = this.Settings.currentIndex;
-            const size = this.Settings.size;
+            const size = this.Settings.singleVerse ? 1 : this.Settings.size;
 
             const verse = this.AvailableVerses[index];
             
@@ -210,10 +211,11 @@ export class PresentationBase {
 
     public next() {
         if (this.settings) {
-            const index = this.settings.currentIndex + this.settings.size;
+            const size = this.settings.singleVerse ? 1 : this.settings.size;
+            const index = this.settings.currentIndex + size;
             if (index < this.AvailableVerses.length) {
                 const settings = Object.assign({}, this.settings);
-                settings.currentIndex = settings.currentIndex + this.settings.size;
+                settings.currentIndex = settings.currentIndex + size;
                 this.settings = settings;
                 this.executeCallback("control");
                 this.commit();
@@ -226,7 +228,7 @@ export class PresentationBase {
 
     public previous() {
         if (this.settings) {
-            const index = this.settings.currentIndex - this.settings.size;
+            const index = this.settings.currentIndex - (this.settings.singleVerse ? 1 : this.settings.size);
             if (index >= 0) {
                 if (this.settings.muted) {
                     return this.mute();
@@ -254,7 +256,7 @@ export class PresentationBase {
     public lastPage(): void {
         if (this.settings) {
             const settings = Object.assign({}, this.settings);
-            settings.currentIndex = this.AvailableVerses.length - settings.size;
+            settings.currentIndex = this.AvailableVerses.length - (this.settings.singleVerse ? 1 : this.settings.size);
             settings.muted = true;
             this.settings = settings;
             this.commit();
@@ -265,6 +267,13 @@ export class PresentationBase {
     public toggleSidebar() {
         const settings = Object.assign({}, this.settings);
         settings.showSideBar = !settings.showSideBar;
+        this.settings = settings;
+        this.commit();
+    }
+
+    public toggleSingleVerse() {
+        const settings = Object.assign({}, this.settings);
+        settings.singleVerse = !settings.singleVerse;
         this.settings = settings;
         this.commit();
     }

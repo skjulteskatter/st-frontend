@@ -42,6 +42,23 @@
 			</Switch>
 			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Show sidepanel</SwitchLabel>
 		</SwitchGroup>
+		<SwitchGroup as="div" class="flex gap-2 items-center cursor-pointer">
+			<Switch
+				v-model="SingleVerse"
+				class="focus-visible:outline-none"
+			>
+				<div
+					class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
+					:class="SingleVerse ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
+				>
+					<span
+						:class="SingleVerse ? 'translate-x-5' : 'translate-x-1'"
+						class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
+					/>
+				</div>
+			</Switch>
+			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Show single verse</SwitchLabel>
+		</SwitchGroup>
 	</BaseCard>
 </template>
 
@@ -65,11 +82,14 @@ export default defineComponent({
 		showSideBar: {
 			type: Boolean,
 		},
+		singleVerse: {
+			type: Boolean,
+		},
 	},
 	data: () => ({
 		themes: ["dark", "light"],
 	}),
-	emits: ["setTheme", "toggleSidebar"],
+	emits: ["setTheme", "toggleSidebar", "toggleSingleVerse"],
 	computed: {
 		Sidebar: {
 			get() {
@@ -77,6 +97,14 @@ export default defineComponent({
 			},
 			set(v: boolean) {
 				this.$emit("toggleSidebar", v);
+			},
+		},
+		SingleVerse: {
+			get() {
+				return this.singleVerse ?? false;
+			},
+			set(v: boolean) {
+				this.$emit("toggleSingleVerse", v);
 			},
 		},
 	},

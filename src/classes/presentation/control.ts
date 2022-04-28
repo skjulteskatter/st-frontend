@@ -57,6 +57,7 @@ export class PresentationControl extends PresentationBase {
             muted: false,
             theme: this.settings?.theme ?? "dark",
             showSideBar: this.settings?.showSideBar ?? true,
+            singleVerse: this.settings?.singleVerse ?? false,
         };
     }
 
@@ -70,6 +71,7 @@ export class PresentationControl extends PresentationBase {
             muted: false,
             theme: this.settings?.theme ?? "dark",
             showSideBar: this.settings?.showSideBar ?? true,
+            singleVerse: this.settings?.singleVerse ?? false,
         };
     }
 

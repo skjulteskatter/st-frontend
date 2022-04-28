@@ -154,7 +154,14 @@
                                 @mute="control.mute()"
                             />
                             <SongSelector :songs="collection?.songs" @setSong="setSong" />
-                            <ThemeSelector :theme="control.Settings?.theme" :showSideBar="control.Settings?.showSideBar" @setTheme="setTheme" @toggleSidebar="toggleSidebar" />
+                            <ThemeSelector 
+                                :theme="control.Settings?.theme" 
+                                :showSideBar="control.Settings?.showSideBar" 
+                                :singleVerse="control.Settings?.singleVerse" 
+                                @setTheme="setTheme" 
+                                @toggleSidebar="toggleSidebar"
+                                @toggleSingleVerse="toggleSingleVerse"
+                            />
                         </div>
                     </aside>
                 </div>
@@ -363,6 +370,9 @@ export default defineComponent({
         },
         toggleSidebar() {
             this.control.toggleSidebar();
+        },
+        toggleSingleVerse() {
+            this.control.toggleSingleVerse();
         },
         setTheme(theme: "dark" | "light") {
             this.control.setTheme(theme);

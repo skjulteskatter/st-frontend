@@ -8,6 +8,7 @@
 				:class="{ 'ml-8': verse.type == 'chorus' }"
 			>
 				<span class="absolute verse-name" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
+				<!-- <span v-else class="absolute verse-name">{{$t('Ref:')}}</span> -->
 				<p
 					class="line"
 					:class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
