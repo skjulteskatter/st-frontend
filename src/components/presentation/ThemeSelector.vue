@@ -57,7 +57,7 @@
 					/>
 				</div>
 			</Switch>
-			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Show single verse</SwitchLabel>
+			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Single verse</SwitchLabel>
 		</SwitchGroup>
 	</BaseCard>
 </template>
