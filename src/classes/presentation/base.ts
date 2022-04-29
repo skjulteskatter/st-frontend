@@ -192,17 +192,10 @@ export class PresentationBase {
             const index = this.Settings.currentIndex;
             const size = this.Settings.singleVerse ? 1 : this.Settings.size;
 
-            const verse = this.AvailableVerses[index];
-            
-            if (verse) {
-                verses.push(verse);
-                
-                if (size > 1) {
-                    const verse2 = this.AvailableVerses[index + 1];
-
-                    if (verse2) {
-                        verses.push(verse2);
-                    }
+            for (let i = 0; i < size; i++) {
+                const verse = this.AvailableVerses[index + i];
+                if (verse) {
+                    verses.push(verse);
                 }
             }
         }
