@@ -23,6 +23,7 @@
 import { defineComponent, PropType } from "vue";
 import { debouncer } from "@/classes/debouncer";
 import { LyricsVerse } from "@/classes/lyrics";
+import { viewer } from "@/classes/presentation/viewer";
 
 // just set to false if you want to disable the feature, without removing code
 const FIGHT_BROWSER_ZOOM = true;
@@ -49,10 +50,19 @@ export default defineComponent({
 		songId: {
 			type: String,
 		},
+		longestLine: {
+			type: String,
+			required: true,
+		},
+		verseLines: {
+			type: Array as PropType<string[]>,
+			required: true,
+		},
 	},
 	mounted() {
 		this.container = this.$el;
 		this.element = this.$refs.versesElement as HTMLDivElement;
+
 
 		this.render();
 
@@ -64,9 +74,6 @@ export default defineComponent({
 			return false;
 		}, { passive: false });
 	},
-	// updated() {
-	// 	this.render();
-	// },
 	watch: {
 		songId() {
 			setTimeout(this.render, 10);
@@ -122,15 +129,6 @@ export default defineComponent({
 			this.calculateWhitespace();
 
 			this.setProperties();
-		},
-	},
-	computed: {
-		verseLines() {
-			return this.verses.reduce((prev, cur) => [...prev, ...cur.content], [] as string[]);
-		},
-		longestLine(): string {
-			const lines = this.verseLines;
-			return lines.sort((a, b) => b.length - a.length)[0];
 		},
 	},
 });

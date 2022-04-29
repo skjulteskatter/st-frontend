@@ -82,15 +82,16 @@ export class PresentationBase {
     }
     
     protected callbacks: {
-        [key: string]: () => void;
+        [key: string]: (() => void)[];
     } = {};
 
     public registerCallback(key: Key | "control" | "preview", callback: () => void) {
-        this.callbacks[key] = callback;
+        this.callbacks[key] ??= [];
+        this.callbacks[key].push(callback);
     }
 
     private executeCallback(key: Key | "control" | "preview") {
-        this.callbacks[key]?.();
+        this.callbacks[key]?.forEach((callback) => callback());
     }
 
     private type: "control" | "viewer" | "not-initialized" = "not-initialized";

@@ -106,7 +106,7 @@
                             class="w-full h-full"
                         >
                             <div class="p-4 flex justify-end bg-white w-full">
-                                <BaseButton theme="error" @click="sheetMusicOptions.show = false">
+                                <BaseButton theme="error" @click="sheetMusicOptions ? sheetMusicOptions.show = false : undefined">
                                     <template #icon>
                                         <XIcon class="w-4 h-4" />
                                     </template>
@@ -131,7 +131,6 @@
                             }, true) ?? []"
                             :availableVerses="control.AvailableVerses"
                             :currentVerses="control.currentVerses"
-                            @mounted="setLyrics"
                             @toggleAll="toggleAll()"
                             @toggle="toggleVerse"
                         />
@@ -365,7 +364,7 @@ export default defineComponent({
             });
         },
         setLyrics() {
-            if (this.lyrics && !this.lyrics.ContainsChords && this.lyrics?.id !== this.control.Lyrics?.id)
+            if (this.lyrics && !this.lyrics.ContainsChords)
                 this.control.setLyrics(this.lyrics);
         },
         toggleSidebar() {

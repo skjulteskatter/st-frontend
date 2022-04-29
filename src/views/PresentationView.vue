@@ -56,7 +56,14 @@
                     </div>
                 </div>
             </div>
-            <PresentationLyrics v-if="verses" :verses="verses" :songId="song?.id" :class="{ 'hidden': muted }" />
+            <PresentationLyrics 
+                v-if="verses"
+                :verses="verses"
+                :songId="song?.id"
+                :class="{ 'hidden': muted }"
+                :longestLine="longestLine"
+                :verseLines="verseLines"
+            />
         </div>
     </div>
 </template>
@@ -111,6 +118,13 @@ export default defineComponent({
         identicalCopyright() {
             return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
         },
+        verseLines() {
+            return this.Verses.reduce((prev, cur) => [...prev, ...cur.content], [] as string[]);
+        },
+		longestLine(): string {
+			const lines = this.verseLines;
+			return lines.sort((a, b) => b.length - a.length)[0];
+		},
     },
     async mounted() {
         await appSession.init();
