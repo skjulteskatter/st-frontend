@@ -5,10 +5,9 @@
 				class="relative verse"
 				v-for="(verse, i) in verses"
 				:key="i"
-				:class="{ 'ml-8': verse.type == 'chorus' }"
+				:class="{ 'pl-12 border-l-4 border-gray-500': verse.type == 'chorus' }"
 			>
 				<span class="absolute verse-name" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
-				<!-- <span v-else class="absolute verse-name">{{$t('Ref:')}}</span> -->
 				<p
 					class="line"
 					:class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim().startsWith('(') && line.trim().endsWith(')') }"
