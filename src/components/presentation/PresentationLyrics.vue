@@ -104,12 +104,6 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			let maxLineLength = 0;
-			for (const line of this.verseLines) {
-				if (line.length > maxLineLength) {
-					maxLineLength = line.length;
-				}
-			}
 
 			this.fontSize = (Math.min(rect.height / this.verseLines.length / 8 * 1.4, 32)) + 32;
 		},
@@ -120,7 +114,7 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			this.margin.left = (rect.width / (this.longestLine?.length / 8)) / 2;
+			this.margin.left = (rect.width / (this.longestLine?.length / 8)) / (this.verseLines.length > 10 ? 1 : 1.5);
 			this.margin.top = rect.height / (this.verseLines?.length * 1.5);
 		},
 		render() {
