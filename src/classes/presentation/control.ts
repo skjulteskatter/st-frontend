@@ -60,7 +60,7 @@ export class PresentationControl extends PresentationBase {
     }
 
     private static getSize(lyricsSize: number) {
-        if (lyricsSize > 6) {
+        if (lyricsSize > 4) {
             return 1;
         }
         if (lyricsSize > 3) {

@@ -187,7 +187,7 @@ export default class Lyrics implements ILyrics {
             throw new Error("Invalid format for .size");
         let max = 0;
         for(const value of Object.values(this.content as LyricsContent)) {
-            if (value.content.length > max) {
+            if (value.content.filter(l => !l.startsWith("(") && !l.endsWith(")")).length > max) {
                 max = value.content.length;
             }
         }
