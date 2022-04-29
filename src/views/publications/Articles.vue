@@ -48,7 +48,6 @@ export default defineComponent({
     async mounted() {
         const {collectionId, publicationId, articleId} = this.$route.params;
         this.collection = (await collectionService.list()).find(i => i.containsKey(collectionId as string)) ?? null;
-        console.log(this.collection);
         this.publication = await publicationService.get(publicationId as string);
         this.loading.publication = false;
         this.articles = (await articleService.retrieve({

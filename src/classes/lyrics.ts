@@ -185,6 +185,12 @@ export default class Lyrics implements ILyrics {
     public get size() {
         if (this.ContainsChords)
             throw new Error("Invalid format for .size");
-        return Object.values(this.content as LyricsContent)[0].content.length;
+        let max = 0;
+        for(const value of Object.values(this.content as LyricsContent)) {
+            if (value.content.length > max) {
+                max = value.content.length;
+            }
+        }
+        return max;
     }
 }

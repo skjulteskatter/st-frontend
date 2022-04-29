@@ -11,7 +11,7 @@
 				<!-- <span v-else class="absolute verse-name">{{$t('Ref:')}}</span> -->
 				<p
 					class="line"
-					:class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim()[0] == '(' }"
+					:class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim().startsWith('(') && line.trim().endsWith(')') }"
 					v-for="(line, i) in verse.content"
 					:key="i + '_' + line"
 				>{{ line }}</p>
@@ -104,6 +104,13 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
+			let maxLineLength = 0;
+			for (const line of this.verseLines) {
+				if (line.length > maxLineLength) {
+					maxLineLength = line.length;
+				}
+			}
+
 			this.fontSize = (Math.min(rect.height / this.verseLines.length / 8 * 1.4, 32)) + 32;
 		},
 		calculateLineHeight() {
