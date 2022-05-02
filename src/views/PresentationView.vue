@@ -23,8 +23,8 @@
                                 {{ composer.name }}
                             </span>
                         </p>
-                        <p v-else-if="!composers.length && !melodyOrigin">{{$t("song_unknownComposer")}}</p>
-                        <p v-if="melodyOrigin">{{ melodyOrigin }}</p>
+                        <p v-else-if="melodyOrigin">{{ melodyOrigin }}</p>
+                        <p v-else>{{$t("song_unknownComposer")}}</p>
                     </div>
                     <div class="flex gap-4">
                         <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
