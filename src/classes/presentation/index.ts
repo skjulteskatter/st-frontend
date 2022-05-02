@@ -1,7 +1,7 @@
-import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
 import { Lyrics } from "@/classes";
+import Song from "../song";
 
 export type Settings = {
     size: number;
@@ -26,23 +26,36 @@ type Key = "song" | "lyrics" | "contributors" | "settings";
 
 type KeyEntry<K extends Key> = KeyTypes[K];
 
-export class PresentationBase {
+export class PresentationControl {
     protected initialized = false;
+    public get Initialized() {
+        return this.initialized;
+    }
     protected store = useStore();
 
     public get Song() {
-        return appSession.songs.find(i => i.id == this.Lyrics?.songId);
+        return this.song ? new Song(this.song) : null;
+    }
+
+    private _song?: ISong;
+    protected set song(v) {
+        this.executeCallback("song");
+        this._song = v;
+    }
+
+    protected get song() {
+        if (!this._song)
+            this._song = this.getKey("song");
+        return this._song;
     }
 
     private _lyrics?: ILyrics;
 
-    // Set lyrics in cache and storage.
     protected set lyrics(v) {
         this.executeCallback("lyrics");
         this._lyrics = v;
     }
 
-    // Get lyrics from cache or storage.
     protected get lyrics() {
         if (!this._lyrics)
             this._lyrics = this.getKey("lyrics");
@@ -50,12 +63,12 @@ export class PresentationBase {
     }
 
     public commit() {
-        if (this.type === "control") {
-            if (this.lyrics)
-                this.setKey("lyrics", this.lyrics);
-            if (this.settings)
-                this.setKey("settings", this.settings);
-        }
+        if (this.song)
+            this.setKey("song", this.song);
+        if (this.lyrics)
+            this.setKey("lyrics", this.lyrics);
+        if (this.settings)
+            this.setKey("settings", this.settings);
     }
 
     public get Lyrics() {
@@ -75,6 +88,7 @@ export class PresentationBase {
         if (!v)
             this.removeKey("settings");
         this._settings = v;
+        this.executeCallback("settings");
     }
 
     public get Settings() {
@@ -90,22 +104,16 @@ export class PresentationBase {
         this.callbacks[key].push(callback);
     }
 
-    private executeCallback(key: Key | "control" | "preview") {
+    private executeCallback(key: Key | "preview") {
         this.callbacks[key]?.forEach((callback) => callback());
     }
 
     private type: "control" | "viewer" | "not-initialized" = "not-initialized";
 
-    protected initialize(type: "control" | "viewer") {
+    public initialize(type: "control" | "viewer") {
         this.type = type;
 
         if(!this.initialized) {
-            if (type == "control") {
-                this.removeKey("settings");
-                this.removeKey("song");
-                this.removeKey("lyrics");
-            }
-
             addEventListener("storage", (e: StorageEvent) => {
                 if (this.type == "not-initialized")
                     throw new Error("PresentationView - Not initialized");
@@ -119,21 +127,47 @@ export class PresentationBase {
                 if (!item) 
                     return;
 
-                if (this.type == "control") {
-                    // CONTROL events
+                if (key.endsWith("lyrics")) {
+                    this.lyrics = JSON.parse(item);
                 }
-
-                if (this.type == "viewer") {
-                    if (key.endsWith("lyrics")) {
-                        this.lyrics = JSON.parse(item);
-                        this.executeCallback("lyrics");
-                    }
-                    if (key.endsWith("settings")) {
-                        this.settings = JSON.parse(item);
-                        this.executeCallback("settings");
-                    }
+                if (key.endsWith("song")) {
+                    this.song = JSON.parse(item);
+                }
+                if (key.endsWith("settings")) {
+                    this.settings = JSON.parse(item);
                 }
             });
+            
+            addEventListener("keydown", (e) => {
+                if (e.key == "ArrowRight") {
+                    this.next();
+                    return;
+                }
+                if (e.key == "ArrowLeft") {
+                    this.previous();
+                    return;
+                }
+                if (e.ctrlKey && e.key === "o") {
+                    this.open();
+                    return;
+                }
+                if (e.ctrlKey && e.key === "m") {
+                    this.mute();
+                    return;
+                }
+                if (e.key === "Home") {
+                    this.firstPage();
+                    e.preventDefault();
+                    return;
+                }
+                if (e.key === "End") {
+                    this.lastPage();
+                    e.preventDefault();
+                    return;
+                }
+            });
+
+            this.commit();
         }
         
         this.initialized = true;
@@ -211,7 +245,6 @@ export class PresentationBase {
                 const settings = Object.assign({}, this.settings);
                 settings.currentIndex = settings.currentIndex + size;
                 this.settings = settings;
-                this.executeCallback("control");
                 this.commit();
             }
             else if (index >= this.AvailableVerses.length && !this.settings.muted) {
@@ -231,7 +264,6 @@ export class PresentationBase {
                 settings.currentIndex = index;
                 this.settings = settings;
                 this.commit();
-                this.executeCallback("control");
             }
         }
     }
@@ -243,7 +275,6 @@ export class PresentationBase {
             settings.muted = false;
             this.settings = settings;
             this.commit();
-            this.executeCallback("control");
         }
     }
 
@@ -254,7 +285,6 @@ export class PresentationBase {
             settings.muted = true;
             this.settings = settings;
             this.commit();
-            this.executeCallback("control");
         }
     }
 
@@ -285,4 +315,58 @@ export class PresentationBase {
         this.settings = settings;
         this.commit();
     }
+    public setSong(song: Song) {
+        this.song = song.raw;
+    }
+    public setLyrics(lyrics: Lyrics, settings?: Settings) {
+        this.lyrics = lyrics.raw;
+        this.settings = settings ?? {
+            size: PresentationControl.getSize(lyrics.size),
+            availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                [key: string]: boolean;
+            }),
+            currentIndex: 0,
+            muted: false,
+            theme: this.settings?.theme ?? "dark",
+            showSideBar: this.settings?.showSideBar ?? true,
+            singleVerse: this.settings?.singleVerse ?? false,
+        };
+    }
+
+    private static getSize(lyricsSize: number) {
+        if (lyricsSize > 6) {
+            return 1;
+        }
+        if (lyricsSize > 3) {
+            return 2;
+        }
+        return 3;
+    }
+
+    public resetSettings(lyrics: Lyrics) {
+        this.settings = {
+            size: PresentationControl.getSize(lyrics.size),
+            availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
+                [key: string]: boolean;
+            }),
+            currentIndex: 0,
+            muted: false,
+            theme: this.settings?.theme ?? "dark",
+            showSideBar: this.settings?.showSideBar ?? true,
+            singleVerse: this.settings?.singleVerse ?? false,
+        };
+    }
+
+    public open(): void {
+        this.commit();
+        window.open("/presentation", "SongTreasures - Presentation View", "resizeable,scrollbars");
+    }
+
+    public get Verses() {
+        return Object.entries(this.Lyrics?.verses ?? {})
+            .filter(i => this.currentVerses.includes(i[0]))
+            .map(i => i[1]);
+    }
 }
+
+export const presentation = new PresentationControl();

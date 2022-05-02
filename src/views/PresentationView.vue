@@ -70,7 +70,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { Lyrics, Song } from "@/classes";
-import { viewer } from "@/classes/presentation/viewer";
+import { presentation } from "@/classes/presentation";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { PresentationLyrics } from "@/components/presentation";
@@ -83,7 +83,7 @@ export default defineComponent({
     },
     data: () => ({
         store: useStore(),
-        viewer: viewer,
+        viewer: presentation,
         lyrics: null as Lyrics | null,
         song: null as Song | null,
         verses: null as LyricsVerse[] | null,
@@ -128,50 +128,27 @@ export default defineComponent({
     },
     async mounted() {
         await appSession.init();
-        viewer.init();
-        this.lyrics = viewer.Lyrics;
+        presentation.initialize("viewer");
+        this.lyrics = presentation.Lyrics;
         this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-        this.song = viewer.Song ?? null;
-        this.verses = viewer.Verses;
-        this.showSidebar = viewer.Settings?.showSideBar === true;
+        this.song = presentation.Song;
+        this.verses = presentation.Verses;
+        this.showSidebar = presentation.Settings?.showSideBar === true;
 
-        viewer.registerCallback("lyrics", () => {
-            this.lyrics = viewer.Lyrics;
+        presentation.registerCallback("lyrics", () => {
+            this.lyrics = presentation.Lyrics;
             this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-            this.song = viewer.Song ?? null;
+            this.song = presentation.Song;
         });
 
-        viewer.registerCallback("settings", () => {
-            this.verses = viewer.Verses;
-            this.muted = viewer.Settings?.muted === true;
-            this.theme = viewer.Settings?.theme ?? "dark";
-            this.showSidebar = viewer.Settings?.showSideBar === true;
+        presentation.registerCallback("settings", () => {
+            this.verses = presentation.Verses;
+            this.muted = presentation.Settings?.muted === true;
+            this.theme = presentation.Settings?.theme ?? "dark";
+            this.showSidebar = presentation.Settings?.showSideBar === true;
         });
-
-        addEventListener("keydown", this.onKeyDown);
-    },
-    unmounted() {
-        removeEventListener("keydown", this.onKeyDown); // Prevent memory leaks
     },
     methods: {
-        onKeyDown(e: KeyboardEvent): void {
-            if (e.key == "ArrowRight") {
-                e.preventDefault(); // prevent cursor from appearing in view
-                viewer.next();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-            if (e.key == "ArrowLeft") {
-                e.preventDefault(); // prevent cursor from appearing in view
-                viewer.previous();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-
-            if (e.ctrlKey && e.key === "m") {
-                viewer.mute();
-            }
-        },
         getLocaleString(dictionary: { [key: string]: string }) {
             if (!dictionary) return "";
             return (

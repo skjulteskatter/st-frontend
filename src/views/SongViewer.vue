@@ -222,9 +222,9 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
-import { control } from "@/classes/presentation/control";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
+import { presentation } from "@/classes/presentation";
 
 export default defineComponent({
     name: "song-viewer",
@@ -257,7 +257,7 @@ export default defineComponent({
     },
     data: () => ({
         store: useStore(),
-        control: control,
+        control: presentation,
         number: 0 as number | string,
         selectedSheetMusic: {} as IMediaFile,
         sheetMusicOptions: null as SheetMusicOptions | null,
@@ -364,6 +364,7 @@ export default defineComponent({
             });
         },
         setLyrics() {
+            this.control.setSong(this.song);
             if (this.lyrics && !this.lyrics.ContainsChords)
                 this.control.setLyrics(this.lyrics);
         },
@@ -509,7 +510,7 @@ export default defineComponent({
         },
         extend() {
             if (!this.control.Initialized) {
-                this.control.init();
+                this.control.initialize("control");
                 if (this.lyrics)
                     this.control.setLyrics(this.lyrics);
                 this.refresh();
