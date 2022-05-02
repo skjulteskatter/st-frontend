@@ -5,7 +5,7 @@
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
         <div class="text-3xl h-full flex-grow flex flex-col">
-            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 pt-10 py-6 border-b" v-if="song">
+            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 pt-6 pb-3 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSidebar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
                 <h1 class="text-8xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-3xl tracking-wide flex flex-col items-end">
