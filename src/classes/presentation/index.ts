@@ -339,7 +339,6 @@ export class PresentationControl {
     }
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
         this.lyrics = lyrics.raw;
-        console.log(lyrics);
         this.settings = settings ?? {
             size: PresentationControl.getSize(lyrics.size),
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
