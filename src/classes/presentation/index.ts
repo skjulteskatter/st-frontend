@@ -2,6 +2,7 @@ import { useStore } from "@/store";
 import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
 import { Lyrics } from "@/classes";
 import Song from "../song";
+import Contributor from "../contributor";
 
 export type Settings = {
     size: number;
@@ -39,8 +40,8 @@ export class PresentationControl {
 
     private _song?: ISong;
     protected set song(v) {
-        this.executeCallback("song");
         this._song = v;
+        this.executeCallback("song");
     }
 
     protected get song() {
@@ -49,11 +50,25 @@ export class PresentationControl {
         return this._song;
     }
 
+    public get Contributors() {
+        return this._contributors?.map(i => new Contributor(i)) ?? null;
+    }
+    private _contributors?: ApiContributor[];
+    protected set contributors(v) {
+        this._contributors = v;
+        this.executeCallback("contributors");
+    }
+    protected get contributors() {
+        if (!this._contributors)
+            this._contributors = this.getKey("contributors");
+        return this._contributors;
+    }
+
     private _lyrics?: ILyrics;
 
     protected set lyrics(v) {
-        this.executeCallback("lyrics");
         this._lyrics = v;
+        this.executeCallback("lyrics");
     }
 
     protected get lyrics() {
@@ -65,6 +80,8 @@ export class PresentationControl {
     public commit() {
         if (this.song)
             this.setKey("song", this.song);
+        if (this.contributors)
+            this.setKey("contributors", this.contributors);
         if (this.lyrics)
             this.setKey("lyrics", this.lyrics);
         if (this.settings)
@@ -127,15 +144,14 @@ export class PresentationControl {
                 if (!item) 
                     return;
 
-                if (key.endsWith("lyrics")) {
+                if (key.endsWith("contributors"))
+                    this.contributors = JSON.parse(item);
+                if (key.endsWith("lyrics"))
                     this.lyrics = JSON.parse(item);
-                }
-                if (key.endsWith("song")) {
+                if (key.endsWith("song"))
                     this.song = JSON.parse(item);
-                }
-                if (key.endsWith("settings")) {
+                if (key.endsWith("settings"))
                     this.settings = JSON.parse(item);
-                }
             });
             
             addEventListener("keydown", (e) => {
@@ -317,6 +333,9 @@ export class PresentationControl {
     }
     public setSong(song: Song) {
         this.song = song.raw;
+    }
+    public setContributors(contributors: Contributor[]|ApiContributor[]) {
+        this.contributors = contributors.map(i => i instanceof Contributor ? i.raw : i);
     }
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
         this.lyrics = lyrics.raw;

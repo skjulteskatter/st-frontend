@@ -23,7 +23,6 @@
 import { defineComponent, PropType } from "vue";
 import { debouncer } from "@/classes/debouncer";
 import { LyricsVerse } from "@/classes/lyrics";
-import { viewer } from "@/classes/presentation/viewer";
 
 // just set to false if you want to disable the feature, without removing code
 const FIGHT_BROWSER_ZOOM = true;
@@ -111,7 +110,7 @@ export default defineComponent({
 
 			const rect = this.container.getBoundingClientRect();
 
-			this.fontSize = (Math.min(rect.height / this.verseLines.length / 8 * 1.4, 32)) + 32;
+			this.fontSize = (Math.min(rect.height / this.verseLines.length / 1.6, 64));
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(3 / this.verseLines.length, 0.25) + 1.25;
@@ -121,7 +120,7 @@ export default defineComponent({
 
 			const rect = this.container.getBoundingClientRect();
 			this.margin.left = (rect.width / (this.longestLine?.length / 8)) / (this.verseLines.length > 10 ? 1 : 1.5);
-			this.margin.top = rect.height / (this.verseLines?.length * 1.5);
+			this.margin.top = rect.height / (this.verseLines?.length * 2);
 		},
 		render() {
 			this.calculateFontSize();

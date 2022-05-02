@@ -365,6 +365,7 @@ export default defineComponent({
         },
         setLyrics() {
             this.control.setSong(this.song);
+            this.control.setContributors(appSession.contributors.filter(i => this.song?.participants.some(p => p.contributorId === i.id)).map(i => i.item));
             if (this.lyrics && !this.lyrics.ContainsChords)
                 this.control.setLyrics(this.lyrics);
         },

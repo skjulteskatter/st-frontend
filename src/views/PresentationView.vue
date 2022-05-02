@@ -5,25 +5,25 @@
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
         <div class="text-3xl h-full flex-grow flex flex-col">
-            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
+            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 pt-10 py-6 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSidebar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
                 <h1 class="text-8xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-3xl tracking-wide flex flex-col items-end">
                     <div class="flex gap-4">
-                        <p v-if="song.Authors.length > 0">
+                        <p v-if="authors.length > 0">
                             {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
-                            <span v-for="author in song.Authors" :key="author.id">
+                            <span v-for="author in authors" :key="author.id">
                                 {{ author.name }}
                             </span>
                         </p>
-                        <span v-if="song.Authors.length">&middot;</span>
-                        <p v-if="song.Composers.length > 0">
+                        <span v-if="authors.length">&middot;</span>
+                        <p v-if="composers.length > 0">
                             {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
-                            <span v-for="composer in song.Composers" :key="composer.id">
+                            <span v-for="composer in composers" :key="composer.id">
                                 {{ composer.name }}
                             </span>
                         </p>
-                        <p v-else-if="!song.Composers.length && !melodyOrigin">{{$t("song_unknownComposer")}}</p>
+                        <p v-else-if="!composers.length && !melodyOrigin">{{$t("song_unknownComposer")}}</p>
                         <p v-if="melodyOrigin">{{ melodyOrigin }}</p>
                     </div>
                     <div class="flex gap-4">
@@ -69,9 +69,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { Lyrics, Song } from "@/classes";
+import { Contributor, Lyrics, Song } from "@/classes";
 import { presentation } from "@/classes/presentation";
-import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { PresentationLyrics } from "@/components/presentation";
 import { LyricsVerse } from "@/classes/lyrics";
@@ -86,6 +85,7 @@ export default defineComponent({
         viewer: presentation,
         lyrics: null as Lyrics | null,
         song: null as Song | null,
+        contributors: null as Contributor[] | null,
         verses: null as LyricsVerse[] | null,
         theme: "dark" as "dark" | "light",
         muted: false,
@@ -119,26 +119,40 @@ export default defineComponent({
             return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
         },
         verseLines() {
-            return this.Verses.reduce((prev, cur) => [...prev, ...cur.content], [] as string[]);
+            return this.Verses.reduce((prev, cur) => [...prev, "", ...cur.content], [] as string[]);
         },
 		longestLine(): string {
 			const lines = this.verseLines;
 			return lines.sort((a, b) => b.length - a.length)[0];
 		},
+        authors() {
+            return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "author" && p.contributorId === i.id)) ?? [];
+        },
+        composers() {
+            return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "composer" && p.contributorId === i.id)) ?? [];
+        },
     },
     async mounted() {
-        await appSession.init();
         presentation.initialize("viewer");
         this.lyrics = presentation.Lyrics;
         this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
         this.song = presentation.Song;
+        this.contributors = presentation.Contributors;
         this.verses = presentation.Verses;
+
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
         presentation.registerCallback("lyrics", () => {
-            this.lyrics = presentation.Lyrics;
             this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
+            this.lyrics = presentation.Lyrics;
+        });
+
+        presentation.registerCallback("song", () => {
             this.song = presentation.Song;
+        });
+
+        presentation.registerCallback("contributors", () => {
+            this.contributors = presentation.Contributors;
         });
 
         presentation.registerCallback("settings", () => {
