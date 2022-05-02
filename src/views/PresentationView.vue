@@ -119,7 +119,10 @@ export default defineComponent({
             return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
         },
         verseLines() {
-            return this.Verses.reduce((prev, cur) => [...prev, "", ...cur.content], [] as string[]);
+            return this.Verses.reduce((prev, cur) => {
+                prev.push(...cur.content);
+                return prev;
+            }, [] as string[]);
         },
 		longestLine(): string {
 			const lines = this.verseLines;

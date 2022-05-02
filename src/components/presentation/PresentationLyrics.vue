@@ -10,7 +10,7 @@
 				<span class="absolute verse-name" v-if="verse.type != 'chorus'">{{ verse.name }}</span>
 				<p
 					class="line"
-					:class="{ 'opacity-50 mt-8 text-[0.5em]': line.trim().startsWith('(') && line.trim().endsWith(')') }"
+					:class="{ 'opacity-50 text-[0.5em]': line.trim().startsWith('(') && line.trim().endsWith(')') }"
 					v-for="(line, i) in verse.content"
 					:key="i + '_' + line"
 				>{{ line }}</p>
@@ -110,7 +110,9 @@ export default defineComponent({
 
 			const rect = this.container.getBoundingClientRect();
 
-			this.fontSize = (Math.min(rect.height / this.verseLines.length / 1.6, 64));
+			const linefactor = (230 - this.longestLine.length) / 200;
+
+			this.fontSize = (Math.min(rect.height / this.verseLines.length / 1.6, 64 * linefactor));
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(3 / this.verseLines.length, 0.25) + 1.25;
@@ -119,7 +121,8 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			this.margin.left = (rect.width / (this.longestLine?.length / 8)) / (this.verseLines.length > 10 ? 1 : 1.5);
+			const linefactor = (300 - this.longestLine.length) / 300;
+			this.margin.left = 10 + ((rect.width / (this.longestLine?.length / 8)) / (this.verseLines.length > 10 ? 1 : 1.5)) * linefactor;
 			this.margin.top = rect.height / (this.verseLines?.length * 2);
 		},
 		render() {
