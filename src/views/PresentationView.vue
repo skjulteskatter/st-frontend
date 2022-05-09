@@ -61,8 +61,9 @@
                 :verses="verses"
                 :songId="song?.id"
                 :class="{ 'hidden': muted }"
-                :longestLine="longestLine"
+                :longestLine="longestLine ?? ''"
                 :verseLines="verseLines"
+                :verseLineLength="verseLineLength ?? 0"
             />
         </div>
     </div>
@@ -91,6 +92,8 @@ export default defineComponent({
         muted: false,
         showSidebar: true,
         verseCount: 0,
+        longestLine: null as string | null,
+        verseLineLength: null as number | null,
     }),
     computed: {
         logoLanguageKey() {
@@ -121,13 +124,10 @@ export default defineComponent({
         verseLines() {
             return this.Verses.reduce((prev, cur) => {
                 prev.push(...cur.content);
+                prev.push("");
                 return prev;
-            }, [] as string[]);
+            }, [] as string[]).slice(0, -1);
         },
-		longestLine(): string {
-			const lines = this.verseLines;
-			return lines.sort((a, b) => b.length - a.length)[0];
-		},
         authors() {
             return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "author" && p.contributorId === i.id)) ?? [];
         },
@@ -137,17 +137,15 @@ export default defineComponent({
     },
     async mounted() {
         presentation.initialize("viewer");
-        this.lyrics = presentation.Lyrics;
-        this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
         this.song = presentation.Song;
         this.contributors = presentation.Contributors;
         this.verses = presentation.Verses;
+        this.refreshLyrics();
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
         presentation.registerCallback("lyrics", () => {
-            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-            this.lyrics = presentation.Lyrics;
+            this.refreshLyrics();
         });
 
         presentation.registerCallback("song", () => {
@@ -173,6 +171,37 @@ export default defineComponent({
                 dictionary.en ??
                 dictionary[Object.keys(dictionary)[0]]
             );
+        },
+        refreshLyrics() {
+            this.lyrics = presentation.Lyrics;
+            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
+            this.longestLine = this.verseLines.sort((a, b) => b.length - a.length)[0];
+            this.verseLineLength = null;
+            
+            const verses = Object.entries(this.lyrics ?? {});
+
+            let i = 0;
+            const size = presentation.Settings?.size;
+            if (size) {
+                while (i < verses.length) {
+                    const verseRange = presentation.GetVerses(presentation.GetVerseRange(i, size));
+
+                    const verseLines = verseRange.reduce((prev, cur) => {
+                        prev.push(...cur.content);
+                        prev.push("");
+                        return prev;
+                    }, [] as string[]).slice(0, -1);
+
+                    console.log(verseLines);
+
+                    if (!this.verseLineLength || verseLines.length > this.verseLineLength) {
+                        this.verseLineLength = verseLines.length;
+                    }
+
+                    i += size;
+                }
+            }
+            console.log(this.verseLineLength);
         },
     },
 });

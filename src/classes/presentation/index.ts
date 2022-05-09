@@ -238,16 +238,21 @@ export class PresentationControl {
     }
 
     public get currentVerses() {
-        const verses: string[] = [];
         if (this.Settings) {
             const index = this.Settings.currentIndex;
             const size = this.Settings.singleVerse ? 1 : this.Settings.size;
 
-            for (let i = 0; i < size; i++) {
-                const verse = this.AvailableVerses[index + i];
-                if (verse) {
-                    verses.push(verse);
-                }
+            return this.GetVerseRange(index, size);
+        }
+        return [];
+    }
+
+    public GetVerseRange(index: number, size: number) {
+        const verses: string[] = [];
+        for (let i = 0; i < size; i++) {
+            const verse = this.AvailableVerses[index + i];
+            if (verse) {
+                verses.push(verse);
             }
         }
         return verses;
@@ -382,8 +387,12 @@ export class PresentationControl {
     }
 
     public get Verses() {
+        return this.GetVerses(this.currentVerses);
+    }
+
+    public GetVerses(currentVerses: string[]) {
         return Object.entries(this.Lyrics?.verses ?? {})
-            .filter(i => this.currentVerses.includes(i[0]))
+            .filter(i => currentVerses.includes(i[0]))
             .map(i => i[1]);
     }
 }
