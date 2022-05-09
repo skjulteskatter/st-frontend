@@ -47,29 +47,25 @@
                                 {{ $t("song_text") }} ©
                                 {{ getLocaleString(song.copyright.text.name) }}
                             </p>
-                            <!-- <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
-                            <p v-if="song.copyright.melody">
-                                {{ $t("song_melody") }} ©
-                                {{ getLocaleString(song.copyright.melody.name) }}
-                            </p> -->
                         </div>
                     </div>
                 </div>
             </div>
             <PresentationLyrics 
                 v-if="verses"
+                ref="presentation"
                 :verses="verses"
                 :songId="song?.id"
                 :class="{ 'hidden': muted }"
                 :longestLine="longestLine ?? ''"
                 :verseLines="verseLines"
-                :verseLineLength="verseLineLength ?? 0"
+                :verseLineLength="verseLineLength"
             />
         </div>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { Contributor, Lyrics, Song } from "@/classes";
 import { presentation } from "@/classes/presentation";
 import { useStore } from "@/store";
@@ -93,7 +89,7 @@ export default defineComponent({
         showSidebar: true,
         verseCount: 0,
         longestLine: null as string | null,
-        verseLineLength: null as number | null,
+        verseLineLength: 0,
     }),
     computed: {
         logoLanguageKey() {
@@ -101,9 +97,6 @@ export default defineComponent({
 
             const languages = ["dk", "en", "es", "fi", "fr", "nl", "no", "pl", "ro", "ru", "un"];
             return languages.includes(this.lyrics.languageKey) ? this.lyrics.languageKey : "en";
-        },
-        Verses() {
-            return this.verses ?? [];
         },
         Collection() {
             return this.song?.Collections.find(c => c.id == this.song?.collectionIds[0]);
@@ -122,11 +115,11 @@ export default defineComponent({
             return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
         },
         verseLines() {
-            return this.Verses.reduce((prev, cur) => {
+            return this.verses?.reduce((prev, cur) => {
                 prev.push(...cur.content);
                 prev.push("");
                 return prev;
-            }, [] as string[]).slice(0, -1);
+            }, [] as string[]).slice(0, -1) ?? [];
         },
         authors() {
             return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "author" && p.contributorId === i.id)) ?? [];
@@ -161,6 +154,7 @@ export default defineComponent({
             this.muted = presentation.Settings?.muted === true;
             this.theme = presentation.Settings?.theme ?? "dark";
             this.showSidebar = presentation.Settings?.showSideBar === true;
+            this.refreshLyrics();
         });
     },
     methods: {
@@ -176,9 +170,9 @@ export default defineComponent({
             this.lyrics = presentation.Lyrics;
             this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
             this.longestLine = this.verseLines.sort((a, b) => b.length - a.length)[0];
-            this.verseLineLength = null;
+            this.verseLineLength = 0;
             
-            const verses = Object.entries(this.lyrics ?? {});
+            const verses = Object.entries(this.lyrics?.content ?? {});
 
             let i = 0;
             const size = presentation.Settings?.size;
@@ -192,8 +186,6 @@ export default defineComponent({
                         return prev;
                     }, [] as string[]).slice(0, -1);
 
-                    console.log(verseLines);
-
                     if (!this.verseLineLength || verseLines.length > this.verseLineLength) {
                         this.verseLineLength = verseLines.length;
                     }
@@ -201,7 +193,6 @@ export default defineComponent({
                     i += size;
                 }
             }
-            console.log(this.verseLineLength);
         },
     },
 });

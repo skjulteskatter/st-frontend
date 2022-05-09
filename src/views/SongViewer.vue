@@ -152,7 +152,12 @@
                                 @previous="previous()"
                                 @mute="control.mute()"
                             />
-                            <SongSelector :songs="collection?.songs" @setSong="setSong" />
+                            <SongSelector 
+                                :songs="collection?.songs" 
+                                @setSong="setSong"
+                                @next="song.next()"
+                                @previous="song.previous()"
+                            />
                             <ThemeSelector 
                                 :theme="control.Settings?.theme" 
                                 :showSideBar="control.Settings?.showSideBar" 
@@ -390,9 +395,7 @@ export default defineComponent({
             }
         },
         refresh() {
-            if (this.lyrics) {
-                this.control.commit();
-            }
+            this.control.commit();
         },
         next() {
             this.control.next();

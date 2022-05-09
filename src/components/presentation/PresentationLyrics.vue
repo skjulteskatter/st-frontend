@@ -16,6 +16,7 @@
 				>{{ line }}</p>
 			</div>
 		</div>
+		<button style="position: absolute" @click="render">RENDER</button>
 	</article>
 </template>
 
@@ -65,7 +66,6 @@ export default defineComponent({
 	mounted() {
 		this.container = this.$el;
 		this.element = this.$refs.versesElement as HTMLDivElement;
-
 
 		this.render();
 
@@ -117,8 +117,6 @@ export default defineComponent({
 			const heightFactor = (this.verseLineLength * 1.4);
 			const widthFactor = (this.longestLine.length / 1.8);
 
-			console.log(this.longestLine.length);
-
 			// eslint-disable-next-line no-console
 			console.log("FACTORS\nHEIGHT: " + heightFactor + "\nWIDTH: " + widthFactor);
 			
@@ -143,7 +141,7 @@ export default defineComponent({
 			const rect = this.container.getBoundingClientRect();
 			const linefactor = (300 - this.longestLine.length) / 300;
 			this.margin.left = 10 + ((rect.width / (this.longestLine?.length / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
-			this.margin.top = rect.height / (this.verseLineLength * 2);
+			this.margin.top = rect.height / (this.verseLineLength * 3);
 		},
 		render() {
 			this.calculateLineHeight();

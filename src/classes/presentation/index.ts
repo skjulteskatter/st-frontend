@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useStore } from "@/store";
 import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
 import { Lyrics } from "@/classes";
@@ -122,6 +123,7 @@ export class PresentationControl {
     }
 
     private executeCallback(key: Key | "preview") {
+        console.log("EXECUTING CALLBACKS FOR " + key);
         this.callbacks[key]?.forEach((callback) => callback());
     }
 

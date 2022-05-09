@@ -8,16 +8,38 @@
 			</div>
 		</template>
 		<div class="grid gap-4">
+            <div class="flex gap-2">
+                <BaseButton
+                    class="flex-grow"
+                    @click="$emit('previous')"
+                    theme="secondary"
+                >
+                    <template #icon>
+                        <ArrowSmLeftIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t("common_previous") }} {{ $t('common_song').toLocaleLowerCase() }}
+                </BaseButton>
+                <BaseButton
+                    class="flex-grow"
+                    @click="$emit('next')"
+                    theme="secondary"
+                >
+                    <template #icon>
+                        <ArrowSmRightIcon class="w-4 h-4" />
+                    </template>
+                    {{ $t("common_next") }} {{ $t('common_song').toLocaleLowerCase() }}
+                </BaseButton>
+            </div>
             <input
 				class="text-sm rounded-md bg-transparent border-black/20 dark:border-white/20 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-primary"
 				v-model="number"
 				type="number"
-        @keyup="onInputKeyUp"
+				@keyup="onInputKeyUp"
 			/>
             <button v-if="filteredSong"
                 :key="filteredSong.id"
 				class="text-left text-sm p-3 rounded-md border border-black/10 dark:border-white/10 hover:ring-2 hover:ring-gray-400"
-                @click="selectSong(filteredSong.id)"
+                @click="selectSong(filteredSong?.id)"
             >
                 <b>{{ filteredSong.number }}</b>
                 <p>{{ filteredSong.getName() }}</p>
@@ -29,9 +51,14 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { Song } from "@/classes";
+import { ArrowSmRightIcon, ArrowSmLeftIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "SongSelector",
+	components: {
+		ArrowSmLeftIcon,
+		ArrowSmRightIcon,
+	},
 	props: {
 		songs: {
 			type: Array as PropType<Song[]>,
@@ -40,7 +67,11 @@ export default defineComponent({
 	data: () => ({
 		number: null as number | null,
 	}),
-	emits: ["setSong"],
+	emits: [
+		"setSong",
+		"previous",
+		"next",
+	],
 	computed: {
 		Songs(): Song[] {
 			return this.songs ?? [];
