@@ -16,7 +16,7 @@
 				>{{ line }}</p>
 			</div>
 		</div>
-		<button style="position: absolute" @click="render">RENDER</button>
+		<!-- <button style="position: absolute" @click="render">RENDER</button> -->
 	</article>
 </template>
 
