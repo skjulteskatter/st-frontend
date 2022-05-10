@@ -183,7 +183,7 @@ export class PresentationControl {
                     e.preventDefault();
                     return;
                 }
-                if (e.ctrlKey && e.key === "r") {
+                if (e.ctrlKey && e.key === "p") {
                     this.commit();
                     e.preventDefault();
                     return;
