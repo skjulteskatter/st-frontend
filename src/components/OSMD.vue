@@ -1,47 +1,61 @@
 <template>
     <BaseCard>
         <template #header>
-        <div>
+            <div>
                 <div v-if="song && collection && showInfo">
                     <h2 class="text-xl font-bold">{{ song.title }}</h2>
                     <div class="flex gap-2 items-center opacity-50 tracking-wide">
                         <small>{{ collection.title }} {{ collection.songOptions.useNumbers ? song.collections.find(c => c.collectionId === collection?.id)?.number : '' }}</small>
                         <span>&middot;</span>
-                        <small v-if="song.verses">{{ song.verses }} {{ $t('song_verses').toLocaleLowerCase() }}</small>
+                        <small v-if="song.verses">{{ song.verses }}
+                            {{ $t('song_verses').toLocaleLowerCase() }}</small>
                     </div>
                     <div class="flex flex-col mt-2">
-                        <small v-if="song.Authors.length">{{(song.yearWritten ? $t('song_writtenInBy').replace('$year', song.yearWritten.toString()) : $t('song_writtenBy')).replace('$authors', song.Authors.map(c => c.name).join(", "))}}</small>
-                        <small v-if="song.Composers.length">{{(song.yearComposed ? $t('song_composedInBy').replace('$year', song.yearComposed.toString()) : $t('song_composedBy')).replace('$composers', song.Composers.map(c => c.name).join(", "))}}</small>
-                        <small v-else>{{$t('song_unknownComposer')}}</small>
+                        <small v-if="song.Authors.length">{{
+                                (song.yearWritten
+                                    ? $t('song_writtenInBy').replace(
+                                        '$year',
+                                        song.yearWritten.toString()
+                                    )
+                                    : $t('song_writtenBy')
+                                ).replace('$authors', song.Authors.map(c => c.name).join(', '))
+                        }}</small>
+                        <small v-if="song.Composers.length">{{
+                                (song.yearComposed
+                                    ? $t('song_composedInBy').replace(
+                                        '$year',
+                                        song.yearComposed.toString()
+                                    )
+                                    : $t('song_composedBy')
+                                ).replace(
+                                    '$composers',
+                                    song.Composers.map(c => c.name).join(', ')
+                                )
+                        }}</small>
+                        <small v-else>{{ $t('song_unknownComposer') }}</small>
                     </div>
                     <div class="text-gray-600" v-if="melodyOrigin">
-                        <small>{{melodyOrigin}}</small>
+                        <small>{{ melodyOrigin }}</small>
                     </div>
                 </div>
+                <button v-if="onSongViewer" class="flex float-right text-red-700" @click="close()">
+                    <XIcon class="w-4 h-4" />
+                </button>
                 <div class="flex">
-                    <label class="flex flex-col mr-2">
+                    <label class="mr-2">
                         <span class="text-sm text-gray-500">{{ $t('song_key') }}</span>
-                        <BaseDropdown
-                            origin="left"
-                            :label="
-                                relativeTranspositions.find(
-                                    (r) => r.value == transposition
-                                )?.view ?? $t('song_transpose')
-                            "
-                            class="flex flex-col"
-                        >
+                        <BaseDropdown origin="left" :label="
+                            relativeTranspositions.find(r => r.value == transposition)
+                                ?.view ?? $t('song_transpose')
+                        " class="">
                             <div class="max-h-64 overflow-y-auto shadow-scroll">
-                                <button
-                                    :class="{
-                                        'bg-primary text-white': transposition == t.value,
-                                        'bg-gray-200 dark:bg-gray-800': options?.originalKey == t.original && transposition != t.value
-                                    }"
-                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                    v-for="t in relativeTranspositions"
-                                    :key="t.key"
-                                    :disabled="transposition == t.value"
-                                    @click="transpose(t.value)"
-                                >
+                                <button :class="{
+                                    'bg-primary text-white': transposition == t.value,
+                                    'bg-gray-200 dark:bg-gray-800':
+                                        options?.originalKey == t.original &&
+                                        transposition != t.value,
+                                }" class="py-1 px-4 rounded w-full flex justify-between gap-4" v-for="t in relativeTranspositions"
+                                    :key="t.key" :disabled="transposition == t.value" @click="transpose(t.value)">
                                     <span class="font-semibold">
                                         {{ t.key }}
                                     </span>
@@ -52,46 +66,30 @@
                             </div>
                         </BaseDropdown>
                     </label>
-                    <label class="flex flex-col mr-2">
+                    <label class="mr-2">
                         <span class="text-sm text-gray-500">{{ $t('song_clef') }}</span>
-                        <BaseDropdown
-                            origin="left"
-                            :label="options?.clef"
-                            class="flex flex-col"
-                        >
+                        <BaseDropdown origin="left" :label="options?.clef" class="">
                             <div class="max-h-64 overflow-y-auto shadow-scroll">
-                                <button
-                                    :class="{
-                                        'bg-primary text-white': options?.clef == 'bass',
-                                    }"
-                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                    :disabled="options?.clef == 'bass'"
-                                    @click="setClef('bass')"
-                                >
+                                <button :class="{
+                                    'bg-primary text-white': options?.clef == 'bass',
+                                }" class="py-1 px-4 rounded w-full flex justify-between gap-4" :disabled="options?.clef == 'bass'"
+                                    @click="setClef('bass')">
                                     <span class="font-semibold">
                                         Bass
                                     </span>
                                 </button>
-                                <button
-                                    :class="{
-                                        'bg-primary text-white': options?.clef == 'treble',
-                                    }"
-                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                    :disabled="options?.clef == 'treble'"
-                                    @click="setClef('treble')"
-                                >
+                                <button :class="{
+                                    'bg-primary text-white': options?.clef == 'treble',
+                                }" class="py-1 px-4 rounded w-full flex justify-between gap-4" :disabled="options?.clef == 'treble'"
+                                    @click="setClef('treble')">
                                     <span class="font-semibold">
                                         Treble
                                     </span>
                                 </button>
-                                <button
-                                    :class="{
-                                        'bg-primary text-white': options?.clef == 'alto',
-                                    }"
-                                    class="py-1 px-4 rounded w-full flex justify-between gap-4"
-                                    :disabled="options?.clef == 'alto'"
-                                    @click="setClef('alto')"
-                                >
+                                <button :class="{
+                                    'bg-primary text-white': options?.clef == 'alto',
+                                }" class="py-1 px-4 rounded w-full flex justify-between gap-4" :disabled="options?.clef == 'alto'"
+                                    @click="setClef('alto')">
                                     <span class="font-semibold">
                                         Alto
                                     </span>
@@ -99,78 +97,65 @@
                             </div>
                         </BaseDropdown>
                     </label>
-                    <label class="flex flex-col mr-2" v-if="sheetDetails && sheetDetails.instruments.length > 1">
-                        <span class="text-sm text-gray-500">{{ $t('common_instruments') }}</span>
-                        <select
-                            class="p-2 rounded-md border-gray-300 pr-8"
-                            name="zoom"
-                            id="zoom"
-                            v-model="instruments"
-                            multiple
-                            @change="load"
+                    <label class="mr-2" v-if="sheetDetails && sheetDetails.instruments.length > 1">
+                        <span class="text-sm text-gray-500">{{
+                                $t('common_instruments')
+                        }}</span>
+                        <BaseDropdown
+                            :label="instrumentsLabel"
                         >
-                            <option
-                                v-for="instrument in sheetDetails.instruments"
-                                :key="instrument"
-                                :value="instrument"
-                            >
-                                {{instrument}}
+                            <ListSelect
+                                :data="sheetDetails.instruments.map(i => ({
+                                    display: i,
+                                    value: i,
+                                    checked: instruments.includes(i),
+                                }))"
+                                :multiSelect="true"
+                                @select="(row, checked) => {
+                                    if (checked) {
+                                        if (!instruments.includes(row.value)) {
+                                            instruments.push(row.value);
+                                        }
+                                    } else {
+                                        instruments = instruments.filter(i => i !== row.value);
+                                    }
+                                    load();
+                                }"
+                            ></ListSelect>
+                        </BaseDropdown>
+                        <!-- <select class="p-2 rounded-md border-gray-300 pr-8" name="zoom" id="zoom" v-model="instruments"
+                            multiple @change="load">
+                            <option v-for="instrument in sheetDetails.instruments" :key="instrument"
+                                :value="instrument">
+                                {{ instrument }}
                             </option>
-                        </select>
+                        </select> -->
                     </label>
-                    <label class="flex flex-col mr-2">
+                    <label class="mr-2">
                         <span class="text-sm text-gray-500">{{ $t('common_size') }}</span>
-                        <select
-                            class="p-2 rounded-md border-gray-300 pr-8"
-                            name="zoom"
-                            id="zoom"
-                            v-model="size"
-                            @change="load"
-                        >
-                            <option
-                                :key="`size-sm`"
-                                value="sm"
-                            >
+                        <select class="p-2 rounded-md border-gray-300 pr-8" name="zoom" id="zoom" v-model="size"
+                            @change="load">
+                            <option :key="`size-sm`" value="sm">
                                 Small
                             </option>
-                            <option
-                                :key="`size-md`"
-                                value="md"
-                            >
+                            <option :key="`size-md`" value="md">
                                 Medium
                             </option>
-                            <option
-                                :key="`size-lg`"
-                                value="lg"
-                            >
+                            <option :key="`size-lg`" value="lg">
                                 Large
                             </option>
                         </select>
                     </label>
-                    <label class="flex flex-col">
-                        <small class="text-sm text-gray-500">{{ $t('song_octave') }}</small>
-                        <SongChanger 
-                            :label="octave.toString()" 
-                            @next="increaseOctave()" 
-                            @previous="decreaseOctave()"
-                            :hasNext="true"
-                            :hasPrevious="true"
-                        />
-                    </label>
-                    <button
-                        v-if="$route.name == 'song'"
-                        class="absolute top-4 right-4 text-red-700"
-                        @click="close()"
-                    >
-                        <XIcon class="w-4 h-4" />
-                    </button>
+                    <div class="">
+                        <label class="text-sm text-gray-500">{{ $t('song_octave') }}</label>
+                        <SongChanger :label="octave.toString()" @next="increaseOctave()" @previous="decreaseOctave()"
+                            :hasNext="true" :hasPrevious="true" />
+                    </div>
                 </div>
-        </div>
+            </div>
         </template>
-        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave']" :position="'local'">
-        </Loader>
-        <div id="osmd-svg" :style="{display: loading['transpose'] || loading['zoom'] || loading['octave'] ? 'none' : ''}">
-        </div>
+        <Loader :loading="loading['transpose'] || loading['zoom'] || loading['octave'] || loading['sheet']" :position="'local'" />
+        <div id="osmd-svg"></div>
     </BaseCard>
 </template>
 
@@ -182,13 +167,17 @@ import { SheetMusicOptions } from "songtreasures";
 import { sheetService } from "@/services/songs/sheetService";
 import { Sheet } from "hiddentreasures-js";
 import { defineComponent, PropType } from "vue";
+import ListSelect from "./inputs/ListSelect.vue";
+import BaseDropdown from "./inputs/BaseDropdown.vue";
 
 export default defineComponent({
     name: "open-sheet-music-display",
     components: {
-        SongChanger,
-        XIcon,
-    },
+    SongChanger,
+    XIcon,
+    ListSelect,
+    BaseDropdown,
+},
     props: {
         options: {
             type: Object as PropType<SheetMusicOptions>,
@@ -212,7 +201,7 @@ export default defineComponent({
         const originalKey = this.options.originalKey;
 
         const transpositions = transposer.getTranspositions(originalKey, true);
-     
+
         return {
             svg: [] as string[],
             octave: 0,
@@ -221,13 +210,19 @@ export default defineComponent({
             sheetDetails: null as Sheet | null,
             instruments: [] as string[],
             loading: {} as {
-                [key: string]: boolean;
+                [key: string]: boolean
             },
-            relativeTranspositions: transposer.getRelativeTranspositions(this.options.originalKey, this.relativeKey, transpositions),
+            relativeTranspositions: transposer.getRelativeTranspositions(
+                this.options.originalKey,
+                this.relativeKey,
+                transpositions,
+            ),
         };
     },
     async mounted() {
         if (this.options.show) {
+            this.transposition = this.options.transposition ?? 0;
+            this.setSvg();
             this.sheetDetails = await sheetService.get(this.options.fileId);
             await this.load();
         }
@@ -236,13 +231,32 @@ export default defineComponent({
         close() {
             if (this.options) {
                 // eslint-disable-next-line vue/no-mutating-props
-                this.options.show = false;
+                this.$emit("close");
+            }
+        },
+        setSvg() {
+            const element = document.getElementById("osmd-svg");
+            if (element) {
+                element.innerHTML = this.svg.join("\n");
+
+                element.childNodes.forEach(n => {
+                    const node = n as HTMLElement;
+                    node.removeAttribute("height");
+                    node.removeAttribute("width");
+                });
             }
         },
         async load() {
             if (this.options) {
+                this.loading.sheet = true;
+                this.svg = [];
+                this.setSvg();
+
                 const octave = 12 * this.octave;
-                const transposition = this.transposition !== undefined ? this.transposition + octave : undefined;
+                const transposition =
+                    this.transposition !== undefined
+                        ? this.transposition + octave
+                        : undefined;
                 this.svg = (await sheetService.render({
                     id: this.options.fileId,
                     clef: this.options.clef,
@@ -250,18 +264,10 @@ export default defineComponent({
                     size: this.size,
                     transposition,
                     instruments: this.instruments.length ? this.instruments : undefined,
-                }) as string[]);
+                })) as string[];
 
-                const element = document.getElementById("osmd-svg");
-                if(element) {
-                    element.innerHTML = this.svg.join("\n");
-
-                    element.childNodes.forEach(n => {
-                        const node = n as HTMLElement;
-                        node.removeAttribute("height");
-                        node.removeAttribute("width");
-                    });
-                }
+                this.setSvg();
+                this.loading.sheet = false;
             }
         },
         async increaseOctave() {
@@ -305,12 +311,25 @@ export default defineComponent({
         osmdDiv() {
             return document.getElementById("osmd-svg") as HTMLDivElement;
         },
+        onSongViewer() {
+            return this.$route.name === "song";
+        },
+        instrumentsLabel() {
+            switch (this.instruments.length) {
+                case 0:
+                    return this.$t("sheets_chooseInstrument");
+                case 1:
+                    return this.instruments[0];
+                default:
+                    return this.instruments[0] + ", +" + (this.instruments.length - 1);
+            }
+        },
     },
 });
 </script>
 
 <style lang="scss">
-@import "../style/mixins";
+@import '../style/mixins';
 
 .shadow-scroll {
     @include scrollShadow(white);
@@ -318,9 +337,10 @@ export default defineComponent({
 
 .dark {
     .shadow-scroll {
-        @include scrollShadow(#213F47);
+        @include scrollShadow(#213f47);
     }
 }
+
 #osmd-svg {
     svg {
         width: unset !important;

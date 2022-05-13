@@ -1,6 +1,6 @@
 export const firebaseConfig = {
     apiKey: "AIzaSyDTZsQJxCT3w7cIQzYJ6T3YxNLIF-2LEpk",
-    authDomain: "songtreasures.firebaseapp.com",
+    authDomain: "songtreasures.app",
     projectId: "songtreasures",
     storageBucket: "songtreasures.appspot.com",
     messagingSenderId: "721098499416",

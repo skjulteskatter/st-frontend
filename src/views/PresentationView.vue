@@ -5,26 +5,26 @@
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
         <div class="text-3xl h-full flex-grow flex flex-col">
-            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 py-6 border-b" v-if="song">
+            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 pt-6 pb-3 border-b" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSidebar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
-                <h1 class="text-7xl" v-if="song.number">{{ song.number }}</h1>
-                <div class="ml-auto text-2xl tracking-wide flex flex-col items-end">
+                <h1 class="text-8xl" v-if="song.number">{{ song.number }}</h1>
+                <div class="ml-auto text-3xl tracking-wide flex flex-col items-end">
                     <div class="flex gap-4">
-                        <p v-if="song.Authors.length > 0">
+                        <p v-if="authors.length > 0">
                             {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
-                            <span v-for="author in song.Authors" :key="author.id">
+                            <span v-for="author in authors" :key="author.id">
                                 {{ author.name }}
                             </span>
                         </p>
-                        <span v-if="song.Authors.length">&middot;</span>
-                        <p v-if="song.Composers.length > 0">
+                        <span v-if="authors.length">&middot;</span>
+                        <p v-if="composers.length > 0">
                             {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
-                            <span v-for="composer in song.Composers" :key="composer.id">
+                            <span v-for="composer in composers" :key="composer.id">
                                 {{ composer.name }}
                             </span>
                         </p>
-                        <p v-else-if="!song.Composers.length && !melodyOrigin">{{$t("song_unknownComposer")}}</p>
-                        <p v-if="melodyOrigin">{{ melodyOrigin }}</p>
+                        <p v-else-if="melodyOrigin">{{ melodyOrigin }}</p>
+                        <p v-else>{{$t("song_unknownComposer")}}</p>
                     </div>
                     <div class="flex gap-4">
                         <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
@@ -33,38 +33,41 @@
                         <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
                         <span>{{ song.verses }}</span>
                         <span v-if="song.copyright.text || song.copyright.melody">&middot;</span>
-                        <p
-                            class="text-base tracking-wide"
+                        <div 
+                            class="flex gap-4"
                             v-if="
                                 song.copyright.melody &&
                                 song.copyright.text &&
                                 identicalCopyright
-                            "
-                        >
-                            © {{ getLocaleString(song.copyright.melody.name) }}
-                        </p>
+                            ">
+                            <p>© {{ getLocaleString(song.copyright.melody.name) }}</p>
+                        </div>
                         <div v-else class="flex gap-4">
                             <p v-if="song.copyright.text">
                                 {{ $t("song_text") }} ©
                                 {{ getLocaleString(song.copyright.text.name) }}
                             </p>
-                            <span v-if="song.copyright.text && song.copyright.melody">&middot;</span>
-                            <p v-if="song.copyright.melody">
-                                {{ $t("song_melody") }} ©
-                                {{ getLocaleString(song.copyright.melody.name) }}
-                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <PresentationLyrics v-if="verses" :verses="verses" :songId="song?.id" :class="{ 'hidden': muted }" />
+            <PresentationLyrics 
+                v-if="verses"
+                ref="presentation"
+                :verses="verses"
+                :songId="song?.id"
+                :class="{ 'hidden': muted }"
+                :longestLine="longestLine ?? ''"
+                :verseLines="verseLines"
+                :verseLineLength="verseLineLength"
+            />
         </div>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { Lyrics, Song } from "@/classes";
-import { viewer } from "@/classes/presentation/viewer";
+import { viewer } from "@/classes/presentation";
 import { appSession } from "@/services/session";
 import { PresentationLyrics } from "@/components/presentation";
 import { LyricsVerse } from "@/classes/lyrics";
@@ -78,11 +81,14 @@ export default defineComponent({
         viewer: viewer,
         lyrics: null as Lyrics | null,
         song: null as Song | null,
+        contributors: null as Contributor[] | null,
         verses: null as LyricsVerse[] | null,
         theme: "dark" as "dark" | "light",
         muted: false,
         showSidebar: true,
         verseCount: 0,
+        longestLine: null as string | null,
+        verseLineLength: 0,
     }),
     computed: {
         logoLanguageKey() {
@@ -90,9 +96,6 @@ export default defineComponent({
 
             const languages = ["dk", "en", "es", "fi", "fr", "nl", "no", "pl", "ro", "ru", "un"];
             return languages.includes(this.lyrics.languageKey) ? this.lyrics.languageKey : "en";
-        },
-        Verses() {
-            return this.verses ?? [];
         },
         Collection() {
             return this.song?.Collections.find(c => c.id == this.song?.collectionIds[0]);
@@ -110,53 +113,50 @@ export default defineComponent({
         identicalCopyright() {
             return this.song?.copyright.text?.id == this.song?.copyright.melody?.id;
         },
+        verseLines() {
+            return this.verses?.reduce((prev, cur) => {
+                prev.push(...cur.content);
+                prev.push("");
+                return prev;
+            }, [] as string[]).slice(0, -1) ?? [];
+        },
+        authors() {
+            return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "author" && p.contributorId === i.id)) ?? [];
+        },
+        composers() {
+            return this.contributors?.filter(i => this.song?.participants.some(p => p.type === "composer" && p.contributorId === i.id)) ?? [];
+        },
     },
     async mounted() {
-        await appSession.init();
-        viewer.init();
-        this.lyrics = viewer.Lyrics;
-        this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-        this.song = viewer.Song ?? null;
-        this.verses = viewer.Verses;
-        this.showSidebar = viewer.Settings?.showSideBar === true;
+        presentation.initialize("viewer");
+        this.song = presentation.Song;
+        this.contributors = presentation.Contributors;
+        this.verses = presentation.Verses;
+        this.refreshLyrics();
 
-        viewer.registerCallback("lyrics", () => {
-            this.lyrics = viewer.Lyrics;
-            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-            this.song = viewer.Song ?? null;
+        this.showSidebar = presentation.Settings?.showSideBar === true;
+
+        presentation.registerCallback("lyrics", () => {
+            this.refreshLyrics();
         });
 
-        viewer.registerCallback("settings", () => {
-            this.verses = viewer.Verses;
-            this.muted = viewer.Settings?.muted === true;
-            this.theme = viewer.Settings?.theme ?? "dark";
-            this.showSidebar = viewer.Settings?.showSideBar === true;
+        presentation.registerCallback("song", () => {
+            this.song = presentation.Song;
         });
 
-        addEventListener("keydown", this.onKeyDown);
-    },
-    unmounted() {
-        removeEventListener("keydown", this.onKeyDown); // Prevent memory leaks
+        presentation.registerCallback("contributors", () => {
+            this.contributors = presentation.Contributors;
+        });
+
+        presentation.registerCallback("settings", () => {
+            this.verses = presentation.Verses;
+            this.muted = presentation.Settings?.muted === true;
+            this.theme = presentation.Settings?.theme ?? "dark";
+            this.showSidebar = presentation.Settings?.showSideBar === true;
+            this.refreshLyrics();
+        });
     },
     methods: {
-        onKeyDown(e: KeyboardEvent): void {
-            if (e.key == "ArrowRight") {
-                e.preventDefault(); // prevent cursor from appearing in view
-                viewer.next();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-            if (e.key == "ArrowLeft") {
-                e.preventDefault(); // prevent cursor from appearing in view
-                viewer.previous();
-                this.verses = viewer.Verses;
-                this.muted = viewer.Settings?.muted === true;
-            }
-
-            if (e.ctrlKey && e.key === "m") {
-                viewer.mute();
-            }
-        },
         getLocaleString(dictionary: { [key: string]: string }) {
             if (!dictionary) return "";
             return (
@@ -164,6 +164,38 @@ export default defineComponent({
                 dictionary.en ??
                 dictionary[Object.keys(dictionary)[0]]
             );
+        },
+        refreshLyrics() {
+            this.lyrics = presentation.Lyrics;
+            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
+            this.verseLineLength = 0;
+            
+            const verses = Object.entries(this.lyrics?.content ?? {}).map(e => e[1] as LyricsVerse);
+            this.longestLine = verses.reduce((prev, cur) => {
+                prev.push(...cur.content);
+                prev.push("");
+                return prev;
+            }, [] as string[]).slice(0, -1).sort((a, b) => b.length - a.length)[0];
+
+            let i = 0;
+            const size = presentation.Settings?.size;
+            if (size) {
+                while (i < verses.length) {
+                    const verseRange = presentation.GetVerses(presentation.GetVerseRange(i, size));
+
+                    const verseLines = verseRange.reduce((prev, cur) => {
+                        prev.push(...cur.content);
+                        prev.push("");
+                        return prev;
+                    }, [] as string[]).slice(0, -1);
+
+                    if (!this.verseLineLength || verseLines.length > this.verseLineLength) {
+                        this.verseLineLength = verseLines.length;
+                    }
+
+                    i += size;
+                }
+            }
         },
     },
 });

@@ -84,7 +84,7 @@ import { defineComponent, PropType } from "@vue/runtime-core";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";
-import { Collection, Song } from "@/classes";
+import { Collection, Song, transposer } from "@/classes";
 import { logs } from "@/services/logs";
 import { SheetMusicOptions } from "songtreasures";
 import { MediaFile } from "hiddentreasures-js";
@@ -151,7 +151,7 @@ export default defineComponent({
                 fileId: sheet?.id,
                 url: sheet?.directUrl,
                 originalKey: this.song?.originalKey ?? "C",
-                transposition: undefined,
+                transposition: transposer.getRelativeTransposition(appSession.user.settings.defaultTransposition, true),
                 type: sheet?.type,
                 clef: "treble",
             };

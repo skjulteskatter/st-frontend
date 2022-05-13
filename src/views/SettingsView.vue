@@ -71,7 +71,7 @@ export default defineComponent({
     }),
     methods: {
         logout() {
-            this.store.dispatch(SessionActionTypes.SESSION_CLEAR).then(() => {
+            auth.logout().then(() => {
                 window.location.replace("/login");
             });
         },

@@ -55,7 +55,7 @@
                                 :songs="
                                     authorSongs.filter((s) =>
                                         s.collectionIds.some(col => col == c.id)
-                                    )
+                                    ).sort((a, b) => a.getNumber(c.id) - b.getNumber(c.id))
                                 "
                             />
                             <SongListCard
@@ -64,7 +64,7 @@
                                 :songs="
                                     composerSongs.filter((s) =>
                                         s.collectionIds.some(col => col == c.id)
-                                    )
+                                    ).sort((a, b) => a.getNumber(c.id) - b.getNumber(c.id))
                                 "
                             />
                         </div>

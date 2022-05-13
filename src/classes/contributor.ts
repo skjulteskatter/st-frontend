@@ -11,6 +11,7 @@ export default class Contributor implements ApiContributor {
     public image;
 
     constructor(contributor: ApiContributor) {
+        this.raw = contributor;
         this.biography = contributor.biography ? new LocaleString(contributor.biography) : undefined;
         this.birthYear = contributor.birthYear;
         this.country = contributor.country;
@@ -19,4 +20,6 @@ export default class Contributor implements ApiContributor {
         this.subtitle = contributor.subtitle;
         this.image = contributor.image;
     }
+
+    public raw;
 }

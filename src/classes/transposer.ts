@@ -156,10 +156,12 @@ class Transposer {
     }
     
     public getRelativeTransposition(relativeKey: string, sheetMusic = false) {
+        relativeKey = relativeKey.replace("m", "");
         return sheetMusic ? smTs[relativeKey] : commonTranspositions[relativeKey];
     }
 
     public getTransposition(originalKey: string, relativeKey: string) {
+        originalKey = originalKey.replace("m", "");
         const diff = commonTranspositions[originalKey] - commonTranspositions[relativeKey];
         return diff < 0 ? [diff, diff + 12] : [diff - 12, diff];
     }
@@ -200,6 +202,7 @@ class Transposer {
     }
 
     public getTransposedString(originalKey: string, transposition: number, sheetmusic = false) {
+        originalKey = originalKey.replace("m", "");
         if (transposition == 0) {
             return originalKey;
         }
