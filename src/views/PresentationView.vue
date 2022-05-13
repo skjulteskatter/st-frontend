@@ -169,10 +169,14 @@ export default defineComponent({
         refreshLyrics() {
             this.lyrics = presentation.Lyrics;
             this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
-            this.longestLine = this.verseLines.sort((a, b) => b.length - a.length)[0];
             this.verseLineLength = 0;
             
-            const verses = Object.entries(this.lyrics?.content ?? {});
+            const verses = Object.entries(this.lyrics?.content ?? {}).map(e => e[1] as LyricsVerse);
+            this.longestLine = verses.reduce((prev, cur) => {
+                prev.push(...cur.content);
+                prev.push("");
+                return prev;
+            }, [] as string[]).slice(0, -1).sort((a, b) => b.length - a.length)[0];
 
             let i = 0;
             const size = presentation.Settings?.size;
