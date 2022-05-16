@@ -182,6 +182,15 @@ export default class Lyrics implements ILyrics {
         return ls;
     }
 
+    public get hasChorus() {
+        for(const key of Object.keys(this.content)) {
+            if (key.startsWith("chorus")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public get size() {
         if (this.ContainsChords)
             throw new Error("Invalid format for .size");
