@@ -176,7 +176,7 @@ export default defineComponent({
                 prev.push(...cur.content);
                 prev.push("");
                 return prev;
-            }, [] as string[]).slice(0, -1).sort((a, b) => b.length - a.length)[0];
+            }, [] as string[]).slice(0, -1).filter(l => !(l.startsWith("(") && l.endsWith(")"))).sort((a, b) => b.length - a.length)[0];
 
             let i = 0;
             const size = presentation.Settings?.size;

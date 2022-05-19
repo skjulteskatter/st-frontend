@@ -352,7 +352,7 @@ export class PresentationControl {
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
         this.lyrics = lyrics.raw;
         this.settings = settings ?? {
-            size: PresentationControl.getSize(lyrics.size),
+            size: PresentationControl.getSize(lyrics.size, lyrics.hasChorus),
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             }),
@@ -364,11 +364,11 @@ export class PresentationControl {
         };
     }
 
-    private static getSize(lyricsSize: number) {
+    private static getSize(lyricsSize: number, hasChorus: boolean) {
         if (lyricsSize > 4) {
             return 1;
         }
-        if (lyricsSize > 3) {
+        if (lyricsSize > 3 || hasChorus) {
             return 2;
         }
         return 3;
@@ -376,7 +376,7 @@ export class PresentationControl {
 
     public resetSettings(lyrics: Lyrics) {
         this.settings = {
-            size: PresentationControl.getSize(lyrics.size),
+            size: PresentationControl.getSize(lyrics.size, lyrics.hasChorus),
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             }),
