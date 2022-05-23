@@ -54,6 +54,10 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		longestLineLength: {
+			type: Number,
+			required: true,
+		},
 		verseLineLength: {
 			type: Number,
 			required: true,
@@ -112,25 +116,7 @@ export default defineComponent({
 		calculateFontSize() {
 			if (!this.container) return;
 
-			const rect = this.container.getBoundingClientRect();
-
-			const heightFactor = (this.verseLineLength * 1.4);
-			const widthFactor = (this.longestLine.length / 1.8);
-
-			// eslint-disable-next-line no-console
-			console.log("FACTORS\nHEIGHT: " + heightFactor + "\nWIDTH: " + widthFactor);
 			
-			const heightSize = rect.height / heightFactor;
-			const widthSize = rect.width / widthFactor;
-
-			// eslint-disable-next-line no-console
-			console.log("SIZE\nHEIGHT: " + heightSize + "\nWIDTH: " + widthSize);
-
-			this.fontSize = Math.min(
-				heightSize,
-				widthSize,
-				64,
-			);
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(4 / this.verseLineLength, 0.5) + 1;
@@ -139,13 +125,18 @@ export default defineComponent({
 			if (!this.container) return;
 
 			const rect = this.container.getBoundingClientRect();
-			const linefactor = (300 - this.longestLine.length) / 300;
-			this.margin.left = 10 + ((rect.width / (this.longestLine?.length / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
+			const linefactor = (300 - this.longestLineLength) / 300;
+			this.margin.left = 10 + ((rect.width / (this.longestLineLength / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
 			this.margin.top = rect.height / (this.verseLineLength * 3);
 		},
 		render() {
+			const rect = this.container?.getBoundingClientRect();
+			if (!rect) return;
+
+			this.fontSize = Math.min((rect.width) / (this.longestLineLength / 1.5), (rect.height - 20) / (this.verseLineLength * 1.25));
+
 			this.calculateLineHeight();
-			this.calculateFontSize();
+			// this.calculateFontSize();
 			this.calculateWhitespace();
 
 			this.setProperties();

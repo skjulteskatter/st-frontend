@@ -58,6 +58,7 @@
                 :songId="song?.id"
                 :class="{ 'hidden': muted }"
                 :longestLine="longestLine ?? ''"
+                :longestLineLength="longestLineLength"
                 :verseLines="verseLines"
                 :verseLineLength="verseLineLength"
             />
@@ -90,6 +91,7 @@ export default defineComponent({
         verseCount: 0,
         longestLine: null as string | null,
         verseLineLength: 0,
+        longestLineLength: 0,
     }),
     computed: {
         logoLanguageKey() {
@@ -130,10 +132,10 @@ export default defineComponent({
     },
     async mounted() {
         presentation.initialize("viewer");
+        this.refreshLyrics();
         this.song = presentation.Song;
         this.contributors = presentation.Contributors;
         this.verses = presentation.Verses;
-        this.refreshLyrics();
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
@@ -150,11 +152,11 @@ export default defineComponent({
         });
 
         presentation.registerCallback("settings", () => {
+            this.refreshLyrics();
             this.verses = presentation.Verses;
             this.muted = presentation.Settings?.muted === true;
             this.theme = presentation.Settings?.theme ?? "dark";
             this.showSidebar = presentation.Settings?.showSideBar === true;
-            this.refreshLyrics();
         });
     },
     methods: {
@@ -172,11 +174,28 @@ export default defineComponent({
             this.verseLineLength = 0;
             
             const verses = Object.entries(this.lyrics?.content ?? {}).map(e => e[1] as LyricsVerse);
+
+            const calculateLength = (line: string) => {
+                let lineLength = 0;
+                for (let i = 0; i < line.length; i++) {
+                    const letter = line[i];
+                    if ("ijIltfr".includes(letter)) {
+                        lineLength += 0.5;
+                    } else {
+                        lineLength += 1;
+                    }
+                }
+                return lineLength;
+            };
+
             this.longestLine = verses.reduce((prev, cur) => {
                 prev.push(...cur.content);
                 prev.push("");
                 return prev;
-            }, [] as string[]).slice(0, -1).filter(l => !(l.startsWith("(") && l.endsWith(")"))).sort((a, b) => b.length - a.length)[0];
+            }, [] as string[]).slice(0, -1).filter(l => !(l.startsWith("(") && l.endsWith(")")))
+                .sort((a, b) => calculateLength(b) - calculateLength(a))[0];
+
+            this.longestLineLength = calculateLength(this.longestLine);
 
             let i = 0;
             const size = presentation.Settings?.size;
