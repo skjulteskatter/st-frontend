@@ -133,9 +133,9 @@ export default defineComponent({
     async mounted() {
         presentation.initialize("viewer");
         this.refreshLyrics();
-        this.song = presentation.Song;
         this.contributors = presentation.Contributors;
         this.verses = presentation.Verses;
+        this.song = presentation.Song;
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
@@ -180,7 +180,7 @@ export default defineComponent({
                 for (let i = 0; i < line.length; i++) {
                     const letter = line[i];
                     if ("ijIltfr".includes(letter)) {
-                        lineLength += 0.5;
+                        lineLength += 0.7;
                     } else {
                         lineLength += 1;
                     }
@@ -204,13 +204,13 @@ export default defineComponent({
                     const verseRange = presentation.GetVerses(presentation.GetVerseRange(i, size));
 
                     const verseLines = verseRange.reduce((prev, cur) => {
-                        prev.push(...cur.content);
+                        prev.push(...cur.content.filter(l => !l.trim().startsWith("(")));
                         prev.push("");
                         return prev;
                     }, [] as string[]).slice(0, -1);
 
                     if (!this.verseLineLength || verseLines.length > this.verseLineLength) {
-                        this.verseLineLength = verseLines.length;
+                        this.verseLineLength = verseLines.length + 1;
                     }
 
                     i += size;

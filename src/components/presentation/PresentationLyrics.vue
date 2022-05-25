@@ -40,6 +40,7 @@ export default defineComponent({
 				top: 0,
 				left: 0,
 			},
+			expanded: false,
 		};
 	},
 	props: {
@@ -112,6 +113,7 @@ export default defineComponent({
 			this.container.style.lineHeight = `${this.lineHeight}`;
 			this.element.style.marginTop = `${this.recalculatePixels(this.margin.top)}px`;
 			this.element.style.marginLeft = `${this.recalculatePixels(this.margin.left)}px`;
+			this.element.style.transform = this.expanded ? "scale(1.15,1)" : "";
 		},
 		calculateFontSize() {
 			if (!this.container) return;
@@ -133,11 +135,23 @@ export default defineComponent({
 			const rect = this.container?.getBoundingClientRect();
 			if (!rect) return;
 
-			this.fontSize = Math.min((rect.width) / (this.longestLineLength / 1.5), (rect.height - 20) / (this.verseLineLength * 1.25));
+			const widthSize = (rect.width) / (this.longestLineLength / 1.65);
+			const heightSize = (rect.height - 100) / (this.verseLineLength * 1.3);
+
+			console.log("WidthSize: " + widthSize);
+			console.log("HeightSize: " + heightSize);
+
+			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
+			this.margin.left = 20 + (rect.width / (this.longestLine.length / 4));
+			this.margin.top = 10 + (rect.height / (this.verseLineLength * 3));
+
+			this.expanded = this.verseLineLength > 10;
+			if (this.expanded) {
+				this.margin.left = this.margin.left * 2;
+			}
 
 			this.calculateLineHeight();
 			// this.calculateFontSize();
-			this.calculateWhitespace();
 
 			this.setProperties();
 		},
