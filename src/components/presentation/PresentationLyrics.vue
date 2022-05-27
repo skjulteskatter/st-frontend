@@ -40,6 +40,7 @@ export default defineComponent({
 				top: 0,
 				left: 0,
 			},
+			expanded: false,
 		};
 	},
 	props: {
@@ -52,6 +53,10 @@ export default defineComponent({
 		},
 		longestLine: {
 			type: String,
+			required: true,
+		},
+		longestLineLength: {
+			type: Number,
 			required: true,
 		},
 		verseLineLength: {
@@ -108,45 +113,44 @@ export default defineComponent({
 			this.container.style.lineHeight = `${this.lineHeight}`;
 			this.element.style.marginTop = `${this.recalculatePixels(this.margin.top)}px`;
 			this.element.style.marginLeft = `${this.recalculatePixels(this.margin.left)}px`;
+			this.element.style.transform = this.expanded ? "scale(1.15,1)" : "";
 		},
 		calculateFontSize() {
 			if (!this.container) return;
 
-			const rect = this.container.getBoundingClientRect();
-
-			const heightFactor = (this.verseLineLength * 1.4);
-			const widthFactor = (this.longestLine.length / 1.8);
-
-			// eslint-disable-next-line no-console
-			console.log("FACTORS\nHEIGHT: " + heightFactor + "\nWIDTH: " + widthFactor);
 			
-			const heightSize = rect.height / heightFactor;
-			const widthSize = rect.width / widthFactor;
-
-			// eslint-disable-next-line no-console
-			console.log("SIZE\nHEIGHT: " + heightSize + "\nWIDTH: " + widthSize);
-
-			this.fontSize = Math.min(
-				heightSize,
-				widthSize,
-				64,
-			);
 		},
 		calculateLineHeight() {
 			this.lineHeight = Math.min(4 / this.verseLineLength, 0.5) + 1;
 		},
-		calculateWhitespace() {
-			if (!this.container) return;
+		// calculateWhitespace() {
+		// 	if (!this.container) return;
 
-			const rect = this.container.getBoundingClientRect();
-			const linefactor = (300 - this.longestLine.length) / 300;
-			this.margin.left = 10 + ((rect.width / (this.longestLine?.length / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
-			this.margin.top = rect.height / (this.verseLineLength * 3);
-		},
+		// 	const rect = this.container.getBoundingClientRect();
+		// 	const linefactor = (300 - this.longestLineLength) / 300;
+		// 	this.margin.left = 10 + ((rect.width / (this.longestLineLength / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
+		// 	this.margin.top = rect.height / (this.verseLineLength * 3);
+		// },
 		render() {
+			const rect = this.container?.getBoundingClientRect();
+			if (!rect) return;
+
+			const widthSize = (rect.width) / (this.longestLineLength / 1.65);
+			const heightSize = (rect.height - 100) / (this.verseLineLength * 1.3);
+
+			// eslint-disable-next-line no-console
+			console.log("WidthSize: " + widthSize);
+			// eslint-disable-next-line no-console
+			console.log("HeightSize: " + heightSize);
+
+			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
+			this.margin.left = Math.max(this.verseLineLength * 5, 300 / this.longestLineLength + 40) * 5;
+			this.margin.top = (rect.height / (this.verseLineLength * 2));
+
+			this.expanded = this.verseLineLength > 10;
+
 			this.calculateLineHeight();
-			this.calculateFontSize();
-			this.calculateWhitespace();
+			// this.calculateFontSize();
 
 			this.setProperties();
 		},
