@@ -123,14 +123,14 @@ export default defineComponent({
 		calculateLineHeight() {
 			this.lineHeight = Math.min(4 / this.verseLineLength, 0.5) + 1;
 		},
-		calculateWhitespace() {
-			if (!this.container) return;
+		// calculateWhitespace() {
+		// 	if (!this.container) return;
 
-			const rect = this.container.getBoundingClientRect();
-			const linefactor = (300 - this.longestLineLength) / 300;
-			this.margin.left = 10 + ((rect.width / (this.longestLineLength / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
-			this.margin.top = rect.height / (this.verseLineLength * 3);
-		},
+		// 	const rect = this.container.getBoundingClientRect();
+		// 	const linefactor = (300 - this.longestLineLength) / 300;
+		// 	this.margin.left = 10 + ((rect.width / (this.longestLineLength / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
+		// 	this.margin.top = rect.height / (this.verseLineLength * 3);
+		// },
 		render() {
 			const rect = this.container?.getBoundingClientRect();
 			if (!rect) return;
@@ -144,13 +144,10 @@ export default defineComponent({
 			console.log("HeightSize: " + heightSize);
 
 			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
-			this.margin.left = 20 + (rect.width / (this.longestLine.length / 4));
-			this.margin.top = 10 + (rect.height / (this.verseLineLength * 3));
+			this.margin.left = Math.max(this.verseLineLength * 5, 300 / this.longestLineLength + 40) * 5;
+			this.margin.top = (rect.height / (this.verseLineLength * 2));
 
 			this.expanded = this.verseLineLength > 10;
-			if (this.expanded) {
-				this.margin.left = this.margin.left * 2;
-			}
 
 			this.calculateLineHeight();
 			// this.calculateFontSize();
