@@ -138,7 +138,9 @@ export default defineComponent({
 			const widthSize = (rect.width) / (this.longestLineLength / 1.65);
 			const heightSize = (rect.height - 100) / (this.verseLineLength * 1.3);
 
+			// eslint-disable-next-line no-console
 			console.log("WidthSize: " + widthSize);
+			// eslint-disable-next-line no-console
 			console.log("HeightSize: " + heightSize);
 
 			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
