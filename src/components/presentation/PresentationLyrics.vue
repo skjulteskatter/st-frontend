@@ -151,7 +151,6 @@ export default defineComponent({
 			// if (this.expanded) {
 			// 	this.margin.left = this.margin.left * 3
 			// }
-			console.log(this.margin.left);
 			this.margin.top = (rect.height / (this.verseLineLength * 2));
 
 			this.calculateLineHeight();
