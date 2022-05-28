@@ -135,6 +135,8 @@ export default defineComponent({
 			const rect = this.container?.getBoundingClientRect();
 			if (!rect) return;
 
+			this.expanded = this.verseLineLength > 10;
+
 			const widthSize = (rect.width) / (this.longestLineLength / 1.65);
 			const heightSize = (rect.height - 100) / (this.verseLineLength * 1.3);
 
@@ -144,13 +146,13 @@ export default defineComponent({
 			console.log("HeightSize: " + heightSize);
 
 			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
-			const verseLineSize = this.verseLineLength * 10;
-			const longestLineSize = 100 / this.longestLineLength * 23;
-			
-			this.margin.left = Math.min(verseLineSize, longestLineSize) * 3;
-			this.margin.top = (rect.height / (this.verseLineLength * 2));
 
-			this.expanded = this.verseLineLength > 10;
+			this.margin.left = (rect.width - (this.fontSize / 2 * this.longestLineLength)) / 2;
+			// if (this.expanded) {
+			// 	this.margin.left = this.margin.left * 3
+			// }
+			console.log(this.margin.left);
+			this.margin.top = (rect.height / (this.verseLineLength * 2));
 
 			this.calculateLineHeight();
 			// this.calculateFontSize();
