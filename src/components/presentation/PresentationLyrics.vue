@@ -144,7 +144,10 @@ export default defineComponent({
 			console.log("HeightSize: " + heightSize);
 
 			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
-			this.margin.left = Math.max(this.verseLineLength * 5, 300 / this.longestLineLength + 40) * 5;
+			const verseLineSize = this.verseLineLength * 10;
+			const longestLineSize = 100 / this.longestLineLength * 23;
+			
+			this.margin.left = Math.min(verseLineSize, longestLineSize) * 3;
 			this.margin.top = (rect.height / (this.verseLineLength * 2));
 
 			this.expanded = this.verseLineLength > 10;
