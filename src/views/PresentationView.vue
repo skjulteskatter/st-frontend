@@ -189,7 +189,11 @@ export default defineComponent({
             };
 
             this.longestLine = verses.reduce((prev, cur) => {
-                prev.push(...cur.content);
+                if (cur.type === "chorus") {
+                    prev.push(...cur.content.map(i => "  " + i));
+                } else {
+                    prev.push(...cur.content);
+                }
                 prev.push("");
                 return prev;
             }, [] as string[]).slice(0, -1).filter(l => !(l.startsWith("(") && l.endsWith(")")))

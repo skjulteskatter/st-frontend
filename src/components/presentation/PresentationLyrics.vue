@@ -113,32 +113,30 @@ export default defineComponent({
 			this.container.style.lineHeight = `${this.lineHeight}`;
 			this.element.style.marginTop = `${this.recalculatePixels(this.margin.top)}px`;
 			this.element.style.marginLeft = `${this.recalculatePixels(this.margin.left)}px`;
-			this.element.style.transform = this.expanded ? "scale(1.15,1)" : "";
-		},
-		calculateFontSize() {
-			if (!this.container) return;
 
-			
+			if (this.expanded) {
+				const scale = this.verseLineLength % 10 * 0.02;
+				this.element.style.transform = "scale(" + (1 + scale) + ",1)";
+			}
 		},
 		calculateLineHeight() {
-			this.lineHeight = Math.min(4 / this.verseLineLength, 0.5) + 1;
+			const rect = this.container?.getBoundingClientRect();
+			if (!rect) {
+				return;
+			}
+			this.lineHeight = Math.min(1.5, (rect.height - this.margin.top) / (this.fontSize * this.verseLineLength));
 		},
-		// calculateWhitespace() {
-		// 	if (!this.container) return;
-
-		// 	const rect = this.container.getBoundingClientRect();
-		// 	const linefactor = (300 - this.longestLineLength) / 300;
-		// 	this.margin.left = 10 + ((rect.width / (this.longestLineLength / 8)) / (this.verseLineLength > 10 ? 1 : 1.5)) * linefactor;
-		// 	this.margin.top = rect.height / (this.verseLineLength * 3);
-		// },
 		render() {
 			const rect = this.container?.getBoundingClientRect();
 			if (!rect) return;
 
-			this.expanded = this.verseLineLength > 10;
+			const rectHeight = rect.height * 0.95;
+			const rectWidth = rect.width * 0.95;
 
-			const widthSize = (rect.width) / (this.longestLineLength / 1.65);
-			const heightSize = (rect.height - 100) / (this.verseLineLength * 1.3);
+			// this.expanded = this.verseLineLength > 10 && this.longestLineLength < 40;
+
+			const widthSize = (rectWidth) / (this.longestLineLength / 1.8);
+			const heightSize = (rectHeight - 100) / (this.verseLineLength * 1.3);
 
 			// eslint-disable-next-line no-console
 			console.log("WidthSize: " + widthSize);
@@ -147,14 +145,13 @@ export default defineComponent({
 
 			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
 
-			this.margin.left = (rect.width - (this.fontSize / 2 * this.longestLineLength)) / 2;
+			this.margin.left = Math.min(rectWidth * 0.2, (rectWidth - (this.fontSize / 2.2 * this.longestLineLength)) / 2 * 1.05);
 			// if (this.expanded) {
 			// 	this.margin.left = this.margin.left * 3
 			// }
-			this.margin.top = (rect.height / (this.verseLineLength * 2));
+			this.margin.top = (rectHeight / (this.verseLineLength * 2)) * 1.05;
 
 			this.calculateLineHeight();
-			// this.calculateFontSize();
 
 			this.setProperties();
 		},
