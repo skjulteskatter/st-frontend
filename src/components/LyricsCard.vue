@@ -90,7 +90,7 @@
             <SwitchGroup as="div" class="flex flex-col cursor-pointer ml-4" v-if="chordsEnabled && song.newMelody && song.newMelodies.includes(languageKey)">
                 <SwitchLabel class="text-sm text-gray-500 dark:text-gray-400">{{ $t("song_newMelody") }}</SwitchLabel>
                 <Switch
-                    @click="newMelody()"
+                    v-model="newMelody"
                     class="focus-visible:outline-none"
                 >
                     <div
@@ -241,6 +241,15 @@ export default defineComponent({
         editor() {
             return appSession.user.roles.some(r => ["administrator", "editor"].includes(r)) == true;
         },
+        newMelody: {
+            get() {
+                return this.newMelodyView;
+            },
+            set(value: boolean) {
+                this.newMelodyView = value;
+                this.transpose();
+            },
+        },
     },
     emits: [
         "translate",
@@ -265,10 +274,6 @@ export default defineComponent({
         },
         setView(type: SongViewType) {
             this.$emit("setView", type);
-        },
-        newMelody() {
-            this.newMelodyView = !this.newMelodyView;
-            this.transpose();
         },
         edit() {
             window.open(`https://songtreasures.sanity.studio/desk/lyrics;${this.lyrics?.id}`);

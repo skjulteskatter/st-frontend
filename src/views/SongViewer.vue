@@ -55,7 +55,6 @@
                         <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
                         <Switch
                             :disabled="lyrics?.ContainsChords"
-                            @click="extend()"
                             v-model="isExtended"
                             class="focus-visible:outline-none"
                             :class="{ 'opacity-50 cursor-not-allowed': lyrics?.ContainsChords }"
@@ -305,8 +304,19 @@ export default defineComponent({
         extended() {
             return this.store.getters.extended;
         },
-        isExtended() {
-            return this.store.state.session.extend;
+        isExtended: {
+            get() {
+                return this.store.state.session.extend;
+            },
+            set(value: boolean) {
+                if (!this.control.Initialized) {
+                    this.control.initialize("control");
+                    if (this.lyrics)
+                        this.control.setLyrics(this.lyrics);
+                    this.refresh();
+                }
+                this.store.commit(SessionMutationTypes.EXTEND, value);
+            },
         },
         isAdmin() {
             return this.store.getters.isAdmin;
@@ -511,15 +521,6 @@ export default defineComponent({
         },
         goToEditPage() {
             window.open(`https://songtreasures.sanity.studio/desk/select-songs;${this.collection?.id};${this.song?.id}`);
-        },
-        extend() {
-            if (!this.control.Initialized) {
-                this.control.initialize("control");
-                if (this.lyrics)
-                    this.control.setLyrics(this.lyrics);
-                this.refresh();
-            }
-            this.store.commit(SessionMutationTypes.EXTEND, !this.isExtended);
         },
         getTransposedLyrics(language?: string, format?: Format) {
             return this.song?.transposeLyrics(transposer.getRelativeTransposition(this.defaultTransposition), language ?? this.store.state.songs.language, undefined, this.store.state.songs.newMelody, format ?? "performance");
