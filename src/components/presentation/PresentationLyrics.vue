@@ -1,6 +1,7 @@
 <template>
 	<article id="presentation-lyrics">
 		<div id="verses" ref="versesElement">
+			<p v-if="verses.length === 1 && (verseLineLength - 1) > verses[0].content.length" class="line opacity-0">.</p>
 			<div
 				class="relative verse"
 				v-for="(verse, i) in verses"
