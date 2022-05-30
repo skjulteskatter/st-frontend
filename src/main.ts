@@ -6,6 +6,7 @@ import { store } from "@/store";
 import "tailwindcss/tailwind.css";
 import "@/style/main.scss";
 import "@/style/tailwind.css";
+import "@stripe/stripe-js";
 
 // GLOBAL COMPONENTS
 import { 

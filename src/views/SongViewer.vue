@@ -421,7 +421,7 @@ export default defineComponent({
         },
         onKeyDown(e: KeyboardEvent) {
             if (e.ctrlKey && e.altKey && e.code === "KeyP") {
-                this.extend();
+                this.isExtended = !this.isExtended;
                 e.preventDefault();
                 return false;
             }
