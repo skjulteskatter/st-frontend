@@ -144,7 +144,7 @@ export default defineComponent({
 			// eslint-disable-next-line no-console
 			console.log("HeightSize: " + heightSize);
 
-			this.fontSize = Math.min(Math.min(widthSize, heightSize), 70);
+			this.fontSize = Math.min(Math.min(widthSize, heightSize), 64);
 
 			this.margin.left = Math.min(rectWidth * 0.2, (rectWidth - (this.fontSize / 2.2 * this.longestLineLength)) / 2 * 1.05);
 			// if (this.expanded) {
