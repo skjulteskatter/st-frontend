@@ -63,7 +63,7 @@ class CacheService {
         "books",
     ];
     // Only update if you need to clear cache for everyone or a new store is added.
-    private version = 37;
+    private version = 38;
 
     private db() {
         const v = this.version;
