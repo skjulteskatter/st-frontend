@@ -320,14 +320,12 @@ export class PresentationControl {
         const settings = Object.assign({}, this.settings);
         settings.showSideBar = !settings.showSideBar;
         this.settings = settings;
-        this.commit();
     }
 
     public toggleSingleVerse() {
         const settings = Object.assign({}, this.settings);
         settings.singleVerse = !settings.singleVerse;
         this.settings = settings;
-        this.commit();
     }
 
     public setTheme(theme: "dark" | "light") {
