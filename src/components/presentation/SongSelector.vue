@@ -11,8 +11,9 @@
             <div class="flex gap-2">
                 <BaseButton
                     class="flex-grow"
-                    @click="$emit('previous')"
+                    @click="previous"
                     theme="secondary"
+					:loading="loading && clicked == 'previous'"
                 >
                     <template #icon>
                         <ArrowSmLeftIcon class="w-4 h-4" />
@@ -21,8 +22,9 @@
                 </BaseButton>
                 <BaseButton
                     class="flex-grow"
-                    @click="$emit('next')"
+                    @click="next"
                     theme="secondary"
+					:loading="loading && clicked == 'next'"
                 >
                     <template #icon>
                         <ArrowSmRightIcon class="w-4 h-4" />
@@ -63,9 +65,13 @@ export default defineComponent({
 		songs: {
 			type: Array as PropType<Song[]>,
 		},
+		loading: {
+			type: Boolean,
+		}
 	},
 	data: () => ({
 		number: null as number | null,
+		clicked: null as "next" | "previous" | null
 	}),
 	emits: [
 		"setSong",
@@ -91,14 +97,21 @@ export default defineComponent({
 			this.number = null;
 			this.$emit("setSong", songId);
 		},
-
-    onInputKeyUp(e: KeyboardEvent): void {
-      if(e.key === "Enter") {
-        if(this.filteredSong) {
-          this.selectSong(this.filteredSong.id);
-        }
-      }
-    },
+		next() {
+			this.$emit("next");
+			this.clicked = "next"
+		},
+		previous() {
+			this.$emit("previous")
+			this.clicked = "previous"
+		},
+    	onInputKeyUp(e: KeyboardEvent): void {
+			if(e.key === "Enter") {
+				if(this.filteredSong) {
+					this.selectSong(this.filteredSong.id);
+				}
+			}
+		},
 	},
 });
 </script>

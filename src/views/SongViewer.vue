@@ -152,6 +152,7 @@
                                 @mute="control.mute()"
                             />
                             <SongSelector 
+                                :loading="fullLoading"
                                 :songs="collection?.songs" 
                                 @setSong="setSong"
                                 @next="song.next()"
