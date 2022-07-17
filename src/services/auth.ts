@@ -34,7 +34,7 @@ import http from "./http";
 import { cache } from "./cache";
 import { appSession } from "./session";
 
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 const analyticsApp = getAnalytics(firebaseApp);
 
 export const analytics = {

@@ -4,6 +4,9 @@ import { ApiContributor, ILyrics, ISong } from "songtreasures-api";
 import { Lyrics } from "@/classes";
 import Song from "../song";
 import Contributor from "../contributor";
+import EventListener, { PresentationDocument, VContributor, VLyrics } from "@/services/eventListener";
+import { appSession } from "@/services/session";
+import { getVerses, LyricsVerse } from "../lyrics";
 
 export type Settings = {
     size: number;
@@ -19,8 +22,8 @@ export type Settings = {
 
 type KeyTypes = {
     song: ISong;
-    lyrics: ILyrics;
-    contributors: ApiContributor[];
+    lyrics: VLyrics;
+    contributors: VContributor[];
     settings: Settings;
 }
 
@@ -33,10 +36,17 @@ export class PresentationControl {
     public get Initialized() {
         return this.initialized;
     }
+
+    public eventListener: EventListener | null = null;
+
     protected store = useStore();
 
     public get Song() {
         return this.song ? new Song(this.song) : null;
+    }
+
+    public get rawSong() {
+        return this.song;
     }
 
     private _song?: ISong;
@@ -46,65 +56,56 @@ export class PresentationControl {
     }
 
     protected get song() {
-        if (!this._song)
-            this._song = this.getKey("song");
         return this._song;
     }
 
     public get Contributors() {
-        return this._contributors?.map(i => new Contributor(i)) ?? null;
+        return this._contributors ?? null;
     }
-    private _contributors?: ApiContributor[];
+    private _contributors?: VContributor[];
     protected set contributors(v) {
         this._contributors = v;
         this.executeCallback("contributors");
     }
     protected get contributors() {
-        if (!this._contributors)
-            this._contributors = this.getKey("contributors");
+        return this._contributors;
+    }
+    public get rawContributors() {
         return this._contributors;
     }
 
-    private _lyrics?: ILyrics;
+    private _lyrics?: VLyrics;
 
     protected set lyrics(v) {
         this._lyrics = v;
+        this.verses = v?.verses ?? {};
         this.executeCallback("lyrics");
     }
 
     protected get lyrics() {
-        if (!this._lyrics)
-            this._lyrics = this.getKey("lyrics");
         return this._lyrics;
     }
 
-    public commit() {
-        if (this.song)
-            this.setKey("song", this.song);
-        if (this.contributors)
-            this.setKey("contributors", this.contributors);
-        if (this.lyrics)
-            this.setKey("lyrics", this.lyrics);
-        if (this.settings)
-            this.setKey("settings", this.settings);
+    public get rawLyrics() {
+        return this.lyrics;
     }
+    private verses: {
+        [key: string]: LyricsVerse;
+    } = {};
 
-    public get Lyrics() {
-        return this.lyrics ? new Lyrics(this.lyrics) : null;
+    public commit() {
+        if (this.eventListener) {
+            this.eventListener.commit();
+        }
     }
 
     private _settings?: Settings;
 
     protected get settings() {
-        if (!this._settings)
-            this._settings = this.getKey("settings");
-        
-        return this._settings;
+        return this._settings as Settings;
     }
 
     protected set settings(v) {
-        if (!v)
-            this.removeKey("settings");
         this._settings = v;
         this.executeCallback("settings");
     }
@@ -129,32 +130,56 @@ export class PresentationControl {
 
     private type: "control" | "viewer" | "not-initialized" = "not-initialized";
 
-    public initialize(type: "control" | "viewer") {
+    private mapState(doc: PresentationDocument) {
+        if (doc.song.id !== this.song?.id) {
+            this.song = doc.song;
+        }
+        if (doc.lyrics.id !== this.lyrics?.id) {
+            this.lyrics = doc.lyrics;
+        }
+        if (doc.contributors.some(c => !this.contributors?.some(i => i.id === c.id))) {
+            this.contributors = doc.contributors;
+        }
+        if (doc.settings) {
+            this.settings = doc.settings;
+        }
+    }
+
+    public async initialize(type: "control" | "viewer") {
         this.type = type;
+        this.eventListener = new EventListener(this, appSession.user.id);
+        this.eventListener.initListener();
 
         if(!this.initialized) {
-            addEventListener("storage", (e: StorageEvent) => {
-                if (this.type == "not-initialized")
-                    throw new Error("PresentationView - Not initialized");
-
-                if (!e.key?.startsWith("viewer_")) 
-                    return;
-                
-                const key = e.key.replace("viewer_", "");
-                
-                const item = localStorage.getItem(e.key);
-                if (!item) 
-                    return;
-
-                if (key.endsWith("contributors"))
-                    this.contributors = JSON.parse(item);
-                if (key.endsWith("lyrics"))
-                    this.lyrics = JSON.parse(item);
-                if (key.endsWith("song"))
-                    this.song = JSON.parse(item);
-                if (key.endsWith("settings"))
-                    this.settings = JSON.parse(item);
+            if (type === "viewer") {
+                this.mapState(await this.eventListener.getState());
+            }
+            this.eventListener.registerHook(doc => {
+                this.mapState(doc);
             });
+
+            // addEventListener("storage", (e: StorageEvent) => {
+            //     if (this.type == "not-initialized")
+            //         throw new Error("PresentationView - Not initialized");
+
+            //     if (!e.key?.startsWith("viewer_")) 
+            //         return;
+                
+            //     const key = e.key.replace("viewer_", "");
+                
+            //     const item = localStorage.getItem(e.key);
+            //     if (!item) 
+            //         return;
+
+            //     if (key.endsWith("contributors"))
+            //         this.contributors = JSON.parse(item);
+            //     if (key.endsWith("lyrics"))
+            //         this.lyrics = JSON.parse(item);
+            //     if (key.endsWith("song"))
+            //         this.song = JSON.parse(item);
+            //     if (key.endsWith("settings"))
+            //         this.settings = JSON.parse(item);
+            // });
             
             addEventListener("keydown", (e) => {
                 if (e.key == "ArrowRight") {
@@ -196,17 +221,6 @@ export class PresentationControl {
         this.initialized = true;
     }
 
-    protected setKey<K extends Key>(key: K, item: KeyEntry<K>) {
-        localStorage.setItem("viewer_" + key, JSON.stringify(item));
-    }
-    protected removeKey<K extends Key>(key: K) {
-        localStorage.removeItem("viewer_" + key);
-    }
-    protected getKey<K extends Key>(key: K) {
-        const i = localStorage.getItem("viewer_" + key);
-        return i ? JSON.parse(i) as KeyEntry<K> : undefined;
-    }
-
     public preview() {
         this.executeCallback("preview");
     }
@@ -215,10 +229,10 @@ export class PresentationControl {
         const settings = this.settings;
         if (settings) {
             settings.availableVerses[index] = !settings.availableVerses[index];
-            const verse = this.Lyrics?.verses[index];
+            const verse = this.verses[index];
             if (verse?.type === "verse") {
                 const nextIndex = (parseInt(index) + 1).toString();
-                const nextVerse = this.Lyrics?.verses[nextIndex];
+                const nextVerse = this.verses[nextIndex];
                 if (nextVerse?.type === "chorus") {
                     settings.availableVerses[nextIndex] = false;
                 }
@@ -233,7 +247,7 @@ export class PresentationControl {
         if (this.AvailableVerses.length) {
             settings.availableVerses = {};
         } else {
-            settings.availableVerses = Object.keys(this.Lyrics?.verses ?? {}).reduce((a, b) => { a[b] = true; return a; }, {} as {
+            settings.availableVerses = Object.keys(this.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
                 [key: string]: boolean;
             });
         }
@@ -262,6 +276,7 @@ export class PresentationControl {
                 verses.push(verse);
             }
         }
+        console.log(verses);
         return verses;
     }
 
@@ -350,7 +365,11 @@ export class PresentationControl {
         this.contributors = contributors.map(i => i instanceof Contributor ? i.raw : i);
     }
     public setLyrics(lyrics: Lyrics, settings?: Settings) {
-        this.lyrics = lyrics.raw;
+        this.lyrics = {
+            id: lyrics.id,
+            languageKey: lyrics.languageKey,
+            verses: lyrics.verses,
+        };
         this.settings = settings ?? {
             size: PresentationControl.getSize(lyrics.size, lyrics.hasChorus),
             availableVerses: Object.keys(lyrics.verses).reduce((a, b) => { a[b] = true; return a; }, {} as {
@@ -398,9 +417,7 @@ export class PresentationControl {
     }
 
     public GetVerses(currentVerses: string[]) {
-        return Object.entries(this.Lyrics?.verses ?? {})
-            .filter(i => currentVerses.includes(i[0]))
-            .map(i => i[1]);
+        return currentVerses.map(i => this.verses[i]).filter(i => i);
     }
 }
 

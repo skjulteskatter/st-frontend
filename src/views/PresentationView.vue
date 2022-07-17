@@ -67,11 +67,12 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Contributor, Lyrics, Song } from "@/classes";
+import { Song } from "@/classes";
 import { presentation } from "@/classes/presentation";
 import { useStore } from "@/store";
 import { PresentationLyrics } from "@/components/presentation";
 import { LyricsVerse } from "@/classes/lyrics";
+import { VContributor, VLyrics } from "@/services/eventListener";
 
 export default defineComponent({
     name: "presentation-view",
@@ -81,9 +82,9 @@ export default defineComponent({
     data: () => ({
         store: useStore(),
         viewer: presentation,
-        lyrics: null as Lyrics | null,
+        lyrics: null as VLyrics | null,
         song: null as Song | null,
-        contributors: null as Contributor[] | null,
+        contributors: null as VContributor[] | null,
         verses: null as LyricsVerse[] | null,
         theme: "dark" as "dark" | "light",
         muted: false,
@@ -131,11 +132,11 @@ export default defineComponent({
         },
     },
     async mounted() {
-        presentation.initialize("viewer");
-        this.refreshLyrics();
+        await presentation.initialize("viewer");
+
         this.contributors = presentation.Contributors;
-        this.verses = presentation.Verses;
         this.song = presentation.Song;
+        this.refreshLyrics();
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
@@ -152,7 +153,6 @@ export default defineComponent({
         });
 
         presentation.registerCallback("settings", () => {
-            this.refreshLyrics();
             this.verses = presentation.Verses;
             this.muted = presentation.Settings?.muted === true;
             this.theme = presentation.Settings?.theme ?? "dark";
@@ -168,14 +168,19 @@ export default defineComponent({
                 dictionary[Object.keys(dictionary)[0]]
             );
         },
-        refreshLyrics() {
-            this.lyrics = presentation.Lyrics;
-            this.verseCount = Object.keys(this.lyrics?.content ?? {}).filter(i => i.startsWith("verse")).length;
+        async refreshLyrics() {
+            this.verses = null;
+            await new Promise(r => setTimeout(r, 10))
+            this.lyrics = presentation.rawLyrics ?? null;
+            if (!this.lyrics) return;
+
+            this.verseCount = Object.entries(this.lyrics.verses).filter(i => i[1].type === "verse").length;
             this.verseLineLength = 0;
             
-            const verses = Object.entries(this.lyrics?.content ?? {}).map(e => e[1] as LyricsVerse);
+            const verses = Object.entries(this.lyrics.verses).map(e => e[1]);
 
             const calculateLength = (line: string) => {
+                if (!line) return 0;
                 let lineLength = 0;
                 for (let i = 0; i < line.length; i++) {
                     const letter = line[i];
@@ -220,6 +225,7 @@ export default defineComponent({
                     i += size;
                 }
             }
+            this.verses = presentation.Verses;
         },
     },
 });

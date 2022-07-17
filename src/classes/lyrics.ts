@@ -7,6 +7,51 @@ export type LyricsVerse = {
     content: string[];
 }
 
+export function getVerses(content: LyricsContent): {
+    [key: string]: LyricsVerse;
+} {
+    const verses: {
+        [key: string]: LyricsVerse;
+    } = {};
+
+    let number = 1;
+    let chorus: LyricsVerse = {} as LyricsVerse;
+
+    const keys = Object.keys(content);
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const type = key.split("_")[0];
+
+        const verse: LyricsVerse = {
+            name: (content)[key].name,
+            content: (content)[key].content,
+            type,
+        };
+
+        if (type == "chorus") {
+            // if (chorus.name) {
+            //     number--;
+            // }
+            verses[number] = verse;
+            number++;
+            chorus = verse;
+        } else {
+            verses[number] = verse;
+            number++;
+            if (chorus.name) {
+                const nextVerseKey = keys[i + 1];
+                if (nextVerseKey && nextVerseKey.split("_")[0] === "chorus") {
+                    continue;
+                }
+                verses[number] = Object.assign({}, chorus);
+                number++;
+            }
+        }
+    }
+    return verses;
+}
+
 export default class Lyrics implements ILyrics {
     id: string;
     songId: string;
@@ -44,46 +89,7 @@ export default class Lyrics implements ILyrics {
     }
 
     public get verses() {
-        const verses: {
-            [key: string]: LyricsVerse;
-        } = {};
-
-        let number = 1;
-        let chorus: LyricsVerse = {} as LyricsVerse;
-
-        const keys = Object.keys(this.content);
-
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const type = key.split("_")[0];
-
-            const verse: LyricsVerse = {
-                name: (this.content as LyricsContent)[key].name,
-                content: (this.content as LyricsContent)[key].content,
-                type,
-            };
-
-            if (type == "chorus") {
-                // if (chorus.name) {
-                //     number--;
-                // }
-                verses[number] = verse;
-                number++;
-                chorus = verse;
-            } else {
-                verses[number] = verse;
-                number++;
-                if (chorus.name) {
-                    const nextVerseKey = keys[i + 1];
-                    if (nextVerseKey && nextVerseKey.split("_")[0] === "chorus") {
-                        continue;
-                    }
-                    verses[number] = Object.assign({}, chorus);
-                    number++;
-                }
-            }
-        }
-        return verses;
+        return getVerses(this.content as LyricsContent);
     }
 
     public getText(translations: {
