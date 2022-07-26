@@ -14,7 +14,8 @@
 					:class="{ 'opacity-50 text-[0.5em]': line.trim().startsWith('(') && line.trim().endsWith(')') }"
 					v-for="(line, i) in verse.content"
 					:key="i + '_' + line"
-				>{{ line }}</p>
+					v-html="line"
+				></p>
 			</div>
 		</div>
 		<!-- <button style="position: absolute" @click="render">RENDER</button> -->

@@ -8,23 +8,9 @@
             <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 pt-6 pb-3 border-b-4" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSidebar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
                 <h1 class="text-8xl" v-if="song.number">{{ song.number }}</h1>
-                <div class="ml-auto text-3xl tracking-wide flex flex-col items-end">
-                    <div class="flex gap-4">
-                        <p v-if="authors.length > 0">
-                            {{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}
-                            <span v-for="author in authors" :key="author.id">
-                                {{ author.name }}
-                            </span>
-                        </p>
-                        <span v-if="authors.length">&middot;</span>
-                        <p v-if="composers.length > 0">
-                            {{ (song.yearComposed ? $t("song_composedInBy").replace('$year', song.yearComposed.toString()) : $t("song_composedBy")).replace('$composers', '') }}
-                            <span v-for="composer in composers" :key="composer.id">
-                                {{ composer.name }}
-                            </span>
-                        </p>
-                        <p v-else-if="melodyOrigin">{{ melodyOrigin }}</p>
-                        <p v-else>{{$t("song_unknownComposer")}}</p>
+                <div class="ml-auto text-3xl max-h-24 tracking-wide flex flex-col items-end">
+                    <div class="flex text-clip gap-4">
+                        <p class="text-clip" v-if="contributorRow" v-html="contributorRow"></p>
                     </div>
                     <div class="flex gap-4">
                         <span v-if="song.originCountry">{{$t(song.originCountry)}}</span>
@@ -91,6 +77,7 @@ export default defineComponent({
         showSidebar: true,
         verseCount: 0,
         longestLine: null as string | null,
+        contributorRow: "",
         verseLineLength: 0,
         longestLineLength: 0,
     }),
@@ -137,6 +124,7 @@ export default defineComponent({
         this.contributors = presentation.Contributors;
         this.song = presentation.Song;
         this.refreshLyrics();
+        this.refreshContributors();
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
@@ -150,6 +138,7 @@ export default defineComponent({
 
         presentation.registerCallback("contributors", () => {
             this.contributors = presentation.Contributors;
+            this.refreshContributors();
         });
 
         presentation.registerCallback("settings", () => {
@@ -160,6 +149,48 @@ export default defineComponent({
         });
     },
     methods: {
+        refreshContributors() {
+            const yearWritten = this.song?.yearWritten;
+            this.contributorRow = "";
+            if (this.authors.length) {
+                this.contributorRow += (yearWritten ? 
+                    this.$t("song_writtenInBy").replace('$year', yearWritten.toString()) : 
+                    this.$t("song_writtenBy")).replace('$authors', '')
+                
+                for (let i = 0; i < this.authors.length; i++) {
+                    const author = this.authors[i]
+                    this.contributorRow += author.name;
+                    if (i === (this.authors.length-2)) {
+                        this.contributorRow += " & "
+                    } else if (i !== (this.authors.length-1)) {
+                        this.contributorRow += ", "
+                    }
+                }
+            }
+            if (this.contributorRow && (this.composers.length || this.melodyOrigin)) {
+                this.contributorRow += " &middot; "
+            }
+            const yearComposed = this.song?.yearComposed;
+            if (this.composers.length) {
+                this.contributorRow += (yearComposed ? 
+                    this.$t("song_composedInBy").replace('$year', yearComposed.toString()) : 
+                    this.$t("song_composedBy")).replace('$composers', '')
+
+                for (let i = 0; i < this.composers.length; i++) {
+                    const composer = this.composers[i]
+                    this.contributorRow += composer.name;
+                    if (i === (this.composers.length-2)) {
+                        this.contributorRow += " & "
+                    } else if (i !== (this.composers.length-1)) {
+                        this.contributorRow += ", "
+                    }
+                } 
+            } else if (this.melodyOrigin) {
+                this.contributorRow += " " + this.melodyOrigin;
+            } else {
+                this.contributorRow += " " + this.$t("song_unknownComposer")
+            }
+        },
         getLocaleString(dictionary: { [key: string]: string }) {
             if (!dictionary) return "";
             return (
@@ -186,6 +217,8 @@ export default defineComponent({
                     const letter = line[i];
                     if ("ijIltfr".includes(letter)) {
                         lineLength += 0.7;
+                    } else if ("–".includes(letter)) {
+                        lineLength += 1.3;
                     } else {
                         lineLength += 1;
                     }

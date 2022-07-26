@@ -7,6 +7,25 @@ export type LyricsVerse = {
     content: string[];
 }
 
+const parseLine = (line: string) => {
+    let lyricsContent = "";
+    let endTag = false;
+    for (let i = 0; i < line.length; i++) {
+        if (line[i] === "_") {
+            if (endTag) {
+                lyricsContent += "</i>"
+                endTag = false
+            } else {
+                lyricsContent += "<i>"
+                endTag = true
+            }
+            continue
+        }
+        lyricsContent += line[i]
+    }
+    return lyricsContent
+}
+
 export function getVerses(content: LyricsContent): {
     [key: string]: LyricsVerse;
 } {
@@ -22,10 +41,11 @@ export function getVerses(content: LyricsContent): {
     for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const type = key.split("_")[0];
+        
 
         const verse: LyricsVerse = {
             name: (content)[key].name,
-            content: (content)[key].content,
+            content: (content)[key].content.map(i => parseLine(i)),
             type,
         };
 
