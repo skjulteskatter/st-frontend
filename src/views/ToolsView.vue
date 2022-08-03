@@ -170,7 +170,8 @@ export default defineComponent({
             const contributors = await contributorService.list();
             const copyrights = await copyrightService.list();
 
-            let csv = "Number;Title;Authors;Composers;Year Written;Copyright;\n";
+            let csv = "data:text/csv;charset=utf-8\n"
+            csv += "Number;Title;Authors;Composers;Year Written;Copyright\n";
             for (const song of songs) {
                 csv += song.collections[0].number
                 csv += ";"
@@ -182,7 +183,7 @@ export default defineComponent({
                     const cons = song.participants.filter(p => p.type === type).map(i => contributors.find(c => c.id === i.contributorId)?.name ?? "")
                     if (cons) {
                         if (cons.length > 1) {
-                            conCsv += (cons.slice(0, cons.length - 2).join(", ") + " & " + cons[cons.length -1])?.replace("\"", "\"\"") ?? ""
+                            conCsv += (cons.slice(0, cons.length - 1).join(", ") + " & " + cons[cons.length -1])?.replace("\"", "\"\"") ?? ""
                         } else {
                             conCsv += cons[0]?.replace("\"", "\"\"") ?? ""
                         }
@@ -216,7 +217,7 @@ export default defineComponent({
                 if (textCopyright) {
                     csv += "© " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
                 }
-                csv += "\";"
+                csv += "\""
                 // csv += "\""
                 // if (melodyCopyright) {
                 //     csv += copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
@@ -225,16 +226,13 @@ export default defineComponent({
                 csv += "\n"
             }
 
-            const blob = new Blob([csv], {type: "text/csv"})
-            const a = document.createElement("a"), url = URL.createObjectURL(blob);
-            a.href = url;
-            a.download = `${collection.key}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            });
+            const encodedUri = encodeURI(csv);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", collection.key + ".csv");
+            document.body.appendChild(link); // Required for FF
+
+            link.click(); // This will download the data file named "my_data.csv".
             this.loadingCreds = false;
         }
     },

@@ -161,7 +161,9 @@
                             <ThemeSelector 
                                 :theme="control.Settings?.theme" 
                                 :showSideBar="control.Settings?.showSideBar" 
-                                :singleVerse="control.Settings?.singleVerse" 
+                                :singleVerse="control.Settings?.singleVerse"
+                                :sync="control.Settings?.sync"
+                                @update:sync="setSync"
                                 @setTheme="setTheme" 
                                 @toggleSidebar="toggleSidebar"
                                 @toggleSingleVerse="toggleSingleVerse"
@@ -398,6 +400,9 @@ export default defineComponent({
         toggleVerse(index: string) {
             this.control.toggleVerse(index);
             this.control.AvailableVerses;
+        },
+        setSync(v: boolean) {
+            this.control.setSync(v)
         },
         toggleAll() {
             if (this.lyrics) {

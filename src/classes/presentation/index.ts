@@ -18,6 +18,7 @@ export type Settings = {
     theme: "dark" | "light";
     showSideBar: boolean;
     singleVerse: boolean;
+    sync: boolean;
 }
 
 type KeyTypes = {
@@ -151,12 +152,16 @@ export class PresentationControl {
         this.eventListener.initListener();
 
         if(!this.initialized) {
+            const state = await this.eventListener.getState()
             if (type === "viewer") {
-                this.mapState(await this.eventListener.getState());
+                this.mapState(state);
             }
             this.eventListener.registerHook(doc => {
                 this.mapState(doc);
             });
+            if (this.settings) {
+                this.settings.sync = state.settings.sync
+            }
 
             // addEventListener("storage", (e: StorageEvent) => {
             //     if (this.type == "not-initialized")
@@ -210,6 +215,11 @@ export class PresentationControl {
                 }
                 if (e.ctrlKey && e.key === "p") {
                     this.commit();
+                    e.preventDefault();
+                    return;
+                }
+                if (e.ctrlKey && e.key === "Enter") {
+                    this.commit(),
                     e.preventDefault();
                     return;
                 }
@@ -349,6 +359,13 @@ export class PresentationControl {
             this.commit();
         }
     }
+    
+    public setSync(sync: boolean) {
+        if (this.settings) {
+            this.settings.sync = sync;
+            this.commit();
+        }
+    }
 
     public mute() {
         const settings = Object.assign({}, this.settings);
@@ -378,7 +395,12 @@ export class PresentationControl {
             theme: this.settings?.theme ?? "dark",
             showSideBar: this.settings?.showSideBar ?? true,
             singleVerse: this.settings?.singleVerse ?? false,
+            sync: this.settings?.sync ?? false,
         };
+
+        if (this.settings.sync) {
+            this.commit()
+        }
     }
 
     private static getSize(lyricsSize: number, hasChorus: boolean) {
@@ -402,7 +424,11 @@ export class PresentationControl {
             theme: this.settings?.theme ?? "dark",
             showSideBar: this.settings?.showSideBar ?? true,
             singleVerse: this.settings?.singleVerse ?? false,
+            sync: this.settings?.sync ?? false,
         };
+        if (this.settings.sync) {
+            this.commit()
+        }
     }
 
     public open(): void {

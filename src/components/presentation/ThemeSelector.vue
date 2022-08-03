@@ -59,6 +59,23 @@
 			</Switch>
 			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Single verse</SwitchLabel>
 		</SwitchGroup>
+		<SwitchGroup as="div" class="flex gap-2 items-center cursor-pointer">
+			<Switch
+				v-model="Sync"
+				class="focus-visible:outline-none"
+			>
+				<div
+					class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
+					:class="Sync ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
+				>
+					<span
+						:class="Sync ? 'translate-x-5' : 'translate-x-1'"
+						class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
+					/>
+				</div>
+			</Switch>
+			<SwitchLabel class="uppercase text-xs tracking-wider opacity-50">Sync</SwitchLabel>
+		</SwitchGroup>
 	</BaseCard>
 </template>
 
@@ -85,11 +102,14 @@ export default defineComponent({
 		singleVerse: {
 			type: Boolean,
 		},
+		sync: {
+			type: Boolean,
+		}
 	},
 	data: () => ({
 		themes: ["dark", "light"],
 	}),
-	emits: ["setTheme", "toggleSidebar", "toggleSingleVerse"],
+	emits: ["setTheme", "toggleSidebar", "toggleSingleVerse", "update:sync"],
 	computed: {
 		Sidebar: {
 			get() {
@@ -107,6 +127,14 @@ export default defineComponent({
 				this.$emit("toggleSingleVerse", v);
 			},
 		},
+		Sync: {
+			get() {
+				return this.sync ?? false;
+			},
+			set(v: boolean) {
+				this.$emit("update:sync", v)
+			}
+		}
 	},
 	methods: {
 		selectTheme(theme: string) {
