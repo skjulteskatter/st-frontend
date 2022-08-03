@@ -43,6 +43,18 @@
                 <template #header>
                     Credits
                 </template>
+                <select 
+                    v-model="collectionIdCredits"
+                    class="mb-2"
+                >
+                    <option 
+                        :value="collection.id" 
+                        v-for="collection in collections" 
+                        :key="collection.id"
+                    >
+                        {{collection.name.default}}
+                    </option>
+                </select>
                 <template #footer>
                     <BaseButton
                         @click="downloadCredits"
@@ -90,6 +102,7 @@ export default defineComponent({
         return {
             customLyrics: {} as CustomLyrics,
             collectionId: null as string | null,
+            collectionIdCredits: null as string | null,
             loading: false,
             includeLanguages: {} as {[key: string]: boolean},
             codepage: null as number | null,
@@ -103,7 +116,7 @@ export default defineComponent({
             return a;
         }, {} as {[key: string]: boolean});
 
-        this.collectionId = this.collections.find(c => c.keys["no"] === "HV")?.id ?? null;
+        this.collectionId = this.collectionIdCredits = this.collections.find(c => c.keys["no"] === "HV")?.id ?? null;
     },
     computed: {
         languages(): Language[] {
@@ -146,25 +159,19 @@ export default defineComponent({
             }
         },
         async downloadCredits() {
+            if (!this.collectionIdCredits) {
+                return
+            }
             this.loadingCreds = true;
-            const collections = await collectionService.list();
-            const songs = (await songService.list()).sort((a, b) => {
-                const cola = collections.find(c => a.collections.some(i => i.collectionId === c.id))
-                const colb = collections.find(c => b.collections.some(i => i.collectionId === c.id))
-
-                if (cola && colb && cola?.id !== colb?.id) {
-                    return colb?.priority - cola?.priority;
-                }
-
+            const collection = await collectionService.get(this.collectionIdCredits);
+            const songs = (await songService.childrenOf(collection.id)).sort((a, b) => {
                 return (a.collections[0].number ?? 0) - (b.collections[0].number ?? 0)
             });
             const contributors = await contributorService.list();
             const copyrights = await copyrightService.list();
 
-            let csv = "Collection;Number;Title;Author;Composer;Arranger;YearWritten;YearComposed;TextCopyright;MelodyCopyright\n";
+            let csv = "Number;Title;Authors;Composers;Year Written;Copyright;\n";
             for (const song of songs) {
-                csv += collections.find(c => song.collections[0].collectionId === c.id)?.key;
-                csv += ";"
                 csv += song.collections[0].number
                 csv += ";"
                 csv += "\"" + song.title.replace("\"", "\"\"") + "\""
@@ -179,38 +186,49 @@ export default defineComponent({
                         } else {
                             conCsv += cons[0]?.replace("\"", "\"\"") ?? ""
                         }
+                    } else {
+                        if (type === "composer") {
+                            const origin = song.origins.find(i => i.type === "melody")?.description
+                            conCsv += origin?.replace("\"", "\"\"") ?? ""
+                        }
                     }
                     return conCsv + "\";"
                 }
                 csv += getContributorCsv("author")
-                csv += getContributorCsv("composer")
-                csv += getContributorCsv("arranger")
+                if (!song.participants.some(i => i.type === "composer")) {
+                    const origin = song.origins.find(i => i.type === "melody")?.description
+                    csv += (origin?.replace("\"", "\"\"") ?? "") + ";"
+                } else {
+                    csv += getContributorCsv("composer")
+                }
+                // csv += getContributorCsv("arranger")
                 if (song.yearWritten) {
-                    csv += song.yearWritten + ";"
+                    csv += song.yearWritten
                 }
-                if (song.yearComposed) {
-                    csv += song.yearComposed + ";"
-                }
+                csv += ";"
+                // if (song.yearComposed) {
+                //     csv += song.yearComposed + ";"
+                // }
                 const textCopyright = song.copyrights.find(t => t.type === "text")
-                const melodyCopyright = song.copyrights.find(c => c.type === "melody")
+                // const melodyCopyright = song.copyrights.find(c => c.type === "melody")
 
                 csv += "\""
                 if (textCopyright) {
-                    csv += copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                    csv += "© " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
                 }
                 csv += "\";"
-                csv += "\""
-                if (melodyCopyright) {
-                    csv += copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
-                }
-                csv += "\";"
+                // csv += "\""
+                // if (melodyCopyright) {
+                //     csv += copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
+                // }
+                // csv += "\";"
                 csv += "\n"
             }
 
             const blob = new Blob([csv], {type: "text/csv"})
             const a = document.createElement("a"), url = URL.createObjectURL(blob);
             a.href = url;
-            a.download = `credits.csv`;
+            a.download = `${collection.key}.csv`;
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
