@@ -159,7 +159,7 @@ export class PresentationControl {
             this.eventListener.registerHook(doc => {
                 this.mapState(doc);
             });
-            if (this.settings) {
+            if (this.settings && state?.settings) {
                 this.settings.sync = state.settings.sync
             }
 
