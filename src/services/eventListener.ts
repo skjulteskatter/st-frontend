@@ -39,6 +39,9 @@ export default class EventListener {
             for (const hook of this.listeners) {
                 hook(doc.data() as PresentationDocument);
             }
+        }, (err) => {
+            console.log(err)
+            setTimeout(location.reload, 5000);
         });
     }
 
