@@ -34,14 +34,17 @@ export default class EventListener {
     }
 
 
+    private errorCount = 0;
     public initListener() {
         onSnapshot(this.doc, (doc) => {
             for (const hook of this.listeners) {
                 hook(doc.data() as PresentationDocument);
             }
-        }, (err) => {
+        }, async (err) => {
             console.log(err)
-            setTimeout(location.reload, 5000);
+            await new Promise(r => setTimeout(r, this.errorCount^2 * 1000))
+            this.errorCount++;
+            this.initListener();
         });
     }
 
