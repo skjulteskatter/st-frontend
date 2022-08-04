@@ -170,8 +170,7 @@ export default defineComponent({
             const contributors = await contributorService.list();
             const copyrights = await copyrightService.list();
 
-            let csv = "data:text/csv;charset=utf-8\n"
-            csv += "Number;Title;Authors;Composers;Year Written;Copyright\n";
+            let csv = "Number;Title;Authors;Composers;Year Written;Copyright\n";
             for (const song of songs) {
                 csv += song.collections[0].number
                 csv += ";"
@@ -198,7 +197,7 @@ export default defineComponent({
                 csv += getContributorCsv("author")
                 if (!song.participants.some(i => i.type === "composer")) {
                     const origin = song.origins.find(i => i.type === "melody")?.description
-                    csv += (origin?.replace("\"", "\"\"") ?? "") + ";"
+                    csv += "\"" + (origin?.replace("\"", "\"\"") ?? "") + "\";"
                 } else {
                     csv += getContributorCsv("composer")
                 }
@@ -226,13 +225,16 @@ export default defineComponent({
                 csv += "\n"
             }
 
-            const encodedUri = encodeURI(csv);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", collection.key + ".csv");
-            document.body.appendChild(link); // Required for FF
-
-            link.click(); // This will download the data file named "my_data.csv".
+            const blob = new Blob([csv], {type: "text/csv"});
+                const a = document.createElement("a"), url = URL.createObjectURL(blob);
+                a.href = url;
+                a.download = `${collection.key}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                });
             this.loadingCreds = false;
         }
     },
