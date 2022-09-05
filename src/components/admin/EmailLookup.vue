@@ -70,11 +70,17 @@
 						<small class="opacity-50">Subscriptions</small>
 						<div v-for="sub in response.stripeSubscriptions" :key="sub.id" class="rounded-md bg-black/5 p-4">
 							<small class="opacity-50 inline-block">Stripe</small>
-							<p v-for="p in sub.productIds" :key="sub.id + p">{{ p }}</p>
+							<small class="opacity-50">{{sub.id}}</small>
+							<p class="flex bg-green-500 rounded rounded-lg p-2" v-if="sub.valid">Active {{sub.validTo}}</p>
+							<p v-else class="flex bg-red-500 rounded rounded-lg p-2">Inactive {{sub.validTo}}</p>
+							<p v-for="c in sub.collectionIds">{{collections.find(i => i.id === c)?.title}}</p>
 						</div>
 						<div v-for="sub in response.firebaseSubscriptions" :key="sub.id" class="rounded-md bg-black/5 p-4">
 							<small class="opacity-50 inline-block">Firebase</small>
-							<p v-for="p in sub.productIds" :key="sub.id + p">{{ p }}</p>
+							<small class="opacity-50">{{sub.id}}</small>
+							<p class="flex bg-green-500 rounded rounded-lg p-2" v-if="sub.valid">Active {{sub.validTo}}</p>
+							<p v-else class="flex bg-red-500 rounded rounded-lg p-2">Inactive {{sub.validTo}}</p>
+							<p v-for="c in sub.collectionIds">{{collections.find(i => i.id === c)?.title}}</p>
 						</div>
 					</div>
 				</div>
@@ -90,6 +96,8 @@ import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
 import { ISubscription, IUser } from "songtreasures-api";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/solid";
+import collectionService from "@/services/collectionService";
+import { Collection } from "hiddentreasures-js";
 
 type EmailLookupResponse = {
 	userId: {
@@ -113,7 +121,11 @@ export default defineComponent({
 		response: {} as EmailLookupResponse,
 		email: "",
 		loading: false,
+		collections: [] as Collection[],
 	}),
+	async mounted() {
+		this.collections = await collectionService.list();
+	},
 	methods: {
 		async lookupEmail() {
 			this.loading = true;
