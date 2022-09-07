@@ -204,6 +204,13 @@ declare module "songtreasures-api" {
         canEdit: boolean;
     }
 
+    interface IChord {
+        id: string;
+        imageArray: string[];
+        chordName: string;
+        instrument: string;
+    }
+
     type MediaType = "audio" | "video" | "sheetmusic" | "sheetmusic-pdf";
 
     interface IMediaFile {
