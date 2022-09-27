@@ -71,7 +71,7 @@ export default defineComponent({
 	data: () => ({
 		open: false,
 		flip: false,
-		chordObject: {imageArray: [], id: "", chordName: "", instrument: ""} as IChord,
+		chordObject: {imageArray: [], chordName: "", instrument: ""} as IChord,
 		chordId: "",
 		currentChordIndex: 0,
 		chordSpan: undefined as HTMLElement | undefined,

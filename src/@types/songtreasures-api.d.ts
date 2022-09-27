@@ -205,7 +205,6 @@ declare module "songtreasures-api" {
     }
 
     interface IChord {
-        id: string;
         imageArray: string[];
         chordName: string;
         instrument: string;
