@@ -2,7 +2,7 @@ import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
 import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
+import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, IChord, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
 import { Language } from "songtreasures";
 import { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
@@ -257,6 +257,12 @@ export const favorites = {
     },
     delete(ids: string[]) {
         return http.delete<void>("api/Favorites", ids);
+    },
+};
+
+export const chords = {
+    async get(chord: string) {
+        return (await http.get<IChord>(`api/Chords/${chord}`, undefined, true, "4.0"));
     },
 };
 
