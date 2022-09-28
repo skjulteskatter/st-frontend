@@ -243,8 +243,8 @@ export const songs = {
     getContributors(lastUpdated?: string) {
         return http.getWithResult<ICollectionItem<ApiContributor>[]>("api/Contributors" + (lastUpdated && new Date(lastUpdated) > new Date("2021-01-01")  ? "?updatedAt=" + lastUpdated : ""));
     },
-    creditSong(collectionId: string, number: number, language: string, content: string) {
-        return http.uploadAndDownload(`api/Songs/Credit?collectionId=${collectionId}&number=${number}&language=${language}`, content);
+    creditSong(collectionId: string, number: number, language: string, content: string, fileExtension: string) {
+        return http.uploadAndDownload(`api/Songs/Credit?collectionId=${collectionId}&number=${number}&language=${language}&fileExtension=${fileExtension}`, content);
     },
 };
 

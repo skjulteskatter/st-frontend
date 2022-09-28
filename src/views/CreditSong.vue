@@ -28,7 +28,25 @@
                         <HashtagIcon class="w-4 h-4 opacity-50 absolute bottom-3 left-3" />
                         <input type="number" v-model="number" :placeholder="$t('song_number')" class="pl-10 rounded-md border-black/20 dark:border-white/20" />
                     </label>
-                </div>
+                    
+                    <label class="text-xs flex flex-col gap-1 relative">{{ $t("common_language") }}
+                        <select
+                            class="pl-10 rounded-md border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
+                            id="language"
+                            name="language"
+                            v-model="selectedLanguage"
+                        >
+                            <option
+                                v-for="lang in languages"
+                                :value="lang"
+                                :key="lang.key"
+                            >
+                                {{ lang.name }}
+                            </option>
+                        </select>
+                        <TranslateIcon class="opacity-50 w-4 h-4 absolute bottom-3 left-3" />
+                    </label>
+            </div>
             </BaseCard>
             <BaseCard v-if="step == 2">
                 <div v-if="song">
@@ -37,7 +55,7 @@
                         <small class="opacity-50">{{ $t('song_author') }}: {{ song.Authors[0]?.name }}</small>
                         <small class="opacity-50">{{ $t('song_composer') }}: {{ song.Composers[0]?.name }}</small>
                     </div>
-                    <input ref="file" type="file" id="credit-file-input" accept="audio/mpeg"/>
+                    <input ref="file" type="file" id="credit-file-input" accept="audio/*, video/*"/>
                 </div>
                 <p v-else>Please select a song</p>
             </BaseCard>
@@ -49,7 +67,7 @@
                 </template>
                 {{ $t('common_previous') }}
             </BaseButton>
-            <BaseButton theme="secondary" :disabled="!(collection && number)" @click="nextStep()" v-if="step < 2">
+            <BaseButton theme="secondary" :disabled="!(collection && number && selectedLanguage.name)" @click="nextStep()" v-if="step < 2">
                 <template #icon>
                     <ArrowRightIcon class="w-4 h-4" />
                 </template>
@@ -70,7 +88,9 @@ import { songs } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";
 import { Song } from "@/classes";
-import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon } from "@heroicons/vue/solid";
+import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon, TranslateIcon } from "@heroicons/vue/solid";
+import { notify } from "@/services/notify";
+import { Language } from "songtreasures";
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
     let binary = "";
@@ -88,8 +108,8 @@ const saveByteArray = (function () {
     a.style.setProperty("display", "none");
     // eslint-disable-next-line no-undef
     return function (data: BlobPart[], name: string) {
-        const blob = new Blob(data, {type: "audio/mpeg"}),
-            url = window.URL.createObjectURL(blob);
+        const blob = new Blob(data),
+        url = window.URL.createObjectURL(blob);
         a.href = url;
         a.download = name;
         a.click();
@@ -105,6 +125,7 @@ export default defineComponent({
         DownloadIcon,
         BookOpenIcon,
         HashtagIcon,
+        TranslateIcon,
     },
     data: () => ({
         store: useStore(),
@@ -113,6 +134,8 @@ export default defineComponent({
         song: null as Song | null,
         loading: false,
         step: 1,
+        selectedLanguage: {} as Language,
+        currentFileExtension: "",
     }),
     computed: {
         downloadReady() {
@@ -123,6 +146,9 @@ export default defineComponent({
         },
         Language() {
             return this.store.getters.languageKey;
+        },
+        languages(): Language[] {
+            return appSession.languages || [];
         },
     },
     methods: {
@@ -141,6 +167,8 @@ export default defineComponent({
             if (el.files?.length) {
                 this.loading = true;
                 const reader = new FileReader();
+
+                this.currentFileExtension = (el.files[0].name.match(/[^.]*$/g) || [""])[0].trim();
                 
                 reader.onload = async () => {
                     const buffer = reader.result as ArrayBuffer;
@@ -148,13 +176,29 @@ export default defineComponent({
                     const stuff = arrayBufferToBase64(buffer);
 
                     if (this.number && this.collection){
-                        const r = await songs.creditSong(this.collection, this.number, this.Language, stuff);
-                        const file = await r?.arrayBuffer();
+                        const r = await songs.creditSong(this.collection, this.number, this.selectedLanguage.key, stuff, this.currentFileExtension);
 
-                        if (file) {
-                            saveByteArray([file], `${this.Collections.find(c => c.id == this.collection)?.key} ${this.number} - ${this.song?.getName(this.Language)}.mp3`);
-                            this.loading = false;
+                        switch(r?.status){
+                            case 413:
+                                notify("error", "File size exceeds limit (30 MB)", "warning");
+                                this.loading = false;
+                                return;
+                                
+                            case 200: {
+                                const file = await r?.arrayBuffer();
+
+                                if (file) {
+                                    saveByteArray([file], `${this.Collections.find(c => c.id == this.collection)?.key} ${this.number} - ${this.song?.getName(this.selectedLanguage.key)}.${this.currentFileExtension}`);
+                                    this.loading = false;
+                                }
+                                break;
+                            }
+                            default: 
+                                notify("error", "Something went wrong", "warning");
+                                this.loading = false;
+                                return;
                         }
+
                     }
                 };
 
