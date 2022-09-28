@@ -169,6 +169,12 @@ export default class Collection extends BaseClass implements ICollection {
                     hidden: !this.hasCategories,
                 },
                 {
+                    label: "song_theme",
+                    value: "themes",
+                    selected: () => this.listType == "themes",
+                    hidden: !this.hasThemes,
+                },
+                {
                     label: "common_views",
                     value: "views",
                     selected: () => this.listType == "views",
@@ -358,16 +364,17 @@ export default class Collection extends BaseClass implements ICollection {
                     );
                     break;
                 case "themes":
-                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
+                    songs = this.songs.filter(i => i.themeIds.length).sort((a, b) => a.getNumber(this.id) > b.getNumber(this.id) ? 1 : -1);
                     this._lists[value] = appSession.themes.map(i => 
                         {
+                            const songList = songs.filter(x => x.themeIds.includes(i.id));
                             return {
                                 title: i.getName(),
                                 count: true,
-                                songs: songs.filter(i => i.themeIds.includes(i.id)),
+                                songs: songList,
                             };
                         },
-                    );
+                    ).filter(x => x.songs.length > 0).sort((a,b) => (a.songs[0]).getNumber(this.id) > b.songs[0].getNumber(this.id) ? 1 : -1);
                     break;
                 case "genre":
                     songs = this.songs.filter(i => i.genreIds.length).sort((a, b) => a.getName() < b.getName() ? 1 : -1);
