@@ -1,11 +1,11 @@
 <template>
     <div id="presentation-view" :class="['flex h-full', theme == 'dark' ? 'text-white bg-[#101010]' : 'text-[#101010] bg-white']">
-        <aside v-if="showSidebar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'hidden': muted }, theme == 'dark' ? 'bg-black' : 'bg-gray-100']">
+        <aside v-if="showSidebar" :class="['max-w-xs w-full flex items-center justify-center p-8', { 'opacity-0': muted }, theme == 'dark' ? 'bg-black' : 'bg-gray-100']">
             <img class="w-full drop-shadow-sm" :src="`/img/collections/wotl/${logoLanguageKey}.png`" v-if="Collection?.getKeys().includes('HV')" />
             <h2 class="text-5xl font-light whitespace-nowrap tracking-wider opacity-50 -rotate-90" v-else>{{ Collection?.getName() }}</h2>
         </aside>
         <div class="text-3xl h-full flex-grow flex flex-col">
-            <div :class="[{ 'hidden': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 pt-6 pb-3 border-b-4" v-if="song">
+            <div :class="[{ 'opacity-0': muted }, theme == 'dark' ? 'border-white/50' : 'border-black/50']" class="flex items-end gap-6 px-10 pt-6 pb-3 border-b-4" v-if="song">
                 <span class="font-light text-2xl" v-if="!showSidebar">{{ song.Collections.find(c => c.id == song?.collectionIds[0])?.key }}</span>
                 <h1 class="text-8xl" v-if="song.number">{{ song.number }}</h1>
                 <div class="ml-auto text-3xl max-h-24 tracking-wide flex flex-col items-end">
@@ -37,12 +37,13 @@
                     </div>
                 </div>
             </div>
-            <PresentationLyrics 
+            <PresentationLyrics
                 v-if="verses"
                 ref="presentation"
                 :verses="verses"
                 :songId="song?.id"
-                :class="{ 'hidden': muted }"
+                :key="song?.id"
+                :class="{ 'invisible': muted }"
                 :longestLine="longestLine ?? ''"
                 :longestLineLength="longestLineLength"
                 :verseLines="verseLines"
