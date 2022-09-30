@@ -62,16 +62,18 @@ class Http {
      * @param  {String} path
      * @return {Promise}
      */
-    public async get<T>(path: string, bypassAuth?: boolean): Promise<T> {
+    public async get<T>(path: string, bypassAuth?: boolean, json? :boolean, apiVersion?: string): Promise<T> {
         const result = await this.apifetch(
             path,
             {
                 method: "GET",
             }, 
             bypassAuth,
-        ) as Result<T>;
+            json,
+            apiVersion,
+        ) as Result<T> | T;
 
-        return result.result;
+        return apiVersion == "4.0" ? result as T : (result as Result<T>).result;
     }
 
     public async getWithResult<T>(path: string): Promise<Result<T>> {
@@ -229,14 +231,14 @@ class Http {
         }
     }
 
-    public async apifetch(path: string, options: RequestInit, bypassAuth = false, json = true) {
+    public async apifetch(path: string, options: RequestInit, bypassAuth = false, json = true, apiVersion = "3.0") {
         path = `${config.api.basePath}${path}`;
         const token = this._token ?? await auth.getToken();
         if (!token && !bypassAuth) throw new Error("No Authorization token available " + path);
 
         const headers = Object.assign({
             "Authorization": `Bearer ${token}`,
-            "X-Api-Version": "3.0",
+            "X-Api-Version": apiVersion,
         }, options.headers);
 
         const o = Object.assign(

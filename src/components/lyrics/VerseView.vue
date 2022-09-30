@@ -4,7 +4,9 @@
         <div class="content">
             <table class="songline mb-4" v-for="(line, i) in Verse.content" :key="i">
                 <tr class="chords">
-                    <td v-for="(chord, i) in line.chords" :key="i">{{chord + ' '}}</td>
+                    <td v-for="(chord, i) in line.chords" :key="i">
+                        <ChordViewer :text="chord" :chord="chord" />
+                    </td>
                 </tr>
                 <tr class="lyrics">
                     <td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
@@ -17,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { LyricsChordContent } from "songtreasures-api";
+import ChordViewer from "./ChordViewer.vue";
 
 export default defineComponent({
     name: "verse-view",
@@ -36,6 +39,9 @@ export default defineComponent({
         type() {
             return this.Verse.key.split("_")[0];
         },
+    },
+    components:{
+        ChordViewer,
     },
 });
 </script>
@@ -63,10 +69,13 @@ export default defineComponent({
     }
 
     .chords {
-        color: var(--st-color-primary);
-        font-weight: bold;
-        font-size: var(--chord-size);
-        line-height: var(--chord-size);
+        .chord-title{
+            color: var(--st-color-primary);
+            font-weight: bold;
+            font-size: var(--chord-size);
+            line-height: var(--chord-size);
+        }
+        user-select: none;
     }
 }
 </style>
