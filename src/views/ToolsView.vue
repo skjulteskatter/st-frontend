@@ -210,11 +210,23 @@ export default defineComponent({
                 //     csv += song.yearComposed + ";"
                 // }
                 const textCopyright = song.copyrights.find(t => t.type === "text")
-                // const melodyCopyright = song.copyrights.find(c => c.type === "melody")
+                const melodyCopyright = song.copyrights.find(c => c.type === "melody")
 
                 csv += "\""
                 if (textCopyright) {
-                    csv += "© " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                    if (melodyCopyright) {
+                        if (melodyCopyright.referenceId === textCopyright.referenceId) {
+                            csv += "Tekst & Melodi © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                        } else {
+                            csv += "Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                            csv += ", "
+                            csv += "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
+                        }
+                    } else {
+                        csv += "Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                    }
+                } else if (melodyCopyright) {
+                    csv += "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
                 }
                 csv += "\""
                 // csv += "\""
