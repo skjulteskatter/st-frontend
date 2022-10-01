@@ -172,40 +172,37 @@ export default defineComponent({
 
             let csv = "Number;Title;Authors;Composers;Year Written;Copyright\n";
             for (const song of songs) {
-                csv += song.collections[0].number
-                csv += ";"
-                csv += "\"" + song.title.replace("\"", "\"\"") + "\""
-                csv += ";"
+                const parts: (string | number)[] = [];
+
+                parts.push(song.collections[0].number ?? "")
+                parts.push(song.title)
 
                 const getContributorCsv = (type: string) => {
-                    let conCsv = "\""
+                    let conCsv = ""
                     const cons = song.participants.filter(p => p.type === type).map(i => contributors.find(c => c.id === i.contributorId)?.name ?? "")
                     if (cons) {
                         if (cons.length > 1) {
-                            conCsv += (cons.slice(0, cons.length - 1).join(", ") + " & " + cons[cons.length -1])?.replace("\"", "\"\"") ?? ""
+                            conCsv += (cons.slice(0, cons.length - 1).join(", ") + " & " + cons[cons.length -1]) ?? ""
                         } else {
-                            conCsv += cons[0]?.replace("\"", "\"\"") ?? ""
+                            conCsv += cons[0] ?? ""
                         }
                     } else {
                         if (type === "composer") {
                             const origin = song.origins.find(i => i.type === "melody")?.description
-                            conCsv += origin?.replace("\"", "\"\"") ?? ""
+                            conCsv += origin ?? ""
                         }
                     }
-                    return conCsv + "\";"
+                    return conCsv
                 }
-                csv += getContributorCsv("author")
+                parts.push(getContributorCsv("author"))
                 if (!song.participants.some(i => i.type === "composer")) {
                     const origin = song.origins.find(i => i.type === "melody")?.description
-                    csv += "\"" + (origin?.replace("\"", "\"\"") ?? "") + "\";"
+                    parts.push((origin ?? ""))
                 } else {
-                    csv += getContributorCsv("composer")
+                    parts.push(getContributorCsv("composer"))
                 }
                 // csv += getContributorCsv("arranger")
-                if (song.yearWritten) {
-                    csv += song.yearWritten
-                }
-                csv += ";"
+                parts.push(song.yearWritten ?? "");
                 // if (song.yearComposed) {
                 //     csv += song.yearComposed + ";"
                 // }
@@ -214,28 +211,22 @@ export default defineComponent({
                 const textCopyright = song.copyrights.find(t => t.type === "text" && filterCopyrights.includes(t.referenceId));
                 const melodyCopyright = song.copyrights.find(c => c.type === "melody" && filterCopyrights.includes(c.referenceId));
 
-                csv += "\""
                 if (textCopyright) {
                     if (melodyCopyright) {
                         if (melodyCopyright.referenceId === textCopyright.referenceId) {
-                            csv += "Tekst & Melodi © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                            parts.push("Tekst & Melodi © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name)
                         } else {
-                            csv += "Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
-                            csv += ", "
-                            csv += "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
+                            parts.push("Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name + ", " + "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name)
                         }
                     } else {
-                        csv += "Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name.replace("\"", "\"\"")
+                        parts.push("Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name)
                     }
                 } else if (melodyCopyright) {
-                    csv += "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
+                    parts.push("Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name)
                 }
-                csv += "\""
-                // csv += "\""
-                // if (melodyCopyright) {
-                //     csv += copyrights.find(i => i.id === melodyCopyright.referenceId)?.name.replace("\"", "\"\"")
-                // }
-                // csv += "\";"
+
+
+                csv += parts.map(i => typeof(i) === "string" ? "\"" + i.replace(/"/g, "\"\"") + "\"" : i).join(";");
                 csv += "\n"
             }
 
