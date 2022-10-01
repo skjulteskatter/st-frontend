@@ -209,8 +209,10 @@ export default defineComponent({
                 // if (song.yearComposed) {
                 //     csv += song.yearComposed + ";"
                 // }
-                const textCopyright = song.copyrights.find(t => t.type === "text")
-                const melodyCopyright = song.copyrights.find(c => c.type === "melody")
+                const filterCopyrights = ["f8ca2745-72d6-4082-9be9-e39bb90567fb", "e627e22a-a621-4377-aaa6-886e3437b5fc"];
+
+                const textCopyright = song.copyrights.find(t => t.type === "text" && filterCopyrights.includes(t.referenceId));
+                const melodyCopyright = song.copyrights.find(c => c.type === "melody" && filterCopyrights.includes(c.referenceId));
 
                 csv += "\""
                 if (textCopyright) {
