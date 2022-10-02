@@ -144,12 +144,10 @@ export default defineComponent({
         });
 
         presentation.registerCallback("settings", async () => {
-            setTimeout(() => {
-                this.verses = presentation.Verses;
-                this.muted = presentation.Settings?.muted === true;
-                this.theme = presentation.Settings?.theme ?? "dark";
-                this.showSidebar = presentation.Settings?.showSideBar === true;
-            }, 500)
+            this.refreshLyrics();
+            this.muted = presentation.Settings?.muted === true;
+            this.theme = presentation.Settings?.theme ?? "dark";
+            this.showSidebar = presentation.Settings?.showSideBar === true;
         });
     },
     methods: {
