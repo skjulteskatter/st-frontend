@@ -42,7 +42,6 @@
                 ref="presentation"
                 :verses="verses"
                 :songId="song?.id"
-                :key="song?.id"
                 :class="{ 'invisible': muted }"
                 :longestLine="longestLine ?? ''"
                 :longestLineLength="longestLineLength"
@@ -53,7 +52,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
 import { Song } from "@/classes";
 import { presentation } from "@/classes/presentation";
 import { useStore } from "@/store";
@@ -129,7 +128,9 @@ export default defineComponent({
 
         this.showSidebar = presentation.Settings?.showSideBar === true;
 
-        presentation.registerCallback("lyrics", () => {
+        presentation.registerCallback("lyrics", async () => {
+            this.verses = null
+            await nextTick()
             this.refreshLyrics();
         });
 
@@ -142,11 +143,13 @@ export default defineComponent({
             this.refreshContributors();
         });
 
-        presentation.registerCallback("settings", () => {
-            this.verses = presentation.Verses;
-            this.muted = presentation.Settings?.muted === true;
-            this.theme = presentation.Settings?.theme ?? "dark";
-            this.showSidebar = presentation.Settings?.showSideBar === true;
+        presentation.registerCallback("settings", async () => {
+            setTimeout(() => {
+                this.verses = presentation.Verses;
+                this.muted = presentation.Settings?.muted === true;
+                this.theme = presentation.Settings?.theme ?? "dark";
+                this.showSidebar = presentation.Settings?.showSideBar === true;
+            }, 500)
         });
     },
     methods: {
