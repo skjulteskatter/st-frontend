@@ -55,6 +55,9 @@
 										>{{link.name}}</router-link>
 									</MenuItem>
 									<MenuItem>
+										<button class="w-full text-left px-4 py-2 text-sm" @click="clearCache">Clear cache</button>
+									</MenuItem>
+									<MenuItem>
 										<button @click="logout()" class="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-500/10">{{ $t('common_logout') }}</button>
 									</MenuItem>
 								</MenuItems>
@@ -104,6 +107,7 @@
 						:to="link.path"
 						class="block px-3 py-2 rounded-md text-base font-medium hover:bg-black/5 dark:hover:bg-white/10"
 					>{{link.name}}</router-link>
+					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium" @click="clearCache">Clear cache</button>
 					<button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-500/10 text-red-500" @click="logout()">{{ $t('common_logout') }}</button>
 				</div>
 			</div>
@@ -133,6 +137,7 @@ import {
 } from "@heroicons/vue/solid";
 import { storeService } from "@/services/modules";
 import { appSession } from "@/services/session";
+import { cache } from "@/services/cache";
 
 export default defineComponent({
 	name: "the-navbar",
@@ -239,6 +244,10 @@ export default defineComponent({
 		logout() {
 			appSession.clear();
 		},
+		clearCache() {
+			cache.clearCache();
+			window.location.reload()
+		}
 	},
 });
 </script>
