@@ -203,7 +203,6 @@ export default defineComponent({
         },
         async refreshLyrics() {
             this.verses = null;
-            await new Promise(r => setTimeout(r, 10))
             this.lyrics = presentation.rawLyrics ?? null;
             if (!this.lyrics) return;
 
