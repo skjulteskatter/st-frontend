@@ -155,9 +155,11 @@ export default defineComponent({
             const yearWritten = this.song?.yearWritten;
             this.contributorRow = "";
             if (this.authors.length) {
-                this.contributorRow += (yearWritten ? 
-                    this.$t("song_writtenInBy").replace('$year', yearWritten.toString()) : 
-                    this.$t("song_writtenBy")).replace('$authors', '')
+                if (this.authors.length === 1) {
+                    this.contributorRow += this.$t("song_author") + ": "
+                } else {
+                    this.contributorRow += this.$t("song_authors[other]") + ": "
+                }
                 
                 for (let i = 0; i < this.authors.length; i++) {
                     const author = this.authors[i]
@@ -168,15 +170,23 @@ export default defineComponent({
                         this.contributorRow += ", "
                     }
                 }
+
+                if (yearWritten) {
+                    this.contributorRow += ` (${yearWritten})`
+                } else if (this.song?.yearPublished) {
+                    this.contributorRow += ` (*${this.song.yearPublished})`
+                }
             }
             if (this.contributorRow && (this.composers.length || this.melodyOrigin)) {
                 this.contributorRow += " &middot; "
             }
             const yearComposed = this.song?.yearComposed;
             if (this.composers.length) {
-                this.contributorRow += (yearComposed ? 
-                    this.$t("song_composedInBy").replace('$year', yearComposed.toString()) : 
-                    this.$t("song_composedBy")).replace('$composers', '')
+                if (this.composers.length === 1) {
+                    this.contributorRow += this.$t("song_composer") + ": "
+                } else {
+                    this.contributorRow += this.$t("song_composers[other]") + ": "
+                }
 
                 for (let i = 0; i < this.composers.length; i++) {
                     const composer = this.composers[i]
@@ -187,6 +197,10 @@ export default defineComponent({
                         this.contributorRow += ", "
                     }
                 } 
+
+                if (yearComposed) {
+                    this.contributorRow += ` (${yearComposed})`
+                }
             } else if (this.melodyOrigin) {
                 this.contributorRow += " " + this.melodyOrigin;
             } else {

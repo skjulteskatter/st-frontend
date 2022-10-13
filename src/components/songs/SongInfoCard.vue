@@ -92,6 +92,7 @@ if (props.song.image) {
                     >
                         <span>{{ (song.yearWritten ? $t("song_writtenInBy").replace('$year', song.yearWritten.toString()) : $t("song_writtenBy")).replace('$authors', '') }}</span>
                         <ContributorInfo :contributors="song.Authors" />
+                        <span v-if="song.yearPublished">({{song.yearPublished}})</span>
                     </small>
                     <small
                         v-if="song.Composers.length"

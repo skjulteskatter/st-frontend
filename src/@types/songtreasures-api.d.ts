@@ -104,6 +104,7 @@ declare module "songtreasures-api" {
         participants: IParticipant[];
         yearWritten?: number;
         yearComposed?: number;
+        yearPublished?: number;
         originalKey: string;
         minor: boolean;
         hasLyrics: boolean;

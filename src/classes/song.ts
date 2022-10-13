@@ -46,6 +46,7 @@ export default class Song extends BaseClass implements ISong {
 
     public participants: Participant[] = [];
     public yearWritten;
+    public yearPublished;
     public yearComposed;
 
     private _files?: MediaFile[];
@@ -87,6 +88,7 @@ export default class Song extends BaseClass implements ISong {
         this.participants = song.participants?.map(c => new Participant(c)) ?? [];
         this.yearWritten = song.yearWritten;
         this.yearComposed = song.yearComposed;
+        this.yearPublished = song.yearPublished;
         this.details = song.details ?? {};
         this.copyrights = song.copyrights;
         this.type = song.type;
