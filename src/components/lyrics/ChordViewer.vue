@@ -85,11 +85,14 @@ export default defineComponent({
 			return this.chordObject.imageArray.length <= 0;
 		},
 		halfOffesetWidth() : number{
-			return this.chordSpan !== undefined ? this.chordSpan.offsetWidth / 2 : 0;
+			if (!this.chordSpan)
+				return 0;
+			
+			return this.chordSpan.offsetWidth / 2;
 		},
 	},
 	mounted() { 
-		let triesLeft = 10;
+		let triesLeft = 5;
 		const interval = setInterval(() => {
 			let chordSpan = this.chordSpan ?? this.$refs.chordSpan as HTMLElement;
 			let mockupChordViewer = this.mockupChordViewer ?? this.$refs.mockupChordViewer as HTMLElement;
@@ -97,10 +100,22 @@ export default defineComponent({
 			this.chordSpan = chordSpan;
 			this.mockupChordViewer = mockupChordViewer;
 
-			let chordSpanExist = chordSpan !== undefined && chordSpan.offsetWidth !== undefined;
-			let mockupChordViewerExist = mockupChordViewer !== undefined && mockupChordViewer.offsetHeight !== undefined;
+			let chordSpanExist = false;
 
-			((chordSpanExist && mockupChordViewerExist) || triesLeft === 0) && clearInterval(interval);
+			if (chordSpan){
+				chordSpanExist = chordSpan.offsetWidth !== undefined;
+			}
+
+			let mockupChordViewerExist = false;
+
+			if (mockupChordViewer){
+				mockupChordViewerExist = mockupChordViewer.offsetHeight !== undefined;
+			}
+
+			if (((chordSpanExist && mockupChordViewerExist) || triesLeft === 0)){
+				clearInterval(interval);
+				return;
+			}
 
 			triesLeft--;
 		}, 50);
