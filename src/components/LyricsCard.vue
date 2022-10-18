@@ -14,7 +14,7 @@
                     {{ $t('common_edit') }}
                 </BaseButton>
                 <SongChanger class="ml-auto" :label="$t('song_changeSong')" @next="song?.next()" @previous="song?.previous()" :hasNext="song.hasNext" :hasPrevious="song.hasPrevious"/>
-                <PrintButton class="hidden md:flex" />
+                <PrintButton class="hidden md:flex" :lyrics="lyrics"/>
             </div>
         </template>
         <div class="flex gap-2 items-center mb-4">

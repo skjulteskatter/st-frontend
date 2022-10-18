@@ -9,8 +9,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent, PropType } from "@vue/runtime-core";
 import { PrinterIcon } from "@heroicons/vue/solid";
+import Lyrics, { setPrintLyrics } from "@/classes/lyrics";
+
 
 export default defineComponent({
 	name: "print-button",
@@ -19,8 +21,14 @@ export default defineComponent({
 	},
 	methods: {
 		print() {
+			setPrintLyrics(this.lyrics ?? null);
 			this.$router.push("/print");
 		},
+	},
+	props: {
+		lyrics: {
+            type: Object as PropType<Lyrics | null | undefined>,
+        },
 	},
 });
 </script>
