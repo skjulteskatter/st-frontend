@@ -1,5 +1,6 @@
 import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
 import { transposer } from "./transposer";
+import { ref } from "vue";
 
 export type LyricsVerse = {
     type: string;
@@ -7,15 +8,7 @@ export type LyricsVerse = {
     content: string[];
 }
 
-let printLyrics = null as Lyrics | null;
-
-export function getPrintLyrics(): Lyrics | null{
-    return printLyrics;
-}
-
-export function setPrintLyrics(lyrics: Lyrics | null){
-    printLyrics = lyrics;
-}
+export const printLyrics = ref(null as Lyrics | null);
 
 const parseLine = (line: string) => {
     let lyricsContent = "";

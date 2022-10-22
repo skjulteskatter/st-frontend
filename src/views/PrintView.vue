@@ -106,7 +106,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { Collection } from "@/classes";
-import Lyrics, { getPrintLyrics } from "@/classes/lyrics";
+import Lyrics, { printLyrics } from "@/classes/lyrics";
 import { useStore } from "@/store";
 import song from "@/classes/song";
 import { collection } from "@firebase/firestore";
@@ -165,7 +165,7 @@ export default defineComponent({
 	},
 	async mounted() {
 
-		this.lyrics = getPrintLyrics();
+		this.lyrics = printLyrics.value;
 
 		if(this.song){
 			document.title = this.formattedTitle;

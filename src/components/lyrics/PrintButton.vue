@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import { PrinterIcon } from "@heroicons/vue/solid";
-import Lyrics, { setPrintLyrics } from "@/classes/lyrics";
+import Lyrics, { printLyrics } from "@/classes/lyrics";
 
 
 export default defineComponent({
@@ -21,7 +21,7 @@ export default defineComponent({
 	},
 	methods: {
 		print() {
-			setPrintLyrics(this.lyrics ?? null);
+			printLyrics.value = this.lyrics ?? null;
 			this.$router.push("/print");
 		},
 	},
