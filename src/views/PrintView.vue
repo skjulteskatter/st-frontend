@@ -52,7 +52,7 @@
                 </small>
 			</div>
 		</header>
-		<main v-if="Object.keys(verses).length <= 4" class="flex justify-center">
+		<main v-if="isShortSong && !useChords" class="flex justify-center">
 			<section class="flex flex-col gap-4">
 				<div class="mb-4" v-for="verse of verses" :key="verse.name">
 					<b>{{ verse.name }}</b>
@@ -60,12 +60,42 @@
 				</div>
 			</section>
 		</main>
-		<main class="lyrics" v-else>
+
+		<main class="lyrics" v-else-if="!useChords">
 			<div class="mb-4" v-for="verse of verses" :key="verse.name">
 				<b>{{ verse.name }}</b>
 				<p v-for="line in verse.content" :key="verse.name + line">{{ line }}</p>
 			</div>
 		</main>
+
+		<main v-else>
+			<div class="table ml-auto mr-auto">
+				<blockquote v-for="(v, i) in lyrics?.versesWithChords" :verse="v" :key="i" class="bg-white border-black/30 rounded-lg py-5 text-sm">
+					<div>
+						<b>{{v.name}}</b>
+						<div class="content">
+							<table class="songline" v-for="(line, i) in v.content" :key="i">
+								<tr class="chords">
+									<td v-for="(chord, i) in line.chords" :key="i">
+										<b>{{chord}}&nbsp;</b>
+									</td>
+								</tr>
+								<tr class="lyrics">
+									<td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</blockquote>
+			</div>
+			<div class="table">
+				<blockquote v-for="(image, i) in chordImages" :key="image + i" class="inline-block">
+					<b v-html="image" class="inline-block"></b>
+				</blockquote>
+			</div>
+		</main>
+
+
 		<footer class="mt-8 flex">
 			<img id="st-logo-print" src="/img/logo/dark.svg" alt="SongTreasures logo" class="max-h-12" height="48">
 			<a class="ml-auto mt-auto" href="https://songtreasures.org">songtreasures.org</a>
@@ -75,9 +105,14 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { Collection, Lyrics } from "@/classes";
+import { Collection } from "@/classes";
+import Lyrics, { printLyrics } from "@/classes/lyrics";
 import { useStore } from "@/store";
-import { LyricsContent } from "songtreasures-api";
+import song from "@/classes/song";
+import { collection } from "@firebase/firestore";
+import lyrics from "@/classes/lyrics";
+import { IChord, LyricsContent } from "songtreasures-api";
+import { chords } from "@/services/api";
 
 export default defineComponent({
 	name: "print-view",
@@ -85,6 +120,8 @@ export default defineComponent({
 		store: useStore(),
 		printed: false,
 		lyrics: null as Lyrics | null,
+		chordImages: [] as string[],
+		imageLoaded: false,
 	}),
 	computed: {
 		formattedTitle() {
@@ -119,20 +156,33 @@ export default defineComponent({
 				undefined
 			);
 		},
+		isShortSong() {
+			return Object.keys(this.verses).length <= 4;
+		},
+		useChords(){
+			return this.store.state.songs.view === "chords";
+		},
 	},
 	async mounted() {
-		const imageElement = document.getElementById("st-logo-print") as HTMLImageElement;
+
+		this.lyrics = printLyrics.value;
 
 		if(this.song){
 			document.title = this.formattedTitle;
-			this.lyrics = await this.song.getLyrics(this.store.state.songs.language);
 		}
 
+		const imageElement = document.getElementById("st-logo-print") as HTMLImageElement;
+
 		imageElement.onload = () => {
-			if (!this.printed)
+			this.imageLoaded = true;
+		};
+
+		await this.getChords();
+
+		if (this.imageLoaded && this.printed == false){
 				window.print();
 			this.printed = true;
-		};
+		}
 	},
 	methods: {
 		getLocaleString(dictionary: { [key: string]: string }) {
@@ -142,6 +192,37 @@ export default defineComponent({
 				dictionary.en ??
 				dictionary[Object.keys(dictionary)[0]]
 			);
+		},
+		async getChords(){
+
+			let chordNames : string[] = [];
+			let promises: Promise<IChord>[] = [];
+
+			if (!this.lyrics?.versesWithChords) return;
+
+			for (let a = 0; a < this.lyrics?.versesWithChords.length || 0; a++) {
+				const verse = this.lyrics?.versesWithChords[a];
+				
+				for (let b = 0; b < verse.content.length; b++) {
+					const line = verse.content[b];
+
+					for (let c = 0; c < line.chords.length; c++) {
+
+						const chord = line.chords[c].trim();
+						if (chord.length < 1) continue;
+						if (chordNames.includes(chord)) continue;
+
+						chordNames.push(chord);
+						promises.push(this.getChordObject(chord));
+					}
+				}
+			}
+
+			this.chordImages = (await Promise.all(promises)).map(x => x.imageArray[0]);
+		},
+		async getChordObject(chordName: string): Promise<IChord> {
+			const chord = await chords.get(chordName.replaceAll("/","over").replaceAll("#", "sharp"));
+			return chord;
 		},
 	},
 });
@@ -169,5 +250,8 @@ export default defineComponent({
         padding-top: 72px;
         padding-bottom: 72px ;
     }
+	blockquote {
+		page-break-inside: avoid;
+	}
 }
 </style>

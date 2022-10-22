@@ -1,11 +1,14 @@
 import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
 import { transposer } from "./transposer";
+import { ref } from "vue";
 
 export type LyricsVerse = {
     type: string;
     name: string;
     content: string[];
 }
+
+export const printLyrics = ref(null as Lyrics | null);
 
 const parseLine = (line: string) => {
     let lyricsContent = "";
