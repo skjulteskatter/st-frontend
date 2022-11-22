@@ -158,8 +158,8 @@ export const admin = {
     createSubscription(uid: string, options: {
         collectionIds: string[];
         validTo: string;
-    }) {
-        return http.post<ISubscription, unknown>(`api/Admin/User/${uid}/Subscriptions`, options);
+    }, presentation?: boolean) {
+        return http.post<ISubscription, unknown>(`api/Admin/User/${uid}/Subscriptions?presentation=${presentation ? 'true' : 'false'}`, options);
     },
     deleteSubcription(uid: string, subscriptionId: string) {
         return http.delete(`api/Admin/User/${uid}/Subscriptions/${subscriptionId}`);  

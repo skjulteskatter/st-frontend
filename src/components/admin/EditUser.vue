@@ -59,6 +59,12 @@
 									{{i.getName()}}
 								</label>
 							</div>
+							<div class="mb-2 text-sm">
+								<label class="cursor-pointer">
+									<input type="checkbox" class="text-primary rounded border-gray-300 focus-visible:ring-primary mr-1" v-model="newSubs[User.id][PRESENTATION_PRODUCT_ID]" />
+									Presentation
+								</label>
+							</div>
 							<br/>
 							<span class="text-sm">Valid To</span>
 							<input type="date" v-model="validTo[User.id]"/>
@@ -89,6 +95,8 @@ import { User } from "@/classes";
 import { ISubscription } from "songtreasures-api";
 import { appSession } from "@/services/session";
 
+const PRESENTATION_PRODUCT_ID = "prod_MoRqqzwH6vnfTZ";
+
 export default defineComponent({
 	name: "edit-user",
 	components: {
@@ -105,6 +113,7 @@ export default defineComponent({
 		store: useStore(),
 		loading: false,
 		show: false,
+		PRESENTATION_PRODUCT_ID,
 	}),
 	emits: ["save"],
 	computed: {
@@ -151,11 +160,13 @@ export default defineComponent({
 					cols.push(v[0]);
 			}
 
+			const presentation = cols.includes(PRESENTATION_PRODUCT_ID)
+
 			if (cols.length > 0 && this.validTo[user.id]) {
 				const sub = await api.admin.createSubscription(user.id, {
-					collectionIds: cols,
+					collectionIds: cols.filter(i => i !== PRESENTATION_PRODUCT_ID),
 					validTo: this.validTo[user.id],
-				});
+				}, presentation);
 
 				user.subscriptions.push(sub);
 				this.newSubs[user.id] = {};
