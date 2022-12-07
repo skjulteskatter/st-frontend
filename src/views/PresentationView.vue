@@ -174,7 +174,7 @@ export default defineComponent({
                 if (yearWritten) {
                     this.contributorRow += ` (${yearWritten})`
                 } else if (this.song?.yearPublished) {
-                    this.contributorRow += ` (*${this.song.yearPublished})`
+                    this.contributorRow += ` (P${this.song.yearPublished})`
                 }
             }
             if (this.contributorRow && (this.composers.length || this.melodyOrigin)) {
