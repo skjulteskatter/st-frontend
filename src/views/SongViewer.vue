@@ -205,7 +205,7 @@
                 <p>Go to the new solution to purchase a presentation license.</p>
                 <div class="flex ml-auto gap-2">
                     <BaseButton theme="secondary" @click="goToWidescreen()">Go to new Solution</BaseButton>
-                    <BaseButton @click="showPresentationPopup = false; (isExtended = true)">Continue</BaseButton>
+                    <BaseButton @click="showPresentationPopup = false; isExtended = true">Continue</BaseButton>
                 </div>
             </div>
         </BaseModal>
