@@ -198,6 +198,17 @@
                 </div>
             </div>
         </BaseModal>
+        <BaseModal :show="showPresentationPopup">
+            <div class="flex flex-col items-center max-w-lg gap-2">
+                <h1 class="text-lg">Presentation has been moved</h1>
+                <p>This functionality will disappear from here the 1st of January 2023</p>
+                <p>Go to the new solution to purchase a presentation license.</p>
+                <div class="flex ml-auto gap-2">
+                    <BaseButton theme="secondary" @click="goToWidescreen()">Go to new Solution</BaseButton>
+                    <BaseButton @click="showPresentationPopup = false; (isExtended = true)">Continue</BaseButton>
+                </div>
+            </div>
+        </BaseModal>
     </div>
 </template>
 <script lang="ts">
@@ -279,6 +290,8 @@ export default defineComponent({
         fullLoading: false,
         favorite: false,
         showSheet: false,
+        presentationPopupShown: false,
+        showPresentationPopup: false,
     }),
     computed: {
         selectedLanguage() {
@@ -312,6 +325,11 @@ export default defineComponent({
                 return this.store.state.session.extend;
             },
             set(value: boolean) {
+                if (!this.presentationPopupShown) {
+                    this.showPresentationPopup = true
+                    this.presentationPopupShown = true
+                    return
+                }
                 if (!this.control.Initialized) {
                     this.control.initialize("control");
                     if (this.lyrics)
@@ -415,6 +433,9 @@ export default defineComponent({
         },
         next() {
             this.control.next();
+        },
+        goToWidescreen() {
+            window.location.replace("https://presentation.songtreasures.app")
         },
         previous() {
             this.control.previous();
