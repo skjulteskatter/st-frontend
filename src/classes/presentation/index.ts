@@ -138,9 +138,7 @@ export class PresentationControl {
         if (doc.lyrics.id !== this.lyrics?.id) {
             this.lyrics = doc.lyrics;
         }
-        if (doc.contributors.some(c => !this.contributors?.some(i => i.id === c.id))) {
-            this.contributors = doc.contributors;
-        }
+        this.contributors = doc.contributors;
         if (doc.settings) {
             this.settings = doc.settings;
         }
