@@ -199,6 +199,20 @@ export const admin = {
     getEmails(createdAt: Date) {
         return http.get<string>("api/Admin/Emails?createdAt=" + createdAt.toISOString());
     },
+    updateSubscription(id: string, options: {
+        userId: string
+    }) {
+        return http.patch<{
+            id: string;
+            productIds: string[];
+            creationDate: string
+            validTo: string;
+            userId: string;
+            valid: boolean;
+            trial?: string;
+            active: string;
+        }>("api/Admin/Subscription/" + id, options);
+    },
     exportSubtitles(collection: string, codepage?: number, languages?: string[], replaceLyrics?: {
         [key: string]: {
             [key: number]: string;

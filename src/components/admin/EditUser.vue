@@ -49,6 +49,19 @@
 								<TrashIcon class="w-4 h-4" />
 							</button>
 							<small class="whitespace-nowrap block" v-for="c in getCollections(i)" :key="c.id">{{c.getName()}}</small>
+							<small class="whitespace-nowrap block" v-if="i.productIds.includes(PRESENTATION_PRODUCT_ID)">Presentation</small>
+							<BaseDropdown
+								label="Move"
+							>
+								<div class="flex">
+									<input v-model="moveToEmailLookup" type="email" placeholder="Email..." />
+									<RefreshIcon class="w-8 h-8" @click="moveToEmailLookupSearch()"></RefreshIcon>
+								</div>
+								<div v-if="lookedUpUser">
+									<h3>{{lookedUpUser.name}}</h3>
+									<BaseButton @click="transferToId(i, lookedUpUser?.id ?? '')">Confirm</BaseButton>
+								</div>
+							</BaseDropdown>
 						</div>
 						<BaseDropdown
 							:label="'Add'"
@@ -86,7 +99,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/runtime-core";
 import SlidePanel from "@/components/SlidePanel.vue";
-import { TrashIcon } from "@heroicons/vue/solid";
+import { RefreshIcon, TrashIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
@@ -94,15 +107,18 @@ import api, { admin } from "@/services/api";
 import { User } from "@/classes";
 import { ISubscription } from "songtreasures-api";
 import { appSession } from "@/services/session";
+import { Product, ProductService } from "hiddentreasures-js";
+import client from "@/services/client";
 
 const PRESENTATION_PRODUCT_ID = "prod_MoRqqzwH6vnfTZ";
 
 export default defineComponent({
 	name: "edit-user",
 	components: {
-		SlidePanel,
-		TrashIcon,
-	},
+    SlidePanel,
+    TrashIcon,
+    RefreshIcon
+},
 	props: {
 		user: {
 			type: Object as PropType<User>,
@@ -114,7 +130,17 @@ export default defineComponent({
 		loading: false,
 		show: false,
 		PRESENTATION_PRODUCT_ID,
+		products: [] as Product[],
+		lookedUpUser: null as {
+			id: string,
+			name: string,
+		} | null,
+		moveToEmailLookup: "",
 	}),
+	async mounted() {
+		const service = new ProductService(client);
+		this.products = await service.list();
+	},
 	emits: ["save"],
 	computed: {
 		User() {
@@ -140,6 +166,20 @@ export default defineComponent({
 			this.validTo[id] = "";
 			this.loading = false;
 		},
+		async moveToEmailLookupSearch() {
+			this.lookedUpUser = null;
+			const users = await admin.getUsers(this.moveToEmailLookup);
+			const u = users[0];
+			if (u) {
+				this.lookedUpUser = {
+					id: u.id,
+					name: u.displayName,
+				};
+			}
+		},
+		async transferToId(sub: ISubscription, userId: string) {
+			await admin.updateSubscription(sub.id, {userId});
+		},
 		hideModal() {
 			this.show = false;
 		},
@@ -147,7 +187,8 @@ export default defineComponent({
 			this.store.commit(UsersMutationTypes.USER_TOGGLE_ROLE, { user, role });
 		},
 		getCollections(subscription: ISubscription) {
-			return appSession.collections.filter(i => subscription.collectionIds?.includes(i.id));
+			const cols = appSession.collections.filter(i => this.products.filter(p => subscription.productIds.includes(p.id)).some(p => p.collectionIds.includes(i.id)));
+			return cols;
 		},
 		getUnownedCollections(subscriptions: ISubscription[]) {
 			return appSession.collections.filter(i => !subscriptions.some(s => s.collectionIds?.includes(i.id)));
