@@ -169,7 +169,7 @@ export default class Collection extends BaseClass implements ICollection {
                     hidden: !this.hasCategories,
                 },
                 {
-                    label: "song_theme",
+                    label: "common_theme",
                     value: "themes",
                     selected: () => this.listType == "themes",
                     hidden: !this.hasThemes,
