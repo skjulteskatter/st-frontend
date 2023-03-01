@@ -1,7 +1,7 @@
 <template>
 	<button
 		v-if="file"
-		class="rounded-lg p-4 bg-white shadow-md file-card w-full text-left hover:ring-2 hover:ring-gray-400"
+		class="rounded-lg p-4 bg-white dark:bg-secondary shadow-md file-card w-full text-left hover:ring-2 hover:ring-gray-400"
 		@click="callback"
 		:title="$t(`types_${file.type}`)"
 	>

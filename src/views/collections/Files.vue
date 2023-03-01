@@ -1,7 +1,10 @@
 <template>
     <section>
         <!-- TODO: Header should be the same for SongList and this (?) -->
-        <h1 class="font-bold text-xl md:text-2xl mb-4">Files</h1>
+        <div class="mb-4 flex flex-wrap gap-4 items-start md:items-center">
+            <h1 class="font-bold text-2xl md:text-3xl">Files</h1>
+            <BaseButton theme="neutral" @click="$router.push({name: 'song-list', params: $route.params})">{{$t('common_songs')}}</BaseButton>
+        </div>
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <FileCard v-for="file in videos" :key="file.id" :file="file" @selectVideo="selectVideo" />
             <FileCard v-for="file in audio" :key="file.id" :file="file" />
