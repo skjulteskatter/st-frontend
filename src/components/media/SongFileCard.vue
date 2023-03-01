@@ -1,7 +1,7 @@
 <template>
 	<div
 		v-if="song"
-		class="rounded-lg p-4 bg-white shadow-md file-card w-full text-left"
+		class="rounded-lg p-4 bg-white dark:bg-secondary shadow-md file-card w-full text-left"
 		:title="song.name.default"
 	>
 		<p v-if="collection" class="opacity-50 text-sm">{{collection.key}} {{song.getNumber(collection?.id)}}</p>
