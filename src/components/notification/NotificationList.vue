@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { BellIcon } from "@heroicons/vue/outline";
-import { notifications } from "@/services/notifications";
+import { useNotifications } from "@/services/notifications";
 import { useStore } from "@/store";
 
 export default defineComponent({
@@ -61,7 +61,7 @@ export default defineComponent({
 	},
 	methods: {
 		async clearNotifications() {
-			await notifications.clear();
+			await useNotifications().clear();
 		},
 	},
 });

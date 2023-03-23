@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { notifications } from "@/services/notifications";
+import { useNotifications } from "@/services/notifications";
 import { TransitionRoot } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/solid";
 
@@ -73,7 +73,7 @@ export default defineComponent({
     },
     methods: {
         async remove() {
-            await notifications.remove(this.id);
+            await useNotifications().remove(this.id);
             this.show = false;
         },
     },

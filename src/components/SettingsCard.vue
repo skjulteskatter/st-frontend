@@ -55,7 +55,14 @@
                 <img :src="image" alt="Profile picture" class="rounded-full border border-black/20 dark:border-white/20" width="100" height="100">
                 <div>
                     <h3 class="text-xl">{{ user.displayName }}</h3>
-                    <p class="text-sm mb-2 text-gray-500">{{ user.email }}</p>
+                    <div v-if="editEmail">
+                        <div class="flex">
+                            <BaseInput type="email" :placeholder="user.email"  v-model="editEmailValue" />
+                            <BaseButton @click="updateEmail()">{{ $t("common_confirm") }}</BaseButton>
+                        </div>
+                        <p v-if="editEmailError" class="text-red-500">{{ editEmailError }}</p>
+                    </div>
+                    <p v-else class="text-sm mb-2 text-gray-500">{{ user.email }} <span class="cursor-pointer text-blue-500" @click="editEmail = true">{{ $t("common_edit").toLowerCase() }}</span></p>
                     <span v-if="user.roles.length" :class="[user.roles[0] == 'administrator' ? 'bg-green-500/20 text-green-600 dark:bg-green-200/20 dark:text-green-200' : 'bg-yellow-500/20 text-yellow-600 dark:bg-yellow-200/20 dark:text-yellow-300', 'rounded-full text-xs tracking-wide py-1 px-2 mt-1']">{{ user.roles[0] }}</span>
                     <span v-else class="bg-black/5 text-gray-500 dark:bg-white/10 dark:text-white rounded-full text-xs tracking-wide py-1 px-2 mt-1">Standard</span>
                 </div>
@@ -164,18 +171,22 @@ import { session } from "@/services/api";
 import { storeService } from "@/services/modules";
 import { Language } from "songtreasures";
 import { ensureLanguageIsFetched } from "@/i18n";
+import { BaseInput } from "./inputs";
+import { updateEmail, getAuth, reauthenticateWithPopup, reauthenticateWithCredential } from "@firebase/auth";
+import { FirebaseError } from "@firebase/util";
 
 export default defineComponent({
     name: "settings-card",
     components: {
-        ChangePassword,
-        CheckIcon,
-        ColorSwatchIcon,
-        TranslateIcon,
-        MusicNoteIcon,
-        PhotographIcon,
-        CreditCardIcon,
-    },
+    ChangePassword,
+    CheckIcon,
+    ColorSwatchIcon,
+    TranslateIcon,
+    MusicNoteIcon,
+    PhotographIcon,
+    CreditCardIcon,
+    BaseInput
+},
     props: {
         category: {
             type: String,
@@ -188,6 +199,9 @@ export default defineComponent({
         selectedKey: "",
         selectedTranscode: "",
         selectedImage: "",
+        editEmail: false,
+        editEmailValue: "",
+        editEmailError: "",
         themes: themes,
         newDisplayName: "",
         offline: false,
@@ -341,6 +355,24 @@ export default defineComponent({
         async submitImage() {
             if (this.fileName && this.selectedImage) {
                 await auth.setProfileImage(this.fileName, this.selectedImage);
+            }
+        },
+        async updateEmail() {
+            this.editEmailError = ""
+            const user = getAuth().currentUser
+            if (user) {
+                try {
+                    await updateEmail(user, this.editEmailValue)
+                } catch (e: any) {
+                    const fe = e as FirebaseError
+                    if (fe.code === "auth/requires-recent-login") {
+                        if (confirm("You must be recently logged in to complete this action")) {
+                            await auth.logout()
+                        }
+                    } else {
+                        this.editEmailError = fe.code
+                    }
+                }
             }
         },
         async createBase64Image(file: File) {

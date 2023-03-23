@@ -81,7 +81,11 @@ export class Notifications {
     }
 }
 
-export const notifications = new Notifications();
+let notifications: Notifications | null = null;
+
+export const useNotifications = () => {
+    return notifications ??= new Notifications()
+}
 
 // const notifications = new Notifications();
 

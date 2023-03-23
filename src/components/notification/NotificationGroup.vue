@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
-import { notifications } from "@/services/notifications";
+import { useNotifications } from "@/services/notifications";
 import { useStore } from "@/store";
 import Notification from "./NotificationItem.vue";
 
@@ -28,7 +28,7 @@ export default defineComponent({
         store: useStore(),
     }),
     async mounted() {
-        await notifications.init();
+        await useNotifications().init();
     },
     computed: {
         notifications() {
