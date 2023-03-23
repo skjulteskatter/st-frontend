@@ -1,6 +1,8 @@
 import { Product } from "@/classes";
 import { SetupResponse } from "songtreasures-api/checkout";
+import i18n from "@/i18n";
 import { stripe } from "../api";
+import { appSession } from "../session";
 import StripeService from "../stripe";
 
 type Hooks = "productsUpdated" | "checkout"
@@ -47,6 +49,11 @@ class StoreService {
 
     public async checkout() {
         this.runHooks("checkout");
+        if (appSession.user.email.includes("privaterelay.apple.com")) {
+            if (!confirm(i18n.global.t("store_privateRelayUsed").replace("\\n", "\n").replace("%0", appSession.user.email) + "\n\nLog in with a different email to avoid this alert. \nClick Ok to continue to checkout")) {
+                return
+            }
+        }
         (await this.getStripeService()).checkout(this.cart, this.type);
     }
 
