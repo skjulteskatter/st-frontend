@@ -83,7 +83,7 @@
     </section>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { songs } from "@/services/api";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";

@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { Product } from "@/classes";
 import http from "@/services/http";
 import { storeService } from "@/services/modules";

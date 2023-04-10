@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { Lyrics } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/vue/solid";
 import VerseView from "./VerseView.vue";

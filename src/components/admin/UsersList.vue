@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { SearchInput } from "@/components/inputs";
 import EditUser from "@/components/admin/EditUser.vue";
 import { useStore } from "@/store";

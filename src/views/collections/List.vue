@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { ProductSlider, StoreCart } from "@/components/store";
 import { RefreshIcon, CreditCardIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";

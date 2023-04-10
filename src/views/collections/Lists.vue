@@ -13,7 +13,7 @@
 import { Collection } from "@/classes";
 // import { BackButton } from "@/components";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({

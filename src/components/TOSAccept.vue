@@ -26,7 +26,7 @@
     </BaseModal>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { session } from "@/services/api";
 import { useStore } from "@/store";
 import { BaseModal } from ".";

@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { Song, Tag } from "@/classes";
 import { appSession } from "@/services/session";
 import { useStore } from "@/store";

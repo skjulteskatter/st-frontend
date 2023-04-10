@@ -6,7 +6,7 @@
     </BaseCard>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { Collection } from "@/classes";
 
 export default defineComponent({

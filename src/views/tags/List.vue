@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { appSession } from "@/services/session";
 import { Tag } from "@/classes";
 import { useStore } from "@/store";

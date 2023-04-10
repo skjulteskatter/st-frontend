@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { appSession } from "@/services/session";
 import { SongListItemCard } from "@/components/songs";
 import { HeartIcon } from "@heroicons/vue/outline";

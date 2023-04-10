@@ -31,7 +31,7 @@ import { Book, Chapter, Translation } from "@/classes/scriptures";
 import scriptures from "@/services/modules/scriptures";
 import { appSession } from "@/services/session";
 import { SelectTranslation } from "@/components/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { ChevronRightIcon } from "@heroicons/vue/outline";
 import { Collection } from "@/classes";
 import { ILocale, Language } from "songtreasures";

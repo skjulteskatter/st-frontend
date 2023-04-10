@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import auth from "@/services/auth";
 import { BaseButton } from "@/components";
 import { CheckIcon } from "@heroicons/vue/solid";

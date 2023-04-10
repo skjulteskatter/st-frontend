@@ -66,7 +66,7 @@
     </BaseDropdown>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import http from "@/services/http";
 import Price from "./Price.vue";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";

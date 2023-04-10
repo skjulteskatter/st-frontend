@@ -151,7 +151,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import themes from "@/classes/themes";
 import auth from "@/services/auth";
 import { useStore } from "@/store";
@@ -172,8 +172,8 @@ import { storeService } from "@/services/modules";
 import { Language } from "songtreasures";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { BaseInput } from "./inputs";
-import { updateEmail, getAuth, reauthenticateWithPopup, reauthenticateWithCredential } from "@firebase/auth";
-import { FirebaseError } from "@firebase/util";
+import { updateEmail, getAuth, reauthenticateWithPopup, reauthenticateWithCredential } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 export default defineComponent({
     name: "settings-card",

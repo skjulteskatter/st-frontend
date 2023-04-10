@@ -13,7 +13,7 @@
 <script lang="ts">
 import Chapter from "@/classes/scriptures/chapter";
 import scriptures from "@/services/modules/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import BaseList from "@/components/BaseList.vue";
 
 export default defineComponent({

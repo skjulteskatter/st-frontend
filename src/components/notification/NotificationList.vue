@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BellIcon } from "@heroicons/vue/outline";
 import { useNotifications } from "@/services/notifications";
 import { useStore } from "@/store";

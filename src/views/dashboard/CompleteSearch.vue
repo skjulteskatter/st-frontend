@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BackButton } from "@/components";
 import { SearchInput, SearchResultItemCard } from "@/components/inputs";
 import { Collection } from "@/classes";

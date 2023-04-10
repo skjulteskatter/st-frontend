@@ -51,7 +51,7 @@ import { Collection, MediaFile, Song } from "@/classes";
 import { BaseModal } from "@/components";
 import { SongFileCard } from "@/components/media";
 import { appSession } from "@/services/session";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { MediaType } from "songtreasures-api";
 
 export default defineComponent({

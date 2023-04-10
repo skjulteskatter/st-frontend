@@ -116,7 +116,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { FullSearchInput } from "@/components/inputs";
 import { StoreCart } from "@/components/store";
 import { 

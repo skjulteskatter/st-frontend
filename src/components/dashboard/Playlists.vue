@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { CreatePlaylistModal } from "@/components/playlist";
 import { useStore } from "@/store";
 import { ICustomCollection } from "songtreasures-api";

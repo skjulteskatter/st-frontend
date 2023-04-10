@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BackButton } from "@/components";
 import { appSession } from "@/services/session";
 import http from "@/services/http";

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { useStore } from "@/store";
 import { IMediaFile } from "songtreasures-api";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";

@@ -15,7 +15,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { UsersList, EmailLookup, DownloadEmails } from "@/components/admin";
 import { CopyToClipboard } from "@/components/inputs";
 import auth from "@/services/auth";

@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import SlidePanel from "@/components/SlidePanel.vue";
 import { RefreshIcon, TrashIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";

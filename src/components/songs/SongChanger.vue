@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({

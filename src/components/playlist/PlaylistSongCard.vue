@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { ICustomCollectionEntry } from "songtreasures-api";
 import { Song } from "@/classes";
 import { useStore } from "@/store";

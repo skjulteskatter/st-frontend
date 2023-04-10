@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { CheckCircleIcon } from "@heroicons/vue/solid";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 

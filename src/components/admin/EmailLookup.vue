@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
 import { ISubscription, IUser } from "songtreasures-api";

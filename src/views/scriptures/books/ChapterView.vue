@@ -17,7 +17,7 @@
 import Chapter from "@/classes/scriptures/chapter";
 import Verse from "@/classes/scriptures/verse";
 import scriptures from "@/services/modules/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "chapter-view",

@@ -36,7 +36,7 @@
     </BaseCard>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { CheckCircleIcon } from "@heroicons/vue/solid";
 import { MinusCircleIcon } from "@heroicons/vue/outline";
 

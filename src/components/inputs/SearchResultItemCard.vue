@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { UserCircleIcon, PencilIcon } from "@heroicons/vue/outline";
 import { CollectionItem, Song } from "@/classes";
 import { ApiContributor } from "songtreasures-api";

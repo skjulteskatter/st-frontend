@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { useStore } from "@/store";
 import { appSession } from "@/services/session";
 import { User } from "@/classes";

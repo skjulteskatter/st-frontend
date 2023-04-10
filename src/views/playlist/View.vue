@@ -146,7 +146,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BackButton, BaseModal } from "@/components";
 import { PlaylistSongCard } from "@/components/playlist";
 import { useStore } from "@/store";
@@ -155,7 +155,7 @@ import { notify } from "@/services/notify";
 import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
 import { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures-api";
-import { reactive } from "@vue/reactivity";
+import { reactive } from "vue";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";

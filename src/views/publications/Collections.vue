@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Collection } from "@/classes";
 import { appSession } from "@/services/session";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "publication-collections",

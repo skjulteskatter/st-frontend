@@ -4,7 +4,7 @@
     </BaseCard>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { Book } from "@/classes/scriptures";
 
 export default defineComponent({

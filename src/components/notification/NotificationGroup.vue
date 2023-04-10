@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { useNotifications } from "@/services/notifications";
 import { useStore } from "@/store";
 import Notification from "./NotificationItem.vue";

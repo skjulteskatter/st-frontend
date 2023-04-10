@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { TransitionRoot } from "@headlessui/vue";
 import { ClipboardCopyIcon } from "@heroicons/vue/solid";
 

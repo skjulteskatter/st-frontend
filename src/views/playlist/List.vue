@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { ICustomCollection } from "songtreasures-api";
 import { BaseModal } from "@/components";
 import { PlaylistCard, CreatePlaylistModal } from "@/components/playlist";

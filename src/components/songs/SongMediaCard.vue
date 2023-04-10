@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { BaseModal } from "@/components";
 import { MediaListItem } from "@/components/media";
 import { PlayIcon, XIcon } from "@heroicons/vue/solid";

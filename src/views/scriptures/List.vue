@@ -14,7 +14,7 @@
 <script lang="ts">
 import { ScriptureCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "scripture-list",

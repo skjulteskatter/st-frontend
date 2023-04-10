@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { ArrowRightIcon, CollectionIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
 import { Collection } from "@/classes";

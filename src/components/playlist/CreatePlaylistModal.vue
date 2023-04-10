@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import { BaseModal, BaseButton } from "@/components";
 import { BaseInput } from "@/components/inputs";

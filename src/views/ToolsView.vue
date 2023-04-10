@@ -73,7 +73,7 @@ import { Collection } from "@/classes";
 import { FileSelector } from "@/components/tools";
 import api from "@/services/api";
 import { appSession } from "@/services/session";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { Language } from "songtreasures";
 import BaseButton from "../components/BaseButton.vue";
 import Checkbox from "../components/inputs/Checkbox.vue";

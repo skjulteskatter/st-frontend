@@ -119,7 +119,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { Collection, CollectionItem, ListEntry, Song } from "@/classes";
 import { SongListCard } from "@/components/songs";
 import {
@@ -136,7 +136,7 @@ import {
     ViewBoardsIcon,
 } from "@heroicons/vue/solid";
 import { LockClosedIcon } from "@heroicons/vue/outline";
-import { ApiContributor, Sort } from "songtreasures-api";
+import type { ApiContributor, Sort } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";

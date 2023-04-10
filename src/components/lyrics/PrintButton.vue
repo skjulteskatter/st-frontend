@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { PrinterIcon } from "@heroicons/vue/solid";
 import Lyrics, { printLyrics } from "@/classes/lyrics";
 

@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "@vue/runtime-core";
+import { defineComponent, PropType, ref } from "vue";
 import { Product } from "@/classes";
 import Price from "./Price.vue";
 import { ShoppingCartIcon, CheckIcon, LockClosedIcon } from "@heroicons/vue/solid";

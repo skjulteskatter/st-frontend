@@ -39,13 +39,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import Translation from "@/classes/scriptures/translation";
 import { CheckboxList, BaseDropdown } from "@/components/inputs";
 import TranslationCard from "./TranslationCard.vue";
 import { BaseModal } from "@/components";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
-import { ILocale, Language } from "songtreasures";
+import type { ILocale, Language } from "songtreasures";
 
 type CheckboxData = {
     key: string;

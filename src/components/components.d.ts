@@ -1,4 +1,4 @@
-declare module "@vue/runtime-core" {
+declare module "vue" {
     export interface GlobalComponents {
         Loader: typeof import("@/components")["Loader"];
         BaseButton: typeof import("@/components")["BaseButton"];

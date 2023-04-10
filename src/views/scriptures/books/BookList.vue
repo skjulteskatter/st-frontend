@@ -8,7 +8,7 @@
 import Book from "@/classes/scriptures/book";
 import BaseList from "@/components/BaseList.vue";
 import scriptures from "@/services/modules/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "book-list",

@@ -32,7 +32,7 @@
     </BaseModal>
 </template>
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BaseModal } from ".";
 import { InformationCircleIcon } from "@heroicons/vue/outline";
 import { CheckIcon, XCircleIcon } from "@heroicons/vue/solid";

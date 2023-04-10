@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import SongFilter from "@/classes/songFilter";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { useStore } from "vuex";

@@ -104,12 +104,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { Collection } from "@/classes";
 import Lyrics, { printLyrics } from "@/classes/lyrics";
 import { useStore } from "@/store";
 import song from "@/classes/song";
-import { collection } from "@firebase/firestore";
+import { collection } from "firebase/firestore";
 import lyrics from "@/classes/lyrics";
 import { IChord, LyricsContent } from "songtreasures-api";
 import { chords } from "@/services/api";

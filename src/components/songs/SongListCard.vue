@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 import { appSession } from "@/services/session";
 import { StarIcon, EyeIcon } from "@heroicons/vue/solid";
 import { Song } from "@/classes";

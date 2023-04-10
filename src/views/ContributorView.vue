@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { BackButton } from "@/components";
 import { SongListCard } from "@/components/songs";
 import { Collection, Contributor, Song } from "@/classes";

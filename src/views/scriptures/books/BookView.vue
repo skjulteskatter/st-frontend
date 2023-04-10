@@ -9,7 +9,7 @@
 import Book from "@/classes/scriptures/book";
 // import { BookCard } from "@/components/scriptures";
 import scriptures from "@/services/modules/scriptures";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import ChapterList from "./ChapterList.vue";
 
 export default defineComponent({

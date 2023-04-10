@@ -205,57 +205,11 @@ export class Session {
         await cache.set("config", "owned_collections", ownedCols);
 
         const fetchSongs = async () => {
-            try {
-                const key = "last_updated_songs";
-                const lastUpdated = await cache.get("config", key) as Date | undefined;
-
-                if (shouldUpdate) {
-                    const updateSongs = await songs.getAllSongs([], lastUpdated?.toISOString());
-
-                    await cache.replaceEntries("songs", updateSongs.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: ISong;
-                    }));
-
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
-                }
-            }
-            catch (e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error occured", "warning", error);
-                this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
-            }
-
-            this.songs = this.songs.length > 0 ? this.songs : (await cache.getAll("songs")).map(s => new Song(s));
+            this.songs = (await songs.getAllSongs(ownedCols)).result.map(s => new Song(s));
         };
 
         const fetchFiles = async () => {
-            try {
-                const key = "last_updated_files";
-                const lastUpdated = await cache.get("config", key) as Date | undefined;
-                if (shouldUpdate) {
-                    const updateSongs = await songs.getFiles(lastUpdated?.toISOString());
-
-                    await cache.replaceEntries("files", updateSongs.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: IMediaFile;
-                    }));
-
-                    await cache.set("config", key, new Date(updateSongs.lastUpdated));
-                }
-            } catch (e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error fetching files", "warning", error);
-                this.files = (await songs.getFiles()).result.map(i => new MediaFile(i));
-            }
-
-            this.files = this.files.length > 0 ? this.files : (await cache.getAll("files")).map(i => new MediaFile(i));
+            this.files = (await songs.getFiles()).result.map(i => new MediaFile(i));
         };
 
         const fetchContributors = async () => {

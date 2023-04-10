@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import api from "@/services/api";
 import { DownloadIcon } from "@heroicons/vue/solid";
 

@@ -17,7 +17,7 @@
     </table>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/runtime-core";
+import { defineComponent, PropType } from "vue";
 
 type Header = {
     name: string;

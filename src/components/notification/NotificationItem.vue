@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import { useNotifications } from "@/services/notifications";
 import { TransitionRoot } from "@headlessui/vue";
 import { XIcon } from "@heroicons/vue/solid";
