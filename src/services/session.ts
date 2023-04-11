@@ -167,41 +167,6 @@ export class Session {
 
         const ownedCols = this.collections.filter(c => c.available && c.type == "song").map(c => c.id);
 
-        const previousCols = await cache.get("config", "owned_collections") as string[] | undefined;
-
-        if (previousCols) {
-            const fetchSongs = ownedCols.filter(c => !previousCols.includes(c));
-
-            if (fetchSongs.length) {
-                const s = await songs.getAllSongs([]);
-
-                await cache.replaceEntries("songs", s.result.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: ISong;
-                }));
-
-                // const f = await songs.getFiles(fetchSongs);
-
-                // await cache.replaceEntries("files", f.result.reduce((a, b) => {
-                //     a[b.id] = b;
-                //     return a;
-                // }, {} as {
-                //     [id: string]: IMediaFile;
-                // }));
-
-                const c = await songs.getContributors();
-
-                await cache.replaceEntries("contributors", c.result.reduce((a, b) => {
-                    a[b.id] = b;
-                    return a;
-                }, {} as {
-                    [id: string]: ICollectionItem<ApiContributor>;
-                }));
-            }
-        }
-
         await cache.set("config", "owned_collections", ownedCols);
 
         const fetchSongs = async () => {
@@ -213,30 +178,7 @@ export class Session {
         };
 
         const fetchContributors = async () => {
-            try {
-                const key = "last_updated_contributors";
-                const lastUpdated = await cache.get("config", key) as Date | undefined;
-                if (shouldUpdate) {
-                    const updateItems = await songs.getContributors(lastUpdated?.toISOString());
-
-                    await cache.replaceEntries("contributors", updateItems.result.reduce((a, b) => {
-                        a[b.id] = b;
-                        return a;
-                    }, {} as {
-                        [id: string]: ICollectionItem<ApiContributor>;
-                    }));
-
-                    await cache.set("config", key, new Date(updateItems.lastUpdated));
-                }
-            }
-            catch (e) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const error = e as any;
-                notify("error", "Error occured", "warning", error);
-                this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
-            }
-
-            this.contributors = (this.contributors.length > 0 ? this.contributors : (await cache.getAll("contributors")).map(s => new CollectionItem<ApiContributor>(s))).sort((a, b) => a.item.name > b.item.name ? 1 : -1);
+            this.contributors = (await songs.getContributors()).result.map(s => new CollectionItem<ApiContributor>(s));
         };
 
         const fetchAll = [fetchContributors()];

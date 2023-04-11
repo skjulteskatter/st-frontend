@@ -172,7 +172,7 @@ import { storeService } from "@/services/modules";
 import { Language } from "songtreasures";
 import { ensureLanguageIsFetched } from "@/i18n";
 import { BaseInput } from "./inputs";
-import { updateEmail, getAuth, reauthenticateWithPopup, reauthenticateWithCredential } from "firebase/auth";
+import { updateEmail, getAuth } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 export default defineComponent({
