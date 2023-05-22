@@ -99,7 +99,7 @@ export default defineComponent({
     async mounted() {
         this.products = (await storeService.getProducts())
                 .sort((a, b) => b.priority - a.priority)
-                .filter((p) => p.collections.length == 1) as Product[];
+                .filter((p) => p.collections.length == 1 && p.collections.some(c => c.type === "song")) as Product[];
     },
     methods: {
         async portal() {
