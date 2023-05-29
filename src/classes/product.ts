@@ -60,7 +60,7 @@ export default class Product extends BaseClass implements ApiProduct {
         this._collections = appSession.collections?.filter(c => product.collectionIds.includes(c.id));
         this.id = product.id;
         this.name = this._collections[0]?.name ?? {};
-        this.prices = product.prices;
+        this.prices = product.prices.filter(p => (p as any).value !== "nok 0");
         this.priority = product.priority;
         this.collectionIds = product.collectionIds;
     }
