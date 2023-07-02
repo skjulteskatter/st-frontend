@@ -1,12 +1,12 @@
 import { Lyrics } from "@/classes";
 import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation } from "songtreasures-api";
-import { openDB } from "idb";
+import { IDBPTransaction, openDB } from "idb";
 import { Notification } from "songtreasures-api";
 
-type EntryWithExpiry<T> = {
-    expiry: Date;
-    entry: T;
-}
+// type EntryWithExpiry<T> = {
+//     expiry: Date;
+//     entry: T;
+// }
 
 type StoreTypes = {
     songs: ISong;
@@ -79,7 +79,7 @@ class CacheService {
                         db.deleteObjectStore(store);
                         db.createObjectStore(store);
                     }
-                    if (!db.objectStoreNames.contains(store)) {     
+                    if (!db.objectStoreNames.contains(store)) {
                         db.createObjectStore(store);
                     }
 
@@ -101,8 +101,8 @@ class CacheService {
         }
     }
 
-    private async tx(store: Store, write = false) {
-        return (await this.db()).transaction(store, write ? "readwrite" : "readonly");
+    private async tx<S extends Store, WriteMode extends boolean>(store: S, write: WriteMode = false as WriteMode): Promise<IDBPTransaction<unknown, [Store], WriteMode extends true ? "readwrite" : "readonly">> {
+        return (await this.db()).transaction(store, write ? "readwrite" : "readonly") as never;
     }
 
     public async clearStore(store: Store) {
@@ -110,19 +110,20 @@ class CacheService {
     }
 
     public async set<S extends Store>(store: S, key: string, value: Entry<S>): Promise<void> {
-        // avoid
+        const objectStore = (await this.tx(store, true)).objectStore(store);
+        await objectStore.put(value, key);
     }
 
     public async get<S extends Store>(store: S, key: string): Promise<Entry<S> | undefined> {
-        return undefined
+        return (await this.tx(store, false)).objectStore(store).get(key);
     }
 
     public async delete<S extends Store>(store: S, key: string): Promise<void> {
-        // void
+        return (await this.tx(store, true)).objectStore(store).delete(key);
     }
 
     public async getAll<S extends Store>(store: S): Promise<Entry<S>[]> {
-        return []
+        return (await this.tx(store, false)).objectStore(store).getAll();
     }
 
     public async setAll<S extends Store>(store: S, entries: Entry<S>[]): Promise<void> {
@@ -136,22 +137,22 @@ class CacheService {
     }
 
     public async getOrCreateAsync<T>(key: string, factory: () => Promise<T>, expiry: number) {
-        return await factory()
+        return await factory();
     }
 
     public async getOrCreateHashAsync<S extends Store>(module: S, factory: () => Promise<{[key: string]: Entry<S>}>, expiration: number): Promise<Entry<S>[]> {
-        return Object.values(await factory())
+        return Object.values(await factory());
     }
 
     /**
-     * 
-     * @param store 
-     * @param key 
-     * @param factory 
+     *
+     * @param store
+     * @param key
+     * @param factory
      * @param expiry Expiry in seconds
      */
     public async getOrCreate<S extends StoreWithParent>(store: S, key: string, factory: () => Promise<Entry<S>>, expiry = 60): Promise<Entry<S>> {
-        return factory()
+        return factory();
     }
 }
 
