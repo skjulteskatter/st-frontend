@@ -1,5 +1,6 @@
 import { cache } from "@/services/cache";
 import { appSession } from "@/services/session";
+import api from "@/services/api";
 
 type Theme = "dark" | "light";
 
@@ -21,7 +22,10 @@ export class Themes {
     }
 
     public async load() {
-        const theme = await cache.get("config", "theme");
+        let theme = await cache.get("config", "theme");
+        if (theme === undefined) {
+            theme = appSession.user.settings?.theme;
+        }
         this.applyTheme(theme as unknown as undefined | Theme);
     }
 
