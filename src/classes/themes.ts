@@ -1,6 +1,5 @@
 import { cache } from "@/services/cache";
 import { appSession } from "@/services/session";
-import api from "@/services/api";
 
 type Theme = "dark" | "light";
 
