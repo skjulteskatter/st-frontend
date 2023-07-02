@@ -126,14 +126,13 @@ class CacheService {
         return (await this.tx(store, false)).objectStore(store).getAll();
     }
 
-    public async setAll<S extends Store>(store: S, entries: Entry<S>[]): Promise<void> {
-        // void
-    }
-
     public async replaceEntries<S extends Store>(store: S, entries: {
         [id: string]: Entry<S>;
     }) {
-        // void
+        const objectStore = (await this.tx(store, true)).objectStore(store);
+        for (const [key, value] of Object.entries(entries)) {
+            await objectStore.put(value, key);
+        }
     }
 
     public async getOrCreateAsync<T>(key: string, factory: () => Promise<T>, expiry: number) {
