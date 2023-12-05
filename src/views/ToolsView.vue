@@ -164,11 +164,10 @@ export default defineComponent({
                     url = URL.createObjectURL(blob);
                 a.href = url;
                 const d = new Date();
-                a.download = `${d.getFullYear()}${d
-                    .getMonth()
+                a.download = `${d.getFullYear()}${(d.getMonth() + 1)
                     .toString()
                     .padStart(2, "0")}${d
-                    .getDay()
+                    .getDate()
                     .toString()
                     .padStart(2, "0")} - ${
                     this.collections.find((c) => c.id === this.collectionId)
