@@ -163,10 +163,17 @@ export default defineComponent({
                 const a = document.createElement("a"),
                     url = URL.createObjectURL(blob);
                 a.href = url;
-                a.download = `${
+                const d = new Date();
+                a.download = `${d.getFullYear()}${d
+                    .getMonth()
+                    .toString()
+                    .padStart(2, "0")}${d
+                    .getDay()
+                    .toString()
+                    .padStart(2, "0")} - ${
                     this.collections.find((c) => c.id === this.collectionId)
                         ?.name.default
-                }-CP${this.codepage}.zip`;
+                } - CP${this.codepage}.zip`;
                 document.body.appendChild(a);
                 a.click();
                 setTimeout(() => {
