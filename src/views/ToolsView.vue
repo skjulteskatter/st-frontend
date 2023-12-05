@@ -1,37 +1,48 @@
 <template>
     <div>
-        <h1 class="text-xl">
-            Tools
-        </h1>
+        <h1 class="text-xl">Tools</h1>
         <div class="grid grid-cols-4 gap-4">
             <BaseCard class="col-span-2">
                 <template #header>Subtitles</template>
-                <select 
-                    v-model="collectionId"
-                    class="mb-2"
-                >
-                    <option 
-                        :value="collection.id" 
-                        v-for="collection in collections" 
+                <select v-model="collectionId" class="mb-2">
+                    <option
+                        :value="collection.id"
+                        v-for="collection in collections"
                         :key="collection.id"
                     >
-                        {{collection.name.default}}
+                        {{ collection.name.default }}
                     </option>
                 </select>
-                <input v-model="codepage" class="mb-2" type="number" placeholder="Codepage"/>
-                <BaseButton 
+                <input
+                    v-model="codepage"
+                    class="mb-2"
+                    type="number"
+                    placeholder="Codepage"
+                />
+                <BaseButton
                     @click="showCustomFiles = !showCustomFiles"
                     class="mb-2"
                 >
                     Custom Files
                 </BaseButton>
-                <div class="mb-2" v-for="language in languages" :key="language.key">
-                    <Checkbox class="cursor-pointer select-none" v-model="includeLanguages[language.key]"><h3>{{language.name}}</h3></Checkbox>
-                    <FileSelector v-if="showCustomFiles" @files="(files) => setFiles(language, files)"/>
-                </div>
+                <!-- <div
+                    class="mb-2"
+                    v-for="language in languages"
+                    :key="language.key"
+                >
+                    <Checkbox
+                        class="cursor-pointer select-none"
+                        v-model="includeLanguages[language.key]"
+                        ><h3>{{ language.name }}</h3></Checkbox
+                    >
+                    <FileSelector
+                        v-if="showCustomFiles"
+                        @files="(files) => setFiles(language, files)"
+                    />
+                </div> -->
                 <template #footer>
-                    <BaseButton 
-                        @click="downloadSubtitles" 
+                    <BaseButton
+                        @click="downloadSubtitles"
                         :loading="loading"
                         class="mb-2 float-right"
                     >
@@ -40,19 +51,14 @@
                 </template>
             </BaseCard>
             <BaseCard class="col-span-2">
-                <template #header>
-                    Credits
-                </template>
-                <select 
-                    v-model="collectionIdCredits"
-                    class="mb-2"
-                >
-                    <option 
-                        :value="collection.id" 
-                        v-for="collection in collections" 
+                <template #header> Credits </template>
+                <select v-model="collectionIdCredits" class="mb-2">
+                    <option
+                        :value="collection.id"
+                        v-for="collection in collections"
                         :key="collection.id"
                     >
-                        {{collection.name.default}}
+                        {{ collection.name.default }}
                     </option>
                 </select>
                 <template #footer>
@@ -87,24 +93,24 @@ import { addAbortSignal } from "stream";
 type CustomLyrics = {
     [key: string]: {
         [key: number]: string;
-    }
-}
+    };
+};
 
 export default defineComponent({
     name: "tools-view",
     components: {
-    FileSelector,
-    BaseButton,
-    Checkbox,
-    BaseCard,
-},
+        FileSelector,
+        BaseButton,
+        Checkbox,
+        BaseCard,
+    },
     data() {
         return {
             customLyrics: {} as CustomLyrics,
             collectionId: null as string | null,
             collectionIdCredits: null as string | null,
             loading: false,
-            includeLanguages: {} as {[key: string]: boolean},
+            includeLanguages: {} as { [key: string]: boolean },
             codepage: null as number | null,
             showCustomFiles: false,
             loadingCreds: false,
@@ -114,16 +120,21 @@ export default defineComponent({
         this.includeLanguages = this.languages.reduce((a, b) => {
             a[b.key] = true;
             return a;
-        }, {} as {[key: string]: boolean});
+        }, {} as { [key: string]: boolean });
 
-        this.collectionId = this.collectionIdCredits = this.collections.find(c => c.keys["no"] === "HV")?.id ?? null;
+        this.collectionId = this.collectionIdCredits =
+            this.collections.find((c) => c.keys["no"] === "HV")?.id ?? null;
     },
     computed: {
         languages(): Language[] {
-            return appSession.languages.filter(l => ["no", "de", "nl", "en", "fr", "ro", "es", "pl"].includes(l.key));
+            return appSession.languages.filter((l) =>
+                ["no", "de", "nl", "en", "fr", "ro", "es", "pl"].includes(l.key)
+            );
         },
         collections(): Collection[] {
-            return appSession.collections.filter(c => c.enabled && c.type === "song");
+            return appSession.collections.filter(
+                (c) => c.enabled && c.type === "song"
+            );
         },
     },
     methods: {
@@ -140,15 +151,22 @@ export default defineComponent({
         async downloadSubtitles() {
             if (this.collectionId) {
                 this.loading = true;
-                const zip = await api.admin.exportSubtitles(this.collectionId, 
-                    this.codepage ?? undefined, 
+                const zip = await api.admin.exportSubtitles(
+                    this.collectionId,
+                    this.codepage ?? undefined,
                     Object.entries(this.includeLanguages)
-                    .filter((e) => e[1])
-                    .map(([key]) => key), this.customLyrics);
-                const blob = new Blob([zip], {type: "application/zip"});
-                const a = document.createElement("a"), url = URL.createObjectURL(blob);
+                        .filter((e) => e[1])
+                        .map(([key]) => key),
+                    this.customLyrics
+                );
+                const blob = new Blob([zip], { type: "application/zip" });
+                const a = document.createElement("a"),
+                    url = URL.createObjectURL(blob);
                 a.href = url;
-                a.download = `${this.collections.find(c => c.id === this.collectionId)?.name.default}.zip`;
+                a.download = `${
+                    this.collections.find((c) => c.id === this.collectionId)
+                        ?.name.default
+                }-CP${this.codepage}.zip`;
                 document.body.appendChild(a);
                 a.click();
                 setTimeout(() => {
@@ -160,13 +178,20 @@ export default defineComponent({
         },
         async downloadCredits() {
             if (!this.collectionIdCredits) {
-                return
+                return;
             }
             this.loadingCreds = true;
-            const collection = await collectionService.get(this.collectionIdCredits);
-            const songs = (await songService.childrenOf(collection.id)).sort((a, b) => {
-                return (a.collections[0].number ?? 0) - (b.collections[0].number ?? 0)
-            });
+            const collection = await collectionService.get(
+                this.collectionIdCredits
+            );
+            const songs = (await songService.childrenOf(collection.id)).sort(
+                (a, b) => {
+                    return (
+                        (a.collections[0].number ?? 0) -
+                        (b.collections[0].number ?? 0)
+                    );
+                }
+            );
             const contributors = await contributorService.list();
             const copyrights = await copyrightService.list();
 
@@ -174,74 +199,136 @@ export default defineComponent({
             for (const song of songs) {
                 const parts: (string | number)[] = [];
 
-                parts.push(song.collections[0].number ?? "")
-                parts.push(song.title)
+                parts.push(song.collections[0].number ?? "");
+                parts.push(song.title);
 
                 const getContributorCsv = (type: string) => {
-                    let conCsv = ""
-                    const cons = song.participants.filter(p => p.type === type).map(i => contributors.find(c => c.id === i.contributorId)?.name ?? "")
+                    let conCsv = "";
+                    const cons = song.participants
+                        .filter((p) => p.type === type)
+                        .map(
+                            (i) =>
+                                contributors.find(
+                                    (c) => c.id === i.contributorId
+                                )?.name ?? ""
+                        );
                     if (cons) {
                         if (cons.length > 1) {
-                            conCsv += (cons.slice(0, cons.length - 1).join(", ") + " & " + cons[cons.length -1]) ?? ""
+                            conCsv +=
+                                cons.slice(0, cons.length - 1).join(", ") +
+                                    " & " +
+                                    cons[cons.length - 1] ?? "";
                         } else {
-                            conCsv += cons[0] ?? ""
+                            conCsv += cons[0] ?? "";
                         }
                     } else {
                         if (type === "composer") {
-                            const origin = song.origins.find(i => i.type === "melody")?.description
-                            conCsv += origin ?? ""
+                            const origin = song.origins.find(
+                                (i) => i.type === "melody"
+                            )?.description;
+                            conCsv += origin ?? "";
                         }
                     }
-                    return conCsv
-                }
-                parts.push(getContributorCsv("author"))
-                if (!song.participants.some(i => i.type === "composer")) {
-                    const origin = song.origins.find(i => i.type === "melody")?.description
-                    parts.push((origin ?? ""))
+                    return conCsv;
+                };
+                parts.push(getContributorCsv("author"));
+                if (!song.participants.some((i) => i.type === "composer")) {
+                    const origin = song.origins.find(
+                        (i) => i.type === "melody"
+                    )?.description;
+                    parts.push(origin ?? "");
                 } else {
-                    parts.push(getContributorCsv("composer"))
+                    parts.push(getContributorCsv("composer"));
                 }
                 // csv += getContributorCsv("arranger")
                 parts.push(song.yearWritten ?? "");
                 // if (song.yearComposed) {
                 //     csv += song.yearComposed + ";"
                 // }
-                const filterCopyrights = ["f8ca2745-72d6-4082-9be9-e39bb90567fb", "e627e22a-a621-4377-aaa6-886e3437b5fc"];
+                const filterCopyrights = [
+                    "f8ca2745-72d6-4082-9be9-e39bb90567fb",
+                    "e627e22a-a621-4377-aaa6-886e3437b5fc",
+                ];
 
-                const textCopyright = song.copyrights.find(t => t.type === "text" && filterCopyrights.includes(t.referenceId));
-                const melodyCopyright = song.copyrights.find(c => c.type === "melody" && filterCopyrights.includes(c.referenceId));
+                const textCopyright = song.copyrights.find(
+                    (t) =>
+                        t.type === "text" &&
+                        filterCopyrights.includes(t.referenceId)
+                );
+                const melodyCopyright = song.copyrights.find(
+                    (c) =>
+                        c.type === "melody" &&
+                        filterCopyrights.includes(c.referenceId)
+                );
 
                 if (textCopyright) {
                     if (melodyCopyright) {
-                        if (melodyCopyright.referenceId === textCopyright.referenceId) {
-                            parts.push("Tekst & Melodi © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name)
+                        if (
+                            melodyCopyright.referenceId ===
+                            textCopyright.referenceId
+                        ) {
+                            parts.push(
+                                "Tekst & Melodi © " +
+                                    copyrights.find(
+                                        (i) =>
+                                            i.id === textCopyright.referenceId
+                                    )?.name
+                            );
                         } else {
-                            parts.push("Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name + ", " + "Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name)
+                            parts.push(
+                                "Tekst © " +
+                                    copyrights.find(
+                                        (i) =>
+                                            i.id === textCopyright.referenceId
+                                    )?.name +
+                                    ", " +
+                                    "Melodi © " +
+                                    copyrights.find(
+                                        (i) =>
+                                            i.id === melodyCopyright.referenceId
+                                    )?.name
+                            );
                         }
                     } else {
-                        parts.push("Tekst © " + copyrights.find(i => i.id === textCopyright.referenceId)?.name)
+                        parts.push(
+                            "Tekst © " +
+                                copyrights.find(
+                                    (i) => i.id === textCopyright.referenceId
+                                )?.name
+                        );
                     }
                 } else if (melodyCopyright) {
-                    parts.push("Melodi © " + copyrights.find(i => i.id === melodyCopyright.referenceId)?.name)
+                    parts.push(
+                        "Melodi © " +
+                            copyrights.find(
+                                (i) => i.id === melodyCopyright.referenceId
+                            )?.name
+                    );
                 }
 
-
-                csv += parts.map(i => typeof(i) === "string" ? "\"" + i.replace(/"/g, "\"\"") + "\"" : i).join(";");
-                csv += "\n"
+                csv += parts
+                    .map((i) =>
+                        typeof i === "string"
+                            ? '"' + i.replace(/"/g, '""') + '"'
+                            : i
+                    )
+                    .join(";");
+                csv += "\n";
             }
 
-            const blob = new Blob([csv], {type: "text/csv"});
-                const a = document.createElement("a"), url = URL.createObjectURL(blob);
-                a.href = url;
-                a.download = `${collection.key}.csv`;
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => {
-                    document.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                });
+            const blob = new Blob([csv], { type: "text/csv" });
+            const a = document.createElement("a"),
+                url = URL.createObjectURL(blob);
+            a.href = url;
+            a.download = `${collection.key}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
             this.loadingCreds = false;
-        }
+        },
     },
 });
 </script>
