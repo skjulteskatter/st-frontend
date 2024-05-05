@@ -130,20 +130,28 @@ export default class Song extends BaseClass implements ISong {
         lan = lan ?? this.store.getters.languageKey;
         return !Object.keys(this.name).includes(lan) && this.type == "lyrics";
     }
-        
 
-    public view() {
+    public getRoute() {
         if (!this.available) return;
         const col = appSession.collections.find(c => this.collectionIds.includes(c.id));
 
         if (col)
-            router.push({
+            return {
                 name: "song",
                 params: {
                     collection: col.key ?? col.id,
                     number: this.getNumber(col.id) ?? this.id,
                 },
-            });
+            };
+
+        return null;
+    }
+        
+
+    public view() {
+        const route = this.getRoute();
+        if (!route) return;
+        router.push(route);
     }
 
     public get Views() {
