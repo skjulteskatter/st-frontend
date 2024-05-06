@@ -459,6 +459,10 @@ export default defineComponent({
             }
         },
         async load() {
+            await this.doLoad();
+            document.title = this.collection.key + " " + this.song.getNumber(this.collection?.id) + " - " + this.song.getName();
+        },
+        async doLoad() {
             if (this.fullLoading) {
                 return;
             }
