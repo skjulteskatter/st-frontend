@@ -9,12 +9,14 @@
         <router-view />
     </div>
 </template>
+
 <script lang="ts">
 import { Collection } from "@/classes";
 // import { BackButton } from "@/components";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "collection-lists",
@@ -23,6 +25,7 @@ export default defineComponent({
     },
     mounted() {
         this.loadCollection();
+        application.setTitle(this.collection.title.default);
     },
     data() {
         return {

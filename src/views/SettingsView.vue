@@ -59,6 +59,7 @@ import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import auth from "@/services/auth";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "settings-view",
@@ -73,6 +74,9 @@ export default defineComponent({
         loading: false,
         category: "general" as "general" | "user",
     }),
+    mounted() {
+        application.setTitle(null);
+    },
     methods: {
         logout() {
             auth.logout().then(() => {

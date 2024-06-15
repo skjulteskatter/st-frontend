@@ -18,6 +18,7 @@ import { defineComponent } from "vue";
 import { appSession } from "@/services/session";
 import { SongListItemCard } from "@/components/songs";
 import { HeartIcon } from "@heroicons/vue/outline";
+import { application } from "@/classes/application";
 
 export default defineComponent({
 	name: "favorites-view",
@@ -30,5 +31,8 @@ export default defineComponent({
 			return appSession.songs.filter(s => appSession.favorites.has(s.id));
 		},
 	},
+    mounted() {
+        application.setTitle(null);
+    },
 });
 </script>

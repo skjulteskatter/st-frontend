@@ -60,6 +60,7 @@ import { notify } from "@/services/notify";
 import { Product } from "@/classes";
 import { storeService } from "@/services/modules";
 import { appSession } from "@/services/session";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "collections-home",
@@ -100,6 +101,7 @@ export default defineComponent({
         this.products = (await storeService.getProducts())
                 .sort((a, b) => b.priority - a.priority)
                 .filter((p) => p.collections.length == 1 && p.collections.some(c => c.type === "song")) as Product[];
+        application.setTitle(null);
     },
     methods: {
         async portal() {

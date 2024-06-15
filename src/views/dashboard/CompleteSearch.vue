@@ -39,6 +39,7 @@ import { appSession } from "@/services/session";
 import { ILocaleString } from "songtreasures";
 import { searchService } from "@/services/searchService";
 import { SearchResultGroup } from "hiddentreasures-js/build/models/searchResultGroup";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "complete-search",
@@ -88,6 +89,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+        application.setTitle(null);
         if (!this.searchResult) {
             await this.search();
         }

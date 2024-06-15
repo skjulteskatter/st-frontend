@@ -113,6 +113,7 @@ import { collection } from "firebase/firestore";
 import lyrics from "@/classes/lyrics";
 import { IChord, LyricsContent } from "songtreasures-api";
 import { chords } from "@/services/api";
+import { application } from "@/classes/application";
 
 export default defineComponent({
 	name: "print-view",
@@ -168,7 +169,7 @@ export default defineComponent({
 		this.lyrics = printLyrics.value;
 
 		if(this.song){
-			document.title = this.formattedTitle;
+			application.setTitle(this.formattedTitle);
 		}
 
 		const imageElement = document.getElementById("st-logo-print") as HTMLImageElement;

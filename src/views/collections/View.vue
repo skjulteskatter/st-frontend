@@ -53,6 +53,7 @@ import { Price as PriceDiv} from "@/components/store";
 import { ShoppingCartIcon } from "@heroicons/vue/solid";
 import { Product } from "@/classes";
 import { storeService } from "@/services/modules";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "collection-item",
@@ -87,6 +88,7 @@ export default defineComponent({
     async mounted() {
         this.product = (await storeService.getProducts()).find((p) => p.id == this.$route.params.id) ?? null;
         this.country = await http.getCountry();
+        application.setTitle(null);
     },
     methods: {
         addToCart() {
