@@ -243,6 +243,7 @@ import { appSession } from "@/services/session";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
 import { presentation } from "@/classes/presentation";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "song-viewer",
@@ -459,6 +460,10 @@ export default defineComponent({
             }
         },
         async load() {
+            await this.doLoad();
+            application.setTitle(this.collection.key + " " + this.song.getNumber(this.collection?.id) + " - " + this.song.getName());
+        },
+        async doLoad() {
             if (this.fullLoading) {
                 return;
             }

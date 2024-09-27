@@ -19,6 +19,7 @@ import {
     OwnedCollections,
 } from "@/components/dashboard";
 import { appSession } from "@/services/session";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "dashboard-view",
@@ -31,6 +32,9 @@ export default defineComponent({
         user() {
             return appSession.user;
         },
+    },
+    mounted() {
+        application.setTitle(null);
     },
 });
 </script>

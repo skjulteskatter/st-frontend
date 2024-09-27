@@ -160,6 +160,7 @@ import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";
 import Draggable from "vuedraggable";
 import { CopyToClipboard } from "@/components/inputs";
+import { application } from "@/classes/application";
 
 const keys = reactive<{value?: ShareKey[]}>({value: undefined});
 
@@ -242,6 +243,9 @@ export default defineComponent({
         userId() {
             return appSession.user.id;
         },
+    },
+    mounted() {
+        application.setTitle(this.playlist?.name);
     },
     methods: {
         showModal() {

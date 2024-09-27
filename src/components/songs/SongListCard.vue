@@ -19,8 +19,8 @@
                     'opacity-40': !song.available,
                 }"
             >
-                <button 
-                    @click="viewSong(song)" 
+                <router-link
+                    :to="song.getRoute()"
                     class="w-full text-left flex hover:text-primary hover:underline cursor-pointer dark:opacity-90"
                     :class="{'text-yellow-700': !song.enabled}"
                 >
@@ -37,7 +37,7 @@
                             <EyeIcon class="w-3 h-3 opacity-50" />
                         </span>
                     </div>
-                </button>
+                </router-link>
             </li>
         </ul>
     </BaseCard>

@@ -52,6 +52,7 @@ import { FolderAddIcon, ExclamationIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
 import { notify } from "@/services/notify";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
+import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "playlist-list",
@@ -74,6 +75,9 @@ export default defineComponent({
         playlists(): ICustomCollection[] {
             return this.store.getters.playlists;
         },
+    },
+    mounted() {
+        application.setTitle(null);
     },
     methods: {
         confirmDelete(playlist: {
