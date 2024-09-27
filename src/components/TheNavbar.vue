@@ -43,7 +43,7 @@
 
         <div class="hidden lg:block">
           <div class="ml-4 flex items-center md:ml-6">
-            <StoreCart v-if="showCart" class="mr-2" />
+            <!-- <StoreCart v-if="showCart" class="mr-2" /> -->
             <Feedback />
             <Notification-list />
 

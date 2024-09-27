@@ -6,7 +6,7 @@
                     <h1 class="font-bold text-xl lg:text-2xl mr-4">{{ $t("common_collections") }}</h1>
                     <Tooltip :text="$t('store_currencyDescription')" />
                 </div>
-                <StoreCart class="md:hidden" />
+                <!-- <StoreCart class="md:hidden" /> -->
             </div>
             <div class="flex gap-2">
                 <BaseButton
