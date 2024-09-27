@@ -16,12 +16,12 @@
             <div class="flex justify-between gap-2 items-start mb-4">
                 <span>
                     <h2 class="font-bold leading-tight mb-2">{{ product.getName() }}</h2>
-                    <suspense>
+                    <!-- <suspense>
                         <template #fallback>{{ $t("common_loading") }}</template>
                         <template #default>
                             <Price class="opacity-50" v-if="!product.owned" :product="product" />
                         </template>
-                    </suspense>
+                    </suspense> -->
                 </span>
                 <button
                     :title="$t('store_learnMore')"
@@ -32,7 +32,7 @@
                     <InformationCircleIcon class="w-4 h-4" />
                 </button>
             </div>
-            <BaseButton
+            <!-- <BaseButton
                 theme="secondary"
                 :disabled="inCart || !collection.enabled"
                 v-if="!product.owned"
@@ -42,7 +42,7 @@
                     <ShoppingCartIcon class="w-4 h-4" />
                 </template>
                 {{ $t('store_addToCart') }}
-            </BaseButton>
+            </BaseButton> -->
         </div>
     </div>
 </template>
