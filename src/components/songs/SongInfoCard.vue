@@ -152,7 +152,7 @@ if (props.song.image) {
                 </div>
             </div>
         </div>
-        <div v-if="song.Description" class="flex flex-col gap-4 relative">
+        <!-- <div v-if="song.Description" class="flex flex-col gap-4 relative">
             <div
                 class="mt-8 text-sm song-description"
                 :class="{ 'hidden': !showDescription }"
@@ -162,7 +162,7 @@ if (props.song.image) {
                 <InformationCircleIcon class="w-4 h-4" />
                 <span class="text-sm">{{ $t('store_learnMore') }}</span>
             </button>
-        </div>
+        </div> -->
     </BaseCard>
 </template>
 <style scoped>
