@@ -203,15 +203,17 @@
 
 <script lang="ts">
 import { Collection, Song, transposer } from "@/classes";
-import { useStore } from "@/store";
 import { SongChanger } from "@/components/songs";
-import { XIcon } from "@heroicons/vue/solid";
-import { SheetMusicOptions } from "songtreasures";
 import { sheetService } from "@/services/songs/sheetService";
+import { sessionTranspositionFromApi } from "@/services/bandSync/bandSyncSession";
+import { useStore } from "@/store";
+import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
+import { XIcon } from "@heroicons/vue/solid";
 import { Sheet } from "hiddentreasures-js";
+import { SheetMusicOptions } from "songtreasures";
 import { defineComponent, PropType } from "vue";
-import ListSelect from "./inputs/ListSelect.vue";
 import BaseDropdown from "./inputs/BaseDropdown.vue";
+import ListSelect from "./inputs/ListSelect.vue";
 
 export default defineComponent({
   name: "open-sheet-music-display",
@@ -338,15 +340,29 @@ export default defineComponent({
       this.loading["transpose"] = true;
       this.transposition = n;
 
+      // Flutter: sheet key only pushes into session transposition while
+      // band sync is active; otherwise SVG-only.
+      if (this.store.state.bandSync.role !== "none") {
+          const sessionTs = sessionTranspositionFromApi(
+              n,
+              this.relativeKey || "C",
+              this.song?.transpositions ?? {},
+          );
+          this.store.commit(
+              SongsMutationTypes.SET_TRANSPOSITION,
+              sessionTs,
+          );
+      }
+
       if (this.transposition == n) {
-        await this.load();
+          await this.load();
       }
       this.loading["transpose"] = false;
     },
     async setClef(c: "bass" | "treble" | "alto") {
       if (this.options) {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.options.clef = c;
+          // eslint-disable-next-line vue/no-mutating-props
+          this.options.clef = c;
 
         await this.load();
       }

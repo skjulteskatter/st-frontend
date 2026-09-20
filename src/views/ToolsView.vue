@@ -78,17 +78,16 @@
 import { Collection } from "@/classes";
 import { FileSelector } from "@/components/tools";
 import api from "@/services/api";
-import { appSession } from "@/services/session";
-import { defineComponent } from "vue";
-import { Language } from "songtreasures";
-import BaseButton from "../components/BaseButton.vue";
-import Checkbox from "../components/inputs/Checkbox.vue";
-import BaseCard from "../components/BaseCard.vue";
-import songService from "@/services/songs/songService";
-import contributorService from "@/services/contributorService";
 import collectionService from "@/services/collectionService";
+import contributorService from "@/services/contributorService";
+import { appSession } from "@/services/session";
 import copyrightService from "@/services/songs/copyrightService";
-import { addAbortSignal } from "stream";
+import songService from "@/services/songs/songService";
+import type { Language } from "songtreasures";
+import { defineComponent } from "vue";
+import BaseButton from "../components/BaseButton.vue";
+import BaseCard from "../components/BaseCard.vue";
+import Checkbox from "../components/inputs/Checkbox.vue";
 
 type CustomLyrics = {
     [key: string]: {
@@ -128,12 +127,12 @@ export default defineComponent({
     computed: {
         languages(): Language[] {
             return appSession.languages.filter((l) =>
-                ["no", "de", "nl", "en", "fr", "ro", "es", "pl"].includes(l.key)
+                ["no", "de", "nl", "en", "fr", "ro", "es", "pl"].includes(l.key),
             );
         },
         collections(): Collection[] {
             return appSession.collections.filter(
-                (c) => c.enabled && c.type === "song"
+                (c) => c.enabled && c.type === "song",
             );
         },
     },
@@ -157,7 +156,7 @@ export default defineComponent({
                     Object.entries(this.includeLanguages)
                         .filter((e) => e[1])
                         .map(([key]) => key),
-                    this.customLyrics
+                    this.customLyrics,
                 );
                 const blob = new Blob([zip], { type: "application/zip" });
                 const a = document.createElement("a"),
@@ -188,7 +187,7 @@ export default defineComponent({
             }
             this.loadingCreds = true;
             const collection = await collectionService.get(
-                this.collectionIdCredits
+                this.collectionIdCredits,
             );
             const songs = (await songService.childrenOf(collection.id)).sort(
                 (a, b) => {
@@ -196,7 +195,7 @@ export default defineComponent({
                         (a.collections[0].number ?? 0) -
                         (b.collections[0].number ?? 0)
                     );
-                }
+                },
             );
             const contributors = await contributorService.list();
             const copyrights = await copyrightService.list();
@@ -215,8 +214,8 @@ export default defineComponent({
                         .map(
                             (i) =>
                                 contributors.find(
-                                    (c) => c.id === i.contributorId
-                                )?.name ?? ""
+                                    (c) => c.id === i.contributorId,
+                                )?.name ?? "",
                         );
                     if (cons) {
                         if (cons.length > 1) {
@@ -230,7 +229,7 @@ export default defineComponent({
                     } else {
                         if (type === "composer") {
                             const origin = song.origins.find(
-                                (i) => i.type === "melody"
+                                (i) => i.type === "melody",
                             )?.description;
                             conCsv += origin ?? "";
                         }
@@ -240,7 +239,7 @@ export default defineComponent({
                 parts.push(getContributorCsv("author"));
                 if (!song.participants.some((i) => i.type === "composer")) {
                     const origin = song.origins.find(
-                        (i) => i.type === "melody"
+                        (i) => i.type === "melody",
                     )?.description;
                     parts.push(origin ?? "");
                 } else {
@@ -259,12 +258,12 @@ export default defineComponent({
                 const textCopyright = song.copyrights.find(
                     (t) =>
                         t.type === "text" &&
-                        filterCopyrights.includes(t.referenceId)
+                        filterCopyrights.includes(t.referenceId),
                 );
                 const melodyCopyright = song.copyrights.find(
                     (c) =>
                         c.type === "melody" &&
-                        filterCopyrights.includes(c.referenceId)
+                        filterCopyrights.includes(c.referenceId),
                 );
 
                 if (textCopyright) {
@@ -277,46 +276,46 @@ export default defineComponent({
                                 "Tekst & Melodi © " +
                                     copyrights.find(
                                         (i) =>
-                                            i.id === textCopyright.referenceId
-                                    )?.name
+                                            i.id === textCopyright.referenceId,
+                                    )?.name,
                             );
                         } else {
                             parts.push(
                                 "Tekst © " +
                                     copyrights.find(
                                         (i) =>
-                                            i.id === textCopyright.referenceId
+                                            i.id === textCopyright.referenceId,
                                     )?.name +
                                     ", " +
                                     "Melodi © " +
                                     copyrights.find(
                                         (i) =>
-                                            i.id === melodyCopyright.referenceId
-                                    )?.name
+                                            i.id === melodyCopyright.referenceId,
+                                    )?.name,
                             );
                         }
                     } else {
                         parts.push(
                             "Tekst © " +
                                 copyrights.find(
-                                    (i) => i.id === textCopyright.referenceId
-                                )?.name
+                                    (i) => i.id === textCopyright.referenceId,
+                                )?.name,
                         );
                     }
                 } else if (melodyCopyright) {
                     parts.push(
                         "Melodi © " +
                             copyrights.find(
-                                (i) => i.id === melodyCopyright.referenceId
-                            )?.name
+                                (i) => i.id === melodyCopyright.referenceId,
+                            )?.name,
                     );
                 }
 
                 csv += parts
                     .map((i) =>
                         typeof i === "string"
-                            ? '"' + i.replace(/"/g, '""') + '"'
-                            : i
+                            ? "\"" + i.replace(/"/g, "\"\"") + "\""
+                            : i,
                     )
                     .join(";");
                 csv += "\n";

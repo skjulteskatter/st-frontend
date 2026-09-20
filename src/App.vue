@@ -1,6 +1,9 @@
 <template>
     <SplashScreen :loading="ready === false" />
     <Loader :loading="ready === false">
+        <div class="max-w-screen-2xl mx-auto px-4 pt-4">
+            <BandSyncOutOfSyncBar />
+        </div>
         <router-view />
     </Loader>
     <NotificationGroup />
@@ -11,7 +14,14 @@ import { defineComponent } from "vue";
 import { NotificationGroup } from "@/components/notification";
 import { useStore } from "@/store";
 import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
+import { BandSyncActionTypes } from "@/store/modules/bandSync/action-types";
 import SplashScreen from "@/components/SplashScreen.vue";
+import BandSyncOutOfSyncBar from "@/components/bandSync/BandSyncOutOfSyncBar.vue";
+import {
+    createBandSyncSongCoordinator,
+    BandSyncSongCoordinator,
+} from "@/composables/useBandSyncSongCoordinator";
+import { registerBandSyncCoordinator } from "@/services/bandSync/bandSyncCoordinatorRegistry";
 import { appSession } from "./services/session";
 
 export default defineComponent({
@@ -19,13 +29,23 @@ export default defineComponent({
     components: {
         NotificationGroup,
         SplashScreen,
+        BandSyncOutOfSyncBar,
     },
     data: () => ({
         store: useStore(),
         ready: false,
+        bandSyncCoordinator: null as BandSyncSongCoordinator | null,
     }),
     mounted() {
+        this.bandSyncCoordinator = createBandSyncSongCoordinator(
+            this.store,
+            this.$router,
+        );
+        this.bandSyncCoordinator.start();
+        registerBandSyncCoordinator(this.bandSyncCoordinator);
+
         appSession.onReady(() => {
+            this.store.dispatch(BandSyncActionTypes.INIT);
             this.ready = true;
         });
         if (!window.location.pathname.startsWith("/login")) {
@@ -34,6 +54,11 @@ export default defineComponent({
                 window.location.pathname,
             );
         }
+    },
+    unmounted() {
+        this.bandSyncCoordinator?.dispose();
+        registerBandSyncCoordinator(null);
+        this.bandSyncCoordinator = null;
     },
 });
 </script>

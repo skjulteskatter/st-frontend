@@ -33,13 +33,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { ICustomCollectionEntry } from "songtreasures-api";
 import { Song } from "@/classes";
-import { useStore } from "@/store";
-import { appSession } from "@/services/session";
 import { songs } from "@/services/api";
+import { appSession } from "@/services/session";
+import { useStore } from "@/store";
 import { SelectorIcon, TrashIcon } from "@heroicons/vue/solid";
+import type { ICustomCollectionEntry } from "songtreasures-api";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
     name: "playlist-song-card",

@@ -17,6 +17,12 @@
                             </template>
                             {{ $t('common_edit') }}
                         </BaseButton>
+                        <BandSyncIcon @open="showBandSync = true" />
+                        <BandSyncModal
+                            :show="showBandSync"
+                            :start-context="bandSyncStartContext"
+                            @close="showBandSync = false"
+                        />
                         <button @click="toggleFavorite" :disabled="favorites.loading" class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10" title="Add to favorites">
                             <component :is="favorite ? 'HeartIcon' : 'HeartOutline'" :class="[favorite ? 'text-red-500 dark:text-red-400' : 'opacity-50', 'w-6 h-6']" />
                         </button>
@@ -95,9 +101,11 @@
                         />
                         <OpenSheetMusicDisplay
                             v-if="sheetMusicOptions?.show === true && sheetMusicOptions?.type === 'sheetmusic'"
+                            :key="`${sheetMusicOptions.fileId}:${sheetMusicOptions.transposition}`"
                             :options="sheetMusicOptions"
                             :relativeKey="user?.settings?.defaultTransposition"
                             :languageKey="languageKey"
+                            :song="song"
                             @close="() => sheetMusicOptions ? sheetMusicOptions.show = false : undefined"
                         />
                         <div
@@ -227,6 +235,8 @@ import {
     SongSelector,
 } from "@/components/presentation";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
+import BandSyncIcon from "@/components/bandSync/BandSyncIcon.vue";
+import BandSyncModal from "@/components/bandSync/BandSyncModal.vue";
 import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon, PlusIcon, XIcon } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
@@ -240,6 +250,7 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
+import { toSheetApiTransposition } from "@/services/bandSync/bandSyncSession";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
 import { presentation } from "@/classes/presentation";
@@ -273,6 +284,8 @@ export default defineComponent({
         Switch,
         SwitchLabel,
         XIcon,
+        BandSyncIcon,
+        BandSyncModal,
     },
     data: () => ({
         store: useStore(),
@@ -289,10 +302,12 @@ export default defineComponent({
             [key: string]: boolean;
         },
         fullLoading: false,
+        loadGeneration: 0,
         favorite: false,
         showSheet: false,
         presentationPopupShown: false,
         showPresentationPopup: false,
+        showBandSync: false,
     }),
     computed: {
         selectedLanguage() {
@@ -375,6 +390,14 @@ export default defineComponent({
         viewCount() {
             return this.songViewCount ?? appSession.Views[this.song?.id ?? ""] ?? 0;
         },
+        bandSyncStartContext() {
+            if (!this.collection?.id || !this.song) return null;
+            return {
+                songbookId: this.collection.id,
+                songNumber: this.song.getNumber(this.collection.id) ?? 0,
+                transposition: this.store.state.songs.transposition ?? 0,
+            };
+        },
     },
     async beforeMount() {
         await this.load();
@@ -384,14 +407,98 @@ export default defineComponent({
         addEventListener("keydown", this.onKeyDown);
         this.favorite = this.favorites.has(this.song?.id);
     },
-    async updated() {
-        await this.load();
-        this.favorite = this.favorites.has(this.song?.id);
-    },
     unmounted() {
         removeEventListener("keydown", this.onKeyDown);
     },
+    watch: {
+        "$route.params.collection"() {
+            void this.load();
+        },
+        "$route.params.number"() {
+            void this.load();
+        },
+        "store.state.songs.songId"(id: string | undefined) {
+            this.favorite = this.favorites.has(id);
+        },
+        "store.state.songs.transposition"(value: number | undefined, previous: number | undefined) {
+            if (value === previous || value === undefined || this.fullLoading) {
+                return;
+            }
+            void this.transpose();
+
+            // Followers: refresh open sheet with local instrument API transposition
+            // (Flutter SheetsCubit.syncSessionTransposition). Solo / leader lyrics
+            // changes leave sheet independent.
+            const bandSync = this.store.state.bandSync;
+            if (
+                this.sheetMusicOptions?.show &&
+                bandSync.role === "member" &&
+                bandSync.followingLeaderUpdates
+            ) {
+                const defaultKey =
+                    this.user?.settings?.defaultTransposition ?? "C";
+                this.sheetMusicOptions = {
+                    ...this.sheetMusicOptions,
+                    transposition: toSheetApiTransposition(value, defaultKey),
+                };
+            }
+        },
+    },
     methods: {
+        /**
+         * Re-points an open sheet at the song now being shown.
+         *
+         * `sheetMusicOptions` is component state and survives the params-only
+         * route change a band sync follower gets when the leader picks another
+         * song, so without this the previous song's sheet keeps rendering
+         * (its `fileId` drives the OSMD key) while the lyrics and header
+         * around it update.
+         */
+        rebindSheetMusicToCurrentSong() {
+            const current = this.sheetMusicOptions;
+            if (!current?.show) {
+                return;
+            }
+
+            const sheets =
+                this.song?.sheetMusic.filter(
+                    (s) => !s.type.endsWith("sibelius"),
+                ) ?? [];
+
+            if (!sheets.length) {
+                // Nothing to show for this song — fall back to the lyrics.
+                this.sheetMusicOptions = { ...current, show: false };
+                return;
+            }
+
+            if (sheets.some((s) => s.id === current.fileId)) {
+                return;
+            }
+
+            const bandSync = this.store.state.bandSync;
+            const following =
+                bandSync.role === "member" && bandSync.followingLeaderUpdates;
+
+            const sheet = sheets[0];
+            this.sheetMusicOptions = {
+                ...current,
+                fileId: sheet.id,
+                url: sheet.directUrl,
+                type: sheet.type,
+                originalKey: this.song?.originalKey ?? "C",
+                // Followers land on the leader's key; everyone else opens the
+                // new song the way selectSheetMusic would.
+                transposition: following
+                    ? toSheetApiTransposition(
+                        this.store.state.songs.transposition ?? 0,
+                        this.defaultTransposition,
+                    )
+                    : transposer.getRelativeTransposition(
+                        this.defaultTransposition,
+                        true,
+                    ),
+            };
+        },
         setSong(songId: string) {
             this.$router.push({
                 name: "song",
@@ -401,6 +508,9 @@ export default defineComponent({
             });
         },
         setLyrics() {
+            if (!this.song) {
+                return;
+            }
             this.control.setSong(this.song);
             this.control.setContributors(appSession.contributors.filter(i => this.song?.participants.some(p => p.contributorId === i.id)).map(i => i.item));
             if (this.lyrics && !this.lyrics.ContainsChords)
@@ -461,69 +571,106 @@ export default defineComponent({
         },
         async load() {
             await this.doLoad();
-            application.setTitle(this.collection.key + " " + this.song.getNumber(this.collection?.id) + " - " + this.song.getName());
-        },
-        async doLoad() {
-            if (this.fullLoading) {
+            if (!this.song || !this.collection) {
                 return;
             }
+            application.setTitle(
+                this.collection.key +
+                    " " +
+                    this.song.getNumber(this.collection.id) +
+                    " - " +
+                    this.song.getName(),
+            );
+        },
+        async doLoad() {
+            const loadId = ++this.loadGeneration;
             this.fullLoading = true;
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
-                fileId: "",
-                show: false,
-                clef: "treble",
-                originalKey: "C",
-            });
-            this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
-            this.number = this.$route.params.number as string;
-            if (
-                !this.store.getters.collection
-                    ?.getKeys()
-                    .includes(this.$route.params.collection as string)
-            ) {
-                await this.store.dispatch(
-                    SongsActionTypes.SELECT_COLLECTION,
-                    this.$route.params.collection as string,
-                );
-            }
+            try {
+                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
+                    fileId: "",
+                    show: false,
+                    clef: "treble",
+                    originalKey: "C",
+                });
+                this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, undefined);
 
-            while (this.collection?.loading) {
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
+                const routeCollection = this.$route.params.collection as string;
+                const routeNumber = this.$route.params.number as string;
+                this.number = routeNumber;
 
-            await this.store.dispatch(SongsActionTypes.SELECT_SONG, this.number);
+                const current = this.store.getters.collection as Collection | undefined;
+                const routeMatchesCurrent =
+                    current != null &&
+                    (current.id === routeCollection ||
+                        current.getKeys().includes(routeCollection));
 
-            if (this.song?.hasLyrics && this.collection)
-            {
-                if (this.lyrics?.ContainsChords) {
-                    this.lyrics = await this.song?.transposeLyrics( 
-                        this.store.state.songs.transposition ?? 0,
-                        this.selectedLanguage,
+                if (!routeMatchesCurrent) {
+                    await this.store.dispatch(
+                        SongsActionTypes.SELECT_COLLECTION,
+                        routeCollection,
                     );
                 }
-                else {
-                    this.lyrics = await this.song?.getLyrics(this.store.state.songs.language);
-                }  
-            }
 
-            const route = this.$route.fullPath;
-            const log = () => {
-                if (route == this.$route.fullPath && this.song) {
-                    analytics.viewSong(this.song.id).then(r => {
-                        this.songViewCount = r;
-                        if (this.song)
-                            appSession.Views[this.song.id] = r;
-                    });
-                    this.store.dispatch(
-                        SessionActionTypes.LOG_SONG_ITEM,
-                        this.song,
-                    );
+                if (loadId !== this.loadGeneration) {
+                    return;
                 }
-            };
-            setTimeout(log, 5000);
-            this.setLyrics();
-            this.setView(this.store.state.songs.view);
-            this.fullLoading = false;
+
+                while (this.collection?.loading) {
+                    await new Promise((resolve) => setTimeout(resolve, 100));
+                    if (loadId !== this.loadGeneration) {
+                        return;
+                    }
+                }
+
+                // Re-read route in case a newer navigation started while we waited.
+                const number = this.$route.params.number as string;
+                this.number = number;
+                await this.store.dispatch(SongsActionTypes.SELECT_SONG, number);
+
+                if (loadId !== this.loadGeneration) {
+                    return;
+                }
+
+                this.rebindSheetMusicToCurrentSong();
+
+                if (this.song?.hasLyrics && this.collection) {
+                    if (this.lyrics?.ContainsChords) {
+                        this.lyrics = await this.song?.transposeLyrics(
+                            this.store.state.songs.transposition ?? 0,
+                            this.selectedLanguage,
+                        );
+                    } else {
+                        this.lyrics = await this.song?.getLyrics(
+                            this.store.state.songs.language,
+                        );
+                    }
+                }
+
+                if (loadId !== this.loadGeneration) {
+                    return;
+                }
+
+                const route = this.$route.fullPath;
+                const log = () => {
+                    if (route == this.$route.fullPath && this.song) {
+                        analytics.viewSong(this.song.id).then((r) => {
+                            this.songViewCount = r;
+                            if (this.song) appSession.Views[this.song.id] = r;
+                        });
+                        this.store.dispatch(
+                            SessionActionTypes.LOG_SONG_ITEM,
+                            this.song,
+                        );
+                    }
+                };
+                setTimeout(log, 5000);
+                this.setLyrics();
+                this.setView(this.store.state.songs.view);
+            } finally {
+                if (loadId === this.loadGeneration) {
+                    this.fullLoading = false;
+                }
+            }
         },
         async addToPlaylist(playlist: ICustomCollection) {
             // Add song to playlist with ID

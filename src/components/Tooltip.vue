@@ -1,6 +1,8 @@
 <template>
 	<div class="relative" @mouseenter="showTooltip" @mouseleave="hideTooltip" @click="showTooltip">
-		<QuestionMarkCircleIcon class="w-4 h-4 text-secondary dark:text-white" />
+		<slot>
+			<QuestionMarkCircleIcon class="w-4 h-4 text-secondary dark:text-white" />
+		</slot>
 		<TransitionRoot
 			:show="open"
 			as="div"

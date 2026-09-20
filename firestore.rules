@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /bandSessions/{code} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if request.auth != null
+        && request.resource.data.leaderId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.leaderId == request.auth.uid;
+    }
+  }
+}
