@@ -13,6 +13,14 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                // Vite 4 only supports Sass' legacy JS API; Vite 5.4+ can switch to the modern one
+                silenceDeprecations: ["legacy-js-api"],
+            },
+        },
+    },
     server: {
         port: 8080,
     },

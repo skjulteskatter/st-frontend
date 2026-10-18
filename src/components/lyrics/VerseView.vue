@@ -3,14 +3,16 @@
         <span :class="type + '-title'">{{Verse.name}}</span>
         <div class="content">
             <table class="songline mb-4" v-for="(line, i) in Verse.content" :key="i">
-                <tr class="chords">
-                    <td v-for="(chord, i) in line.chords" :key="i">
-                        <ChordViewer :text="chord" :chord="chord" />
-                    </td>
-                </tr>
-                <tr class="lyrics">
-                    <td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
-                </tr>
+                <tbody>
+                    <tr class="chords">
+                        <td v-for="(chord, i) in line.chords" :key="i">
+                            <ChordViewer :text="chord" :chord="chord" />
+                        </td>
+                    </tr>
+                    <tr class="lyrics">
+                        <td v-for="(chord, i) in line.parts" :key="i" :class="{'indent': chord.startsWith(' ')}">{{chord.trimStart()}}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

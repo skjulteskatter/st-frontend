@@ -17,14 +17,21 @@ import { analytics, instruments, items, playlists, session, sharing, songs, tags
 import auth, { analytics as googleAnalytics } from "./auth";
 import { cache } from "./cache";
 import { notify } from "./notify";
+import { ref } from "vue";
 import Favorites from "@/classes/favorites";
 import Instrument from "@/classes/instrument";
 import type { Language } from "songtreasures";
 
+// Reactive so store getters (languageKey, isAdmin, extended) update when the user or their settings change.
+// Kept outside the class: components wrap the session in reactive(appSession), which would unwrap a ref property.
+const currentUser = ref<User>();
+
 export class Session {
     private _initialized?: boolean;
 
-    private _user?: User;
+    private get _user() {
+        return currentUser.value as User | undefined;
+    }
 
     private get expiry() {
         return new Date().getTime() + 3600000;
@@ -76,7 +83,7 @@ export class Session {
     }
     
     public set user(v) {
-        this._user = v;
+        currentUser.value = v;
     }
 
     public get User() {

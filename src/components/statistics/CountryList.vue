@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "../../style/mixins";
+@use "../../style/mixins" as *;
 
 .shadow-scroll {
     @include scrollShadow(white);

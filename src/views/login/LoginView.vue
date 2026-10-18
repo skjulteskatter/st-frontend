@@ -7,7 +7,12 @@
                 class="max-h-16"
                 height="64"
             />
-            <TabGroup>
+            <div v-if="signingIn" class="mt-16 lg:mt-32 flex flex-col items-center lg:items-start gap-4 text-secondary" role="status">
+                <div class="w-8 h-8 rounded-full border-4 border-gray-200 border-t-primary animate-spin"></div>
+                <h1 class="font-bold text-2xl lg:text-4xl">Signing in…</h1>
+                <p class="text-gray-500">Getting your account ready.</p>
+            </div>
+            <TabGroup v-else>
                 <TabList class="rounded-full bg-gray-200 p-1 mt-16 lg:mt-32">
                     <Tab v-slot="{ selected }" as="template">
                         <button :class="[selected ? 'bg-white shadow-md' : 'bg-transparent', 'rounded-full px-3 py-1 text-sm text-secondary']">Sign in</button>
@@ -41,6 +46,7 @@
                                 @click="login('apple')"
                                 v-if="!providers.length || providers.includes('apple.com')"
                                 title="Sign in with Apple"
+                                :class="{'opacity-75 cursor-wait button--loading': loading.providerapple}"
                                 class="p-6 cursor-pointer border border-gray-300 rounded-md hover:border-secondary h-20 flex gap-4 items-center justify-center"
                             >
                                 <img
@@ -171,6 +177,8 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { MailIcon } from "@heroicons/vue/outline";
 import { appSession } from "@/services/session";
 import { User } from "@/classes";
+import { a } from "@/services/auth";
+import { onAuthStateChanged, Unsubscribe } from "firebase/auth";
 
 export default defineComponent({
     name: "login-view",
@@ -202,6 +210,9 @@ export default defineComponent({
         forgotPassword: false,
         forgotPasswordSent: false,
         user: null as User | null,
+        // Set once Firebase has signed the user in, until the session is loaded and we navigate away
+        signingIn: false,
+        unsubscribeAuth: null as Unsubscribe | null,
     }),
     computed: {
         initialized() {
@@ -215,6 +226,14 @@ export default defineComponent({
         if (this.user) {
             this.$router.push({ name: "main" });
         }
+        this.unsubscribeAuth = onAuthStateChanged(a, (user) => {
+            if (user?.emailVerified && this.loading.login) {
+                this.signingIn = true;
+            }
+        });
+    },
+    beforeUnmount() {
+        this.unsubscribeAuth?.();
     },
     methods: {
         async submitForm() {
@@ -251,7 +270,19 @@ export default defineComponent({
         async login(provider: string) {
             this.loading.login = true;
             this.loading["provider" + provider] = true;
-            await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
+            try {
+                await this.store.dispatch(SessionActionTypes.SESSION_LOGIN_SOCIAL, provider);
+            }
+            catch (e) {
+                // Popup closed or sign-in failed: let the user try again
+                this.loading.login = false;
+                this.loading["provider" + provider] = false;
+                this.signingIn = false;
+                const code = (e as { code?: string })?.code;
+                if (code !== "auth/popup-closed-by-user" && code !== "auth/cancelled-popup-request") {
+                    throw e;
+                }
+            }
         },
     },
 });
