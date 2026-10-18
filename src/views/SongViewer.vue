@@ -463,64 +463,6 @@ export default defineComponent({
             ),
       };
     },
-    setSong(songId: string) {
-      this.$router.push({
-        name: "song",
-        params: {
-          number: songId,
-        },
-      });
-    },
-    setLyrics() {
-      if (!this.song) {
-        return;
-      }
-      this.control.setSong(this.song);
-      this.control.setContributors(
-        appSession.contributors
-          .filter((i) =>
-            this.song?.participants.some((p) => p.contributorId === i.id),
-          )
-          .map((i) => i.item),
-      );
-      if (this.lyrics && !this.lyrics.ContainsChords)
-        this.control.setLyrics(this.lyrics);
-    },
-    toggleSidebar() {
-      this.control.toggleSidebar();
-    },
-    toggleSingleVerse() {
-      this.control.toggleSingleVerse();
-    },
-    setTheme(theme: "dark" | "light") {
-      this.control.setTheme(theme);
-    },
-    // PRESENTATION VIEW
-    toggleVerse(index: string) {
-      this.control.toggleVerse(index);
-      this.control.AvailableVerses;
-    },
-    setSync(v: boolean) {
-      this.control.setSync(v);
-    },
-    toggleAll() {
-      if (this.lyrics) {
-        this.control.toggleAll();
-        this.unset = !this.control.AvailableVerses.length;
-      }
-    },
-    refresh() {
-      this.control.commit();
-    },
-    next() {
-      this.control.next();
-    },
-    goToWidescreen() {
-      window.location.replace("https://presentation.songtreasures.app");
-    },
-    previous() {
-      this.control.previous();
-    },
     openAdder() {
       this.show = true;
     },
