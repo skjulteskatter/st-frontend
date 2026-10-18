@@ -17,7 +17,6 @@ export enum SessionMutationTypes {
     SET_PLAYLIST = "SET_PLAYLIST",
     DELETE_PLAYLIST = "DELETE_PLAYLIST",
     
-    EXTEND = "EXTEND",
     ERROR = "ERROR",
     REDIRECT = "REDIRECT",
     SET_LOG_ITEMS = "SET_LOG_ITEMS",

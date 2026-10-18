@@ -14,7 +14,6 @@ export type Mutations<S = State> = {
 
     [SessionMutationTypes.INITIALIZED](state: S): void;
     [SessionMutationTypes.REDIRECT](state: S, payload: string): void;
-    [SessionMutationTypes.EXTEND](state: S, payload: boolean): void;
     [SessionMutationTypes.ERROR](state: S, payload: string): void;
     
     [SessionMutationTypes.SET_TAGS](state: S, payload: ITag[]): void;
@@ -69,9 +68,6 @@ export const mutations: MutationTree<State> & Mutations = {
     },
     [SessionMutationTypes.REDIRECT](state, redirect) {
         state.redirect = redirect;
-    },
-    [SessionMutationTypes.EXTEND](state, value) {
-        state.extend = value;
     },
     [SessionMutationTypes.ERROR](state, value) {
         state.error = value;
