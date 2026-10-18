@@ -22,6 +22,14 @@
                     </button>
                     <button
                         class="text-left px-4 py-3 flex gap-2 items-center rounded-md"
+                        :class="{ 'bg-black/10 dark:bg-white/10': category == 'bandSync' }"
+                        @click="category = 'bandSync'"
+                    >
+                        <UserGroupIcon class="w-5 h-5 opacity-50" />
+                        {{ $t('bandSync_title') }}
+                    </button>
+                    <button
+                        class="text-left px-4 py-3 flex gap-2 items-center rounded-md"
                         :class="{ 'bg-black/10 dark:bg-white/10': category == 'user' }"
                         @click="category = 'user'"
                     >
@@ -46,20 +54,22 @@
                 </div>
             </div>
             <div class="md:col-span-3">
-                <SettingsCard :category="category" />
+                <BandSyncSettings v-if="category == 'bandSync'" />
+                <SettingsCard v-else :category="category" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { SettingsCard } from "@/components";
-import { LogoutIcon, UserIcon, CogIcon } from "@heroicons/vue/solid";
-import { useStore } from "@/store";
-import { SessionActionTypes } from "@/store/modules/session/action-types";
-import auth from "@/services/auth";
 import { application } from "@/classes/application";
+import { SettingsCard } from "@/components";
+import { BandSyncSettings } from "@/components/settings";
+import auth from "@/services/auth";
+import { useStore } from "@/store";
+import { UserGroupIcon } from "@heroicons/vue/outline";
+import { CogIcon, LogoutIcon, UserIcon } from "@heroicons/vue/solid";
+import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "settings-view",
@@ -68,11 +78,13 @@ export default defineComponent({
         LogoutIcon,
         UserIcon,
         CogIcon,
+        UserGroupIcon,
+        BandSyncSettings,
     },
     data: () => ({
         store: useStore(),
         loading: false,
-        category: "general" as "general" | "user",
+        category: "general" as "general" | "user" | "bandSync",
     }),
     mounted() {
         application.setTitle(null);

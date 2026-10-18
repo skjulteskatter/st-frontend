@@ -151,29 +151,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import themes from "@/classes/themes";
-import auth from "@/services/auth";
-import { useStore } from "@/store";
-import { cache } from "@/services/cache";
 import { ChangePassword } from "@/components/settings";
-import { 
-    CheckIcon,
-    ColorSwatchIcon,
-    TranslateIcon,
-    MusicNoteIcon,
-    PhotographIcon,
-    CreditCardIcon,
-} from "@heroicons/vue/solid";
+import { ensureLanguageIsFetched } from "@/i18n";
+import { session } from "@/services/api";
+import auth from "@/services/auth";
+import { cache } from "@/services/cache";
+import { storeService } from "@/services/modules";
 import { notify } from "@/services/notify";
 import { appSession } from "@/services/session";
-import { session } from "@/services/api";
-import { storeService } from "@/services/modules";
-import { Language } from "songtreasures";
-import { ensureLanguageIsFetched } from "@/i18n";
-import { BaseInput } from "./inputs";
-import { updateEmail, getAuth } from "firebase/auth";
+import { useStore } from "@/store";
+import {
+    CheckIcon,
+    ColorSwatchIcon,
+    CreditCardIcon,
+    MusicNoteIcon,
+    PhotographIcon,
+    TranslateIcon,
+} from "@heroicons/vue/solid";
 import { FirebaseError } from "firebase/app";
+import { getAuth, updateEmail } from "firebase/auth";
+import { Language } from "songtreasures";
+import { defineComponent } from "vue";
+import { BaseInput } from "./inputs";
 
 export default defineComponent({
     name: "settings-card",
@@ -185,7 +185,7 @@ export default defineComponent({
     MusicNoteIcon,
     PhotographIcon,
     CreditCardIcon,
-    BaseInput
+    BaseInput,
 },
     props: {
         category: {
@@ -358,19 +358,19 @@ export default defineComponent({
             }
         },
         async updateEmail() {
-            this.editEmailError = ""
-            const user = getAuth().currentUser
+            this.editEmailError = "";
+            const user = getAuth().currentUser;
             if (user) {
                 try {
-                    await updateEmail(user, this.editEmailValue)
+                    await updateEmail(user, this.editEmailValue);
                 } catch (e: any) {
-                    const fe = e as FirebaseError
+                    const fe = e as FirebaseError;
                     if (fe.code === "auth/requires-recent-login") {
                         if (confirm("You must be recently logged in to complete this action")) {
-                            await auth.logout()
+                            await auth.logout();
                         }
                     } else {
-                        this.editEmailError = fe.code
+                        this.editEmailError = fe.code;
                     }
                 }
             }

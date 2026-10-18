@@ -1,8 +1,8 @@
 <template>
     <label class="border-none p-0 bg-transparent">
-        <small class="block tracking-wide" v-if="label">{{ label }}</small>
+        <small class="block uppercase tracking-wide text-xs mb-1" v-if="label">{{ label }}</small>
         <input
-            class="px-2 py-1 text-base rounded-md border-black/20 placeholder-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 w-full dark:border-white/20 dark:bg-secondary"
+            class="w-full px-3 py-2 rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
             v-bind="$attrs"
             :value="modelValue"
             :disabled="disabled"
