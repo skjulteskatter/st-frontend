@@ -8,7 +8,7 @@ export const firebaseConfig = {
   measurementId: "G-YWMEW6TKB8",
 };
 
-const basePath = "https://songtreasures.azurewebsites.net/";
+const basePath = "https://st-api-44114060540.europe-west4.run.app/";
 
 const config = {
   api: {
