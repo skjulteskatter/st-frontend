@@ -1,4 +1,4 @@
-import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
+import type { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 
 export type State = {
     initialized: boolean;

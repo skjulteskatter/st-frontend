@@ -1,4 +1,4 @@
-import { IInstrument } from "songtreasures-api";
+import type { IInstrument } from "songtreasures-api";
 
 export default class Instrument implements IInstrument {
     public id: string;

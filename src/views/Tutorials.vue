@@ -52,7 +52,7 @@ import { BaseModal } from "@/components";
 import { SongFileCard } from "@/components/media";
 import { appSession } from "@/services/session";
 import { defineComponent } from "vue";
-import { MediaType } from "songtreasures-api";
+import type { MediaType } from "songtreasures-api";
 
 export default defineComponent({
     name: "collection-tutorials",

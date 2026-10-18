@@ -1,7 +1,7 @@
 import { Lyrics } from "@/classes";
-import { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation } from "songtreasures-api";
+import type { ICollectionItem, ApiContributor, ICustomCollection, ISong, ITag, IMediaFile, IChapter, IBook, ITranslation } from "songtreasures-api";
 import { openDB } from "idb";
-import { Notification } from "songtreasures-api";
+import type { Notification } from "songtreasures-api";
 
 type EntryWithExpiry<T> = {
     expiry: Date;

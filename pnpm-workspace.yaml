@@ -1,0 +1,13 @@
+allowBuilds:
+  esbuild: true
+  nodent-runtime: true
+  '@parcel/watcher': false
+  core-js: false
+  core-js-pure: false
+  gl: false
+  plyr: false
+  protobufjs: false
+  re2: false
+
+overrides:
+  webpack: 5.111.1

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { LyricsChordContent } from "songtreasures-api";
+import type { LyricsChordContent } from "songtreasures-api";
 import ChordViewer from "./ChordViewer.vue";
 
 export default defineComponent({

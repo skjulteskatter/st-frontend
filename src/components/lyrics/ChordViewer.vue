@@ -48,7 +48,7 @@
 import { defineComponent } from "vue";
 import { TransitionRoot } from "@headlessui/vue";
 import { chords } from "@/services/api";
-import { IChord } from "songtreasures-api";
+import type { IChord } from "songtreasures-api";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({

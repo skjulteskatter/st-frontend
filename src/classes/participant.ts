@@ -1,4 +1,4 @@
-import { IParticipant } from "songtreasures-api";
+import type { IParticipant } from "songtreasures-api";
 import { Contributor } from ".";
 
 export default class Participant implements IParticipant {

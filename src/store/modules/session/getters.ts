@@ -1,7 +1,7 @@
 import { RootState } from "../..";
 import { GetterTree } from "vuex";
 import { State } from "./state";
-import { IActivity, ICustomCollection } from "songtreasures-api";
+import type { IActivity, ICustomCollection } from "songtreasures-api";
 import { Activity } from "@/classes/activity";
 import { appSession } from "@/services/session";
 

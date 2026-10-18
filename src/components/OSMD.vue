@@ -210,7 +210,7 @@ import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { XIcon } from "@heroicons/vue/solid";
 import { Sheet } from "hiddentreasures-js";
-import { SheetMusicOptions } from "songtreasures";
+import type { SheetMusicOptions } from "songtreasures";
 import { defineComponent, PropType } from "vue";
 import BaseDropdown from "./inputs/BaseDropdown.vue";
 import ListSelect from "./inputs/ListSelect.vue";

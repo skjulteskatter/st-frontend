@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useStore } from "@/store";
-import { IMediaFile } from "songtreasures-api";
+import type { IMediaFile } from "songtreasures-api";
 import { MusicNoteIcon, VolumeUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({

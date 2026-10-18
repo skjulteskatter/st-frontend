@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { ICustomCollection } from "songtreasures-api";
+import type { ICustomCollection } from "songtreasures-api";
 import { useStore } from "@/store";
 import { FolderIcon } from "@heroicons/vue/outline";
 import { TrashIcon, UsersIcon } from "@heroicons/vue/solid";

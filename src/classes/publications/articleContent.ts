@@ -1,4 +1,4 @@
-import { IArticleContent } from "songtreasures-api/publications";
+import type { IArticleContent } from "songtreasures-api/publications";
 
 export default class ArticleContent implements IArticleContent {
     public articleId: string;

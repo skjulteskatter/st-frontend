@@ -1,4 +1,4 @@
-import { ApiContributor } from "songtreasures-api";
+import type { ApiContributor } from "songtreasures-api";
 import LocaleString from "./localeString";
 
 export default class Contributor implements ApiContributor {

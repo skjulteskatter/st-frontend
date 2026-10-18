@@ -1,6 +1,6 @@
 import { session } from "@/services/api";
 import { cache } from "@/services/cache";
-import { IUser } from "songtreasures-api";
+import type { IUser } from "songtreasures-api";
 import UserSettings from "./userSettings";
 
 export default class User implements IUser {

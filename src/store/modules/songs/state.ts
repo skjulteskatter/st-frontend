@@ -1,8 +1,8 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SongFilter from "@/classes/songFilter";
 import { ISearchResultGroup } from "hiddentreasures-js/build/models/searchResultGroup";
-import { SheetMusicOptions } from "songtreasures";
-import { ApiContributor, IMediaFile } from "songtreasures-api";
+import type { SheetMusicOptions } from "songtreasures";
+import type { ApiContributor, IMediaFile } from "songtreasures-api";
 
 
 export type SongViewType = "default" | "performance" | "chords";

@@ -239,7 +239,7 @@ import {
 } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
-import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
+import type { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -249,7 +249,7 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { toSheetApiTransposition } from "@/services/bandSync/bandSyncSession";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
-import { SheetMusicOptions } from "songtreasures";
+import type { SheetMusicOptions } from "songtreasures";
 import { application } from "@/classes/application";
 
 export default defineComponent({

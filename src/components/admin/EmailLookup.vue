@@ -94,7 +94,7 @@
 import { defineComponent } from "vue";
 import { SearchInput } from "@/components/inputs";
 import api from "@/services/api";
-import { ISubscription, IUser } from "songtreasures-api";
+import type { ISubscription, IUser } from "songtreasures-api";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/solid";
 import collectionService from "@/services/collectionService";
 import { Collection } from "hiddentreasures-js";

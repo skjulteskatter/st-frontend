@@ -74,7 +74,7 @@ import { ShoppingCartIcon } from "@heroicons/vue/outline";
 import { XIcon, ArrowRightIcon } from "@heroicons/vue/solid";
 import { Product } from "@/classes";
 import { storeService } from "@/services/modules";
-import { IPrice } from "songtreasures-api";
+import type { IPrice } from "songtreasures-api";
 
 export default defineComponent({
     name: "store-cart",

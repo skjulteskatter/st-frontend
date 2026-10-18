@@ -1,11 +1,11 @@
 import { CollectionItem, Lyrics } from "@/classes";
 //import { CacheService } from "./cacheservice";
 import { RedirectToCheckoutOptions } from "@stripe/stripe-js";
-import { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
-import { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, IChord, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
+import type { SessionRequest, SetupResponse } from "songtreasures-api/checkout";
+import type { IActivity, ICategory, ICollection, ICollectionItem, ApiContributor, ICopyright, ICountry, IGenre, ILyrics, ICustomCollection, IChord, ICustomCollectionEntry, ISettings, ISong, ISubscription, Format, ITag, ITheme, IUser, IMediaFile, PublicUser, ShareKey, IScripture, ITranslation, IBook, IChapter, IVerse, IInstrument, IAnalyticsItem } from "songtreasures-api";
 import http from "./http";
-import { Language } from "songtreasures";
-import { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
+import type { Language } from "songtreasures";
+import type { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
 
 export const activity = {
     async getActivities() {

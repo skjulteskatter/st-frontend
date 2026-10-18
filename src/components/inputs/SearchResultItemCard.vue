@@ -53,7 +53,7 @@
 import { defineComponent, PropType } from "vue";
 import { UserCircleIcon, PencilIcon } from "@heroicons/vue/outline";
 import { CollectionItem, Song } from "@/classes";
-import { ApiContributor } from "songtreasures-api";
+import type { ApiContributor } from "songtreasures-api";
 import { Article } from "hiddentreasures-js";
 import { SearchResult } from "hiddentreasures-js/build/models/searchResultGroup";
 import { articleService, publicationService } from "@/services/publications";

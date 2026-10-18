@@ -1,8 +1,8 @@
 import { Collection, CollectionItem, Song } from "@/classes";
 import SongFilter from "@/classes/songFilter";
 import { ISearchResultGroup } from "hiddentreasures-js/build/models/searchResultGroup";
-import { SheetMusicOptions } from "songtreasures";
-import { ApiContributor } from "songtreasures-api";
+import type { SheetMusicOptions } from "songtreasures";
+import type { ApiContributor } from "songtreasures-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";

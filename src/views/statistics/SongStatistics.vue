@@ -46,7 +46,7 @@ import { LineChart, CountryList } from "@/components/statistics";
 import { appSession } from "@/services/session";
 import { EyeIcon } from "@heroicons/vue/outline";
 import { RefreshIcon } from "@heroicons/vue/solid";
-import { IAnalyticsItem } from "songtreasures-api";
+import type { IAnalyticsItem } from "songtreasures-api";
 
 export default defineComponent({ 
 	name: "song-statistics",

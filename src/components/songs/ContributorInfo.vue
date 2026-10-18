@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { ApiContributor } from "songtreasures-api";
+import type { ApiContributor } from "songtreasures-api";
 
 export default defineComponent({
     name: "contributor-info",

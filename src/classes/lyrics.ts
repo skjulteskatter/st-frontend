@@ -1,4 +1,4 @@
-import { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
+import type { ILyrics, LyricsChordContent, LyricsContent } from "songtreasures-api";
 import { transposer } from "./transposer";
 import { ref } from "vue";
 

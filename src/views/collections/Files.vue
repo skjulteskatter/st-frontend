@@ -23,7 +23,7 @@ import { BaseModal } from "@/components";
 import { FileCard } from "@/components/media";
 import { appSession } from "@/services/session";
 import { defineComponent } from "vue";
-import { MediaType } from "songtreasures-api";
+import type { MediaType } from "songtreasures-api";
 
 export default defineComponent({
     name: "collection-files",

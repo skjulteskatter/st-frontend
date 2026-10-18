@@ -1,4 +1,4 @@
-import { IMediaFile } from "songtreasures-api";
+import type { IMediaFile } from "songtreasures-api";
 import { Song } from ".";
 
 export type TSongFilter = {

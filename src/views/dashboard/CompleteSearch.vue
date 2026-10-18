@@ -36,7 +36,7 @@ import { Collection } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { appSession } from "@/services/session";
-import { ILocaleString } from "songtreasures";
+import type { ILocaleString } from "songtreasures";
 import { searchService } from "@/services/searchService";
 import { SearchResultGroup } from "hiddentreasures-js/build/models/searchResultGroup";
 import { application } from "@/classes/application";

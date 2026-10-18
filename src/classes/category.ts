@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import { ICategory } from "songtreasures-api";
+import type { ICategory } from "songtreasures-api";
 import LocaleString from "./localeString";
 
 export default class Category implements ICategory {

@@ -90,7 +90,7 @@ import { useStore } from "@/store";
 import { Song } from "@/classes";
 import { ArrowRightIcon, ArrowLeftIcon, DownloadIcon, BookOpenIcon, HashtagIcon, TranslateIcon } from "@heroicons/vue/solid";
 import { notify } from "@/services/notify";
-import { Language } from "songtreasures";
+import type { Language } from "songtreasures";
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
     let binary = "";

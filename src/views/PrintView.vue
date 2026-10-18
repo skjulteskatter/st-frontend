@@ -111,7 +111,7 @@ import { useStore } from "@/store";
 import song from "@/classes/song";
 import { collection } from "firebase/firestore";
 import lyrics from "@/classes/lyrics";
-import { IChord, LyricsContent } from "songtreasures-api";
+import type { IChord, LyricsContent } from "songtreasures-api";
 import { chords } from "@/services/api";
 import { application } from "@/classes/application";
 

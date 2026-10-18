@@ -1,5 +1,5 @@
 import { appSession } from "@/services/session";
-import { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures-api";
+import type { ICategory, ICollectionItem, ApiContributor, ICountry, ITheme } from "songtreasures-api";
 
 export default class CollectionItem<T extends (ApiContributor | ICountry | ITheme | ICategory)> implements ICollectionItem<T> {
     public id;

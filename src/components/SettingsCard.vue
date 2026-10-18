@@ -171,7 +171,7 @@ import {
 } from "@heroicons/vue/solid";
 import { FirebaseError } from "firebase/app";
 import { getAuth, updateEmail } from "firebase/auth";
-import { Language } from "songtreasures";
+import type { Language } from "songtreasures";
 import { defineComponent } from "vue";
 import { BaseInput } from "./inputs";
 

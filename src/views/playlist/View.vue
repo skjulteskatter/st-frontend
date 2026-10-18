@@ -154,7 +154,7 @@ import { SessionActionTypes } from "@/store/modules/session/action-types";
 import { notify } from "@/services/notify";
 import { playlists, sharing } from "@/services/api";
 import { appSession } from "@/services/session";
-import { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures-api";
+import type { ICustomCollectionEntry, PublicUser, ShareKey } from "songtreasures-api";
 import { reactive } from "vue";
 import { ShareIcon, TrashIcon, SaveIcon, XIcon } from "@heroicons/vue/solid";
 import { PencilIcon, CheckIcon, ExclamationIcon, BookOpenIcon } from "@heroicons/vue/outline";

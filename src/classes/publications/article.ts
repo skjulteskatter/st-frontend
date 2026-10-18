@@ -1,5 +1,5 @@
 import { appSession } from "@/services/session";
-import { IArticle } from "songtreasures-api/publications";
+import type { IArticle } from "songtreasures-api/publications";
 import ArticleContent from "./articleContent";
 
 export default class Article implements IArticle {

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { IAnalyticsItem } from "songtreasures-api";
+import type { IAnalyticsItem } from "songtreasures-api";
 
 export default defineComponent({
 	name: "country-list",

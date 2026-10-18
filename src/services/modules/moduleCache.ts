@@ -1,6 +1,6 @@
-import { ICustomCollection, ISong, ITag, IChapter, IBook, ITranslation, IScripture } from "songtreasures-api";
+import type { ICustomCollection, ISong, ITag, IChapter, IBook, ITranslation, IScripture } from "songtreasures-api";
 import { openDB } from "idb";
-import { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
+import type { IArticle, IArticleContent, IPublication } from "songtreasures-api/publications";
 
 type EntryWithExpiry<T> = {
     expiry: Date;

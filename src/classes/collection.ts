@@ -1,5 +1,5 @@
 import api from "@/services/api";
-import { ICollection, ApiContributor, Sort } from "songtreasures-api";
+import type { ICollection, ApiContributor, Sort } from "songtreasures-api";
 import { ListEntry, Lyrics, Song, CollectionItem } from ".";
 import BaseClass from "./baseClass";
 import { cache } from "@/services/cache";
@@ -8,7 +8,7 @@ import { appSession } from "@/services/session";
 import router from "@/router";
 import SongFilter from "./songFilter";
 import LocaleString from "./localeString";
-import { ILocaleString, Origin } from "songtreasures";
+import type { ILocaleString, Origin } from "songtreasures";
 import { storeService } from "@/services/modules";
 
 type CollectionSettings = {

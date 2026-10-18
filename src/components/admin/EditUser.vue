@@ -105,7 +105,7 @@ import { UsersMutationTypes } from "@/store/modules/users/mutation-types";
 import { adminService } from "@/services/admin";
 import api, { admin } from "@/services/api";
 import { User } from "@/classes";
-import { ISubscription } from "songtreasures-api";
+import type { ISubscription } from "songtreasures-api";
 import { appSession } from "@/services/session";
 import { Product, ProductService } from "hiddentreasures-js";
 import client from "@/services/client";

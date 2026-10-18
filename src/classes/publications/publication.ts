@@ -1,4 +1,4 @@
-import { IPublication } from "songtreasures-api/publications";
+import type { IPublication } from "songtreasures-api/publications";
 import LocaleString from "../localeString";
 
 export default class Publication implements IPublication {

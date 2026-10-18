@@ -76,7 +76,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { ICollection, IMediaFile } from "songtreasures-api";
+import type { ICollection, IMediaFile } from "songtreasures-api";
 import { Collection, Contributor, SheetMusicTypes, Song, transposer, User } from "@/classes";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
@@ -86,7 +86,7 @@ import http from "@/services/http";
 import { session, songs } from "@/services/api";
 import { MediaListItem } from "@/components/media";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/vue/outline";
-import { SheetMusicOptions } from "songtreasures";
+import type { SheetMusicOptions } from "songtreasures";
 import client from "@/services/client";
 
 export default defineComponent({

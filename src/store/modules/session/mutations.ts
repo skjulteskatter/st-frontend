@@ -1,4 +1,4 @@
-import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
+import type { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 import { MutationTree } from "vuex";
 import { SessionMutationTypes } from "./mutation-types";
 import { State } from "./state";

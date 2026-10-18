@@ -1,5 +1,5 @@
 import { Product } from "@/classes";
-import { SetupResponse } from "songtreasures-api/checkout";
+import type { SetupResponse } from "songtreasures-api/checkout";
 import i18n from "@/i18n";
 import { stripe } from "../api";
 import { appSession } from "../session";

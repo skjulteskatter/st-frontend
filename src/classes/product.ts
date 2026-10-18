@@ -1,4 +1,4 @@
-import { ApiProduct } from "songtreasures-api/checkout";
+import type { ApiProduct } from "songtreasures-api/checkout";
 import BaseClass from "./baseClass";
 import { Collection } from ".";
 import { appSession } from "@/services/session";

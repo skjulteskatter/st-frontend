@@ -87,7 +87,7 @@ import { PlayIcon, XIcon } from "@heroicons/vue/solid";
 import { Collection, MediaFile, Song, transposer } from "@/classes";
 import { AudioTrack } from "@/store/modules/songs/state";
 import { logs } from "@/services/logs";
-import { SheetMusicOptions } from "songtreasures";
+import type { SheetMusicOptions } from "songtreasures";
 import { appSession } from "@/services/session";
 
 export default defineComponent({
