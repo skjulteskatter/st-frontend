@@ -51,25 +51,15 @@
                 </div>
                 <div class="flex justify-between">
                     <SongTags :song="song" />
-                    <SwitchGroup as="div" class="hidden md:flex gap-2 items-center cursor-pointer" v-if="song?.hasLyrics">
-                        <SwitchLabel class="text-xs tracking-wide">{{ $t("song_viewer") }}</SwitchLabel>
-                        <Switch
-                            :disabled="lyrics?.ContainsChords"
-                            v-model="isExtended"
-                            class="focus-visible:outline-none"
-                            :class="{ 'opacity-50 cursor-not-allowed': lyrics?.ContainsChords }"
-                        >
-                            <div
-                                class="relative inline-flex items-center h-6 rounded-full w-10 transition-colors"
-                                :class="isExtended ? 'bg-primary' : 'bg-black/20 dark:bg-white/40'"
-                            >
-                                <span
-                                    :class="isExtended ? 'translate-x-5' : 'translate-x-1'"
-                                    class="shadow-md inline-block w-4 h-4 transform bg-white rounded-full transition-transform dark:bg-secondary"
-                                />
-                            </div>
-                        </Switch>
-                    </SwitchGroup>
+                    <a
+                        v-if="song?.hasLyrics"
+                        href="https://presentation.songtreasures.app"
+                        target="_blank"
+                        rel="noopener"
+                        class="hidden md:flex items-center text-xs tracking-wide hover:underline"
+                    >
+                        {{ $t("song_viewer") }}
+                    </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="flex flex-col gap-4 md:col-span-2">
@@ -83,7 +73,7 @@
                         />
                         <LyricsCard
                             :class="{ 'hidden': sheetMusicOptions?.show }"
-                            v-if="song.hasLyrics && !isExtended"
+                            v-if="song.hasLyrics"
                             :loading="loadingLyrics"
                             :song="song"
                             :lyrics="lyrics"
@@ -122,53 +112,15 @@
                                 height="720px"
                             ></object>
                         </div>
-                        <PresentationPreview
-                            v-if="song.hasLyrics && isExtended && lyrics"
-                            :text="lyrics?.getText({
-                                chorus: $t('song_chorus'),
-                                bridge: $t('song_bridge'),
-                            }, true) ?? []"
-                            :availableVerses="control.AvailableVerses"
-                            :currentVerses="control.currentVerses"
-                            @toggleAll="toggleAll()"
-                            @toggle="toggleVerse"
-                        />
                     </div>
                     <aside>
                         <SongMediaCard
-                            v-if="!isExtended"
                             :song="song"
                             :collection="collection"
                             @setAudioTrack="(t) => audioTrack = t"
                             @setSheetMusic="(m) => sheetMusicOptions = m"
                             class="sticky top-20"
                         />
-                        <div v-else class="sticky top-20 flex flex-col gap-4">
-                            <PresentationControlPanel
-                                @refresh="refresh()"
-                                @open="control.open()"
-                                @next="next()"
-                                @previous="previous()"
-                                @mute="control.mute()"
-                            />
-                            <SongSelector 
-                                :loading="fullLoading"
-                                :songs="collection?.songs" 
-                                @setSong="setSong"
-                                @next="song.next()"
-                                @previous="song.previous()"
-                            />
-                            <ThemeSelector 
-                                :theme="control.Settings?.theme" 
-                                :showSideBar="control.Settings?.showSideBar" 
-                                :singleVerse="control.Settings?.singleVerse"
-                                :sync="control.Settings?.sync"
-                                @update:sync="setSync"
-                                @setTheme="setTheme" 
-                                @toggleSidebar="toggleSidebar"
-                                @toggleSingleVerse="toggleSingleVerse"
-                            />
-                        </div>
                     </aside>
                 </div>
             </div>
@@ -198,17 +150,6 @@
                 </div>
             </div>
         </BaseModal>
-        <BaseModal :show="showPresentationPopup">
-            <div class="flex flex-col items-center max-w-lg gap-2">
-                <h1 class="text-lg">Presentation has been moved</h1>
-                <p>This functionality will disappear from here the 1st of January 2023</p>
-                <p>Go to the new solution to purchase a presentation license.</p>
-                <div class="flex ml-auto gap-2">
-                    <BaseButton theme="secondary" @click="goToWidescreen()">Go to new Solution</BaseButton>
-                    <BaseButton @click="showPresentationPopup = false; isExtended = true">Continue</BaseButton>
-                </div>
-            </div>
-        </BaseModal>
     </div>
 </template>
 <script lang="ts">
@@ -220,21 +161,13 @@ import {
     BaseModal,
 } from "@/components";
 import OpenSheetMusicDisplay from "@/components/OSMD.vue";
-import {
-    PresentationControlPanel,
-    PresentationPreview,
-    ThemeSelector,
-    SongSelector,
-} from "@/components/presentation";
 import { PlaylistAddToCard, CreatePlaylistModal } from "@/components/playlist";
 import { FolderAddIcon, LockClosedIcon, ShoppingCartIcon, ArrowLeftIcon, PencilAltIcon, HeartIcon, PlusIcon, XIcon } from "@heroicons/vue/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/vue/outline";
-import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
 import { Collection, Lyrics, Song, transposer } from "@/classes";
 import { ICustomCollection, Format, IMediaFile } from "songtreasures-api";
 import { useStore } from "@/store";
 import { SessionActionTypes } from "@/store/modules/session/action-types";
-import { SessionMutationTypes } from "@/store/modules/session/mutation-types";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
 import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
@@ -242,16 +175,11 @@ import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import { SheetMusicOptions } from "songtreasures";
-import { presentation } from "@/classes/presentation";
 import { application } from "@/classes/application";
 
 export default defineComponent({
     name: "song-viewer",
     components: {
-        PresentationControlPanel,
-        PresentationPreview,
-        ThemeSelector,
-        SongSelector,
         LyricsCard,
         SongInfoCard,
         SongMediaCard,
@@ -269,20 +197,15 @@ export default defineComponent({
         HeartIcon,
         PlusIcon,
         HeartOutline,
-        SwitchGroup,
-        Switch,
-        SwitchLabel,
         XIcon,
     },
     data: () => ({
         store: useStore(),
-        control: presentation,
         number: 0 as number | string,
         selectedSheetMusic: {} as IMediaFile,
         sheetMusicOptions: null as SheetMusicOptions | null,
         songViewCount: null as number | null,
         show: false,
-        unset: false,
         showPlaylistModal: false,
         lyrics: null as Lyrics | null,
         componentLoading: {} as {
@@ -291,8 +214,6 @@ export default defineComponent({
         fullLoading: false,
         favorite: false,
         showSheet: false,
-        presentationPopupShown: false,
-        showPresentationPopup: false,
     }),
     computed: {
         selectedLanguage() {
@@ -317,28 +238,6 @@ export default defineComponent({
         },
         playlists() {
             return this.store.state.session.playlists.filter(p => p.userId == this.user?.id);
-        },
-        extended() {
-            return this.store.getters.extended;
-        },
-        isExtended: {
-            get() {
-                return this.store.state.session.extend;
-            },
-            set(value: boolean) {
-                if (!this.presentationPopupShown) {
-                    this.showPresentationPopup = true
-                    this.presentationPopupShown = true
-                    return
-                }
-                if (!this.control.Initialized) {
-                    this.control.initialize("control");
-                    if (this.lyrics)
-                        this.control.setLyrics(this.lyrics);
-                    this.refresh();
-                }
-                this.store.commit(SessionMutationTypes.EXTEND, value);
-            },
         },
         isAdmin() {
             return this.store.getters.isAdmin;
@@ -380,84 +279,18 @@ export default defineComponent({
         await this.load();
     },
     mounted() {
-        this.onKeyDown = this.onKeyDown.bind(this);
-        addEventListener("keydown", this.onKeyDown);
         this.favorite = this.favorites.has(this.song?.id);
     },
     async updated() {
         await this.load();
         this.favorite = this.favorites.has(this.song?.id);
     },
-    unmounted() {
-        removeEventListener("keydown", this.onKeyDown);
-    },
     methods: {
-        setSong(songId: string) {
-            this.$router.push({
-                name: "song",
-                params: {
-                    number: songId,
-                },
-            });
-        },
-        setLyrics() {
-            this.control.setSong(this.song);
-            this.control.setContributors(appSession.contributors.filter(i => this.song?.participants.some(p => p.contributorId === i.id)).map(i => i.item));
-            if (this.lyrics && !this.lyrics.ContainsChords)
-                this.control.setLyrics(this.lyrics);
-        },
-        toggleSidebar() {
-            this.control.toggleSidebar();
-        },
-        toggleSingleVerse() {
-            this.control.toggleSingleVerse();
-        },
-        setTheme(theme: "dark" | "light") {
-            this.control.setTheme(theme);
-        },
-        // PRESENTATION VIEW
-        toggleVerse(index: string) {
-            this.control.toggleVerse(index);
-            this.control.AvailableVerses;
-        },
-        setSync(v: boolean) {
-            this.control.setSync(v)
-        },
-        toggleAll() {
-            if (this.lyrics) {
-                this.control.toggleAll();
-                this.unset = !this.control.AvailableVerses.length;
-            }
-        },
-        refresh() {
-            this.control.commit();
-        },
-        next() {
-            this.control.next();
-        },
-        goToWidescreen() {
-            window.location.replace("https://presentation.songtreasures.app")
-        },
-        previous() {
-            this.control.previous();
-        },
         openAdder() {
             this.show = true;
         },
         closeAdder() {
             this.show = false;
-        },
-        onKeyDown(e: KeyboardEvent) {
-            if (e.ctrlKey && e.altKey && e.code === "KeyP") {
-                this.isExtended = !this.isExtended;
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.altKey && e.code === "KeyS") {
-                this.toggleSidebar();
-                e.preventDefault();
-                return false;
-            }
         },
         async load() {
             await this.doLoad();
@@ -521,7 +354,6 @@ export default defineComponent({
                 }
             };
             setTimeout(log, 5000);
-            this.setLyrics();
             this.setView(this.store.state.songs.view);
             this.fullLoading = false;
         },

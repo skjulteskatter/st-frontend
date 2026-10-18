@@ -57,10 +57,6 @@ const SongSelector = () =>
   import("../views/SongSelector.vue").catch(() => {
     window.location.reload();
   });
-const PresentationView = () =>
-  import("../views/PresentationView.vue").catch(() => {
-    window.location.reload();
-  });
 const SongViewer = () =>
   import("../views/SongViewer.vue").catch(() => {
     window.location.reload();
@@ -330,11 +326,6 @@ const routes: Array<RouteRecordRaw> = [
         component: CreateUserView,
       },
     ],
-  },
-  {
-    path: "/presentation",
-    name: "presentation-view",
-    component: getComponent(PresentationView),
   },
   {
     path: "/success",

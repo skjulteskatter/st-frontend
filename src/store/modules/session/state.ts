@@ -2,7 +2,6 @@ import { IActivity, ICustomCollection, ITag } from "songtreasures-api";
 
 export type State = {
     initialized: boolean;
-    extend: boolean;
     error: string;
     playlists: ICustomCollection[];
     activities?: IActivity[];
@@ -17,7 +16,6 @@ export type State = {
 
 export const state: State = {
     initialized: false,
-    extend: false,
     error: "",
     playlists: [],
     tags: [],
