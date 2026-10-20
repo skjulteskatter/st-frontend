@@ -1,8 +1,23 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /bandSessions/{code} {
+    // Allow only authenticated content owners access
+    match /presentation/{userId}/{documents=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /bandSessionCodes/{code} {
+      // Join uses get by known code only — never allow collection listing.
+      allow get: if true;
+      allow list: if false;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null;
+      allow update: if false;
+    }
+
+    match /bandSessions/{sessionId} {
+      // Followers subscribe to a known sessionId (from code lookup) — no listing.
       allow get: if true;
       allow list: if false;
       allow create: if request.auth != null
