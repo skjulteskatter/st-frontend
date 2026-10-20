@@ -75,8 +75,6 @@
               </div>
             </BaseDropdown>
             <BaseInput v-model="name" :label="$t('sheetEdits_name')" maxlength="100" @input="dirty = true" />
-            <!-- Rendered sheets are cached by the backend -->
-            <p class="text-xs opacity-50">{{ $t("sheetEdits_cacheNotice") }}</p>
           </div>
         </BaseCard>
 

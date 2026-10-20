@@ -503,6 +503,5 @@
     "sheetEdits_notFound": "No se encontró esta partitura.",
     "sheetEdits_leaderVersion": "Versión del líder",
     "sheetEdits_addChord": "Añadir acorde",
-    "sheetEdits_removeChord": "Quitar acorde",
-    "sheetEdits_cacheNotice": "Los cambios guardados pueden tardar unos minutos en aparecer en la partitura, también para otros que usan esta versión."
+    "sheetEdits_removeChord": "Quitar acorde"
 }

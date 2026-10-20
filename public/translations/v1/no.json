@@ -508,12 +508,12 @@
     "sheetEdits_shared": "Delt",
     "sheetEdits_untitled": "Min versjon",
     "sheetEdits_name": "Navn",
-    "sheetEdits_hint": "Klikk på en note for å endre akkorden eller flytte den (piltaster, shift for halvtoner). Vises i originaltoneart.",
+    "sheetEdits_hint": "Klikk på en note for å endre besifringen eller flytte noten (piltaster, shift for halvtoner). Vises i originaltoneart.",
     "sheetEdits_measure": "Takt",
     "sheetEdits_beat": "slag",
-    "sheetEdits_chord": "Akkord",
+    "sheetEdits_chord": "Besifring",
     "sheetEdits_chordPlaceholder": "f.eks. F#m7/C#",
-    "sheetEdits_invalidChord": "Ukjent akkord",
+    "sheetEdits_invalidChord": "Ukjent besifring",
     "sheetEdits_note": "Note",
     "sheetEdits_rest": "Pause",
     "sheetEdits_stepUp": "Trinn opp",
@@ -532,7 +532,6 @@
     "sheetEdits_selection": "Markering",
     "sheetEdits_notFound": "Fant ikke denne noten.",
     "sheetEdits_leaderVersion": "Lederens versjon",
-    "sheetEdits_addChord": "Legg til akkord",
-    "sheetEdits_removeChord": "Fjern akkord",
-    "sheetEdits_cacheNotice": "Det kan ta noen minutter før lagrede endringer vises på noten, også for andre som bruker denne versjonen."
+    "sheetEdits_addChord": "Legg til besifring",
+    "sheetEdits_removeChord": "Fjern besifring"
 }
