@@ -449,5 +449,8 @@
     "sheetEdits_unsaved": "Odrzucić niezapisane zmiany?",
     "sheetEdits_selection": "Zaznaczenie",
     "sheetEdits_notFound": "Nie znaleziono tych nut.",
-    "sheetEdits_leaderVersion": "Wersja lidera"
+    "sheetEdits_leaderVersion": "Wersja lidera",
+    "sheetEdits_addChord": "Dodaj akord",
+    "sheetEdits_removeChord": "Usuń akord",
+    "sheetEdits_cacheNotice": "Zapisane zmiany mogą pojawić się w nutach dopiero po kilku minutach, także dla innych korzystających z tej wersji."
 }

@@ -75,6 +75,8 @@
               </div>
             </BaseDropdown>
             <BaseInput v-model="name" :label="$t('sheetEdits_name')" maxlength="100" @input="dirty = true" />
+            <!-- Rendered sheets are cached by the backend -->
+            <p class="text-xs opacity-50">{{ $t("sheetEdits_cacheNotice") }}</p>
           </div>
         </BaseCard>
 
@@ -86,17 +88,46 @@
           </template>
           <p v-if="!selection" class="text-sm opacity-50">{{ $t("sheetEdits_hint") }}</p>
           <div v-else class="flex flex-col gap-4">
-            <label>
-              <small class="block uppercase tracking-wide text-xs mb-1">{{ $t("sheetEdits_chord") }}</small>
-              <input
-                v-model="chordInput"
-                class="w-full px-3 py-2 rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
-                :placeholder="$t('sheetEdits_chordPlaceholder')"
-                @keydown.enter="applyChord"
-                @blur="applyChord"
-              />
-              <small v-if="chordError" class="text-red-700">{{ chordError }}</small>
+            <!-- One chord per beat the note lasts (four over a whole note in 4/4), plus any added between beats -->
+            <label v-for="position in chordPositions" :key="positionKey(position)">
+              <small class="block uppercase tracking-wide text-xs mb-1">
+                {{ $t("sheetEdits_chord") }}
+                <template v-if="chordPositions.length > 1">· {{ $t("sheetEdits_beat") }} {{ beatLabel(position) }}</template>
+              </small>
+              <div class="flex gap-2 items-center">
+                <input
+                  v-model="chordInputs[positionKey(position)]"
+                  :data-chord-position="positionKey(position)"
+                  class="w-full px-3 py-2 rounded-md border border-black/20 dark:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ring-offset-2 dark:bg-secondary"
+                  :placeholder="$t('sheetEdits_chordPlaceholder')"
+                  @keydown.enter="applyChord(position)"
+                  @blur="applyChord(position)"
+                />
+                <!-- mousedown.prevent: the field keeps focus, so its blur doesn't apply a half-typed chord first -->
+                <button
+                  v-if="chordAt(position) || isExtraPosition(position)"
+                  type="button"
+                  class="p-2 rounded-md text-red-700 hover:bg-black/5 dark:hover:bg-white/10"
+                  :title="$t('sheetEdits_removeChord')"
+                  @mousedown.prevent
+                  @click="removeChord(position)"
+                >
+                  <XIcon class="w-4 h-4" />
+                </button>
+              </div>
+              <small v-if="chordErrors[positionKey(position)]" class="text-red-700">{{ chordErrors[positionKey(position)] }}</small>
             </label>
+            <select
+              v-if="addablePositions.length"
+              value=""
+              class="w-full px-3 py-2 rounded-md border border-dashed border-black/20 dark:border-white/20 bg-transparent text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              @change="onAddPosition"
+            >
+              <option value="" disabled>+ {{ $t("sheetEdits_addChord") }}</option>
+              <option v-for="p in addablePositions" :key="positionKey(p)" :value="positionKey(p)">
+                {{ $t("sheetEdits_beat") }} {{ beatLabel(p) }}
+              </option>
+            </select>
 
             <div v-if="selectedNotes.some((n) => n.original)" class="flex flex-col gap-2">
               <small class="block uppercase tracking-wide text-xs">{{ $t("sheetEdits_note") }}</small>
@@ -166,7 +197,10 @@ import { notify } from "@/services/notify";
 import { parseChord, sameChord } from "@/services/sheetEdits/chords";
 import {
   applyEdits,
+  chordPositionsOver,
   fetchMusicXml,
+  lessThan,
+  subdivisionsOver,
   formatPitch,
   fraction,
   hashMusicXml,
@@ -267,8 +301,11 @@ export default defineComponent({
       renderVersion: 0,
       skipped: [] as SheetEdit[],
       selection: null as Selection | null,
-      chordInput: "",
-      chordError: "",
+      /** Chord field per position over the selected note, keyed by positionKey(). */
+      chordInputs: {} as Record<string, string>,
+      chordErrors: {} as Record<string, string>,
+      /** Positions between beats the user added a chord field for, over the selected note. */
+      extraPositions: [] as Fraction[],
       error: "",
       loading: true,
       saving: false,
@@ -352,12 +389,30 @@ export default defineComponent({
     selectedNote(): NoteEntry | undefined {
       return this.selection ? this.selectedNotes[this.selection.note] ?? this.selectedNotes[0] : undefined;
     },
+    /** The beats over the selected note, chords already between them, and positions added with +. */
+    chordPositions(): Fraction[] {
+      const note = this.selectedNote;
+      if (!note || !this.index) return [];
+      const between = this.index.harmonies
+        .filter((h) => h.part === note.part && h.measure === note.measure && !lessThan(h.offset, note.offset) && lessThan(h.offset, note.end))
+        .map((h) => h.offset);
+      const positions: Fraction[] = [];
+      for (const p of [...chordPositionsOver(note), ...between, ...this.extraPositions]) {
+        if (!positions.some((q) => sameFraction(p, q))) positions.push(p);
+      }
+      return positions.sort((a, b) => (lessThan(a, b) ? -1 : 1));
+    },
+    /** Positions between the beats that have no chord field yet. */
+    addablePositions(): Fraction[] {
+      const note = this.selectedNote;
+      if (!note) return [];
+      return subdivisionsOver(note).filter((p) => !this.chordPositions.some((q) => sameFraction(p, q)));
+    },
   },
   watch: {
     selection: {
       handler() {
-        this.chordInput = this.currentChord()?.text ?? "";
-        this.chordError = "";
+        this.refreshChords();
         this.highlight();
       },
       deep: true,
@@ -381,6 +436,7 @@ export default defineComponent({
       // Someone else's version is only saved as a copy
       this.dirty = !!version && !owned;
       this.selection = null;
+      this.extraPositions = [];
       this.$emit("version", this.currentId);
     },
     async selectVersion(version: SheetEdits | null) {
@@ -396,14 +452,55 @@ export default defineComponent({
       const pitch = this.selectedNotes[i] && readPitch(this.selectedNotes[i].element);
       return pitch ? formatPitch(pitch) : this.$t("sheetEdits_rest");
     },
-    currentHarmonyEntry() {
-      const s = this.selection;
-      if (!this.index || !s) return undefined;
-      return this.index.harmonies.find((h) => h.part === s.part && h.measure === s.measure && sameFraction(h.offset, s.offset));
+    positionKey(position: Fraction) {
+      return `${position[0]}/${position[1]}`;
     },
-    currentChord(): Harmony | null {
-      const entry = this.currentHarmonyEntry();
+    /** Beat number in the measure, counted in the note's time signature. */
+    beatLabel(position: Fraction) {
+      const beat = this.selectedNote?.beat ?? [1, 4];
+      // Position in beats: a whole beat plus a part of one, e.g. 1 ⅔ for the 3rd eighth in 6/8
+      const numerator = position[0] * beat[1];
+      const denominator = position[1] * beat[0];
+      const whole = Math.floor(numerator / denominator);
+      const [n, d] = fraction(numerator - whole * denominator, denominator);
+      if (n === 0) return `${whole + 1}`;
+      const vulgar: Record<string, string> = {
+        "1/2": "½", "1/3": "⅓", "2/3": "⅔", "1/4": "¼", "3/4": "¾", "1/6": "⅙", "5/6": "⅚",
+        "1/8": "⅛", "3/8": "⅜", "5/8": "⅝", "7/8": "⅞",
+      };
+      return `${whole + 1} ${vulgar[`${n}/${d}`] ?? `${n}/${d}`}`;
+    },
+    isExtraPosition(position: Fraction) {
+      return this.extraPositions.some((p) => sameFraction(p, position));
+    },
+    /** Removes the chord at a position, and the field when it was added with +. */
+    async removeChord(position: Fraction) {
+      this.extraPositions = this.extraPositions.filter((p) => !sameFraction(p, position));
+      this.chordInputs[this.positionKey(position)] = "";
+      if (this.chordAt(position)) await this.applyChord(position);
+    },
+    /** Adds a chord field at a position picked from the + list, and focuses it. */
+    onAddPosition(event: Event) {
+      const select = event.target as HTMLSelectElement;
+      const key = select.value;
+      select.value = "";
+      const position = this.addablePositions.find((p) => this.positionKey(p) === key);
+      if (!position) return;
+      this.extraPositions.push(position);
+      this.chordInputs[key] = "";
+      void this.$nextTick(() => (document.querySelector(`[data-chord-position="${key}"]`) as HTMLInputElement | null)?.focus());
+    },
+    /** The chord at a position in the selected note's measure, as currently shown. */
+    chordAt(offset: Fraction): Harmony | null {
+      const s = this.selection;
+      if (!this.index || !s) return null;
+      const entry = this.index.harmonies.find((h) => h.part === s.part && h.measure === s.measure && sameFraction(h.offset, offset));
       return entry ? readHarmony(entry.element) : null;
+    },
+    /** Fills the chord fields from the score. */
+    refreshChords() {
+      this.chordInputs = Object.fromEntries(this.chordPositions.map((p) => [this.positionKey(p), this.chordAt(p)?.text ?? ""]));
+      this.chordErrors = {};
     },
 
     /** Applies the edits to a fresh copy of the original and renders it. */
@@ -485,6 +582,7 @@ export default defineComponent({
       return candidates.find((n) => n.voice === voice) ?? candidates[0];
     },
     select(entry: NoteEntry) {
+      this.extraPositions = [];
       const notes = this.index?.notes.filter(
         (n) => n.part === entry.part && n.measure === entry.measure && n.voice === entry.voice && sameFraction(n.offset, entry.offset),
       ) ?? [entry];
@@ -511,28 +609,29 @@ export default defineComponent({
       if (edit) this.edits.splice(i >= 0 ? i : this.edits.length, 0, edit);
       this.dirty = true;
     },
-    async applyChord() {
+    async applyChord(offset: Fraction) {
       const s = this.selection;
       if (!s || this.loading) return;
-      const text = this.chordInput.trim();
-      const current = this.currentChord();
+      const key = this.positionKey(offset);
+      const text = (this.chordInputs[key] ?? "").trim();
+      const current = this.chordAt(offset);
       if (text === (current?.text ?? "")) return;
 
       const to = text ? parseChord(text) : null;
       if (text && !to) {
-        this.chordError = this.$t("sheetEdits_invalidChord");
+        this.chordErrors[key] = this.$t("sheetEdits_invalidChord");
         return;
       }
-      this.chordError = "";
+      delete this.chordErrors[key];
 
       const matches = (e: SheetEdit) =>
-        e.type === "chord" && e.part === s.part && e.measure === s.measure && sameFraction(e.offset, s.offset);
+        e.type === "chord" && e.part === s.part && e.measure === s.measure && sameFraction(e.offset, offset);
       const existing = this.edits.find(matches);
       // Unedited positions still hold the original chord
       const from = existing ? (existing as { from: Harmony | null }).from : current;
       const unchanged = sameChord(from, to) && from?.kindText === to?.kindText;
 
-      this.putEdit(matches, unchanged ? null : { type: "chord", part: s.part, measure: s.measure, offset: s.offset, from, to });
+      this.putEdit(matches, unchanged ? null : { type: "chord", part: s.part, measure: s.measure, offset, from, to });
       await this.rerender();
     },
     async move(direction: 1 | -1, chromatic: boolean) {
@@ -566,8 +665,8 @@ export default defineComponent({
       } finally {
         this.loading = false;
       }
-      // Keep the chord field in step with the score
-      this.chordInput = this.currentChord()?.text ?? "";
+      // Keep the chord fields in step with the score
+      this.refreshChords();
     },
     async removeEdit(edit: SheetEdit) {
       this.edits.splice(this.edits.indexOf(edit), 1);

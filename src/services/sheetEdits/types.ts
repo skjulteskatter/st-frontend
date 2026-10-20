@@ -52,7 +52,9 @@ export type Harmony = {
 /**
  * Sets, adds (`from: null`) or removes (`to: null`) the chord symbol at a position.
  * Applying: remove the matching `<harmony>`'s root/kind/inversion/bass/degree children and write
- * the new ones, or insert a new `<harmony>` before the first `<note>` at `offset`.
+ * the new ones, or insert a new `<harmony>` before the first `<note>` at `offset`. Where no note
+ * starts (e.g. beat 3 of a whole note), add `<backup>`, `<harmony>`, `<forward>` at the end of the
+ * measure (before closing barlines), moving back to `offset` and forward again.
  * `from` is checked on root, kind and bass.
  */
 export type ChordEdit = {

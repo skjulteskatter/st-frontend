@@ -531,5 +531,8 @@
     "sheetEdits_unsaved": "Forkaste endringer som ikke er lagret?",
     "sheetEdits_selection": "Markering",
     "sheetEdits_notFound": "Fant ikke denne noten.",
-    "sheetEdits_leaderVersion": "Lederens versjon"
+    "sheetEdits_leaderVersion": "Lederens versjon",
+    "sheetEdits_addChord": "Legg til akkord",
+    "sheetEdits_removeChord": "Fjern akkord",
+    "sheetEdits_cacheNotice": "Det kan ta noen minutter før lagrede endringer vises på noten, også for andre som bruker denne versjonen."
 }

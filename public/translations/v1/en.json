@@ -531,5 +531,8 @@
     "sheetEdits_unsaved": "Discard unsaved changes?",
     "sheetEdits_selection": "Selection",
     "sheetEdits_notFound": "This sheet music couldn't be found.",
-    "sheetEdits_leaderVersion": "Leader's version"
+    "sheetEdits_leaderVersion": "Leader's version",
+    "sheetEdits_addChord": "Add chord",
+    "sheetEdits_removeChord": "Remove chord",
+    "sheetEdits_cacheNotice": "Saved changes can take a few minutes to show on the sheet, also for others using this version."
 }

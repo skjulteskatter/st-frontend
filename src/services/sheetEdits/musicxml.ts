@@ -11,6 +11,8 @@ export function fraction(numerator: number, denominator: number): Fraction {
 }
 
 const addFractions = (a: Fraction, b: Fraction) => fraction(a[0] * b[1] + b[0] * a[1], a[1] * b[1]);
+const subtractFractions = (a: Fraction, b: Fraction) => fraction(a[0] * b[1] - b[0] * a[1], a[1] * b[1]);
+export const lessThan = (a: Fraction, b: Fraction) => a[0] * b[1] < b[0] * a[1];
 
 export const sameFraction = (a: Fraction, b: Fraction) => a[0] * b[1] === b[0] * a[1];
 
@@ -54,6 +56,18 @@ export type NoteEntry = {
     tieStop: boolean;
     /** Key signature (`<fifths>`) in effect for the note. */
     fifths: number;
+    /** Length of a beat in the time signature in effect, e.g. 1/4 in 4/4 and 3/8 in 6/8. */
+    beat: Fraction;
+};
+
+export type MeasureEntry = {
+    part: string;
+    measure: number;
+    element: Element;
+    /** Position after the measure's last element, where chords between notes are added. */
+    end: Fraction;
+    /** `<divisions>` in effect at the end of the measure. */
+    divisions: number;
 };
 
 export type HarmonyEntry = {
@@ -69,6 +83,7 @@ export type ScoreIndex = {
     doc: XMLDocument;
     notes: NoteEntry[];
     harmonies: HarmonyEntry[];
+    measures: MeasureEntry[];
 };
 
 const child = (element: Element, name: string) => Array.from(element.children).find((c) => c.tagName === name);
@@ -131,11 +146,13 @@ export function parseMusicXml(xml: string): XMLDocument {
 export function indexScore(doc: XMLDocument): ScoreIndex {
     const notes: NoteEntry[] = [];
     const harmonies: HarmonyEntry[] = [];
+    const measures: MeasureEntry[] = [];
 
     for (const part of Array.from(doc.documentElement.children).filter((c) => c.tagName === "part")) {
         const partId = part.getAttribute("id") ?? "";
         let divisions = 1;
         let fifths = 0;
+        let beat: Fraction = [1, 4];
 
         Array.from(part.children)
             .filter((c) => c.tagName === "measure")
@@ -150,6 +167,13 @@ export function indexScore(doc: XMLDocument): ScoreIndex {
                             divisions = childNumber(element, "divisions") ?? divisions;
                             const key = child(element, "key");
                             if (key) fifths = childNumber(key, "fifths") ?? fifths;
+                            const time = child(element, "time");
+                            const beats = time && childNumber(time, "beats");
+                            const beatType = time && childNumber(time, "beat-type");
+                            if (beats && beatType && Number.isInteger(beats) && Number.isInteger(beatType)) {
+                                // Compound meters (6/8, 9/8, 12/8) count dotted beats
+                                beat = beatType >= 8 && beats > 3 && beats % 3 === 0 ? fraction(3, beatType) : fraction(1, beatType);
+                            }
                             break;
                         }
                         case "backup":
@@ -191,15 +215,18 @@ export function indexScore(doc: XMLDocument): ScoreIndex {
                                 tieStart: ties.some((t) => t.getAttribute("type") === "start"),
                                 tieStop: ties.some((t) => t.getAttribute("type") === "stop"),
                                 fifths,
+                                beat,
                             });
                             break;
                         }
                     }
                 }
+
+                measures.push({ part: partId, measure: measureIndex, element: measure, end: position, divisions });
             });
     }
 
-    return { doc, notes, harmonies };
+    return { doc, notes, harmonies, measures };
 }
 
 function setChildText(parent: Element, name: string, value: string, before?: Element | null) {
@@ -279,12 +306,43 @@ function applyChord(index: ScoreIndex, edit: ChordEdit): boolean {
         const note = index.notes.find(
             (n) => n.part === edit.part && n.measure === edit.measure && !n.isChordNote && sameFraction(n.offset, edit.offset),
         );
-        if (!note) return false;
         const harmony = index.doc.createElement("harmony");
         writeHarmony(harmony, edit.to);
-        note.element.before(harmony);
+        if (note) {
+            note.element.before(harmony);
+        } else if (!insertBetweenNotes(index, edit, harmony)) {
+            return false;
+        }
         index.harmonies.push({ part: edit.part, measure: edit.measure, offset: edit.offset, element: harmony, original: null });
     }
+    return true;
+}
+
+/**
+ * Adds a chord where no note starts, e.g. on beat 3 of a whole note: at the end of the measure,
+ * `<backup>` to the chord's position, the `<harmony>`, then `<forward>` back to the end.
+ * Valid MusicXML, and how OSMD places a chord between notes (it ignores `<harmony><offset>`).
+ */
+function insertBetweenNotes(index: ScoreIndex, edit: ChordEdit, harmony: Element): boolean {
+    const measure = index.measures.find((m) => m.part === edit.part && m.measure === edit.measure);
+    if (!measure || edit.offset[0] < 0 || !lessThan(edit.offset, measure.end)) return false;
+
+    const back = subtractFractions(measure.end, edit.offset);
+    const duration = (back[0] * 4 * measure.divisions) / back[1];
+    // Positions that don't fit the measure's divisions can't be reached
+    if (!Number.isInteger(duration)) return false;
+
+    const doc = index.doc;
+    const move = (name: string) => {
+        const e = doc.createElement(name);
+        e.append(element(doc, "duration", duration.toString()));
+        return e;
+    };
+
+    // Before any closing barline
+    let before: Element | null = null;
+    for (let c = measure.element.lastElementChild; c?.tagName === "barline"; c = c.previousElementSibling) before = c;
+    for (const e of [move("backup"), harmony, move("forward")]) measure.element.insertBefore(e, before);
     return true;
 }
 
@@ -311,6 +369,37 @@ export function serializeMusicXml(doc: XMLDocument): string {
     const xml = new XMLSerializer().serializeToString(doc);
     // The serializer leaves out the <?xml ?> declaration, but osmd.load(string) only parses strings starting with it
     return xml.startsWith("<?xml") ? xml : `<?xml version="1.0" encoding="UTF-8"?>\n${xml}`;
+}
+
+/** Where chords can go over a note or rest: its start, then each beat it lasts into. */
+export function chordPositionsOver(note: NoteEntry): Fraction[] {
+    const positions: Fraction[] = [note.offset];
+    const [beatN, beatD] = note.beat;
+    // The first beat after the start
+    let k = Math.floor((note.offset[0] * beatD) / (note.offset[1] * beatN)) + 1;
+    for (; positions.length < 64; k++) {
+        const position = fraction(k * beatN, beatD);
+        if (!lessThan(position, note.end)) break;
+        positions.push(position);
+    }
+    return positions;
+}
+
+/**
+ * Positions between the beats over a note, for adding chords off the beat: eighths in compound
+ * meters (6/8: a dotted beat in three), half beats otherwise.
+ */
+export function subdivisionsOver(note: NoteEntry): Fraction[] {
+    const [beatN, beatD] = note.beat;
+    const [stepN, stepD] = beatN % 3 === 0 ? fraction(beatN / 3, beatD) : fraction(beatN, beatD * 2);
+    const positions: Fraction[] = [];
+    let k = Math.ceil((note.offset[0] * stepD) / (note.offset[1] * stepN));
+    for (; positions.length < 64; k++) {
+        const position = fraction(k * stepN, stepD);
+        if (!lessThan(position, note.end)) break;
+        positions.push(position);
+    }
+    return positions;
 }
 
 /** The notes tied to this one, in order, so a move can take them along. */
