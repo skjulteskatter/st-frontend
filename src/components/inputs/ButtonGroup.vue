@@ -3,12 +3,13 @@
         <button
             v-for="(button, i) in Buttons"
             :key="button.label"
-            class="p-2 bg-white border-black/10 dark:bg-secondary dark:border-white/10"
+            class="p-2 border-black/10 dark:border-white/10"
             :class="{
                 'border-l': i > 0,
-                'bg-primary dark:bg-primary text-white': button.selected(),
-                'hover:bg-gray-100 dark:hover:bg-secondary dark:hover:brightness-110': !button.selected(),
-                'bg-gray-200 cursor-wait': loading[button.value],
+                // One background per state: with two, the stylesheet order decides which shows
+                'bg-primary text-white': button.selected(),
+                'bg-white dark:bg-secondary hover:bg-gray-100 dark:hover:bg-secondary dark:hover:brightness-110': !button.selected() && !loading[button.value],
+                'bg-gray-200 cursor-wait': loading[button.value] && !button.selected(),
             }"
             @click="action ? clickButton(button.value) : undefined"
         >
