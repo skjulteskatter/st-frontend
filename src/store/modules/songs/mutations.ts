@@ -6,7 +6,7 @@ import type { ApiContributor } from "songtreasures-api";
 import { MutationTree } from "vuex";
 import { State } from ".";
 import { SongsMutationTypes } from "./mutation-types";
-import { AudioTrack, SongViewType } from "./state";
+import { AudioTrack, SheetEditState, SongViewType } from "./state";
 
 export type Mutations<S = State> = {
     [SongsMutationTypes.COLLECTION](state: S, payload: string): void;
@@ -30,6 +30,7 @@ export type Mutations<S = State> = {
     [SongsMutationTypes.SET_AUDIO](state: S, payload: AudioTrack): void;
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state: S, payload: SheetMusicOptions): void;
+    [SongsMutationTypes.SET_SHEET_EDIT](state: S, payload: SheetEditState | null): void;
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state: S, payload: number): void;
 
     [SongsMutationTypes.SEARCH](state: S, payload?: string): void;
@@ -88,6 +89,9 @@ export const mutations: MutationTree<State> & Mutations = {
 
     [SongsMutationTypes.SET_SHEETMUSIC_OPTIONS](state, o: SheetMusicOptions): void {
         state.sheetMusic = o;
+    },
+    [SongsMutationTypes.SET_SHEET_EDIT](state, sheetEdit): void {
+        state.sheetEdit = sheetEdit;
     },
     // [SongsMutationTypes.SET_SHEETMUSIC_TRANSPOSITION](state, transposition: number): void {
     //     state.smTransposition = transposition;

@@ -66,4 +66,9 @@ export default class User implements IUser {
     public get Techinican() {
         return this.roles.includes("technician") || this.Admin;
     }
+
+    /** May make their own versions of sheet music (chords, notes) in the sheet editor. */
+    public get CanEditSheets() {
+        return this.roles.some(r => ["editor", "extended", "administrator", "technician", "service"].includes(r));
+    }
 }

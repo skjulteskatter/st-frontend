@@ -12,6 +12,12 @@ export type AudioTrack = {
     collection?: Collection;
 }
 
+/** The version of a sheet being shown (sheetEdits id, null for the original). */
+export type SheetEditState = {
+    fileId: string;
+    editId: string | null;
+};
+
 export type State = {
     collectionId?: string;
     language: string;
@@ -27,6 +33,8 @@ export type State = {
     filter: SongFilter;
     audio?: AudioTrack;
     sheetMusic?: SheetMusicOptions;
+    /** Set by the open sheet; published to band sync followers when leading. */
+    sheetEdit?: SheetEditState | null;
     search?: string;
     searchResult?: ISearchResultGroup;
     view: SongViewType;

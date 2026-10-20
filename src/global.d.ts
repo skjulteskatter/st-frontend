@@ -24,5 +24,7 @@ declare module "songtreasures" {
         transposition?: number;
         zoom?: number;
         clef: "bass" | "treble" | "alto";
+        /** Version of the sheet to open (sheetEdits id), e.g. from a shared link. */
+        editId?: string;
     }
 }

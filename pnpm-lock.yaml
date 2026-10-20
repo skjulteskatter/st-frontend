@@ -197,8 +197,8 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0(less@4.9.1(supports-color@8.1.1))(webpack@5.111.1(clean-css@5.3.3)(cssnano@5.1.15(postcss@8.5.30))(csso@4.2.0)(esbuild@0.18.20)(html-minifier-terser@6.1.0)(postcss@8.5.30)(svgo@2.8.4)(uglify-js@3.19.3))
       opensheetmusicdisplay:
-        specifier: ^1.9.9
-        version: 1.9.9
+        specifier: ^2.2.1
+        version: 2.2.1
       plyr:
         specifier: ^3.8.5
         version: 3.8.5
@@ -5456,8 +5456,8 @@ packages:
     resolution: {integrity: sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==}
     hasBin: true
 
-  opensheetmusicdisplay@1.9.9:
-    resolution: {integrity: sha512-HS2uTSrmUyYaJFSdBdD3i3wNQh3XoRHkSE7bX3N+5x/+RHlrmVdCwINA24aIyXA4pjTeaiVYFpRpdnNXFttiZg==}
+  opensheetmusicdisplay@2.2.1:
+    resolution: {integrity: sha512-2DqI2lQKKzDDoIe7yD8yNyWTofSdRbFZYTD3nGRzEo1XmTK2DJWcUXLRXZ2E5xzOt7Pd+RmSGL1quFQZRCqDMw==}
 
   optionator@0.8.3:
     resolution: {integrity: sha512-+IW9pACdk3XWmmTXG8m3upGUJst5XRGzxMRjXzAuJ1XnIFNvfhjjIuYkDvysnPQ7qzqVzLt78BCruntqRhWQbA==}
@@ -13571,7 +13571,7 @@ snapshots:
 
   opener@1.5.2: {}
 
-  opensheetmusicdisplay@1.9.9:
+  opensheetmusicdisplay@2.2.1:
     dependencies:
       '@types/vexflow': 1.2.42
       jszip: 3.10.1

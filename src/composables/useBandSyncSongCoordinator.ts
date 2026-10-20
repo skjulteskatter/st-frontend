@@ -2,8 +2,11 @@ import { Collection } from "@/classes";
 import {
     BandSyncSession,
     hasLeaderStateChangedComparedTo,
+    lyricsTranspositionFromSession,
+    matchesSheetEdit,
     matchesSongState,
     samePitchClass,
+    sessionTranspositionFromLyrics,
     toSheetApiTransposition,
 } from "@/services/bandSync/bandSyncSession";
 import { appSession } from "@/services/session";
@@ -52,10 +55,14 @@ export class BandSyncSongCoordinator {
                 sessionSongNumber: state.bandSync.session?.songNumber,
                 sessionSongbookId: state.bandSync.session?.songbookId,
                 sessionUpdatedAt: state.bandSync.session?.updatedAt?.getTime(),
+                sessionSheetFileId: state.bandSync.session?.sheetFileId,
+                sessionSheetEditId: state.bandSync.session?.sheetEditId,
                 collectionId: state.songs.collectionId,
                 songId: state.songs.songId,
                 transposition: state.songs.transposition,
                 sheetMusicTransposition: state.songs.sheetMusic?.transposition,
+                sheetFileId: state.songs.sheetEdit?.fileId,
+                sheetEditId: state.songs.sheetEdit?.editId,
             }),
             () => {
                 const session = this.store.state.bandSync.session;
@@ -143,8 +150,20 @@ export class BandSyncSongCoordinator {
         const songbookId = collection?.id ?? "";
         const songNumber =
             song && collection ? song.getNumber(collection.id) ?? 0 : 0;
-        const transposition = this.store.state.songs.transposition ?? 0;
-        return { songbookId, songNumber, transposition, collection, song };
+        // The session holds the concert key; the local lyrics transposition is in the user's instrument key
+        const transposition = sessionTranspositionFromLyrics(
+            this.store.state.songs.transposition ?? 0,
+            this.userDefaultKey(),
+        );
+        // The sheet version shown; followers apply it in the sheet view (OSMD.vue)
+        const sheetFileId = this.store.state.songs.sheetEdit?.fileId ?? null;
+        const sheetEditId = this.store.state.songs.sheetEdit?.editId ?? null;
+        return { songbookId, songNumber, transposition, sheetFileId, sheetEditId, collection, song };
+    }
+
+    private userDefaultKey(): string {
+        // `user` throws before login; the coordinator starts with the app
+        return appSession.User?.settings?.defaultTransposition ?? "C";
     }
 
     private rememberLocalSong(): void {
@@ -201,7 +220,7 @@ export class BandSyncSongCoordinator {
 
         if (!isActive || !bandSync.session) return;
 
-        const { songbookId, songNumber, transposition, song } = this.getLocalState();
+        const { songbookId, songNumber, transposition, sheetFileId, sheetEditId, song } = this.getLocalState();
         const localKey = songKey(songbookId, songNumber);
         const localSongChanged =
             this.lastLocalSongKey != null && this.lastLocalSongKey !== localKey;
@@ -219,7 +238,8 @@ export class BandSyncSongCoordinator {
                     songbookId,
                     songNumber,
                     transposition,
-                )
+                ) &&
+                matchesSheetEdit(bandSync.session, sheetFileId, sheetEditId)
             ) {
                 return;
             }
@@ -228,6 +248,8 @@ export class BandSyncSongCoordinator {
                 songbookId,
                 songNumber,
                 transposition,
+                sheetFileId,
+                sheetEditId,
             });
             return;
         }
@@ -368,7 +390,11 @@ export class BandSyncSongCoordinator {
             if (transpositionChanged) {
                 this.store.commit(
                     SongsMutationTypes.SET_TRANSPOSITION,
-                    session.transposition,
+                    lyricsTranspositionFromSession(
+                        session.transposition,
+                        this.userDefaultKey(),
+                        this.getLocalState().song?.transpositions,
+                    ),
                 );
             }
 
@@ -376,13 +402,11 @@ export class BandSyncSongCoordinator {
             // SongViewer keeps a local copy; its watcher updates that separately.
             const sheetMusic = this.store.state.songs.sheetMusic;
             if (sheetMusic) {
-                const userDefaultKey =
-                    appSession.user?.settings?.defaultTransposition ?? "C";
                 this.store.commit(SongsMutationTypes.SET_SHEETMUSIC_OPTIONS, {
                     ...sheetMusic,
                     transposition: toSheetApiTransposition(
                         session.transposition,
-                        userDefaultKey,
+                        this.userDefaultKey(),
                     ),
                 });
             }

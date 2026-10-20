@@ -15,6 +15,8 @@ const mockSession = {
     songbookId: "book-1",
     songNumber: 10,
     transposition: 0,
+    sheetFileId: null,
+    sheetEditId: null,
     createdAt: new Date(),
     updatedAt: new Date(),
     expireAt: new Date(Date.now() + 86400000),
@@ -188,6 +190,8 @@ describe("bandSync actions", () => {
             songbookId: "book-1",
             songNumber: 11,
             transposition: 1,
+            sheetFileId: null,
+            sheetEditId: null,
         });
 
         expect(store.state.bandSync.errorMessage).to.equal(
@@ -380,6 +384,8 @@ describe("bandSync actions", () => {
             songbookId: "book-1",
             songNumber: 11,
             transposition: 0,
+            sheetFileId: null,
+            sheetEditId: null,
         });
 
         expect(store.state.bandSync.role).to.equal("member");

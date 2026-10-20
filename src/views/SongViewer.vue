@@ -132,6 +132,7 @@
               :relativeKey="user?.settings?.defaultTransposition"
               :languageKey="languageKey"
               :song="song"
+              :collection="collection"
               @close="
                 () =>
                   sheetMusicOptions
@@ -247,7 +248,10 @@ import { SongsActionTypes } from "@/store/modules/songs/action-types";
 import { notify } from "@/services/notify";
 import { analytics } from "@/services/api";
 import { appSession } from "@/services/session";
-import { toSheetApiTransposition } from "@/services/bandSync/bandSyncSession";
+import {
+  sessionTranspositionFromLyrics,
+  toSheetApiTransposition,
+} from "@/services/bandSync/bandSyncSession";
 import { AudioTrack, SongViewType } from "@/store/modules/songs/state";
 import type { SheetMusicOptions } from "songtreasures";
 import { application } from "@/classes/application";
@@ -364,7 +368,10 @@ export default defineComponent({
       return {
         songbookId: this.collection.id,
         songNumber: this.song.getNumber(this.collection.id) ?? 0,
-        transposition: this.store.state.songs.transposition ?? 0,
+        transposition: sessionTranspositionFromLyrics(
+          this.store.state.songs.transposition ?? 0,
+          this.defaultTransposition,
+        ),
       };
     },
   },
@@ -405,7 +412,10 @@ export default defineComponent({
         const defaultKey = this.user?.settings?.defaultTransposition ?? "C";
         this.sheetMusicOptions = {
           ...this.sheetMusicOptions,
-          transposition: toSheetApiTransposition(value, defaultKey),
+          transposition: toSheetApiTransposition(
+            sessionTranspositionFromLyrics(value, defaultKey),
+            defaultKey,
+          ),
         };
       }
     },
@@ -454,13 +464,45 @@ export default defineComponent({
         // new song the way selectSheetMusic would.
         transposition: following
           ? toSheetApiTransposition(
-              this.store.state.songs.transposition ?? 0,
+              sessionTranspositionFromLyrics(
+                this.store.state.songs.transposition ?? 0,
+                this.defaultTransposition,
+              ),
               this.defaultTransposition,
             )
           : transposer.getRelativeTransposition(
               this.defaultTransposition,
               true,
             ),
+      };
+    },
+    /**
+     * Opens the sheet in `?sheet=` (and version in `?edits=`), from the sheet editor's back
+     * button and shared versions, then drops them from the URL.
+     */
+    openSheetMusicFromQuery() {
+      const { sheet: fileId, edits, ...query } = this.$route.query;
+      if (!fileId) {
+        return;
+      }
+      void this.$router.replace({ query });
+
+      const sheet = this.song?.sheetMusic.find((s) => s.id === fileId);
+      if (!sheet) {
+        return;
+      }
+      this.sheetMusicOptions = {
+        editId: typeof edits === "string" ? edits : undefined,
+        show: true,
+        fileId: sheet.id,
+        url: sheet.directUrl,
+        type: sheet.type,
+        originalKey: this.song?.originalKey ?? "C",
+        transposition: transposer.getRelativeTransposition(
+          this.defaultTransposition,
+          true,
+        ),
+        clef: "treble",
       };
     },
     openAdder() {
@@ -532,6 +574,7 @@ export default defineComponent({
         }
 
         this.rebindSheetMusicToCurrentSong();
+        this.openSheetMusicFromQuery();
 
         if (this.song?.hasLyrics && this.collection) {
           if (this.lyrics?.ContainsChords) {

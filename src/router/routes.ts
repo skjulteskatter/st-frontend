@@ -85,6 +85,10 @@ const VerifyEmail = () =>
     window.location.reload();
   });
 
+const SheetEditView = () =>
+  import("../views/SheetEditView.vue").catch(() => {
+    window.location.reload();
+  });
 const SheetMusic = () =>
   import("../views/SheetMusic.vue").catch(() => {
     window.location.reload();
@@ -179,6 +183,11 @@ const routes: Array<RouteRecordRaw> = [
             path: ":collection/:number",
             name: "song",
             component: getComponent(SongViewer),
+          },
+          {
+            path: ":collection/:number/edit",
+            name: "song-sheet-edit",
+            component: getComponent(SheetEditView),
           },
           {
             path: "search",

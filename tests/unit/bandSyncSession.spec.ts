@@ -9,10 +9,13 @@ import {
     hasLeaderStateChangedComparedTo,
     isExpired,
     isLedByDevice,
+    lyricsTranspositionFromSession,
+    matchesSheetEdit,
     matchesSongState,
     roleFromStorage,
     samePitchClass,
     sessionTranspositionFromApi,
+    sessionTranspositionFromLyrics,
     SESSION_TTL_DAYS,
     toSheetApiTransposition,
 } from "@/services/bandSync/bandSyncSession";
@@ -40,6 +43,45 @@ describe("bandSyncSession", () => {
         expect(session.songNumber).to.equal(42);
         expect(session.transposition).to.equal(2);
         expect(session.leaderDeviceId).to.equal(null);
+    });
+
+    it("fromFirestore parses the sheet version, null when absent", () => {
+        const session = makeSession({ sheetFileId: "file-1", sheetEditId: "edit-1" });
+        expect(session.sheetFileId).to.equal("file-1");
+        expect(session.sheetEditId).to.equal("edit-1");
+        expect(makeSession().sheetFileId).to.equal(null);
+        expect(makeSession({ sheetFileId: "file-1", sheetEditId: null }).sheetEditId).to.equal(null);
+    });
+
+    it("matchesSheetEdit compares the sheet and its version", () => {
+        const session = makeSession({ sheetFileId: "file-1", sheetEditId: "edit-1" });
+        expect(matchesSheetEdit(session, "file-1", "edit-1")).to.equal(true);
+        expect(matchesSheetEdit(session, "file-1", null)).to.equal(false);
+        expect(matchesSheetEdit(session, "file-2", "edit-1")).to.equal(false);
+        expect(matchesSheetEdit(makeSession(), null, null)).to.equal(true);
+    });
+
+    it("sessionTranspositionFromLyrics removes the instrument key, giving the concert key", () => {
+        // An Eb instrument's lyrics start at its offset (-3 / 9): the original concert key
+        expect(sessionTranspositionFromLyrics(-3, "Eb")).to.equal(0);
+        expect(sessionTranspositionFromLyrics(9, "Eb")).to.equal(0);
+        expect(sessionTranspositionFromLyrics(-10, "Bb")).to.equal(0);
+        // Bb instrument reading a whole tone up from its default: concert also up a tone
+        expect(sessionTranspositionFromLyrics(0, "Bb")).to.equal(-2);
+        expect(sessionTranspositionFromLyrics(5, "C")).to.equal(5);
+        expect(sessionTranspositionFromLyrics(7, "C")).to.equal(-5);
+    });
+
+    it("lyricsTranspositionFromSession adds the instrument key, preferring the song's value", () => {
+        expect(lyricsTranspositionFromSession(0, "Eb")).to.equal(9);
+        expect(lyricsTranspositionFromSession(0, "Eb", { G: -3, C: 2 })).to.equal(-3);
+        expect(lyricsTranspositionFromSession(2, "C", { D: 2 })).to.equal(2);
+        expect(lyricsTranspositionFromSession(-2, "C")).to.equal(10);
+        for (const key of ["C", "Bb", "Eb", "F", "D"]) {
+            for (let session = -5; session <= 6; session++) {
+                expect(sessionTranspositionFromLyrics(lyricsTranspositionFromSession(session, key), key)).to.equal(session);
+            }
+        }
     });
 
     it("fromFirestore parses leaderDeviceId", () => {

@@ -51,6 +51,37 @@
           <XIcon class="w-4 h-4" />
         </button>
         <div class="flex">
+          <label class="mr-2" v-if="myEdits.length || editId">
+            <span class="text-sm text-gray-500">{{ $t("sheetEdits_version") }}</span>
+            <BaseDropdown origin="left" :label="editLabel">
+              <div class="max-h-64 overflow-y-auto shadow-scroll">
+                <button
+                  :class="{ 'bg-primary text-white': !editId }"
+                  class="py-1 px-4 rounded w-full text-left"
+                  @click="selectEdit(null)"
+                >
+                  {{ $t("sheetEdits_original") }}
+                </button>
+                <button
+                  v-for="v in myEdits"
+                  :key="v.id"
+                  :class="{ 'bg-primary text-white': editId == v.id }"
+                  class="py-1 px-4 rounded w-full text-left"
+                  @click="selectEdit(v.id)"
+                >
+                  {{ v.name }}
+                </button>
+                <!-- Someone else's version (shared link or band sync leader) -->
+                <button
+                  v-if="editId && !myEdits.some((e) => e.id === editId)"
+                  class="py-1 px-4 rounded w-full text-left bg-primary text-white"
+                  disabled
+                >
+                  {{ editLabel }}
+                </button>
+              </div>
+            </BaseDropdown>
+          </label>
           <label class="mr-2">
             <span class="text-sm text-gray-500">{{ $t("song_key") }}</span>
             <BaseDropdown
@@ -185,6 +216,14 @@
               :hasPrevious="true"
             />
           </div>
+          <button
+            v-if="canEdit"
+            class="ml-auto self-end bg-white p-2 rounded-md border border-black/20 flex items-center gap-2 hover:bg-black/5 dark:bg-secondary dark:border-white/20 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            @click="openEditor"
+          >
+            <PencilIcon class="w-4 h-4" />
+            <span>{{ $t("sheetEdits_edit") }}</span>
+          </button>
         </div>
       </div>
     </template>
@@ -205,21 +244,28 @@
 import { Collection, Song, transposer } from "@/classes";
 import { SongChanger } from "@/components/songs";
 import { sheetService } from "@/services/songs/sheetService";
-import { sessionTranspositionFromApi } from "@/services/bandSync/bandSyncSession";
+import {
+  lyricsTranspositionFromSession,
+  sessionTranspositionFromApi,
+} from "@/services/bandSync/bandSyncSession";
 import { useStore } from "@/store";
 import { SongsMutationTypes } from "@/store/modules/songs/mutation-types";
-import { XIcon } from "@heroicons/vue/solid";
+import { PencilIcon, XIcon } from "@heroicons/vue/solid";
 import { Sheet } from "hiddentreasures-js";
 import type { SheetMusicOptions } from "songtreasures";
 import { defineComponent, PropType } from "vue";
 import BaseDropdown from "./inputs/BaseDropdown.vue";
 import ListSelect from "./inputs/ListSelect.vue";
+import { sheetEditsService } from "@/services/sheetEdits/sheetEditsService";
+import { appSession } from "@/services/session";
+import type { SheetEdits } from "@/services/sheetEdits/types";
 
 export default defineComponent({
   name: "open-sheet-music-display",
   components: {
     SongChanger,
     XIcon,
+    PencilIcon,
     ListSelect,
     BaseDropdown,
   },
@@ -259,6 +305,10 @@ export default defineComponent({
       size: "md" as "sm" | "md" | "lg" | "xl",
       sheetDetails: null as Sheet | null,
       instruments: [] as string[],
+      userId: sheetEditsService.userId,
+      myEdits: [] as SheetEdits[],
+      /** The version shown (sheetEdits id), null for the original. Only the id is needed here; the editor loads the edits. */
+      editId: null as string | null,
       loading: {} as {
         [key: string]: boolean;
       },
@@ -274,8 +324,27 @@ export default defineComponent({
       this.transposition = this.options.transposition ?? 0;
       this.setSvg();
       this.sheetDetails = await sheetService.get(this.options.fileId);
+      // Shared links open a specific set of edits, otherwise follow the band sync leader's version
+      const linked =
+        this.options.editId ?? (this.$route.query.edits as string | undefined);
+      this.editId = linked ?? this.leaderSheetEditId ?? null;
+      await this.loadVersions();
+      this.publishSheetEdit();
       await this.load();
     }
+  },
+  beforeUnmount() {
+    this.store.commit(SongsMutationTypes.SET_SHEET_EDIT, null);
+  },
+  watch: {
+    editId() {
+      this.publishSheetEdit();
+    },
+    async leaderSheetEditId(id: string | null | undefined) {
+      if (id === undefined || id === this.editId) return;
+      this.editId = id;
+      await this.load();
+    },
   },
   methods: {
     close() {
@@ -307,18 +376,73 @@ export default defineComponent({
           this.transposition !== undefined
             ? this.transposition + octave
             : undefined;
-        this.svg = (await sheetService.render({
+        const renderOptions = {
           id: this.options.fileId,
           clef: this.options.clef,
-          format: "endless",
+          format: "endless" as const,
           size: this.size,
           transposition,
           instruments: this.instruments.length ? this.instruments : undefined,
-        })) as string[];
+          // The backend applies these edits to the MusicXML before rendering
+          editId: this.editId ?? undefined,
+        };
+        this.svg = (await this.render(renderOptions)) ?? [];
 
         this.setSvg();
         this.loading.sheet = false;
       }
+    },
+    /**
+     * Renders the sheet. A version that can't be rendered (e.g. deleted, while band sync still
+     * points to it) falls back to the original, which is then shown and published instead.
+     */
+    async render(options: Parameters<typeof sheetService.render>[0] & { editId?: string }) {
+      let pages: string[] | undefined;
+      try {
+        pages = await sheetService.render(options);
+      } catch (e) {
+        if (!options.editId) throw e;
+      }
+      if (pages || !options.editId) return pages;
+
+      console.error(`Couldn't render version ${options.editId}, showing the original`);
+      this.editId = null;
+      const original = { ...options, editId: undefined };
+      return await sheetService.render(original);
+    },
+    /** The current user's versions of this sheet, for the version picker. */
+    async loadVersions() {
+      try {
+        this.myEdits = await sheetEditsService.listMine(this.options.fileId);
+      } catch (e) {
+        console.error("Couldn't load sheet edits", e);
+      }
+    },
+    /** Tells the store which version is shown, which band sync publishes when leading. */
+    publishSheetEdit() {
+      this.store.commit(SongsMutationTypes.SET_SHEET_EDIT, {
+        fileId: this.options.fileId,
+        editId: this.editId,
+      });
+    },
+    async selectEdit(id: string | null) {
+      this.editId = id;
+      await this.load();
+    },
+    openEditor() {
+      if (!this.song || !this.collection) return;
+      void this.$router.push({
+        name: "song-sheet-edit",
+        params: {
+          collection: this.collection.key ?? this.collection.id,
+          number: this.song.getNumber(this.collection.id),
+        },
+        query: {
+          fileid: this.options.fileId,
+          size: this.size,
+          ...(this.editId ? { edits: this.editId } : {}),
+        },
+      });
     },
     async increaseOctave() {
       this.loading["octave"] = true;
@@ -343,32 +467,71 @@ export default defineComponent({
       // Flutter: sheet key only pushes into session transposition while
       // band sync is active; otherwise SVG-only.
       if (this.store.state.bandSync.role !== "none") {
-          const sessionTs = sessionTranspositionFromApi(
-              n,
-              this.relativeKey || "C",
-              this.song?.transpositions ?? {},
-          );
-          this.store.commit(
-              SongsMutationTypes.SET_TRANSPOSITION,
-              sessionTs,
-          );
+        const sessionTs = sessionTranspositionFromApi(
+          n,
+          this.relativeKey || "C",
+          this.song?.transpositions ?? {},
+        );
+        // The store holds the lyrics transposition, which is in the user's instrument key
+        this.store.commit(
+          SongsMutationTypes.SET_TRANSPOSITION,
+          lyricsTranspositionFromSession(
+            sessionTs,
+            this.relativeKey || "C",
+            this.song?.transpositions ?? {},
+          ),
+        );
       }
 
       if (this.transposition == n) {
-          await this.load();
+        await this.load();
       }
       this.loading["transpose"] = false;
     },
     async setClef(c: "bass" | "treble" | "alto") {
       if (this.options) {
-          // eslint-disable-next-line vue/no-mutating-props
-          this.options.clef = c;
+        // eslint-disable-next-line vue/no-mutating-props
+        this.options.clef = c;
 
         await this.load();
       }
     },
   },
   computed: {
+    /**
+     * The band sync leader's version of this sheet when following (null for the original),
+     * undefined when there's nothing to follow.
+     */
+    leaderSheetEditId(): string | null | undefined {
+      const bandSync = this.store.state.bandSync;
+      const session = bandSync.session;
+      if (
+        bandSync.role !== "member" ||
+        !bandSync.followingLeaderUpdates ||
+        !session
+      )
+        return undefined;
+      return session.sheetFileId === this.options.fileId
+        ? session.sheetEditId
+        : undefined;
+    },
+    editLabel(): string {
+      const own = this.myEdits.find((e) => e.id === this.editId);
+      if (own) return own.name;
+      if (!this.editId) return this.$t("sheetEdits_original");
+      return this.editId === this.leaderSheetEditId
+        ? this.$t("sheetEdits_leaderVersion")
+        : this.$t("sheetEdits_shared");
+    },
+    canEdit(): boolean {
+      return (
+        appSession.User?.CanEditSheets === true &&
+        !!this.userId &&
+        !!this.options.url &&
+        !!this.song &&
+        !!this.collection
+      );
+    },
     melodyOrigin() {
       return this.song?.melodyOrigin?.description?.default;
     },

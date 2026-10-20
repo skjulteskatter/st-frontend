@@ -21,7 +21,7 @@
     "idb": "^7.1.1",
     "isomorphic-fetch": "^3.0.0",
     "less-loader": "^10.2.0",
-    "opensheetmusicdisplay": "^1.9.9",
+    "opensheetmusicdisplay": "^2.2.1",
     "plyr": "^3.8.5",
     "regenerator-runtime": "^0.13.11",
     "unzipper": "^0.10.14",

@@ -25,5 +25,34 @@ service cloud.firestore {
       allow update, delete: if request.auth != null
         && resource.data.leaderId == request.auth.uid;
     }
+
+    match /sheetEdits/{editId} {
+      // Anyone with the edit id can read it (shared by link). Listing is only
+      // for the owner's own edits, and the query must filter on ownerId.
+      allow get: if true;
+      allow list: if request.auth != null
+        && resource.data.ownerId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.ownerId == request.auth.uid
+        && isValidSheetEdits(request.resource.data);
+      allow update: if request.auth != null
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.fileId == resource.data.fileId
+        && request.resource.data.createdAt == resource.data.createdAt
+        && isValidSheetEdits(request.resource.data);
+      allow delete: if request.auth != null
+        && resource.data.ownerId == request.auth.uid;
+    }
+
+    function isValidSheetEdits(data) {
+      return data.keys().hasOnly(['ownerId', 'fileId', 'name', 'baseHash', 'edits', 'createdAt', 'updatedAt'])
+        && data.fileId is string
+        && data.name is string && data.name.size() <= 100
+        && data.baseHash is string
+        && data.edits is list && data.edits.size() <= 1000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
   }
 }

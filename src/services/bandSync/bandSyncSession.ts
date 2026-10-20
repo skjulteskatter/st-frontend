@@ -17,6 +17,12 @@ export type BandSyncSession = {
     songbookId: string;
     songNumber: number;
     transposition: number;
+    /**
+     * The sheet the leader shows and which version of it (sheetEdits id, null for the original).
+     * Both null when the leader isn't showing a sheet version. Followers only apply it to that sheet.
+     */
+    sheetFileId: string | null;
+    sheetEditId: string | null;
     createdAt: Date;
     updatedAt: Date;
     expireAt: Date;
@@ -47,6 +53,10 @@ function readTimestamp(value: unknown): Date | null {
     return null;
 }
 
+function readString(value: unknown): string | null {
+    return typeof value === "string" && value.length > 0 ? value : null;
+}
+
 export function fromFirestore(
     code: string,
     data: Record<string, unknown>,
@@ -68,6 +78,8 @@ export function fromFirestore(
         songbookId: data.songbookId as string,
         songNumber: (data.songNumber as number).valueOf(),
         transposition: (data.transposition as number).valueOf(),
+        sheetFileId: readString(data.sheetFileId),
+        sheetEditId: readString(data.sheetEditId),
         createdAt,
         updatedAt,
         expireAt: readTimestamp(data.expireAt) ?? createdAt,
@@ -155,8 +167,43 @@ export function samePitchClass(a: number, b: number): boolean {
     return ((a % 12) + 12) % 12 === ((b % 12) + 12) % 12;
 }
 
+function normalizeSessionTransposition(value: number): number {
+    const pitchClass = ((value % 12) + 12) % 12;
+    return pitchClass > 6 ? pitchClass - 12 : pitchClass;
+}
+
 /**
- * Session (lyrics/concert) → sheet API transposition for a local instrument key.
+ * Lyrics transposition → session (concert) transposition. The lyrics transposition
+ * (store `songs.transposition`) includes the user's instrument key: it starts at that
+ * key's offset and the key picker's values include it. Normalised to -5..6.
+ */
+export function sessionTranspositionFromLyrics(
+    lyricsTransposition: number,
+    userDefaultKey: string,
+): number {
+    return normalizeSessionTransposition(
+        lyricsTransposition - transposer.getRelativeTransposition(userDefaultKey || "C"),
+    );
+}
+
+/**
+ * Session (concert) → lyrics transposition for the local instrument key. Prefers the
+ * song's own value for that key (what the key picker uses), otherwise 0–11.
+ */
+export function lyricsTranspositionFromSession(
+    sessionTransposition: number,
+    userDefaultKey: string,
+    songTranspositions: { [key: string]: number } = {},
+): number {
+    const lyrics = sessionTransposition + transposer.getRelativeTransposition(userDefaultKey || "C");
+    return (
+        Object.values(songTranspositions).find((t) => samePitchClass(t, lyrics)) ??
+        ((lyrics % 12) + 12) % 12
+    );
+}
+
+/**
+ * Session (concert) → sheet API transposition for a local instrument key.
  * Matches Flutter SheetsCubit: (session + moveByValueDict[userKey]) % 12.
  */
 export function toSheetApiTransposition(
@@ -206,6 +253,14 @@ export function matchesSongState(
         session.songNumber === songNumber &&
         samePitchClass(session.transposition, transposition)
     );
+}
+
+export function matchesSheetEdit(
+    session: BandSyncSession,
+    sheetFileId: string | null,
+    sheetEditId: string | null,
+): boolean {
+    return session.sheetFileId === sheetFileId && session.sheetEditId === sheetEditId;
 }
 
 export function hasLeaderStateChangedComparedTo(

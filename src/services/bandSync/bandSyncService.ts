@@ -110,6 +110,8 @@ class BandSyncService {
             songbookId,
             songNumber,
             transposition,
+            sheetFileId: null,
+            sheetEditId: null,
             createdAt: now,
             updatedAt: now,
             expireAt,
@@ -121,6 +123,8 @@ class BandSyncService {
             songbookId: session.songbookId,
             songNumber: session.songNumber,
             transposition: session.transposition,
+            sheetFileId: null,
+            sheetEditId: null,
             createdAt: Timestamp.fromDate(session.createdAt),
             updatedAt: Timestamp.fromDate(session.updatedAt),
             expireAt: Timestamp.fromDate(session.expireAt),
@@ -160,16 +164,21 @@ class BandSyncService {
         return session;
     }
 
+    /** Publishes the leader's state. The sheet version is cleared unless given. */
     async updateSession({
         code,
         songbookId,
         songNumber,
         transposition,
+        sheetFileId = null,
+        sheetEditId = null,
     }: {
         code: string;
         songbookId: string;
         songNumber: number;
         transposition: number;
+        sheetFileId?: string | null;
+        sheetEditId?: string | null;
     }): Promise<void> {
         const user = a.currentUser;
         if (!user) {
@@ -192,6 +201,8 @@ class BandSyncService {
             songbookId,
             songNumber,
             transposition,
+            sheetFileId,
+            sheetEditId,
             updatedAt: Timestamp.now(),
             ...(stampClaim ? { leaderDeviceId: deviceId } : {}),
         });

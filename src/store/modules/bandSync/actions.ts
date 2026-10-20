@@ -78,7 +78,13 @@ export interface Actions {
     [BandSyncActionTypes.TAKE_LEAD](context: AugmentedActionContext): Promise<void>;
     [BandSyncActionTypes.LEADER_PUBLISH](
         context: AugmentedActionContext,
-        payload: { songbookId: string; songNumber: number; transposition: number },
+        payload: {
+            songbookId: string;
+            songNumber: number;
+            transposition: number;
+            sheetFileId: string | null;
+            sheetEditId: string | null;
+        },
     ): Promise<void>;
     [BandSyncActionTypes.SET_MEMBER_SYNC_STATUS](
         context: AugmentedActionContext,
@@ -319,6 +325,8 @@ export const actions: ActionTree<State, RootState> & Actions = {
                     songbookId: payload.songbookId,
                     songNumber: payload.songNumber,
                     transposition: payload.transposition,
+                    sheetFileId: payload.sheetFileId,
+                    sheetEditId: payload.sheetEditId,
                     updatedAt: new Date(),
                 });
             }
